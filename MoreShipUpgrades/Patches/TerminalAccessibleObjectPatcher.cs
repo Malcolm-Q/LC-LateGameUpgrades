@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Patches
@@ -19,12 +20,9 @@ namespace MoreShipUpgrades.Patches
             if(!UpgradeBus.instance.DestroyTraps || __instance.gameObject.layer != LayerMask.NameToLayer("MapHazards")) { return true; }
             if(__instance.gameObject.GetComponent<Landmine>() != null)
             {
-                __instance.gameObject.GetComponent<Landmine>().ExplodeMineServerRpc();
+                Landmine.SpawnExplosion(__instance.transform.position, true);
             }
-            else
-            {
-                __instance.NetworkObject.Despawn();
-            }
+            UpgradeBus.instance.ReqDestroyObjectServerRpc(new NetworkObjectReference(__instance.gameObject.transform.parent.gameObject.GetComponent<NetworkObject>()));
             return false;
         }
     }

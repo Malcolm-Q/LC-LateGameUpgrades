@@ -31,16 +31,31 @@ namespace MoreShipUpgrades
 
         void Awake()
         {
-            // TODO: Make item loading and registration more modular and concise.
+            // TODO: Make item loading and registration more modular and concise. 
             mls = BepInEx.Logging.Logger.CreateLogSource(GUID);
             instance = this;
+
+            var types = Assembly.GetExecutingAssembly().GetTypes();
+            foreach (var type in types)
+            {
+                var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+                foreach (var method in methods)
+                {
+                    var attributes = method.GetCustomAttributes(typeof(RuntimeInitializeOnLoadMethodAttribute), false);
+                    if (attributes.Length > 0)
+                    {
+                        method.Invoke(null, null);
+                    }
+                }
+            }
+
             string assetDir = System.IO.Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "shipupgrades");
             AssetBundle UpgradeAssets = AssetBundle.LoadFromFile(assetDir);
 
             GameObject busGO = new GameObject("UpgradeBus");
             busGO.AddComponent<UpgradeBus>();
 
-            //TP button sfx
+            //TP button sfx 
             AudioClip itemBreak = UpgradeAssets.LoadAsset<AudioClip>("Assets/ShipUpgrades/break.mp3");
             AudioClip error = UpgradeAssets.LoadAsset<AudioClip>("Assets/ShipUpgrades/error.mp3");
             AudioClip buttonPressed = UpgradeAssets.LoadAsset<AudioClip>("Assets/ShipUpgrades/ButtonPress2.ogg");

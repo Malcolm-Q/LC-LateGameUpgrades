@@ -33,7 +33,22 @@ namespace MoreShipUpgrades.Managers
         void Awake()
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject); 
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void ReqDestroyObjectServerRpc(NetworkObjectReference go)
+        {
+            go.TryGet(out NetworkObject netObj);
+            if(netObj == null) { return; }
+            if(netObj.gameObject.name == "Landmine(Clone)" || netObj.gameObject.name == "TurretContainer(Clone)")
+            {
+                netObj.Despawn();
+            }
+            else
+            {
+                Debug.Log(netObj.gameObject.name);
+            }
         }
     }
 }

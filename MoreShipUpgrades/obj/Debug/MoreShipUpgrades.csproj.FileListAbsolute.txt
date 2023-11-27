@@ -224,3 +224,9 @@ C:\Users\malco\source\repos\MoreShipUpgrades\LC-LateGameUpgrades\MoreShipUpgrade
 C:\Users\malco\source\repos\MoreShipUpgrades\LC-LateGameUpgrades\MoreShipUpgrades\obj\Debug\MoreShipUpgrades.csproj.CopyComplete
 C:\Users\malco\source\repos\MoreShipUpgrades\LC-LateGameUpgrades\MoreShipUpgrades\obj\Debug\MoreShipUpgrades.dll
 C:\Users\malco\source\repos\MoreShipUpgrades\LC-LateGameUpgrades\MoreShipUpgrades\obj\Debug\MoreShipUpgrades.pdb
+C:\Users\malco\source\repos\MoreShipUpgrades\LC-LateGameUpgrades\MoreShipUpgrades\bin\Debug\Unity.Multiplayer.Tools.NetStatsMonitor.Component.dll
+C:\Users\malco\source\repos\MoreShipUpgrades\LC-LateGameUpgrades\MoreShipUpgrades\bin\Debug\Unity.Multiplayer.Tools.NetStatsMonitor.Configuration.dll
+C:\Users\malco\source\repos\MoreShipUpgrades\LC-LateGameUpgrades\MoreShipUpgrades\bin\Debug\Unity.Multiplayer.Tools.NetStatsMonitor.Implementation.dll
+C:\Users\malco\source\repos\MoreShipUpgrades\LC-LateGameUpgrades\MoreShipUpgrades\bin\Debug\Unity.Multiplayer.Tools.Util.dll
+C:\Users\malco\source\repos\MoreShipUpgrades\LC-LateGameUpgrades\MoreShipUpgrades\bin\Debug\Unity.Services.Core.Networking.dll
+C:\Users\malco\source\repos\MoreShipUpgrades\LC-LateGameUpgrades\MoreShipUpgrades\bin\Debug\UnityEngine.UnityTestProtocolModule.dll
