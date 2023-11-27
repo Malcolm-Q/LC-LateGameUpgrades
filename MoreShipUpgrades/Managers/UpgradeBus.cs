@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MoreShipUpgrades.UpgradeComponents;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,12 +29,33 @@ namespace MoreShipUpgrades.Managers
         public bool strongLegs = false;
         public bool runningShoes = false;
         public bool biggerLungs = false;
+        public float alteredWeight = 1f;
         public AudioClip flashNoise;
+        public trapDestroyerScript trapHandler = null;
         
         void Awake()
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject); 
+        }
+
+        public void ResetAllValues()
+        {
+            DestroyTraps = false;
+            softSteps = false;
+            scannerUpgrade = false;
+            nightVision = false;
+            nightVisionActive = false;
+            exoskeleton = false;
+            TPButtonPressed = false;
+            beekeeper = false;
+            terminalFlash = false;
+            flashCooldown = 0f;
+            strongLegs = false;
+            runningShoes = false;
+            biggerLungs = false;
+            trapHandler = null;
+            alteredWeight = 1f;
         }
     }
 }
