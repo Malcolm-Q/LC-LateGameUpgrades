@@ -13,9 +13,6 @@ namespace MoreShipUpgrades.Patches
     [HarmonyPatch(typeof(HUDManager))]
     internal class HUDManagerPatcher
     {
-        private static float intensity;
-        private static Color color;
-        private static float range;
         [HarmonyPostfix]
         [HarmonyPatch("MeetsScanNodeRequirements")]
         private static void alterReqs(ref HUDManager __instance, ScanNodeProperties node, ref bool __result, PlayerControllerB playerScript)

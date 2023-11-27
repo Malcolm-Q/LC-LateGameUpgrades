@@ -1,4 +1,5 @@
 ﻿using GameNetcodeStuff;
+using MoreShipUpgrades.Managers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         private IEnumerator LateApply()
         {
             yield return new WaitForSeconds(1);
+            UpgradeBus.instance.runningShoes = true;
             PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
             foreach (PlayerControllerB player in players)
             {

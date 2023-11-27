@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace MoreShipUpgrades.Patches
 {
@@ -15,8 +16,15 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("CallFunctionFromTerminal")]
         private static bool DestroyObject(ref TerminalAccessibleObject __instance)
         {
-            if(!UpgradeBus.instance.DestroyTraps) { return true; }
-            __instance.NetworkObject.Despawn();
+            if(!UpgradeBus.instance.DestroyTraps || __instance.gameObject.layer != LayerMask.NameToLayer("MapHazards")) { return true; }
+            if(__instance.gameObject.GetComponent<Landmine>() != null)
+            {
+                __instance.gameObject.GetComponent<Landmine>().ExplodeMineServerRpc();
+            }
+            else
+            {
+                __instance.NetworkObject.Despawn();
+            }
             return false;
         }
     }

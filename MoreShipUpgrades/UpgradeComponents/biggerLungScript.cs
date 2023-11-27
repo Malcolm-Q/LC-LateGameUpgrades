@@ -1,4 +1,5 @@
 ﻿using GameNetcodeStuff;
+using MoreShipUpgrades.Managers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             {
                 player.sprintTime = 17f;
             }
+            UpgradeBus.instance.biggerLungs = true;
             transform.parent = GameObject.Find("HangarShip").transform;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Bigger Lungs is active!";
         }
