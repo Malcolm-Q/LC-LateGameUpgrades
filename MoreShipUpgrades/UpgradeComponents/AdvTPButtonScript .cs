@@ -84,9 +84,21 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         private IEnumerator WaitToTP(ShipTeleporter tele)
         {
-            yield return new WaitForSeconds(0.2f);
-            UpgradeBus.instance.TPButtonPressed = true;
+            yield return new WaitForSeconds(0.15f);
+            ReqUpdateTpDropStatusServerRpc();
             tele.PressTeleportButtonOnLocalClient();
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void ReqUpdateTpDropStatusServerRpc()
+        {
+            ChangeTPButtonPressedClientRpc();
+        }
+
+        [ClientRpc]
+        private void ChangeTPButtonPressedClientRpc()
+        {
+            UpgradeBus.instance.TPButtonPressed = true;
         }
     }
 }

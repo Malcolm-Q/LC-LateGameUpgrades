@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MoreShipUpgrades.UpgradeComponents;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,9 @@ namespace MoreShipUpgrades.Managers
         public bool strongLegs = false;
         public bool runningShoes = false;
         public bool biggerLungs = false;
+        public float alteredWeight = 1f;
         public AudioClip flashNoise;
+        public trapDestroyerScript trapHandler = null;
         
         void Awake()
         {
@@ -36,19 +39,23 @@ namespace MoreShipUpgrades.Managers
             DontDestroyOnLoad(gameObject); 
         }
 
-        [ServerRpc(RequireOwnership = false)]
-        public void ReqDestroyObjectServerRpc(NetworkObjectReference go)
+        public void ResetAllValues()
         {
-            go.TryGet(out NetworkObject netObj);
-            if(netObj == null) { return; }
-            if(netObj.gameObject.name == "Landmine(Clone)" || netObj.gameObject.name == "TurretContainer(Clone)")
-            {
-                netObj.Despawn();
-            }
-            else
-            {
-                Debug.Log(netObj.gameObject.name);
-            }
+            DestroyTraps = false;
+            softSteps = false;
+            scannerUpgrade = false;
+            nightVision = false;
+            nightVisionActive = false;
+            exoskeleton = false;
+            TPButtonPressed = false;
+            beekeeper = false;
+            terminalFlash = false;
+            flashCooldown = 0f;
+            strongLegs = false;
+            runningShoes = false;
+            biggerLungs = false;
+            trapHandler = null;
+            alteredWeight = 1f;
         }
     }
 }

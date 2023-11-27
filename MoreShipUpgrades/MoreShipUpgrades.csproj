@@ -31,7 +31,9 @@
     <Reference Include="Unity.Netcode.Runtime">
       <HintPath>D:\SteamLibrary\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Unity.Netcode.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>D:\SteamLibrary\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>D:\SteamLibrary\steamapps\common\Lethal Company\Lethal Company_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
@@ -56,6 +58,6 @@
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy C:\Users\malco\source\repos\MoreShipUpgrades\LC-LateGameUpgrades\MoreShipUpgrades\bin\Debug\netstandard2.1\MoreShipUpgrades.dll C:\Users\malco\Downloads\NetcodePatcher-2.0.0\plugins\MoreShipUpgrades.dll&#xD;&#xA;copy C:\Users\malco\source\repos\MoreShipUpgrades\LC-LateGameUpgrades\MoreShipUpgrades\bin\Debug\netstandard2.1\MoreShipUpgrades.pdb C:\Users\malco\Downloads\NetcodePatcher-2.0.0\plugins\MoreShipUpgrades.pdb&#xD;&#xA;cd C:\Users\malco\Downloads\NetcodePatcher-2.0.0&#xD;&#xA;NetcodePatcher.dll plugins/ deps/" />
+    <Exec Command="cd C:\Users\malco\Downloads\NetcodePatcher-2.0.0&#xD;&#xA;NetcodePatcher.dll $(TargetDir) deps/" />
   </Target>
 </Project>

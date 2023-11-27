@@ -18,11 +18,8 @@ namespace MoreShipUpgrades.Patches
         private static bool DestroyObject(ref TerminalAccessibleObject __instance)
         {
             if(!UpgradeBus.instance.DestroyTraps || __instance.gameObject.layer != LayerMask.NameToLayer("MapHazards")) { return true; }
-            if(__instance.gameObject.GetComponent<Landmine>() != null)
-            {
-                Landmine.SpawnExplosion(__instance.transform.position, true);
-            }
-            UpgradeBus.instance.ReqDestroyObjectServerRpc(new NetworkObjectReference(__instance.gameObject.transform.parent.gameObject.GetComponent<NetworkObject>()));
+            Landmine.SpawnExplosion(__instance.transform.position, true);
+            UpgradeBus.instance.trapHandler.ReqDestroyObjectServerRpc(new NetworkObjectReference(__instance.gameObject.transform.parent.gameObject.GetComponent<NetworkObject>()));
             return false;
         }
     }

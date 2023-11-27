@@ -15,9 +15,6 @@ That being said it's all pretty straightforward.
 
 
 ## **TODO:**
-* Sync DropAllItems() Prevention!
-    * Currently when a client teleports via portable tele all other clients see their loot drop.
-    * Probably use [NetCode Patcher.](https://github.com/EvaisaDev/UnityNetcodeWeaver)
 * Cleanup
 * Config Implementation
 * Rewrite AssetBundle Loading and Spawning to be Concise and Modular
