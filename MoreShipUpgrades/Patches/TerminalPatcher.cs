@@ -28,7 +28,7 @@ namespace MoreShipUpgrades.Patches
         private static void DestroyObject(ref Terminal __instance, ref TerminalNode __result)
         {
             string text = __instance.screenText.text.Substring(__instance.screenText.text.Length - __instance.textAdded);
-            if (text.ToLower() == "initattack")
+           if (text.ToLower() == "initattack" || text.ToLower() == "atk")
             {
                 if(!UpgradeBus.instance.terminalFlash)
                 {
@@ -41,7 +41,7 @@ namespace MoreShipUpgrades.Patches
                 if(UpgradeBus.instance.flashCooldown > 0f)
                 {
                     TerminalNode failNode = new TerminalNode();
-                    failNode.displayText = $"You can discombobulate again in {Mathf.Round(UpgradeBus.instance.flashCooldown)} seconds.\nType 'cooldown' to check discombobulation cooldown.";
+                    failNode.displayText = $"You can discombobulate again in {Mathf.Round(UpgradeBus.instance.flashCooldown)} seconds.\nType 'cooldown' or 'cd' to check discombobulation cooldown.";
                     failNode.clearPreviousText = true;
                     __result = failNode;
                 }
@@ -77,7 +77,7 @@ namespace MoreShipUpgrades.Patches
                     }
                 }
             }
-            else if (text.ToLower() == "cooldown")
+            else if (text.ToLower() == "cooldown" || text.ToLower() == "cd")
             {
                 if(!UpgradeBus.instance.terminalFlash)
                 {
@@ -97,7 +97,7 @@ namespace MoreShipUpgrades.Patches
                 else
                 {
                     TerminalNode node = new TerminalNode();
-                    node.displayText = "Discombobulate is ready, Type 'initattack' to execute.";
+                    node.displayText = "Discombobulate is ready, Type 'initattack' or 'atk' to execute.";
                     node.clearPreviousText = true;
                     __result = node;
                 }
