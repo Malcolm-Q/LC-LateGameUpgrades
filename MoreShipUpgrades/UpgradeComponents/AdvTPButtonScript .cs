@@ -68,6 +68,14 @@ namespace MoreShipUpgrades.UpgradeComponents
                         StartOfRound.Instance.mapScreen.targetedPlayer = playerHeldBy;
                         UpgradeBus.instance.TPButtonPressed = true;
                         NotInverseTele.PressTeleportButtonOnLocalClient();
+
+                        // 80% chance to not break
+                        if (UnityEngine.Random.Range(0f, 1f) > 0.2f)
+                        {
+                            audio.PlayOneShot(ItemBreak);
+                            itemUsedUp = true;
+                            playerHeldBy.DespawnHeldObject();
+                        }
                     }
                     else
                     {
