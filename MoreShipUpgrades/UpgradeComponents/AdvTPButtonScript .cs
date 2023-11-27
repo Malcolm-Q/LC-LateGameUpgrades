@@ -76,6 +76,11 @@ namespace MoreShipUpgrades.UpgradeComponents
                             itemUsedUp = true;
                             playerHeldBy.DespawnHeldObject();
                         }
+                        else
+                        {
+                            // Display item break message in the chat
+                            DisplayItemBreakMessageInChat();
+                        }
                     }
                     else
                     {
@@ -95,6 +100,12 @@ namespace MoreShipUpgrades.UpgradeComponents
             yield return new WaitForSeconds(0.2f);
             UpgradeBus.instance.TPButtonPressed = true;
             tele.PressTeleportButtonOnLocalClient();
+        }
+
+        private void DisplayItemBreakMessageInChat()
+        {
+            HUDManager.Instance.chatText.text += "\n<color=#FF0000>The teleporter button has suffered irreparable damage and destroyed itself!</color>";
+            // You can customize the message as needed
         }
     }
 }
