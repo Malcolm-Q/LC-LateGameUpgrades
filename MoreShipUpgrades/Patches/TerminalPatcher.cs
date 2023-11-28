@@ -74,7 +74,7 @@ namespace MoreShipUpgrades.Patches
 
                         TerminalNode node = new TerminalNode();
                         node.clearPreviousText = true;
-                        node.displayText = $"Stun grenade hit {array.Length} enemies.";
+                        node.displayText = $"Stun grenade hit {array.Length} enemies. Total Stun Duration: {maxStunDuration} seconds.";
                         __result = node;
                     }
                     else
@@ -98,8 +98,7 @@ namespace MoreShipUpgrades.Patches
                 }
                 if (UpgradeBus.instance.flashCooldown > 0f)
                 {
-                    CoroutineCooldownCountdown coroutine = new CoroutineCooldownCountdown(UpgradeBus.instance.flashCooldown, __instance);
-                    __instance.StartCoroutine(coroutine.Run());
+
 
                     TerminalNode node = new TerminalNode();
                     node.clearPreviousText = true;
@@ -165,7 +164,8 @@ namespace MoreShipUpgrades.Patches
                     terminal.screenText.text += $"\n{countdownNode.displayText}";
 
                     // Append to chat
-                    HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Remaining cooldown: {Mathf.Round(remainingCooldown)} seconds";
+                    // Oops forgot to comment this out after testing
+                    // HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Remaining cooldown: {Mathf.Round(remainingCooldown)} seconds";\\
 
                     yield return new WaitForSeconds(1f);
                     remainingCooldown -= 1f;
