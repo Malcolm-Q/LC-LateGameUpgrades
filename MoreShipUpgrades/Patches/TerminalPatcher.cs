@@ -21,7 +21,6 @@ namespace MoreShipUpgrades.Patches
                 UpgradeBus.instance.flashCooldown -= Time.deltaTime;
             }
         }
-        
 
         [HarmonyPostfix]
         [HarmonyPatch("ParsePlayerSentence")]
@@ -53,24 +52,30 @@ namespace MoreShipUpgrades.Patches
                     Collider[] array = Physics.OverlapSphere(__instance.transform.position, 40f, 524288);
                     if(array.Length > 0)
                     {
+                        TerminalNode node = new TerminalNode();
+                        node.clearPreviousText = true;
+
+                        float stunDuration = 0f;
                         for (int i = 0; i < array.Length; i++)
                         {
                             EnemyAICollisionDetect component = array[i].GetComponent<EnemyAICollisionDetect>();
                             if (!(component == null))
                             {
+                                // Get stun duration from SetEnemyStunned method
                                 component.mainScript.SetEnemyStunned(true, 7.5f, null);
+                                stunDuration = Mathf.Max(stunDuration, component.mainScript.stunDuration);
                             }
                         }
-                    }
-                    TerminalNode node = new TerminalNode();
-                    if(array.Length > 0)
-                    {
-                        node.displayText = $"Stun grenade hit {array.Length} enemies.";
-                        node.clearPreviousText = true;
+
+                        // Display stun duration with countdown in the terminal
+                        CoroutineStunDurationCountdown coroutine = new CoroutineStunDurationCountdown(stunDuration, node, __instance);
+                        __instance.StartCoroutine(coroutine.Run());
+
                         __result = node;
                     }
                     else
                     {
+                        TerminalNode node = new TerminalNode();
                         node.displayText = "No stunned enemies detected.";
                         node.clearPreviousText = true;
                         __result = node;
@@ -107,16 +112,16 @@ namespace MoreShipUpgrades.Patches
                 TerminalNode node = new TerminalNode();
                 node.clearPreviousText = true;
                 node.displayText = "Purchased Upgrades:";
-                if(UpgradeBus.instance.beekeeper) { node.displayText += "\n\nBeekeeper"; }
-                if(UpgradeBus.instance.biggerLungs) { node.displayText += "\n\nBigger Lungs"; }
-                if(UpgradeBus.instance.exoskeleton) { node.displayText += "\n\nBack Muscles"; }
-                if(UpgradeBus.instance.softSteps) { node.displayText += "\n\nLight Footed"; }
-                if(UpgradeBus.instance.nightVision) { node.displayText += "\n\nNight Vision"; }
-                if(UpgradeBus.instance.runningShoes) { node.displayText += "\n\nRunning Shoes"; }
-                if(UpgradeBus.instance.scannerUpgrade) { node.displayText += "\n\nBetter Scanner"; }
-                if(UpgradeBus.instance.strongLegs) { node.displayText += "\n\nStrong Legs"; }
-                if(UpgradeBus.instance.DestroyTraps) { node.displayText += "\n\nMalware Broadcaster"; }
-                if(UpgradeBus.instance.terminalFlash) { node.displayText += "\n\nDiscombobulator"; }
+                if (UpgradeBus.instance.beekeeper) { node.displayText += "\n\nBeekeeper"; }
+                if (UpgradeBus.instance.biggerLungs) { node.displayText += "\n\nBigger Lungs"; }
+                if (UpgradeBus.instance.exoskeleton) { node.displayText += "\n\nBack Muscles"; }
+                if (UpgradeBus.instance.softSteps) { node.displayText += "\n\nLight Footed"; }
+                if (UpgradeBus.instance.nightVision) { node.displayText += "\n\nNight Vision"; }
+                if (UpgradeBus.instance.runningShoes) { node.displayText += "\n\nRunning Shoes"; }
+                if (UpgradeBus.instance.scannerUpgrade) { node.displayText += "\n\nBetter Scanner"; }
+                if (UpgradeBus.instance.strongLegs) { node.displayText += "\n\nStrong Legs"; }
+                if (UpgradeBus.instance.DestroyTraps) { node.displayText += "\n\nMalware Broadcaster"; }
+                if (UpgradeBus.instance.terminalFlash) { node.displayText += "\n\nDiscombobulator"; }
                 __result = node;
             }
             else if(text.ToLower() == "lategame")
@@ -128,6 +133,46 @@ namespace MoreShipUpgrades.Patches
                 node.displayText += "\n\nUse the info command to get info about an item. EX: `info beekeeper`";
                 node.displayText += "\n\nHave fun and please report bugs to the Lethal Company modding discord";
                 __result = node;
+            }
+        }
+    }
+
+    internal class CoroutineStunDurationCountdown
+    {
+        private float duration;
+        private TerminalNode node;
+        private Terminal terminal;
+
+        public CoroutineStunDurationCountdown(float duration, TerminalNode node, Terminal terminal)
+        {
+            this.duration = duration;
+            this.node = node;
+            this.terminal = terminal;
+        }
+
+        public IEnumerator Run()
+        {
+            float timer = duration;
+
+            while (timer > 0f)
+            {
+                node.displayText = $"Stun grenade hit enemies. {Mathf.Round(timer)} seconds remaining.";
+                terminal.UpdateTerminalDisplay();
+                yield return null;
+                timer -= Time.deltaTime;
+            }
+
+            // Reset the message after the countdown
+            node.displayText = "Enemies are no longer stunned.";
+            terminal.UpdateTerminalDisplay();
+
+            // Display remaining cooldown
+            if (UpgradeBus.instance.flashCooldown > 0f)
+            {
+                TerminalNode cooldownNode = new TerminalNode();
+                cooldownNode.displayText = $"You can discombobulate again in {Mathf.Round(UpgradeBus.instance.flashCooldown)} seconds.";
+                cooldownNode.clearPreviousText = true;
+                terminal.screenText.Add(cooldownNode);
             }
         }
     }
