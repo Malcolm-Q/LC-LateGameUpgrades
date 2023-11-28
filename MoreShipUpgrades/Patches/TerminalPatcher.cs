@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,7 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("Update")]
         private static void Counter()
         {
-            if(UpgradeBus.instance.flashCooldown > 0f)
+            if (UpgradeBus.instance.flashCooldown > 0f)
             {
                 UpgradeBus.instance.flashCooldown -= Time.deltaTime;
             }
@@ -27,9 +28,9 @@ namespace MoreShipUpgrades.Patches
         private static void DestroyObject(ref Terminal __instance, ref TerminalNode __result)
         {
             string text = __instance.screenText.text.Substring(__instance.screenText.text.Length - __instance.textAdded);
-           if (text.ToLower() == "initattack" || text.ToLower() == "atk")
+            if (text.ToLower() == "initattack" || text.ToLower() == "atk")
             {
-                if(!UpgradeBus.instance.terminalFlash)
+                if (!UpgradeBus.instance.terminalFlash)
                 {
                     TerminalNode failNode = new TerminalNode();
                     failNode.displayText = "You don't have access to this command yet. Purchase the 'Discombobulator'.";
@@ -37,7 +38,7 @@ namespace MoreShipUpgrades.Patches
                     __result = failNode;
                     return;
                 }
-                if(UpgradeBus.instance.flashCooldown > 0f)
+                if (UpgradeBus.instance.flashCooldown > 0f)
                 {
                     TerminalNode failNode = new TerminalNode();
                     failNode.displayText = $"You can discombobulate again in {Mathf.Round(UpgradeBus.instance.flashCooldown)} seconds.\nType 'cooldown' or 'cd' to check discombobulation cooldown.";
@@ -50,27 +51,30 @@ namespace MoreShipUpgrades.Patches
                     RoundManager.Instance.PlayAudibleNoise(__instance.transform.position, 60f, 0.8f, 0, false, 14155);
                     UpgradeBus.instance.flashCooldown = 120f;
                     Collider[] array = Physics.OverlapSphere(__instance.transform.position, 40f, 524288);
-                    if(array.Length > 0)
+                    if (array.Length > 0)
                     {
-                        TerminalNode node = new TerminalNode();
-                        node.clearPreviousText = true;
-
-                        float stunDuration = 0f;
-                        for (int i = 0; i < array.Length; i++)
+                        float maxStunDuration = 0f;
+                        foreach (Collider collider in array)
                         {
-                            EnemyAICollisionDetect component = array[i].GetComponent<EnemyAICollisionDetect>();
-                            if (!(component == null))
+                            EnemyAICollisionDetect component = collider.GetComponent<EnemyAICollisionDetect>();
+                            if (component != null)
                             {
-                                // Get stun duration from SetEnemyStunned method
-                                component.mainScript.SetEnemyStunned(true, 7.5f, null);
-                                stunDuration = Mathf.Max(stunDuration, component.mainScript.stunDuration);
+                                float stunDuration = 7.5f; // Set the stun duration as needed
+                                component.mainScript.SetEnemyStunned(true, stunDuration, null);
+                                maxStunDuration = Mathf.Max(maxStunDuration, stunDuration);
                             }
                         }
 
                         // Display stun duration with countdown in the terminal
-                        CoroutineStunDurationCountdown coroutine = new CoroutineStunDurationCountdown(stunDuration, node, __instance);
+                        CoroutineStunDurationCountdown coroutine = new CoroutineStunDurationCountdown(maxStunDuration, __instance);
                         __instance.StartCoroutine(coroutine.Run());
 
+                        CoroutineStunCountdownChat coroutineChat = new CoroutineStunCountdownChat(maxStunDuration, __instance);
+                        __instance.StartCoroutine(coroutineChat.Run());
+
+                        TerminalNode node = new TerminalNode();
+                        node.clearPreviousText = true;
+                        node.displayText = $"Stun grenade hit {array.Length} enemies.";
                         __result = node;
                     }
                     else
@@ -84,7 +88,7 @@ namespace MoreShipUpgrades.Patches
             }
             else if (text.ToLower() == "cooldown" || text.ToLower() == "cd")
             {
-                if(!UpgradeBus.instance.terminalFlash)
+                if (!UpgradeBus.instance.terminalFlash)
                 {
                     TerminalNode failNode = new TerminalNode();
                     failNode.displayText = "You don't have access to this command yet. Purchase 'Discombobulator'.";
@@ -92,11 +96,14 @@ namespace MoreShipUpgrades.Patches
                     __result = failNode;
                     return;
                 }
-                if(UpgradeBus.instance.flashCooldown > 0f)
+                if (UpgradeBus.instance.flashCooldown > 0f)
                 {
+                    CoroutineCooldownCountdown coroutine = new CoroutineCooldownCountdown(UpgradeBus.instance.flashCooldown, __instance);
+                    __instance.StartCoroutine(coroutine.Run());
+
                     TerminalNode node = new TerminalNode();
+                    node.clearPreviousText = true;
                     node.displayText = $"You can discombobulate again in {Mathf.Round(UpgradeBus.instance.flashCooldown)} seconds.";
-                    node.clearPreviousText= true;
                     __result = node;
                 }
                 else
@@ -107,7 +114,7 @@ namespace MoreShipUpgrades.Patches
                     __result = node;
                 }
             }
-            else if(text.ToLower() == "unlocks")
+            else if (text.ToLower() == "unlocks")
             {
                 TerminalNode node = new TerminalNode();
                 node.clearPreviousText = true;
@@ -124,7 +131,7 @@ namespace MoreShipUpgrades.Patches
                 if (UpgradeBus.instance.terminalFlash) { node.displayText += "\n\nDiscombobulator"; }
                 __result = node;
             }
-            else if(text.ToLower() == "lategame")
+            else if (text.ToLower() == "lategame")
             {
                 TerminalNode node = new TerminalNode();
                 node.clearPreviousText = true;
@@ -135,44 +142,101 @@ namespace MoreShipUpgrades.Patches
                 __result = node;
             }
         }
-    }
 
-    internal class CoroutineStunDurationCountdown
-    {
-        private float duration;
-        private TerminalNode node;
-        private Terminal terminal;
-
-        public CoroutineStunDurationCountdown(float duration, TerminalNode node, Terminal terminal)
+        internal class CoroutineCooldownCountdown
         {
-            this.duration = duration;
-            this.node = node;
-            this.terminal = terminal;
-        }
+            private readonly float cooldown;
+            private readonly Terminal terminal;
 
-        public IEnumerator Run()
-        {
-            float timer = duration;
-
-            while (timer > 0f)
+            public CoroutineCooldownCountdown(float cooldown, Terminal terminal)
             {
-                node.displayText = $"Stun grenade hit enemies. {Mathf.Round(timer)} seconds remaining.";
-                terminal.UpdateTerminalDisplay();
-                yield return null;
-                timer -= Time.deltaTime;
+                this.cooldown = cooldown;
+                this.terminal = terminal;
             }
 
-            // Reset the message after the countdown
-            node.displayText = "Enemies are no longer stunned.";
-            terminal.UpdateTerminalDisplay();
-
-            // Display remaining cooldown
-            if (UpgradeBus.instance.flashCooldown > 0f)
+            public IEnumerator Run()
             {
-                TerminalNode cooldownNode = new TerminalNode();
-                cooldownNode.displayText = $"You can discombobulate again in {Mathf.Round(UpgradeBus.instance.flashCooldown)} seconds.";
-                cooldownNode.clearPreviousText = true;
-                terminal.screenText.Add(cooldownNode);
+                float remainingCooldown = cooldown;
+
+                while (remainingCooldown > 0f)
+                {
+                    TerminalNode countdownNode = new TerminalNode();
+                    countdownNode.displayText = $"Remaining cooldown: {Mathf.Round(remainingCooldown)} seconds";
+                    terminal.screenText.text += $"\n{countdownNode.displayText}";
+
+                    // Append to chat
+                    HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Remaining cooldown: {Mathf.Round(remainingCooldown)} seconds";
+
+                    yield return new WaitForSeconds(1f);
+                    remainingCooldown -= 1f;
+                }
+            }
+        }
+
+        internal class CoroutineStunDurationCountdown
+        {
+            private float remainingTime;
+            private Terminal terminal;
+
+            public CoroutineStunDurationCountdown(float duration, Terminal terminal)
+            {
+                remainingTime = duration;
+                this.terminal = terminal;
+            }
+
+            public IEnumerator Run()
+            {
+                while (remainingTime > 0f)
+                {
+                    TerminalNode countdownNode = new TerminalNode();
+                    countdownNode.displayText = $"Remaining Stun Duration: {Mathf.Round(remainingTime)} seconds";
+                    terminal.screenText.text += $"\n{countdownNode.displayText}";
+
+                    yield return new WaitForSeconds(1f);
+                    remainingTime -= 1f;
+                }
+            }
+        }
+
+        internal class CoroutineStunCountdownChat
+        {
+            private float remainingTime;
+            private float lastDisplayedTime;
+            private Terminal terminal;
+
+            public CoroutineStunCountdownChat(float duration, Terminal terminal)
+            {
+                remainingTime = duration;
+                lastDisplayedTime = Mathf.Round(duration);
+                this.terminal = terminal;
+            }
+
+            public IEnumerator Run()
+            {
+                float startTime = Time.time;
+
+                while (remainingTime > 0f)
+                {
+                    float roundedTime = Mathf.Round(remainingTime);
+
+                    // Display in chat only when the rounded time changes
+                    if (roundedTime != lastDisplayedTime)
+                    {
+                        HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Stun Countdown: {roundedTime} seconds";
+                        lastDisplayedTime = roundedTime;
+                    }
+
+                    yield return null;
+
+                    // Calculate time elapsed since the start of the coroutine
+                    float elapsed = Time.time - startTime;
+
+                    // Adjust remaining time based on elapsed time
+                    remainingTime = Mathf.Max(0f, remainingTime - elapsed);
+
+                    // Update the start time for the next iteration
+                    startTime = Time.time;
+                }
             }
         }
     }
