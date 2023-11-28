@@ -19,11 +19,11 @@ namespace MoreShipUpgrades.UpgradeComponents
             players = GameObject.FindObjectsOfType<PlayerControllerB>();
             foreach (PlayerControllerB player in players)
             {
-                player.sprintTime = 17f;
+                player.sprintTime = Plugin.cfg.SPRINT_TIME_INCREASE; //17
             }
             UpgradeBus.instance.biggerLungs = true;
             transform.parent = GameObject.Find("HangarShip").transform;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Bigger Lungs is active!";
+            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Bigger Lungs is active!</color>";
         }
     }
 }

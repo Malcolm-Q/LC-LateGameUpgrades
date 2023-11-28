@@ -23,7 +23,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             yield return new WaitForSeconds(1);
             UpgradeBus.instance.softSteps = true;
             transform.parent = GameObject.Find("HangarShip").transform;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Light Footed is active!";
+            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Light Footed is active!</color>";
         }
     }
 }

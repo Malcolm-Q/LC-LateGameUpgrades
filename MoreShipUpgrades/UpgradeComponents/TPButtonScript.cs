@@ -92,15 +92,27 @@ namespace MoreShipUpgrades.UpgradeComponents
         private IEnumerator WaitToTP(ShipTeleporter tele)
         {
             // if we don't do a little wait we'll tp the previously seleccted player.
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.15f);
+            ReqUpdateTpDropStatusServerRpc();
             tele.PressTeleportButtonOnLocalClient();
-            if (UnityEngine.Random.Range(0f, 1f) > 0.1f)
+            if (UnityEngine.Random.Range(0f, 1f) < Plugin.cfg.CHANCE_TO_BREAK) // 0.9f
             {
                 audio.PlayOneShot(ItemBreak);
                 itemUsedUp = true;
+                HUDManager.Instance.chatText.text += "\n<color=#FF0000>The teleporter button has suffered irreparable damage and destroyed itself!</color>";
                 playerHeldBy.DespawnHeldObject();
             }
-            yield return new WaitForSeconds(2.5f); // minimize chance of player keeping items on death.
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void ReqUpdateTpDropStatusServerRpc()
+        {
+            ChangeTPButtonPressedClientRpc();
+        }
+
+        [ClientRpc]
+        private void ChangeTPButtonPressedClientRpc()
+        {
             UpgradeBus.instance.TPButtonPressed = true;
         }
     }

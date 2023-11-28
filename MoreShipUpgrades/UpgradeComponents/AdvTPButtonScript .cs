@@ -68,19 +68,6 @@ namespace MoreShipUpgrades.UpgradeComponents
                         StartOfRound.Instance.mapScreen.targetedPlayer = playerHeldBy;
                         UpgradeBus.instance.TPButtonPressed = true;
                         NotInverseTele.PressTeleportButtonOnLocalClient();
-
-                        // 80% chance to not break
-                        if (UnityEngine.Random.Range(0f, 1f) > 0.2f)
-                        {
-                            audio.PlayOneShot(ItemBreak);
-                            itemUsedUp = true;
-                            playerHeldBy.DespawnHeldObject();
-                        }
-                        else
-                        {
-                            // Display item break message in the chat
-                            DisplayItemBreakMessageInChat();
-                        }
                     }
                     else
                     {
@@ -100,12 +87,14 @@ namespace MoreShipUpgrades.UpgradeComponents
             yield return new WaitForSeconds(0.15f);
             ReqUpdateTpDropStatusServerRpc();
             tele.PressTeleportButtonOnLocalClient();
+            if (UnityEngine.Random.Range(0f, 1f) < Plugin.cfg.ADV_CHANCE_TO_BREAK) // 0.1f
+            {
+                audio.PlayOneShot(ItemBreak);
+                itemUsedUp = true;
+                HUDManager.Instance.chatText.text += "\n<color=#FF0000>The teleporter button has suffered irreparable damage and destroyed itself!</color>";
+                playerHeldBy.DespawnHeldObject();
+            }
         }
-
-        private void DisplayItemBreakMessageInChat()
-        {
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>The teleporter button has suffered irreparable damage and destroyed itself!</color>";
-            // You can customize the message as needed
 
         [ServerRpc(RequireOwnership = false)]
         public void ReqUpdateTpDropStatusServerRpc()

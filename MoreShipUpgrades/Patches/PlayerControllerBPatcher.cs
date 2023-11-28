@@ -24,6 +24,15 @@ namespace MoreShipUpgrades.Patches
             }
         }
 
+        [HarmonyPrefix]
+        [HarmonyPatch("DamagePlayer")]
+        private static void beekeeperReduceDamage(ref int damageNumber, CauseOfDeath causeOfDeath)
+        {
+            if (!UpgradeBus.instance.beekeeper || causeOfDeath != CauseOfDeath.Electrocution) { return; }
+            damageNumber = (int)(damageNumber * Plugin.cfg.BEEKEEPER_DAMAGE_MULTIPLIER);
+            Debug.Log(damageNumber);
+        }
+
 
         [HarmonyPrefix]
         [HarmonyPatch("DropAllHeldItems")]
@@ -56,7 +65,7 @@ namespace MoreShipUpgrades.Patches
                         GrabbableObject obj = __instance.ItemSlots[i];
                         if(obj != null)
                         {
-                            UpgradeBus.instance.alteredWeight += (Mathf.Clamp(obj.itemProperties.weight - 1f, 0f, 10f) / 2);
+                            UpgradeBus.instance.alteredWeight += (Mathf.Clamp(obj.itemProperties.weight - 1f, 0f, 10f) * Plugin.cfg.CARRY_WEIGHT_REDUCTION);
                         }
                     }
                     __instance.carryWeight = UpgradeBus.instance.alteredWeight;

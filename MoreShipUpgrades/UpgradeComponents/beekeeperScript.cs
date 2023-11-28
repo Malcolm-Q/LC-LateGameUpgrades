@@ -23,7 +23,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             yield return new WaitForSeconds(1);
             UpgradeBus.instance.beekeeper = true;
             transform.parent = GameObject.Find("HangarShip").transform;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Beekeeper is active!";
+            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Beekeeper is active!</color>";
         }
     }
 }

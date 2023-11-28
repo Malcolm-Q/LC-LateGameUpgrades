@@ -1,24 +1,22 @@
-﻿using GameNetcodeStuff;
-using HarmonyLib;
+﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
 
 namespace MoreShipUpgrades.Patches
 {
-    [HarmonyPatch(typeof(RedLocustBees))]
-    internal class RedLocustPatcher
+    [HarmonyPatch(typeof(RoundManager))]
+    internal class RoundManagerPatcher
     {
         [HarmonyPrefix]
-        [HarmonyPatch("OnCollideWithPlayer")]
-        private static bool ReduceDamage()
+        [HarmonyPatch("PlayAudibleNoise")]
+        private static void MakeFootstepsQuiet(ref float noiseRange)
         {
-            if (!UpgradeBus.instance.beekeeper) { return true; }
-            return false;
+            if(!UpgradeBus.instance.softSteps) { return; }
+            noiseRange -= Plugin.cfg.NOISE_REDUCTION;
         }
     }
 }

@@ -49,8 +49,8 @@ namespace MoreShipUpgrades.Patches
                 {
                     __instance.terminalAudio.PlayOneShot(UpgradeBus.instance.flashNoise);
                     RoundManager.Instance.PlayAudibleNoise(__instance.transform.position, 60f, 0.8f, 0, false, 14155);
-                    UpgradeBus.instance.flashCooldown = 120f;
-                    Collider[] array = Physics.OverlapSphere(__instance.transform.position, 40f, 524288);
+                    UpgradeBus.instance.flashCooldown = Plugin.cfg.DISCOMBOBULATOR_COOLDOWN;
+                    Collider[] array = Physics.OverlapSphere(__instance.transform.position, Plugin.cfg.DISCOMBOBULATOR_RADIUS, 524288);
                     if(array.Length > 0)
                     {
                         for (int i = 0; i < array.Length; i++)
@@ -58,7 +58,7 @@ namespace MoreShipUpgrades.Patches
                             EnemyAICollisionDetect component = array[i].GetComponent<EnemyAICollisionDetect>();
                             if (!(component == null))
                             {
-                                component.mainScript.SetEnemyStunned(true, 7.5f, null);
+                                component.mainScript.SetEnemyStunned(true, Plugin.cfg.DISCOMBOBULATOR_STUN_DURATION, null);
                             }
                         }
                     }

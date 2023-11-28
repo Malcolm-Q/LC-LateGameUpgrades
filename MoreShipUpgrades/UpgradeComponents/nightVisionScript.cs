@@ -14,9 +14,13 @@ namespace MoreShipUpgrades.UpgradeComponents
 {
     internal class nightVisionScript : NetworkBehaviour
     {
+        private float nightBattery;
+        private Transform batteryBar;
         void Start()
         {
             StartCoroutine(lateApply());
+            batteryBar = transform.GetChild(0).GetChild(0).transform;
+            batteryBar.gameObject.SetActive(true);
         }
 
         private IEnumerator lateApply()
@@ -24,7 +28,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             yield return new WaitForSeconds(1);
             UpgradeBus.instance.nightVision = true;
             transform.parent = GameObject.Find("HangarShip").transform;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Press Left-Alt to toggle Night Vision!!!";
+            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Press Left-Alt to toggle Night Vision!!!</color>";
         }
 
         void Update()
@@ -50,6 +54,30 @@ namespace MoreShipUpgrades.UpgradeComponents
                 }
 
             }
+            if(UpgradeBus.instance.nightVisionActive)
+            {
+                nightBattery -= Time.deltaTime * Plugin.cfg.NIGHT_VIS_DRAIN_SPEED; //0.1f
+                nightBattery = Mathf.Clamp(nightBattery, 0f, 1f);
+                batteryBar.parent.gameObject.SetActive(true);
+                if(nightBattery <= 0f)
+                {
+                    UpgradeBus.instance.nightVisionActive = false;
+                }
+            }
+            else
+            {
+                nightBattery += Time.deltaTime * Plugin.cfg.NIGHT_VIS_REGEN_SPEED; //0.05f
+                nightBattery = Mathf.Clamp(nightBattery, 0f, 1f);
+                if(nightBattery >= 1f)
+                {
+                    batteryBar.parent.gameObject.SetActive(false);
+                }
+                else
+                {
+                    batteryBar.parent.gameObject.SetActive(true);
+                }
+            }
+            batteryBar.localScale = new Vector3(nightBattery, 1, 1);
         }
     }
 }

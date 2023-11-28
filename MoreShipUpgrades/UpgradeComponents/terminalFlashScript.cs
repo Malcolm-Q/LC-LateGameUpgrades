@@ -24,7 +24,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             UpgradeBus.instance.terminalFlash = true;
             
             transform.parent = GameObject.Find("HangarShip").transform;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Discombobulator is active!\nType 'cooldown' into the terminal for info!!!";
+            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Discombobulator is active!\nType 'cooldown' into the terminal for info!!!</color>";
         }
     }
 }
