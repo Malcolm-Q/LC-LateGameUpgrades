@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents
 {
-    internal class terminalFlashScript : NetworkBehaviour
+    public class terminalFlashScript : NetworkBehaviour
     {
         void Start()
         {

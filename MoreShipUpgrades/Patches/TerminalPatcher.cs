@@ -1,10 +1,12 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Patches
@@ -68,6 +70,10 @@ namespace MoreShipUpgrades.Patches
                         node.displayText = $"Stun grenade hit {array.Length} enemies.";
                         node.clearPreviousText = true;
                         __result = node;
+                        if(Plugin.cfg.DISCOMBOBULATOR_NOTIFY_CHAT)
+                        {
+                            __instance.StartCoroutine(CountDownChat(Plugin.cfg.DISCOMBOBULATOR_STUN_DURATION));
+                        }
                     }
                     else
                     {
@@ -129,6 +135,21 @@ namespace MoreShipUpgrades.Patches
                 node.displayText += "\n\nHave fun and please report bugs to the Lethal Company modding discord";
                 __result = node;
             }
+        }
+
+        private static IEnumerator CountDownChat(float count)
+        {
+            HUDManager.Instance.chatText.text = "";
+            HUDManager.Instance.chatText.text += $"<color=#FFFFFF>Stun Duration: {count.ToString("F1")} seconds.</color>";
+            while(count > 0f)
+            {
+                yield return new WaitForSeconds(1f);
+                count -= 1f;
+                HUDManager.Instance.chatText.text = "";
+                HUDManager.Instance.chatText.text += $"<color=#FFFFFF>Stun Duration: {count.ToString("F1")} seconds.</color>";
+            }
+            HUDManager.Instance.chatText.text = "";
+            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Effected enemies are no longer stunned!</color>";
         }
     }
 }

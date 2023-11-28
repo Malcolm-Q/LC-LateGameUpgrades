@@ -7,7 +7,7 @@ Feel free to make a pull request. Please make an effort to have additions be rea
 This is MIT, do with it whatever you want.
 
 
-Join [this modding discord](https://discord.gg/lcmods) and comment [on this post](https://discord.com/channels/1168655651455639582/1178407269994594435)  to discuss the mod.
+Join [this modding discord](https://discord.gg/hzEcKFSSDX) and comment [on this post](https://discord.com/channels/1168655651455639582/1178407269994594435)  to discuss the mod.
 
 
 I was really rushing and learning as I went when I made this so there's quite a bit of stuff that isn't best practice and a lot of housekeeping needs to be done.  

@@ -1,4 +1,6 @@
 ﻿using BepInEx.Configuration;
+using UnityEngine;
+using System.Drawing;
 
 namespace MoreShipUpgrades.Misc
 {
@@ -55,6 +57,10 @@ namespace MoreShipUpgrades.Misc
         public float NIGHT_VIS_REGEN_SPEED { get; set; }
         public float DISCOMBOBULATOR_RADIUS { get; set; }
         public float DISCOMBOBULATOR_STUN_DURATION { get; set; }
+        public bool DISCOMBOBULATOR_NOTIFY_CHAT { get; set; }
+        public UnityEngine.Color NIGHT_VIS_COLOR { get; set; }
+        public float NIGHT_VIS_RANGE { get; set; }
+        public float NIGHT_VIS_INTENSITY { get; set; }
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -111,6 +117,9 @@ namespace MoreShipUpgrades.Misc
             NIGHT_VISION_PRICE = ConfigEntry("Price of Night Vision Upgrade", 700, "");
             NIGHT_VIS_DRAIN_SPEED = ConfigEntry("Multiplier for night vis battery drain", 0.1f, "Multiplied by timedelta. A value of 0.1 will result in a 10 second battery life.");
             NIGHT_VIS_REGEN_SPEED = ConfigEntry("Multiplier for night vis battery regen", 0.05f, "Multiplied by timedelta.");
+            NIGHT_VIS_COLOR = ConfigEntry("Night Vision Color", UnityEngine.Color.green, "The color your night vision light emits.");
+            NIGHT_VIS_RANGE = ConfigEntry("Night Vision Range", 2000f, "Kind of like the distance your night vision travels.");
+            NIGHT_VIS_INTENSITY = ConfigEntry("Night Vision Intensity", 1000f, "Kind of like the brightness of your Night Vision.");
 
 
             DISCOMBOBULATOR_ENABLED = ConfigEntry("Enable Discombobulator Upgrade", true, "Stun enemies around the ship.");
@@ -118,6 +127,7 @@ namespace MoreShipUpgrades.Misc
             DISCOMBOBULATOR_COOLDOWN = ConfigEntry("Discombobulator Cooldown", 120f, "");
             DISCOMBOBULATOR_RADIUS  = ConfigEntry("Discombobulator Effect Radius", 40f, "");
             DISCOMBOBULATOR_STUN_DURATION  = ConfigEntry("Discombobulator Stun Duration", 7.5f, "");
+            DISCOMBOBULATOR_NOTIFY_CHAT = ConfigEntry("Notify Local Chat of Enemy Stun Duration", true, "");
 
             BETTER_SCANNER_ENABLED = ConfigEntry("Enable Better Scanner Upgrade", true, "Further scan distance, no LOS needed.");
             BETTER_SCANNER_PRICE = ConfigEntry("Price of Better Scanner Upgrade", 650, "");

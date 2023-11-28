@@ -42,9 +42,13 @@ namespace MoreShipUpgrades.UpgradeComponents
                     UpgradeBus.instance.nightVisColor = nightVis.color;
                     UpgradeBus.instance.nightVisRange = nightVis.range;
                     UpgradeBus.instance.nightVisIntensity = nightVis.intensity;
-                    nightVis.color = Color.green;
-                    nightVis.range = 3000f;
-                    nightVis.intensity = 1500f;
+
+                    //nightVis.color = Color.green;
+                    //nightVis.range = 3000f;
+                    //nightVis.intensity = 1500f;
+                    nightVis.color = Plugin.cfg.NIGHT_VIS_COLOR;
+                    nightVis.range = Plugin.cfg.NIGHT_VIS_RANGE;
+                    nightVis.intensity = Plugin.cfg.NIGHT_VIS_INTENSITY;
                 }
                 else
                 {
