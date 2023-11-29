@@ -16,11 +16,13 @@ namespace MoreShipUpgrades.UpgradeComponents
     {
         private float nightBattery;
         private Transform batteryBar;
+        private Light nightVis;
         void Start()
         {
             StartCoroutine(lateApply());
             batteryBar = transform.GetChild(0).GetChild(0).transform;
             batteryBar.gameObject.SetActive(true);
+            nightVis = GameNetworkManager.Instance.localPlayerController.nightVision;
         }
 
         private IEnumerator lateApply()
@@ -36,7 +38,6 @@ namespace MoreShipUpgrades.UpgradeComponents
             if (Keyboard.current[Key.LeftAlt].wasPressedThisFrame)
             {
                 UpgradeBus.instance.nightVisionActive = !UpgradeBus.instance.nightVisionActive;
-                Light nightVis = GameNetworkManager.Instance.localPlayerController.nightVision;
                 if (UpgradeBus.instance.nightVisionActive)
                 {
                     UpgradeBus.instance.nightVisColor = nightVis.color;
@@ -66,6 +67,9 @@ namespace MoreShipUpgrades.UpgradeComponents
                 if(nightBattery <= 0f)
                 {
                     UpgradeBus.instance.nightVisionActive = false;
+                    nightVis.color = UpgradeBus.instance.nightVisColor;
+                    nightVis.range = UpgradeBus.instance.nightVisRange;
+                    nightVis.intensity = UpgradeBus.instance.nightVisIntensity;
                 }
             }
             else
