@@ -19,7 +19,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             players = GameObject.FindObjectsOfType<PlayerControllerB>();
             foreach (PlayerControllerB player in players)
             {
-                player.sprintTime = Plugin.cfg.SPRINT_TIME_INCREASE; //17
+                player.sprintTime = UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE; //17
             }
             UpgradeBus.instance.biggerLungs = true;
             transform.parent = GameObject.Find("HangarShip").transform;

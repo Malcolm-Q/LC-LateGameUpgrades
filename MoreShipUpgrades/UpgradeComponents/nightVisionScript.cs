@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Unity.Netcode;
@@ -16,13 +17,12 @@ namespace MoreShipUpgrades.UpgradeComponents
     {
         private float nightBattery;
         private Transform batteryBar;
-        private Light nightVis;
+        private PlayerControllerB client;
+        private bool batteryExhaustion;
         void Start()
         {
             StartCoroutine(lateApply());
             batteryBar = transform.GetChild(0).GetChild(0).transform;
-            batteryBar.gameObject.SetActive(true);
-            nightVis = GameNetworkManager.Instance.localPlayerController.nightVision;
         }
 
         private IEnumerator lateApply()
@@ -31,50 +31,55 @@ namespace MoreShipUpgrades.UpgradeComponents
             UpgradeBus.instance.nightVision = true;
             transform.parent = GameObject.Find("HangarShip").transform;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Press Left-Alt to toggle Night Vision!!!</color>";
+            client = GameNetworkManager.Instance.localPlayerController;
         }
 
-        void Update()
+        void LateUpdate()
         {
-            if (Keyboard.current[Key.LeftAlt].wasPressedThisFrame)
+            if(client == null) { return; }
+            if (Keyboard.current[Key.LeftAlt].wasPressedThisFrame && !batteryExhaustion)
             {
                 UpgradeBus.instance.nightVisionActive = !UpgradeBus.instance.nightVisionActive;
                 if (UpgradeBus.instance.nightVisionActive)
                 {
-                    UpgradeBus.instance.nightVisColor = nightVis.color;
-                    UpgradeBus.instance.nightVisRange = nightVis.range;
-                    UpgradeBus.instance.nightVisIntensity = nightVis.intensity;
+                    UpgradeBus.instance.nightVisColor = client.nightVision.color;
+                    UpgradeBus.instance.nightVisRange = client.nightVision.range;
+                    UpgradeBus.instance.nightVisIntensity = client.nightVision.intensity;
 
                     //nightVis.color = Color.green;
                     //nightVis.range = 3000f;
                     //nightVis.intensity = 1500f;
-                    nightVis.color = Plugin.cfg.NIGHT_VIS_COLOR;
-                    nightVis.range = Plugin.cfg.NIGHT_VIS_RANGE;
-                    nightVis.intensity = Plugin.cfg.NIGHT_VIS_INTENSITY;
+                    client.nightVision.color = UpgradeBus.instance.cfg.NIGHT_VIS_COLOR;
+                    client.nightVision.range = UpgradeBus.instance.cfg.NIGHT_VIS_RANGE;
+                    client.nightVision.intensity = UpgradeBus.instance.cfg.NIGHT_VIS_INTENSITY;
+                    nightBattery -= UpgradeBus.instance.cfg.NIGHT_VIS_STARTUP; // 0.1f
                 }
                 else
                 {
-                    nightVis.color = UpgradeBus.instance.nightVisColor;
-                    nightVis.range = UpgradeBus.instance.nightVisRange;
-                    nightVis.intensity = UpgradeBus.instance.nightVisIntensity;
+                    client.nightVision.color = UpgradeBus.instance.nightVisColor;
+                    client.nightVision.range = UpgradeBus.instance.nightVisRange;
+                    client.nightVision.intensity = UpgradeBus.instance.nightVisIntensity;
                 }
 
             }
             if(UpgradeBus.instance.nightVisionActive)
             {
-                nightBattery -= Time.deltaTime * Plugin.cfg.NIGHT_VIS_DRAIN_SPEED; //0.1f
+                nightBattery -= Time.deltaTime * UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_SPEED; //0.1f
                 nightBattery = Mathf.Clamp(nightBattery, 0f, 1f);
                 batteryBar.parent.gameObject.SetActive(true);
                 if(nightBattery <= 0f)
                 {
                     UpgradeBus.instance.nightVisionActive = false;
-                    nightVis.color = UpgradeBus.instance.nightVisColor;
-                    nightVis.range = UpgradeBus.instance.nightVisRange;
-                    nightVis.intensity = UpgradeBus.instance.nightVisIntensity;
+                    client.nightVision.color = UpgradeBus.instance.nightVisColor;
+                    client.nightVision.range = UpgradeBus.instance.nightVisRange;
+                    client.nightVision.intensity = UpgradeBus.instance.nightVisIntensity;
+                    batteryExhaustion = true;
+                    StartCoroutine(BatteryRecovery());
                 }
             }
-            else
+            else if (!batteryExhaustion)
             {
-                nightBattery += Time.deltaTime * Plugin.cfg.NIGHT_VIS_REGEN_SPEED; //0.05f
+                nightBattery += Time.deltaTime * UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_SPEED; //0.05f
                 nightBattery = Mathf.Clamp(nightBattery, 0f, 1f);
                 if(nightBattery >= 1f)
                 {
@@ -85,7 +90,20 @@ namespace MoreShipUpgrades.UpgradeComponents
                     batteryBar.parent.gameObject.SetActive(true);
                 }
             }
+            if(client.isInsideFactory || UpgradeBus.instance.nightVisionActive)
+            {
+                client.nightVision.enabled = true;
+            }
+            else
+            {
+                client.nightVision.enabled = false;
+            }
             batteryBar.localScale = new Vector3(nightBattery, 1, 1);
+        }
+        private IEnumerator BatteryRecovery()
+        {
+            yield return new WaitForSeconds(UpgradeBus.instance.cfg.NIGHT_VIS_EXHAUST);
+            batteryExhaustion = false;
         }
     }
 }

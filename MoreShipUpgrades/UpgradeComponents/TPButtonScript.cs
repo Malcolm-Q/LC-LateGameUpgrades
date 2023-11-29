@@ -68,7 +68,7 @@ namespace MoreShipUpgrades.UpgradeComponents
                         StartOfRound.Instance.mapScreen.targetedPlayer = playerHeldBy;
                         UpgradeBus.instance.TPButtonPressed = true;
                         NotInverseTele.PressTeleportButtonOnLocalClient();
-                        if (UnityEngine.Random.Range(0f, 1f) > 0.1f)
+                        if (UnityEngine.Random.Range(0f, 1f) > UpgradeBus.instance.cfg.CHANCE_TO_BREAK)
                         {
                             audio.PlayOneShot(ItemBreak);
                             itemUsedUp = true;
@@ -95,7 +95,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             yield return new WaitForSeconds(0.15f);
             ReqUpdateTpDropStatusServerRpc();
             tele.PressTeleportButtonOnLocalClient();
-            if (UnityEngine.Random.Range(0f, 1f) < Plugin.cfg.CHANCE_TO_BREAK) // 0.9f
+            if (UnityEngine.Random.Range(0f, 1f) < UpgradeBus.instance.cfg.CHANCE_TO_BREAK) // 0.9f
             {
                 audio.PlayOneShot(ItemBreak);
                 itemUsedUp = true;

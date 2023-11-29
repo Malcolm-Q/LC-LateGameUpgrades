@@ -25,7 +25,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
             foreach (PlayerControllerB player in players)
             {
-                player.jumpForce = Plugin.cfg.JUMP_FORCE;
+                player.jumpForce = UpgradeBus.instance.cfg.JUMP_FORCE;
             }
             transform.parent = GameObject.Find("HangarShip").transform;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Strong Legs is active!</color>";

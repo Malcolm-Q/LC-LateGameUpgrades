@@ -38,8 +38,15 @@ namespace MoreShipUpgrades.UpgradeComponents
             }
             if (netObj.gameObject.name == "Landmine(Clone)" || netObj.gameObject.name == "TurretContainer(Clone)")
             {
+                if (UpgradeBus.instance.cfg.EXPLODE_TRAP) { SpawnExplosionClientRpc(netObj.gameObject.transform.position); }
                 GameNetworkManager.Destroy(netObj.gameObject);
             }
+        }
+
+        [ClientRpc]
+        private void SpawnExplosionClientRpc(Vector3 position)
+        {
+            if (UpgradeBus.instance.cfg.EXPLODE_TRAP) { Landmine.SpawnExplosion(position + Vector3.up, true, 5.7f, 6.4f); }
         }
     }
 }

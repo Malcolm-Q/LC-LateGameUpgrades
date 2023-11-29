@@ -25,7 +25,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
             foreach (PlayerControllerB player in players)
             {
-                player.movementSpeed = Plugin.cfg.MOVEMENT_SPEED;
+                player.movementSpeed = UpgradeBus.instance.cfg.MOVEMENT_SPEED;
             }
             transform.parent = GameObject.Find("HangarShip").transform;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Running Shoes is active!</color>";

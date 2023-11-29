@@ -87,7 +87,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             yield return new WaitForSeconds(0.15f);
             ReqUpdateTpDropStatusServerRpc();
             tele.PressTeleportButtonOnLocalClient();
-            if (UnityEngine.Random.Range(0f, 1f) < Plugin.cfg.ADV_CHANCE_TO_BREAK) // 0.1f
+            if (UnityEngine.Random.Range(0f, 1f) < UpgradeBus.instance.cfg.ADV_CHANCE_TO_BREAK) // 0.1f
             {
                 audio.PlayOneShot(ItemBreak);
                 itemUsedUp = true;

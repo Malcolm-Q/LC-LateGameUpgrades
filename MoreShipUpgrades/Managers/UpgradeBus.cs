@@ -1,4 +1,5 @@
-﻿using MoreShipUpgrades.UpgradeComponents;
+﻿using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -32,11 +33,13 @@ namespace MoreShipUpgrades.Managers
         public float alteredWeight = 1f;
         public AudioClip flashNoise;
         public trapDestroyerScript trapHandler = null;
+        public PluginConfig cfg;
         
         void Awake()
         {
             instance = this;
-            DontDestroyOnLoad(gameObject); 
+            DontDestroyOnLoad(gameObject);
+            cfg = Plugin.cfg;
         }
 
         public void ResetAllValues()

@@ -8,6 +8,6 @@ namespace MoreShipUpgrades.Misc
     {
         public const string GUID = "com.malco.lethalcompany.moreshipupgrades";
         public const string NAME = "More Ship Upgrades";
-        public const string VERSION = "1.2.5";
+        public const string VERSION = "1.3.1";
     }
 }

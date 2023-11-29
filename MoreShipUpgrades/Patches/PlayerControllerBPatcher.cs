@@ -13,24 +13,36 @@ namespace MoreShipUpgrades.Patches
     [HarmonyPatch(typeof(PlayerControllerB))]
     internal class PlayerControllerBPatcher
     {
-        [HarmonyPostfix]
-        [HarmonyPatch("SetNightVisionEnabled")]
-        private static void overrideNightVision(ref PlayerControllerB __instance)
-        {
-            __instance.nightVision.enabled = UpgradeBus.instance.nightVisionActive;
-            if (__instance.isInsideFactory)
-            {
-                __instance.nightVision.enabled = true;
-            }
-        }
-
         [HarmonyPrefix]
         [HarmonyPatch("DamagePlayer")]
         private static void beekeeperReduceDamage(ref int damageNumber, CauseOfDeath causeOfDeath)
         {
-            if (!UpgradeBus.instance.beekeeper || causeOfDeath != CauseOfDeath.Electrocution) { return; }
-            damageNumber = (int)(damageNumber * Plugin.cfg.BEEKEEPER_DAMAGE_MULTIPLIER);
-            Debug.Log(damageNumber);
+            if (!UpgradeBus.instance.beekeeper || causeOfDeath != CauseOfDeath.Electrocution || damageNumber != 10) { return; }
+            damageNumber = (int)(damageNumber * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER);
+        }
+        
+        [HarmonyPrefix]
+        [HarmonyPatch("DamagePlayerServerRpc")]
+        private static void beekeeperReduceDamageServer(ref int damageNumber)
+        {
+            if (!UpgradeBus.instance.beekeeper || damageNumber != 10) { return; }
+            damageNumber = (int)(damageNumber * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER);
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch("DamagePlayerClientRpc")]
+        private static void beekeeperReduceDamageClient(ref int damageNumber)
+        {
+            if (!UpgradeBus.instance.beekeeper || damageNumber != 10) { return; }
+            damageNumber = (int)(damageNumber * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER);
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch("DamageOnOtherClients")]
+        private static void beekeeperReduceDamageOther(ref int damageNumber)
+        {
+            if (!UpgradeBus.instance.beekeeper || damageNumber != 10) { return; }
+            damageNumber = (int)(damageNumber * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER);
         }
 
 
@@ -65,7 +77,7 @@ namespace MoreShipUpgrades.Patches
                         GrabbableObject obj = __instance.ItemSlots[i];
                         if(obj != null)
                         {
-                            UpgradeBus.instance.alteredWeight += (Mathf.Clamp(obj.itemProperties.weight - 1f, 0f, 10f) * Plugin.cfg.CARRY_WEIGHT_REDUCTION);
+                            UpgradeBus.instance.alteredWeight += (Mathf.Clamp(obj.itemProperties.weight - 1f, 0f, 10f) * UpgradeBus.instance.cfg.CARRY_WEIGHT_REDUCTION);
                         }
                     }
                     __instance.carryWeight = UpgradeBus.instance.alteredWeight;

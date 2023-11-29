@@ -18,13 +18,12 @@ namespace MoreShipUpgrades.Patches
         private static bool DestroyObject(ref TerminalAccessibleObject __instance, ref float ___currentCooldownTimer, ref bool ___inCooldown)
         {
             if(!UpgradeBus.instance.DestroyTraps || __instance.gameObject.layer != LayerMask.NameToLayer("MapHazards")) { return true; }
-            if (Plugin.cfg.DESTROY_TRAP)
+            if (UpgradeBus.instance.cfg.DESTROY_TRAP)
             {
-                if (Plugin.cfg.EXPLODE_TRAP) { Landmine.SpawnExplosion(__instance.transform.position, true); }
                 UpgradeBus.instance.trapHandler.ReqDestroyObjectServerRpc(new NetworkObjectReference(__instance.gameObject.transform.parent.gameObject.GetComponent<NetworkObject>()));
                 return false;
             }
-            if (!___inCooldown) { ___currentCooldownTimer = Plugin.cfg.DISARM_TIME; }
+            if (!___inCooldown) { ___currentCooldownTimer = UpgradeBus.instance.cfg.DISARM_TIME; }
             return true;
         }
     }
