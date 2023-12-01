@@ -1,5 +1,6 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents
 {
-    internal class beekeeperScript : NetworkBehaviour
+    internal class beekeeperScript : BaseUpgrade
     {
         void Start()
         {
@@ -24,6 +25,25 @@ namespace MoreShipUpgrades.UpgradeComponents
             UpgradeBus.instance.beekeeper = true;
             transform.parent = GameObject.Find("HangarShip").transform;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Beekeeper is active!</color>";
+            foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
+            {
+                if(node.Name.ToLower() == "beekeeper" && node.Price > 0)
+                {
+                    node.Price /= 2;
+                }
+            }
+        }
+
+        public override void Increment()
+        {
+            UpgradeBus.instance.beeLevel++;
+            foreach( CustomTerminalNode node in UpgradeBus.instance.terminalNodes )
+            {
+                if(node.Name.ToLower() == "beekeeper")
+                {
+                    node.Description = $"Circuit bees do %{Mathf.Round(100 * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beeLevel * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT)))} of their base damage.";
+                }
+            }
         }
     }
 }

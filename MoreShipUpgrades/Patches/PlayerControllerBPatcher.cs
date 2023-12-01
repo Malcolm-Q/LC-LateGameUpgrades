@@ -18,7 +18,7 @@ namespace MoreShipUpgrades.Patches
         private static void beekeeperReduceDamage(ref int damageNumber, CauseOfDeath causeOfDeath)
         {
             if (!UpgradeBus.instance.beekeeper || causeOfDeath != CauseOfDeath.Electrocution || damageNumber != 10) { return; }
-            damageNumber = (int)(damageNumber * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER);
+            damageNumber = (int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beeLevel * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT)));
         }
         
         [HarmonyPrefix]
@@ -26,7 +26,7 @@ namespace MoreShipUpgrades.Patches
         private static void beekeeperReduceDamageServer(ref int damageNumber)
         {
             if (!UpgradeBus.instance.beekeeper || damageNumber != 10) { return; }
-            damageNumber = (int)(damageNumber * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER);
+            damageNumber = (int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beeLevel * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT)));
         }
 
         [HarmonyPrefix]
@@ -34,7 +34,7 @@ namespace MoreShipUpgrades.Patches
         private static void beekeeperReduceDamageClient(ref int damageNumber)
         {
             if (!UpgradeBus.instance.beekeeper || damageNumber != 10) { return; }
-            damageNumber = (int)(damageNumber * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER);
+            damageNumber = (int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beeLevel * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT)));
         }
 
         [HarmonyPrefix]
@@ -42,7 +42,7 @@ namespace MoreShipUpgrades.Patches
         private static void beekeeperReduceDamageOther(ref int damageNumber)
         {
             if (!UpgradeBus.instance.beekeeper || damageNumber != 10) { return; }
-            damageNumber = (int)(damageNumber * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER);
+            damageNumber = (int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beeLevel * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT)));
         }
 
 

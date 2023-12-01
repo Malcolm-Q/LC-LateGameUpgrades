@@ -53,6 +53,7 @@ namespace MoreShipUpgrades.Misc
         public float ADV_CHANCE_TO_BREAK { get; set; }
         public float CHANCE_TO_BREAK { get; set; }
         public float BEEKEEPER_DAMAGE_MULTIPLIER { get; set; }
+        public float BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT { get; set; }
         public float NIGHT_VIS_DRAIN_SPEED { get; set; }
         public float NIGHT_VIS_REGEN_SPEED { get; set; }
         public float DISCOMBOBULATOR_RADIUS { get; set; }
@@ -63,6 +64,12 @@ namespace MoreShipUpgrades.Misc
         public float NIGHT_VIS_INTENSITY { get; set; }
         public float NIGHT_VIS_STARTUP { get; set; }
         public float NIGHT_VIS_EXHAUST { get; set; }
+        public float CARRY_WEIGHT_INCREMENT { get; set; }
+        public float MOVEMENT_INCREMENT { get; set; }
+        public float SPRINT_TIME_INCREMENT { get; set; }
+        public float NOISE_REDUCTION_INCREMENT { get; set; }
+        public float JUMP_FORCE_INCREMENT { get; set; }
+        public float DISCOMBOBULATOR_INCREMENT { get; set; }
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -89,19 +96,23 @@ namespace MoreShipUpgrades.Misc
 
             BEEKEEPER_ENABLED = ConfigEntry("Beekeeper","Enable Beekeeper Upgrade", true, "Take no damage from bees");
             BEEKEEPER_PRICE = ConfigEntry("Beekeeper","Price of Beekeeper Upgrade", 450, "");
-            BEEKEEPER_DAMAGE_MULTIPLIER = ConfigEntry("Beekeeper","Multiplied to incoming damage (rounded to int)", 0.25f, "Incoming damage from bees is 10.");
+            BEEKEEPER_DAMAGE_MULTIPLIER = ConfigEntry("Beekeeper","Multiplied to incoming damage (rounded to int)", 0.64f, "Incoming damage from bees is 10.");
+            BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT = ConfigEntry("Beekeeper","Additional % Reduced per level", 0.15f, "Every time beekeeper is upgraded this value will be subtracted to the base multiplier above.");
 
             BIGGER_LUNGS_ENABLED = ConfigEntry("Bigger Lungs","Enable Bigger Lungs Upgrade", true, "More Stamina");
             BIGGER_LUNGS_PRICE = ConfigEntry("Bigger Lungs","Price of Bigger Lungs Upgrade", 700, "");
             SPRINT_TIME_INCREASE = ConfigEntry("Bigger Lungs","SprintTime value", 17f, "Vanilla value is 11");
+            SPRINT_TIME_INCREMENT = ConfigEntry("Bigger Lungs","SprintTime Increment", 1.25f,"How much the above value is increased on upgrade.");
 
             RUNNING_SHOES_ENABLED = ConfigEntry("Running Shoes","Enable Running Shoes Upgrade", true, "Run Faster");
             RUNNING_SHOES_PRICE = ConfigEntry("Running Shoes","Price of Running Shoes Upgrade", 1000, "");
             MOVEMENT_SPEED = ConfigEntry("Running Shoes","Movement Speed Value", 6f, "Vanilla value is 4.6");
+            MOVEMENT_INCREMENT = ConfigEntry("Running Shoes", "Movement Speed Increment", 0.5f, "How much the above value is increased on upgrade.");
 
             STRONG_LEGS_ENABLED = ConfigEntry("Strong Legs","Enable Strong Legs Upgrade", true, "Jump Higher");
             STRONG_LEGS_PRICE = ConfigEntry("Strong Legs","Price of Strong Legs Upgrade", 300, "");
             JUMP_FORCE = ConfigEntry("Strong Legs","Jump Force", 16f, "Vanilla value is 13");
+            JUMP_FORCE_INCREMENT = ConfigEntry("Strong Legs","Jump Force Increment", 0.75f, "How much the above value is increased on upgrade.");
 
             MALWARE_BROADCASTER_ENABLED = ConfigEntry("Malware Broadcaster", "Enable Malware Broadcaster Upgrade", true, "Explode Map Hazards");
             MALWARE_BROADCASTER_PRICE = ConfigEntry("Malware Broadcaster", "Price of Malware Broadcaster Upgrade", 650, "");
@@ -112,7 +123,9 @@ namespace MoreShipUpgrades.Misc
 
             LIGHT_FOOTED_ENABLED = ConfigEntry("Light Footed", "Enable Light Footed Upgrade", true, "Make less noise moving.");
             LIGHT_FOOTED_PRICE = ConfigEntry("Light Footed", "Price of Light Footed Upgrade", 350, "");
-            NOISE_REDUCTION = ConfigEntry("Light Footed", "Noise Reduction", 7f, "Distance units to subtract from footstep noise");
+            NOISE_REDUCTION = ConfigEntry("Light Footed", "Noise Reduction", 7f, "Distance units to subtract from footstep noise.");
+            NOISE_REDUCTION_INCREMENT = ConfigEntry("Light Footed", "Noise Reduction Increment", 1f, "The amount added to above value on upgrade.");
+
 
 
             NIGHT_VISION_ENABLED = ConfigEntry("Night Vision", "Enable Night Vision Upgrade", true, "Toggleable night vision.");
@@ -132,6 +145,7 @@ namespace MoreShipUpgrades.Misc
             DISCOMBOBULATOR_RADIUS  = ConfigEntry("Discombobulator", "Discombobulator Effect Radius", 40f, "");
             DISCOMBOBULATOR_STUN_DURATION  = ConfigEntry("Discombobulator", "Discombobulator Stun Duration", 7.5f, "");
             DISCOMBOBULATOR_NOTIFY_CHAT = ConfigEntry("Discombobulator", "Notify Local Chat of Enemy Stun Duration", true, "");
+            DISCOMBOBULATOR_INCREMENT  = ConfigEntry("Discombobulator", "Discombobulator Increment", 1f, "The amount added to stun duration on upgrade.");
 
             BETTER_SCANNER_ENABLED = ConfigEntry("Better Scanner", "Enable Better Scanner Upgrade", true, "Further scan distance, no LOS needed.");
             BETTER_SCANNER_PRICE = ConfigEntry("Better Scanner", "Price of Better Scanner Upgrade", 650, "");
@@ -142,7 +156,8 @@ namespace MoreShipUpgrades.Misc
 
             BACK_MUSCLES_ENABLED = ConfigEntry("Back Muscles", "Enable Back Muscles Upgrade", true, "Reduce carry weight");
             BACK_MUSCLES_PRICE = ConfigEntry("Back Muscles", "Price of Back Muscles Upgrade", 835, "");
-            CARRY_WEIGHT_REDUCTION = ConfigEntry("Back Muscles", "Carry Weight Multiplier", 0.5f, "your carry weight is multiplied by this.");
+            CARRY_WEIGHT_REDUCTION = ConfigEntry("Back Muscles", "Carry Weight Multiplier", 0.5f, "Your carry weight is multiplied by this.");
+            CARRY_WEIGHT_INCREMENT = ConfigEntry("Back Muscles", "Carry Weight Increment", 0.1f, "Each upgrade subtracts this from the above coefficient.");
         }
     }
 }

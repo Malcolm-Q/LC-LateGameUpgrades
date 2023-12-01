@@ -1,5 +1,6 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ using UnityEngine.InputSystem;
 
 namespace MoreShipUpgrades.UpgradeComponents
 {
-    internal class exoskeletonScript : NetworkBehaviour
+    internal class exoskeletonScript : BaseUpgrade
     {
         
         void Start()
@@ -26,6 +27,25 @@ namespace MoreShipUpgrades.UpgradeComponents
             UpgradeBus.instance.exoskeleton = true;
             transform.parent = GameObject.Find("HangarShip").transform;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Back Muscles is active!</color>";
+            foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
+            {
+                if(node.Name.ToLower() == "protein powder" && node.Price > 0)
+                {
+                    node.Price /= 2;
+                }
+            }
+        }
+        public override void Increment()
+        {
+            UpgradeBus.instance.backLevel++;
+            foreach( CustomTerminalNode node in UpgradeBus.instance.terminalNodes )
+            {
+                if(node.Name.ToLower() == "protein powder")
+                {
+                    node.Description = $"Carry weight becomes %{Mathf.Round((UpgradeBus.instance.cfg.CARRY_WEIGHT_REDUCTION - (UpgradeBus.instance.cfg.CARRY_WEIGHT_INCREMENT * UpgradeBus.instance.backLevel)) * 100f)} of original";
+                }
+            }
+
         }
     }
 }

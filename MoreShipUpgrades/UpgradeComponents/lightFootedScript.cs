@@ -1,5 +1,6 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents
 {
-    internal class lightFootedScript : NetworkBehaviour
+    internal class lightFootedScript : BaseUpgrade
     {
         void Start()
         {
@@ -24,6 +25,26 @@ namespace MoreShipUpgrades.UpgradeComponents
             UpgradeBus.instance.softSteps = true;
             transform.parent = GameObject.Find("HangarShip").transform;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Light Footed is active!</color>";
+            foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
+            {
+                if(node.Name.ToLower() == "light footed" && node.Price > 0)
+                {
+                    node.Price /= 2;
+                }
+            }
+        }
+
+        public override void Increment()
+        {
+            UpgradeBus.instance.lightLevel++;
+            foreach( CustomTerminalNode node in UpgradeBus.instance.terminalNodes )
+            {
+                if(node.Name.ToLower() == "light footed")
+                {
+                    node.Description = $"Audible Noise Distance is reduced by {UpgradeBus.instance.cfg.NOISE_REDUCTION + (UpgradeBus.instance.cfg.NOISE_REDUCTION_INCREMENT * UpgradeBus.instance.lightLevel)} units. \nApplies to both sprinting and walking.";
+                }
+            }
+
         }
     }
 }

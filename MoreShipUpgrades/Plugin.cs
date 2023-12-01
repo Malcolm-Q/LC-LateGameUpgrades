@@ -14,6 +14,7 @@ using MoreShipUpgrades.Managers;
 using System.IO;
 using System.Reflection;
 using MoreShipUpgrades.Misc;
+using Unity.Netcode;
 
 namespace MoreShipUpgrades
 {
@@ -57,6 +58,12 @@ namespace MoreShipUpgrades
 
             GameObject busGO = new GameObject("UpgradeBus");
             busGO.AddComponent<UpgradeBus>();
+
+            GameObject modStore = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/LGUStore.prefab");
+            modStore.AddComponent<LGUStore>();
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(modStore);
+            UpgradeBus.instance.modStorePrefab = modStore;
+
             //TP button sfx 
             AudioClip itemBreak = UpgradeAssets.LoadAsset<AudioClip>("Assets/ShipUpgrades/break.mp3");
             AudioClip error = UpgradeAssets.LoadAsset<AudioClip>("Assets/ShipUpgrades/error.mp3");
@@ -109,13 +116,11 @@ namespace MoreShipUpgrades
             {
                 Item beekeeper = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/beekeeper.asset");
                 beekeeper.spawnPrefab.AddComponent<beekeeperScript>();
-                beekeeper.creditsWorth = cfg.BEEKEEPER_PRICE;
                 LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(beekeeper.spawnPrefab);
-                TerminalNode beeNode = new TerminalNode();
-                beeNode.displayText = "Upgrades your suit to a space beekeeping suit. Circuit bees can no longer harass you!";
-                beeNode.clearPreviousText = true;
-                Items.RegisterShopItem(beekeeper,null,null,beeNode, beekeeper.creditsWorth);
+                CustomTerminalNode beeNode = new CustomTerminalNode("Beekeeper", cfg.BEEKEEPER_PRICE, $"Circuit bees do %{Mathf.Round(100 * (cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beeLevel * cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT)))} of their base damage.", beekeeper.spawnPrefab, 3);
+                UpgradeBus.instance.terminalNodes.Add(beeNode);
                 upgradeItems.Add(beekeeper);
+
             }
 
             //lungs
@@ -123,11 +128,8 @@ namespace MoreShipUpgrades
             {
                 Item biggerLungs = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/BiggerLungs.asset");
                 biggerLungs.spawnPrefab.AddComponent<biggerLungScript>();
-                biggerLungs.creditsWorth = cfg.BIGGER_LUNGS_PRICE;
-                TerminalNode lungNode = new TerminalNode();
-                lungNode.displayText = "Upgrades your suit to a space beekeeping suit. Circuit bees can no longer harass you!";
-                lungNode.clearPreviousText = true;
-                Items.RegisterShopItem(biggerLungs,null,null,lungNode, biggerLungs.creditsWorth);
+                CustomTerminalNode lungNode = new CustomTerminalNode("Bigger Lungs", cfg.BIGGER_LUNGS_PRICE, $"Stamina Time is {UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE - 11 + UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT} units longer", biggerLungs.spawnPrefab, 3);
+                UpgradeBus.instance.terminalNodes.Add(lungNode);
                 LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(biggerLungs.spawnPrefab);
                 upgradeItems.Add(biggerLungs);
             }
@@ -137,11 +139,8 @@ namespace MoreShipUpgrades
             {
                 Item runningShoes = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/runningShoes.asset");
                 runningShoes.spawnPrefab.AddComponent<runningShoeScript>();
-                runningShoes.creditsWorth = cfg.RUNNING_SHOES_PRICE;
-                TerminalNode runNode = new TerminalNode();
-                runNode.displayText = "Move faster!";
-                runNode.clearPreviousText = true;
-                Items.RegisterShopItem(runningShoes,null,null,runNode, runningShoes.creditsWorth);
+                CustomTerminalNode node = new CustomTerminalNode("Running Shoes", cfg.RUNNING_SHOES_PRICE, $"You can run {UpgradeBus.instance.cfg.MOVEMENT_SPEED - 4.6f + UpgradeBus.instance.cfg.MOVEMENT_INCREMENT} units faster", runningShoes.spawnPrefab, 3);
+                UpgradeBus.instance.terminalNodes.Add(node);
                 LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(runningShoes.spawnPrefab);
                 upgradeItems.Add(runningShoes);
             }
@@ -151,11 +150,8 @@ namespace MoreShipUpgrades
             {
                 Item strongLegs = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/strongLegs.asset");
                 strongLegs.spawnPrefab.AddComponent<strongLegsScript>();
-                strongLegs.creditsWorth = cfg.STRONG_LEGS_PRICE;
-                TerminalNode legNode = new TerminalNode();
-                legNode.displayText = "Jump Higher. Never fail those pesky jumps and be forced to listen in silence as your friends mock you.";
-                legNode.clearPreviousText = true;
-                Items.RegisterShopItem(strongLegs,null,null,legNode, strongLegs.creditsWorth);
+                CustomTerminalNode node = new CustomTerminalNode("Strong Legs", cfg.STRONG_LEGS_PRICE, $"Jump {cfg.JUMP_FORCE - 13} units higher.", strongLegs.spawnPrefab, 3);
+                UpgradeBus.instance.terminalNodes.Add(node);
                 LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(strongLegs.spawnPrefab);
                 upgradeItems.Add(strongLegs);
             }
@@ -164,13 +160,22 @@ namespace MoreShipUpgrades
             if(cfg.MALWARE_BROADCASTER_ENABLED)
             {
                 Item destructiveCodes = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/destructiveCodes.asset");
-                destructiveCodes.itemName = "Malware Broadcaster";
                 destructiveCodes.spawnPrefab.AddComponent<trapDestroyerScript>();
-                destructiveCodes.creditsWorth = cfg.MALWARE_BROADCASTER_PRICE;
-                TerminalNode destNode = new TerminalNode();
-                destNode.displayText = "When broadcasting a code turrets and mines aren't disabled, they're destroyed.";
-                destNode.clearPreviousText = true;
-                Items.RegisterShopItem(destructiveCodes,null,null,destNode, destructiveCodes.creditsWorth);
+                string desc = "";
+                if(cfg.DESTROY_TRAP)
+                {
+                    if(cfg.EXPLODE_TRAP)
+                    {
+                        desc = "Broadcasted codes now explode map hazards.";
+                    }
+                    else
+                    {
+                        desc = "Broadcasted codes now destroy map hazards.";
+                    }
+                }
+                else { desc = $"Broadcasted codes now disable map hazards for {cfg.DISARM_TIME} seconds."; }
+                CustomTerminalNode node = new CustomTerminalNode("Malware Broadcaster", cfg.MALWARE_BROADCASTER_PRICE, desc, destructiveCodes.spawnPrefab);
+                UpgradeBus.instance.terminalNodes.Add(node);
                 LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(destructiveCodes.spawnPrefab);
                 upgradeItems.Add(destructiveCodes);
             }
@@ -180,11 +185,8 @@ namespace MoreShipUpgrades
             {
                 Item lightFooted = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/LightFooted.asset");
                 lightFooted.spawnPrefab.AddComponent<lightFootedScript>();
-                lightFooted.creditsWorth = cfg.LIGHT_FOOTED_PRICE;
-                TerminalNode lightNode = new TerminalNode();
-                lightNode.displayText = "Enemies must be closer to you to hear your footsteps.\nApplies to both sprinting and walking.";
-                lightNode.clearPreviousText= true;
-                Items.RegisterShopItem(lightFooted,null,null,lightNode, lightFooted.creditsWorth);
+                CustomTerminalNode node = new CustomTerminalNode("Light Footed", cfg.LIGHT_FOOTED_PRICE, $"Audible Noise Distance is reduced by {UpgradeBus.instance.cfg.NOISE_REDUCTION + (UpgradeBus.instance.cfg.NOISE_REDUCTION_INCREMENT * UpgradeBus.instance.lightLevel)} units. \nApplies to both sprinting and walking.", lightFooted.spawnPrefab, 3);
+                UpgradeBus.instance.terminalNodes.Add(node);
                 LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(lightFooted.spawnPrefab);
                 upgradeItems.Add(lightFooted);
             }
@@ -194,11 +196,8 @@ namespace MoreShipUpgrades
             { 
                 Item nightVision = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/NightVision.asset");
                 nightVision.spawnPrefab.AddComponent<nightVisionScript>();
-                nightVision.creditsWorth = cfg.NIGHT_VISION_PRICE;
-                TerminalNode nightNode = new TerminalNode();
-                nightNode.displayText = "Press Left-Alt to toggle night vision!";
-                nightNode.clearPreviousText = true;
-                Items.RegisterShopItem(nightVision,null,null,nightNode, nightVision.creditsWorth);
+                CustomTerminalNode node = new CustomTerminalNode("Night Vision", cfg.NIGHT_VISION_PRICE, $"Allows you to see in the dark. Press Left-Alt to turn on.  \nDrain speed is {cfg.NIGHT_VIS_DRAIN_SPEED}  \nRegen speed is {cfg.NIGHT_VIS_REGEN_SPEED}", nightVision.spawnPrefab);
+                UpgradeBus.instance.terminalNodes.Add(node);
                 LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(nightVision.spawnPrefab);
                 upgradeItems.Add(nightVision);
             }
@@ -207,15 +206,11 @@ namespace MoreShipUpgrades
             if(cfg.DISCOMBOBULATOR_ENABLED)
             {
                 Item flash = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/terminalFlash.asset");
-                flash.itemName = "Discombobulator";
-                flash.creditsWorth = cfg.DISCOMBOBULATOR_PRICE;
                 AudioClip flashSFX = UpgradeAssets.LoadAsset<AudioClip>("Assets/ShipUpgrades/flashbangsfx.ogg");
                 UpgradeBus.instance.flashNoise = flashSFX;
                 flash.spawnPrefab.AddComponent<terminalFlashScript>();
-                TerminalNode flashNode = new TerminalNode();
-                flashNode.displayText = "Stun any enemies in a wide radius around your ship! Type cooldown into the terminal to view status and initattack to execute.";
-                flashNode.clearPreviousText= true;
-                Items.RegisterShopItem(flash,null,null,flashNode, flash.creditsWorth);
+                CustomTerminalNode node = new CustomTerminalNode("Discombobulator", cfg.DISCOMBOBULATOR_PRICE, $"Stun enemies around your ship in a {cfg.DISCOMBOBULATOR_RADIUS} unit radius.", flash.spawnPrefab, 3);
+                UpgradeBus.instance.terminalNodes.Add(node);
                 LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(flash.spawnPrefab);
                 upgradeItems.Add(flash);
             }
@@ -224,13 +219,12 @@ namespace MoreShipUpgrades
             if(cfg.BETTER_SCANNER_ENABLED)
             {
                 Item strongScan = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/strongScanner.asset");
-                strongScan.itemName = "Better Scanner";
                 strongScan.spawnPrefab.AddComponent<strongerScannerScript>();
-                strongScan.creditsWorth = cfg.BETTER_SCANNER_PRICE;
-                TerminalNode betScanNode = new TerminalNode();
-                betScanNode.displayText = "Allows your scanner to find the entrance and ship from further away, increases the distance you can ping objects and enemies, and allows you to ping through walls.";
-                betScanNode .clearPreviousText= true;
-                Items.RegisterShopItem(strongScan,null,null,betScanNode, strongScan.creditsWorth);
+                string LOS = cfg.REQUIRE_LINE_OF_SIGHT ? "Does not remove" : "Removes";
+                string info = $"Increase distance nodes can be scanned by {cfg.NODE_DISTANCE_INCREASE} units.  \nIncrease distance Ship and Entrance can be scanned by {cfg.SHIP_AND_ENTRANCE_DISTANCE_INCREASE} units.  \n";
+                info += $"{LOS} LOS requirement";
+                CustomTerminalNode node = new CustomTerminalNode("Scanner MKII", cfg.BETTER_SCANNER_PRICE, info, strongScan.spawnPrefab);
+                UpgradeBus.instance.terminalNodes.Add(node);
                 LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(strongScan.spawnPrefab);
                 upgradeItems.Add(strongScan);
             }
@@ -240,12 +234,8 @@ namespace MoreShipUpgrades
             {
                 Item exoskel = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/exoskeleton.asset");
                 exoskel.spawnPrefab.AddComponent<exoskeletonScript>();
-                exoskel.itemName = "Back Muscles";
-                exoskel.creditsWorth = cfg.BACK_MUSCLES_PRICE;
-                TerminalNode exoNode = new TerminalNode();
-                exoNode.displayText = "Lift things with ease and no longer worry about your carry weight.";
-                exoNode.clearPreviousText= true;
-                Items.RegisterShopItem(exoskel,null,null,exoNode, exoskel.creditsWorth);
+                CustomTerminalNode node = new CustomTerminalNode("Protein Powder", cfg.BACK_MUSCLES_PRICE, $"Carry weight becomes %{Mathf.Round((cfg.CARRY_WEIGHT_REDUCTION) * 100f)} of original", exoskel.spawnPrefab, 3);
+                UpgradeBus.instance.terminalNodes.Add(node);
                 LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(exoskel.spawnPrefab);
                 upgradeItems.Add(exoskel);
             }
