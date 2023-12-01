@@ -29,7 +29,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Back Muscles is active!</color>";
             foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
             {
-                if(node.Name.ToLower() == "protein powder" && node.Price > 0)
+                if(node.Name.ToLower() == "back muscles" && node.Price > 0)
                 {
                     node.Price /= 2;
                 }
@@ -40,7 +40,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             UpgradeBus.instance.backLevel++;
             foreach( CustomTerminalNode node in UpgradeBus.instance.terminalNodes )
             {
-                if(node.Name.ToLower() == "protein powder")
+                if(node.Name.ToLower() == "back muscles")
                 {
                     node.Description = $"Carry weight becomes %{Mathf.Round((UpgradeBus.instance.cfg.CARRY_WEIGHT_REDUCTION - (UpgradeBus.instance.cfg.CARRY_WEIGHT_INCREMENT * UpgradeBus.instance.backLevel)) * 100f)} of original";
                 }

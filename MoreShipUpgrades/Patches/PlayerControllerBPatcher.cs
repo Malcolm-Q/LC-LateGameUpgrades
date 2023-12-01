@@ -2,11 +2,13 @@
 using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MoreShipUpgrades.Patches
 {
@@ -18,7 +20,7 @@ namespace MoreShipUpgrades.Patches
         private static void beekeeperReduceDamage(ref int damageNumber, CauseOfDeath causeOfDeath)
         {
             if (!UpgradeBus.instance.beekeeper || causeOfDeath != CauseOfDeath.Electrocution || damageNumber != 10) { return; }
-            damageNumber = (int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beeLevel * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT)));
+            damageNumber = Mathf.Clamp((int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beeLevel * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT))),0,100);
         }
         
         [HarmonyPrefix]
@@ -26,7 +28,7 @@ namespace MoreShipUpgrades.Patches
         private static void beekeeperReduceDamageServer(ref int damageNumber)
         {
             if (!UpgradeBus.instance.beekeeper || damageNumber != 10) { return; }
-            damageNumber = (int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beeLevel * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT)));
+            damageNumber = Mathf.Clamp((int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beeLevel * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT))),0,100);
         }
 
         [HarmonyPrefix]
@@ -34,7 +36,7 @@ namespace MoreShipUpgrades.Patches
         private static void beekeeperReduceDamageClient(ref int damageNumber)
         {
             if (!UpgradeBus.instance.beekeeper || damageNumber != 10) { return; }
-            damageNumber = (int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beeLevel * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT)));
+            damageNumber = Mathf.Clamp((int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beeLevel * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT))),0,100);
         }
 
         [HarmonyPrefix]
@@ -42,7 +44,7 @@ namespace MoreShipUpgrades.Patches
         private static void beekeeperReduceDamageOther(ref int damageNumber)
         {
             if (!UpgradeBus.instance.beekeeper || damageNumber != 10) { return; }
-            damageNumber = (int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beeLevel * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT)));
+            damageNumber = Mathf.Clamp((int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beeLevel * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT))),0,100);
         }
 
 
@@ -67,22 +69,21 @@ namespace MoreShipUpgrades.Patches
             carryWeight is ~(-= 1 then * 100). Ex: when your carryweight is 86 lb it's actually 1.86.
             Tallying it up in a for loop and dividing by two in the += in the best way imo.
              */
-            if (UpgradeBus.instance.exoskeleton)
+
+            // previous optimized solution caused some client side failure. TODO: Optimize this horrific bandaid fix.
+            if (UpgradeBus.instance.exoskeleton && __instance.ItemSlots.Length > 0 && GameNetworkManager.Instance.localPlayerController == __instance)
             {
-                if(__instance.carryWeight != UpgradeBus.instance.alteredWeight && __instance.carryWeight != 1f)
+                UpgradeBus.instance.alteredWeight = 1f;
+                for(int i = 0;  i < __instance.ItemSlots.Length; i++)
                 {
-                    UpgradeBus.instance.alteredWeight = 1f;
-                    for(int i = 0;  i < __instance.ItemSlots.Length; i++)
+                    GrabbableObject obj = __instance.ItemSlots[i];
+                    if(obj != null)
                     {
-                        GrabbableObject obj = __instance.ItemSlots[i];
-                        if(obj != null)
-                        {
-                            UpgradeBus.instance.alteredWeight += (Mathf.Clamp(obj.itemProperties.weight - 1f, 0f, 10f) * UpgradeBus.instance.cfg.CARRY_WEIGHT_REDUCTION);
-                        }
+                        UpgradeBus.instance.alteredWeight += (Mathf.Clamp(obj.itemProperties.weight - 1f, 0f, 10f) * (UpgradeBus.instance.cfg.CARRY_WEIGHT_REDUCTION - (UpgradeBus.instance.backLevel * UpgradeBus.instance.cfg.CARRY_WEIGHT_INCREMENT)));
                     }
-                    __instance.carryWeight = UpgradeBus.instance.alteredWeight;
-                    if(__instance.carryWeight < 1f) { __instance.carryWeight = 1f; }
                 }
+                __instance.carryWeight = UpgradeBus.instance.alteredWeight;
+                if(__instance.carryWeight < 1f) { __instance.carryWeight = 1f; }
             }
         }
     }

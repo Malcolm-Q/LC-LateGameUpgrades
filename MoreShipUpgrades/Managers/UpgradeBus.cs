@@ -57,21 +57,22 @@ namespace MoreShipUpgrades.Managers
 
         public TerminalNode ConstructNode()
         {
-            modStoreInterface = ScriptableObject.CreateInstance<TerminalNode>();
+            modStoreInterface = new TerminalNode();
             modStoreInterface.clearPreviousText = true;
             foreach (CustomTerminalNode terminalNode in terminalNodes)
             {
+                Debug.Log(terminalNode.Name);
                 if (!terminalNode.Unlocked) { modStoreInterface.displayText += $"\n{terminalNode.Name} // {terminalNode.Price}  "; }
                 else if (terminalNode.MaxUpgrade == 0) { modStoreInterface.displayText += $"\n{terminalNode.Name} // UNLOCKED  "; }
-                else if (terminalNode.MaxUpgrade > terminalNode.CurrentUpgrade) { modStoreInterface.displayText = $"\n{terminalNode.Name} // {terminalNode.Price} // LVL {terminalNode.CurrentUpgrade + 1}"; }
-                else { modStoreInterface.displayText = $"\n{terminalNode.Name} // MAX LVL";  }
+                else if (terminalNode.MaxUpgrade > terminalNode.CurrentUpgrade) { modStoreInterface.displayText += $"\n{terminalNode.Name} // {terminalNode.Price} // LVL {terminalNode.CurrentUpgrade + 1}"; }
+                else { modStoreInterface.displayText += $"\n{terminalNode.Name} // MAX LVL";  }
+                Debug.Log(modStoreInterface.displayText);
             }
             if(modStoreInterface.displayText == "")
             {
                 modStoreInterface.displayText = "No upgrades available";
             }
             modStoreInterface.displayText += "\n\n";
-            Debug.Log(modStoreInterface.displayText);
             return modStoreInterface;
         }
 
@@ -100,8 +101,6 @@ namespace MoreShipUpgrades.Managers
             alteredWeight = 1f;
             trapHandler = null;
             flashScript = null;
-            terminalNodes = new List<CustomTerminalNode>();
-            UpgradeObjects = new Dictionary<string, GameObject>();
         }
     }
 }

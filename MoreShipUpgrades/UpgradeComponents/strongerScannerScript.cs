@@ -33,7 +33,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             //UpgradeBus.instance.scanLevel++;
             foreach( CustomTerminalNode node in UpgradeBus.instance.terminalNodes )
             {
-                if(node.Name.ToLower() == "scanner MKII")
+                if(node.Name.ToLower() == "better scanner")
                 {
                     node.Description = $"Can scan the ship from an additional {UpgradeBus.instance.cfg.SHIP_AND_ENTRANCE_DISTANCE_INCREASE} units away.  \nCan scan all other nodes from an additional {UpgradeBus.instance.cfg.NODE_DISTANCE_INCREASE} units away.";
                     if (!UpgradeBus.instance.cfg.REQUIRE_LINE_OF_SIGHT) { node.Description += "  \nDoes not require Line of Sight!"; }

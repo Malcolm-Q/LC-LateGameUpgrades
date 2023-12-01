@@ -31,8 +31,8 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("BeginUsingTerminal")]
         private static void testasdf(ref Terminal __instance)
         {
-            __instance.screenText.text += "\nEnter `lategame` for help with LateGameUpgrades  \n";
-            __instance.currentText += "\nEnter `lategame` for help with LateGameUpgrades  \n";
+            __instance.screenText.text += "\nEnter `lategame` for help with LateGameUpgrades  \n\n";
+            __instance.currentText += "\nEnter `lategame` for help with LateGameUpgrades  \n\n";
         }
 
         [HarmonyPostfix]
@@ -51,7 +51,7 @@ namespace MoreShipUpgrades.Patches
         private static void DestroyObject(ref Terminal __instance, ref TerminalNode __result)
         {
             string text = __instance.screenText.text.Substring(__instance.screenText.text.Length - __instance.textAdded);
-           if (text.ToLower() == "initattack" || text.ToLower() == "atk")
+            if (text.ToLower() == "initattack" || text.ToLower() == "atk")
             {
                 if(!UpgradeBus.instance.terminalFlash)
                 {
@@ -72,19 +72,9 @@ namespace MoreShipUpgrades.Patches
                 {
                     RoundManager.Instance.PlayAudibleNoise(__instance.transform.position, 60f, 0.8f, 0, false, 14155);
                     UpgradeBus.instance.flashScript.PlayAudioAndUpdateCooldownServerRpc();
-                    Collider[] array = Physics.OverlapSphere(__instance.transform.position, UpgradeBus.instance.cfg.DISCOMBOBULATOR_RADIUS, 524288);
-                    if(array.Length > 0)
-                    {
-                        for (int i = 0; i < array.Length; i++)
-                        {
-                            EnemyAICollisionDetect component = array[i].GetComponent<EnemyAICollisionDetect>();
-                            if (!(component == null))
-                            {
-                                component.mainScript.SetEnemyStunned(true, UpgradeBus.instance.cfg.DISCOMBOBULATOR_STUN_DURATION, null);
-                            }
-                        }
-                    }
+                    
                     TerminalNode node = new TerminalNode();
+                    Collider[] array = Physics.OverlapSphere(__instance.transform.position, UpgradeBus.instance.cfg.DISCOMBOBULATOR_RADIUS, 524288);
                     if(array.Length > 0)
                     {
                         node.displayText = $"Stun grenade hit {array.Length} enemies.";
@@ -92,7 +82,7 @@ namespace MoreShipUpgrades.Patches
                         __result = node;
                         if(UpgradeBus.instance.cfg.DISCOMBOBULATOR_NOTIFY_CHAT)
                         {
-                            __instance.StartCoroutine(CountDownChat(UpgradeBus.instance.cfg.DISCOMBOBULATOR_STUN_DURATION));
+                            __instance.StartCoroutine(CountDownChat(UpgradeBus.instance.cfg.DISCOMBOBULATOR_STUN_DURATION + (UpgradeBus.instance.cfg.DISCOMBOBULATOR_INCREMENT * UpgradeBus.instance.discoLevel)));
                         }
                     }
                     else
@@ -159,7 +149,8 @@ namespace MoreShipUpgrades.Patches
                             if (!customNode.Unlocked)
                             {
                                 LGUStore.instance.ReqSpawnServerRpc(customNode.Name);
-                                node.displayText = $"You Purchased {customNode.Name}  \n";
+                                if (customNode.MaxUpgrade != 0) { node.displayText = $"You Upgraded {customNode.Name} to level {customNode.CurrentUpgrade + 1}  \n"; }
+                                else { node.displayText = $"You Purchased {customNode.Name}  \n"; }
                             }
                             else if(customNode.Unlocked && customNode.MaxUpgrade > customNode.CurrentUpgrade)
                             {
@@ -169,7 +160,8 @@ namespace MoreShipUpgrades.Patches
                         }
                         else if(customNode.Unlocked)
                         {
-                            node.displayText = "You already unlocked this upgrade.  \n";
+                            if (customNode.MaxUpgrade == 0) { node.displayText = "You already unlocked this upgrade.  \n"; }
+                            else { node.displayText = "This upgrade is already max level  \n"; }
                         }
                         else
                         {

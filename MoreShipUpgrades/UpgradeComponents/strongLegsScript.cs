@@ -47,6 +47,11 @@ namespace MoreShipUpgrades.UpgradeComponents
                 if(node.Name.ToLower() == "strong legs")
                 {
                     node.Description = $"Can jump an additional {UpgradeBus.instance.cfg.JUMP_FORCE - 13 + (UpgradeBus.instance.legLevel * UpgradeBus.instance.cfg.JUMP_FORCE_INCREMENT)} units high.";
+                    PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
+                    foreach (PlayerControllerB player in players)
+                    {
+                        player.jumpForce = UpgradeBus.instance.cfg.JUMP_FORCE_INCREMENT;
+                    }
                 }
             }
         }

@@ -223,7 +223,7 @@ namespace MoreShipUpgrades
                 string LOS = cfg.REQUIRE_LINE_OF_SIGHT ? "Does not remove" : "Removes";
                 string info = $"Increase distance nodes can be scanned by {cfg.NODE_DISTANCE_INCREASE} units.  \nIncrease distance Ship and Entrance can be scanned by {cfg.SHIP_AND_ENTRANCE_DISTANCE_INCREASE} units.  \n";
                 info += $"{LOS} LOS requirement";
-                CustomTerminalNode node = new CustomTerminalNode("Scanner MKII", cfg.BETTER_SCANNER_PRICE, info, strongScan.spawnPrefab);
+                CustomTerminalNode node = new CustomTerminalNode("Better Scanner", cfg.BETTER_SCANNER_PRICE, info, strongScan.spawnPrefab);
                 UpgradeBus.instance.terminalNodes.Add(node);
                 LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(strongScan.spawnPrefab);
                 upgradeItems.Add(strongScan);
@@ -234,11 +234,12 @@ namespace MoreShipUpgrades
             {
                 Item exoskel = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/exoskeleton.asset");
                 exoskel.spawnPrefab.AddComponent<exoskeletonScript>();
-                CustomTerminalNode node = new CustomTerminalNode("Protein Powder", cfg.BACK_MUSCLES_PRICE, $"Carry weight becomes %{Mathf.Round((cfg.CARRY_WEIGHT_REDUCTION) * 100f)} of original", exoskel.spawnPrefab, 3);
+                CustomTerminalNode node = new CustomTerminalNode("Back Muscles", cfg.BACK_MUSCLES_PRICE, $"Carry weight becomes %{Mathf.Round((cfg.CARRY_WEIGHT_REDUCTION) * 100f)} of original", exoskel.spawnPrefab, 3);
                 UpgradeBus.instance.terminalNodes.Add(node);
                 LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(exoskel.spawnPrefab);
                 upgradeItems.Add(exoskel);
             }
+            Debug.Log(UpgradeBus.instance.terminalNodes);
             harmony.PatchAll();
 
             mls.LogInfo("More Ship Upgrades has been patched");

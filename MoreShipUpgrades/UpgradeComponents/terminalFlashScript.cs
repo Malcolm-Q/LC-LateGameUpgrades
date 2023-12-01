@@ -63,6 +63,18 @@ namespace MoreShipUpgrades.UpgradeComponents
             terminal.terminalAudio.PlayOneShot(UpgradeBus.instance.flashNoise);
             StartCoroutine(ResetRange(terminal));
             UpgradeBus.instance.flashCooldown = UpgradeBus.instance.cfg.DISCOMBOBULATOR_COOLDOWN;
+            Collider[] array = Physics.OverlapSphere(terminal.transform.position, UpgradeBus.instance.cfg.DISCOMBOBULATOR_RADIUS, 524288);
+            if(array.Length > 0)
+            {
+                for (int i = 0; i < array.Length; i++)
+                {
+                    EnemyAICollisionDetect component = array[i].GetComponent<EnemyAICollisionDetect>();
+                    if (component != null)
+                    {
+                        component.mainScript.SetEnemyStunned(true, UpgradeBus.instance.cfg.DISCOMBOBULATOR_STUN_DURATION + (UpgradeBus.instance.cfg.DISCOMBOBULATOR_INCREMENT * UpgradeBus.instance.discoLevel), null);
+                    }
+                }
+            }
         }
 
         private IEnumerator ResetRange(Terminal terminal)
