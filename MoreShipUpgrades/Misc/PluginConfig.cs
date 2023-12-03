@@ -71,6 +71,10 @@ namespace MoreShipUpgrades.Misc
         public float NOISE_REDUCTION_INCREMENT { get; set; }
         public float JUMP_FORCE_INCREMENT { get; set; }
         public float DISCOMBOBULATOR_INCREMENT { get; set; }
+        public int PAGER_PRICE { get; set; }
+        public int LOCKSMITH_PRICE { get; set; }
+        public bool PAGER_ENABLED { get; set; }
+        public bool LOCKSMITH_ENABLED { get; set; }
 
 
         public PluginConfig(ConfigFile cfg)
@@ -154,6 +158,12 @@ namespace MoreShipUpgrades.Misc
             BACK_MUSCLES_PRICE = ConfigEntry("Back Muscles", "Price of Back Muscles Upgrade", 835, "");
             CARRY_WEIGHT_REDUCTION = ConfigEntry("Back Muscles", "Carry Weight Multiplier", 0.5f, "Your carry weight is multiplied by this.");
             CARRY_WEIGHT_INCREMENT = ConfigEntry("Back Muscles", "Carry Weight Increment", 0.1f, "Each upgrade subtracts this from the above coefficient.");
+
+            PAGER_ENABLED = ConfigEntry("Pager", "Enable pager upgrade", true, "Type `page <message>` to send a message to all clients chat.");
+            PAGER_PRICE = ConfigEntry("Pager", "Pager Price", 490, "Default price of pager upgrade.");
+
+            LOCKSMITH_ENABLED = ConfigEntry("Locksmith", "Enable Locksmith upgrade", true, "Allows you to pick locked doors by completing a minigame.");
+            LOCKSMITH_PRICE = ConfigEntry("Locksmith", "Locksmith Price", 740, "Default price of Locksmith upgrade.");
         }
     }
 }

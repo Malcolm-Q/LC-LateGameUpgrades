@@ -111,49 +111,49 @@ namespace MoreShipUpgrades
             }
 
             //beekeeper
-            Item beekeeper = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/beekeeper.asset");
-            beekeeper.spawnPrefab.AddComponent<beekeeperScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(beekeeper.spawnPrefab);
+            GameObject beekeeper = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/beekeeper.prefab");
+            beekeeper.AddComponent<beekeeperScript>();
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(beekeeper);
             if(cfg.BEEKEEPER_ENABLED)
             {
-                CustomTerminalNode beeNode = new CustomTerminalNode("Beekeeper", cfg.BEEKEEPER_PRICE, $"Circuit bees do %{Mathf.Round(100 * cfg.BEEKEEPER_DAMAGE_MULTIPLIER)} of their base damage.", beekeeper.spawnPrefab, 3);
+                CustomTerminalNode beeNode = new CustomTerminalNode("Beekeeper", cfg.BEEKEEPER_PRICE, $"Circuit bees do %{Mathf.Round(100 * cfg.BEEKEEPER_DAMAGE_MULTIPLIER)} of their base damage.", beekeeper, 3);
                 UpgradeBus.instance.terminalNodes.Add(beeNode);
 
             }
 
             //lungs
-            Item biggerLungs = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/BiggerLungs.asset");
-            biggerLungs.spawnPrefab.AddComponent<biggerLungScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(biggerLungs.spawnPrefab);
+            GameObject biggerLungs = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/BiggerLungs.prefab");
+            biggerLungs.AddComponent<biggerLungScript>();
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(biggerLungs);
             if(cfg.BIGGER_LUNGS_ENABLED)
             {
-                CustomTerminalNode lungNode = new CustomTerminalNode("Bigger Lungs", cfg.BIGGER_LUNGS_PRICE, $"Stamina Time is {(UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE - 11)} units longer", biggerLungs.spawnPrefab, 3);
+                CustomTerminalNode lungNode = new CustomTerminalNode("Bigger Lungs", cfg.BIGGER_LUNGS_PRICE, $"Stamina Time is {(UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE - 11)} units longer", biggerLungs, 3);
                 UpgradeBus.instance.terminalNodes.Add(lungNode);
             }
 
             //running shoes
-            Item runningShoes = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/runningShoes.asset");
-            runningShoes.spawnPrefab.AddComponent<runningShoeScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(runningShoes.spawnPrefab);
+            GameObject runningShoes = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/runningShoes.prefab");
+            runningShoes.AddComponent<runningShoeScript>();
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(runningShoes);
             if(cfg.RUNNING_SHOES_ENABLED)
             {
-                CustomTerminalNode node = new CustomTerminalNode("Running Shoes", cfg.RUNNING_SHOES_PRICE, $"You can run {UpgradeBus.instance.cfg.MOVEMENT_SPEED - 4.6f} units faster", runningShoes.spawnPrefab, 3);
+                CustomTerminalNode node = new CustomTerminalNode("Running Shoes", cfg.RUNNING_SHOES_PRICE, $"You can run {UpgradeBus.instance.cfg.MOVEMENT_SPEED - 4.6f} units faster", runningShoes, 3);
                 UpgradeBus.instance.terminalNodes.Add(node);
             }
 
             //strong legs
-            Item strongLegs = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/strongLegs.asset");
-            strongLegs.spawnPrefab.AddComponent<strongLegsScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(strongLegs.spawnPrefab);
+            GameObject strongLegs = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/strongLegs.prefab");
+            strongLegs.AddComponent<strongLegsScript>();
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(strongLegs);
             if(cfg.STRONG_LEGS_ENABLED)
             {
-                CustomTerminalNode node = new CustomTerminalNode("Strong Legs", cfg.STRONG_LEGS_PRICE, $"Jump {cfg.JUMP_FORCE - 13} units higher.", strongLegs.spawnPrefab, 3);
+                CustomTerminalNode node = new CustomTerminalNode("Strong Legs", cfg.STRONG_LEGS_PRICE, $"Jump {cfg.JUMP_FORCE - 13} units higher.", strongLegs, 3);
                 UpgradeBus.instance.terminalNodes.Add(node);
             }
 
             //destructive codes
-            Item destructiveCodes = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/destructiveCodes.asset");
-            destructiveCodes.spawnPrefab.AddComponent<trapDestroyerScript>();
+            GameObject destructiveCodes = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/destructiveCodes.prefab");
+            destructiveCodes.AddComponent<trapDestroyerScript>();
             string desc = "";
             if(cfg.DESTROY_TRAP)
             {
@@ -167,69 +167,89 @@ namespace MoreShipUpgrades
                 }
             }
             else { desc = $"Broadcasted codes now disable map hazards for {cfg.DISARM_TIME} seconds."; }
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(destructiveCodes.spawnPrefab);
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(destructiveCodes);
             if(cfg.MALWARE_BROADCASTER_ENABLED)
             { 
-                CustomTerminalNode node = new CustomTerminalNode("Malware Broadcaster", cfg.MALWARE_BROADCASTER_PRICE, desc, destructiveCodes.spawnPrefab);
+                CustomTerminalNode node = new CustomTerminalNode("Malware Broadcaster", cfg.MALWARE_BROADCASTER_PRICE, desc, destructiveCodes);
                 UpgradeBus.instance.terminalNodes.Add(node);
             }
 
             //light footed
-            Item lightFooted = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/LightFooted.asset");
-            lightFooted.spawnPrefab.AddComponent<lightFootedScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(lightFooted.spawnPrefab);
+            GameObject lightFooted = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/lightFooted.prefab");
+            lightFooted.AddComponent<lightFootedScript>();
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(lightFooted);
             if(cfg.LIGHT_FOOTED_ENABLED)
             {
-                CustomTerminalNode node = new CustomTerminalNode("Light Footed", cfg.LIGHT_FOOTED_PRICE, $"Audible Noise Distance is reduced by {UpgradeBus.instance.cfg.NOISE_REDUCTION} units. \nApplies to both sprinting and walking.", lightFooted.spawnPrefab, 3);
+                CustomTerminalNode node = new CustomTerminalNode("Light Footed", cfg.LIGHT_FOOTED_PRICE, $"Audible Noise Distance is reduced by {UpgradeBus.instance.cfg.NOISE_REDUCTION} units. \nApplies to both sprinting and walking.", lightFooted, 3);
                 UpgradeBus.instance.terminalNodes.Add(node);
             }
 
             //night vision
-            Item nightVision = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/NightVision.asset");
-            nightVision.spawnPrefab.AddComponent<nightVisionScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(nightVision.spawnPrefab);
+            GameObject nightVision = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/nightVision.prefab");
+            nightVision.AddComponent<nightVisionScript>();
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(nightVision);
             if(cfg.NIGHT_VISION_ENABLED) 
             { 
-                CustomTerminalNode node = new CustomTerminalNode("Night Vision", cfg.NIGHT_VISION_PRICE, $"Allows you to see in the dark. Press Left-Alt to turn on.  \nDrain speed is {cfg.NIGHT_VIS_DRAIN_SPEED}  \nRegen speed is {cfg.NIGHT_VIS_REGEN_SPEED}", nightVision.spawnPrefab);
+                CustomTerminalNode node = new CustomTerminalNode("Night Vision", cfg.NIGHT_VISION_PRICE, $"Allows you to see in the dark. Press Left-Alt to turn on.  \nDrain speed is {cfg.NIGHT_VIS_DRAIN_SPEED}  \nRegen speed is {cfg.NIGHT_VIS_REGEN_SPEED}", nightVision);
                 UpgradeBus.instance.terminalNodes.Add(node);
             }
 
             //terminal flashbang
-            Item flash = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/terminalFlash.asset");
+            GameObject flash = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/terminalFlash.prefab");
             AudioClip flashSFX = UpgradeAssets.LoadAsset<AudioClip>("Assets/ShipUpgrades/flashbangsfx.ogg");
             UpgradeBus.instance.flashNoise = flashSFX;
-            flash.spawnPrefab.AddComponent<terminalFlashScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(flash.spawnPrefab);
+            flash.AddComponent<terminalFlashScript>();
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(flash);
             if(cfg.DISCOMBOBULATOR_ENABLED)
             {
-                CustomTerminalNode node = new CustomTerminalNode("Discombobulator", cfg.DISCOMBOBULATOR_PRICE, $"Stun enemies around your ship in a {cfg.DISCOMBOBULATOR_RADIUS} unit radius.", flash.spawnPrefab, 3);
+                CustomTerminalNode node = new CustomTerminalNode("Discombobulator", cfg.DISCOMBOBULATOR_PRICE, $"Stun enemies around your ship in a {cfg.DISCOMBOBULATOR_RADIUS} unit radius.", flash, 3);
                 UpgradeBus.instance.terminalNodes.Add(node);
             }
 
             //stronger scanner
-            Item strongScan = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/strongScanner.asset");
-            strongScan.spawnPrefab.AddComponent<strongerScannerScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(strongScan.spawnPrefab);
+            GameObject strongScan = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/strongScanner.prefab");
+            strongScan.AddComponent<strongerScannerScript>();
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(strongScan);
             if(cfg.BETTER_SCANNER_ENABLED)
             {
                 string LOS = cfg.REQUIRE_LINE_OF_SIGHT ? "Does not remove" : "Removes";
                 string info = $"Increase distance nodes can be scanned by {cfg.NODE_DISTANCE_INCREASE} units.  \nIncrease distance Ship and Entrance can be scanned by {cfg.SHIP_AND_ENTRANCE_DISTANCE_INCREASE} units.  \n";
                 info += $"{LOS} LOS requirement";
-                CustomTerminalNode node = new CustomTerminalNode("Better Scanner", cfg.BETTER_SCANNER_PRICE, info, strongScan.spawnPrefab);
+                CustomTerminalNode node = new CustomTerminalNode("Better Scanner", cfg.BETTER_SCANNER_PRICE, info, strongScan);
                 UpgradeBus.instance.terminalNodes.Add(node);
             }
 
             // back muscles
-            Item exoskel = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/exoskeleton.asset");
-            exoskel.spawnPrefab.AddComponent<exoskeletonScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(exoskel.spawnPrefab);
+            GameObject exoskel = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/exoskeleton.prefab");
+            exoskel.AddComponent<exoskeletonScript>();
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(exoskel);
             if(cfg.BACK_MUSCLES_ENABLED)
             {
-                CustomTerminalNode node = new CustomTerminalNode("Back Muscles", cfg.BACK_MUSCLES_PRICE, $"Carry weight becomes %{Mathf.Round((cfg.CARRY_WEIGHT_REDUCTION) * 100f)} of original", exoskel.spawnPrefab, 3);
+                CustomTerminalNode node = new CustomTerminalNode("Back Muscles", cfg.BACK_MUSCLES_PRICE, $"Carry weight becomes %{Mathf.Round((cfg.CARRY_WEIGHT_REDUCTION) * 100f)} of original", exoskel, 3);
                 UpgradeBus.instance.terminalNodes.Add(node);
             }
+
+            // pager
+            GameObject pager = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/Pager.prefab");
+            pager.AddComponent<pagerScript>();
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(pager);
+            if (cfg.PAGER_ENABLED)
+            {
+                CustomTerminalNode node = new CustomTerminalNode("Pager", cfg.PAGER_PRICE, "Type `page <message>` to send a message to each team members chat", pager);
+                UpgradeBus.instance.terminalNodes.Add(node);
+            }
+
+            //lockSmith
+            GameObject lockSmith = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/LockSmith.prefab");
+            lockSmith.AddComponent<lockSmithScript>();
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(lockSmith);
+            if (cfg.LOCKSMITH_ENABLED)
+            {
+                CustomTerminalNode node = new CustomTerminalNode("Locksmith", cfg.LOCKSMITH_PRICE,"Allows you to pick door locks by completing a minigame.", lockSmith);
+                UpgradeBus.instance.terminalNodes.Add(node);
+            }
+
             UpgradeBus.instance.CreateDeepNodeCopy();
-            Debug.Log(UpgradeBus.instance.terminalNodes);
             harmony.PatchAll();
 
             mls.LogInfo("More Ship Upgrades has been patched");

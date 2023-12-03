@@ -28,7 +28,7 @@ namespace MoreShipUpgrades.Patches
 
         [HarmonyPostfix]
         [HarmonyPatch("ParsePlayerSentence")]
-        private static void DestroyObject(ref Terminal __instance, ref TerminalNode __result)
+        private static void CustomParser(ref Terminal __instance, ref TerminalNode __result)
         {
             string text = __instance.screenText.text.Substring(__instance.screenText.text.Length - __instance.textAdded);
             if (text.ToLower() == "initattack" || text.ToLower() == "atk")
@@ -94,6 +94,36 @@ namespace MoreShipUpgrades.Patches
                 {
                     TerminalNode node = new TerminalNode();
                     node.displayText = "Discombobulate is ready, Type 'initattack' or 'atk' to execute.";
+                    node.clearPreviousText = true;
+                    __result = node;
+                }
+            }
+            else if (text.Split()[0].ToLower() == "page")
+            {
+                string[] splits = text.Split();
+                if(UpgradeBus.instance.pager)
+                {
+                    if(splits.Length == 1)
+                    {
+                        TerminalNode node = new TerminalNode();
+                        node.displayText = "You have to enter a message to broadcast\nEX: `page get back to the ship!`";
+                        node.clearPreviousText = true;
+                        __result = node;
+                    }
+                    else
+                    {
+                        string msg = string.Join(" ", splits.Skip(1));
+                        UpgradeBus.instance.pageScript.ReqBroadcastChatServerRpc(msg);
+                        TerminalNode node = new TerminalNode();
+                        node.displayText = $"Broadcasted message: '{msg}'";
+                        node.clearPreviousText = true;
+                        __result = node;
+                    }
+                }
+                else
+                {
+                    TerminalNode node = new TerminalNode();
+                    node.displayText = "You don't have access to this command.\nPurchase the pager from lategame store.";
                     node.clearPreviousText = true;
                     __result = node;
                 }

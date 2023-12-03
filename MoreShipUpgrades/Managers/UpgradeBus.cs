@@ -30,7 +30,9 @@ namespace MoreShipUpgrades.Managers
         public float flashCooldown = 0f;
         public bool strongLegs = false;
         public bool runningShoes = false;
+        public bool lockSmith = false;
         public bool biggerLungs = false;
+        public bool pager = false;
         public int lungLevel = 0;
         public int backLevel = 0;
         public int runningLevel = 0;
@@ -42,6 +44,8 @@ namespace MoreShipUpgrades.Managers
         public AudioClip flashNoise;
         public trapDestroyerScript trapHandler = null;
         public terminalFlashScript flashScript = null;
+        public lockSmithScript lockScript = null;
+        public pagerScript pageScript = null;
         public PluginConfig cfg;
         public GameObject modStorePrefab;
         public TerminalNode modStoreInterface;

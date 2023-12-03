@@ -28,6 +28,8 @@ namespace MoreShipUpgrades.Managers
             {"Better Scanner", SaveInfo => SaveInfo.scannerUpgrade },
             {"Beekeeper", SaveInfo => SaveInfo.beekeeper },
             {"Back Muscles", SaveInfo => SaveInfo.exoskeleton },
+            {"Pager", SaveInfo => SaveInfo.pager },
+            {"Locksmith", SaveInfo => SaveInfo.lockSmith },
         };
 
         private static Dictionary<string, Func<SaveInfo, int>> levelConditions = new Dictionary<string, Func<SaveInfo, int>>
@@ -42,6 +44,8 @@ namespace MoreShipUpgrades.Managers
             { "Better Scanner", saveInfo => 0 },
             { "Beekeeper", saveInfo => saveInfo.beeLevel },
             { "Back Muscles", saveInfo => saveInfo.backLevel },
+            { "Pager", saveInfo => 0 },
+            { "Locksmith", saveInfo => 0 }
         };
         private bool hasRun = false;
         private void Start()
@@ -86,7 +90,7 @@ namespace MoreShipUpgrades.Managers
         {
             foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
             {
-                if(node.Unlocked && !UpgradeBus.instance.UpgradeObjects.Keys.ToList().Contains(node.Name))
+                if(node.Unlocked)
                 {
                     GameObject go = Instantiate(node.Prefab, Vector3.zero, Quaternion.identity);
                     go.GetComponent<NetworkObject>().Spawn();
@@ -197,6 +201,7 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.lightLevel = saveInfo.lightLevel;
             UpgradeBus.instance.discoLevel = saveInfo.discoLevel;
             UpgradeBus.instance.legLevel = saveInfo.legLevel;
+            UpgradeBus.instance.pager = saveInfo.pager;
 
             foreach(CustomTerminalNode customNode in UpgradeBus.instance.terminalNodes)
             {
@@ -225,6 +230,8 @@ namespace MoreShipUpgrades.Managers
         public bool strongLegs = UpgradeBus.instance.strongLegs;
         public bool runningShoes = UpgradeBus.instance.runningShoes;
         public bool biggerLungs = UpgradeBus.instance.biggerLungs;
+        public bool lockSmith = UpgradeBus.instance.lockSmith;
+        public bool pager = UpgradeBus.instance.pager;
         public int beeLevel = UpgradeBus.instance.beeLevel;
         public int lungLevel = UpgradeBus.instance.lungLevel;
         public int backLevel = UpgradeBus.instance.backLevel;
@@ -232,6 +239,5 @@ namespace MoreShipUpgrades.Managers
         public int lightLevel = UpgradeBus.instance.lightLevel;
         public int discoLevel = UpgradeBus.instance.discoLevel;
         public int legLevel = UpgradeBus.instance.legLevel;
-
     }
 }
