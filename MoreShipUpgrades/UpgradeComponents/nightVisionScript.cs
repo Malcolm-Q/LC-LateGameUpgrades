@@ -1,4 +1,5 @@
-﻿using GameNetcodeStuff;
+﻿using BepInEx.Configuration;
+using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using System;
@@ -12,6 +13,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+
 namespace MoreShipUpgrades.UpgradeComponents
 {
     internal class nightVisionScript : BaseUpgrade
@@ -20,6 +22,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         private Transform batteryBar;
         private PlayerControllerB client;
         private bool batteryExhaustion;
+
         void Start()
         {
             StartCoroutine(lateApply());
@@ -30,7 +33,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             yield return new WaitForSeconds(1);
             UpgradeBus.instance.nightVision = true;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Press Left-Alt to toggle Night Vision!!!</color>";
+            HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Press {UpgradeBus.instance.cfg.TOGGLE_NIGHT_VISION_KEY} to toggle Night Vision!!!</color>";
             client = GameNetworkManager.Instance.localPlayerController;
             UpgradeBus.instance.UpgradeObjects.Add("Night Vision", gameObject);
             DontDestroyOnLoad(gameObject);
@@ -39,10 +42,13 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         void LateUpdate()
         {
-            if(client == null) { return; }
-            if (Keyboard.current[Key.LeftAlt].wasPressedThisFrame && !batteryExhaustion)
+            if (client == null) { return; }
+
+            // Check if the configured key is pressed
+            if (Enum.TryParse(UpgradeBus.instance.cfg.TOGGLE_NIGHT_VISION_KEY, out Key toggleKey) && Keyboard.current[toggleKey].wasPressedThisFrame && !batteryExhaustion)
             {
                 UpgradeBus.instance.nightVisionActive = !UpgradeBus.instance.nightVisionActive;
+
                 if (UpgradeBus.instance.nightVisionActive)
                 {
                     UpgradeBus.instance.nightVisColor = client.nightVision.color;
@@ -52,7 +58,7 @@ namespace MoreShipUpgrades.UpgradeComponents
                     client.nightVision.color = UpgradeBus.instance.cfg.NIGHT_VIS_COLOR;
                     client.nightVision.range = UpgradeBus.instance.cfg.NIGHT_VIS_RANGE;
                     client.nightVision.intensity = UpgradeBus.instance.cfg.NIGHT_VIS_INTENSITY;
-                    nightBattery -= UpgradeBus.instance.cfg.NIGHT_VIS_STARTUP; // 0.1f
+                    nightBattery -= UpgradeBus.instance.cfg.NIGHT_VIS_STARTUP; //0.1f
                 }
                 else
                 {
@@ -60,14 +66,15 @@ namespace MoreShipUpgrades.UpgradeComponents
                     client.nightVision.range = UpgradeBus.instance.nightVisRange;
                     client.nightVision.intensity = UpgradeBus.instance.nightVisIntensity;
                 }
-
             }
-            if(UpgradeBus.instance.nightVisionActive)
+
+            if (UpgradeBus.instance.nightVisionActive)
             {
                 nightBattery -= Time.deltaTime * UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_SPEED; //0.1f
                 nightBattery = Mathf.Clamp(nightBattery, 0f, 1f);
                 batteryBar.parent.gameObject.SetActive(true);
-                if(nightBattery <= 0f)
+
+                if (nightBattery <= 0f)
                 {
                     UpgradeBus.instance.nightVisionActive = false;
                     client.nightVision.color = UpgradeBus.instance.nightVisColor;
@@ -81,7 +88,8 @@ namespace MoreShipUpgrades.UpgradeComponents
             {
                 nightBattery += Time.deltaTime * UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_SPEED; //0.05f
                 nightBattery = Mathf.Clamp(nightBattery, 0f, 1f);
-                if(nightBattery >= 1f)
+
+                if (nightBattery >= 1f)
                 {
                     batteryBar.parent.gameObject.SetActive(false);
                 }
@@ -90,7 +98,8 @@ namespace MoreShipUpgrades.UpgradeComponents
                     batteryBar.parent.gameObject.SetActive(true);
                 }
             }
-            if(client.isInsideFactory || UpgradeBus.instance.nightVisionActive)
+
+            if (client.isInsideFactory || UpgradeBus.instance.nightVisionActive)
             {
                 client.nightVision.enabled = true;
             }
@@ -98,8 +107,10 @@ namespace MoreShipUpgrades.UpgradeComponents
             {
                 client.nightVision.enabled = false;
             }
+
             batteryBar.localScale = new Vector3(nightBattery, 1, 1);
         }
+
         private IEnumerator BatteryRecovery()
         {
             yield return new WaitForSeconds(UpgradeBus.instance.cfg.NIGHT_VIS_EXHAUST);
