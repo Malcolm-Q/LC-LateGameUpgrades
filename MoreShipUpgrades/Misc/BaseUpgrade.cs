@@ -11,5 +11,10 @@ namespace MoreShipUpgrades.Misc
         {
 
         }
+
+        public virtual void load()
+        {
+
+        }
     }
 }

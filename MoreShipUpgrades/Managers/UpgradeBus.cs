@@ -46,6 +46,7 @@ namespace MoreShipUpgrades.Managers
         public GameObject modStorePrefab;
         public TerminalNode modStoreInterface;
         public List<CustomTerminalNode> terminalNodes = new List<CustomTerminalNode>();
+        public List<CustomTerminalNode> terminalNodesOriginal = new List<CustomTerminalNode>();
         public Dictionary<string, GameObject> UpgradeObjects = new Dictionary<string, GameObject>();
         
         void Awake()
@@ -61,12 +62,10 @@ namespace MoreShipUpgrades.Managers
             modStoreInterface.clearPreviousText = true;
             foreach (CustomTerminalNode terminalNode in terminalNodes)
             {
-                Debug.Log(terminalNode.Name);
                 if (!terminalNode.Unlocked) { modStoreInterface.displayText += $"\n{terminalNode.Name} // {terminalNode.Price}  "; }
                 else if (terminalNode.MaxUpgrade == 0) { modStoreInterface.displayText += $"\n{terminalNode.Name} // UNLOCKED  "; }
                 else if (terminalNode.MaxUpgrade > terminalNode.CurrentUpgrade) { modStoreInterface.displayText += $"\n{terminalNode.Name} // {terminalNode.Price} // LVL {terminalNode.CurrentUpgrade + 1}"; }
                 else { modStoreInterface.displayText += $"\n{terminalNode.Name} // MAX LVL";  }
-                Debug.Log(modStoreInterface.displayText);
             }
             if(modStoreInterface.displayText == "")
             {
@@ -101,6 +100,23 @@ namespace MoreShipUpgrades.Managers
             alteredWeight = 1f;
             trapHandler = null;
             flashScript = null;
+            UpgradeObjects = new Dictionary<string, GameObject>();
+            terminalNodes = terminalNodesOriginal;
+
+            try { LGUStore.instance.DeleteUpgradesServerRpc(); }
+            catch (Exception ex)
+            { 
+                BaseUpgrade[] upgradeObjects = GameObject.FindObjectsOfType<BaseUpgrade>();
+                foreach(BaseUpgrade upgrade in upgradeObjects)
+                {
+                    Destroy(upgrade.gameObject);
+                }
+            }
+        }
+
+        public void CreateDeepNodeCopy()
+        {
+            terminalNodesOriginal = terminalNodes.Select(node => node.Copy()).ToList();
         }
     }
 }

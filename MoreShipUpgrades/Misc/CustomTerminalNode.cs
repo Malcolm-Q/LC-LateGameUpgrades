@@ -13,7 +13,7 @@ namespace MoreShipUpgrades.Misc
         public GameObject Prefab;
         public bool Unlocked = false;
         public int MaxUpgrade;
-        public int CurrentUpgrade;
+        public int CurrentUpgrade { get; set; }
 
 
         public CustomTerminalNode(string name, int price, string description, GameObject prefab, int maxUpgrade = 0)
@@ -23,6 +23,18 @@ namespace MoreShipUpgrades.Misc
             Description = description;
             Prefab = prefab;
             MaxUpgrade = maxUpgrade;
+        }
+
+        public CustomTerminalNode Copy()
+        {
+            return new CustomTerminalNode
+            (
+                Name = this.Name,
+                Price = this.Price,
+                Description = this.Description,
+                Prefab = this.Prefab,
+                MaxUpgrade = this.MaxUpgrade
+            );
         }
     }
 }

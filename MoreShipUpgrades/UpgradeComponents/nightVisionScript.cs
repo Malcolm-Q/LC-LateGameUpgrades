@@ -1,5 +1,6 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ using UnityEngine.InputSystem;
 
 namespace MoreShipUpgrades.UpgradeComponents
 {
-    internal class nightVisionScript : NetworkBehaviour
+    internal class nightVisionScript : BaseUpgrade
     {
         private float nightBattery;
         private Transform batteryBar;
@@ -29,9 +30,11 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             yield return new WaitForSeconds(1);
             UpgradeBus.instance.nightVision = true;
-            transform.parent = GameObject.Find("HangarShip").transform;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Press Left-Alt to toggle Night Vision!!!</color>";
             client = GameNetworkManager.Instance.localPlayerController;
+            UpgradeBus.instance.UpgradeObjects.Add("Night Vision", gameObject);
+            DontDestroyOnLoad(gameObject);
+            load();
         }
 
         void LateUpdate()
@@ -46,9 +49,6 @@ namespace MoreShipUpgrades.UpgradeComponents
                     UpgradeBus.instance.nightVisRange = client.nightVision.range;
                     UpgradeBus.instance.nightVisIntensity = client.nightVision.intensity;
 
-                    //nightVis.color = Color.green;
-                    //nightVis.range = 3000f;
-                    //nightVis.intensity = 1500f;
                     client.nightVision.color = UpgradeBus.instance.cfg.NIGHT_VIS_COLOR;
                     client.nightVision.range = UpgradeBus.instance.cfg.NIGHT_VIS_RANGE;
                     client.nightVision.intensity = UpgradeBus.instance.cfg.NIGHT_VIS_INTENSITY;

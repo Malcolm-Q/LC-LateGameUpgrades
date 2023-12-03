@@ -19,13 +19,13 @@ namespace MoreShipUpgrades.UpgradeComponents
         void Start()
         {
             StartCoroutine(lateApply());
+
         }
 
         private IEnumerator lateApply()
         {
             yield return new WaitForSeconds(1);
             UpgradeBus.instance.exoskeleton = true;
-            transform.parent = GameObject.Find("HangarShip").transform;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Back Muscles is active!</color>";
             foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
             {
@@ -34,6 +34,9 @@ namespace MoreShipUpgrades.UpgradeComponents
                     node.Price /= 2;
                 }
             }
+            UpgradeBus.instance.UpgradeObjects.Add("Back Muscles", gameObject);
+            DontDestroyOnLoad(gameObject);
+            load();
         }
         public override void Increment()
         {

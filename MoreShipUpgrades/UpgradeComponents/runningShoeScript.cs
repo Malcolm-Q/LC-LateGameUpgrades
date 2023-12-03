@@ -28,7 +28,6 @@ namespace MoreShipUpgrades.UpgradeComponents
             {
                 player.movementSpeed = UpgradeBus.instance.cfg.MOVEMENT_SPEED;
             }
-            transform.parent = GameObject.Find("HangarShip").transform;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Running Shoes is active!</color>";
             foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
             {
@@ -37,20 +36,43 @@ namespace MoreShipUpgrades.UpgradeComponents
                     node.Price /= 2;
                 }
             }
+            UpgradeBus.instance.UpgradeObjects.Add("Running Shoes", gameObject);
+            load();
+            DontDestroyOnLoad(gameObject);
         }
 
         public override void Increment()
         {
+            PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
+            foreach (PlayerControllerB player in players)
+            {
+                player.movementSpeed += UpgradeBus.instance.cfg.MOVEMENT_INCREMENT;
+            }
             UpgradeBus.instance.runningLevel++;
             foreach( CustomTerminalNode node in UpgradeBus.instance.terminalNodes )
             {
                 if(node.Name.ToLower() == "running shoes")
                 {
-                    node.Description = $"You can run {UpgradeBus.instance.cfg.MOVEMENT_SPEED - 4.6f + (UpgradeBus.instance.cfg.MOVEMENT_INCREMENT * UpgradeBus.instance.runningLevel)} units faster";
+                    node.Description = $"You can run {(UpgradeBus.instance.cfg.MOVEMENT_SPEED - 4.6f) + (UpgradeBus.instance.cfg.MOVEMENT_INCREMENT * UpgradeBus.instance.runningLevel)} units faster";
                 }
             }
 
         }
+
+        public override void load()
+        {
+            float amountToIncrement = 0;
+            for(int i = 0; i < UpgradeBus.instance.runningLevel; i++)
+            {
+                amountToIncrement += UpgradeBus.instance.cfg.MOVEMENT_INCREMENT;
+            }
+            PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
+            foreach(PlayerControllerB player in players)
+            {
+                player.movementSpeed += amountToIncrement;
+            }
+        }
+
 
     }
 }

@@ -1,11 +1,7 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
 using MoreShipUpgrades.Managers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Patches
@@ -13,21 +9,25 @@ namespace MoreShipUpgrades.Patches
     [HarmonyPatch(typeof(StartOfRound))]
     internal class StartOfRoundPatcher
     {
-        [HarmonyPostfix]
-        [HarmonyPatch("Awake")]
-        private static void AddToItemList(ref StartOfRound __instance)
+        [HarmonyPrefix]
+        [HarmonyPatch("Start")]
+        private static void InitLGUStore(PlayerControllerB __instance)
         {
-            foreach(Item item in Plugin.upgradeItems)
+            if(__instance.NetworkManager.IsHost || __instance.NetworkManager.IsServer)
             {
-                __instance.allItemsList.itemsList.Add(item);
+                GameObject refStore = GameObject.Instantiate(UpgradeBus.instance.modStorePrefab);
+                refStore.GetComponent<NetworkObject>().Spawn();
             }
         }
-
         [HarmonyPrefix]
         [HarmonyPatch("playersFiredGameOver")]
-        private static void GameOverResetUpgradeManager()
+        private static void GameOverResetUpgradeManager(StartOfRound __instance)
         {
             UpgradeBus.instance.ResetAllValues();
+            if(__instance.NetworkManager.IsHost ||  __instance.NetworkManager.IsServer)
+            {
+                LGUStore.instance.PlayersFired();
+            }
             PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
             foreach (PlayerControllerB player in players)
             {
@@ -36,6 +36,5 @@ namespace MoreShipUpgrades.Patches
                 player.jumpForce = 13;
             }
         }
-
     }
 }

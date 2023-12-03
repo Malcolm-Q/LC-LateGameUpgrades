@@ -1,5 +1,6 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents
 {
-    public class trapDestroyerScript : NetworkBehaviour
+    public class trapDestroyerScript : BaseUpgrade
     {
         void Start()
         {
@@ -23,8 +24,11 @@ namespace MoreShipUpgrades.UpgradeComponents
             yield return new WaitForSeconds(1);
             UpgradeBus.instance.DestroyTraps = true;
             UpgradeBus.instance.trapHandler = this;
-            transform.parent = GameObject.Find("HangarShip").transform;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Malware Broadcaster is active!</color>";
+            UpgradeBus.instance.UpgradeObjects.Add("Malware Broadcaster", gameObject);
+            DontDestroyOnLoad(gameObject);
+            load();
+
         }
 
         [ServerRpc(RequireOwnership = false)]

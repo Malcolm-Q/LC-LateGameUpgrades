@@ -18,6 +18,12 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         void Start()
         {
+            StartCoroutine(LateApply());
+        }
+
+        private IEnumerator LateApply()
+        {
+            yield return new WaitForSeconds(1f);
             players = GameObject.FindObjectsOfType<PlayerControllerB>();
             foreach (PlayerControllerB player in players)
             {
@@ -25,27 +31,48 @@ namespace MoreShipUpgrades.UpgradeComponents
             }
             foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
             {
-                if(node.Name.ToLower() == "bigger lungs" && node.Price > 0)
+                if(node.Name.ToLower() == "Bigger Lungs" && node.Price > 0)
                 {
                     node.Price /= 2;
                 }
             }
             UpgradeBus.instance.biggerLungs = true;
-            transform.parent = GameObject.Find("HangarShip").transform;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Bigger Lungs is active!</color>";
+            UpgradeBus.instance.UpgradeObjects.Add("Bigger Lungs", gameObject);
+            DontDestroyOnLoad(gameObject);
+            load();
         }
 
         public override void Increment()
         {
             UpgradeBus.instance.lungLevel++;
+            players = GameObject.FindObjectsOfType<PlayerControllerB>();
+            foreach (PlayerControllerB player in players)
+            {
+                player.sprintTime += UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT; //17
+            }
             foreach( CustomTerminalNode node in UpgradeBus.instance.terminalNodes )
             {
                 if(node.Name.ToLower() == "bigger lungs")
                 {
-                    node.Description = $"Stamina Time is {UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE - 11 + UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT} units longer";
+                    node.Description = $"Stamina Time is {(UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE - 11) + (UpgradeBus.instance.lungLevel * UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT)} units longer";
                 }
             }
 
+        }
+
+        public override void load()
+        {
+            float amountToIncrement = 0;
+            for(int i = 0; i < UpgradeBus.instance.lungLevel; i++)
+            {
+                amountToIncrement += UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT;
+            }
+            players = GameObject.FindObjectsOfType<PlayerControllerB>();
+            foreach(PlayerControllerB player in players)
+            {
+                player.sprintTime += amountToIncrement;
+            }
         }
     }
 }

@@ -28,7 +28,6 @@ namespace MoreShipUpgrades.UpgradeComponents
             {
                 player.jumpForce = UpgradeBus.instance.cfg.JUMP_FORCE;
             }
-            transform.parent = GameObject.Find("HangarShip").transform;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Strong Legs is active!</color>";
             foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
             {
@@ -37,6 +36,9 @@ namespace MoreShipUpgrades.UpgradeComponents
                     node.Price /= 2;
                 }
             }
+            UpgradeBus.instance.UpgradeObjects.Add("Strong Legs", gameObject);
+            DontDestroyOnLoad(gameObject);
+            load();
         }
 
         public override void Increment()
@@ -50,11 +52,26 @@ namespace MoreShipUpgrades.UpgradeComponents
                     PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
                     foreach (PlayerControllerB player in players)
                     {
-                        player.jumpForce = UpgradeBus.instance.cfg.JUMP_FORCE_INCREMENT;
+                        player.jumpForce += UpgradeBus.instance.cfg.JUMP_FORCE_INCREMENT;
                     }
                 }
             }
         }
+
+        public override void load()
+        {
+            float amountToIncrement = 0;
+            for(int i = 0; i < UpgradeBus.instance.legLevel; i++)
+            {
+                amountToIncrement += UpgradeBus.instance.cfg.JUMP_FORCE_INCREMENT;
+            }
+            PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
+            foreach(PlayerControllerB player in players)
+            {
+                player.jumpForce += amountToIncrement;
+            }
+        }
+
 
     }
 }

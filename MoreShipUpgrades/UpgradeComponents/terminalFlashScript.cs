@@ -25,7 +25,6 @@ namespace MoreShipUpgrades.UpgradeComponents
             UpgradeBus.instance.terminalFlash = true;
             UpgradeBus.instance.flashScript = this;
             
-            transform.parent = GameObject.Find("HangarShip").transform;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Discombobulator is active!\nType 'cooldown' into the terminal for info!!!</color>";
             foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
             {
@@ -34,6 +33,9 @@ namespace MoreShipUpgrades.UpgradeComponents
                     node.Price /= 2;
                 }
             }
+            UpgradeBus.instance.UpgradeObjects.Add("Discombobulator", gameObject);
+            DontDestroyOnLoad(gameObject);
+            load();
         }
 
         public override void Increment()

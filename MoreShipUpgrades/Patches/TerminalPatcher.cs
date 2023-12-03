@@ -16,26 +16,6 @@ namespace MoreShipUpgrades.Patches
     internal class TerminalPatcher
     {
         [HarmonyPostfix]
-        [HarmonyPatch("Awake")]
-        private static void InjectInfo(ref Terminal __instance)
-        {
-            if(__instance.NetworkManager.IsServer || __instance.NetworkManager.IsHost)
-            {
-                GameObject refStore = GameObject.Instantiate(UpgradeBus.instance.modStorePrefab);
-                refStore.GetComponent<NetworkObject>().Spawn();
-            }
-
-        }
-
-        [HarmonyPostfix]
-        [HarmonyPatch("BeginUsingTerminal")]
-        private static void testasdf(ref Terminal __instance)
-        {
-            __instance.screenText.text += "\nEnter `lategame` for help with LateGameUpgrades  \n\n";
-            __instance.currentText += "\nEnter `lategame` for help with LateGameUpgrades  \n\n";
-        }
-
-        [HarmonyPostfix]
         [HarmonyPatch("Update")]
         private static void Counter()
         {
@@ -158,7 +138,7 @@ namespace MoreShipUpgrades.Patches
                                 node.displayText = $"You Upgraded {customNode.Name} to level {customNode.CurrentUpgrade + 1} \n";
                             }
                         }
-                        else if(customNode.Unlocked)
+                        else if(customNode.Unlocked && __instance.groupCredits >= customNode.Price)
                         {
                             if (customNode.MaxUpgrade == 0) { node.displayText = "You already unlocked this upgrade.  \n"; }
                             else { node.displayText = "This upgrade is already max level  \n"; }
