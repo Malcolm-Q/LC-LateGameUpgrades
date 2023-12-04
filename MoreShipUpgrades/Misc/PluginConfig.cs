@@ -2,13 +2,16 @@
 using UnityEngine;
 using System.Drawing;
 using System.Collections.Generic;
+using System;
+using UnityEngine.InputSystem;
+
 
 namespace MoreShipUpgrades.Misc
 {
     public class PluginConfig
     {
         readonly ConfigFile configFile;
-        
+
         // enabled disabled
         public bool ADVANCED_TELE_ENABLED { get; set; }
         public bool WEAK_TELE_ENABLED { get; set; }
@@ -76,6 +79,16 @@ namespace MoreShipUpgrades.Misc
         public bool PAGER_ENABLED { get; set; }
         public bool LOCKSMITH_ENABLED { get; set; }
 
+        public string TOGGLE_NIGHT_VISION_KEY
+        {
+            get => ConfigEntry("Night Vision", "Toggle Night Vision Key", "LeftAlt", "Key to toggle Night Vision");
+            set
+            {
+                // Ensure that the key is valid, if not, fallback to "LeftAlt"
+                var validKeys = new List<string> { "N", "LeftAlt", "RightAlt", "A", "B", "C", /* Add more keys as needed */ };
+                configFile.Bind("Night Vision", "Toggle Night Vision Key", "LeftAlt", "Key to toggle Night Vision").Value = validKeys.Contains(value) ? value : "LeftAlt";
+            }
+        }
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -139,6 +152,9 @@ namespace MoreShipUpgrades.Misc
             NIGHT_VIS_INTENSITY = ConfigEntry("Night Vision", "Night Vision Intensity", 1000f, "Kind of like the brightness of your Night Vision.");
             NIGHT_VIS_STARTUP = ConfigEntry("Night Vision", "Night Vision StartUp Cost", 0.1f, "The percent battery drained when turned on (0.1 = 10%).");
             NIGHT_VIS_EXHAUST = ConfigEntry("Night Vision", "Night Vision Exhaustion", 2f, "How many seconds night vision stays fully depleted.");
+            TOGGLE_NIGHT_VISION_KEY = ConfigEntry("Night Vision", "Toggle Night Vision Key", "LeftAlt", "Key to toggle Night Vision, you can use any key on your system such as LeftAlt, LeftShift, or any letter which exists.");
+
+
 
             DISCOMBOBULATOR_ENABLED = ConfigEntry("Discombobulator", "Enable Discombobulator Upgrade", true, "Stun enemies around the ship.");
             DISCOMBOBULATOR_PRICE = ConfigEntry("Discombobulator", "Price of Discombobulator Upgrade", 550, "");
@@ -165,5 +181,6 @@ namespace MoreShipUpgrades.Misc
             LOCKSMITH_ENABLED = ConfigEntry("Locksmith", "Enable Locksmith upgrade", true, "Allows you to pick locked doors by completing a minigame.");
             LOCKSMITH_PRICE = ConfigEntry("Locksmith", "Locksmith Price", 740, "Default price of Locksmith upgrade.");
         }
+
     }
 }
