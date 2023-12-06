@@ -85,8 +85,8 @@ namespace MoreShipUpgrades.Misc
             set
             {
                 // Ensure that the key is valid, if not, fallback to "LeftAlt"
-                var validKeys = new List<string> { "N", "LeftAlt", "RightAlt", "A", "B", "C", /* Add more keys as needed */ };
-                configFile.Bind("Night Vision", "Toggle Night Vision Key", "LeftAlt", "Key to toggle Night Vision").Value = validKeys.Contains(value) ? value : "LeftAlt";
+                var validKeys = new List<string> { "N", "LeftAlt", "RightAlt", "A", "B", "C", "X", /* Add more keys as needed */ };
+                configFile.Bind("Night Vision", "Toggle Night Vision Key", "X", "Key to toggle Night Vision").Value = validKeys.Contains(value) ? value : "X";
             }
         }
 
