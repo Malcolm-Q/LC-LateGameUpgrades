@@ -77,8 +77,11 @@ namespace MoreShipUpgrades.Misc
         public int PAGER_PRICE { get; set; }
         public int LOCKSMITH_PRICE { get; set; }
         public bool PAGER_ENABLED { get; set; }
+        public float PAGER_COOLDOWN_DURATION { get; set; }
         public bool LOCKSMITH_ENABLED { get; set; }
         public string TOGGLE_NIGHT_VISION_KEY { get; set; }
+        public float NIGHT_VIS_DRAIN_DECREASE_PERCENT { get; set; }
+        public float NIGHT_VIS_REGEN_INCREASE_PERCENT { get; set; }
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -144,6 +147,8 @@ namespace MoreShipUpgrades.Misc
             NIGHT_VIS_STARTUP = ConfigEntry("Night Vision", "Night Vision StartUp Cost", 0.1f, "The percent battery drained when turned on (0.1 = 10%).");
             NIGHT_VIS_EXHAUST = ConfigEntry("Night Vision", "Night Vision Exhaustion", 2f, "How many seconds night vision stays fully depleted.");
             TOGGLE_NIGHT_VISION_KEY = ConfigEntry("Night Vision", "Toggle Night Vision Key", "LeftAlt", "Key to toggle Night Vision, you can use any key on your system such as LeftAlt, LeftShift, or any letter which exists.");
+            NIGHT_VIS_DRAIN_DECREASE_PERCENT = ConfigEntry("Night Vision", "Percentage decrease for night vis battery drain", 10f, "Percentage decrease applied to drain speed on each upgrade.");
+            NIGHT_VIS_REGEN_INCREASE_PERCENT = ConfigEntry("Night Vision", "Percentage increase for night vis battery regen", 20f, "Percentage increase applied to regen speed on each upgrade.");
 
             DISCOMBOBULATOR_ENABLED = ConfigEntry("Discombobulator", "Enable Discombobulator Upgrade", true, "Stun enemies around the ship.");
             DISCOMBOBULATOR_PRICE = ConfigEntry("Discombobulator", "Price of Discombobulator Upgrade", 550, "");
@@ -166,6 +171,7 @@ namespace MoreShipUpgrades.Misc
 
             PAGER_ENABLED = ConfigEntry("Pager", "Enable pager upgrade", true, "Type `page <message>` to send a message to all clients chat.");
             PAGER_PRICE = ConfigEntry("Pager", "Pager Price", 490, "Default price of pager upgrade.");
+            PAGER_COOLDOWN_DURATION = ConfigEntry("Pager", "Pager Cooldown Duration", 30f, "Total cooldown time for the pager in seconds.");
 
             LOCKSMITH_ENABLED = ConfigEntry("Locksmith", "Enable Locksmith upgrade", true, "Allows you to pick locked doors by completing a minigame.");
             LOCKSMITH_PRICE = ConfigEntry("Locksmith", "Locksmith Price", 740, "Default price of Locksmith upgrade.");

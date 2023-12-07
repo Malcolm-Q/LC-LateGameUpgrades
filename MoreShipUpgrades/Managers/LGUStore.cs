@@ -10,6 +10,15 @@ using System.Xml.Linq;
 using System.Linq;
 using GameNetcodeStuff;
 
+using MoreShipUpgrades.Misc;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
+using Newtonsoft.Json;
+using Unity.Netcode;
+using GameNetcodeStuff;
+
 namespace MoreShipUpgrades.Managers
 {
     public class LGUStore : NetworkBehaviour
@@ -52,12 +61,12 @@ namespace MoreShipUpgrades.Managers
         private void Start()
         {
             instance = this;
-            if(NetworkManager.IsHost && !hasRun)
+            if (NetworkManager.IsHost && !hasRun)
             {
                 hasRun = true;
                 string saveNum = GameNetworkManager.Instance.saveFileNum.ToString();
                 string filePath = Path.Combine(Application.persistentDataPath, $"LGU_{saveNum}.json");
-                if(File.Exists(filePath) )
+                if (File.Exists(filePath))
                 {
                     string json = File.ReadAllText(filePath);
                     saveInfo = JsonConvert.DeserializeObject<SaveInfo>(json);
@@ -67,8 +76,8 @@ namespace MoreShipUpgrades.Managers
                 else
                 {
                     saveInfo = new SaveInfo();
-                    string json = JsonConvert.SerializeObject( saveInfo );
-                    File.WriteAllText(filePath, json );
+                    string json = JsonConvert.SerializeObject(saveInfo);
+                    File.WriteAllText(filePath, json);
                 }
             }
             else
@@ -89,9 +98,9 @@ namespace MoreShipUpgrades.Managers
 
         public void HandleSpawns()
         {
-            foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
+            foreach (CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
             {
-                if(node.Unlocked)
+                if (node.Unlocked)
                 {
                     GameObject go = Instantiate(node.Prefab, Vector3.zero, Quaternion.identity);
                     go.GetComponent<NetworkObject>().Spawn();
@@ -123,7 +132,7 @@ namespace MoreShipUpgrades.Managers
             }
         }
 
-        [ServerRpc(RequireOwnership =false)]
+        [ServerRpc(RequireOwnership = false)]
         public void ShareSaveServerRpc()
         {
             string json = JsonConvert.SerializeObject(saveInfo);
@@ -142,19 +151,19 @@ namespace MoreShipUpgrades.Managers
         {
             string saveNum = GameNetworkManager.Instance.saveFileNum.ToString();
             string filePath = Path.Combine(Application.persistentDataPath, $"LGU_{saveNum}.json");
-            string json = JsonConvert.SerializeObject( new SaveInfo() );
-            File.WriteAllText(filePath, json );
+            string json = JsonConvert.SerializeObject(new SaveInfo());
+            File.WriteAllText(filePath, json);
         }
 
 
         [ServerRpc(RequireOwnership = false)]
         public void ReqSpawnServerRpc(string goName, bool increment = false)
         {
-            if(!increment)
+            if (!increment)
             {
-                foreach(CustomTerminalNode customNode in UpgradeBus.instance.terminalNodes)
+                foreach (CustomTerminalNode customNode in UpgradeBus.instance.terminalNodes)
                 {
-                    if(customNode.Name == goName)
+                    if (customNode.Name == goName)
                     {
                         GameObject go = Instantiate(customNode.Prefab, Vector3.zero, Quaternion.identity);
                         go.GetComponent<NetworkObject>().Spawn();
@@ -172,12 +181,12 @@ namespace MoreShipUpgrades.Managers
         [ClientRpc]
         private void UpdateNodesClientRpc(string goName, bool increment = false)
         {
-            foreach(CustomTerminalNode customNode in UpgradeBus.instance.terminalNodes)
+            foreach (CustomTerminalNode customNode in UpgradeBus.instance.terminalNodes)
             {
-                if(customNode.Name == goName)
+                if (customNode.Name == goName)
                 {
                     customNode.Unlocked = true;
-                    if(increment)
+                    if (increment)
                     {
                         customNode.CurrentUpgrade++;
                         UpgradeBus.instance.UpgradeObjects[goName].GetComponent<BaseUpgrade>().Increment();
@@ -190,7 +199,7 @@ namespace MoreShipUpgrades.Managers
         public void DeleteUpgradesServerRpc()
         {
             BaseUpgrade[] upgradeObjects = GameObject.FindObjectsOfType<BaseUpgrade>();
-            foreach(BaseUpgrade upgrade in upgradeObjects)
+            foreach (BaseUpgrade upgrade in upgradeObjects)
             {
                 GameNetworkManager.Destroy(upgrade.gameObject);
             }
@@ -232,16 +241,16 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.legLevel = saveInfo.legLevel;
             UpgradeBus.instance.pager = saveInfo.pager;
 
-            foreach(CustomTerminalNode customNode in UpgradeBus.instance.terminalNodes)
+            foreach (CustomTerminalNode customNode in UpgradeBus.instance.terminalNodes)
             {
-                if(conditions.TryGetValue(customNode.Name, out var condition) && condition(saveInfo))
+                if (conditions.TryGetValue(customNode.Name, out var condition) && condition(saveInfo))
                 {
                     customNode.Unlocked = true;
                     levelConditions.TryGetValue(customNode.Name, out var level);
                     customNode.CurrentUpgrade = level.Invoke(saveInfo);
                 }
             }
-        } 
+        }
     }
 
     [Serializable]

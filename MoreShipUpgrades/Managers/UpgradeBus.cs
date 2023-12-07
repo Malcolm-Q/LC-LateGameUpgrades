@@ -37,6 +37,7 @@ namespace MoreShipUpgrades.Managers
         public int discoLevel = 0;
         //public int scanLevel = 0; problematic, balance / refactor and then introduce tiered upgrades.
         public int legLevel = 0;
+        public int nightVisionLevel = 0; // Add this property
         public float alteredWeight = 1f;
         public AudioClip flashNoise;
         public trapDestroyerScript trapHandler = null;
@@ -49,7 +50,7 @@ namespace MoreShipUpgrades.Managers
         public List<CustomTerminalNode> terminalNodes = new List<CustomTerminalNode>();
         public List<CustomTerminalNode> terminalNodesOriginal = new List<CustomTerminalNode>();
         public Dictionary<string, GameObject> UpgradeObjects = new Dictionary<string, GameObject>();
-        
+
         void Awake()
         {
             instance = this;
@@ -66,9 +67,9 @@ namespace MoreShipUpgrades.Managers
                 if (!terminalNode.Unlocked) { modStoreInterface.displayText += $"\n{terminalNode.Name} // {terminalNode.Price}  "; }
                 else if (terminalNode.MaxUpgrade == 0) { modStoreInterface.displayText += $"\n{terminalNode.Name} // UNLOCKED  "; }
                 else if (terminalNode.MaxUpgrade > terminalNode.CurrentUpgrade) { modStoreInterface.displayText += $"\n{terminalNode.Name} // {terminalNode.Price} // LVL {terminalNode.CurrentUpgrade + 1}"; }
-                else { modStoreInterface.displayText += $"\n{terminalNode.Name} // MAX LVL";  }
+                else { modStoreInterface.displayText += $"\n{terminalNode.Name} // MAX LVL"; }
             }
-            if(modStoreInterface.displayText == "")
+            if (modStoreInterface.displayText == "")
             {
                 modStoreInterface.displayText = "No upgrades available";
             }
@@ -98,6 +99,7 @@ namespace MoreShipUpgrades.Managers
             lightLevel = 0;
             discoLevel = 0;
             legLevel = 0;
+            nightVisionLevel = 0; // Add this line
             alteredWeight = 1f;
             trapHandler = null;
             flashScript = null;
@@ -106,9 +108,9 @@ namespace MoreShipUpgrades.Managers
 
             try { LGUStore.instance.DeleteUpgradesServerRpc(); }
             catch (Exception ex)
-            { 
+            {
                 BaseUpgrade[] upgradeObjects = GameObject.FindObjectsOfType<BaseUpgrade>();
-                foreach(BaseUpgrade upgrade in upgradeObjects)
+                foreach (BaseUpgrade upgrade in upgradeObjects)
                 {
                     Destroy(upgrade.gameObject);
                 }

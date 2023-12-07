@@ -22,45 +22,30 @@ namespace MoreShipUpgrades.UpgradeComponents
         private Transform batteryBar;
         private PlayerControllerB client;
         private bool batteryExhaustion;
-        Key toggle = Key.LeftAlt;
 
         void Start()
         {
             StartCoroutine(lateApply());
             batteryBar = transform.GetChild(0).GetChild(0).transform;
-            if (Enum.TryParse(UpgradeBus.instance.cfg.TOGGLE_NIGHT_VISION_KEY, out Key toggleKey))
-            {
-                toggle = toggleKey;
-            }
         }
 
         private IEnumerator lateApply()
         {
             yield return new WaitForSeconds(1);
-            DontDestroyOnLoad(gameObject);
-            load();
-        }
-
-        public override void load()
-        {
             UpgradeBus.instance.nightVision = true;
             HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Press {UpgradeBus.instance.cfg.TOGGLE_NIGHT_VISION_KEY} to toggle Night Vision!!!</color>";
             client = GameNetworkManager.Instance.localPlayerController;
-            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Night Vision"))
-            {
-                UpgradeBus.instance.UpgradeObjects.Add("Night Vision", gameObject);
-            }
-            else
-            {
-                Plugin.mls.LogWarning("Night Vision is already in upgrade dict.");
-            }
+            UpgradeBus.instance.UpgradeObjects.Add("Night Vision", gameObject);
+            DontDestroyOnLoad(gameObject);
+            load();
         }
 
         void LateUpdate()
         {
             if (client == null) { return; }
 
-            if (Keyboard.current[toggle].wasPressedThisFrame && !batteryExhaustion)
+            // Check if the configured key is pressed
+            if (Enum.TryParse(UpgradeBus.instance.cfg.TOGGLE_NIGHT_VISION_KEY, out Key toggleKey) && Keyboard.current[toggleKey].wasPressedThisFrame && !batteryExhaustion)
             {
                 UpgradeBus.instance.nightVisionActive = !UpgradeBus.instance.nightVisionActive;
 
@@ -73,7 +58,7 @@ namespace MoreShipUpgrades.UpgradeComponents
                     client.nightVision.color = UpgradeBus.instance.cfg.NIGHT_VIS_COLOR;
                     client.nightVision.range = UpgradeBus.instance.cfg.NIGHT_VIS_RANGE;
                     client.nightVision.intensity = UpgradeBus.instance.cfg.NIGHT_VIS_INTENSITY;
-                    nightBattery -= UpgradeBus.instance.cfg.NIGHT_VIS_STARTUP; //0.1f
+                    nightBattery -= UpgradeBus.instance.cfg.NIGHT_VIS_STARTUP; // 0.1f
                 }
                 else
                 {
@@ -85,7 +70,7 @@ namespace MoreShipUpgrades.UpgradeComponents
 
             if (UpgradeBus.instance.nightVisionActive)
             {
-                nightBattery -= Time.deltaTime * UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_SPEED; //0.1f
+                nightBattery -= Time.deltaTime * UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_SPEED; // 0.1f
                 nightBattery = Mathf.Clamp(nightBattery, 0f, 1f);
                 batteryBar.parent.gameObject.SetActive(true);
 
@@ -101,7 +86,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             }
             else if (!batteryExhaustion)
             {
-                nightBattery += Time.deltaTime * UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_SPEED; //0.05f
+                nightBattery += Time.deltaTime * UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_SPEED; // 0.05f
                 nightBattery = Mathf.Clamp(nightBattery, 0f, 1f);
 
                 if (nightBattery >= 1f)
@@ -130,6 +115,39 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             yield return new WaitForSeconds(UpgradeBus.instance.cfg.NIGHT_VIS_EXHAUST);
             batteryExhaustion = false;
+        }
+
+        public override void Increment()
+        {
+            // Increment the night vision level
+            UpgradeBus.instance.nightVisionLevel++;
+
+            // Apply adjustments based on the new level
+            AdjustNightVisionProperties();
+        }
+
+        public override void load()
+        {
+            // Load adjustments based on the current level
+            AdjustNightVisionProperties();
+        }
+
+        // Add the missing method
+        private void AdjustNightVisionProperties()
+        {
+            // Apply adjustments based on the night vision level
+
+            // Configurable percentage increases
+            float regenAdjustment = Mathf.Pow(1 + UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_INCREASE_PERCENT / 100f, UpgradeBus.instance.nightVisionLevel) * 0.01f;
+            float drainAdjustment = Mathf.Pow(1 - UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_DECREASE_PERCENT / 100f, UpgradeBus.instance.nightVisionLevel) * 0.01f;
+
+            UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_SPEED += regenAdjustment;
+            UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_SPEED -= drainAdjustment;
+
+            // You can add any additional adjustments or logic for night vision properties here
+            // For example:
+            // UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_SPEED += 0.1f;
+            // UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_SPEED -= 0.05f;
         }
     }
 }
