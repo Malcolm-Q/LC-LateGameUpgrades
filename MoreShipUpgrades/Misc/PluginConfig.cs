@@ -78,17 +78,7 @@ namespace MoreShipUpgrades.Misc
         public int LOCKSMITH_PRICE { get; set; }
         public bool PAGER_ENABLED { get; set; }
         public bool LOCKSMITH_ENABLED { get; set; }
-
-        public string TOGGLE_NIGHT_VISION_KEY
-        {
-            get => ConfigEntry("Night Vision", "Toggle Night Vision Key", "LeftAlt", "Key to toggle Night Vision");
-            set
-            {
-                // Ensure that the key is valid, if not, fallback to "LeftAlt"
-                var validKeys = new List<string> { "N", "LeftAlt", "RightAlt", "A", "B", "C", /* Add more keys as needed */ };
-                configFile.Bind("Night Vision", "Toggle Night Vision Key", "LeftAlt", "Key to toggle Night Vision").Value = validKeys.Contains(value) ? value : "LeftAlt";
-            }
-        }
+        public string TOGGLE_NIGHT_VISION_KEY { get; set; }
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -115,6 +105,7 @@ namespace MoreShipUpgrades.Misc
             BEEKEEPER_ENABLED = ConfigEntry("Beekeeper","Enable Beekeeper Upgrade", true, "Take no damage from bees");
             BEEKEEPER_PRICE = ConfigEntry("Beekeeper","Price of Beekeeper Upgrade", 450, "");
             BEEKEEPER_DAMAGE_MULTIPLIER = ConfigEntry("Beekeeper","Multiplied to incoming damage (rounded to int)", 0.64f, "Incoming damage from bees is 10.");
+
             BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT = ConfigEntry("Beekeeper","Additional % Reduced per level", 0.15f, "Every time beekeeper is upgraded this value will be subtracted to the base multiplier above.");
 
             BIGGER_LUNGS_ENABLED = ConfigEntry("Bigger Lungs","Enable Bigger Lungs Upgrade", true, "More Stamina");
@@ -153,8 +144,6 @@ namespace MoreShipUpgrades.Misc
             NIGHT_VIS_STARTUP = ConfigEntry("Night Vision", "Night Vision StartUp Cost", 0.1f, "The percent battery drained when turned on (0.1 = 10%).");
             NIGHT_VIS_EXHAUST = ConfigEntry("Night Vision", "Night Vision Exhaustion", 2f, "How many seconds night vision stays fully depleted.");
             TOGGLE_NIGHT_VISION_KEY = ConfigEntry("Night Vision", "Toggle Night Vision Key", "LeftAlt", "Key to toggle Night Vision, you can use any key on your system such as LeftAlt, LeftShift, or any letter which exists.");
-
-
 
             DISCOMBOBULATOR_ENABLED = ConfigEntry("Discombobulator", "Enable Discombobulator Upgrade", true, "Stun enemies around the ship.");
             DISCOMBOBULATOR_PRICE = ConfigEntry("Discombobulator", "Price of Discombobulator Upgrade", 550, "");

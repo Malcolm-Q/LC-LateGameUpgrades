@@ -33,7 +33,7 @@ namespace MoreShipUpgrades.Patches
             string text = __instance.screenText.text.Substring(__instance.screenText.text.Length - __instance.textAdded);
             if (text.ToLower() == "initattack" || text.ToLower() == "atk")
             {
-                if(!UpgradeBus.instance.terminalFlash)
+                if (!UpgradeBus.instance.terminalFlash)
                 {
                     TerminalNode failNode = new TerminalNode();
                     failNode.displayText = "You don't have access to this command yet. Purchase the 'Discombobulator'.";
@@ -41,7 +41,7 @@ namespace MoreShipUpgrades.Patches
                     __result = failNode;
                     return;
                 }
-                if(UpgradeBus.instance.flashCooldown > 0f)
+                if (UpgradeBus.instance.flashCooldown > 0f)
                 {
                     TerminalNode failNode = new TerminalNode();
                     failNode.displayText = $"You can discombobulate again in {Mathf.Round(UpgradeBus.instance.flashCooldown)} seconds.\nType 'cooldown' or 'cd' to check discombobulation cooldown.";
@@ -52,15 +52,15 @@ namespace MoreShipUpgrades.Patches
                 {
                     RoundManager.Instance.PlayAudibleNoise(__instance.transform.position, 60f, 0.8f, 0, false, 14155);
                     UpgradeBus.instance.flashScript.PlayAudioAndUpdateCooldownServerRpc();
-                    
+
                     TerminalNode node = new TerminalNode();
                     Collider[] array = Physics.OverlapSphere(__instance.transform.position, UpgradeBus.instance.cfg.DISCOMBOBULATOR_RADIUS, 524288);
-                    if(array.Length > 0)
+                    if (array.Length > 0)
                     {
                         node.displayText = $"Stun grenade hit {array.Length} enemies.";
                         node.clearPreviousText = true;
                         __result = node;
-                        if(UpgradeBus.instance.cfg.DISCOMBOBULATOR_NOTIFY_CHAT)
+                        if (UpgradeBus.instance.cfg.DISCOMBOBULATOR_NOTIFY_CHAT)
                         {
                             __instance.StartCoroutine(CountDownChat(UpgradeBus.instance.cfg.DISCOMBOBULATOR_STUN_DURATION + (UpgradeBus.instance.cfg.DISCOMBOBULATOR_INCREMENT * UpgradeBus.instance.discoLevel)));
                         }
@@ -75,7 +75,7 @@ namespace MoreShipUpgrades.Patches
             }
             else if (text.ToLower() == "cooldown" || text.ToLower() == "cd")
             {
-                if(!UpgradeBus.instance.terminalFlash)
+                if (!UpgradeBus.instance.terminalFlash)
                 {
                     TerminalNode failNode = new TerminalNode();
                     failNode.displayText = "You don't have access to this command yet. Purchase 'Discombobulator'.";
@@ -83,11 +83,11 @@ namespace MoreShipUpgrades.Patches
                     __result = failNode;
                     return;
                 }
-                if(UpgradeBus.instance.flashCooldown > 0f)
+                if (UpgradeBus.instance.flashCooldown > 0f)
                 {
                     TerminalNode node = new TerminalNode();
                     node.displayText = $"You can discombobulate again in {Mathf.Round(UpgradeBus.instance.flashCooldown)} seconds.";
-                    node.clearPreviousText= true;
+                    node.clearPreviousText = true;
                     __result = node;
                 }
                 else
@@ -101,9 +101,9 @@ namespace MoreShipUpgrades.Patches
             else if (text.Split()[0].ToLower() == "page")
             {
                 string[] splits = text.Split();
-                if(UpgradeBus.instance.pager)
+                if (UpgradeBus.instance.pager)
                 {
-                    if(splits.Length == 1)
+                    if (splits.Length == 1)
                     {
                         TerminalNode node = new TerminalNode();
                         node.displayText = "You have to enter a message to broadcast\nEX: `page get back to the ship!`";
@@ -128,20 +128,40 @@ namespace MoreShipUpgrades.Patches
                     __result = node;
                 }
             }
-            else if(text.ToLower() == "lategame")
+            else if (text.ToLower() == "lategame")
             {
                 TerminalNode node = new TerminalNode();
                 node.clearPreviousText = true;
-                node.displayText = "Late Game Upgrades\n\nType `lategame store` to view upgrades.\n\nMost of the mod is configurable via the config file in BepInEx/config/\n\nThis mod patches and changes quite a bit and may conflict with other mods at the moment.";
-                node.displayText += "\n\nUpgrades are applied immediately after purchasing. You will see a red chat message when they are applied.";
-                node.displayText += "\n\nUse the info command to get info about an item. EX: `info beekeeper`";
-                node.displayText += "\n\nYou must type the exact name of the upgrade (case insensitve). I removed the vanilla keyword integration as it's prone to stepping on the toes of other keywords.";
-                node.displayText += "\n\nHave fun and please report bugs to the Lethal Company modding discord";
+                node.displayText = "Late Game Upgrades\n\nType `lategame store` or `lgu` to view upgrades.\n\nMost of the mod is configurable via the config file in `BepInEx/config/`.";
+                node.displayText += "\n\nUse the info command to get info about an item. EX: `info beekeeper`.";
+                node.displayText += "\n\nYou must type the exact name of the upgrade (case insensitve).";
+                node.displayText += "\n\nTo force wipe an lgu save file type `reset lgu`.";
+                node.displayText += "\n\nIf using latecompany and your client doesn't have the upgrades, type `load lgu`.";
                 __result = node;
             }
-            else if (text.ToLower() == "lategame store")
+            else if (text.ToLower() == "lategame store" || text.ToLower() == "lgu")
             {
                 __result = UpgradeBus.instance.ConstructNode();
+            }
+            else if (text.ToLower() == "reset lgu")
+            {
+                TerminalNode node = new TerminalNode();
+                node.displayText = "LGU save has been wiped.";
+                node.clearPreviousText = true;
+                __result = node;
+                LGUStore.instance.PlayersFiredServerRpc();
+            }
+            else if (text.ToLower() == "load lgu")
+            {
+                BaseUpgrade[] upgrades = GameObject.FindObjectsOfType<BaseUpgrade>();
+                foreach (BaseUpgrade upgrade in upgrades)
+                {
+                    upgrade.load();
+                }
+                TerminalNode node = new TerminalNode();
+                node.clearPreviousText = true;
+                node.displayText = "Reapplied upgrade effects to this client. Only run this once.";
+                __result = node;
             }
             else
             {
@@ -151,11 +171,12 @@ namespace MoreShipUpgrades.Patches
                     {
                         TerminalNode node = new TerminalNode();
                         node.clearPreviousText = true;
-                        if(__instance.groupCredits >= customNode.Price && (!customNode.Unlocked || customNode.MaxUpgrade > customNode.CurrentUpgrade))
+
+                        bool canAfford = __instance.groupCredits >= customNode.Price;
+
+                        if(canAfford && (!customNode.Unlocked || customNode.MaxUpgrade > customNode.CurrentUpgrade))
                         {
-                            __instance.groupCredits -= customNode.Price;
-                            if(__instance.NetworkManager.IsServer ||  __instance.NetworkManager.IsHost) { __instance.SyncTerminalValuesClientRpc(__instance.groupCredits); }
-                            else { __instance.SyncTerminalValuesServerRpc(); }
+                            LGUStore.instance.SyncCreditsServerRpc(__instance.groupCredits - customNode.Price);
                             if (!customNode.Unlocked)
                             {
                                 LGUStore.instance.ReqSpawnServerRpc(customNode.Name);
@@ -168,7 +189,7 @@ namespace MoreShipUpgrades.Patches
                                 node.displayText = $"You Upgraded {customNode.Name} to level {customNode.CurrentUpgrade + 1} \n";
                             }
                         }
-                        else if(customNode.Unlocked && __instance.groupCredits >= customNode.Price)
+                        else if(customNode.Unlocked && canAfford)
                         {
                             if (customNode.MaxUpgrade == 0) { node.displayText = "You already unlocked this upgrade.  \n"; }
                             else { node.displayText = "This upgrade is already max level  \n"; }

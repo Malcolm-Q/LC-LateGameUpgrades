@@ -8,6 +8,7 @@ using UnityEngine;
 using Newtonsoft.Json;
 using System.Xml.Linq;
 using System.Linq;
+using GameNetcodeStuff;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -98,13 +99,28 @@ namespace MoreShipUpgrades.Managers
             }
         }
 
-        public void PlayersFired()
+        [ServerRpc(RequireOwnership = false)]
+        public void PlayersFiredServerRpc()
         {
+            ResetUpgradeBusClientRpc();
+            UpgradeBus.instance.ResetAllValues();
             string saveNum = GameNetworkManager.Instance.saveFileNum.ToString();
             string filePath = Path.Combine(Application.persistentDataPath, $"LGU_{saveNum}.json");
             saveInfo = new SaveInfo();
             string json = JsonConvert.SerializeObject(saveInfo);
             File.WriteAllText(filePath, json);
+        }
+        [ClientRpc]
+        private void ResetUpgradeBusClientRpc()
+        {
+            UpgradeBus.instance.ResetAllValues();
+            PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
+            foreach (PlayerControllerB player in players)
+            {
+                player.movementSpeed = 4.6f;
+                player.sprintTime = 11;
+                player.jumpForce = 13;
+            }
         }
 
         [ServerRpc(RequireOwnership =false)]
@@ -178,6 +194,19 @@ namespace MoreShipUpgrades.Managers
             {
                 GameNetworkManager.Destroy(upgrade.gameObject);
             }
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void SyncCreditsServerRpc(int newCredits)
+        {
+            SyncCreditsClientRpc(newCredits);
+        }
+
+        [ClientRpc]
+        private void SyncCreditsClientRpc(int newCredits)
+        {
+            Terminal terminal = GameObject.Find("TerminalScript").GetComponent<Terminal>();
+            terminal.groupCredits = newCredits;
         }
 
         public void UpdateUpgradeBus()

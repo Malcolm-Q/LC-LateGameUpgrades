@@ -21,7 +21,7 @@
       <HintPath>D:\SteamLibrary\steamapps\common\Lethal Company\BepInEx\core\BepInEx.dll</HintPath>
     </Reference>
     <Reference Include="LethalLib">
-      <HintPath>D:\SteamLibrary\steamapps\common\Lethal Company\BepInEx\plugins\LethalLib.dll</HintPath>
+      <HintPath>D:\SteamLibrary\steamapps\common\Lethal Company\BepInEx\plugins\LethalLib\LethalLib.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>D:\SteamLibrary\steamapps\common\Lethal Company\Lethal Company_Data\Managed\Newtonsoft.Json.dll</HintPath>

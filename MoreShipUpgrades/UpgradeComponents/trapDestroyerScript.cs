@@ -22,13 +22,23 @@ namespace MoreShipUpgrades.UpgradeComponents
         private IEnumerator lateApply()
         {
             yield return new WaitForSeconds(1);
+            DontDestroyOnLoad(gameObject);
+            load();
+        }
+
+        public override void load()
+        {
             UpgradeBus.instance.DestroyTraps = true;
             UpgradeBus.instance.trapHandler = this;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Malware Broadcaster is active!</color>";
-            UpgradeBus.instance.UpgradeObjects.Add("Malware Broadcaster", gameObject);
-            DontDestroyOnLoad(gameObject);
-            load();
-
+            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Malware Broadcaster"))
+            {
+                UpgradeBus.instance.UpgradeObjects.Add("Malware Broadcaster", gameObject);
+            }
+            else
+            {
+                Plugin.mls.LogWarning("Malware Broadcaster is already in upgrade dict.");
+            }
         }
 
         [ServerRpc(RequireOwnership = false)]

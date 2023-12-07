@@ -3,7 +3,6 @@ using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,19 +10,28 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.Patches
 {
-    [HarmonyPatch(typeof(DeleteFileButton))]
-    internal class DeleteButtonPatcher
+    [HarmonyPatch(typeof(HUDManager))]
+    internal class HUDManagerPatcher
     {
         [HarmonyPostfix]
-        [HarmonyPatch("DeleteFile")]
-        private static void deleteLGUFile(DeleteFileButton __instance)
+        [HarmonyPatch("MeetsScanNodeRequirements")]
+        private static void alterReqs(ScanNodeProperties node, ref bool __result, PlayerControllerB playerScript)
         {
-            string filePath = Path.Combine(Application.persistentDataPath, $"LGU_{__instance.fileToDelete}.json");
-            if(File.Exists(filePath))
+            if (!UpgradeBus.instance.scannerUpgrade) { return; }
+            if (node == null)
             {
-                File.Delete(filePath);
+                __result = false;
+            }
+            float rangeIncrease = (node.headerText == "Main entrance" || node.headerText == "Ship") ? UpgradeBus.instance.cfg.SHIP_AND_ENTRANCE_DISTANCE_INCREASE : UpgradeBus.instance.cfg.NODE_DISTANCE_INCREASE;
+            if(UpgradeBus.instance.cfg.REQUIRE_LINE_OF_SIGHT && Physics.Linecast(playerScript.gameplayCamera.transform.position, node.transform.position, 256, QueryTriggerInteraction.Ignore))
+            {
+                __result = false;
+            }
+            else
+            {
+                float num = Vector3.Distance(playerScript.transform.position, node.transform.position);
+                __result = (num < (float)node.maxRange + rangeIncrease && num > (float)node.minRange);
             }
         }
     }
-
 }

@@ -24,21 +24,6 @@ namespace MoreShipUpgrades.UpgradeComponents
         private IEnumerator LateApply()
         {
             yield return new WaitForSeconds(1f);
-            players = GameObject.FindObjectsOfType<PlayerControllerB>();
-            foreach (PlayerControllerB player in players)
-            {
-                player.sprintTime = UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE; //17
-            }
-            foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
-            {
-                if(node.Name.ToLower() == "Bigger Lungs" && node.Price > 0)
-                {
-                    node.Price /= 2;
-                }
-            }
-            UpgradeBus.instance.biggerLungs = true;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Bigger Lungs is active!</color>";
-            UpgradeBus.instance.UpgradeObjects.Add("Bigger Lungs", gameObject);
             DontDestroyOnLoad(gameObject);
             load();
         }
@@ -63,12 +48,36 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public override void load()
         {
+            players = GameObject.FindObjectsOfType<PlayerControllerB>();
+            foreach (PlayerControllerB player in players)
+            {
+                player.sprintTime = UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE; //17
+            }
+
+            foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
+            {
+                if(node.Name.ToLower() == "Bigger Lungs" && node.Price > 0)
+                {
+                    node.Price /= 2;
+                }
+            }
+            UpgradeBus.instance.biggerLungs = true;
+            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Bigger Lungs is active!</color>";
+            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Bigger Lungs"))
+            {
+                UpgradeBus.instance.UpgradeObjects.Add("Bigger Lungs", gameObject);
+            }
+            else
+            {
+                Plugin.mls.LogWarning("Bigger Lungs is already in upgrade dict.");
+            }
+
             float amountToIncrement = 0;
             for(int i = 0; i < UpgradeBus.instance.lungLevel; i++)
             {
                 amountToIncrement += UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT;
             }
-            players = GameObject.FindObjectsOfType<PlayerControllerB>();
+
             foreach(PlayerControllerB player in players)
             {
                 player.sprintTime += amountToIncrement;

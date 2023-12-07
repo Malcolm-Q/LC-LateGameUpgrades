@@ -23,12 +23,23 @@ namespace MoreShipUpgrades.UpgradeComponents
         private IEnumerator lateApply()
         {
             yield return new WaitForSeconds(1);
+            DontDestroyOnLoad(gameObject);
+            load();
+        }
+
+        public override void load()
+        {
             UpgradeBus.instance.pager = true;
             UpgradeBus.instance.pageScript = this;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Pager is active!</color>";
-            UpgradeBus.instance.UpgradeObjects.Add("Pager", gameObject);
-            DontDestroyOnLoad(gameObject);
-            load();
+            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Pager"))
+            {
+                UpgradeBus.instance.UpgradeObjects.Add("Pager", gameObject);
+            }
+            else
+            {
+                Plugin.mls.LogWarning("Pager is already in upgrade dict.");
+            }
         }
 
         [ServerRpc(RequireOwnership = false)]

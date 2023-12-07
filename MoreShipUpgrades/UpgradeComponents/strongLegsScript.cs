@@ -22,21 +22,6 @@ namespace MoreShipUpgrades.UpgradeComponents
         private IEnumerator lateApply()
         {
             yield return new WaitForSeconds(1);
-            UpgradeBus.instance.strongLegs = true;
-            PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
-            foreach (PlayerControllerB player in players)
-            {
-                player.jumpForce = UpgradeBus.instance.cfg.JUMP_FORCE;
-            }
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Strong Legs is active!</color>";
-            foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
-            {
-                if(node.Name.ToLower() == "strong legs" && node.Price > 0)
-                {
-                    node.Price /= 2;
-                }
-            }
-            UpgradeBus.instance.UpgradeObjects.Add("Strong Legs", gameObject);
             DontDestroyOnLoad(gameObject);
             load();
         }
@@ -60,12 +45,34 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public override void load()
         {
+            UpgradeBus.instance.strongLegs = true;
+            PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
+            foreach (PlayerControllerB player in players)
+            {
+                player.jumpForce = UpgradeBus.instance.cfg.JUMP_FORCE;
+            }
+            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Strong Legs is active!</color>";
+            foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
+            {
+                if(node.Name.ToLower() == "strong legs" && node.Price > 0)
+                {
+                    node.Price /= 2;
+                }
+            }
+            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Strong Legs"))
+            {
+                UpgradeBus.instance.UpgradeObjects.Add("Strong Legs", gameObject);
+            }
+            else
+            {
+                Plugin.mls.LogWarning("Strong Legs is already in upgrade dict.");
+            }
             float amountToIncrement = 0;
             for(int i = 0; i < UpgradeBus.instance.legLevel; i++)
             {
                 amountToIncrement += UpgradeBus.instance.cfg.JUMP_FORCE_INCREMENT;
             }
-            PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
+
             foreach(PlayerControllerB player in players)
             {
                 player.jumpForce += amountToIncrement;

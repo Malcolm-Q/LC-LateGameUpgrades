@@ -19,12 +19,30 @@ namespace MoreShipUpgrades.UpgradeComponents
         void Start()
         {
             StartCoroutine(lateApply());
-
         }
 
         private IEnumerator lateApply()
         {
             yield return new WaitForSeconds(1);
+            DontDestroyOnLoad(gameObject);
+            load();
+        }
+        public override void Increment()
+        {
+            UpgradeBus.instance.backLevel++;
+
+            foreach( CustomTerminalNode node in UpgradeBus.instance.terminalNodes )
+            {
+                if(node.Name.ToLower() == "back muscles")
+                {
+                    node.Description = $"Carry weight becomes %{Mathf.Round((UpgradeBus.instance.cfg.CARRY_WEIGHT_REDUCTION - (UpgradeBus.instance.cfg.CARRY_WEIGHT_INCREMENT * UpgradeBus.instance.backLevel)) * 100f)} of original";
+                }
+            }
+
+        }
+
+        public override void load()
+        {
             UpgradeBus.instance.exoskeleton = true;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Back Muscles is active!</color>";
             foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
@@ -34,21 +52,14 @@ namespace MoreShipUpgrades.UpgradeComponents
                     node.Price /= 2;
                 }
             }
-            UpgradeBus.instance.UpgradeObjects.Add("Back Muscles", gameObject);
-            DontDestroyOnLoad(gameObject);
-            load();
-        }
-        public override void Increment()
-        {
-            UpgradeBus.instance.backLevel++;
-            foreach( CustomTerminalNode node in UpgradeBus.instance.terminalNodes )
+            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Back Muscles"))
             {
-                if(node.Name.ToLower() == "back muscles")
-                {
-                    node.Description = $"Carry weight becomes %{Mathf.Round((UpgradeBus.instance.cfg.CARRY_WEIGHT_REDUCTION - (UpgradeBus.instance.cfg.CARRY_WEIGHT_INCREMENT * UpgradeBus.instance.backLevel)) * 100f)} of original";
-                }
+                UpgradeBus.instance.UpgradeObjects.Add("Back Muscles", gameObject);
             }
-
+            else
+            {
+                Plugin.mls.LogWarning("Back Muscles is already in upgrade dict.");
+            }
         }
     }
 }

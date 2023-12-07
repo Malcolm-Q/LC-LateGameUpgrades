@@ -7,7 +7,7 @@ using UnityEngine;
 namespace MoreShipUpgrades.Patches
 {
     [HarmonyPatch(typeof(InteractTrigger))]
-    internal class DoorLockPatcher
+    internal class InteractTriggerPatcher
     {
         [HarmonyPrefix]
         [HarmonyPatch("OnTriggerEnter")]
@@ -23,6 +23,7 @@ namespace MoreShipUpgrades.Patches
             }
             UpgradeBus.instance.lockScript.currentDoor = __instance.gameObject.GetComponent<DoorLock>();
             UpgradeBus.instance.lockScript.BeginLockPick();
+            UpgradeBus.instance.lockScript.timesStruck = 0;
             return false;
         }
     }

@@ -15,6 +15,7 @@ using System.IO;
 using System.Reflection;
 using MoreShipUpgrades.Misc;
 using Unity.Netcode;
+using BepInEx.Bootstrap;
 
 namespace MoreShipUpgrades
 {
@@ -253,6 +254,32 @@ namespace MoreShipUpgrades
             harmony.PatchAll();
 
             mls.LogInfo("More Ship Upgrades has been patched");
+        }
+
+        public void sendModInfo()
+        {
+            foreach (var plugin in Chainloader.PluginInfos)
+            {
+                if (plugin.Value.Metadata.GUID.Contains("ModSync"))
+                {
+                    try
+                    {
+                        List<string> list = new List<string>
+                        {
+                            "malco",
+                            "LateGameUpgrades"
+                        };
+                        plugin.Value.Instance.BroadcastMessage("getModInfo", list, UnityEngine.SendMessageOptions.DontRequireReceiver);
+                    }
+                    catch (Exception e)
+                    {
+                        // ignore mod if error, removing dependency
+                        mls.LogInfo($"Failed to send info to ModSync, go yell at Minx");
+                    }
+                    break;
+                }
+
+            }
         }
     }
 }

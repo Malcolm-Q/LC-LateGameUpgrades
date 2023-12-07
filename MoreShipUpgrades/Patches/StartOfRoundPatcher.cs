@@ -23,17 +23,9 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("playersFiredGameOver")]
         private static void GameOverResetUpgradeManager(StartOfRound __instance)
         {
-            UpgradeBus.instance.ResetAllValues();
             if(__instance.NetworkManager.IsHost ||  __instance.NetworkManager.IsServer)
             {
-                LGUStore.instance.PlayersFired();
-            }
-            PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
-            foreach (PlayerControllerB player in players)
-            {
-                player.movementSpeed = 4.6f;
-                player.sprintTime = 11;
-                player.jumpForce = 13;
+                LGUStore.instance.PlayersFiredServerRpc();
             }
         }
     }

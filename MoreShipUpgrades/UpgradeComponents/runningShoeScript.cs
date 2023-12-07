@@ -22,21 +22,6 @@ namespace MoreShipUpgrades.UpgradeComponents
         private IEnumerator LateApply()
         {
             yield return new WaitForSeconds(1);
-            UpgradeBus.instance.runningShoes = true;
-            PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
-            foreach (PlayerControllerB player in players)
-            {
-                player.movementSpeed = UpgradeBus.instance.cfg.MOVEMENT_SPEED;
-            }
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Running Shoes is active!</color>";
-            foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
-            {
-                if(node.Name.ToLower() == "running shoes" && node.Price > 0)
-                {
-                    node.Price /= 2;
-                }
-            }
-            UpgradeBus.instance.UpgradeObjects.Add("Running Shoes", gameObject);
             load();
             DontDestroyOnLoad(gameObject);
         }
@@ -61,12 +46,36 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public override void load()
         {
+            UpgradeBus.instance.runningShoes = true;
+            PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
+            foreach (PlayerControllerB player in players)
+            {
+                player.movementSpeed = UpgradeBus.instance.cfg.MOVEMENT_SPEED;
+            }
+            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Running Shoes is active!</color>";
+            foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
+            {
+                if(node.Name.ToLower() == "running shoes" && node.Price > 0)
+                {
+                    node.Price /= 2;
+                }
+            }
+            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Running Shoes"))
+            {
+                UpgradeBus.instance.UpgradeObjects.Add("Running Shoes", gameObject);
+            }
+            else
+            {
+                Plugin.mls.LogWarning("Running Shoes is already in upgrade dict.");
+            }
+
+
             float amountToIncrement = 0;
             for(int i = 0; i < UpgradeBus.instance.runningLevel; i++)
             {
                 amountToIncrement += UpgradeBus.instance.cfg.MOVEMENT_INCREMENT;
             }
-            PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
+
             foreach(PlayerControllerB player in players)
             {
                 player.movementSpeed += amountToIncrement;

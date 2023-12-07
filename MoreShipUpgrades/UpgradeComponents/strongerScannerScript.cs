@@ -23,27 +23,23 @@ namespace MoreShipUpgrades.UpgradeComponents
         private IEnumerator lateApply()
         {
             yield return new WaitForSeconds(1);
-            UpgradeBus.instance.scannerUpgrade = true;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Better Scanner is active!</color>";
-            UpgradeBus.instance.UpgradeObjects.Add("Better Scanner", gameObject);
             DontDestroyOnLoad(gameObject);
             load();
 
         }
 
-        public override void Increment()
+        public override void load()
         {
-            //UpgradeBus.instance.scanLevel++;
-            foreach( CustomTerminalNode node in UpgradeBus.instance.terminalNodes )
+            UpgradeBus.instance.scannerUpgrade = true;
+            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Better Scanner is active!</color>";
+            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Better Scanner"))
             {
-                if(node.Name.ToLower() == "better scanner")
-                {
-                    node.Description = $"Can scan the ship from an additional {UpgradeBus.instance.cfg.SHIP_AND_ENTRANCE_DISTANCE_INCREASE} units away.  \nCan scan all other nodes from an additional {UpgradeBus.instance.cfg.NODE_DISTANCE_INCREASE} units away.";
-                    if (!UpgradeBus.instance.cfg.REQUIRE_LINE_OF_SIGHT) { node.Description += "  \nDoes not require Line of Sight!"; }
-                }
+                UpgradeBus.instance.UpgradeObjects.Add("Better Scanner", gameObject);
             }
-
+            else
+            {
+                Plugin.mls.LogWarning("Better Scanner is already in upgrade dict.");
+            }
         }
-
     }
 }

@@ -22,16 +22,6 @@ namespace MoreShipUpgrades.UpgradeComponents
         private IEnumerator lateApply()
         {
             yield return new WaitForSeconds(1);
-            UpgradeBus.instance.softSteps = true;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Light Footed is active!</color>";
-            foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
-            {
-                if(node.Name.ToLower() == "light footed" && node.Price > 0)
-                {
-                    node.Price /= 2;
-                }
-            }
-            UpgradeBus.instance.UpgradeObjects.Add("Light Footed", gameObject);
             DontDestroyOnLoad(gameObject);
             load();
         }
@@ -47,6 +37,27 @@ namespace MoreShipUpgrades.UpgradeComponents
                 }
             }
 
+        }
+
+        public override void load()
+        {
+            UpgradeBus.instance.softSteps = true;
+            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Light Footed is active!</color>";
+            foreach (CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
+            {
+                if (node.Name.ToLower() == "light footed" && node.Price > 0)
+                {
+                    node.Price /= 2;
+                }
+            }
+            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Light Footed"))
+            {
+                UpgradeBus.instance.UpgradeObjects.Add("Light Footed", gameObject);
+            }
+            else
+            {
+                Plugin.mls.LogWarning("Light Footed is already in upgrade dict.");
+            }
         }
     }
 }

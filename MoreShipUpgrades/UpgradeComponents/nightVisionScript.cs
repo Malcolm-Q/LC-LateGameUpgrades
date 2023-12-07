@@ -22,30 +22,45 @@ namespace MoreShipUpgrades.UpgradeComponents
         private Transform batteryBar;
         private PlayerControllerB client;
         private bool batteryExhaustion;
+        Key toggle = Key.LeftAlt;
 
         void Start()
         {
             StartCoroutine(lateApply());
             batteryBar = transform.GetChild(0).GetChild(0).transform;
+            if (Enum.TryParse(UpgradeBus.instance.cfg.TOGGLE_NIGHT_VISION_KEY, out Key toggleKey))
+            {
+                toggle = toggleKey;
+            }
         }
 
         private IEnumerator lateApply()
         {
             yield return new WaitForSeconds(1);
+            DontDestroyOnLoad(gameObject);
+            load();
+        }
+
+        public override void load()
+        {
             UpgradeBus.instance.nightVision = true;
             HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Press {UpgradeBus.instance.cfg.TOGGLE_NIGHT_VISION_KEY} to toggle Night Vision!!!</color>";
             client = GameNetworkManager.Instance.localPlayerController;
-            UpgradeBus.instance.UpgradeObjects.Add("Night Vision", gameObject);
-            DontDestroyOnLoad(gameObject);
-            load();
+            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Night Vision"))
+            {
+                UpgradeBus.instance.UpgradeObjects.Add("Night Vision", gameObject);
+            }
+            else
+            {
+                Plugin.mls.LogWarning("Night Vision is already in upgrade dict.");
+            }
         }
 
         void LateUpdate()
         {
             if (client == null) { return; }
 
-            // Check if the configured key is pressed
-            if (Enum.TryParse(UpgradeBus.instance.cfg.TOGGLE_NIGHT_VISION_KEY, out Key toggleKey) && Keyboard.current[toggleKey].wasPressedThisFrame && !batteryExhaustion)
+            if (Keyboard.current[toggle].wasPressedThisFrame && !batteryExhaustion)
             {
                 UpgradeBus.instance.nightVisionActive = !UpgradeBus.instance.nightVisionActive;
 
