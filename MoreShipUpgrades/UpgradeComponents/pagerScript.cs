@@ -14,6 +14,9 @@ namespace MoreShipUpgrades.UpgradeComponents
 {
     public class pagerScript : BaseUpgrade
     {
+        private bool isOnCooldown = false;
+        private float remainingCooldownTime;
+        private float cooldownDuration;
 
         void Start()
         {
@@ -24,6 +27,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             yield return new WaitForSeconds(1);
             DontDestroyOnLoad(gameObject);
+            cooldownDuration = UpgradeBus.instance.cfg.PAGER_COOLDOWN_DURATION; // Use the configuration value
             load();
         }
 
@@ -32,7 +36,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             UpgradeBus.instance.pager = true;
             UpgradeBus.instance.pageScript = this;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Pager is active!</color>";
-            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Pager"))
+            if (!UpgradeBus.instance.UpgradeObjects.ContainsKey("Pager"))
             {
                 UpgradeBus.instance.UpgradeObjects.Add("Pager", gameObject);
             }
@@ -45,7 +49,17 @@ namespace MoreShipUpgrades.UpgradeComponents
         [ServerRpc(RequireOwnership = false)]
         public void ReqBroadcastChatServerRpc(string msg)
         {
-            ReceiveChatClientRpc(msg);
+            if (!isOnCooldown)
+            {
+                isOnCooldown = true;
+                remainingCooldownTime = cooldownDuration;
+                StartCoroutine(CooldownTimer());
+                ReceiveChatClientRpc(msg);
+            }
+            else
+            {
+                HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Pager on cooldown - {Mathf.RoundToInt(remainingCooldownTime)} seconds remaining.</color>";
+            }
         }
 
         [ClientRpc]
@@ -53,6 +67,19 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Terminal</color><color=#0000FF>:</color> <color=#FF00FF>{msg}</color>";
             HUDManager.Instance.PingHUDElement(HUDManager.Instance.Chat, 4f, 1f, 0.2f);
+            HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Pager cooldown - {Mathf.RoundToInt(cooldownDuration)} seconds.</color>";
+        }
+
+        private IEnumerator CooldownTimer()
+        {
+            while (remainingCooldownTime > 0)
+            {
+                yield return new WaitForSeconds(1f);
+                remainingCooldownTime--;
+            }
+
+            isOnCooldown = false;
+            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Pager cooldown finished. Ready to use!</color>";
         }
     }
 }
