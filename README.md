@@ -1,4 +1,6 @@
-## ***LateGameUpgrades***
+![LUTransparent](https://github.com/Malcolm-Q/LC-LateGameUpgrades/assets/118214091/a39a7b59-651b-4fa2-8224-cdd9327c02ab)
+
+
 Source code for my [LateGameUpgrades mod.](https://thunderstore.io/c/lethal-company/p/malco/Lategame_Upgrades/)  for Lethal Company  
 
 If reporting a bug. Please include your logoutput.log file if possible, it's in your bepinex folder.
