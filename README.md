@@ -8,6 +8,40 @@ If reporting a bug. Please include your logoutput.log file if possible, it's in 
 
 Join [this modding discord](https://discord.gg/hzEcKFSSDX) and comment [on this post](https://discord.com/channels/1168655651455639582/1178407269994594435)  to discuss the mod.
 
+
+## ***Frequently Asked Questions(FAQ)***
+
+Frequently Asked Questions (FAQ)
+1. the mod isn't working!
+
+This isn't much of a question, but make sure you have all dependencies installed. The current dependencies for v2.1.0 are [Bepinex](https://thunderstore.io/c/lethal-company/p/BepInEx/BepInExPack/), [LethalLib](https://thunderstore.io/c/lethal-company/p/Evaisa/LethalLib/), and [HookGenPatcher](https://thunderstore.io/c/lethal-company/p/Evaisa/HookGenPatcher/)
+
+2. I have the latest version and all the dependencies, but i cannot see the items besides the teleporters what do i do?
+
+The store for the upgrades are no longer in the main terminal store. To access the new store you can type either lategame store, or lgu in the terminal.
+
+3. I don't like this feature, how do i turn it off/modify it?
+
+There is a config which makes most of this mod entirely customizable to the user, configs for r2 modman are easy to access. Click Config editor once your profile is selected, and then choose the file called BepInEx\config\com.malco.lethalcompany.moreshipupgrades.cfg and hit edit. For manual installations the config would be in your Lethal Company\BepInEx\config folder, following the same naming convention the r2modman one is.
+
+4. Is this mod clientside or serverside??
+
+This mod is not clientside, everyone needs to have it installed with the same configuration settings.
+
+5. Can i suggest an addition?
+
+Absolutely, I cannot promise the mod will incorporate your suggestion as we dont want to just add items for the sake of adding items, but we will hear your suggestion out. Simply place your suggestion in the discord channel for the mod, and be sure to ping either myself (@dilly_the_dillster) or keith (@_kieth)
+
+6. When will x feature be implemented?
+
+As the case for all development goes, we can never give you an exact date, however we can say whether it will be soon, if its actively being worked on,  and anything along those lines. The usual answer will probably be "soon". 
+
+7. Can I contribute to the mod?
+
+Absolutely! We welcome anyone who desires to help. Feel free to submit your new features or additions with a pull request [here](https://github.com/Malcolm-Q/LC-LateGameUpgrades). 
+
+
+
 ## **Contributing:**
 You will need to set up Evaisa's [Netcode Patcher](https://github.com/EvaisaDev/UnityNetcodeWeaver) if you want to add more custom netcode. If you are making simple additions that don't need to be tested online you can still build an unpatched dll and test it.
 
