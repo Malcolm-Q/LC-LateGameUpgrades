@@ -22,11 +22,20 @@ namespace MoreShipUpgrades.UpgradeComponents
         private Transform batteryBar;
         private PlayerControllerB client;
         private bool batteryExhaustion;
+        private Key toggleKey;
 
         void Start()
         {
             StartCoroutine(lateApply());
             batteryBar = transform.GetChild(0).GetChild(0).transform;
+            if(Enum.TryParse(UpgradeBus.instance.cfg.TOGGLE_NIGHT_VISION_KEY, out Key toggle))
+            {
+                toggleKey = toggle;
+            }
+            else
+            {
+                toggleKey = Key.LeftAlt;
+            }
         }
 
         private IEnumerator lateApply()
@@ -45,7 +54,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             if (client == null) { return; }
 
             // Check if the configured key is pressed
-            if (Enum.TryParse(UpgradeBus.instance.cfg.TOGGLE_NIGHT_VISION_KEY, out Key toggleKey) && Keyboard.current[toggleKey].wasPressedThisFrame && !batteryExhaustion)
+            if (Keyboard.current[toggleKey].wasPressedThisFrame && !batteryExhaustion)
             {
                 UpgradeBus.instance.nightVisionActive = !UpgradeBus.instance.nightVisionActive;
 
@@ -143,11 +152,6 @@ namespace MoreShipUpgrades.UpgradeComponents
 
             UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_SPEED += regenAdjustment;
             UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_SPEED -= drainAdjustment;
-
-            // You can add any additional adjustments or logic for night vision properties here
-            // For example:
-            // UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_SPEED += 0.1f;
-            // UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_SPEED -= 0.05f;
         }
     }
 }

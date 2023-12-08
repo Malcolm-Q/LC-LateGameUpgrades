@@ -14,9 +14,9 @@ namespace MoreShipUpgrades.UpgradeComponents
 {
     public class pagerScript : BaseUpgrade
     {
-        private bool isOnCooldown = false;
-        private float remainingCooldownTime;
-        private float cooldownDuration;
+        public bool isOnCooldown = false;
+        public float remainingCooldownTime;
+        public float cooldownDuration;
 
         void Start()
         {
@@ -56,10 +56,6 @@ namespace MoreShipUpgrades.UpgradeComponents
                 StartCoroutine(CooldownTimer());
                 ReceiveChatClientRpc(msg);
             }
-            else
-            {
-                HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Pager on cooldown - {Mathf.RoundToInt(remainingCooldownTime)} seconds remaining.</color>";
-            }
         }
 
         [ClientRpc]
@@ -67,7 +63,19 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Terminal</color><color=#0000FF>:</color> <color=#FF00FF>{msg}</color>";
             HUDManager.Instance.PingHUDElement(HUDManager.Instance.Chat, 4f, 1f, 0.2f);
-            HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Pager cooldown - {Mathf.RoundToInt(cooldownDuration)} seconds.</color>";
+            isOnCooldown = true;
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void ReqUpdateCooldownServerRpc()
+        {
+            UpdateCooldownClientRpc();
+        }
+
+        [ClientRpc]
+        private void UpdateCooldownClientRpc()
+        {
+            isOnCooldown = false;
         }
 
         private IEnumerator CooldownTimer()

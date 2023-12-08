@@ -113,10 +113,17 @@ namespace MoreShipUpgrades.Patches
                     else
                     {
                         string msg = string.Join(" ", splits.Skip(1));
-                        UpgradeBus.instance.pageScript.ReqBroadcastChatServerRpc(msg);
                         TerminalNode node = new TerminalNode();
-                        node.displayText = $"Broadcasted message: '{msg}'";
                         node.clearPreviousText = true;
+                        if(UpgradeBus.instance.pageScript.isOnCooldown)
+                        {
+                            node.displayText = $"Pager is on cooldown for {UpgradeBus.instance.pageScript.remainingCooldownTime} seconds!";
+                        }
+                        else
+                        {
+                            UpgradeBus.instance.pageScript.ReqBroadcastChatServerRpc(msg);
+                            node.displayText = $"Broadcasted message: '{msg}'\n\nPager is now on cooldown for {UpgradeBus.instance.pageScript.cooldownDuration}";
+                        }
                         __result = node;
                     }
                 }
