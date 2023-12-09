@@ -5,6 +5,8 @@ Source code for my [LateGameUpgrades mod.](https://thunderstore.io/c/lethal-comp
 
 If reporting a bug. Please include your logoutput.log file if possible, it's in your bepinex folder.
 
+The releases contains a nightly build for V2.5.0 which introduces upgrades for individual players.
+
 Join [this modding discord](https://discord.gg/hzEcKFSSDX) and comment [on this post](https://discord.com/channels/1168655651455639582/1178407269994594435)  to discuss the mod.
 
 
@@ -48,7 +50,6 @@ The most recent (good chance it's unstable) dll and asset bundle can be found in
 
 
 ## **TODO:**
-* Individiaul upgrades and saving (steamid dictionaries).
 * Defibrilator item.
 * Upgraded walkie talkie (Navigation).
 * More meaninful tiered upgrades.
