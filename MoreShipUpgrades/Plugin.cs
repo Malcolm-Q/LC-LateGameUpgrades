@@ -111,6 +111,22 @@ namespace MoreShipUpgrades
                 Items.RegisterShopItem(tpButAdvanced,null,null,advNode, tpButAdvanced.creditsWorth);
             }
 
+            //Night Vision Item
+            Item nightVisionItem = UpgradeAssets.LoadAsset<Item>("Assets/ShipUPgrades/NightVisionItem.asset");
+            nightVisionItem.creditsWorth = cfg.NIGHT_VISION_PRICE;
+            NightVisionItemScript visScript = nightVisionItem.spawnPrefab.AddComponent<NightVisionItemScript>(); 
+            visScript.itemProperties = nightVisionItem;
+            visScript.grabbable = true;
+            visScript.useCooldown = 2f;
+            visScript.grabbableToEnemies=true;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(nightVisionItem.spawnPrefab);
+            if(cfg.NIGHT_VISION_ENABLED)
+            {
+                TerminalNode advNode = new TerminalNode();
+                advNode.displayText = "Night vision headset, pick up and click to equip.";
+                Items.RegisterShopItem(nightVisionItem,null,null,advNode, nightVisionItem.creditsWorth);
+            }
+
             //beekeeper
             GameObject beekeeper = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/beekeeper.prefab");
             beekeeper.AddComponent<beekeeperScript>();
@@ -191,7 +207,8 @@ namespace MoreShipUpgrades
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(nightVision);
             if(cfg.NIGHT_VISION_ENABLED) 
             { 
-                CustomTerminalNode node = new CustomTerminalNode("Night Vision", cfg.NIGHT_VISION_PRICE, $"Allows you to see in the dark. Press Left-Alt to turn on.  \nDrain speed is {cfg.NIGHT_VIS_DRAIN_SPEED}  \nRegen speed is {cfg.NIGHT_VIS_REGEN_SPEED}", nightVision, 3);
+                CustomTerminalNode node = new CustomTerminalNode("NV Headset Batteries", cfg.NIGHT_VISION_PRICE, $"Upgrades the Night Vision Headset in the vanilla `store`.  \nDrain speed is {cfg.NIGHT_VIS_DRAIN_SPEED}  \nRegen speed is {cfg.NIGHT_VIS_REGEN_SPEED}", nightVision, 3);
+                node.Unlocked = true;
                 UpgradeBus.instance.terminalNodes.Add(node);
             }
 

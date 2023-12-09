@@ -16,14 +16,8 @@ namespace MoreShipUpgrades.UpgradeComponents
     {
         void Start()
         {
-            StartCoroutine(lateApply());
-        }
-
-        private IEnumerator lateApply()
-        {
-            yield return new WaitForSeconds(1);
             DontDestroyOnLoad(gameObject);
-            load();
+            UpgradeBus.instance.UpgradeObjects.Add("Light Footed", gameObject);
         }
 
         public override void Increment()
@@ -50,14 +44,11 @@ namespace MoreShipUpgrades.UpgradeComponents
                     node.Price /= 2;
                 }
             }
-            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Light Footed"))
-            {
-                UpgradeBus.instance.UpgradeObjects.Add("Light Footed", gameObject);
-            }
-            else
-            {
-                Plugin.mls.LogWarning("Light Footed is already in upgrade dict.");
-            }
+        }
+
+        public override void Register()
+        {
+            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Light Footed")) { UpgradeBus.instance.UpgradeObjects.Add("Light Footed", gameObject); }
         }
     }
 }

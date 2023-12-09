@@ -18,15 +18,10 @@ namespace MoreShipUpgrades.UpgradeComponents
         
         void Start()
         {
-            StartCoroutine(lateApply());
+            DontDestroyOnLoad(gameObject);
+            UpgradeBus.instance.UpgradeObjects.Add("Back Muscles", gameObject);
         }
 
-        private IEnumerator lateApply()
-        {
-            yield return new WaitForSeconds(1);
-            DontDestroyOnLoad(gameObject);
-            load();
-        }
         public override void Increment()
         {
             UpgradeBus.instance.backLevel++;
@@ -52,14 +47,11 @@ namespace MoreShipUpgrades.UpgradeComponents
                     node.Price /= 2;
                 }
             }
-            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Back Muscles"))
-            {
-                UpgradeBus.instance.UpgradeObjects.Add("Back Muscles", gameObject);
-            }
-            else
-            {
-                Plugin.mls.LogWarning("Back Muscles is already in upgrade dict.");
-            }
+        }
+
+        public override void Register()
+        {
+            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Back Muscles")) { UpgradeBus.instance.UpgradeObjects.Add("Back Muscles", gameObject); }
         }
     }
 }

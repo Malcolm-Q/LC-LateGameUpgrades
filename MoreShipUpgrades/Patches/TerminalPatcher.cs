@@ -186,13 +186,13 @@ namespace MoreShipUpgrades.Patches
                             LGUStore.instance.SyncCreditsServerRpc(__instance.groupCredits - customNode.Price);
                             if (!customNode.Unlocked)
                             {
-                                LGUStore.instance.ReqSpawnServerRpc(customNode.Name);
+                                LGUStore.instance.HandleUpgrade(customNode.Name);
                                 if (customNode.MaxUpgrade != 0) { node.displayText = $"You Upgraded {customNode.Name} to level {customNode.CurrentUpgrade + 1}  \n"; }
                                 else { node.displayText = $"You Purchased {customNode.Name}  \n"; }
                             }
                             else if(customNode.Unlocked && customNode.MaxUpgrade > customNode.CurrentUpgrade)
                             {
-                                LGUStore.instance.ReqSpawnServerRpc(customNode.Name, true);
+                                LGUStore.instance.HandleUpgrade(customNode.Name, true);
                                 node.displayText = $"You Upgraded {customNode.Name} to level {customNode.CurrentUpgrade + 1} \n";
                             }
                         }

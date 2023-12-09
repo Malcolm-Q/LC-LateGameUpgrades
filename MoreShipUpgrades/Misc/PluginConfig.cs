@@ -82,6 +82,7 @@ namespace MoreShipUpgrades.Misc
         public string TOGGLE_NIGHT_VISION_KEY { get; set; }
         public float NIGHT_VIS_DRAIN_DECREASE_PERCENT { get; set; }
         public float NIGHT_VIS_REGEN_INCREASE_PERCENT { get; set; }
+        public bool LOSE_NIGHT_VIS_ON_DEATH { get; set; }
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -149,6 +150,7 @@ namespace MoreShipUpgrades.Misc
             TOGGLE_NIGHT_VISION_KEY = ConfigEntry("Night Vision", "Toggle Night Vision Key", "LeftAlt", "Key to toggle Night Vision, you can use any key on your system such as LeftAlt, LeftShift, or any letter which exists.");
             NIGHT_VIS_DRAIN_DECREASE_PERCENT = ConfigEntry("Night Vision", "Percentage decrease for night vis battery drain", 10f, "Percentage decrease applied to drain speed on each upgrade.");
             NIGHT_VIS_REGEN_INCREASE_PERCENT = ConfigEntry("Night Vision", "Percentage increase for night vis battery regen", 20f, "Percentage increase applied to regen speed on each upgrade.");
+            LOSE_NIGHT_VIS_ON_DEATH = ConfigEntry("Night Vision", "Lose Night Vision On Death", true, "If true when you die you will have to re purchase and equip night vision goggles.");
 
             DISCOMBOBULATOR_ENABLED = ConfigEntry("Discombobulator", "Enable Discombobulator Upgrade", true, "Stun enemies around the ship.");
             DISCOMBOBULATOR_PRICE = ConfigEntry("Discombobulator", "Price of Discombobulator Upgrade", 550, "");

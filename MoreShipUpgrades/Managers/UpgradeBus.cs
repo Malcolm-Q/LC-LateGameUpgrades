@@ -11,45 +11,53 @@ namespace MoreShipUpgrades.Managers
     public class UpgradeBus : NetworkBehaviour
     {
         public static UpgradeBus instance;
+        public PluginConfig cfg;
+
         public bool DestroyTraps = false;
         public bool softSteps = false;
         public bool scannerUpgrade = false;
         public bool nightVision = false;
         public bool nightVisionActive = false;
-        public Color nightVisColor;
         public float nightVisRange;
         public float nightVisIntensity;
         public bool exoskeleton = false;
         public bool TPButtonPressed = false;
         public bool beekeeper = false;
-        public int beeLevel = 0;
         public bool terminalFlash = false;
-        public float flashCooldown = 0f;
         public bool strongLegs = false;
         public bool runningShoes = false;
         public bool lockSmith = false;
         public bool biggerLungs = false;
         public bool pager = false;
+
         public int lungLevel = 0;
+        public int beeLevel = 0;
         public int backLevel = 0;
         public int runningLevel = 0;
         public int lightLevel = 0;
         public int discoLevel = 0;
-        //public int scanLevel = 0; problematic, balance / refactor and then introduce tiered upgrades.
         public int legLevel = 0;
-        public int nightVisionLevel = 0; // Add this property
+        public int nightVisionLevel = 0;
+
+        public float flashCooldown = 0f;
         public float alteredWeight = 1f;
-        public AudioClip flashNoise;
+
         public trapDestroyerScript trapHandler = null;
         public terminalFlashScript flashScript = null;
         public lockSmithScript lockScript = null;
         public pagerScript pageScript = null;
-        public PluginConfig cfg;
+
+        public Color nightVisColor;
+        public AudioClip flashNoise;
         public GameObject modStorePrefab;
         public TerminalNode modStoreInterface;
+
         public List<CustomTerminalNode> terminalNodes = new List<CustomTerminalNode>();
         public List<CustomTerminalNode> terminalNodesOriginal = new List<CustomTerminalNode>();
+
         public Dictionary<string, GameObject> UpgradeObjects = new Dictionary<string, GameObject>();
+
+        public Dictionary<ulong,float> beePercs = new Dictionary<ulong,float>();
 
         void Awake()
         {
@@ -87,34 +95,26 @@ namespace MoreShipUpgrades.Managers
             exoskeleton = false;
             TPButtonPressed = false;
             beekeeper = false;
-            beeLevel = 0;
             terminalFlash = false;
-            flashCooldown = 0f;
             strongLegs = false;
             runningShoes = false;
+            pager = false;
+            lockSmith = false;
             biggerLungs = false;
             lungLevel = 0;
             backLevel = 0;
+            beeLevel = 0;
             runningLevel = 0;
             lightLevel = 0;
             discoLevel = 0;
             legLevel = 0;
-            nightVisionLevel = 0; // Add this line
+            nightVisionLevel = 0;
+            flashCooldown = 0f;
             alteredWeight = 1f;
             trapHandler = null;
             flashScript = null;
             UpgradeObjects = new Dictionary<string, GameObject>();
             terminalNodes = terminalNodesOriginal;
-
-            try { LGUStore.instance.DeleteUpgradesServerRpc(); }
-            catch (Exception ex)
-            {
-                BaseUpgrade[] upgradeObjects = GameObject.FindObjectsOfType<BaseUpgrade>();
-                foreach (BaseUpgrade upgrade in upgradeObjects)
-                {
-                    Destroy(upgrade.gameObject);
-                }
-            }
         }
 
         public void CreateDeepNodeCopy()

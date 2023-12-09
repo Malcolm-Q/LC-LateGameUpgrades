@@ -16,23 +16,13 @@ namespace MoreShipUpgrades.UpgradeComponents
     {
         void Start()
         {
-            StartCoroutine(LateApply());
-        }
-
-        private IEnumerator LateApply()
-        {
-            yield return new WaitForSeconds(1);
-            load();
             DontDestroyOnLoad(gameObject);
+            UpgradeBus.instance.UpgradeObjects.Add("Running Shoes", gameObject);
         }
 
         public override void Increment()
         {
-            PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
-            foreach (PlayerControllerB player in players)
-            {
-                player.movementSpeed += UpgradeBus.instance.cfg.MOVEMENT_INCREMENT;
-            }
+            GameNetworkManager.Instance.localPlayerController.movementSpeed += UpgradeBus.instance.cfg.MOVEMENT_INCREMENT;
             UpgradeBus.instance.runningLevel++;
             foreach( CustomTerminalNode node in UpgradeBus.instance.terminalNodes )
             {
@@ -41,17 +31,17 @@ namespace MoreShipUpgrades.UpgradeComponents
                     node.Description = $"You can run {(UpgradeBus.instance.cfg.MOVEMENT_SPEED - 4.6f) + (UpgradeBus.instance.cfg.MOVEMENT_INCREMENT * UpgradeBus.instance.runningLevel)} units faster";
                 }
             }
+        }
 
+        public override void Register()
+        {
+            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Running Shoes")) { UpgradeBus.instance.UpgradeObjects.Add("Running Shoes", gameObject); }
         }
 
         public override void load()
         {
             UpgradeBus.instance.runningShoes = true;
-            PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
-            foreach (PlayerControllerB player in players)
-            {
-                player.movementSpeed = UpgradeBus.instance.cfg.MOVEMENT_SPEED;
-            }
+            GameNetworkManager.Instance.localPlayerController.movementSpeed = UpgradeBus.instance.cfg.MOVEMENT_SPEED;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Running Shoes is active!</color>";
             foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
             {
@@ -60,15 +50,6 @@ namespace MoreShipUpgrades.UpgradeComponents
                     node.Price /= 2;
                 }
             }
-            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Running Shoes"))
-            {
-                UpgradeBus.instance.UpgradeObjects.Add("Running Shoes", gameObject);
-            }
-            else
-            {
-                Plugin.mls.LogWarning("Running Shoes is already in upgrade dict.");
-            }
-
 
             float amountToIncrement = 0;
             for(int i = 0; i < UpgradeBus.instance.runningLevel; i++)
@@ -76,12 +57,7 @@ namespace MoreShipUpgrades.UpgradeComponents
                 amountToIncrement += UpgradeBus.instance.cfg.MOVEMENT_INCREMENT;
             }
 
-            foreach(PlayerControllerB player in players)
-            {
-                player.movementSpeed += amountToIncrement;
-            }
+            GameNetworkManager.Instance.localPlayerController.movementSpeed += amountToIncrement;
         }
-
-
     }
 }

@@ -2,22 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Unity.Netcode;
 using UnityEngine;
 using Newtonsoft.Json;
-using System.Xml.Linq;
-using System.Linq;
 using GameNetcodeStuff;
-
-using MoreShipUpgrades.Misc;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using UnityEngine;
-using Newtonsoft.Json;
-using Unity.Netcode;
-using GameNetcodeStuff;
+using System.Collections;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -25,6 +14,8 @@ namespace MoreShipUpgrades.Managers
     {
         public static LGUStore instance;
         public SaveInfo saveInfo;
+        public LGUSave lguSave;
+        private ulong playerID = 0;
 
         private static Dictionary<string, Func<SaveInfo, bool>> conditions = new Dictionary<string, Func<SaveInfo, bool>>
         {
@@ -57,27 +48,28 @@ namespace MoreShipUpgrades.Managers
             { "Pager", saveInfo => 0 },
             { "Locksmith", saveInfo => 0 }
         };
-        private bool hasRun = false;
+
         private void Start()
         {
             instance = this;
-            if (NetworkManager.IsHost && !hasRun)
+            if (NetworkManager.IsHost)
             {
-                hasRun = true;
                 string saveNum = GameNetworkManager.Instance.saveFileNum.ToString();
                 string filePath = Path.Combine(Application.persistentDataPath, $"LGU_{saveNum}.json");
                 if (File.Exists(filePath))
                 {
                     string json = File.ReadAllText(filePath);
-                    saveInfo = JsonConvert.DeserializeObject<SaveInfo>(json);
-                    UpdateUpgradeBus();
+                    lguSave = JsonConvert.DeserializeObject<LGUSave>(json);
                     HandleSpawns();
+                    UpdateUpgradeBus();
                 }
                 else
                 {
-                    saveInfo = new SaveInfo();
+                    lguSave = new LGUSave();
+                    lguSave.playerSaves.Add(playerID, new SaveInfo());
                     string json = JsonConvert.SerializeObject(saveInfo);
                     File.WriteAllText(filePath, json);
+                    HandleSpawns();
                 }
             }
             else
@@ -91,20 +83,22 @@ namespace MoreShipUpgrades.Managers
         {
             string saveNum = GameNetworkManager.Instance.saveFileNum.ToString();
             string filePath = Path.Combine(Application.persistentDataPath, $"LGU_{saveNum}.json");
-            saveInfo = new SaveInfo();
-            string json = JsonConvert.SerializeObject(saveInfo);
+            string json = JsonConvert.SerializeObject(lguSave);
             File.WriteAllText(filePath, json);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void UpdateLGUSaveServerRpc(ulong id, string json)
+        {
+            lguSave.playerSaves[id] = JsonConvert.DeserializeObject<SaveInfo>(json);
         }
 
         public void HandleSpawns()
         {
             foreach (CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
             {
-                if (node.Unlocked)
-                {
-                    GameObject go = Instantiate(node.Prefab, Vector3.zero, Quaternion.identity);
-                    go.GetComponent<NetworkObject>().Spawn();
-                }
+                GameObject go = Instantiate(node.Prefab, Vector3.zero, Quaternion.identity);
+                go.GetComponent<NetworkObject>().Spawn();
             }
         }
 
@@ -115,10 +109,11 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.ResetAllValues();
             string saveNum = GameNetworkManager.Instance.saveFileNum.ToString();
             string filePath = Path.Combine(Application.persistentDataPath, $"LGU_{saveNum}.json");
-            saveInfo = new SaveInfo();
-            string json = JsonConvert.SerializeObject(saveInfo);
+            lguSave = new LGUSave();
+            string json = JsonConvert.SerializeObject(lguSave);
             File.WriteAllText(filePath, json);
         }
+
         [ClientRpc]
         private void ResetUpgradeBusClientRpc()
         {
@@ -135,63 +130,37 @@ namespace MoreShipUpgrades.Managers
         [ServerRpc(RequireOwnership = false)]
         public void ShareSaveServerRpc()
         {
-            string json = JsonConvert.SerializeObject(saveInfo);
+            string json = JsonConvert.SerializeObject(lguSave);
             ShareSaveClientRpc(json);
         }
 
         [ClientRpc]
         public void ShareSaveClientRpc(string json)
         {
-            saveInfo = JsonConvert.DeserializeObject<SaveInfo>(json);
+            foreach(BaseUpgrade upgrade in FindObjectsOfType<BaseUpgrade>())
+            {
+                upgrade.Register();
+            }
+            lguSave = JsonConvert.DeserializeObject<LGUSave>(json);
             UpdateUpgradeBus();
         }
 
-        [ServerRpc(RequireOwnership = false)]
-        public void SaveLGUDataServerRpc()
+        [ServerRpc(RequireOwnership =false)]
+        public void UpdateBeePercsServerRpc(ulong id, int lvl)
         {
-            string saveNum = GameNetworkManager.Instance.saveFileNum.ToString();
-            string filePath = Path.Combine(Application.persistentDataPath, $"LGU_{saveNum}.json");
-            string json = JsonConvert.SerializeObject(new SaveInfo());
-            File.WriteAllText(filePath, json);
-        }
-
-
-        [ServerRpc(RequireOwnership = false)]
-        public void ReqSpawnServerRpc(string goName, bool increment = false)
-        {
-            if (!increment)
-            {
-                foreach (CustomTerminalNode customNode in UpgradeBus.instance.terminalNodes)
-                {
-                    if (customNode.Name == goName)
-                    {
-                        GameObject go = Instantiate(customNode.Prefab, Vector3.zero, Quaternion.identity);
-                        go.GetComponent<NetworkObject>().Spawn();
-                        UpdateNodesClientRpc(goName);
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                UpdateNodesClientRpc(goName, increment);
-            }
+            UpdateBeePercsClientRpc(id, lvl);
         }
 
         [ClientRpc]
-        private void UpdateNodesClientRpc(string goName, bool increment = false)
+        private void UpdateBeePercsClientRpc(ulong id, int lvl)
         {
-            foreach (CustomTerminalNode customNode in UpgradeBus.instance.terminalNodes)
+            if(UpgradeBus.instance.beePercs.ContainsKey(id))
             {
-                if (customNode.Name == goName)
-                {
-                    customNode.Unlocked = true;
-                    if (increment)
-                    {
-                        customNode.CurrentUpgrade++;
-                        UpgradeBus.instance.UpgradeObjects[goName].GetComponent<BaseUpgrade>().Increment();
-                    }
-                }
+                UpgradeBus.instance.beePercs[id] = lvl;
+            }
+            else
+            {
+                UpgradeBus.instance.beePercs.Add(id, lvl);
             }
         }
 
@@ -218,8 +187,26 @@ namespace MoreShipUpgrades.Managers
             terminal.groupCredits = newCredits;
         }
 
+        [ServerRpc(RequireOwnership =false)]
+        private void RegisterNewPlayerServerRpc(ulong id, string json)
+        {
+            lguSave.playerSaves.Add(id,JsonConvert.DeserializeObject<SaveInfo>(json));
+        }
+
         public void UpdateUpgradeBus()
         {
+            if(playerID == 0)
+            {
+                StartCoroutine(WaitForSteamID());
+                return;
+            }
+            if(!lguSave.playerSaves.ContainsKey(playerID))
+            {
+                saveInfo = new SaveInfo();
+                RegisterNewPlayerServerRpc(playerID, JsonConvert.SerializeObject(saveInfo));
+                return;
+            }
+            saveInfo = lguSave.playerSaves[playerID];
             UpgradeBus.instance.DestroyTraps = saveInfo.DestroyTraps;
             UpgradeBus.instance.softSteps = saveInfo.softSteps;
             UpgradeBus.instance.scannerUpgrade = saveInfo.scannerUpgrade;
@@ -241,6 +228,24 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.legLevel = saveInfo.legLevel;
             UpgradeBus.instance.pager = saveInfo.pager;
 
+            StartCoroutine(WaitForUpgradeObject());
+        }
+
+        private IEnumerator WaitForSteamID()
+        {
+            yield return new WaitForSeconds(1f);
+            while(playerID == 0)
+            {
+                playerID = GameNetworkManager.Instance.localPlayerController.playerSteamId;
+                Debug.Log(playerID);
+                yield return new WaitForSeconds(0.5f);
+            }
+            UpdateUpgradeBus();
+        }
+
+        private IEnumerator WaitForUpgradeObject()
+        {
+            yield return new WaitForSeconds(1f);
             foreach (CustomTerminalNode customNode in UpgradeBus.instance.terminalNodes)
             {
                 if (conditions.TryGetValue(customNode.Name, out var condition) && condition(saveInfo))
@@ -248,8 +253,25 @@ namespace MoreShipUpgrades.Managers
                     customNode.Unlocked = true;
                     levelConditions.TryGetValue(customNode.Name, out var level);
                     customNode.CurrentUpgrade = level.Invoke(saveInfo);
+                    UpgradeBus.instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>().load();
                 }
             }
+        }
+
+        public void HandleUpgrade(string name, bool increment = false)
+        {
+            foreach (CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
+            {
+                if (node.Name == name)
+                {
+                    node.Unlocked = true;
+                    if(increment) { node.CurrentUpgrade++; }
+                }
+            }
+            if(!increment){ UpgradeBus.instance.UpgradeObjects[name].GetComponent<BaseUpgrade>().load(); }
+            else { UpgradeBus.instance.UpgradeObjects[name].GetComponent<BaseUpgrade>().Increment(); }
+            saveInfo = new SaveInfo();
+            UpdateLGUSaveServerRpc(playerID, JsonConvert.SerializeObject(saveInfo));
         }
     }
 
@@ -277,5 +299,11 @@ namespace MoreShipUpgrades.Managers
         public int lightLevel = UpgradeBus.instance.lightLevel;
         public int discoLevel = UpgradeBus.instance.discoLevel;
         public int legLevel = UpgradeBus.instance.legLevel;
+    }
+
+    [Serializable]
+    public class LGUSave
+    {
+        public Dictionary<ulong,SaveInfo> playerSaves = new Dictionary<ulong,SaveInfo>();
     }
 }

@@ -16,14 +16,8 @@ namespace MoreShipUpgrades.UpgradeComponents
     {
         void Start()
         {
-            StartCoroutine(lateApply());
-        }
-
-        private IEnumerator lateApply()
-        {
-            yield return new WaitForSeconds(1);
             DontDestroyOnLoad(gameObject);
-            load();
+            UpgradeBus.instance.UpgradeObjects.Add("Beekeeper", gameObject);
         }
 
         public override void Increment()
@@ -36,6 +30,7 @@ namespace MoreShipUpgrades.UpgradeComponents
                     node.Description = $"Circuit bees do %{Mathf.Round(100 * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beeLevel * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT)))} of their base damage.";
                 }
             }
+            LGUStore.instance.UpdateBeePercsServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, UpgradeBus.instance.beeLevel);
         }
 
         public override void load()
@@ -49,14 +44,12 @@ namespace MoreShipUpgrades.UpgradeComponents
                     node.Price /= 2;
                 }
             }
-            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Beekeeper"))
-            {
-                UpgradeBus.instance.UpgradeObjects.Add("Beekeeper", gameObject);
-            }
-            else
-            {
-                Plugin.mls.LogWarning("Locksmith key is already present in upgrade dict.");
-            }
+            LGUStore.instance.UpdateBeePercsServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, 0);
+        }
+
+        public override void Register()
+        {
+            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Beekeeper")) { UpgradeBus.instance.UpgradeObjects.Add("Beekeeper", gameObject); }
         }
     }
 }

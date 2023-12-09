@@ -20,15 +20,9 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         void Start()
         {
-            StartCoroutine(lateApply());
-        }
-
-        private IEnumerator lateApply()
-        {
-            yield return new WaitForSeconds(1);
             DontDestroyOnLoad(gameObject);
+            UpgradeBus.instance.UpgradeObjects.Add("Pager", gameObject);
             cooldownDuration = UpgradeBus.instance.cfg.PAGER_COOLDOWN_DURATION; // Use the configuration value
-            load();
         }
 
         public override void load()
@@ -36,14 +30,11 @@ namespace MoreShipUpgrades.UpgradeComponents
             UpgradeBus.instance.pager = true;
             UpgradeBus.instance.pageScript = this;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Pager is active!</color>";
-            if (!UpgradeBus.instance.UpgradeObjects.ContainsKey("Pager"))
-            {
-                UpgradeBus.instance.UpgradeObjects.Add("Pager", gameObject);
-            }
-            else
-            {
-                Plugin.mls.LogWarning("Pager is already in upgrade dict.");
-            }
+        }
+
+        public override void Register()
+        {
+            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Pager")) { UpgradeBus.instance.UpgradeObjects.Add("Pager", gameObject); }
         }
 
         [ServerRpc(RequireOwnership = false)]

@@ -16,14 +16,8 @@ namespace MoreShipUpgrades.UpgradeComponents
     {
         void Start()
         {
-            StartCoroutine(lateApply());
-        }
-
-        private IEnumerator lateApply()
-        {
-            yield return new WaitForSeconds(1);
             DontDestroyOnLoad(gameObject);
-            load();
+            UpgradeBus.instance.UpgradeObjects.Add("Discombobulator", gameObject);
         }
 
         public override void load()
@@ -39,14 +33,11 @@ namespace MoreShipUpgrades.UpgradeComponents
                     node.Price /= 2;
                 }
             }
-            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Discombobulator"))
-            {
-                UpgradeBus.instance.UpgradeObjects.Add("Discombobulator", gameObject);
-            }
-            else
-            {
-                Plugin.mls.LogWarning("Discombobulator is already in upgrade dict.");
-            }
+        }
+
+        public override void Register()
+        {
+            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Discombobulator")) { UpgradeBus.instance.UpgradeObjects.Add("Discombobulator", gameObject); }
         }
 
         public override void Increment()

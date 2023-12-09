@@ -21,7 +21,8 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         void Start()
         {
-            StartCoroutine(lateApply());
+            DontDestroyOnLoad(gameObject);
+            UpgradeBus.instance.UpgradeObjects.Add("Locksmith", gameObject);
             Transform tumbler = transform.GetChild(0).GetChild(0).GetChild(0);
             pin1 = tumbler.GetChild(0).gameObject;
             pin2 = tumbler.GetChild(1).gameObject;
@@ -38,26 +39,16 @@ namespace MoreShipUpgrades.UpgradeComponents
             pins = new List<GameObject> { pin1, pin2, pin3, pin4, pin5 };
         }
 
-        private IEnumerator lateApply()
-        {
-            yield return new WaitForSeconds(1);
-            load();
-            DontDestroyOnLoad(gameObject);
-        }
-
         public override void load()
         {
             UpgradeBus.instance.lockSmith = true;
             UpgradeBus.instance.lockScript = this;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Locksmith is active!</color>";
-            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Locksmith"))
-            {
-                UpgradeBus.instance.UpgradeObjects.Add("Locksmith", gameObject);
-            }
-            else
-            {
-                Plugin.mls.LogWarning("Locksmith key is already present in upgrade dict.");
-            }
+        }
+
+        public override void Register()
+        {
+            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Locksmith")) { UpgradeBus.instance.UpgradeObjects.Add("Locksmith", gameObject); }
         }
 
         void Update()
