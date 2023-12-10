@@ -1,4 +1,5 @@
-﻿using MoreShipUpgrades.Misc;
+﻿using GameNetcodeStuff;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace MoreShipUpgrades.Managers
     {
         public static UpgradeBus instance;
         public PluginConfig cfg;
+        public GameObject introScreen;
 
         public bool DestroyTraps = false;
         public bool softSteps = false;
@@ -53,11 +55,12 @@ namespace MoreShipUpgrades.Managers
         public TerminalNode modStoreInterface;
 
         public List<CustomTerminalNode> terminalNodes = new List<CustomTerminalNode>();
-        public List<CustomTerminalNode> terminalNodesOriginal = new List<CustomTerminalNode>();
 
         public Dictionary<string, GameObject> UpgradeObjects = new Dictionary<string, GameObject>();
 
         public Dictionary<ulong,float> beePercs = new Dictionary<ulong,float>();
+
+        public Dictionary<string,bool> IndividualUpgrades = new Dictionary<string,bool>();
 
         void Awake()
         {
@@ -72,9 +75,9 @@ namespace MoreShipUpgrades.Managers
             modStoreInterface.clearPreviousText = true;
             foreach (CustomTerminalNode terminalNode in terminalNodes)
             {
-                if (!terminalNode.Unlocked) { modStoreInterface.displayText += $"\n{terminalNode.Name} // {terminalNode.Price}  "; }
+                if (!terminalNode.Unlocked) { modStoreInterface.displayText += $"\n{terminalNode.Name} // {terminalNode.UnlockPrice}  "; }
                 else if (terminalNode.MaxUpgrade == 0) { modStoreInterface.displayText += $"\n{terminalNode.Name} // UNLOCKED  "; }
-                else if (terminalNode.MaxUpgrade > terminalNode.CurrentUpgrade) { modStoreInterface.displayText += $"\n{terminalNode.Name} // {terminalNode.Price} // LVL {terminalNode.CurrentUpgrade + 1}"; }
+                else if (terminalNode.MaxUpgrade > terminalNode.CurrentUpgrade) { modStoreInterface.displayText += $"\n{terminalNode.Name} // {terminalNode.Prices[terminalNode.CurrentUpgrade]} // LVL {terminalNode.CurrentUpgrade + 1}"; }
                 else { modStoreInterface.displayText += $"\n{terminalNode.Name} // MAX LVL"; }
             }
             if (modStoreInterface.displayText == "")
@@ -85,7 +88,7 @@ namespace MoreShipUpgrades.Managers
             return modStoreInterface;
         }
 
-        public void ResetAllValues()
+        public void ResetAllValues(bool wipeObjRefs = true)
         {
             DestroyTraps = false;
             softSteps = false;
@@ -113,13 +116,20 @@ namespace MoreShipUpgrades.Managers
             alteredWeight = 1f;
             trapHandler = null;
             flashScript = null;
-            UpgradeObjects = new Dictionary<string, GameObject>();
-            terminalNodes = terminalNodesOriginal;
-        }
-
-        public void CreateDeepNodeCopy()
-        {
-            terminalNodesOriginal = terminalNodes.Select(node => node.Copy()).ToList();
+            if (wipeObjRefs) { UpgradeObjects = new Dictionary<string, GameObject>(); }
+            foreach(CustomTerminalNode node in terminalNodes)
+            {
+                node.Unlocked = false;
+                node.CurrentUpgrade = 0;
+                if(node.Name == "NV Headset Batteries") { node.Unlocked = true; }
+            }
+            PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
+            foreach (PlayerControllerB player in players)
+            {
+                player.movementSpeed = 4.6f;
+                player.sprintTime = 11;
+                player.jumpForce = 13;
+            }
         }
     }
 }

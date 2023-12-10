@@ -43,14 +43,6 @@ namespace MoreShipUpgrades.UpgradeComponents
             UpgradeBus.instance.runningShoes = true;
             GameNetworkManager.Instance.localPlayerController.movementSpeed = UpgradeBus.instance.cfg.MOVEMENT_SPEED;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Running Shoes is active!</color>";
-            foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
-            {
-                if(node.Name.ToLower() == "running shoes" && node.Price > 0)
-                {
-                    node.Price /= 2;
-                }
-            }
-
             float amountToIncrement = 0;
             for(int i = 0; i < UpgradeBus.instance.runningLevel; i++)
             {

@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -142,8 +143,9 @@ namespace MoreShipUpgrades.Patches
                 node.displayText = "Late Game Upgrades\n\nType `lategame store` or `lgu` to view upgrades.\n\nMost of the mod is configurable via the config file in `BepInEx/config/`.";
                 node.displayText += "\n\nUse the info command to get info about an item. EX: `info beekeeper`.";
                 node.displayText += "\n\nYou must type the exact name of the upgrade (case insensitve).";
-                node.displayText += "\n\nTo force wipe an lgu save file type `reset lgu`.";
-                node.displayText += "\n\nIf using latecompany and your client doesn't have the upgrades, type `load lgu`.";
+                node.displayText += "\n\nTo force wipe an lgu save file type `reset lgu`. (will only wipe the clients save).";
+                node.displayText += "\n\nTo reapply any upgrades that failed to apply type `load lgu`.";
+                node.displayText += "\n\nIn the case of credit desync to force an amount of credits type `forceCredits 123`, to attempt to sync credits type `syncCredits`";
                 __result = node;
             }
             else if (text.ToLower() == "lategame store" || text.ToLower() == "lgu")
@@ -153,22 +155,48 @@ namespace MoreShipUpgrades.Patches
             else if (text.ToLower() == "reset lgu")
             {
                 TerminalNode node = new TerminalNode();
-                node.displayText = "LGU save has been wiped.";
                 node.clearPreviousText = true;
+                node.displayText = "LGU save has been wiped.";
                 __result = node;
-                LGUStore.instance.PlayersFiredServerRpc();
+                if(LGUStore.instance.lguSave.playerSaves.ContainsKey(GameNetworkManager.Instance.localPlayerController.playerSteamId))
+                {
+                    UpgradeBus.instance.ResetAllValues(false);
+                    SaveInfo saveInfo = new SaveInfo();
+                    ulong id = GameNetworkManager.Instance.localPlayerController.playerSteamId;
+                    LGUStore.instance.saveInfo = saveInfo;
+                    LGUStore.instance.UpdateLGUSaveServerRpc(id, JsonConvert.SerializeObject(saveInfo));
+                }
             }
             else if (text.ToLower() == "load lgu")
             {
-                BaseUpgrade[] upgrades = GameObject.FindObjectsOfType<BaseUpgrade>();
-                foreach (BaseUpgrade upgrade in upgrades)
-                {
-                    upgrade.load();
-                }
+                LGUStore.instance.UpdateUpgradeBus();
                 TerminalNode node = new TerminalNode();
                 node.clearPreviousText = true;
                 node.displayText = "Reapplied upgrade effects to this client. Only run this once.";
                 __result = node;
+            }
+            else if (text.Split()[0].ToLower() == "forcecredits")
+            {
+                TerminalNode node = new TerminalNode();
+                node.clearPreviousText = true;
+                if (int.TryParse(text.Split()[1], out int value))
+                {
+                    __instance.groupCredits = value;
+                    node.displayText = $"This client now has {value} credits.  \n\nThis was intended to be used when credit desync occurs due to Bigger Lobby or More Company.";
+                }
+                else
+                {
+                    node.displayText = $"Failed to parse value {text.Split()[1]}.";
+                }
+                __result = node;
+            }
+            else if (text.Split()[0].ToLower() == "synccredits")
+            {
+                TerminalNode node = new TerminalNode();
+                node.clearPreviousText = true;
+                node.displayText = $"Sending an RPC to sync all clients credits with your credits. ({__instance.groupCredits})";
+                __result = node;
+                LGUStore.instance.SyncCreditsServerRpc(__instance.groupCredits);
             }
             else
             {
@@ -178,12 +206,15 @@ namespace MoreShipUpgrades.Patches
                     {
                         TerminalNode node = new TerminalNode();
                         node.clearPreviousText = true;
-
-                        bool canAfford = __instance.groupCredits >= customNode.Price;
+                        int price = 0;
+                        if (!customNode.Unlocked) { price = customNode.UnlockPrice; }
+                        else if(customNode.MaxUpgrade> customNode.CurrentUpgrade) { price = customNode.Prices[customNode.CurrentUpgrade]; }
+                       
+                        bool canAfford = __instance.groupCredits >= price;
 
                         if(canAfford && (!customNode.Unlocked || customNode.MaxUpgrade > customNode.CurrentUpgrade))
                         {
-                            LGUStore.instance.SyncCreditsServerRpc(__instance.groupCredits - customNode.Price);
+                            LGUStore.instance.SyncCreditsServerRpc(__instance.groupCredits - price);
                             if (!customNode.Unlocked)
                             {
                                 LGUStore.instance.HandleUpgrade(customNode.Name);

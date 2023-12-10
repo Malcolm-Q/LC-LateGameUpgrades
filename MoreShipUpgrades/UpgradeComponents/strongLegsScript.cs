@@ -43,13 +43,6 @@ namespace MoreShipUpgrades.UpgradeComponents
             UpgradeBus.instance.strongLegs = true;
             GameNetworkManager.Instance.localPlayerController.jumpForce = UpgradeBus.instance.cfg.JUMP_FORCE;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Strong Legs is active!</color>";
-            foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
-            {
-                if(node.Name.ToLower() == "strong legs" && node.Price > 0)
-                {
-                    node.Price /= 2;
-                }
-            }
             float amountToIncrement = 0;
             for(int i = 0; i < UpgradeBus.instance.legLevel; i++)
             {

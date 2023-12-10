@@ -37,13 +37,6 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             UpgradeBus.instance.softSteps = true;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Light Footed is active!</color>";
-            foreach (CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
-            {
-                if (node.Name.ToLower() == "light footed" && node.Price > 0)
-                {
-                    node.Price /= 2;
-                }
-            }
         }
 
         public override void Register()

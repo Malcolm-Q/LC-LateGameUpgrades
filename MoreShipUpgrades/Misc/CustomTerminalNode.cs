@@ -8,7 +8,8 @@ namespace MoreShipUpgrades.Misc
     public class CustomTerminalNode
     {
         public string Name;
-        public int Price;
+        public int[] Prices;
+        public int UnlockPrice;
         public string Description;
         public GameObject Prefab;
         public bool Unlocked = false;
@@ -16,13 +17,15 @@ namespace MoreShipUpgrades.Misc
         public int CurrentUpgrade { get; set; }
 
 
-        public CustomTerminalNode(string name, int price, string description, GameObject prefab, int maxUpgrade = 0)
+        public CustomTerminalNode(string name, int unlockPrice, string description, GameObject prefab, int[] prices = null, int maxUpgrade = 0)
         {
+            if(prices == null) {  prices = new int[0]; }
             Name = name;
-            Price = price;
+            Prices = prices;
             Description = description;
             Prefab = prefab;
             MaxUpgrade = maxUpgrade;
+            UnlockPrice = unlockPrice;
         }
 
         public CustomTerminalNode Copy()
@@ -30,9 +33,10 @@ namespace MoreShipUpgrades.Misc
             return new CustomTerminalNode
             (
                 Name = this.Name,
-                Price = this.Price,
+                UnlockPrice = this.UnlockPrice,
                 Description = this.Description,
                 Prefab = this.Prefab,
+                Prices = this.Prices,
                 MaxUpgrade = this.MaxUpgrade
             );
         }

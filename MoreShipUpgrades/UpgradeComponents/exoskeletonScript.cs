@@ -40,13 +40,6 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             UpgradeBus.instance.exoskeleton = true;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Back Muscles is active!</color>";
-            foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
-            {
-                if(node.Name.ToLower() == "back muscles" && node.Price > 0)
-                {
-                    node.Price /= 2;
-                }
-            }
         }
 
         public override void Register()

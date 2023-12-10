@@ -28,7 +28,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         void Start()
         {
             DontDestroyOnLoad(gameObject);
-            UpgradeBus.instance.UpgradeObjects.Add("Night Vision", gameObject);
+            UpgradeBus.instance.UpgradeObjects.Add("NV Headset Batteries", gameObject);
             batteryBar = transform.GetChild(0).GetChild(0).transform;
             transform.GetChild(0).gameObject.SetActive(false);
             if(Enum.TryParse(UpgradeBus.instance.cfg.TOGGLE_NIGHT_VISION_KEY, out Key toggle))
@@ -43,7 +43,7 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public override void Register()
         {
-            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Night Vision")) { UpgradeBus.instance.UpgradeObjects.Add("Night Vision", gameObject); }
+            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("NV Headset Batteries")) { UpgradeBus.instance.UpgradeObjects.Add("NV Headset Batteries", gameObject); }
         }
 
         void LateUpdate()
@@ -125,16 +125,14 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public override void Increment()
         {
-            // Increment the night vision level
             UpgradeBus.instance.nightVisionLevel++;
+            LGUStore.instance.UpdateLGUSaveServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, JsonConvert.SerializeObject(new SaveInfo()));
 
-            // Apply adjustments based on the new level
             AdjustNightVisionProperties();
         }
 
         public override void load()
         {
-            // Load adjustments based on the current level
             AdjustNightVisionProperties();
             EnableOnClient(false);
         }
@@ -142,9 +140,9 @@ namespace MoreShipUpgrades.UpgradeComponents
         public void EnableOnClient(bool save = true)
         {
             if(client == null) { client = GameNetworkManager.Instance.localPlayerController; }
-            if (save) { LGUStore.instance.UpdateLGUSaveServerRpc(client.playerSteamId, JsonConvert.SerializeObject(new SaveInfo())); }
             transform.GetChild(0).gameObject.SetActive(true);
             UpgradeBus.instance.nightVision = true;
+            if (save) { LGUStore.instance.UpdateLGUSaveServerRpc(client.playerSteamId, JsonConvert.SerializeObject(new SaveInfo())); }
             HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Press {UpgradeBus.instance.cfg.TOGGLE_NIGHT_VISION_KEY} to toggle Night Vision!!!</color>";
         }
 

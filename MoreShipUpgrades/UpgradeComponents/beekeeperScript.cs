@@ -37,13 +37,6 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             UpgradeBus.instance.beekeeper = true;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Beekeeper is active!</color>";
-            foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
-            {
-                if(node.Name.ToLower() == "beekeeper" && node.Price > 0)
-                {
-                    node.Price /= 2;
-                }
-            }
             LGUStore.instance.UpdateBeePercsServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, 0);
         }
 

@@ -7,6 +7,7 @@ using UnityEngine;
 using Newtonsoft.Json;
 using GameNetcodeStuff;
 using System.Collections;
+using MoreShipUpgrades.UpgradeComponents;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -24,7 +25,7 @@ namespace MoreShipUpgrades.Managers
             {"Discombobulator", SaveInfo => SaveInfo.terminalFlash },
             {"Bigger Lungs", SaveInfo => SaveInfo.biggerLungs },
             {"Running Shoes", SaveInfo => SaveInfo.runningShoes },
-            {"Night Vision", SaveInfo => SaveInfo.nightVision },
+            {"NV Headset Batteries", SaveInfo => SaveInfo.nightVision },
             {"Strong Legs", SaveInfo => SaveInfo.strongLegs },
             {"Better Scanner", SaveInfo => SaveInfo.scannerUpgrade },
             {"Beekeeper", SaveInfo => SaveInfo.beekeeper },
@@ -40,7 +41,7 @@ namespace MoreShipUpgrades.Managers
             { "Discombobulator", saveInfo => saveInfo.discoLevel },
             { "Bigger Lungs", saveInfo => saveInfo.lungLevel },
             { "Running Shoes", saveInfo => saveInfo.runningLevel },
-            { "Night Vision", saveInfo => 0 },
+            { "NV Headset Batteries", saveInfo => saveInfo.nightVisionLevel },
             { "Strong Legs", saveInfo => saveInfo.legLevel },
             { "Better Scanner", saveInfo => 0 },
             { "Beekeeper", saveInfo => saveInfo.beeLevel },
@@ -66,15 +67,18 @@ namespace MoreShipUpgrades.Managers
                 else
                 {
                     lguSave = new LGUSave();
-                    lguSave.playerSaves.Add(playerID, new SaveInfo());
-                    string json = JsonConvert.SerializeObject(saveInfo);
-                    File.WriteAllText(filePath, json);
                     HandleSpawns();
+                    UpdateUpgradeBus();
                 }
             }
             else
             {
                 ShareSaveServerRpc();
+            }
+            if(!File.Exists(Path.Combine(Application.persistentDataPath,"hasSeenIntroLGU")))
+            {
+                Instantiate(UpgradeBus.instance.introScreen);
+                File.Create(Path.Combine(Application.persistentDataPath,"hasSeenIntroLGU"));
             }
         }
 
@@ -118,13 +122,7 @@ namespace MoreShipUpgrades.Managers
         private void ResetUpgradeBusClientRpc()
         {
             UpgradeBus.instance.ResetAllValues();
-            PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
-            foreach (PlayerControllerB player in players)
-            {
-                player.movementSpeed = 4.6f;
-                player.sprintTime = 11;
-                player.jumpForce = 13;
-            }
+            saveInfo = new SaveInfo();
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -227,6 +225,7 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.discoLevel = saveInfo.discoLevel;
             UpgradeBus.instance.legLevel = saveInfo.legLevel;
             UpgradeBus.instance.pager = saveInfo.pager;
+            UpgradeBus.instance.nightVisionLevel = saveInfo.nightVisionLevel;
 
             StartCoroutine(WaitForUpgradeObject());
         }
@@ -259,6 +258,47 @@ namespace MoreShipUpgrades.Managers
         }
 
         public void HandleUpgrade(string name, bool increment = false)
+        {
+            if (!UpgradeBus.instance.IndividualUpgrades[name])
+            {
+                HandleUpgradeServerRpc(name, increment);
+                return;
+            }
+            foreach (CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
+            {
+                if (node.Name == name)
+                {
+                    node.Unlocked = true;
+                    if(increment) { node.CurrentUpgrade++; }
+                    break;
+                }
+            }
+            if(!increment){ UpgradeBus.instance.UpgradeObjects[name].GetComponent<BaseUpgrade>().load(); }
+            else { UpgradeBus.instance.UpgradeObjects[name].GetComponent<BaseUpgrade>().Increment(); }
+            saveInfo = new SaveInfo();
+            UpdateLGUSaveServerRpc(playerID, JsonConvert.SerializeObject(saveInfo));
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void EnableNightVisionServerRpc()
+        {
+            EnableNightVisionClientRpc();
+        }
+
+        [ClientRpc]
+        private void EnableNightVisionClientRpc()
+        {
+            UpgradeBus.instance.UpgradeObjects["NV Headset Batteries"].GetComponent<nightVisionScript>().EnableOnClient();
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void HandleUpgradeServerRpc(string name, bool increment)
+        {
+            HandleUpgradeClientRpc(name, increment);
+        }
+
+        [ClientRpc]
+        private void HandleUpgradeClientRpc(string name, bool increment)
         {
             foreach (CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
             {
@@ -299,6 +339,7 @@ namespace MoreShipUpgrades.Managers
         public int lightLevel = UpgradeBus.instance.lightLevel;
         public int discoLevel = UpgradeBus.instance.discoLevel;
         public int legLevel = UpgradeBus.instance.legLevel;
+        public int nightVisionLevel = UpgradeBus.instance.nightVisionLevel;
     }
 
     [Serializable]

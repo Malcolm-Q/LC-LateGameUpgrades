@@ -26,13 +26,6 @@ namespace MoreShipUpgrades.UpgradeComponents
             UpgradeBus.instance.flashScript = this;
             
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Discombobulator is active!\nType 'cooldown' into the terminal for info!!!</color>";
-            foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
-            {
-                if(node.Name.ToLower() == "discombobulator" && node.Price > 0)
-                {
-                    node.Price /= 2;
-                }
-            }
         }
 
         public override void Register()

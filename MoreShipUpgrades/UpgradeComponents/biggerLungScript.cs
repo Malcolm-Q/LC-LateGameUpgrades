@@ -41,14 +41,6 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             players = GameObject.FindObjectsOfType<PlayerControllerB>();
             GameNetworkManager.Instance.localPlayerController.sprintTime = UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE; //17
-
-            foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
-            {
-                if(node.Name.ToLower() == "Bigger Lungs" && node.Price > 0)
-                {
-                    node.Price /= 2;
-                }
-            }
             UpgradeBus.instance.biggerLungs = true;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Bigger Lungs is active!</color>";
 

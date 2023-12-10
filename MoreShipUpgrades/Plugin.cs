@@ -30,7 +30,7 @@ namespace MoreShipUpgrades
 
         void Awake()
         {
-            // TODO: Make item loading and registration more modular and concise.
+            // TODO: Move item info strings to a json file for the love of god.
 
             cfg = new(base.Config);
             cfg.InitBindings();
@@ -68,6 +68,10 @@ namespace MoreShipUpgrades
             AudioClip itemBreak = UpgradeAssets.LoadAsset<AudioClip>("Assets/ShipUpgrades/break.mp3");
             AudioClip error = UpgradeAssets.LoadAsset<AudioClip>("Assets/ShipUpgrades/error.mp3");
             AudioClip buttonPressed = UpgradeAssets.LoadAsset<AudioClip>("Assets/ShipUpgrades/ButtonPress2.ogg");
+
+            // intro screen
+            UpgradeBus.instance.introScreen = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/IntroScreen.prefab");
+            UpgradeBus.instance.introScreen.AddComponent<IntroScreenScript>();
 
             //tp button
             Item tpBut = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/TpButton.asset");
@@ -114,6 +118,7 @@ namespace MoreShipUpgrades
             //Night Vision Item
             Item nightVisionItem = UpgradeAssets.LoadAsset<Item>("Assets/ShipUPgrades/NightVisionItem.asset");
             nightVisionItem.creditsWorth = cfg.NIGHT_VISION_PRICE;
+            nightVisionItem.spawnPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             NightVisionItemScript visScript = nightVisionItem.spawnPrefab.AddComponent<NightVisionItemScript>(); 
             visScript.itemProperties = nightVisionItem;
             visScript.grabbable = true;
@@ -131,20 +136,53 @@ namespace MoreShipUpgrades
             GameObject beekeeper = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/beekeeper.prefab");
             beekeeper.AddComponent<beekeeperScript>();
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(beekeeper);
+            UpgradeBus.instance.IndividualUpgrades.Add("Beekeeper", cfg.BEEKEEPER_INDIVIDUAL);
             if(cfg.BEEKEEPER_ENABLED)
             {
-                CustomTerminalNode beeNode = new CustomTerminalNode("Beekeeper", cfg.BEEKEEPER_PRICE, $"Circuit bees do %{Mathf.Round(100 * cfg.BEEKEEPER_DAMAGE_MULTIPLIER)} of their base damage.", beekeeper, 3);
-                UpgradeBus.instance.terminalNodes.Add(beeNode);
+                string[] priceString = cfg.BEEKEEPER_UPGRADE_PRICES.Split(',').ToArray();
+                int[] prices = new int[priceString.Length];
 
+                for (int i = 0; i < priceString.Length; i++)
+                {
+                    if (int.TryParse(priceString[i], out int price))
+                    {
+                        prices[i] = price;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"[LGU] Invalid upgrade price submitted: {prices[i]}");
+                        prices[i] = -1;
+                    }
+                }
+                if(prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
+                CustomTerminalNode beeNode = new CustomTerminalNode("Beekeeper", cfg.BEEKEEPER_PRICE, $"Circuit bees do %{Mathf.Round(100 * cfg.BEEKEEPER_DAMAGE_MULTIPLIER)} of their base damage.", beekeeper, prices, prices.Length);
+                UpgradeBus.instance.terminalNodes.Add(beeNode);
             }
 
             //lungs
             GameObject biggerLungs = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/BiggerLungs.prefab");
             biggerLungs.AddComponent<biggerLungScript>();
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(biggerLungs);
+            UpgradeBus.instance.IndividualUpgrades.Add("Bigger Lungs", cfg.BIGGER_LUNGS_INDIVIDUAL);
             if(cfg.BIGGER_LUNGS_ENABLED)
             {
-                CustomTerminalNode lungNode = new CustomTerminalNode("Bigger Lungs", cfg.BIGGER_LUNGS_PRICE, $"Stamina Time is {(UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE - 11)} units longer", biggerLungs, 3);
+                string[] priceString = cfg.BIGGER_LUNGS_UPGRADE_PRICES.Split(',').ToArray();
+                int[] prices = new int[priceString.Length];
+
+                for (int i = 0; i < priceString.Length; i++)
+                {
+                    if (int.TryParse(priceString[i], out int price))
+                    {
+                        prices[i] = price;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"[LGU] Invalid upgrade price submitted: {prices[i]}");
+                        prices[i] = -1;
+                    }
+                }
+                if(prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
+                CustomTerminalNode lungNode = new CustomTerminalNode("Bigger Lungs", cfg.BIGGER_LUNGS_PRICE, $"Stamina Time is {(UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE - 11)} units longer", biggerLungs, prices, prices.Length);
                 UpgradeBus.instance.terminalNodes.Add(lungNode);
             }
 
@@ -152,9 +190,26 @@ namespace MoreShipUpgrades
             GameObject runningShoes = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/runningShoes.prefab");
             runningShoes.AddComponent<runningShoeScript>();
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(runningShoes);
+            UpgradeBus.instance.IndividualUpgrades.Add("Running Shoes", cfg.RUNNING_SHOES_INDIVIDUAL);
             if(cfg.RUNNING_SHOES_ENABLED)
             {
-                CustomTerminalNode node = new CustomTerminalNode("Running Shoes", cfg.RUNNING_SHOES_PRICE, $"You can run {UpgradeBus.instance.cfg.MOVEMENT_SPEED - 4.6f} units faster", runningShoes, 3);
+                string[] priceString = cfg.RUNNING_SHOES_UPGRADE_PRICES.Split(',').ToArray();
+                int[] prices = new int[priceString.Length];
+
+                for (int i = 0; i < priceString.Length; i++)
+                {
+                    if (int.TryParse(priceString[i], out int price))
+                    {
+                        prices[i] = price;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"[LGU] Invalid upgrade price submitted: {prices[i]}");
+                        prices[i] = -1;
+                    }
+                }
+                if(prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
+                CustomTerminalNode node = new CustomTerminalNode("Running Shoes", cfg.RUNNING_SHOES_PRICE, $"You can run {UpgradeBus.instance.cfg.MOVEMENT_SPEED - 4.6f} units faster", runningShoes, prices, prices.Length);
                 UpgradeBus.instance.terminalNodes.Add(node);
             }
 
@@ -162,9 +217,26 @@ namespace MoreShipUpgrades
             GameObject strongLegs = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/strongLegs.prefab");
             strongLegs.AddComponent<strongLegsScript>();
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(strongLegs);
+            UpgradeBus.instance.IndividualUpgrades.Add("Strong Legs", cfg.STRONG_LEGS_INDIVIDUAL);
             if(cfg.STRONG_LEGS_ENABLED)
             {
-                CustomTerminalNode node = new CustomTerminalNode("Strong Legs", cfg.STRONG_LEGS_PRICE, $"Jump {cfg.JUMP_FORCE - 13} units higher.", strongLegs, 3);
+                string[] priceString = cfg.STRONG_LEGS_UPGRADE_PRICES.Split(',').ToArray();
+                int[] prices = new int[priceString.Length];
+
+                for (int i = 0; i < priceString.Length; i++)
+                {
+                    if (int.TryParse(priceString[i], out int price))
+                    {
+                        prices[i] = price;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"[LGU] Invalid upgrade price submitted: {prices[i]}");
+                        prices[i] = -1;
+                    }
+                }
+                if(prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
+                CustomTerminalNode node = new CustomTerminalNode("Strong Legs", cfg.STRONG_LEGS_PRICE, $"Jump {cfg.JUMP_FORCE - 13} units higher.", strongLegs, prices, prices.Length);
                 UpgradeBus.instance.terminalNodes.Add(node);
             }
 
@@ -185,6 +257,7 @@ namespace MoreShipUpgrades
             }
             else { desc = $"Broadcasted codes now disable map hazards for {cfg.DISARM_TIME} seconds."; }
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(destructiveCodes);
+            UpgradeBus.instance.IndividualUpgrades.Add("Malware Broadcaster", cfg.MALWARE_BROADCASTER_INDIVIDUAL);
             if(cfg.MALWARE_BROADCASTER_ENABLED)
             { 
                 CustomTerminalNode node = new CustomTerminalNode("Malware Broadcaster", cfg.MALWARE_BROADCASTER_PRICE, desc, destructiveCodes);
@@ -195,9 +268,26 @@ namespace MoreShipUpgrades
             GameObject lightFooted = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/lightFooted.prefab");
             lightFooted.AddComponent<lightFootedScript>();
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(lightFooted);
+            UpgradeBus.instance.IndividualUpgrades.Add("Light Footed", cfg.LIGHT_FOOTED_INDIVIDUAL);
             if(cfg.LIGHT_FOOTED_ENABLED)
             {
-                CustomTerminalNode node = new CustomTerminalNode("Light Footed", cfg.LIGHT_FOOTED_PRICE, $"Audible Noise Distance is reduced by {UpgradeBus.instance.cfg.NOISE_REDUCTION} units. \nApplies to both sprinting and walking.", lightFooted, 3);
+                string[] priceString = cfg.LIGHT_FOOTED_UPGRADE_PRICES.Split(',').ToArray();
+                int[] prices = new int[priceString.Length];
+
+                for (int i = 0; i < priceString.Length; i++)
+                {
+                    if (int.TryParse(priceString[i], out int price))
+                    {
+                        prices[i] = price;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"[LGU] Invalid upgrade price submitted: {prices[i]}");
+                        prices[i] = -1;
+                    }
+                }
+                if(prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
+                CustomTerminalNode node = new CustomTerminalNode("Light Footed", cfg.LIGHT_FOOTED_PRICE, $"Audible Noise Distance is reduced by {UpgradeBus.instance.cfg.NOISE_REDUCTION} units. \nApplies to both sprinting and walking.", lightFooted, prices, prices.Length);
                 UpgradeBus.instance.terminalNodes.Add(node);
             }
 
@@ -205,9 +295,33 @@ namespace MoreShipUpgrades
             GameObject nightVision = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/nightVision.prefab");
             nightVision.AddComponent<nightVisionScript>();
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(nightVision);
+            UpgradeBus.instance.IndividualUpgrades.Add("NV Headset Batteries", cfg.NIGHT_VISION_INDIVIDUAL);
             if(cfg.NIGHT_VISION_ENABLED) 
             { 
-                CustomTerminalNode node = new CustomTerminalNode("NV Headset Batteries", cfg.NIGHT_VISION_PRICE, $"Upgrades the Night Vision Headset in the vanilla `store`.  \nDrain speed is {cfg.NIGHT_VIS_DRAIN_SPEED}  \nRegen speed is {cfg.NIGHT_VIS_REGEN_SPEED}", nightVision, 3);
+                string[] priceString = cfg.NIGHT_VISION_UPGRADE_PRICES.Split(',').ToArray();
+                int[] prices = new int[priceString.Length];
+
+                for (int i = 0; i < priceString.Length; i++)
+                {
+                    if (int.TryParse(priceString[i], out int price))
+                    {
+                        prices[i] = price;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"[LGU] Invalid upgrade price submitted: {prices[i]}");
+                        prices[i] = -1;
+                    }
+                }
+                if(prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
+                CustomTerminalNode node = new CustomTerminalNode(
+                    "NV Headset Batteries",
+                    cfg.NIGHT_VISION_PRICE,
+                    $"Upgrades the Night Vision Headset in the vanilla `store`.  \nDrain speed is {cfg.NIGHT_VIS_DRAIN_SPEED}  \nRegen speed is {cfg.NIGHT_VIS_REGEN_SPEED}",
+                    nightVision,
+                    prices,
+                    prices.Length
+                    );
                 node.Unlocked = true;
                 UpgradeBus.instance.terminalNodes.Add(node);
             }
@@ -218,9 +332,26 @@ namespace MoreShipUpgrades
             UpgradeBus.instance.flashNoise = flashSFX;
             flash.AddComponent<terminalFlashScript>();
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(flash);
+            UpgradeBus.instance.IndividualUpgrades.Add("Discombobulator", cfg.DISCOMBOBULATOR_INDIVIDUAL);
             if(cfg.DISCOMBOBULATOR_ENABLED)
             {
-                CustomTerminalNode node = new CustomTerminalNode("Discombobulator", cfg.DISCOMBOBULATOR_PRICE, $"Stun enemies around your ship in a {cfg.DISCOMBOBULATOR_RADIUS} unit radius.", flash, 3);
+                string[] priceString = cfg.DISCO_UPGRADE_PRICES.Split(',').ToArray();
+                int[] prices = new int[priceString.Length];
+
+                for (int i = 0; i < priceString.Length; i++)
+                {
+                    if (int.TryParse(priceString[i], out int price))
+                    {
+                        prices[i] = price;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"[LGU] Invalid upgrade price submitted: {prices[i]}");
+                        prices[i] = -1;
+                    }
+                }
+                if(prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
+                CustomTerminalNode node = new CustomTerminalNode("Discombobulator", cfg.DISCOMBOBULATOR_PRICE, $"Stun enemies around your ship in a {cfg.DISCOMBOBULATOR_RADIUS} unit radius.", flash, prices, prices.Length);
                 UpgradeBus.instance.terminalNodes.Add(node);
             }
 
@@ -228,6 +359,7 @@ namespace MoreShipUpgrades
             GameObject strongScan = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/strongScanner.prefab");
             strongScan.AddComponent<strongerScannerScript>();
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(strongScan);
+            UpgradeBus.instance.IndividualUpgrades.Add("Better Scanner", cfg.BETTER_SCANNER_INDIVIDUAL);
             if(cfg.BETTER_SCANNER_ENABLED)
             {
                 string LOS = cfg.REQUIRE_LINE_OF_SIGHT ? "Does not remove" : "Removes";
@@ -241,9 +373,26 @@ namespace MoreShipUpgrades
             GameObject exoskel = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/exoskeleton.prefab");
             exoskel.AddComponent<exoskeletonScript>();
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(exoskel);
+            UpgradeBus.instance.IndividualUpgrades.Add("Back Muscles", cfg.BACK_MUSCLES_INDIVIDUAL);
             if(cfg.BACK_MUSCLES_ENABLED)
             {
-                CustomTerminalNode node = new CustomTerminalNode("Back Muscles", cfg.BACK_MUSCLES_PRICE, $"Carry weight becomes %{Mathf.Round((cfg.CARRY_WEIGHT_REDUCTION) * 100f)} of original", exoskel, 3);
+                string[] priceString = cfg.BACK_MUSCLES_UPGRADE_PRICES.Split(',').ToArray();
+                int[] prices = new int[priceString.Length];
+
+                for (int i = 0; i < priceString.Length; i++)
+                {
+                    if (int.TryParse(priceString[i], out int price))
+                    {
+                        prices[i] = price;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"[LGU] Invalid upgrade price submitted: {prices[i]}");
+                        prices[i] = -1;
+                    }
+                }
+                if(prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
+                CustomTerminalNode node = new CustomTerminalNode("Back Muscles", cfg.BACK_MUSCLES_PRICE, $"Carry weight becomes %{Mathf.Round((cfg.CARRY_WEIGHT_REDUCTION) * 100f)} of original", exoskel, prices, prices.Length);
                 UpgradeBus.instance.terminalNodes.Add(node);
             }
 
@@ -251,6 +400,7 @@ namespace MoreShipUpgrades
             GameObject pager = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/Pager.prefab");
             pager.AddComponent<pagerScript>();
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(pager);
+            UpgradeBus.instance.IndividualUpgrades.Add("Pager", cfg.PAGER_INDIVIDUAL);
             if (cfg.PAGER_ENABLED)
             {
                 CustomTerminalNode node = new CustomTerminalNode("Pager", cfg.PAGER_PRICE, "Type `page <message>` to send a message to each team members chat", pager);
@@ -261,13 +411,13 @@ namespace MoreShipUpgrades
             GameObject lockSmith = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/LockSmith.prefab");
             lockSmith.AddComponent<lockSmithScript>();
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(lockSmith);
+            UpgradeBus.instance.IndividualUpgrades.Add("Locksmith", cfg.LOCKSMITH_INDIVIDUAL);
             if (cfg.LOCKSMITH_ENABLED)
             {
                 CustomTerminalNode node = new CustomTerminalNode("Locksmith", cfg.LOCKSMITH_PRICE,"Allows you to pick door locks by completing a minigame.", lockSmith);
                 UpgradeBus.instance.terminalNodes.Add(node);
             }
 
-            UpgradeBus.instance.CreateDeepNodeCopy();
             harmony.PatchAll();
 
             mls.LogInfo("More Ship Upgrades has been patched");
