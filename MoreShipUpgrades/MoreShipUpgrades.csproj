@@ -11,6 +11,10 @@
 		<LangVersion>9.0</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
+    	<None Remove="Managers\InfoStrings.json" />
+    	<None Remove="Misc\InfoStrings.json" />
+  	</ItemGroup>
+	<ItemGroup>
 		<Reference Include="0Harmony">
 			<HintPath>{{BEPINEX_ASSEMBLY_PATH}}\0Harmony.dll</HintPath>
 			<Private>false</Private>
