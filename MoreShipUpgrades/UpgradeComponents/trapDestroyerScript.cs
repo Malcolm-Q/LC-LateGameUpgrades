@@ -1,12 +1,5 @@
-﻿using GameNetcodeStuff;
-using MoreShipUpgrades.Managers;
+﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -27,6 +20,11 @@ namespace MoreShipUpgrades.UpgradeComponents
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Malware Broadcaster is active!</color>";
         }
 
+        public override void Unwind()
+        {
+            UpgradeBus.instance.DestroyTraps = false;
+            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Malware Broadcaster has been disabled.</color>";
+        }
         public override void Register()
         {
             if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Malware Broadcaster")) { UpgradeBus.instance.UpgradeObjects.Add("Malware Broadcaster", gameObject); }

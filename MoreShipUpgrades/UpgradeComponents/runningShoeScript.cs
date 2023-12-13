@@ -1,14 +1,5 @@
-﻿using GameNetcodeStuff;
-using MoreShipUpgrades.Managers;
+﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Unity.Netcode;
-using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents
 {
@@ -24,15 +15,14 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             GameNetworkManager.Instance.localPlayerController.movementSpeed += UpgradeBus.instance.cfg.MOVEMENT_INCREMENT;
             UpgradeBus.instance.runningLevel++;
-            foreach( CustomTerminalNode node in UpgradeBus.instance.terminalNodes )
-            {
-                if(node.Name.ToLower() == "running shoes")
-                {
-                    node.Description = $"You can run {(UpgradeBus.instance.cfg.MOVEMENT_SPEED - 4.6f) + (UpgradeBus.instance.cfg.MOVEMENT_INCREMENT * UpgradeBus.instance.runningLevel)} units faster";
-                }
-            }
         }
 
+        public override void Unwind()
+        {
+            UpgradeBus.instance.runningShoes = false;
+            UpgradeBus.instance.runningLevel = 0;
+            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Running Shoes has been disabled.</color>";
+        }
         public override void Register()
         {
             if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Running Shoes")) { UpgradeBus.instance.UpgradeObjects.Add("Running Shoes", gameObject); }

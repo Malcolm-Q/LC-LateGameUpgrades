@@ -1,12 +1,6 @@
-﻿using GameNetcodeStuff;
-using MoreShipUpgrades.Managers;
+﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -36,15 +30,14 @@ namespace MoreShipUpgrades.UpgradeComponents
         public override void Increment()
         {
             UpgradeBus.instance.discoLevel++;
-            foreach( CustomTerminalNode node in UpgradeBus.instance.terminalNodes )
-            {
-                if(node.Name.ToLower() == "discombobulator")
-                {
-                    node.Description = $"Enemies are stunned for {UpgradeBus.instance.cfg.DISCOMBOBULATOR_STUN_DURATION + (UpgradeBus.instance.discoLevel * UpgradeBus.instance.cfg.DISCOMBOBULATOR_INCREMENT)} seconds.";
-                }
-            }
         }
 
+        public override void Unwind()
+        {
+            UpgradeBus.instance.terminalFlash = false;
+            UpgradeBus.instance.discoLevel = 0;
+            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Discombobulator has been disabled.</color>";
+        }
 
         [ServerRpc(RequireOwnership = false)]
         public void PlayAudioAndUpdateCooldownServerRpc()

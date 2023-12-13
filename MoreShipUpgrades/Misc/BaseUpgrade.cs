@@ -21,5 +21,10 @@ namespace MoreShipUpgrades.Misc
         {
 
         }
+
+        public virtual void Unwind()
+        {
+
+        }
     }
 }

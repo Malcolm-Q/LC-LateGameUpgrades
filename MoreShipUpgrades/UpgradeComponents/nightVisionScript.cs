@@ -1,16 +1,9 @@
-﻿using BepInEx.Configuration;
-using GameNetcodeStuff;
+﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -50,7 +43,6 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             if (client == null) { return; }
 
-            // Check if the configured key is pressed
             if (Keyboard.current[toggleKey].wasPressedThisFrame && !batteryExhaustion)
             {
                 UpgradeBus.instance.nightVisionActive = !UpgradeBus.instance.nightVisionActive;
@@ -136,7 +128,14 @@ namespace MoreShipUpgrades.UpgradeComponents
             AdjustNightVisionProperties();
             EnableOnClient(false);
         }
-
+        public override void Unwind()
+        {
+            UpgradeBus.instance.nightVision = false;
+            UpgradeBus.instance.nightVisionLevel = 0;
+            AdjustNightVisionProperties();
+            DisableOnClient();
+            HUDManager.Instance.chatText.text += "\n<color=#FF0000>NV Headset Batteries has been disabled.</color>";
+        }
         public void EnableOnClient(bool save = true)
         {
             if(client == null) { client = GameNetworkManager.Instance.localPlayerController; }

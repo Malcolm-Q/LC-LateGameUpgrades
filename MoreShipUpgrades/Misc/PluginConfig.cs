@@ -40,10 +40,12 @@ namespace MoreShipUpgrades.Misc
         public bool STRONG_LEGS_INDIVIDUAL { get; set; }
         public bool DISCOMBOBULATOR_INDIVIDUAL { get; set; }
         public bool MALWARE_BROADCASTER_INDIVIDUAL { get; set; }
-        public bool PAGER_INDIVIDUAL { get; set; }
+        public bool INTERN_INDIVIDUAL { get; set; }
         public bool LOCKSMITH_INDIVIDUAL { get; set; }
+        public bool PEEPER_ENABLED { get; set; }
 
         // prices
+        public int PEEPER_PRICE { get; set; }
         public int ADVANCED_TELE_PRICE { get; set; }
         public int WEAK_TELE_PRICE { get; set; }
         public int BEEKEEPER_PRICE { get; set; }
@@ -91,10 +93,9 @@ namespace MoreShipUpgrades.Misc
         public float NOISE_REDUCTION_INCREMENT { get; set; }
         public float JUMP_FORCE_INCREMENT { get; set; }
         public float DISCOMBOBULATOR_INCREMENT { get; set; }
-        public int PAGER_PRICE { get; set; }
+        public int INTERN_PRICE { get; set; }
         public int LOCKSMITH_PRICE { get; set; }
-        public bool PAGER_ENABLED { get; set; }
-        public float PAGER_COOLDOWN_DURATION { get; set; }
+        public bool INTERN_ENABLED { get; set; }
         public bool LOCKSMITH_ENABLED { get; set; }
         public string TOGGLE_NIGHT_VISION_KEY { get; set; }
         public float NIGHT_VIS_DRAIN_DECREASE_PERCENT { get; set; }
@@ -108,6 +109,7 @@ namespace MoreShipUpgrades.Misc
         public string RUNNING_SHOES_UPGRADE_PRICES { get; set; }
         public string STRONG_LEGS_UPGRADE_PRICES { get; set; }
         public string DISCO_UPGRADE_PRICES { get; set; }
+        public bool SHARED_UPGRADES { get; set; }
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -121,6 +123,9 @@ namespace MoreShipUpgrades.Misc
 
         public void InitBindings()
         {
+            SHARED_UPGRADES = ConfigEntry("Shared Upgrades", "Convert all upgrades to be shared.", false, "Set true if you want no individual upgrades.");
+
+
             ADVANCED_TELE_ENABLED = ConfigEntry("Advanced Portable Teleporter","Enable Advanced Portable Teleporter", true, "");
             ADVANCED_TELE_PRICE = ConfigEntry("Advanced Portable Teleporter","Price of Advanced Portable Teleporter", 1750, "");
             ADV_CHANCE_TO_BREAK = ConfigEntry("Advanced Portable Teleporter","Chance to break on use", 0.1f, "value should be 0.00 - 1.00");
@@ -216,14 +221,17 @@ namespace MoreShipUpgrades.Misc
             BACK_MUSCLES_UPGRADE_PRICES = ConfigEntry("Back Muscles","Price of each additional upgrade", "600,700,800", "");
             BACK_MUSCLES_INDIVIDUAL = ConfigEntry("Back Muscles","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
-            PAGER_ENABLED = ConfigEntry("Pager", "Enable pager upgrade", true, "Type `page <message>` to send a message to all clients chat.");
-            PAGER_PRICE = ConfigEntry("Pager", "Pager Price", 490, "Default price of pager upgrade.");
-            PAGER_COOLDOWN_DURATION = ConfigEntry("Pager", "Pager Cooldown Duration", 30f, "Total cooldown time for the pager in seconds.");
-            PAGER_INDIVIDUAL = ConfigEntry("Pager","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
+            INTERN_ENABLED = ConfigEntry("Interns", "Enable hiring of interns", true, "Pay x amount of credits to revive a player.");
+            INTERN_PRICE = ConfigEntry("Interns", "Intern Price", 1000, "Default price to hire an intern.");
+            INTERN_INDIVIDUAL = ConfigEntry("Interns","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
             LOCKSMITH_ENABLED = ConfigEntry("Locksmith", "Enable Locksmith upgrade", true, "Allows you to pick locked doors by completing a minigame.");
             LOCKSMITH_PRICE = ConfigEntry("Locksmith", "Locksmith Price", 740, "Default price of Locksmith upgrade.");
             LOCKSMITH_INDIVIDUAL = ConfigEntry("Locksmith","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
+
+
+            PEEPER_ENABLED = ConfigEntry("Peeper", "Enable Peeper item", true, "An item that will stare at coilheads for you.");
+            PEEPER_PRICE = ConfigEntry("Peeper", "Peeper Price", 500, "Default price to purchase a Peeper.");
         }
 
     }

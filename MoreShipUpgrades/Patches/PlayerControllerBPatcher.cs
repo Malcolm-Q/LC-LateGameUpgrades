@@ -17,7 +17,7 @@ namespace MoreShipUpgrades.Patches
             if (!__instance.IsOwner) { return; }
             else if (__instance.isPlayerDead) { return; }
             else if (!__instance.AllowPlayerDeath()) { return; }
-            if(UpgradeBus.instance.nightVision) { UpgradeBus.instance.UpgradeObjects["Night Vision"].GetComponent<nightVisionScript>().DisableOnClient(); }
+            if(UpgradeBus.instance.nightVision) { UpgradeBus.instance.UpgradeObjects["NV Headset Batteries"].GetComponent<nightVisionScript>().DisableOnClient(); }
         }
 
 

@@ -1,9 +1,7 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -47,7 +45,7 @@ namespace MoreShipUpgrades.Managers
         public trapDestroyerScript trapHandler = null;
         public terminalFlashScript flashScript = null;
         public lockSmithScript lockScript = null;
-        public pagerScript pageScript = null;
+        public defibScript internScript = null;
 
         public Color nightVisColor;
         public AudioClip flashNoise;
@@ -61,6 +59,9 @@ namespace MoreShipUpgrades.Managers
         public Dictionary<ulong,float> beePercs = new Dictionary<ulong,float>();
 
         public Dictionary<string,bool> IndividualUpgrades = new Dictionary<string,bool>();
+        public string[] internNames, internInterests;
+
+        public List<coilHeadItem> coilHeadItems = new List<coilHeadItem>();
 
         void Awake()
         {
@@ -75,9 +76,10 @@ namespace MoreShipUpgrades.Managers
             modStoreInterface.clearPreviousText = true;
             foreach (CustomTerminalNode terminalNode in terminalNodes)
             {
-                if (!terminalNode.Unlocked) { modStoreInterface.displayText += $"\n{terminalNode.Name} // {terminalNode.UnlockPrice}  "; }
+                string saleStatus = terminalNode.salePerc == 1f ? "" : "SALE";
+                if (!terminalNode.Unlocked) { modStoreInterface.displayText += $"\n{terminalNode.Name} // {(int)(terminalNode.UnlockPrice * terminalNode.salePerc)}  // {saleStatus}  "; }
                 else if (terminalNode.MaxUpgrade == 0) { modStoreInterface.displayText += $"\n{terminalNode.Name} // UNLOCKED  "; }
-                else if (terminalNode.MaxUpgrade > terminalNode.CurrentUpgrade) { modStoreInterface.displayText += $"\n{terminalNode.Name} // {terminalNode.Prices[terminalNode.CurrentUpgrade]} // LVL {terminalNode.CurrentUpgrade + 1}"; }
+                else if (terminalNode.MaxUpgrade > terminalNode.CurrentUpgrade) { modStoreInterface.displayText += $"\n{terminalNode.Name} // {(int)(terminalNode.Prices[terminalNode.CurrentUpgrade]*terminalNode.salePerc)} // LVL {terminalNode.CurrentUpgrade + 1} // {saleStatus}  "; }
                 else { modStoreInterface.displayText += $"\n{terminalNode.Name} // MAX LVL"; }
             }
             if (modStoreInterface.displayText == "")
@@ -129,6 +131,21 @@ namespace MoreShipUpgrades.Managers
                 player.movementSpeed = 4.6f;
                 player.sprintTime = 11;
                 player.jumpForce = 13;
+            }
+        }
+
+        internal void GenerateSales()
+        {
+            foreach(CustomTerminalNode node in terminalNodes)
+            {
+                if(Random.value > 0.85f)
+                {
+                    node.salePerc = Random.Range(0.65f, 0.95f);
+                }
+                else
+                {
+                    node.salePerc = 1f;
+                }
             }
         }
     }

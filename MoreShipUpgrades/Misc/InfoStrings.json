@@ -1,0 +1,18 @@
+{
+    "Portable Tele": "A button that when pressed teleports you and your loot back to the ship. Must have Ship Teleporter unlocked!!!\n\nHas a {0}% chance to self destruct on use.\n",
+    "Advanced Portable Tele": "A button that when pressed teleports you and your loot back to the ship. Must have Ship Teleporter unlocked!!!\n\nHas a {0}% chance to self destruct on use.\n",
+    "Night Vision": "Grants night vision, pick up and left click to equip. This will grant night vision for {0} players and will {1} lost on death.\n\nBattery drain speed: {2}/s\nBattery regen speed: {3}/s\n\nType `info nv headset batteries` for info on upgrading headset.\n",
+    "Beekeeper" : "LVL {0} - ${1}: Circuit bees do {2}% of their base damage.\n",
+    "Bigger Lungs" : "LVL {0} - ${1}: Stamina Time is {2} units longer\n",
+    "Running Shoes" : "LVL {0} - ${1}: You can run {2} units faster\n",
+    "Strong Legs" : "LVL {0} - ${1}: Jump {2} units higher.\n",
+    "Light Footed": "LVL {0} - ${1}: Audible Noise Distance is reduced by {2} units. \nApplies to both sprinting and walking.\n",
+    "NV Headset Batteries" : "LVL {0} - ${1}: Drain speed is {2} // Regen speed is {3}\n",
+    "Discombobulator" : "LVL {0} - ${1}: Stun enemies around your ship in a {2} unit radius.\n",
+    "Back Muscles" : "LVL {0} - ${1}: Carry weight becomes {2}% of original.\n",
+    "Interns" : "Switch the monitor to target a dead player and enter `intern` into the terminal. This will cost {0} and will replace (revive) the dead player with an intern.\n",
+    "Locksmith" : "Run into locked doors to initiate a lockpicking minigame.",
+    "generalInfo" : "Late Game Upgrades\n\nType `lategame store` or `lgu` to view upgrades.\nMost of the mod is configurable via the config file `Bepinex/config/com.malco.lethalcompany.moreshipupgrades`\nUPGRADES ARE APPLIED ONLY TO THE CLIENT THAT PURCHASED THEM BY DEFAULT.\nUse the info command to get info about an item/upgrade.\nYou must type the exact name of the upgrade when purchasing. Ex: `beekeeper` not `buy beekeeper`.\nTo reset your upgrades type `reset lgu`.\nTo copy another clients upgrades type `load lgu steam_name`.\nIn the case of credit desync or upgrade loss, type `forceCredits 123`. To send the rpc to sync credits type `syncCredits`.\nType `unload upgrade_name` to remove that upgrades effects.\n\nHave fun - malco",
+    "InternNames" : "GERRY,GORD,JESSICA,EMMA,MALCOLM,KEVIN,BRIDGETTE,SAGE,JEREMY ELBERTSON,KODY,GOOBER,GOR,THE MALIGNANT,GABEN,ALF,DEWBERRY,STACY,STACY'S MOM,NAPOLEON,ROBIN",
+    "InternInterests" : "LAWNMOWERS,TRAINS,HARMONIZING WITH THE BOYS,WANTING TO FEEL ALIVE AND LIKE EVERY MOVE THEY MAKE IN THEIR LIFE ISN'T PREDICTABLE AND UNORIGINAL,EMOTIONAL WARMTH,SPREADING MISINFORMATION,COMMITTING WAR CRIMES,DISTRACTING THEMSELVES FROM THE OVERWHELMING FEELING OF EVERYTHING IN THEIR LIFE FALLING APART BY DOING SILLY LITTLE TASKS,HAMBURGER,PIZZA BAGELS,USING THEIR CROW LIKE BRAIN TO FIND AND RETRIEVE SHINY OBJECTS,DANCING; DO NOT LAUGH,'WITEWALLY HITTING DA GWIDDY ND JUST BEIN A WIZZLER IN OHIO'"
+}

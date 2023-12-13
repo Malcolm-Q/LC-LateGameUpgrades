@@ -1,13 +1,6 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents
@@ -27,19 +20,10 @@ namespace MoreShipUpgrades.UpgradeComponents
             UpgradeBus.instance.lungLevel++;
             players = GameObject.FindObjectsOfType<PlayerControllerB>();
             GameNetworkManager.Instance.localPlayerController.sprintTime += UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT;  //17
-            foreach( CustomTerminalNode node in UpgradeBus.instance.terminalNodes )
-            {
-                if(node.Name.ToLower() == "bigger lungs")
-                {
-                    node.Description = $"Stamina Time is {(UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE - 11) + (UpgradeBus.instance.lungLevel * UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT)} units longer";
-                }
-            }
-
         }
 
         public override void load()
         {
-            players = GameObject.FindObjectsOfType<PlayerControllerB>();
             GameNetworkManager.Instance.localPlayerController.sprintTime = UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE; //17
             UpgradeBus.instance.biggerLungs = true;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Bigger Lungs is active!</color>";
@@ -51,6 +35,13 @@ namespace MoreShipUpgrades.UpgradeComponents
             }
 
             GameNetworkManager.Instance.localPlayerController.sprintTime += amountToIncrement;
+        }
+
+        public override void Unwind()
+        {
+            UpgradeBus.instance.biggerLungs = false;
+            GameNetworkManager.Instance.localPlayerController.sprintTime = 11f;
+            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Bigger Lungs has been disabled.</color>";
         }
 
         public override void Register()

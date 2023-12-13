@@ -1,6 +1,5 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -78,7 +77,11 @@ namespace MoreShipUpgrades.UpgradeComponents
             RandomizeListOrder(order);
             StartCoroutine(CommunicateOrder(order));
         }
-
+        public override void Unwind()
+        {
+            UpgradeBus.instance.lockSmith = false;
+            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Locksmith has been disabled.</color>";
+        }
         public void StrikePin(int i)
         {
             if (!canPick) { return; }

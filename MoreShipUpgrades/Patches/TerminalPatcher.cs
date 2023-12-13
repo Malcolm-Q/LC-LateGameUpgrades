@@ -1,14 +1,10 @@
-﻿using HarmonyLib;
+﻿using GameNetcodeStuff;
+using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using Newtonsoft.Json;
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Patches
@@ -99,43 +95,6 @@ namespace MoreShipUpgrades.Patches
                     __result = node;
                 }
             }
-            else if (text.Split()[0].ToLower() == "page")
-            {
-                string[] splits = text.Split();
-                if (UpgradeBus.instance.pager)
-                {
-                    if (splits.Length == 1)
-                    {
-                        TerminalNode node = new TerminalNode();
-                        node.displayText = "You have to enter a message to broadcast\nEX: `page get back to the ship!`";
-                        node.clearPreviousText = true;
-                        __result = node;
-                    }
-                    else
-                    {
-                        string msg = string.Join(" ", splits.Skip(1));
-                        TerminalNode node = new TerminalNode();
-                        node.clearPreviousText = true;
-                        if(UpgradeBus.instance.pageScript.isOnCooldown)
-                        {
-                            node.displayText = $"Pager is on cooldown for {UpgradeBus.instance.pageScript.remainingCooldownTime} seconds!";
-                        }
-                        else
-                        {
-                            UpgradeBus.instance.pageScript.ReqBroadcastChatServerRpc(msg);
-                            node.displayText = $"Broadcasted message: '{msg}'\n\nPager is now on cooldown for {UpgradeBus.instance.pageScript.cooldownDuration}";
-                        }
-                        __result = node;
-                    }
-                }
-                else
-                {
-                    TerminalNode node = new TerminalNode();
-                    node.displayText = "You don't have access to this command.\nPurchase the pager from lategame store.";
-                    node.clearPreviousText = true;
-                    __result = node;
-                }
-            }
             else if (text.ToLower() == "lategame")
             {
                 TerminalNode node = new TerminalNode();
@@ -167,14 +126,6 @@ namespace MoreShipUpgrades.Patches
                     LGUStore.instance.UpdateLGUSaveServerRpc(id, JsonConvert.SerializeObject(saveInfo));
                 }
             }
-            else if (text.ToLower() == "load lgu")
-            {
-                LGUStore.instance.UpdateUpgradeBus();
-                TerminalNode node = new TerminalNode();
-                node.clearPreviousText = true;
-                node.displayText = "Reapplied upgrade effects to this client. Only run this once.";
-                __result = node;
-            }
             else if (text.Split()[0].ToLower() == "forcecredits")
             {
                 TerminalNode node = new TerminalNode();
@@ -198,6 +149,60 @@ namespace MoreShipUpgrades.Patches
                 __result = node;
                 LGUStore.instance.SyncCreditsServerRpc(__instance.groupCredits);
             }
+            else if (text.ToLower() == "intern")
+            {
+                TerminalNode node = new TerminalNode();
+                node.clearPreviousText = true;
+
+                if(__instance.groupCredits < UpgradeBus.instance.cfg.INTERN_PRICE)
+                {
+                    node.displayText = $"Interns cost {UpgradeBus.instance.cfg.INTERN_PRICE} credits and you have {__instance.groupCredits} credits.\n";
+                    __result = node;
+                    return;
+                }
+                PlayerControllerB player = StartOfRound.Instance.mapScreen.targetedPlayer;
+                if(!player.isPlayerDead)
+                {
+                    node.displayText = $"{player.name} is still alive, they can't be replaced with an intern.\n\n";
+                    __result = node;
+                    return;
+                }
+                __instance.groupCredits -= UpgradeBus.instance.cfg.INTERN_PRICE;
+                LGUStore.instance.SyncCreditsServerRpc( __instance.groupCredits );
+                UpgradeBus.instance.internScript.ReviveTargetedPlayerServerRpc();
+                string name = UpgradeBus.instance.internNames[UnityEngine.Random.Range(0, UpgradeBus.instance.internNames.Length)];
+                string interest = UpgradeBus.instance.internInterests[UnityEngine.Random.Range(0, UpgradeBus.instance.internInterests.Length)];
+                node.displayText = $"{player.name} has been replaced with:\n\nNAME: {name}\nAGE: {UnityEngine.Random.Range(19,76)}\nIQ: {UnityEngine.Random.Range(2,160)}\nINTERESTS: {interest}\n\n{name} HAS BEEN TELEPORTED INSIDE THE FACILITY, PLEASE ACQUAINTANCE YOURSELF ACCORDINGLY";
+                __result = node;
+            }
+            else if (text.Split()[0].ToLower() == "load" && text.Split()[1].ToLower() == "lgu")
+            {
+                TerminalNode node = new TerminalNode();
+                node.clearPreviousText = true;
+                if(text.ToLower() == "load lgu")
+                {
+                    node.displayText = "Enter the name of the user whos upgrades/save you want to copy. Ex: `load lgu steve`\n";
+                    __result = node;
+                    return;
+                }
+                PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
+                List<string> playerNames = new List<string>();
+                foreach(PlayerControllerB player in players)
+                {
+                    playerNames.Add(player.name);
+                    if(player.name.ToLower() == text.Split()[2].ToLower())
+                    {
+                        node.displayText = $"Syncing with {player.name}\nThis should take 5 seconds\nPulling data...\n";
+                        LGUStore.instance.ShareSaveServerRpc();
+                        __instance.StartCoroutine(WaitForSync(player.playerSteamId));
+                        __result = node;
+                        return;
+                    }
+                }
+                node.displayText = $"The name {text.Split()[2]} was not found. The following names were found:\n{string.Join(", ",playerNames)}\n";
+                __result = node;
+                return;
+            }
             else
             {
                 foreach(CustomTerminalNode customNode in UpgradeBus.instance.terminalNodes)
@@ -207,8 +212,8 @@ namespace MoreShipUpgrades.Patches
                         TerminalNode node = new TerminalNode();
                         node.clearPreviousText = true;
                         int price = 0;
-                        if (!customNode.Unlocked) { price = customNode.UnlockPrice; }
-                        else if(customNode.MaxUpgrade> customNode.CurrentUpgrade) { price = customNode.Prices[customNode.CurrentUpgrade]; }
+                        if (!customNode.Unlocked) { price = (int)(customNode.UnlockPrice * customNode.salePerc); }
+                        else if(customNode.MaxUpgrade> customNode.CurrentUpgrade) { price = (int)(customNode.Prices[customNode.CurrentUpgrade] * customNode.salePerc); }
                        
                         bool canAfford = __instance.groupCredits >= price;
 
@@ -245,10 +250,25 @@ namespace MoreShipUpgrades.Patches
                         node.clearPreviousText = true;
                         __result = node;
                     }
+                    else if (text.ToLower() == $"unload {customNode.Name.ToLower()}")
+                    {
+                        UpgradeBus.instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>().Unwind();
+                        LGUStore.instance.UpdateLGUSaveServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, JsonConvert.SerializeObject(new SaveInfo()));
+                        TerminalNode node = new TerminalNode();
+                        node.displayText = $"Unwinding {customNode.Name.ToLower()}";
+                        node.clearPreviousText = true;
+                        __result = node;
+                    }
                 }
             }
         }
 
+        private static IEnumerator WaitForSync(ulong id)
+        {
+            yield return new WaitForSeconds(3f);
+            LGUStore.instance.saveInfo = LGUStore.instance.lguSave.playerSaves[id];
+            LGUStore.instance.UpdateUpgradeBus(false);
+        }
         private static IEnumerator CountDownChat(float count)
         {
             HUDManager.Instance.chatText.text = "";

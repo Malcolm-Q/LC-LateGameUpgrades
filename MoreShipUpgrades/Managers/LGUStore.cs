@@ -191,20 +191,23 @@ namespace MoreShipUpgrades.Managers
             lguSave.playerSaves.Add(id,JsonConvert.DeserializeObject<SaveInfo>(json));
         }
 
-        public void UpdateUpgradeBus()
+        public void UpdateUpgradeBus(bool UseLocalSteamID = true)
         {
-            if(playerID == 0)
+            if(UseLocalSteamID)
             {
-                StartCoroutine(WaitForSteamID());
-                return;
+                if(playerID == 0)
+                {
+                    StartCoroutine(WaitForSteamID());
+                    return;
+                }
+                if(!lguSave.playerSaves.ContainsKey(playerID))
+                {
+                    saveInfo = new SaveInfo();
+                    RegisterNewPlayerServerRpc(playerID, JsonConvert.SerializeObject(saveInfo));
+                    return;
+                }
+                saveInfo = lguSave.playerSaves[playerID];
             }
-            if(!lguSave.playerSaves.ContainsKey(playerID))
-            {
-                saveInfo = new SaveInfo();
-                RegisterNewPlayerServerRpc(playerID, JsonConvert.SerializeObject(saveInfo));
-                return;
-            }
-            saveInfo = lguSave.playerSaves[playerID];
             UpgradeBus.instance.DestroyTraps = saveInfo.DestroyTraps;
             UpgradeBus.instance.softSteps = saveInfo.softSteps;
             UpgradeBus.instance.scannerUpgrade = saveInfo.scannerUpgrade;
@@ -262,6 +265,7 @@ namespace MoreShipUpgrades.Managers
             if (!UpgradeBus.instance.IndividualUpgrades[name])
             {
                 HandleUpgradeServerRpc(name, increment);
+                Debug.Log("Shared Upgrade");
                 return;
             }
             foreach (CustomTerminalNode node in UpgradeBus.instance.terminalNodes)

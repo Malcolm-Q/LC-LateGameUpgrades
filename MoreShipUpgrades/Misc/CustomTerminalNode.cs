@@ -16,6 +16,8 @@ namespace MoreShipUpgrades.Misc
         public int MaxUpgrade;
         public int CurrentUpgrade { get; set; }
 
+        public float salePerc = 1f;
+
 
         public CustomTerminalNode(string name, int unlockPrice, string description, GameObject prefab, int[] prices = null, int maxUpgrade = 0)
         {

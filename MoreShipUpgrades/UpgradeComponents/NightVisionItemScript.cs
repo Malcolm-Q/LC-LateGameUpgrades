@@ -1,16 +1,5 @@
-﻿using GameNetcodeStuff;
-using JetBrains.Annotations;
-using MoreShipUpgrades.Managers;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Unity.Netcode;
-using UnityEngine;
+﻿using MoreShipUpgrades.Managers;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.LowLevel;
 
 namespace MoreShipUpgrades.UpgradeComponents
 {

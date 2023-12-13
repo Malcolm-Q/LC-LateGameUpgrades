@@ -1,16 +1,10 @@
 ﻿using GameNetcodeStuff;
-using JetBrains.Annotations;
 using MoreShipUpgrades.Managers;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.LowLevel;
 
 namespace MoreShipUpgrades.UpgradeComponents
 {
@@ -23,7 +17,6 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             base.Start();
             audio = GetComponent<AudioSource>();
-            gameObject.GetComponent<NetworkObject>().Spawn();
         }
 
         public override void DiscardItem()
