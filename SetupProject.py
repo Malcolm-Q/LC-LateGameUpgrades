@@ -4,7 +4,7 @@ import sys
 # Reads the steam library VDF file to find where Lethal Company is installed
 libraryFolderDb = "C:\\Program Files (x86)\\Steam\\steamapps\\libraryfolders.vdf"
 
-vs_project_file = ".\\LateGameUpgrades\\LateGameUpgrades.csproj"
+vs_project_file = ".\\MoreShipUpgrades\\MoreShipUpgrades.csproj"
 
 lc_path = ""
 
