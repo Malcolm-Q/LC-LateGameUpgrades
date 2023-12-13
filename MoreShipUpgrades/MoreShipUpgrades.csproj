@@ -12,7 +12,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<Reference Include="0Harmony">
-			<HintPath>{{LC_PATH}}\0Harmony.dll</HintPath>
+			<HintPath>{{BEPINEX_ASSEMBLY_PATH}}\0Harmony.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="Assembly-CSharp">
