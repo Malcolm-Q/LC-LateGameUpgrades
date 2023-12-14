@@ -22,7 +22,8 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             if(!Active) return false;
             float num = Vector3.Distance(base.transform.position, pos);
-            return num < (float)range && !Physics.Linecast(transform.position, pos, StartOfRound.Instance.collidersRoomDefaultAndFoliage, QueryTriggerInteraction.Ignore);
+            bool result = num < (float)range && !Physics.Linecast(transform.position, pos, StartOfRound.Instance.collidersRoomDefaultAndFoliage, QueryTriggerInteraction.Ignore);
+            return result;
         }
     }
 }

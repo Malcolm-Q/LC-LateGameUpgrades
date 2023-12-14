@@ -147,6 +147,11 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public void DisableOnClient()
         {
+            UpgradeBus.instance.nightVisionActive = false;
+            client.nightVision.color = UpgradeBus.instance.nightVisColor;
+            client.nightVision.range = UpgradeBus.instance.nightVisRange;
+            client.nightVision.intensity = UpgradeBus.instance.nightVisIntensity;
+
             transform.GetChild(0).gameObject.SetActive(false);
             UpgradeBus.instance.nightVision = false;
             LGUStore.instance.UpdateLGUSaveServerRpc(client.playerSteamId, JsonConvert.SerializeObject(new SaveInfo()));

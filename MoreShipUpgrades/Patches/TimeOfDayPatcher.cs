@@ -8,9 +8,12 @@ namespace MoreShipUpgrades.Patches
     {
         [HarmonyPostfix]
         [HarmonyPatch("SyncNewProfitQuotaClientRpc")]
-        private static void GenerateNewSales(DeleteFileButton __instance)
+        private static void GenerateNewSales(TimeOfDay __instance)
         {
-            UpgradeBus.instance.GenerateSales();
+            if(__instance.IsHost || __instance.IsServer)
+            {
+                UpgradeBus.instance.GenerateSales();
+            }
         }
     }
 

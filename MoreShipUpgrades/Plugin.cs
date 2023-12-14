@@ -59,6 +59,8 @@ namespace MoreShipUpgrades
             GameObject busGO = new GameObject("UpgradeBus");
             busGO.AddComponent<UpgradeBus>();
 
+            UpgradeBus.instance.version = Metadata.VERSION;
+
             UpgradeBus.instance.internNames = infoJson["InternNames"].Split(",");
             UpgradeBus.instance.internInterests = infoJson["InternInterests"].Split(",");
 
@@ -187,6 +189,41 @@ namespace MoreShipUpgrades
                 UpgradeBus.instance.terminalNodes.Add(beeNode);
             }
 
+            //protein powder
+            GameObject prot = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/ProteinPowder.prefab");
+            prot.AddComponent<proteinPowderScript>();
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(prot);
+            shareStatus = cfg.SHARED_UPGRADES ? false : cfg.PROTEIN_INDIVIDUAL;
+            UpgradeBus.instance.IndividualUpgrades.Add("Protein Powder", shareStatus);
+            if(cfg.PROTEIN_ENABLED)
+            {
+                string[] priceString = cfg.PROTEIN_UPGRADE_PRICES.Split(',').ToArray();
+                int[] prices = new int[priceString.Length];
+
+                for (int i = 0; i < priceString.Length; i++)
+                {
+                    if (int.TryParse(priceString[i], out int price))
+                    {
+                        prices[i] = price;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"[LGU] Invalid upgrade price submitted: {prices[i]}");
+                        prices[i] = -1;
+                    }
+                }
+                if(prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
+
+                string infoString = string.Format(infoJson["Protein Powder"],1,cfg.PROTEIN_PRICE,cfg.PROTEIN_UNLOCK_FORCE);
+                for(int i = 0; i < prices.Length; i++)
+                {
+                    infoString += string.Format(infoJson["Protein Powder"], i + 2, prices[i],cfg.PROTEIN_UNLOCK_FORCE + 1 + (cfg.PROTEIN_INCREMENT *i));
+                }
+                CustomTerminalNode protNode = new CustomTerminalNode("Protein Powder", cfg.PROTEIN_PRICE, infoString, prot, prices, prices.Length);
+                UpgradeBus.instance.terminalNodes.Add(protNode);
+            }
+
+
             //lungs
             GameObject biggerLungs = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/BiggerLungs.prefab");
             biggerLungs.AddComponent<biggerLungScript>();
@@ -211,10 +248,10 @@ namespace MoreShipUpgrades
                     }
                 }
                 if(prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
-                string infoString = string.Format(infoJson["Bigger Lungs"],1,cfg.BIGGER_LUNGS_PRICE,cfg.SPRINT_TIME_INCREASE);
+                string infoString = string.Format(infoJson["Bigger Lungs"],1,cfg.BIGGER_LUNGS_PRICE,cfg.SPRINT_TIME_INCREASE-11f);
                 for(int i = 0; i < prices.Length; i++)
                 {
-                    infoString += string.Format(infoJson["Bigger Lungs"], i + 2, prices[i], cfg.SPRINT_TIME_INCREASE + ((i+1) * cfg.SPRINT_TIME_INCREMENT));
+                    infoString += string.Format(infoJson["Bigger Lungs"], i + 2, prices[i], (cfg.SPRINT_TIME_INCREASE + ((i+1) * cfg.SPRINT_TIME_INCREMENT))-11f);
                 }
 
                 CustomTerminalNode lungNode = new CustomTerminalNode("Bigger Lungs", cfg.BIGGER_LUNGS_PRICE, infoString, biggerLungs, prices, prices.Length);
@@ -245,10 +282,10 @@ namespace MoreShipUpgrades
                     }
                 }
                 if(prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
-                string infoString = string.Format(infoJson["Running Shoes"],1,cfg.RUNNING_SHOES_PRICE,cfg.MOVEMENT_SPEED);
+                string infoString = string.Format(infoJson["Running Shoes"],1,cfg.RUNNING_SHOES_PRICE,cfg.MOVEMENT_SPEED - 4.6f);
                 for(int i = 0; i < prices.Length; i++)
                 {
-                    infoString += string.Format(infoJson["Running Shoes"], i + 2, prices[i], cfg.MOVEMENT_SPEED + ((i+1) * cfg.MOVEMENT_INCREMENT));
+                    infoString += string.Format(infoJson["Running Shoes"], i + 2, prices[i], (cfg.MOVEMENT_SPEED + ((i+1) * cfg.MOVEMENT_INCREMENT)) - 4.6f);
                 }
                 CustomTerminalNode node = new CustomTerminalNode("Running Shoes", cfg.RUNNING_SHOES_PRICE, infoString, runningShoes, prices, prices.Length);
                 UpgradeBus.instance.terminalNodes.Add(node);
@@ -278,10 +315,10 @@ namespace MoreShipUpgrades
                     }
                 }
                 if(prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
-                string infoString = string.Format(infoJson["Strong Legs"],1,cfg.STRONG_LEGS_PRICE,cfg.JUMP_FORCE);
+                string infoString = string.Format(infoJson["Strong Legs"],1,cfg.STRONG_LEGS_PRICE,cfg.JUMP_FORCE-13f);
                 for(int i = 0; i < prices.Length; i++)
                 {
-                    infoString += string.Format(infoJson["Strong Legs"], i + 2, prices[i], cfg.JUMP_FORCE + ((i+1) * cfg.JUMP_FORCE_INCREMENT));
+                    infoString += string.Format(infoJson["Strong Legs"], i + 2, prices[i], (cfg.JUMP_FORCE + ((i+1) * cfg.JUMP_FORCE_INCREMENT))-13f);
                 }
                 CustomTerminalNode node = new CustomTerminalNode("Strong Legs", cfg.STRONG_LEGS_PRICE, infoString, strongLegs, prices, prices.Length);
                 UpgradeBus.instance.terminalNodes.Add(node);
@@ -418,7 +455,7 @@ namespace MoreShipUpgrades
                 string infoString = string.Format(infoJson["Discombobulator"],1,cfg.DISCOMBOBULATOR_PRICE,cfg.DISCOMBOBULATOR_RADIUS);
                 for(int i = 0; i < prices.Length; i++)
                 {
-                    infoString += string.Format(infoJson["Discombobulator"], i + 2, prices[i], cfg.DISCOMBOBULATOR_RADIUS + ((i+1) * cfg.DISCOMBOBULATOR_INCREMENT));
+                    infoString += string.Format(infoJson["Discombobulator"], i + 2, prices[i], cfg.DISCOMBOBULATOR_STUN_DURATION + ((i+1) * cfg.DISCOMBOBULATOR_INCREMENT));
                 }
                 CustomTerminalNode node = new CustomTerminalNode("Discombobulator", cfg.DISCOMBOBULATOR_PRICE, infoString, flash, prices, prices.Length);
                 UpgradeBus.instance.terminalNodes.Add(node);
@@ -435,6 +472,17 @@ namespace MoreShipUpgrades
                 string LOS = cfg.REQUIRE_LINE_OF_SIGHT ? "Does not remove" : "Removes";
                 string info = $"Increase distance nodes can be scanned by {cfg.NODE_DISTANCE_INCREASE} units.  \nIncrease distance Ship and Entrance can be scanned by {cfg.SHIP_AND_ENTRANCE_DISTANCE_INCREASE} units.\n{LOS} LOS requirement\n";
                 CustomTerminalNode node = new CustomTerminalNode("Better Scanner", cfg.BETTER_SCANNER_PRICE, info, strongScan);
+                UpgradeBus.instance.terminalNodes.Add(node);
+            }
+
+            // walkie
+            GameObject walkie = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/walkieUpgrade.prefab");
+            walkie.AddComponent<walkieScript>();
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(walkie);
+            UpgradeBus.instance.IndividualUpgrades.Add("Walkie GPS", true);
+            if(cfg.WALKIE_ENABLED)
+            {
+                CustomTerminalNode node = new CustomTerminalNode("Walkie GPS", cfg.WALKIE_PRICE, "Displays your location and time when holding a walkie talkie.\nEspecially useful for fog.", walkie);
                 UpgradeBus.instance.terminalNodes.Add(node);
             }
 
@@ -494,6 +542,8 @@ namespace MoreShipUpgrades
                 CustomTerminalNode node = new CustomTerminalNode("Locksmith", cfg.LOCKSMITH_PRICE,"Allows you to pick door locks by completing a minigame.", lockSmith);
                 UpgradeBus.instance.terminalNodes.Add(node);
             }
+
+            UpgradeBus.instance.GenerateSales();
 
             harmony.PatchAll();
 

@@ -28,9 +28,10 @@ namespace MoreShipUpgrades.Managers
         public bool runningShoes = false;
         public bool lockSmith = false;
         public bool biggerLungs = false;
-        public bool pager = false;
+        public bool proteinPowder = false;
 
         public int lungLevel = 0;
+        public int proteinLevel = 0;
         public int beeLevel = 0;
         public int backLevel = 0;
         public int runningLevel = 0;
@@ -46,6 +47,7 @@ namespace MoreShipUpgrades.Managers
         public terminalFlashScript flashScript = null;
         public lockSmithScript lockScript = null;
         public defibScript internScript = null;
+        public walkieScript walkieHandler = null;
 
         public Color nightVisColor;
         public AudioClip flashNoise;
@@ -57,11 +59,15 @@ namespace MoreShipUpgrades.Managers
         public Dictionary<string, GameObject> UpgradeObjects = new Dictionary<string, GameObject>();
 
         public Dictionary<ulong,float> beePercs = new Dictionary<ulong,float>();
+        public Dictionary<ulong,int> forceMults = new Dictionary<ulong,int>();
 
         public Dictionary<string,bool> IndividualUpgrades = new Dictionary<string,bool>();
         public string[] internNames, internInterests;
 
         public List<coilHeadItem> coilHeadItems = new List<coilHeadItem>();
+        internal bool walkies;
+        internal bool walkieUIActive;
+        internal string version;
 
         void Awake()
         {
@@ -76,10 +82,10 @@ namespace MoreShipUpgrades.Managers
             modStoreInterface.clearPreviousText = true;
             foreach (CustomTerminalNode terminalNode in terminalNodes)
             {
-                string saleStatus = terminalNode.salePerc == 1f ? "" : "SALE";
-                if (!terminalNode.Unlocked) { modStoreInterface.displayText += $"\n{terminalNode.Name} // {(int)(terminalNode.UnlockPrice * terminalNode.salePerc)}  // {saleStatus}  "; }
+                string saleStatus = terminalNode.salePerc < 1f ? $"- {((1-terminalNode.salePerc)*100).ToString("F0")}% OFF!" : "";
+                if (!terminalNode.Unlocked) { modStoreInterface.displayText += $"\n{terminalNode.Name} // ${(int)(terminalNode.UnlockPrice * terminalNode.salePerc)} {saleStatus}  "; }
                 else if (terminalNode.MaxUpgrade == 0) { modStoreInterface.displayText += $"\n{terminalNode.Name} // UNLOCKED  "; }
-                else if (terminalNode.MaxUpgrade > terminalNode.CurrentUpgrade) { modStoreInterface.displayText += $"\n{terminalNode.Name} // {(int)(terminalNode.Prices[terminalNode.CurrentUpgrade]*terminalNode.salePerc)} // LVL {terminalNode.CurrentUpgrade + 1} // {saleStatus}  "; }
+                else if (terminalNode.MaxUpgrade > terminalNode.CurrentUpgrade) { modStoreInterface.displayText += $"\n{terminalNode.Name} // ${(int)(terminalNode.Prices[terminalNode.CurrentUpgrade]*terminalNode.salePerc)} // LVL {terminalNode.CurrentUpgrade + 1} {saleStatus}  "; }
                 else { modStoreInterface.displayText += $"\n{terminalNode.Name} // MAX LVL"; }
             }
             if (modStoreInterface.displayText == "")
@@ -96,6 +102,7 @@ namespace MoreShipUpgrades.Managers
             softSteps = false;
             scannerUpgrade = false;
             nightVision = false;
+            walkies = false;
             nightVisionActive = false;
             exoskeleton = false;
             TPButtonPressed = false;
@@ -103,7 +110,6 @@ namespace MoreShipUpgrades.Managers
             terminalFlash = false;
             strongLegs = false;
             runningShoes = false;
-            pager = false;
             lockSmith = false;
             biggerLungs = false;
             lungLevel = 0;
@@ -138,9 +144,10 @@ namespace MoreShipUpgrades.Managers
         {
             foreach(CustomTerminalNode node in terminalNodes)
             {
-                if(Random.value > 0.85f)
+                if(node.Name == "Interns") { continue; }
+                if(Random.value > UpgradeBus.instance.cfg.SALE_PERC)
                 {
-                    node.salePerc = Random.Range(0.65f, 0.95f);
+                    node.salePerc = Random.Range(0.60f, 0.90f);
                 }
                 else
                 {

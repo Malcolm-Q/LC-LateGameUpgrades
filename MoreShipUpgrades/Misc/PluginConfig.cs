@@ -16,6 +16,7 @@ namespace MoreShipUpgrades.Misc
         public bool ADVANCED_TELE_ENABLED { get; set; }
         public bool WEAK_TELE_ENABLED { get; set; }
         public bool BEEKEEPER_ENABLED { get; set; }
+        public bool PROTEIN_ENABLED { get; set; }
         public bool BIGGER_LUNGS_ENABLED { get; set; }
         public bool BACK_MUSCLES_ENABLED { get; set; }
         public bool LIGHT_FOOTED_ENABLED { get; set; }
@@ -30,6 +31,7 @@ namespace MoreShipUpgrades.Misc
         public bool ADVANCED_TELE_INDIVIDUAL { get; set; }
         public bool WEAK_TELE_INDIVIDUAL { get; set; }
         public bool BEEKEEPER_INDIVIDUAL { get; set; }
+        public bool PROTEIN_INDIVIDUAL { get; set; }
         public bool BIGGER_LUNGS_INDIVIDUAL { get; set; }
         public bool BACK_MUSCLES_INDIVIDUAL { get; set; }
         public bool LIGHT_FOOTED_INDIVIDUAL { get; set; }
@@ -49,6 +51,7 @@ namespace MoreShipUpgrades.Misc
         public int ADVANCED_TELE_PRICE { get; set; }
         public int WEAK_TELE_PRICE { get; set; }
         public int BEEKEEPER_PRICE { get; set; }
+        public int PROTEIN_PRICE { get; set; }
         public int BIGGER_LUNGS_PRICE { get; set; }
         public int BACK_MUSCLES_PRICE { get; set; }
         public int LIGHT_FOOTED_PRICE { get; set; }
@@ -58,8 +61,10 @@ namespace MoreShipUpgrades.Misc
         public int STRONG_LEGS_PRICE { get; set; }
         public int DISCOMBOBULATOR_PRICE { get; set; }
         public int MALWARE_BROADCASTER_PRICE { get; set; }
+        public int WALKIE_PRICE { get; set; }
 
         // attributes
+        public int PROTEIN_INCREMENT { get; set; }
         public bool KEEP_ITEMS_ON_TELE { get; set; }
         public float SPRINT_TIME_INCREASE { get; set; }
         public float MOVEMENT_SPEED { get; set; }
@@ -100,6 +105,7 @@ namespace MoreShipUpgrades.Misc
         public string TOGGLE_NIGHT_VISION_KEY { get; set; }
         public float NIGHT_VIS_DRAIN_DECREASE_PERCENT { get; set; }
         public float NIGHT_VIS_REGEN_INCREASE_PERCENT { get; set; }
+        public float SALE_PERC { get; set; }
         public bool LOSE_NIGHT_VIS_ON_DEATH { get; set; }
         public string BEEKEEPER_UPGRADE_PRICES { get; set; }
         public string BACK_MUSCLES_UPGRADE_PRICES { get; set; }
@@ -109,7 +115,11 @@ namespace MoreShipUpgrades.Misc
         public string RUNNING_SHOES_UPGRADE_PRICES { get; set; }
         public string STRONG_LEGS_UPGRADE_PRICES { get; set; }
         public string DISCO_UPGRADE_PRICES { get; set; }
+        public string PROTEIN_UPGRADE_PRICES { get; set; }
         public bool SHARED_UPGRADES { get; set; }
+        public bool WALKIE_ENABLED { get; set; }
+        public bool WALKIE_INDIVIDUAL { get; set; }
+        public int PROTEIN_UNLOCK_FORCE {  get; set; }
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -123,8 +133,8 @@ namespace MoreShipUpgrades.Misc
 
         public void InitBindings()
         {
-            SHARED_UPGRADES = ConfigEntry("Shared Upgrades", "Convert all upgrades to be shared.", false, "Set true if you want no individual upgrades.");
-
+            SHARED_UPGRADES = ConfigEntry("Misc", "Convert all upgrades to be shared.", false, "Set true if you want no individual upgrades.");
+            SALE_PERC = ConfigEntry("Misc", "Chance of upgrades going on sale", 0.85f, "0.85 = 15% chance of an upgrade going on sale.");
 
             ADVANCED_TELE_ENABLED = ConfigEntry("Advanced Portable Teleporter","Enable Advanced Portable Teleporter", true, "");
             ADVANCED_TELE_PRICE = ConfigEntry("Advanced Portable Teleporter","Price of Advanced Portable Teleporter", 1750, "");
@@ -138,13 +148,20 @@ namespace MoreShipUpgrades.Misc
 
             KEEP_ITEMS_ON_TELE = ConfigEntry("Portable Teleporter","Keep Items When Using Portable Teleporters", true, "If set to false you will drop your items like when using the vanilla TP.");
 
-            BEEKEEPER_ENABLED = ConfigEntry("Beekeeper","Enable Beekeeper Upgrade", true, "Take no damage from bees");
+            BEEKEEPER_ENABLED = ConfigEntry("Beekeeper","Enable Beekeeper Upgrade", true, "Take less damage from bees");
             BEEKEEPER_PRICE = ConfigEntry("Beekeeper","Price of Beekeeper Upgrade", 450, "");
             BEEKEEPER_DAMAGE_MULTIPLIER = ConfigEntry("Beekeeper","Multiplied to incoming damage (rounded to int)", 0.64f, "Incoming damage from bees is 10.");
             BEEKEEPER_UPGRADE_PRICES = ConfigEntry("Beekeeper","Price of each additional upgrade", "225,280,340", "");
             BEEKEEPER_INDIVIDUAL = ConfigEntry("Beekeeper","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
             BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT = ConfigEntry("Beekeeper","Additional % Reduced per level", 0.15f, "Every time beekeeper is upgraded this value will be subtracted to the base multiplier above.");
+
+            PROTEIN_ENABLED = ConfigEntry("Protein Powder","Enable Protein Powder Upgrade", true, "Do more damage with shovels");
+            PROTEIN_PRICE = ConfigEntry("Protein Powder","Price of Protein Powder Upgrade", 500, "");
+            PROTEIN_UNLOCK_FORCE = ConfigEntry("Protein Powder", "Initial additional hit force", 1, "The value added to hit force on initial unlock.");
+            PROTEIN_INCREMENT = ConfigEntry("Protein Powder", "Additional hit force per level", 1, "Every time protein powder is upgraded this value will be added to the value above.");
+            PROTEIN_INDIVIDUAL = ConfigEntry("Protein Powder","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
+            PROTEIN_UPGRADE_PRICES = ConfigEntry("Protein Powder","Price of each additional upgrade", "700", "Value must be seperated by commas EX: '123,321,222'");
 
             BIGGER_LUNGS_ENABLED = ConfigEntry("Bigger Lungs","Enable Bigger Lungs Upgrade", true, "More Stamina");
             BIGGER_LUNGS_PRICE = ConfigEntry("Bigger Lungs","Price of Bigger Lungs Upgrade", 700, "");
@@ -229,9 +246,12 @@ namespace MoreShipUpgrades.Misc
             LOCKSMITH_PRICE = ConfigEntry("Locksmith", "Locksmith Price", 740, "Default price of Locksmith upgrade.");
             LOCKSMITH_INDIVIDUAL = ConfigEntry("Locksmith","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
-
             PEEPER_ENABLED = ConfigEntry("Peeper", "Enable Peeper item", true, "An item that will stare at coilheads for you.");
             PEEPER_PRICE = ConfigEntry("Peeper", "Peeper Price", 500, "Default price to purchase a Peeper.");
+
+            WALKIE_ENABLED = ConfigEntry("Walkie", "Enable the walkie talkie gps upgrade", true, "Holding a walkie talkie displays location.");
+            WALKIE_PRICE = ConfigEntry("Walkie", "Walkie GPS Price", 450, "Default price for upgrade.");
+            WALKIE_INDIVIDUAL = ConfigEntry("Walkie","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
         }
 
     }

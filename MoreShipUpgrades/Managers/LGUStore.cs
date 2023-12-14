@@ -5,7 +5,6 @@ using System.IO;
 using Unity.Netcode;
 using UnityEngine;
 using Newtonsoft.Json;
-using GameNetcodeStuff;
 using System.Collections;
 using MoreShipUpgrades.UpgradeComponents;
 
@@ -30,8 +29,8 @@ namespace MoreShipUpgrades.Managers
             {"Better Scanner", SaveInfo => SaveInfo.scannerUpgrade },
             {"Beekeeper", SaveInfo => SaveInfo.beekeeper },
             {"Back Muscles", SaveInfo => SaveInfo.exoskeleton },
-            {"Pager", SaveInfo => SaveInfo.pager },
             {"Locksmith", SaveInfo => SaveInfo.lockSmith },
+            {"Walkie GPS", SaveInfo => SaveInfo.walkies },
         };
 
         private static Dictionary<string, Func<SaveInfo, int>> levelConditions = new Dictionary<string, Func<SaveInfo, int>>
@@ -46,8 +45,8 @@ namespace MoreShipUpgrades.Managers
             { "Better Scanner", saveInfo => 0 },
             { "Beekeeper", saveInfo => saveInfo.beeLevel },
             { "Back Muscles", saveInfo => saveInfo.backLevel },
-            { "Pager", saveInfo => 0 },
-            { "Locksmith", saveInfo => 0 }
+            { "Locksmith", saveInfo => 0 },
+            { "Walkie GPS", saveInfo => 0 }
         };
 
         private void Start()
@@ -75,10 +74,18 @@ namespace MoreShipUpgrades.Managers
             {
                 ShareSaveServerRpc();
             }
-            if(!File.Exists(Path.Combine(Application.persistentDataPath,"hasSeenIntroLGU")))
+            string path = Path.Combine(Application.persistentDataPath, "IntroLGU");
+            if(File.Exists(path))
             {
-                Instantiate(UpgradeBus.instance.introScreen);
-                File.Create(Path.Combine(Application.persistentDataPath,"hasSeenIntroLGU"));
+                if(File.ReadAllText(path) != UpgradeBus.instance.version)
+                {
+                    Instantiate(UpgradeBus.instance.introScreen);
+                    File.WriteAllText(path, UpgradeBus.instance.version);
+                }    
+            }
+            else
+            {
+                File.WriteAllText(path, UpgradeBus.instance.version);
             }
         }
 
@@ -162,6 +169,26 @@ namespace MoreShipUpgrades.Managers
             }
         }
 
+        [ServerRpc(RequireOwnership =false)]
+        public void UpdateForceMultsServerRpc(ulong id, int lvl)
+        {
+            UpdateForceMultsClientRpc(id, lvl);
+        }
+
+        [ClientRpc]
+        private void UpdateForceMultsClientRpc(ulong id, int lvl)
+        {
+            if(UpgradeBus.instance.forceMults.ContainsKey(id))
+            {
+                UpgradeBus.instance.forceMults[id] = lvl;
+            }
+            else
+            {
+                UpgradeBus.instance.forceMults.Add(id, lvl);
+            }
+        }
+
+
         [ServerRpc(RequireOwnership = false)]
         public void DeleteUpgradesServerRpc()
         {
@@ -220,14 +247,17 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.strongLegs = saveInfo.strongLegs;
             UpgradeBus.instance.runningShoes = saveInfo.runningShoes;
             UpgradeBus.instance.biggerLungs = saveInfo.biggerLungs;
+            UpgradeBus.instance.proteinPowder = saveInfo.proteinPowder;
+
             UpgradeBus.instance.beeLevel = saveInfo.beeLevel;
+            UpgradeBus.instance.proteinLevel = saveInfo.proteinLevel;
             UpgradeBus.instance.lungLevel = saveInfo.lungLevel;
+            UpgradeBus.instance.walkies = saveInfo.walkies;
             UpgradeBus.instance.backLevel = saveInfo.backLevel;
             UpgradeBus.instance.runningLevel = saveInfo.runningLevel;
             UpgradeBus.instance.lightLevel = saveInfo.lightLevel;
             UpgradeBus.instance.discoLevel = saveInfo.discoLevel;
             UpgradeBus.instance.legLevel = saveInfo.legLevel;
-            UpgradeBus.instance.pager = saveInfo.pager;
             UpgradeBus.instance.nightVisionLevel = saveInfo.nightVisionLevel;
 
             StartCoroutine(WaitForUpgradeObject());
@@ -332,11 +362,14 @@ namespace MoreShipUpgrades.Managers
         public bool beekeeper = UpgradeBus.instance.beekeeper;
         public bool terminalFlash = UpgradeBus.instance.terminalFlash;
         public bool strongLegs = UpgradeBus.instance.strongLegs;
+        public bool proteinPowder = UpgradeBus.instance.proteinPowder;
         public bool runningShoes = UpgradeBus.instance.runningShoes;
         public bool biggerLungs = UpgradeBus.instance.biggerLungs;
         public bool lockSmith = UpgradeBus.instance.lockSmith;
-        public bool pager = UpgradeBus.instance.pager;
+        public bool walkies = UpgradeBus.instance.walkies;
+
         public int beeLevel = UpgradeBus.instance.beeLevel;
+        public int proteinLevel = UpgradeBus.instance.beeLevel;
         public int lungLevel = UpgradeBus.instance.lungLevel;
         public int backLevel = UpgradeBus.instance.backLevel;
         public int runningLevel = UpgradeBus.instance.runningLevel;

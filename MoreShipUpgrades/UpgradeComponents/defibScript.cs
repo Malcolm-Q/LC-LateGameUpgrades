@@ -60,9 +60,9 @@ namespace MoreShipUpgrades.UpgradeComponents
                 {
                     player.isPlayerDead = false;
                     player.isPlayerControlled = true;
-                    player.isInElevator = true;
-                    player.isInHangarShipRoom = true;
-                    player.isInsideFactory = false;
+                    player.isInElevator = false;
+                    player.isInHangarShipRoom = false;
+                    player.isInsideFactory = true;
                     player.wasInElevatorLastFrame = false;
                     StartOfRound.Instance.SetPlayerObjectExtrapolate(false);
                     player.setPositionOfDeadPlayer = false;
