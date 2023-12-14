@@ -93,7 +93,7 @@ namespace MoreShipUpgrades.UpgradeComponents
                         HUDManager.Instance.gasHelmetAnimator.SetBool("gasEmitting", false);
                         player.hasBegunSpectating = false;
                         HUDManager.Instance.RemoveSpectateUI();
-                        HUDManager.Instance.gameOverAnimator.SetTrigger("revive");
+                        //HUDManager.Instance.gameOverAnimator.SetTrigger("revive");
                         player.hinderedMultiplier = 1f;
                         player.isMovementHindered = 0;
                         player.sourcesCausingSinking = 0;

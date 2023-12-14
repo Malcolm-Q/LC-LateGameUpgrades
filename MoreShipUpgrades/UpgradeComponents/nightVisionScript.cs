@@ -12,7 +12,7 @@ namespace MoreShipUpgrades.UpgradeComponents
 {
     internal class nightVisionScript : BaseUpgrade
     {
-        private float nightBattery;
+        private float nightBattery, regen, drain;
         private Transform batteryBar;
         private PlayerControllerB client;
         private bool batteryExhaustion;
@@ -32,6 +32,8 @@ namespace MoreShipUpgrades.UpgradeComponents
             {
                 toggleKey = Key.LeftAlt;
             }
+            regen = UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_SPEED;
+            drain = UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_SPEED;
         }
 
         public override void Register()
@@ -68,7 +70,7 @@ namespace MoreShipUpgrades.UpgradeComponents
 
             if (UpgradeBus.instance.nightVisionActive)
             {
-                nightBattery -= Time.deltaTime * UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_SPEED; // 0.1f
+                nightBattery -= Time.deltaTime * drain; // 0.1f
                 nightBattery = Mathf.Clamp(nightBattery, 0f, 1f);
                 batteryBar.parent.gameObject.SetActive(true);
 
@@ -84,7 +86,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             }
             else if (!batteryExhaustion)
             {
-                nightBattery += Time.deltaTime * UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_SPEED; // 0.05f
+                nightBattery += Time.deltaTime * regen; // 0.05f
                 nightBattery = Mathf.Clamp(nightBattery, 0f, 1f);
 
                 if (nightBattery >= 1f)
@@ -163,8 +165,8 @@ namespace MoreShipUpgrades.UpgradeComponents
             float regenAdjustment = Mathf.Pow(1 + UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_INCREASE_PERCENT / 100f, UpgradeBus.instance.nightVisionLevel) * 0.01f;
             float drainAdjustment = Mathf.Pow(1 - UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_DECREASE_PERCENT / 100f, UpgradeBus.instance.nightVisionLevel) * 0.01f;
 
-            UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_SPEED += regenAdjustment;
-            UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_SPEED -= drainAdjustment;
+            regen = UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_SPEED + regenAdjustment;
+            drain = UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_SPEED - drainAdjustment;
         }
     }
 }

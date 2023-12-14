@@ -53,7 +53,6 @@ namespace MoreShipUpgrades
             string assetDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "shipupgrades");
             AssetBundle UpgradeAssets = AssetBundle.LoadFromFile(assetDir);
 
-            string infoStrings = GetJsonContent();
             Dictionary<string,string> infoJson = JsonConvert.DeserializeObject<Dictionary<string,string>>(UpgradeAssets.LoadAsset<TextAsset>("Assets/ShipUpgrades/InfoStrings.json").text);
 
             GameObject busGO = new GameObject("UpgradeBus");
@@ -73,6 +72,10 @@ namespace MoreShipUpgrades
             AudioClip itemBreak = UpgradeAssets.LoadAsset<AudioClip>("Assets/ShipUpgrades/break.mp3");
             AudioClip error = UpgradeAssets.LoadAsset<AudioClip>("Assets/ShipUpgrades/error.mp3");
             AudioClip buttonPressed = UpgradeAssets.LoadAsset<AudioClip>("Assets/ShipUpgrades/ButtonPress2.ogg");
+
+            //peeper sfx
+            AudioClip mineBeep = UpgradeAssets.LoadAsset<AudioClip>("Assets/ShipUPgrades/MineBeep.ogg");
+            AudioClip robot = UpgradeAssets.LoadAsset<AudioClip>("Assets/ShipUPgrades/robot.mp3");
 
             // intro screen
             UpgradeBus.instance.introScreen = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/IntroScreen.prefab");
@@ -142,9 +145,13 @@ namespace MoreShipUpgrades
             //coil head Item
             Item Peeper = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/coilHead.asset");
             Peeper.creditsWorth = cfg.PEEPER_PRICE;
+            Peeper.twoHanded = false;
+            Peeper.twoHandedAnimation = false;
             Peeper.spawnPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             coilHeadItem peepScript = Peeper.spawnPrefab.AddComponent<coilHeadItem>(); 
             peepScript.itemProperties = Peeper;
+            peepScript.mineBeep = mineBeep;
+            peepScript.robot = robot;
             peepScript.grabbable = true;
             peepScript.grabbableToEnemies=true;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(Peeper.spawnPrefab);
@@ -574,17 +581,6 @@ namespace MoreShipUpgrades
                     break;
                 }
 
-            }
-        }
-
-        private string GetJsonContent()
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = "MoreShipUpgrades.Misc.InfoStrings.json";
-
-            using (StreamReader reader = new StreamReader(assembly.GetManifestResourceStream(resourceName)))
-            {
-                return reader.ReadToEnd();
             }
         }
     }

@@ -12,7 +12,6 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Managers\InfoStrings.json" />
-    <None Remove="Misc\InfoStrings.json" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
@@ -73,11 +72,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Misc\InfoStrings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="cd C:\Users\malco\Downloads\NetcodePatcher-2.0.0&#xD;&#xA;NetcodePatcher.dll $(TargetDir) deps/" />

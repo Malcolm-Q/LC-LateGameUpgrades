@@ -85,6 +85,7 @@ namespace MoreShipUpgrades.Managers
             }
             else
             {
+                Instantiate(UpgradeBus.instance.introScreen);
                 File.WriteAllText(path, UpgradeBus.instance.version);
             }
         }

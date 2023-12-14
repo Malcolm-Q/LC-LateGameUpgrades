@@ -21,6 +21,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             UpgradeBus.instance.runningShoes = false;
             UpgradeBus.instance.runningLevel = 0;
+            GameNetworkManager.Instance.localPlayerController.movementSpeed = 4.6f;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Running Shoes has been disabled.</color>";
         }
         public override void Register()

@@ -56,11 +56,15 @@ namespace MoreShipUpgrades.Patches
 
         [HarmonyPrefix]
         [HarmonyPatch("DropAllHeldItems")]
-        private static bool DontDropItems()
+        private static bool DontDropItems(PlayerControllerB __instance)
         {
             if (UpgradeBus.instance.TPButtonPressed)
             {
                 UpgradeBus.instance.TPButtonPressed = false;
+                __instance.isSinking = false;
+                __instance.isUnderwater = false;
+                __instance.sinkingValue = 0;
+                __instance.statusEffectAudio.Stop();
                 return false;
             }
             return true;
