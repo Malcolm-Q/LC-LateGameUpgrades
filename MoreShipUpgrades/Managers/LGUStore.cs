@@ -31,6 +31,7 @@ namespace MoreShipUpgrades.Managers
             {"Back Muscles", SaveInfo => SaveInfo.exoskeleton },
             {"Locksmith", SaveInfo => SaveInfo.lockSmith },
             {"Walkie GPS", SaveInfo => SaveInfo.walkies },
+            {radarFlashScript.UPGRADE_NAME, SaveInfo => SaveInfo.radarFlash },
         };
 
         private static Dictionary<string, Func<SaveInfo, int>> levelConditions = new Dictionary<string, Func<SaveInfo, int>>
@@ -46,7 +47,8 @@ namespace MoreShipUpgrades.Managers
             { "Beekeeper", saveInfo => saveInfo.beeLevel },
             { "Back Muscles", saveInfo => saveInfo.backLevel },
             { "Locksmith", saveInfo => 0 },
-            { "Walkie GPS", saveInfo => 0 }
+            { "Walkie GPS", saveInfo => 0 },
+            {radarFlashScript.UPGRADE_NAME, SaveInfo => SaveInfo.radarFlashLevel },
         };
 
         private void Start()
@@ -245,6 +247,7 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.TPButtonPressed = saveInfo.TPButtonPressed;
             UpgradeBus.instance.beekeeper = saveInfo.beekeeper;
             UpgradeBus.instance.terminalFlash = saveInfo.terminalFlash;
+            UpgradeBus.instance.radarFlash = saveInfo.radarFlash;
             UpgradeBus.instance.strongLegs = saveInfo.strongLegs;
             UpgradeBus.instance.runningShoes = saveInfo.runningShoes;
             UpgradeBus.instance.biggerLungs = saveInfo.biggerLungs;
@@ -258,6 +261,7 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.runningLevel = saveInfo.runningLevel;
             UpgradeBus.instance.lightLevel = saveInfo.lightLevel;
             UpgradeBus.instance.discoLevel = saveInfo.discoLevel;
+            UpgradeBus.instance.radarFlashLevel = saveInfo.radarFlashLevel;
             UpgradeBus.instance.legLevel = saveInfo.legLevel;
             UpgradeBus.instance.nightVisionLevel = saveInfo.nightVisionLevel;
 
@@ -362,6 +366,7 @@ namespace MoreShipUpgrades.Managers
         public bool TPButtonPressed = UpgradeBus.instance.TPButtonPressed;
         public bool beekeeper = UpgradeBus.instance.beekeeper;
         public bool terminalFlash = UpgradeBus.instance.terminalFlash;
+        public bool radarFlash = UpgradeBus.instance.radarFlash;
         public bool strongLegs = UpgradeBus.instance.strongLegs;
         public bool proteinPowder = UpgradeBus.instance.proteinPowder;
         public bool runningShoes = UpgradeBus.instance.runningShoes;
@@ -370,12 +375,13 @@ namespace MoreShipUpgrades.Managers
         public bool walkies = UpgradeBus.instance.walkies;
 
         public int beeLevel = UpgradeBus.instance.beeLevel;
-        public int proteinLevel = UpgradeBus.instance.beeLevel;
+        public int proteinLevel = UpgradeBus.instance.proteinLevel;
         public int lungLevel = UpgradeBus.instance.lungLevel;
         public int backLevel = UpgradeBus.instance.backLevel;
         public int runningLevel = UpgradeBus.instance.runningLevel;
         public int lightLevel = UpgradeBus.instance.lightLevel;
         public int discoLevel = UpgradeBus.instance.discoLevel;
+        public int radarFlashLevel = UpgradeBus.instance.radarFlashLevel;
         public int legLevel = UpgradeBus.instance.legLevel;
         public int nightVisionLevel = UpgradeBus.instance.nightVisionLevel;
     }

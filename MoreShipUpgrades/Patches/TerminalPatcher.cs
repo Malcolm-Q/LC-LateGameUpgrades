@@ -2,6 +2,7 @@
 using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,15 +21,79 @@ namespace MoreShipUpgrades.Patches
             {
                 UpgradeBus.instance.flashCooldown -= Time.deltaTime;
             }
+
+            if(UpgradeBus.instance.radarFlashCooldown > 0f)
+            {
+                UpgradeBus.instance.radarFlashCooldown -= Time.deltaTime;
+            }
         }
-        
 
         [HarmonyPostfix]
         [HarmonyPatch("ParsePlayerSentence")]
         private static void CustomParser(ref Terminal __instance, ref TerminalNode __result)
         {
             string text = __instance.screenText.text.Substring(__instance.screenText.text.Length - __instance.textAdded);
-            if (text.ToLower() == "initattack" || text.ToLower() == "atk")
+            if (text.Split()[0] == "ping")
+            {
+                if (text.Split()[1].Length < 3)
+                {
+                    // Base game can't do anything with names with 2 characters or less
+                    return;
+                }
+                if (!UpgradeBus.instance.radarFlash)
+                {
+                    // Booster Shock is locked but execute ping regardless
+                    return;
+                }
+
+                // Prolly better way to find the intended radar but for now it suffices
+                RadarBoosterItem[] radars = GameObject.FindObjectsOfType<RadarBoosterItem>();
+                RadarBoosterItem selectedRadar = null;
+                for (int i = 0; i < radars.Length; i++)
+                {
+                    if (radars[i].radarBoosterName.ToLower().StartsWith(text.Split()[1].ToLower()) && radars[i].radarEnabled)
+                    {
+                        selectedRadar = radars[i];
+                    }
+                }
+
+                if (selectedRadar == null)
+                {
+                    // No radars with given name exists so do nothing
+                    return;
+                }
+
+                if (UpgradeBus.instance.radarFlashCooldown > 0f)
+                {
+                    // Booster Shock is still in cooldown but execute ping regardless
+                    TerminalNode infoNode = new TerminalNode();
+                    infoNode.displayText = string.Format("Pinged radar booster.\n{0} is on cooldown for {1} seconds.\n",radarFlashScript.UPGRADE_NAME, Mathf.Round(UpgradeBus.instance.radarFlashCooldown));
+                    infoNode.clearPreviousText = true;
+                    __result = infoNode;
+                    return;
+                }
+
+                Collider[] array = Physics.OverlapSphere(selectedRadar.transform.position, UpgradeBus.instance.cfg.RADAR_BOOSTER_SHOCKWAVE_RADIUS, 524288);
+                if (array.Length > 0) // Use the ping and stun
+                {
+                    RoundManager.Instance.PlayAudibleNoise(selectedRadar.transform.position, 60f, 0.8f, 0, false, 14155);
+                    UpgradeBus.instance.radarFlashScript.selectedRadar = selectedRadar;
+                    UpgradeBus.instance.radarFlashScript.PlayAudioAndUpdateRadarCooldownServerRpc();
+
+                    TerminalNode infoNode = new TerminalNode();
+                    infoNode.displayText = "Pinged radar booster and stunned nearby enemies.\n";
+                    infoNode.clearPreviousText = true;
+                    __result = infoNode;
+
+                    if (UpgradeBus.instance.cfg.RADAR_BOOSTER_SHOCKWAVE_NOTIFY_CHAT)
+                    {
+                        __instance.StartCoroutine(CountDownChat(UpgradeBus.instance.cfg.RADAR_BOOSTER_SHOCKWAVE_STUN_DURATION + (UpgradeBus.instance.cfg.RADAR_BOOSTER_SHOCKWAVE_INCREMENT * UpgradeBus.instance.radarFlashLevel)));
+                    }
+                }
+                // Use only the ping
+                return;
+            }
+            else if (text.ToLower() == "initattack" || text.ToLower() == "atk")
             {
                 if (!UpgradeBus.instance.terminalFlash)
                 {

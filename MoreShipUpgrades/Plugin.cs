@@ -433,6 +433,9 @@ namespace MoreShipUpgrades
                 UpgradeBus.instance.terminalNodes.Add(node);
             }
 
+            // Radar Booster Shockwave
+            SetupRadarBoosterShockwave(ref UpgradeAssets, ref infoJson);
+
             //terminal flashbang
             GameObject flash = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/terminalFlash.prefab");
             AudioClip flashSFX = UpgradeAssets.LoadAsset<AudioClip>("Assets/ShipUpgrades/flashbangsfx.ogg");
@@ -581,6 +584,45 @@ namespace MoreShipUpgrades
                     break;
                 }
 
+            }
+        }
+        // Loads the radar booster shockwave perk into the lategame store
+        // @param UpgradeAssets Asset Bundle where are relevant assets for LateGame-Upgrades are stored
+        // @param infoJson Map of perk names mapping to their respective info output message
+        private void SetupRadarBoosterShockwave(ref AssetBundle UpgradeAssets, ref Dictionary<string, string> infoJson)
+        {
+            GameObject radarFlash = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/radarFlash.prefab");
+            AudioClip radarFlashSFX = UpgradeAssets.LoadAsset<AudioClip>("Assets/ShipUpgrades/flashbangsfx.ogg");
+            UpgradeBus.instance.radarFlashNoise = radarFlashSFX;
+            radarFlash.AddComponent<radarFlashScript>();
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(radarFlash);
+            bool shareStatus = cfg.SHARED_UPGRADES ? false : cfg.RADAR_BOOSTER_SHOCKWAVE_INDIVIDUAL;
+            UpgradeBus.instance.IndividualUpgrades.Add(radarFlashScript.UPGRADE_NAME, shareStatus);
+
+            if (cfg.RADAR_BOOSTER_SHOCKWAVE_ENABLED)
+            {
+                string[] priceString = cfg.RADAR_BOOSTER_SHOCKWAVE_UPGRADE_PRICES.Split(',').ToArray();
+                int[] prices = new int[priceString.Length];
+                for (int i = 0; i < priceString.Length; i++)
+                {
+                    if (int.TryParse(priceString[i], out int price))
+                    {
+                        prices[i] = price;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"[LGU] Invalid upgrade price submitted: {prices[i]}");
+                        prices[i] = -1;
+                    }
+                }
+                if (prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
+                string infoString = string.Format(radarFlashScript.INITIAL_LEVEL_INFO, 1, cfg.RADAR_BOOSTER_SHOCKWAVE_PRICE, cfg.RADAR_BOOSTER_SHOCKWAVE_STUN_DURATION, cfg.RADAR_BOOSTER_SHOCKWAVE_RADIUS);
+                for (int i = 0; i < prices.Length; i++)
+                {
+                    infoString += string.Format(infoJson[radarFlashScript.UPGRADE_NAME], i + 2, prices[i], cfg.RADAR_BOOSTER_SHOCKWAVE_STUN_DURATION + ((i + 1) * cfg.RADAR_BOOSTER_SHOCKWAVE_INCREMENT));
+                }
+                CustomTerminalNode node = new CustomTerminalNode(radarFlashScript.UPGRADE_NAME, cfg.RADAR_BOOSTER_SHOCKWAVE_PRICE, infoString, radarFlash, prices, prices.Length);
+                UpgradeBus.instance.terminalNodes.Add(node);
             }
         }
     }

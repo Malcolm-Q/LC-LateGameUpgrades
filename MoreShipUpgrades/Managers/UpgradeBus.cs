@@ -24,6 +24,7 @@ namespace MoreShipUpgrades.Managers
         public bool TPButtonPressed = false;
         public bool beekeeper = false;
         public bool terminalFlash = false;
+        public bool radarFlash = false;
         public bool strongLegs = false;
         public bool runningShoes = false;
         public bool lockSmith = false;
@@ -37,20 +38,24 @@ namespace MoreShipUpgrades.Managers
         public int runningLevel = 0;
         public int lightLevel = 0;
         public int discoLevel = 0;
+        public int radarFlashLevel = 0;
         public int legLevel = 0;
         public int nightVisionLevel = 0;
 
         public float flashCooldown = 0f;
+        public float radarFlashCooldown = 0f;
         public float alteredWeight = 1f;
 
         public trapDestroyerScript trapHandler = null;
         public terminalFlashScript flashScript = null;
+        public radarFlashScript radarFlashScript = null;
         public lockSmithScript lockScript = null;
         public defibScript internScript = null;
         public walkieScript walkieHandler = null;
 
         public Color nightVisColor;
         public AudioClip flashNoise;
+        public AudioClip radarFlashNoise;
         public GameObject modStorePrefab;
         public TerminalNode modStoreInterface;
 
@@ -108,22 +113,28 @@ namespace MoreShipUpgrades.Managers
             TPButtonPressed = false;
             beekeeper = false;
             terminalFlash = false;
+            radarFlash = false;
             strongLegs = false;
             runningShoes = false;
             lockSmith = false;
             biggerLungs = false;
+            proteinPowder = false;
             lungLevel = 0;
+            proteinLevel = 0;
             backLevel = 0;
             beeLevel = 0;
             runningLevel = 0;
             lightLevel = 0;
             discoLevel = 0;
+            radarFlashLevel = 0;
             legLevel = 0;
             nightVisionLevel = 0;
             flashCooldown = 0f;
+            radarFlashCooldown = 0f;
             alteredWeight = 1f;
             trapHandler = null;
             flashScript = null;
+            radarFlashScript = null;
             if (wipeObjRefs) { UpgradeObjects = new Dictionary<string, GameObject>(); }
             foreach(CustomTerminalNode node in terminalNodes)
             {

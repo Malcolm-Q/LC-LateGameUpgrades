@@ -1,4 +1,5 @@
 ﻿using BepInEx.Configuration;
+using MoreShipUpgrades.UpgradeComponents;
 using UnityEngine;
 using System.Drawing;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ namespace MoreShipUpgrades.Misc
         public bool BETTER_SCANNER_ENABLED { get; set; }
         public bool STRONG_LEGS_ENABLED { get; set; }
         public bool DISCOMBOBULATOR_ENABLED { get; set; }
+        public bool RADAR_BOOSTER_SHOCKWAVE_ENABLED { get; set; }
         public bool MALWARE_BROADCASTER_ENABLED { get; set; }
 
         // individual or shared
@@ -41,6 +43,7 @@ namespace MoreShipUpgrades.Misc
         public bool BETTER_SCANNER_INDIVIDUAL { get; set; }
         public bool STRONG_LEGS_INDIVIDUAL { get; set; }
         public bool DISCOMBOBULATOR_INDIVIDUAL { get; set; }
+        public bool RADAR_BOOSTER_SHOCKWAVE_INDIVIDUAL { get; set; }
         public bool MALWARE_BROADCASTER_INDIVIDUAL { get; set; }
         public bool INTERN_INDIVIDUAL { get; set; }
         public bool LOCKSMITH_INDIVIDUAL { get; set; }
@@ -60,6 +63,7 @@ namespace MoreShipUpgrades.Misc
         public int BETTER_SCANNER_PRICE { get; set; }
         public int STRONG_LEGS_PRICE { get; set; }
         public int DISCOMBOBULATOR_PRICE { get; set; }
+        public int RADAR_BOOSTER_SHOCKWAVE_PRICE { get; set; }
         public int MALWARE_BROADCASTER_PRICE { get; set; }
         public int WALKIE_PRICE { get; set; }
 
@@ -78,6 +82,7 @@ namespace MoreShipUpgrades.Misc
         public float SHIP_AND_ENTRANCE_DISTANCE_INCREASE { get; set; }
         public float NOISE_REDUCTION { get; set; }
         public float DISCOMBOBULATOR_COOLDOWN { get; set; }
+        public float RADAR_BOOSTER_SHOCKWAVE_COOLDOWN { get; set; }
         public float ADV_CHANCE_TO_BREAK { get; set; }
         public float CHANCE_TO_BREAK { get; set; }
         public float BEEKEEPER_DAMAGE_MULTIPLIER { get; set; }
@@ -87,6 +92,9 @@ namespace MoreShipUpgrades.Misc
         public float DISCOMBOBULATOR_RADIUS { get; set; }
         public float DISCOMBOBULATOR_STUN_DURATION { get; set; }
         public bool DISCOMBOBULATOR_NOTIFY_CHAT { get; set; }
+        public float RADAR_BOOSTER_SHOCKWAVE_RADIUS { get; set; }
+        public float RADAR_BOOSTER_SHOCKWAVE_STUN_DURATION { get; set; }
+        public bool RADAR_BOOSTER_SHOCKWAVE_NOTIFY_CHAT { get; set; }
         public UnityEngine.Color NIGHT_VIS_COLOR { get; set; }
         public float NIGHT_VIS_RANGE { get; set; }
         public float NIGHT_VIS_INTENSITY { get; set; }
@@ -98,6 +106,7 @@ namespace MoreShipUpgrades.Misc
         public float NOISE_REDUCTION_INCREMENT { get; set; }
         public float JUMP_FORCE_INCREMENT { get; set; }
         public float DISCOMBOBULATOR_INCREMENT { get; set; }
+        public float RADAR_BOOSTER_SHOCKWAVE_INCREMENT { get; set; }
         public int INTERN_PRICE { get; set; }
         public int LOCKSMITH_PRICE { get; set; }
         public bool INTERN_ENABLED { get; set; }
@@ -115,6 +124,7 @@ namespace MoreShipUpgrades.Misc
         public string RUNNING_SHOES_UPGRADE_PRICES { get; set; }
         public string STRONG_LEGS_UPGRADE_PRICES { get; set; }
         public string DISCO_UPGRADE_PRICES { get; set; }
+        public string RADAR_BOOSTER_SHOCKWAVE_UPGRADE_PRICES { get; set; }
         public string PROTEIN_UPGRADE_PRICES { get; set; }
         public bool SHARED_UPGRADES { get; set; }
         public bool WALKIE_ENABLED { get; set; }
@@ -126,7 +136,7 @@ namespace MoreShipUpgrades.Misc
             configFile = cfg;
         }
 
-        private T ConfigEntry<T>(string section, string key, T defaultVal, string description)
+        private T ConfigEntry<T>(string section, string key, T defaultVal, string description = "")
         {
             return configFile.Bind(section, key, defaultVal, description).Value;
         }
@@ -223,6 +233,16 @@ namespace MoreShipUpgrades.Misc
             DISCOMBOBULATOR_INCREMENT  = ConfigEntry("Discombobulator", "Discombobulator Increment", 1f, "The amount added to stun duration on upgrade.");
             DISCO_UPGRADE_PRICES = ConfigEntry("Discombobulator","Price of each additional upgrade", "330,460,620", "");
             DISCOMBOBULATOR_INDIVIDUAL = ConfigEntry("Discombobulator","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
+
+            RADAR_BOOSTER_SHOCKWAVE_ENABLED         = ConfigEntry(radarFlashScript.UPGRADE_NAME, radarFlashScript.ENABLED_CONFIGURATION         , radarFlashScript.ENABLED_DEFAULT, radarFlashScript.ENABLED_DESCRIPTION);
+            RADAR_BOOSTER_SHOCKWAVE_PRICE           = ConfigEntry(radarFlashScript.UPGRADE_NAME, radarFlashScript.PRICE_CONFIGURATION           , radarFlashScript.PRICE_DEFAULT);
+            RADAR_BOOSTER_SHOCKWAVE_COOLDOWN        = ConfigEntry(radarFlashScript.UPGRADE_NAME, radarFlashScript.COOLDOWN_CONFIGURATION        , radarFlashScript.COOLDOWN_DEFAULT);
+            RADAR_BOOSTER_SHOCKWAVE_RADIUS          = ConfigEntry(radarFlashScript.UPGRADE_NAME, radarFlashScript.RADIUS_CONFIGURATION          , radarFlashScript.RADIUS_DEFAULT);
+            RADAR_BOOSTER_SHOCKWAVE_STUN_DURATION   = ConfigEntry(radarFlashScript.UPGRADE_NAME, radarFlashScript.STUN_DURATION_CONFIGURATION   , radarFlashScript.STUN_DURATION_DEFAULT);
+            RADAR_BOOSTER_SHOCKWAVE_NOTIFY_CHAT     = ConfigEntry(radarFlashScript.UPGRADE_NAME, radarFlashScript.NOTIFY_CHAT_CONFIGURATION     , radarFlashScript.NOTIFY_CHAT_DEFAULT);
+            RADAR_BOOSTER_SHOCKWAVE_INCREMENT       = ConfigEntry(radarFlashScript.UPGRADE_NAME, radarFlashScript.INCREMENT_CONFIGURATION       , radarFlashScript.INCREMENT_DEFAULT, radarFlashScript.INCREMENT_DESCRIPTION);
+            RADAR_BOOSTER_SHOCKWAVE_UPGRADE_PRICES  = ConfigEntry(radarFlashScript.UPGRADE_NAME, BaseUpgrade.PRICES_CONFIGURATION               , radarFlashScript.PRICES_DEFAULT);
+            RADAR_BOOSTER_SHOCKWAVE_INDIVIDUAL      = ConfigEntry(radarFlashScript.UPGRADE_NAME, BaseUpgrade.INDIVIDUAL_CONFIGURATION           , radarFlashScript.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
 
             BETTER_SCANNER_ENABLED = ConfigEntry("Better Scanner", "Enable Better Scanner Upgrade", true, "Further scan distance, no LOS needed.");
             BETTER_SCANNER_PRICE = ConfigEntry("Better Scanner", "Price of Better Scanner Upgrade", 650, "");
