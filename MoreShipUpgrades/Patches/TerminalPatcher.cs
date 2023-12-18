@@ -67,7 +67,7 @@ namespace MoreShipUpgrades.Patches
                 {
                     // Booster Shock is still in cooldown but execute ping regardless
                     TerminalNode infoNode = new TerminalNode();
-                    infoNode.displayText = string.Format("Pinged radar booster.\n{0} is on cooldown for {1} seconds.\n",radarFlashScript.UPGRADE_NAME, Mathf.Round(UpgradeBus.instance.radarFlashCooldown));
+                    infoNode.displayText = string.Format(radarFlashScript.ON_COOLDOWN, radarFlashScript.UPGRADE_NAME, Mathf.Round(UpgradeBus.instance.radarFlashCooldown));
                     infoNode.clearPreviousText = true;
                     __result = infoNode;
                     return;
@@ -81,7 +81,7 @@ namespace MoreShipUpgrades.Patches
                     UpgradeBus.instance.radarFlashScript.PlayAudioAndUpdateRadarCooldownServerRpc();
 
                     TerminalNode infoNode = new TerminalNode();
-                    infoNode.displayText = "Pinged radar booster and stunned nearby enemies.\n";
+                    infoNode.displayText = radarFlashScript.STUNNED_ENEMIES;
                     infoNode.clearPreviousText = true;
                     __result = infoNode;
 

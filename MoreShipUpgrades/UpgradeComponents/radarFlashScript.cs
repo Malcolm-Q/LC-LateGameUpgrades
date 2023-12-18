@@ -46,8 +46,12 @@ namespace MoreShipUpgrades.UpgradeComponents
         private static string UNLOAD_OUTPUT = "\n<color={0}>{1} has been disabled.</color>";
         private static string UNLOAD_COLOUR = "#FF0000";
 
+        // Terminal Responses
+        public static string ON_COOLDOWN = "Pinged radar booster.\n{0} is on cooldown for {1} seconds.\n";
+        public static string STUNNED_ENEMIES = "Pinged radar booster and stunned nearby enemies.\n";
+
         // Info Messages
-        // It's different from infoJson because the user should have some idea of the range the stun.
+        // It's different from infoJson because the user should have some idea of the range of the stun.
         public static string INITIAL_LEVEL_INFO = "LVL {0} - ${1}: Stuns enemies around the pinged radar booster for {2} seconds at {3} meter radius.\n";
 
         void Start()
