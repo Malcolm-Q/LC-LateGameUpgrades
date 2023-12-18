@@ -2,6 +2,7 @@
 using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,6 +29,15 @@ namespace MoreShipUpgrades.Patches
         private static void CustomParser(ref Terminal __instance, ref TerminalNode __result)
         {
             string text = __instance.screenText.text.Substring(__instance.screenText.text.Length - __instance.textAdded);
+            if (text.Split()[0].ToLower() == "toggle" && text.Split()[1].ToLower() == "lightning")
+            {
+                if (!UpgradeBus.instance.lightningRod)
+                {
+                    lightningRodScript.AccessDeniedMessage(ref __result);
+                    return;
+                }
+                lightningRodScript.ToggleLightningRod(ref __result);
+            }
             if (text.ToLower() == "initattack" || text.ToLower() == "atk")
             {
                 if (!UpgradeBus.instance.terminalFlash)

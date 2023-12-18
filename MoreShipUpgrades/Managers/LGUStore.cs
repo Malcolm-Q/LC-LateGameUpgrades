@@ -31,6 +31,7 @@ namespace MoreShipUpgrades.Managers
             {"Back Muscles", SaveInfo => SaveInfo.exoskeleton },
             {"Locksmith", SaveInfo => SaveInfo.lockSmith },
             {"Walkie GPS", SaveInfo => SaveInfo.walkies },
+            {lightningRodScript.UPGRADE_NAME, SaveInfo => SaveInfo.lightningRod },
         };
 
         private static Dictionary<string, Func<SaveInfo, int>> levelConditions = new Dictionary<string, Func<SaveInfo, int>>
@@ -46,7 +47,8 @@ namespace MoreShipUpgrades.Managers
             { "Beekeeper", saveInfo => saveInfo.beeLevel },
             { "Back Muscles", saveInfo => saveInfo.backLevel },
             { "Locksmith", saveInfo => 0 },
-            { "Walkie GPS", saveInfo => 0 }
+            { "Walkie GPS", saveInfo => 0 },
+            { lightningRodScript.UPGRADE_NAME, saveInfo => 0},
         };
 
         private void Start()
@@ -249,6 +251,7 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.runningShoes = saveInfo.runningShoes;
             UpgradeBus.instance.biggerLungs = saveInfo.biggerLungs;
             UpgradeBus.instance.proteinPowder = saveInfo.proteinPowder;
+            UpgradeBus.instance.lightningRod = saveInfo.lightningRod;
 
             UpgradeBus.instance.beeLevel = saveInfo.beeLevel;
             UpgradeBus.instance.proteinLevel = saveInfo.proteinLevel;
@@ -368,6 +371,7 @@ namespace MoreShipUpgrades.Managers
         public bool biggerLungs = UpgradeBus.instance.biggerLungs;
         public bool lockSmith = UpgradeBus.instance.lockSmith;
         public bool walkies = UpgradeBus.instance.walkies;
+        public bool lightningRod = UpgradeBus.instance.lightningRod;
 
         public int beeLevel = UpgradeBus.instance.beeLevel;
         public int proteinLevel = UpgradeBus.instance.beeLevel;

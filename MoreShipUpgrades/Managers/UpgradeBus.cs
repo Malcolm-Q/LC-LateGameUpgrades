@@ -29,6 +29,8 @@ namespace MoreShipUpgrades.Managers
         public bool lockSmith = false;
         public bool biggerLungs = false;
         public bool proteinPowder = false;
+        public bool lightningRod = false;
+        public bool lightningRodActive = false;
 
         public int lungLevel = 0;
         public int proteinLevel = 0;
@@ -40,6 +42,7 @@ namespace MoreShipUpgrades.Managers
         public int legLevel = 0;
         public int nightVisionLevel = 0;
 
+        public float lightningRodProbability = 1f;
         public float flashCooldown = 0f;
         public float alteredWeight = 1f;
 
@@ -112,6 +115,8 @@ namespace MoreShipUpgrades.Managers
             runningShoes = false;
             lockSmith = false;
             biggerLungs = false;
+            lightningRod = false;
+            lightningRodActive = false;
             lungLevel = 0;
             backLevel = 0;
             beeLevel = 0;
@@ -121,6 +126,7 @@ namespace MoreShipUpgrades.Managers
             legLevel = 0;
             nightVisionLevel = 0;
             flashCooldown = 0f;
+            lightningRodProbability = 1f;
             alteredWeight = 1f;
             trapHandler = null;
             flashScript = null;

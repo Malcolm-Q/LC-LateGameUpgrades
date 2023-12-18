@@ -538,6 +538,10 @@ namespace MoreShipUpgrades
                 UpgradeBus.instance.terminalNodes.Add(node);
             }
 
+            // Lightning Rod
+            SetupLightningRod(ref UpgradeAssets, ref infoJson);
+
+
             //lockSmith
             GameObject lockSmith = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/LockSmith.prefab");
             lockSmith.AddComponent<lockSmithScript>();
@@ -581,6 +585,20 @@ namespace MoreShipUpgrades
                     break;
                 }
 
+            }
+        }
+
+        private void SetupLightningRod(ref AssetBundle UpgradeAssets, ref Dictionary<string, string> infoJson)
+        {
+            GameObject lightningRod = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/LightningRod.prefab");
+            lightningRod.AddComponent<lightningRodScript>();
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(lightningRod);
+            bool shareStatus = true; // It doesn't really make sense making this individual
+            UpgradeBus.instance.IndividualUpgrades.Add(lightningRodScript.UPGRADE_NAME, shareStatus);
+            if (cfg.LIGHTNING_ROD_ENABLED)
+            {
+                CustomTerminalNode node = new CustomTerminalNode(lightningRodScript.UPGRADE_NAME, cfg.LIGHTNING_ROD_PRICE, string.Format(infoJson[lightningRodScript.UPGRADE_NAME], cfg.LIGHTNING_ROD_PRICE), lightningRod);
+                UpgradeBus.instance.terminalNodes.Add(node);
             }
         }
     }

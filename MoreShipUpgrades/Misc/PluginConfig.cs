@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Collections.Generic;
 using System;
 using UnityEngine.InputSystem;
+using MoreShipUpgrades.UpgradeComponents;
 
 
 namespace MoreShipUpgrades.Misc
@@ -26,6 +27,7 @@ namespace MoreShipUpgrades.Misc
         public bool STRONG_LEGS_ENABLED { get; set; }
         public bool DISCOMBOBULATOR_ENABLED { get; set; }
         public bool MALWARE_BROADCASTER_ENABLED { get; set; }
+        public bool LIGHTNING_ROD_ENABLED { get; set; }
 
         // individual or shared
         public bool ADVANCED_TELE_INDIVIDUAL { get; set; }
@@ -62,6 +64,7 @@ namespace MoreShipUpgrades.Misc
         public int DISCOMBOBULATOR_PRICE { get; set; }
         public int MALWARE_BROADCASTER_PRICE { get; set; }
         public int WALKIE_PRICE { get; set; }
+        public int LIGHTNING_ROD_PRICE { get; set; }
 
         // attributes
         public int PROTEIN_INCREMENT { get; set; }
@@ -120,6 +123,9 @@ namespace MoreShipUpgrades.Misc
         public bool WALKIE_ENABLED { get; set; }
         public bool WALKIE_INDIVIDUAL { get; set; }
         public int PROTEIN_UNLOCK_FORCE {  get; set; }
+        public float LIGHTNING_ROD_PROBABILITY { get; set; }
+        public bool LIGHTNING_ROD_ACTIVE { get; set; }
+
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -248,6 +254,11 @@ namespace MoreShipUpgrades.Misc
 
             PEEPER_ENABLED = ConfigEntry("Peeper", "Enable Peeper item", true, "An item that will stare at coilheads for you.");
             PEEPER_PRICE = ConfigEntry("Peeper", "Peeper Price", 500, "Default price to purchase a Peeper.");
+
+            LIGHTNING_ROD_ENABLED = ConfigEntry(lightningRodScript.UPGRADE_NAME, lightningRodScript.ENABLED_SECTION, lightningRodScript.ENABLED_DEFAULT, lightningRodScript.ENABLED_DESCRIPTION);
+            LIGHTNING_ROD_PRICE = ConfigEntry(lightningRodScript.UPGRADE_NAME, lightningRodScript.PRICE_SECTION, lightningRodScript.PRICE_DEFAULT, "");
+            LIGHTNING_ROD_PROBABILITY = ConfigEntry(lightningRodScript.UPGRADE_NAME, lightningRodScript.PROBABILITY_SECTION, lightningRodScript.PROBABILITY_DEFAULT, lightningRodScript.PROBABILITY_DESCRIPTION);
+            LIGHTNING_ROD_ACTIVE = ConfigEntry(lightningRodScript.UPGRADE_NAME, lightningRodScript.ACTIVE_SECTION, lightningRodScript.ACTIVE_DEFAULT, lightningRodScript.ACTIVE_DESCRIPTION);
 
             WALKIE_ENABLED = ConfigEntry("Walkie", "Enable the walkie talkie gps upgrade", true, "Holding a walkie talkie displays location.");
             WALKIE_PRICE = ConfigEntry("Walkie", "Walkie GPS Price", 450, "Default price for upgrade.");
