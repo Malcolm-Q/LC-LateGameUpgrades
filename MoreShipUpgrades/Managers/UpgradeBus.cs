@@ -213,7 +213,7 @@ namespace MoreShipUpgrades.Managers
 
             //Beekeeper
             GameObject beekeeper = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/beekeeper.prefab");
-            bool shareStatus = cfg.SHARED_UPGRADES ? false : cfg.BEEKEEPER_INDIVIDUAL;
+            bool shareStatus = cfg.SHARED_UPGRADES ? true : cfg.BEEKEEPER_INDIVIDUAL;
             IndividualUpgrades = new Dictionary<string, bool>
             {
                 { "Beekeeper", shareStatus }
@@ -248,7 +248,7 @@ namespace MoreShipUpgrades.Managers
 
             // protein
             GameObject prot = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/ProteinPowder.prefab");
-            shareStatus = cfg.SHARED_UPGRADES ? false : cfg.PROTEIN_INDIVIDUAL;
+            shareStatus = cfg.SHARED_UPGRADES ? true : cfg.PROTEIN_INDIVIDUAL;
             IndividualUpgrades.Add("Protein Powder", shareStatus);
             if(cfg.PROTEIN_ENABLED)
             {
@@ -280,7 +280,7 @@ namespace MoreShipUpgrades.Managers
 
             // lungs
             GameObject biggerLungs = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/BiggerLungs.prefab");
-            shareStatus = cfg.SHARED_UPGRADES ? false : cfg.BIGGER_LUNGS_INDIVIDUAL;
+            shareStatus = cfg.SHARED_UPGRADES ? true : cfg.BIGGER_LUNGS_INDIVIDUAL;
             IndividualUpgrades.Add("Bigger Lungs", shareStatus);
             if(cfg.BIGGER_LUNGS_ENABLED)
             {
@@ -312,7 +312,7 @@ namespace MoreShipUpgrades.Managers
 
             // running shoes
             GameObject runningShoes = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/runningShoes.prefab");
-            shareStatus = cfg.SHARED_UPGRADES ? false : cfg.RUNNING_SHOES_INDIVIDUAL;
+            shareStatus = cfg.SHARED_UPGRADES ? true : cfg.RUNNING_SHOES_INDIVIDUAL;
             IndividualUpgrades.Add("Running Shoes", shareStatus);
             if(cfg.RUNNING_SHOES_ENABLED)
             {
@@ -343,7 +343,7 @@ namespace MoreShipUpgrades.Managers
 
             // strong legs
             GameObject strongLegs = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/strongLegs.prefab");
-            shareStatus = cfg.SHARED_UPGRADES ? false : cfg.STRONG_LEGS_INDIVIDUAL;
+            shareStatus = cfg.SHARED_UPGRADES ? true : cfg.STRONG_LEGS_INDIVIDUAL;
             IndividualUpgrades.Add("Strong Legs", shareStatus);
             if(cfg.STRONG_LEGS_ENABLED)
             {
@@ -387,7 +387,7 @@ namespace MoreShipUpgrades.Managers
                 }
             }
             else { desc = $"Broadcasted codes now disable map hazards for {cfg.DISARM_TIME} seconds."; }
-            shareStatus = cfg.SHARED_UPGRADES ? false : cfg.MALWARE_BROADCASTER_INDIVIDUAL;
+            shareStatus = cfg.SHARED_UPGRADES ? true : cfg.MALWARE_BROADCASTER_INDIVIDUAL;
             IndividualUpgrades.Add("Malware Broadcaster", shareStatus);
             if(cfg.MALWARE_BROADCASTER_ENABLED)
             { 
@@ -397,7 +397,7 @@ namespace MoreShipUpgrades.Managers
 
             // light footed
             GameObject lightFooted = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/lightFooted.prefab");
-            shareStatus = cfg.SHARED_UPGRADES ? false : cfg.LIGHT_FOOTED_INDIVIDUAL;
+            shareStatus = cfg.SHARED_UPGRADES ? true : cfg.LIGHT_FOOTED_INDIVIDUAL;
             IndividualUpgrades.Add("Light Footed", shareStatus);
             if(cfg.LIGHT_FOOTED_ENABLED)
             {
@@ -429,7 +429,7 @@ namespace MoreShipUpgrades.Managers
 
             // night vision
             GameObject nightVision = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/nightVision.prefab");
-            shareStatus = cfg.SHARED_UPGRADES ? false : cfg.NIGHT_VISION_INDIVIDUAL;
+            shareStatus = cfg.SHARED_UPGRADES ? true : cfg.NIGHT_VISION_INDIVIDUAL;
             IndividualUpgrades.Add("NV Headset Batteries", shareStatus);
             if(cfg.NIGHT_VISION_ENABLED) 
             { 
@@ -474,7 +474,7 @@ namespace MoreShipUpgrades.Managers
             GameObject flash = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/terminalFlash.prefab");
             AudioClip flashSFX = UpgradeAssets.LoadAsset<AudioClip>("Assets/ShipUpgrades/flashbangsfx.ogg");
             UpgradeBus.instance.flashNoise = flashSFX;
-            shareStatus = cfg.SHARED_UPGRADES ? false : cfg.DISCOMBOBULATOR_INDIVIDUAL;
+            shareStatus = cfg.SHARED_UPGRADES ? true : cfg.DISCOMBOBULATOR_INDIVIDUAL;
             IndividualUpgrades.Add("Discombobulator", shareStatus);
             if(cfg.DISCOMBOBULATOR_ENABLED)
             {
@@ -505,7 +505,7 @@ namespace MoreShipUpgrades.Managers
 
             //stronger scanner
             GameObject strongScan = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/strongScanner.prefab");
-            shareStatus = cfg.SHARED_UPGRADES ? false : cfg.BETTER_SCANNER_INDIVIDUAL;
+            shareStatus = cfg.SHARED_UPGRADES ? true : cfg.BETTER_SCANNER_INDIVIDUAL;
             IndividualUpgrades.Add("Better Scanner", shareStatus);
             if(cfg.BETTER_SCANNER_ENABLED)
             {
@@ -526,7 +526,7 @@ namespace MoreShipUpgrades.Managers
 
             // back muscles
             GameObject exoskel = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/exoskeleton.prefab");
-            shareStatus = cfg.SHARED_UPGRADES ? false : cfg.BACK_MUSCLES_INDIVIDUAL;
+            shareStatus = cfg.SHARED_UPGRADES ? true : cfg.BACK_MUSCLES_INDIVIDUAL;
             IndividualUpgrades.Add("Back Muscles", shareStatus);
             if(cfg.BACK_MUSCLES_ENABLED)
             {
@@ -557,7 +557,7 @@ namespace MoreShipUpgrades.Managers
 
             // interns
             GameObject intern = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/Pager.prefab");
-            shareStatus = cfg.SHARED_UPGRADES ? false : cfg.INTERN_INDIVIDUAL;
+            shareStatus = cfg.SHARED_UPGRADES ? true : cfg.INTERN_INDIVIDUAL;
             IndividualUpgrades.Add("Interns", shareStatus);
             if (cfg.INTERN_ENABLED)
             {
@@ -567,7 +567,7 @@ namespace MoreShipUpgrades.Managers
 
             //lockSmith
             GameObject lockSmith = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/LockSmith.prefab");
-            shareStatus = cfg.SHARED_UPGRADES ? false : cfg.LOCKSMITH_INDIVIDUAL;
+            shareStatus = cfg.SHARED_UPGRADES ? true : cfg.LOCKSMITH_INDIVIDUAL;
             IndividualUpgrades.Add("Locksmith", shareStatus);
             if (cfg.LOCKSMITH_ENABLED)
             {
