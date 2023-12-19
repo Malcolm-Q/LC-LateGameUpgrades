@@ -271,6 +271,7 @@ namespace MoreShipUpgrades.Patches
             yield return new WaitForSeconds(3f);
             LGUStore.instance.saveInfo = LGUStore.instance.lguSave.playerSaves[id];
             LGUStore.instance.UpdateUpgradeBus(false);
+            HUDManager.Instance.chatText.text += "\nAPPLYING RETRIEVED SAVE";
         }
         private static IEnumerator CountDownChat(float count)
         {
