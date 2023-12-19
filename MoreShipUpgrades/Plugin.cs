@@ -133,12 +133,12 @@ namespace MoreShipUpgrades
             visScript.useCooldown = 2f;
             visScript.grabbableToEnemies=true;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(nightVisionItem.spawnPrefab);
-            if(cfg.NIGHT_VISION_ENABLED)
+            if (cfg.NIGHT_VISION_ENABLED)
             {
                 TerminalNode nightNode = new TerminalNode();
-                string grantStatus = cfg.NIGHT_VISION_INDIVIDUAL ? "one" : "all";
+                string grantStatus = cfg.NIGHT_VISION_INDIVIDUAL || UpgradeBus.instance.cfg.SHARED_UPGRADES ? "one" : "all";
                 string loseOnDeath = cfg.LOSE_NIGHT_VIS_ON_DEATH ? "be" : "not be";
-                nightNode.displayText = string.Format(infoJson["Night Vision"], grantStatus, loseOnDeath, cfg.NIGHT_VIS_DRAIN_SPEED, cfg.NIGHT_VIS_REGEN_SPEED);
+                nightNode.displayText = string.Format(infoJson["Night Vision"], grantStatus, loseOnDeath);
                 Items.RegisterShopItem(nightVisionItem,null,null,nightNode, nightVisionItem.creditsWorth);
             }
 

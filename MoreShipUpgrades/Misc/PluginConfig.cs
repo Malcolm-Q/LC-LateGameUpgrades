@@ -84,17 +84,21 @@ namespace MoreShipUpgrades.Misc
         public float CHANCE_TO_BREAK { get; set; }
         public float BEEKEEPER_DAMAGE_MULTIPLIER { get; set; }
         public float BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT { get; set; }
-        public float NIGHT_VIS_DRAIN_SPEED { get; set; }
-        public float NIGHT_VIS_REGEN_SPEED { get; set; }
         public float DISCOMBOBULATOR_RADIUS { get; set; }
         public float DISCOMBOBULATOR_STUN_DURATION { get; set; }
         public bool DISCOMBOBULATOR_NOTIFY_CHAT { get; set; }
         [JsonIgnore]
         public UnityEngine.Color NIGHT_VIS_COLOR { get; set; }
+        public float NIGHT_VIS_DRAIN_SPEED { get; set; }
+        public float NIGHT_VIS_REGEN_SPEED { get; set; }
+        public float NIGHT_BATTERY_MAX { get; set; }
         public float NIGHT_VIS_RANGE { get; set; }
         public float NIGHT_VIS_INTENSITY { get; set; }
         public float NIGHT_VIS_STARTUP { get; set; }
         public float NIGHT_VIS_EXHAUST { get; set; }
+        public float NIGHT_VIS_DRAIN_INCREMENT { get; set; }
+        public float NIGHT_VIS_REGEN_INCREMENT { get; set; }
+        public float NIGHT_VIS_BATTERY_INCREMENT { get; set; }
         public float CARRY_WEIGHT_INCREMENT { get; set; }
         public float MOVEMENT_INCREMENT { get; set; }
         public float SPRINT_TIME_INCREMENT { get; set; }
@@ -106,8 +110,6 @@ namespace MoreShipUpgrades.Misc
         public bool INTERN_ENABLED { get; set; }
         public bool LOCKSMITH_ENABLED { get; set; }
         public string TOGGLE_NIGHT_VISION_KEY { get; set; }
-        public float NIGHT_VIS_DRAIN_DECREASE_PERCENT { get; set; }
-        public float NIGHT_VIS_REGEN_INCREASE_PERCENT { get; set; }
         public float SALE_PERC { get; set; }
         public bool LOSE_NIGHT_VIS_ON_DEATH { get; set; }
         public string BEEKEEPER_UPGRADE_PRICES { get; set; }
@@ -203,16 +205,18 @@ namespace MoreShipUpgrades.Misc
 
             NIGHT_VISION_ENABLED = ConfigEntry("Night Vision", "Enable Night Vision Upgrade", true, "Toggleable night vision.");
             NIGHT_VISION_PRICE = ConfigEntry("Night Vision", "Price of Night Vision Upgrade", 380, "");
-            NIGHT_VIS_DRAIN_SPEED = ConfigEntry("Night Vision", "Multiplier for night vis battery drain", 0.1f, "Multiplied by timedelta. A value of 0.1 will result in a 10 second battery life.");
-            NIGHT_VIS_REGEN_SPEED = ConfigEntry("Night Vision", "Multiplier for night vis battery regen", 0.05f, "Multiplied by timedelta.");
+            NIGHT_BATTERY_MAX = ConfigEntry("Night Vision", "The max charge for your night vision battery", 10f, "Default settings this will be the unupgraded time in seconds the battery will drain and regen in. Increase to increase battery life.");
+            NIGHT_VIS_DRAIN_SPEED = ConfigEntry("Night Vision", "Multiplier for night vis battery drain", 1f, "Multiplied by timedelta, lower to increase battery life.");
+            NIGHT_VIS_REGEN_SPEED = ConfigEntry("Night Vision", "Multiplier for night vis battery regen", 1f, "Multiplied by timedelta, raise to speed up battery regen time.");
             NIGHT_VIS_COLOR = ConfigEntry("Night Vision", "Night Vision Color", UnityEngine.Color.green, "The color your night vision light emits.");
             NIGHT_VIS_RANGE = ConfigEntry("Night Vision", "Night Vision Range", 2000f, "Kind of like the distance your night vision travels.");
             NIGHT_VIS_INTENSITY = ConfigEntry("Night Vision", "Night Vision Intensity", 1000f, "Kind of like the brightness of your Night Vision.");
             NIGHT_VIS_STARTUP = ConfigEntry("Night Vision", "Night Vision StartUp Cost", 0.1f, "The percent battery drained when turned on (0.1 = 10%).");
             NIGHT_VIS_EXHAUST = ConfigEntry("Night Vision", "Night Vision Exhaustion", 2f, "How many seconds night vision stays fully depleted.");
             TOGGLE_NIGHT_VISION_KEY = ConfigEntry("Night Vision", "Toggle Night Vision Key", "LeftAlt", "Key to toggle Night Vision, you can use any key on your system such as LeftAlt, LeftShift, or any letter which exists.");
-            NIGHT_VIS_DRAIN_DECREASE_PERCENT = ConfigEntry("Night Vision", "Percentage decrease for night vis battery drain", 25f, "Percentage decrease applied to drain speed on each upgrade.");
-            NIGHT_VIS_REGEN_INCREASE_PERCENT = ConfigEntry("Night Vision", "Percentage increase for night vis battery regen", 40f, "Percentage increase applied to regen speed on each upgrade.");
+            NIGHT_VIS_DRAIN_INCREMENT = ConfigEntry("Night Vision", "Decrease for night vis battery drain", 0.15f, "Applied to drain speed on each upgrade.");
+            NIGHT_VIS_REGEN_INCREMENT = ConfigEntry("Night Vision", "Increase for night vis battery regen", 0.40f, "Applied to regen speed on each upgrade.");
+            NIGHT_VIS_BATTERY_INCREMENT = ConfigEntry("Night Vision", "Increase for night vis battery life", 2f, "Applied to the max charge for night vis battery on each upgrade.");
             LOSE_NIGHT_VIS_ON_DEATH = ConfigEntry("Night Vision", "Lose Night Vision On Death", true, "If true when you die you will have to re purchase and equip night vision goggles.");
             NIGHT_VISION_UPGRADE_PRICES = ConfigEntry("Night Vision","Price of each additional upgrade", "300,400,500", "");
             NIGHT_VISION_INDIVIDUAL = ConfigEntry("Night Vision","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
