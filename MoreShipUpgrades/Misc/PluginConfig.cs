@@ -1,13 +1,12 @@
 ﻿using BepInEx.Configuration;
-using UnityEngine;
-using System.Drawing;
-using System.Collections.Generic;
 using System;
-using UnityEngine.InputSystem;
+using Newtonsoft.Json;
+using MoreShipUpgrades.UpgradeComponents;
 
 
 namespace MoreShipUpgrades.Misc
 {
+    [Serializable]
     public class PluginConfig
     {
         readonly ConfigFile configFile;
@@ -16,6 +15,7 @@ namespace MoreShipUpgrades.Misc
         public bool ADVANCED_TELE_ENABLED { get; set; }
         public bool WEAK_TELE_ENABLED { get; set; }
         public bool BEEKEEPER_ENABLED { get; set; }
+        public bool PROTEIN_ENABLED { get; set; }
         public bool BIGGER_LUNGS_ENABLED { get; set; }
         public bool BACK_MUSCLES_ENABLED { get; set; }
         public bool LIGHT_FOOTED_ENABLED { get; set; }
@@ -25,11 +25,13 @@ namespace MoreShipUpgrades.Misc
         public bool STRONG_LEGS_ENABLED { get; set; }
         public bool DISCOMBOBULATOR_ENABLED { get; set; }
         public bool MALWARE_BROADCASTER_ENABLED { get; set; }
+        public bool LIGHTNING_ROD_ENABLED { get; set; }
 
         // individual or shared
         public bool ADVANCED_TELE_INDIVIDUAL { get; set; }
         public bool WEAK_TELE_INDIVIDUAL { get; set; }
         public bool BEEKEEPER_INDIVIDUAL { get; set; }
+        public bool PROTEIN_INDIVIDUAL { get; set; }
         public bool BIGGER_LUNGS_INDIVIDUAL { get; set; }
         public bool BACK_MUSCLES_INDIVIDUAL { get; set; }
         public bool LIGHT_FOOTED_INDIVIDUAL { get; set; }
@@ -49,6 +51,7 @@ namespace MoreShipUpgrades.Misc
         public int ADVANCED_TELE_PRICE { get; set; }
         public int WEAK_TELE_PRICE { get; set; }
         public int BEEKEEPER_PRICE { get; set; }
+        public int PROTEIN_PRICE { get; set; }
         public int BIGGER_LUNGS_PRICE { get; set; }
         public int BACK_MUSCLES_PRICE { get; set; }
         public int LIGHT_FOOTED_PRICE { get; set; }
@@ -58,8 +61,11 @@ namespace MoreShipUpgrades.Misc
         public int STRONG_LEGS_PRICE { get; set; }
         public int DISCOMBOBULATOR_PRICE { get; set; }
         public int MALWARE_BROADCASTER_PRICE { get; set; }
+        public int WALKIE_PRICE { get; set; }
+        public int LIGHTNING_ROD_PRICE { get; set; }
 
         // attributes
+        public int PROTEIN_INCREMENT { get; set; }
         public bool KEEP_ITEMS_ON_TELE { get; set; }
         public float SPRINT_TIME_INCREASE { get; set; }
         public float MOVEMENT_SPEED { get; set; }
@@ -77,16 +83,21 @@ namespace MoreShipUpgrades.Misc
         public float CHANCE_TO_BREAK { get; set; }
         public float BEEKEEPER_DAMAGE_MULTIPLIER { get; set; }
         public float BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT { get; set; }
-        public float NIGHT_VIS_DRAIN_SPEED { get; set; }
-        public float NIGHT_VIS_REGEN_SPEED { get; set; }
         public float DISCOMBOBULATOR_RADIUS { get; set; }
         public float DISCOMBOBULATOR_STUN_DURATION { get; set; }
         public bool DISCOMBOBULATOR_NOTIFY_CHAT { get; set; }
+        [JsonIgnore]
         public UnityEngine.Color NIGHT_VIS_COLOR { get; set; }
+        public float NIGHT_VIS_DRAIN_SPEED { get; set; }
+        public float NIGHT_VIS_REGEN_SPEED { get; set; }
+        public float NIGHT_BATTERY_MAX { get; set; }
         public float NIGHT_VIS_RANGE { get; set; }
         public float NIGHT_VIS_INTENSITY { get; set; }
         public float NIGHT_VIS_STARTUP { get; set; }
         public float NIGHT_VIS_EXHAUST { get; set; }
+        public float NIGHT_VIS_DRAIN_INCREMENT { get; set; }
+        public float NIGHT_VIS_REGEN_INCREMENT { get; set; }
+        public float NIGHT_VIS_BATTERY_INCREMENT { get; set; }
         public float CARRY_WEIGHT_INCREMENT { get; set; }
         public float MOVEMENT_INCREMENT { get; set; }
         public float SPRINT_TIME_INCREMENT { get; set; }
@@ -98,8 +109,7 @@ namespace MoreShipUpgrades.Misc
         public bool INTERN_ENABLED { get; set; }
         public bool LOCKSMITH_ENABLED { get; set; }
         public string TOGGLE_NIGHT_VISION_KEY { get; set; }
-        public float NIGHT_VIS_DRAIN_DECREASE_PERCENT { get; set; }
-        public float NIGHT_VIS_REGEN_INCREASE_PERCENT { get; set; }
+        public float SALE_PERC { get; set; }
         public bool LOSE_NIGHT_VIS_ON_DEATH { get; set; }
         public string BEEKEEPER_UPGRADE_PRICES { get; set; }
         public string BACK_MUSCLES_UPGRADE_PRICES { get; set; }
@@ -109,7 +119,15 @@ namespace MoreShipUpgrades.Misc
         public string RUNNING_SHOES_UPGRADE_PRICES { get; set; }
         public string STRONG_LEGS_UPGRADE_PRICES { get; set; }
         public string DISCO_UPGRADE_PRICES { get; set; }
+        public string PROTEIN_UPGRADE_PRICES { get; set; }
         public bool SHARED_UPGRADES { get; set; }
+        public bool WALKIE_ENABLED { get; set; }
+        public bool WALKIE_INDIVIDUAL { get; set; }
+        public int PROTEIN_UNLOCK_FORCE {  get; set; }
+        public bool INTRO_ENABLED { get; set; }
+        public float LIGHTNING_ROD_PROBABILITY { get; set; }
+        public bool LIGHTNING_ROD_ACTIVE { get; set; }
+
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -123,22 +141,21 @@ namespace MoreShipUpgrades.Misc
 
         public void InitBindings()
         {
-            SHARED_UPGRADES = ConfigEntry("Shared Upgrades", "Convert all upgrades to be shared.", false, "Set true if you want no individual upgrades.");
-
+            SHARED_UPGRADES = ConfigEntry("Misc", "Convert all upgrades to be shared.", true, "Mod is designed to be played with this off.");
+            SALE_PERC = ConfigEntry("Misc", "Chance of upgrades going on sale", 0.85f, "0.85 = 15% chance of an upgrade going on sale.");
+            INTRO_ENABLED = ConfigEntry("Misc", "Intro Enabled", true, "If true shows a splashscreen with some info once per update of LGU.");
 
             ADVANCED_TELE_ENABLED = ConfigEntry("Advanced Portable Teleporter","Enable Advanced Portable Teleporter", true, "");
             ADVANCED_TELE_PRICE = ConfigEntry("Advanced Portable Teleporter","Price of Advanced Portable Teleporter", 1750, "");
             ADV_CHANCE_TO_BREAK = ConfigEntry("Advanced Portable Teleporter","Chance to break on use", 0.1f, "value should be 0.00 - 1.00");
-            ADVANCED_TELE_INDIVIDUAL = ConfigEntry("Advanced Portable Teleporter","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
             WEAK_TELE_ENABLED = ConfigEntry("Portable Teleporter", "Enable Portable Teleporter", true, "");
             WEAK_TELE_PRICE = ConfigEntry("Portable Teleporter", "Price of Portable Teleporter", 300, "");
             CHANCE_TO_BREAK = ConfigEntry("Portable Teleporter","Chance to break on use", 0.9f, "value should be 0.00 - 1.00");
-            WEAK_TELE_INDIVIDUAL = ConfigEntry("Portable Teleporter","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
             KEEP_ITEMS_ON_TELE = ConfigEntry("Portable Teleporter","Keep Items When Using Portable Teleporters", true, "If set to false you will drop your items like when using the vanilla TP.");
 
-            BEEKEEPER_ENABLED = ConfigEntry("Beekeeper","Enable Beekeeper Upgrade", true, "Take no damage from bees");
+            BEEKEEPER_ENABLED = ConfigEntry("Beekeeper","Enable Beekeeper Upgrade", true, "Take less damage from bees");
             BEEKEEPER_PRICE = ConfigEntry("Beekeeper","Price of Beekeeper Upgrade", 450, "");
             BEEKEEPER_DAMAGE_MULTIPLIER = ConfigEntry("Beekeeper","Multiplied to incoming damage (rounded to int)", 0.64f, "Incoming damage from bees is 10.");
             BEEKEEPER_UPGRADE_PRICES = ConfigEntry("Beekeeper","Price of each additional upgrade", "225,280,340", "");
@@ -146,15 +163,22 @@ namespace MoreShipUpgrades.Misc
 
             BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT = ConfigEntry("Beekeeper","Additional % Reduced per level", 0.15f, "Every time beekeeper is upgraded this value will be subtracted to the base multiplier above.");
 
+            PROTEIN_ENABLED = ConfigEntry("Protein Powder","Enable Protein Powder Upgrade", true, "Do more damage with shovels");
+            PROTEIN_PRICE = ConfigEntry("Protein Powder","Price of Protein Powder Upgrade", 500, "");
+            PROTEIN_UNLOCK_FORCE = ConfigEntry("Protein Powder", "Initial additional hit force", 1, "The value added to hit force on initial unlock.");
+            PROTEIN_INCREMENT = ConfigEntry("Protein Powder", "Additional hit force per level", 1, "Every time protein powder is upgraded this value will be added to the value above.");
+            PROTEIN_INDIVIDUAL = ConfigEntry("Protein Powder","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
+            PROTEIN_UPGRADE_PRICES = ConfigEntry("Protein Powder","Price of each additional upgrade", "700", "Value must be seperated by commas EX: '123,321,222'");
+
             BIGGER_LUNGS_ENABLED = ConfigEntry("Bigger Lungs","Enable Bigger Lungs Upgrade", true, "More Stamina");
-            BIGGER_LUNGS_PRICE = ConfigEntry("Bigger Lungs","Price of Bigger Lungs Upgrade", 700, "");
+            BIGGER_LUNGS_PRICE = ConfigEntry("Bigger Lungs","Price of Bigger Lungs Upgrade", 600, "");
             SPRINT_TIME_INCREASE = ConfigEntry("Bigger Lungs","SprintTime value", 17f, "Vanilla value is 11");
             SPRINT_TIME_INCREMENT = ConfigEntry("Bigger Lungs","SprintTime Increment", 1.25f,"How much the above value is increased on upgrade.");
             BIGGER_LUNGS_UPGRADE_PRICES = ConfigEntry("Bigger Lungs","Price of each additional upgrade", "350,450,550", "");
             BIGGER_LUNGS_INDIVIDUAL = ConfigEntry("Bigger Lungs","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
             RUNNING_SHOES_ENABLED = ConfigEntry("Running Shoes","Enable Running Shoes Upgrade", true, "Run Faster");
-            RUNNING_SHOES_PRICE = ConfigEntry("Running Shoes","Price of Running Shoes Upgrade", 1000, "");
+            RUNNING_SHOES_PRICE = ConfigEntry("Running Shoes","Price of Running Shoes Upgrade", 650, "");
             MOVEMENT_SPEED = ConfigEntry("Running Shoes","Movement Speed Value", 6f, "Vanilla value is 4.6");
             MOVEMENT_INCREMENT = ConfigEntry("Running Shoes", "Movement Speed Increment", 0.5f, "How much the above value is increased on upgrade.");
             RUNNING_SHOES_UPGRADE_PRICES = ConfigEntry("Running Shoes","Price of each additional upgrade", "500,750,1000", "");
@@ -168,7 +192,7 @@ namespace MoreShipUpgrades.Misc
             STRONG_LEGS_INDIVIDUAL = ConfigEntry("Strong Legs","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
             MALWARE_BROADCASTER_ENABLED = ConfigEntry("Malware Broadcaster", "Enable Malware Broadcaster Upgrade", true, "Explode Map Hazards");
-            MALWARE_BROADCASTER_PRICE = ConfigEntry("Malware Broadcaster", "Price of Malware Broadcaster Upgrade", 650, "");
+            MALWARE_BROADCASTER_PRICE = ConfigEntry("Malware Broadcaster", "Price of Malware Broadcaster Upgrade", 550, "");
             DESTROY_TRAP = ConfigEntry("Malware Broadcaster", "Destroy Trap", true, "If false Malware Broadcaster will disable the trap for a long time instead of destroying.");
             DISARM_TIME = ConfigEntry("Malware Broadcaster", "Disarm Time", 7f, "If `Destroy Trap` is false this is the duration traps will be disabled.");
             EXPLODE_TRAP = ConfigEntry("Malware Broadcaster", "Explode Trap", true, "Destroy Trap must be true! If this is true when destroying a trap it will also explode.");
@@ -182,23 +206,25 @@ namespace MoreShipUpgrades.Misc
             LIGHT_FOOTED_INDIVIDUAL = ConfigEntry("Light Footed","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
             NIGHT_VISION_ENABLED = ConfigEntry("Night Vision", "Enable Night Vision Upgrade", true, "Toggleable night vision.");
-            NIGHT_VISION_PRICE = ConfigEntry("Night Vision", "Price of Night Vision Upgrade", 480, "");
-            NIGHT_VIS_DRAIN_SPEED = ConfigEntry("Night Vision", "Multiplier for night vis battery drain", 0.1f, "Multiplied by timedelta. A value of 0.1 will result in a 10 second battery life.");
-            NIGHT_VIS_REGEN_SPEED = ConfigEntry("Night Vision", "Multiplier for night vis battery regen", 0.05f, "Multiplied by timedelta.");
+            NIGHT_VISION_PRICE = ConfigEntry("Night Vision", "Price of Night Vision Upgrade", 380, "");
+            NIGHT_BATTERY_MAX = ConfigEntry("Night Vision", "The max charge for your night vision battery", 10f, "Default settings this will be the unupgraded time in seconds the battery will drain and regen in. Increase to increase battery life.");
+            NIGHT_VIS_DRAIN_SPEED = ConfigEntry("Night Vision", "Multiplier for night vis battery drain", 1f, "Multiplied by timedelta, lower to increase battery life.");
+            NIGHT_VIS_REGEN_SPEED = ConfigEntry("Night Vision", "Multiplier for night vis battery regen", 1f, "Multiplied by timedelta, raise to speed up battery regen time.");
             NIGHT_VIS_COLOR = ConfigEntry("Night Vision", "Night Vision Color", UnityEngine.Color.green, "The color your night vision light emits.");
             NIGHT_VIS_RANGE = ConfigEntry("Night Vision", "Night Vision Range", 2000f, "Kind of like the distance your night vision travels.");
             NIGHT_VIS_INTENSITY = ConfigEntry("Night Vision", "Night Vision Intensity", 1000f, "Kind of like the brightness of your Night Vision.");
             NIGHT_VIS_STARTUP = ConfigEntry("Night Vision", "Night Vision StartUp Cost", 0.1f, "The percent battery drained when turned on (0.1 = 10%).");
             NIGHT_VIS_EXHAUST = ConfigEntry("Night Vision", "Night Vision Exhaustion", 2f, "How many seconds night vision stays fully depleted.");
             TOGGLE_NIGHT_VISION_KEY = ConfigEntry("Night Vision", "Toggle Night Vision Key", "LeftAlt", "Key to toggle Night Vision, you can use any key on your system such as LeftAlt, LeftShift, or any letter which exists.");
-            NIGHT_VIS_DRAIN_DECREASE_PERCENT = ConfigEntry("Night Vision", "Percentage decrease for night vis battery drain", 10f, "Percentage decrease applied to drain speed on each upgrade.");
-            NIGHT_VIS_REGEN_INCREASE_PERCENT = ConfigEntry("Night Vision", "Percentage increase for night vis battery regen", 20f, "Percentage increase applied to regen speed on each upgrade.");
+            NIGHT_VIS_DRAIN_INCREMENT = ConfigEntry("Night Vision", "Decrease for night vis battery drain", 0.15f, "Applied to drain speed on each upgrade.");
+            NIGHT_VIS_REGEN_INCREMENT = ConfigEntry("Night Vision", "Increase for night vis battery regen", 0.40f, "Applied to regen speed on each upgrade.");
+            NIGHT_VIS_BATTERY_INCREMENT = ConfigEntry("Night Vision", "Increase for night vis battery life", 2f, "Applied to the max charge for night vis battery on each upgrade.");
             LOSE_NIGHT_VIS_ON_DEATH = ConfigEntry("Night Vision", "Lose Night Vision On Death", true, "If true when you die you will have to re purchase and equip night vision goggles.");
             NIGHT_VISION_UPGRADE_PRICES = ConfigEntry("Night Vision","Price of each additional upgrade", "300,400,500", "");
             NIGHT_VISION_INDIVIDUAL = ConfigEntry("Night Vision","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
             DISCOMBOBULATOR_ENABLED = ConfigEntry("Discombobulator", "Enable Discombobulator Upgrade", true, "Stun enemies around the ship.");
-            DISCOMBOBULATOR_PRICE = ConfigEntry("Discombobulator", "Price of Discombobulator Upgrade", 550, "");
+            DISCOMBOBULATOR_PRICE = ConfigEntry("Discombobulator", "Price of Discombobulator Upgrade", 450, "");
             DISCOMBOBULATOR_COOLDOWN = ConfigEntry("Discombobulator", "Discombobulator Cooldown", 120f, "");
             DISCOMBOBULATOR_RADIUS  = ConfigEntry("Discombobulator", "Discombobulator Effect Radius", 40f, "");
             DISCOMBOBULATOR_STUN_DURATION  = ConfigEntry("Discombobulator", "Discombobulator Stun Duration", 7.5f, "");
@@ -215,7 +241,7 @@ namespace MoreShipUpgrades.Misc
             BETTER_SCANNER_INDIVIDUAL = ConfigEntry("Better Scanner","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
             BACK_MUSCLES_ENABLED = ConfigEntry("Back Muscles", "Enable Back Muscles Upgrade", true, "Reduce carry weight");
-            BACK_MUSCLES_PRICE = ConfigEntry("Back Muscles", "Price of Back Muscles Upgrade", 835, "");
+            BACK_MUSCLES_PRICE = ConfigEntry("Back Muscles", "Price of Back Muscles Upgrade", 715, "");
             CARRY_WEIGHT_REDUCTION = ConfigEntry("Back Muscles", "Carry Weight Multiplier", 0.5f, "Your carry weight is multiplied by this.");
             CARRY_WEIGHT_INCREMENT = ConfigEntry("Back Muscles", "Carry Weight Increment", 0.1f, "Each upgrade subtracts this from the above coefficient.");
             BACK_MUSCLES_UPGRADE_PRICES = ConfigEntry("Back Muscles","Price of each additional upgrade", "600,700,800", "");
@@ -226,12 +252,20 @@ namespace MoreShipUpgrades.Misc
             INTERN_INDIVIDUAL = ConfigEntry("Interns","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
             LOCKSMITH_ENABLED = ConfigEntry("Locksmith", "Enable Locksmith upgrade", true, "Allows you to pick locked doors by completing a minigame.");
-            LOCKSMITH_PRICE = ConfigEntry("Locksmith", "Locksmith Price", 740, "Default price of Locksmith upgrade.");
+            LOCKSMITH_PRICE = ConfigEntry("Locksmith", "Locksmith Price", 640, "Default price of Locksmith upgrade.");
             LOCKSMITH_INDIVIDUAL = ConfigEntry("Locksmith","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
-
 
             PEEPER_ENABLED = ConfigEntry("Peeper", "Enable Peeper item", true, "An item that will stare at coilheads for you.");
             PEEPER_PRICE = ConfigEntry("Peeper", "Peeper Price", 500, "Default price to purchase a Peeper.");
+
+            LIGHTNING_ROD_ENABLED = ConfigEntry(lightningRodScript.UPGRADE_NAME, lightningRodScript.ENABLED_SECTION, lightningRodScript.ENABLED_DEFAULT, lightningRodScript.ENABLED_DESCRIPTION);
+            LIGHTNING_ROD_PRICE = ConfigEntry(lightningRodScript.UPGRADE_NAME, lightningRodScript.PRICE_SECTION, lightningRodScript.PRICE_DEFAULT, "");
+            LIGHTNING_ROD_PROBABILITY = ConfigEntry(lightningRodScript.UPGRADE_NAME, lightningRodScript.PROBABILITY_SECTION, lightningRodScript.PROBABILITY_DEFAULT, lightningRodScript.PROBABILITY_DESCRIPTION);
+            LIGHTNING_ROD_ACTIVE = ConfigEntry(lightningRodScript.UPGRADE_NAME, lightningRodScript.ACTIVE_SECTION, lightningRodScript.ACTIVE_DEFAULT, lightningRodScript.ACTIVE_DESCRIPTION);
+
+            WALKIE_ENABLED = ConfigEntry("Walkie", "Enable the walkie talkie gps upgrade", true, "Holding a walkie talkie displays location.");
+            WALKIE_PRICE = ConfigEntry("Walkie", "Walkie GPS Price", 450, "Default price for upgrade.");
+            WALKIE_INDIVIDUAL = ConfigEntry("Walkie","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
         }
 
     }

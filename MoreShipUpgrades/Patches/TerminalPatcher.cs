@@ -2,6 +2,7 @@
 using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,6 +13,8 @@ namespace MoreShipUpgrades.Patches
     [HarmonyPatch(typeof(Terminal))]
     internal class TerminalPatcher
     {
+        const string LOAD_LGU_COMMAND = "load lgu";
+
         [HarmonyPostfix]
         [HarmonyPatch("Update")]
         private static void Counter()
@@ -28,6 +31,15 @@ namespace MoreShipUpgrades.Patches
         private static void CustomParser(ref Terminal __instance, ref TerminalNode __result)
         {
             string text = __instance.screenText.text.Substring(__instance.screenText.text.Length - __instance.textAdded);
+            if (text.Split()[0].ToLower() == "toggle" && text.Split()[1].ToLower() == "lightning")
+            {
+                if (!UpgradeBus.instance.lightningRod)
+                {
+                    lightningRodScript.AccessDeniedMessage(ref __result);
+                    return;
+                }
+                lightningRodScript.ToggleLightningRod(ref __result);
+            }
             if (text.ToLower() == "initattack" || text.ToLower() == "atk")
             {
                 if (!UpgradeBus.instance.terminalFlash)
@@ -149,7 +161,7 @@ namespace MoreShipUpgrades.Patches
                 __result = node;
                 LGUStore.instance.SyncCreditsServerRpc(__instance.groupCredits);
             }
-            else if (text.ToLower() == "intern")
+            else if (text.ToLower() == "intern" || text.ToLower() == "interns")
             {
                 TerminalNode node = new TerminalNode();
                 node.clearPreviousText = true;
@@ -163,7 +175,7 @@ namespace MoreShipUpgrades.Patches
                 PlayerControllerB player = StartOfRound.Instance.mapScreen.targetedPlayer;
                 if(!player.isPlayerDead)
                 {
-                    node.displayText = $"{player.name} is still alive, they can't be replaced with an intern.\n\n";
+                    node.displayText = $"{player.playerUsername} is still alive, they can't be replaced with an intern.\n\n";
                     __result = node;
                     return;
                 }
@@ -172,14 +184,14 @@ namespace MoreShipUpgrades.Patches
                 UpgradeBus.instance.internScript.ReviveTargetedPlayerServerRpc();
                 string name = UpgradeBus.instance.internNames[UnityEngine.Random.Range(0, UpgradeBus.instance.internNames.Length)];
                 string interest = UpgradeBus.instance.internInterests[UnityEngine.Random.Range(0, UpgradeBus.instance.internInterests.Length)];
-                node.displayText = $"{player.name} has been replaced with:\n\nNAME: {name}\nAGE: {UnityEngine.Random.Range(19,76)}\nIQ: {UnityEngine.Random.Range(2,160)}\nINTERESTS: {interest}\n\n{name} HAS BEEN TELEPORTED INSIDE THE FACILITY, PLEASE ACQUAINTANCE YOURSELF ACCORDINGLY";
+                node.displayText = $"{player.playerUsername} has been replaced with:\n\nNAME: {name}\nAGE: {UnityEngine.Random.Range(19,76)}\nIQ: {UnityEngine.Random.Range(2,160)}\nINTERESTS: {interest}\n\n{name} HAS BEEN TELEPORTED INSIDE THE FACILITY, PLEASE ACQUAINTANCE YOURSELF ACCORDINGLY";
                 __result = node;
             }
-            else if (text.Split()[0].ToLower() == "load" && text.Split()[1].ToLower() == "lgu")
+            else if (text.ToLower().Contains(LOAD_LGU_COMMAND))
             {
                 TerminalNode node = new TerminalNode();
                 node.clearPreviousText = true;
-                if(text.ToLower() == "load lgu")
+                if(text.ToLower() == LOAD_LGU_COMMAND)
                 {
                     node.displayText = "Enter the name of the user whos upgrades/save you want to copy. Ex: `load lgu steve`\n";
                     __result = node;
@@ -187,19 +199,20 @@ namespace MoreShipUpgrades.Patches
                 }
                 PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
                 List<string> playerNames = new List<string>();
-                foreach(PlayerControllerB player in players)
+                var playerNameToSearch = text.Substring(text.IndexOf(LOAD_LGU_COMMAND) + LOAD_LGU_COMMAND.Length).Trim();
+                foreach (PlayerControllerB player in players)
                 {
-                    playerNames.Add(player.name);
-                    if(player.name.ToLower() == text.Split()[2].ToLower())
+                    playerNames.Add(player.playerUsername);
+                    if (player.playerUsername.ToLower() == playerNameToSearch.ToLower())
                     {
-                        node.displayText = $"Syncing with {player.name}\nThis should take 5 seconds\nPulling data...\n";
+                        node.displayText = $"Syncing with {player.playerUsername}\nThis should take 5 seconds\nPulling data...\n";
                         LGUStore.instance.ShareSaveServerRpc();
                         __instance.StartCoroutine(WaitForSync(player.playerSteamId));
                         __result = node;
                         return;
                     }
                 }
-                node.displayText = $"The name {text.Split()[2]} was not found. The following names were found:\n{string.Join(", ",playerNames)}\n";
+                node.displayText = $"The name {playerNameToSearch} was not found. The following names were found:\n{string.Join(", ",playerNames)}\n";
                 __result = node;
                 return;
             }
@@ -268,6 +281,7 @@ namespace MoreShipUpgrades.Patches
             yield return new WaitForSeconds(3f);
             LGUStore.instance.saveInfo = LGUStore.instance.lguSave.playerSaves[id];
             LGUStore.instance.UpdateUpgradeBus(false);
+            HUDManager.Instance.chatText.text += "\nAPPLYING RETRIEVED SAVE";
         }
         private static IEnumerator CountDownChat(float count)
         {

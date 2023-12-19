@@ -12,7 +12,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         void Start()
         {
             DontDestroyOnLoad(gameObject);
-            UpgradeBus.instance.UpgradeObjects.Add("Interns", gameObject);
+            Register();
             UpgradeBus.instance.internScript = this;
         }
 
@@ -60,9 +60,9 @@ namespace MoreShipUpgrades.UpgradeComponents
                 {
                     player.isPlayerDead = false;
                     player.isPlayerControlled = true;
-                    player.isInElevator = true;
-                    player.isInHangarShipRoom = true;
-                    player.isInsideFactory = false;
+                    player.isInElevator = false;
+                    player.isInHangarShipRoom = false;
+                    player.isInsideFactory = true;
                     player.wasInElevatorLastFrame = false;
                     StartOfRound.Instance.SetPlayerObjectExtrapolate(false);
                     player.setPositionOfDeadPlayer = false;
@@ -88,7 +88,8 @@ namespace MoreShipUpgrades.UpgradeComponents
                     player.DisableJetpackControlsLocally();
                     player.health = 100;
                     player.mapRadarDotAnimator.SetBool("dead", false);
-                    if (player.IsOwner)
+                    player.deadBody = null;
+                    if (player == GameNetworkManager.Instance.localPlayerController)
                     {
                         HUDManager.Instance.gasHelmetAnimator.SetBool("gasEmitting", false);
                         player.hasBegunSpectating = false;
@@ -97,6 +98,7 @@ namespace MoreShipUpgrades.UpgradeComponents
                         player.hinderedMultiplier = 1f;
                         player.isMovementHindered = 0;
                         player.sourcesCausingSinking = 0;
+                        HUDManager.Instance.HideHUD(false);
                     }
                 }
                 SoundManager.Instance.earsRingingTimer = 0f;
@@ -129,7 +131,9 @@ namespace MoreShipUpgrades.UpgradeComponents
                 player.spectatedPlayerScript = null;
                 HUDManager.Instance.audioListenerLowPass.enabled = false;
                 StartOfRound.Instance.SetSpectateCameraToGameOverMode(false, player);
+                TimeOfDay.Instance.DisableAllWeather(false);
                 StartOfRound.Instance.UpdatePlayerVoiceEffects();
+                player.thisPlayerModel.enabled = true;
             }
             else
             {

@@ -9,7 +9,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         void Start()
         {
             DontDestroyOnLoad(gameObject);
-            UpgradeBus.instance.UpgradeObjects.Add("Better Scanner", gameObject);
+            Register();
         }
 
         public override void load()

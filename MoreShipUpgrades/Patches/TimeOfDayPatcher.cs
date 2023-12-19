@@ -8,9 +8,17 @@ namespace MoreShipUpgrades.Patches
     {
         [HarmonyPostfix]
         [HarmonyPatch("SyncNewProfitQuotaClientRpc")]
-        private static void GenerateNewSales(DeleteFileButton __instance)
+        private static void GenerateNewSales(TimeOfDay __instance)
         {
-            UpgradeBus.instance.GenerateSales();
+            if(UpgradeBus.instance.cfg.SHARED_UPGRADES && (__instance.IsHost || __instance.IsServer))
+            {
+                int seed = UnityEngine.Random.Range(0, 999999);
+                LGUStore.instance.GenerateSalesClientRpc(seed);
+            }
+            else
+            {
+                UpgradeBus.instance.GenerateSales();
+            }
         }
     }
 

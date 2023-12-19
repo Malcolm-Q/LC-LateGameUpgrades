@@ -7,18 +7,16 @@ namespace MoreShipUpgrades.UpgradeComponents
 {
     internal class biggerLungScript : BaseUpgrade
     {
-        private PlayerControllerB[] players;
 
         void Start()
         {
             DontDestroyOnLoad(gameObject);
-            UpgradeBus.instance.UpgradeObjects.Add("Bigger Lungs", gameObject);
+            Register();
         }
 
         public override void Increment()
         {
             UpgradeBus.instance.lungLevel++;
-            players = GameObject.FindObjectsOfType<PlayerControllerB>();
             GameNetworkManager.Instance.localPlayerController.sprintTime += UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT;  //17
         }
 

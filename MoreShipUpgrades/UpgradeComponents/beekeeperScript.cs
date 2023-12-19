@@ -8,7 +8,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         void Start()
         {
             DontDestroyOnLoad(gameObject);
-            UpgradeBus.instance.UpgradeObjects.Add("Beekeeper", gameObject);
+            Register();
         }
 
         public override void Increment()
@@ -21,7 +21,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             UpgradeBus.instance.beekeeper = true;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Beekeeper is active!</color>";
-            LGUStore.instance.UpdateBeePercsServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, 0);
+            LGUStore.instance.UpdateBeePercsServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, UpgradeBus.instance.beeLevel);
         }
 
         public override void Register()

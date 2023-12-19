@@ -5,9 +5,9 @@ using System.IO;
 using Unity.Netcode;
 using UnityEngine;
 using Newtonsoft.Json;
-using GameNetcodeStuff;
 using System.Collections;
 using MoreShipUpgrades.UpgradeComponents;
+using System.Linq;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -17,6 +17,7 @@ namespace MoreShipUpgrades.Managers
         public SaveInfo saveInfo;
         public LGUSave lguSave;
         private ulong playerID = 0;
+        private Action onConfigReceived;
 
         private static Dictionary<string, Func<SaveInfo, bool>> conditions = new Dictionary<string, Func<SaveInfo, bool>>
         {
@@ -30,8 +31,10 @@ namespace MoreShipUpgrades.Managers
             {"Better Scanner", SaveInfo => SaveInfo.scannerUpgrade },
             {"Beekeeper", SaveInfo => SaveInfo.beekeeper },
             {"Back Muscles", SaveInfo => SaveInfo.exoskeleton },
-            {"Pager", SaveInfo => SaveInfo.pager },
             {"Locksmith", SaveInfo => SaveInfo.lockSmith },
+            {"Walkie GPS", SaveInfo => SaveInfo.walkies },
+            {"Protein Powder", SaveInfo => SaveInfo.proteinPowder },
+            {lightningRodScript.UPGRADE_NAME, SaveInfo => SaveInfo.lightningRod },
         };
 
         private static Dictionary<string, Func<SaveInfo, int>> levelConditions = new Dictionary<string, Func<SaveInfo, int>>
@@ -46,9 +49,13 @@ namespace MoreShipUpgrades.Managers
             { "Better Scanner", saveInfo => 0 },
             { "Beekeeper", saveInfo => saveInfo.beeLevel },
             { "Back Muscles", saveInfo => saveInfo.backLevel },
-            { "Pager", saveInfo => 0 },
-            { "Locksmith", saveInfo => 0 }
+            { "Locksmith", saveInfo => 0 },
+            { "Walkie GPS", saveInfo => 0 },
+            {"Protein Powder", SaveInfo => SaveInfo.proteinLevel },
+            { lightningRodScript.UPGRADE_NAME, saveInfo => 0},
         };
+        private bool retrievedCfg;
+        private bool receivedSave;
 
         private void Start()
         {
@@ -61,24 +68,33 @@ namespace MoreShipUpgrades.Managers
                 {
                     string json = File.ReadAllText(filePath);
                     lguSave = JsonConvert.DeserializeObject<LGUSave>(json);
-                    HandleSpawns();
                     UpdateUpgradeBus();
                 }
                 else
                 {
                     lguSave = new LGUSave();
-                    HandleSpawns();
                     UpdateUpgradeBus();
                 }
+                UpgradeBus.instance.Reconstruct();
+                HandleSpawns();
             }
             else
             {
-                ShareSaveServerRpc();
+                SendConfigServerRpc();
             }
-            if(!File.Exists(Path.Combine(Application.persistentDataPath,"hasSeenIntroLGU")))
+            string path = Path.Combine(Application.persistentDataPath, "IntroLGU");
+            if(File.Exists(path))
             {
-                Instantiate(UpgradeBus.instance.introScreen);
-                File.Create(Path.Combine(Application.persistentDataPath,"hasSeenIntroLGU"));
+                if(File.ReadAllText(path) != UpgradeBus.instance.version)
+                {
+                    if(UpgradeBus.instance.cfg.INTRO_ENABLED) Instantiate(UpgradeBus.instance.introScreen);
+                    File.WriteAllText(path, UpgradeBus.instance.version);
+                }    
+            }
+            else
+            {
+                if(UpgradeBus.instance.cfg.INTRO_ENABLED) Instantiate(UpgradeBus.instance.introScreen);
+                File.WriteAllText(path, UpgradeBus.instance.version);
             }
         }
 
@@ -104,6 +120,39 @@ namespace MoreShipUpgrades.Managers
                 GameObject go = Instantiate(node.Prefab, Vector3.zero, Quaternion.identity);
                 go.GetComponent<NetworkObject>().Spawn();
             }
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void SendConfigServerRpc()
+        {
+            string json = JsonConvert.SerializeObject(UpgradeBus.instance.cfg);
+            SendConfigClientRpc(json);
+        }
+
+        [ClientRpc]
+        private void SendConfigClientRpc(string json)
+        {
+            if (retrievedCfg) return;
+            PluginConfig cfg = JsonConvert.DeserializeObject<PluginConfig>(json);
+            if( cfg != null && !IsHost && !IsServer)
+            {
+                Color col = UpgradeBus.instance.cfg.NIGHT_VIS_COLOR;
+                UpgradeBus.instance.cfg = cfg;
+                UpgradeBus.instance.cfg.NIGHT_VIS_COLOR = col; //
+                UpgradeBus.instance.Reconstruct();
+                retrievedCfg = true;
+
+            }
+            if(IsHost || IsServer)
+            {
+                StartCoroutine(WaitALittleToShareTheFile());
+            }
+        }
+
+        private IEnumerator WaitALittleToShareTheFile()
+        {
+            yield return new WaitForSeconds(0.5f);
+            ShareSaveServerRpc();
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -135,12 +184,24 @@ namespace MoreShipUpgrades.Managers
         [ClientRpc]
         public void ShareSaveClientRpc(string json)
         {
+            if (receivedSave) return;
+            receivedSave = true;
             foreach(BaseUpgrade upgrade in FindObjectsOfType<BaseUpgrade>())
             {
                 upgrade.Register();
             }
             lguSave = JsonConvert.DeserializeObject<LGUSave>(json);
-            UpdateUpgradeBus();
+            List<ulong> saves = lguSave.playerSaves.Keys.ToList();
+            if(UpgradeBus.instance.cfg.SHARED_UPGRADES && saves.Count > 0)
+            {
+                Debug.Log("LGU: Loading first players save");
+                saveInfo = lguSave.playerSaves[lguSave.playerSaves.Keys.ToList<ulong>()[0]];
+                UpdateUpgradeBus(false);
+            }
+            else
+            {
+                UpdateUpgradeBus();
+            }
         }
 
         [ServerRpc(RequireOwnership =false)]
@@ -161,6 +222,26 @@ namespace MoreShipUpgrades.Managers
                 UpgradeBus.instance.beePercs.Add(id, lvl);
             }
         }
+
+        [ServerRpc(RequireOwnership =false)]
+        public void UpdateForceMultsServerRpc(ulong id, int lvl)
+        {
+            UpdateForceMultsClientRpc(id, lvl);
+        }
+
+        [ClientRpc]
+        private void UpdateForceMultsClientRpc(ulong id, int lvl)
+        {
+            if(UpgradeBus.instance.forceMults.ContainsKey(id))
+            {
+                UpgradeBus.instance.forceMults[id] = lvl;
+            }
+            else
+            {
+                UpgradeBus.instance.forceMults.Add(id, lvl);
+            }
+        }
+
 
         [ServerRpc(RequireOwnership = false)]
         public void DeleteUpgradesServerRpc()
@@ -220,14 +301,18 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.strongLegs = saveInfo.strongLegs;
             UpgradeBus.instance.runningShoes = saveInfo.runningShoes;
             UpgradeBus.instance.biggerLungs = saveInfo.biggerLungs;
+            UpgradeBus.instance.proteinPowder = saveInfo.proteinPowder;
+            UpgradeBus.instance.lightningRod = saveInfo.lightningRod;
+
             UpgradeBus.instance.beeLevel = saveInfo.beeLevel;
+            UpgradeBus.instance.proteinLevel = saveInfo.proteinLevel;
             UpgradeBus.instance.lungLevel = saveInfo.lungLevel;
+            UpgradeBus.instance.walkies = saveInfo.walkies;
             UpgradeBus.instance.backLevel = saveInfo.backLevel;
             UpgradeBus.instance.runningLevel = saveInfo.runningLevel;
             UpgradeBus.instance.lightLevel = saveInfo.lightLevel;
             UpgradeBus.instance.discoLevel = saveInfo.discoLevel;
             UpgradeBus.instance.legLevel = saveInfo.legLevel;
-            UpgradeBus.instance.pager = saveInfo.pager;
             UpgradeBus.instance.nightVisionLevel = saveInfo.nightVisionLevel;
 
             StartCoroutine(WaitForUpgradeObject());
@@ -317,6 +402,12 @@ namespace MoreShipUpgrades.Managers
             saveInfo = new SaveInfo();
             UpdateLGUSaveServerRpc(playerID, JsonConvert.SerializeObject(saveInfo));
         }
+
+        [ClientRpc]
+        public void GenerateSalesClientRpc(int seed)
+        {
+            UpgradeBus.instance.GenerateSales(seed);
+        }
     }
 
     [Serializable]
@@ -332,11 +423,15 @@ namespace MoreShipUpgrades.Managers
         public bool beekeeper = UpgradeBus.instance.beekeeper;
         public bool terminalFlash = UpgradeBus.instance.terminalFlash;
         public bool strongLegs = UpgradeBus.instance.strongLegs;
+        public bool proteinPowder = UpgradeBus.instance.proteinPowder;
         public bool runningShoes = UpgradeBus.instance.runningShoes;
         public bool biggerLungs = UpgradeBus.instance.biggerLungs;
         public bool lockSmith = UpgradeBus.instance.lockSmith;
-        public bool pager = UpgradeBus.instance.pager;
+        public bool walkies = UpgradeBus.instance.walkies;
+        public bool lightningRod = UpgradeBus.instance.lightningRod;
+
         public int beeLevel = UpgradeBus.instance.beeLevel;
+        public int proteinLevel = UpgradeBus.instance.proteinLevel;
         public int lungLevel = UpgradeBus.instance.lungLevel;
         public int backLevel = UpgradeBus.instance.backLevel;
         public int runningLevel = UpgradeBus.instance.runningLevel;
