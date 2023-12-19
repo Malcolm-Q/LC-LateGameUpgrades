@@ -134,8 +134,10 @@ namespace MoreShipUpgrades.Managers
             PluginConfig cfg = JsonConvert.DeserializeObject<PluginConfig>(json);
             if( cfg != null && !IsHost && !IsServer)
             {
+                Color col = UpgradeBus.instance.cfg.NIGHT_VIS_COLOR;
                 UpgradeBus.instance.cfg = cfg;
-                UpgradeBus.instance.Reconstruct(); // do this 
+                UpgradeBus.instance.cfg.NIGHT_VIS_COLOR = col; //
+                UpgradeBus.instance.Reconstruct();
                 retrievedCfg = true;
 
             }

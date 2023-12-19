@@ -12,6 +12,8 @@ namespace MoreShipUpgrades.Patches
     [HarmonyPatch(typeof(Terminal))]
     internal class TerminalPatcher
     {
+        const string LOAD_LGU_COMMAND = "load lgu";
+
         [HarmonyPostfix]
         [HarmonyPatch("Update")]
         private static void Counter()
@@ -175,11 +177,11 @@ namespace MoreShipUpgrades.Patches
                 node.displayText = $"{player.playerUsername} has been replaced with:\n\nNAME: {name}\nAGE: {UnityEngine.Random.Range(19,76)}\nIQ: {UnityEngine.Random.Range(2,160)}\nINTERESTS: {interest}\n\n{name} HAS BEEN TELEPORTED INSIDE THE FACILITY, PLEASE ACQUAINTANCE YOURSELF ACCORDINGLY";
                 __result = node;
             }
-            else if (text.Split()[0].ToLower() == "load" && text.Split()[1].ToLower() == "lgu")
+            else if (text.ToLower().Contains(LOAD_LGU_COMMAND))
             {
                 TerminalNode node = new TerminalNode();
                 node.clearPreviousText = true;
-                if(text.ToLower() == "load lgu")
+                if(text.ToLower() == LOAD_LGU_COMMAND)
                 {
                     node.displayText = "Enter the name of the user whos upgrades/save you want to copy. Ex: `load lgu steve`\n";
                     __result = node;
@@ -187,10 +189,11 @@ namespace MoreShipUpgrades.Patches
                 }
                 PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
                 List<string> playerNames = new List<string>();
-                foreach(PlayerControllerB player in players)
+                var playerNameToSearch = text.Substring(text.IndexOf(LOAD_LGU_COMMAND) + LOAD_LGU_COMMAND.Length).Trim();
+                foreach (PlayerControllerB player in players)
                 {
                     playerNames.Add(player.playerUsername);
-                    if(player.playerUsername.ToLower() == text.Split()[2].ToLower())
+                    if (player.playerUsername.ToLower() == playerNameToSearch.ToLower())
                     {
                         node.displayText = $"Syncing with {player.playerUsername}\nThis should take 5 seconds\nPulling data...\n";
                         LGUStore.instance.ShareSaveServerRpc();
@@ -199,7 +202,7 @@ namespace MoreShipUpgrades.Patches
                         return;
                     }
                 }
-                node.displayText = $"The name {text.Split()[2]} was not found. The following names were found:\n{string.Join(", ",playerNames)}\n";
+                node.displayText = $"The name {playerNameToSearch} was not found. The following names were found:\n{string.Join(", ",playerNames)}\n";
                 __result = node;
                 return;
             }
