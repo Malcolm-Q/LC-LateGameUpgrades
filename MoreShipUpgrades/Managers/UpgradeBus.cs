@@ -124,6 +124,7 @@ namespace MoreShipUpgrades.Managers
             biggerLungs = false;
             lightningRod = false;
             lightningRodActive = false;
+            proteinLevel = 0;
             lungLevel = 0;
             backLevel = 0;
             beeLevel = 0;
