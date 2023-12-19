@@ -163,7 +163,7 @@ namespace MoreShipUpgrades.Patches
                 PlayerControllerB player = StartOfRound.Instance.mapScreen.targetedPlayer;
                 if(!player.isPlayerDead)
                 {
-                    node.displayText = $"{player.name} is still alive, they can't be replaced with an intern.\n\n";
+                    node.displayText = $"{player.playerUsername} is still alive, they can't be replaced with an intern.\n\n";
                     __result = node;
                     return;
                 }
@@ -172,7 +172,7 @@ namespace MoreShipUpgrades.Patches
                 UpgradeBus.instance.internScript.ReviveTargetedPlayerServerRpc();
                 string name = UpgradeBus.instance.internNames[UnityEngine.Random.Range(0, UpgradeBus.instance.internNames.Length)];
                 string interest = UpgradeBus.instance.internInterests[UnityEngine.Random.Range(0, UpgradeBus.instance.internInterests.Length)];
-                node.displayText = $"{player.name} has been replaced with:\n\nNAME: {name}\nAGE: {UnityEngine.Random.Range(19,76)}\nIQ: {UnityEngine.Random.Range(2,160)}\nINTERESTS: {interest}\n\n{name} HAS BEEN TELEPORTED INSIDE THE FACILITY, PLEASE ACQUAINTANCE YOURSELF ACCORDINGLY";
+                node.displayText = $"{player.playerUsername} has been replaced with:\n\nNAME: {name}\nAGE: {UnityEngine.Random.Range(19,76)}\nIQ: {UnityEngine.Random.Range(2,160)}\nINTERESTS: {interest}\n\n{name} HAS BEEN TELEPORTED INSIDE THE FACILITY, PLEASE ACQUAINTANCE YOURSELF ACCORDINGLY";
                 __result = node;
             }
             else if (text.Split()[0].ToLower() == "load" && text.Split()[1].ToLower() == "lgu")
@@ -189,10 +189,10 @@ namespace MoreShipUpgrades.Patches
                 List<string> playerNames = new List<string>();
                 foreach(PlayerControllerB player in players)
                 {
-                    playerNames.Add(player.name);
-                    if(player.name.ToLower() == text.Split()[2].ToLower())
+                    playerNames.Add(player.playerUsername);
+                    if(player.playerUsername.ToLower() == text.Split()[2].ToLower())
                     {
-                        node.displayText = $"Syncing with {player.name}\nThis should take 5 seconds\nPulling data...\n";
+                        node.displayText = $"Syncing with {player.playerUsername}\nThis should take 5 seconds\nPulling data...\n";
                         LGUStore.instance.ShareSaveServerRpc();
                         __instance.StartCoroutine(WaitForSync(player.playerSteamId));
                         __result = node;
