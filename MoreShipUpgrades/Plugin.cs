@@ -229,6 +229,11 @@ namespace MoreShipUpgrades
             intern.AddComponent<defibScript>();
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(intern);
 
+            // Lightning Rod
+            GameObject lightningRod = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/LightningRod.prefab");
+            lightningRod.AddComponent<lightningRodScript>();
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(lightningRod);
+
             //lockSmith
             GameObject lockSmith = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/LockSmith.prefab");
             lockSmith.AddComponent<lockSmithScript>();
