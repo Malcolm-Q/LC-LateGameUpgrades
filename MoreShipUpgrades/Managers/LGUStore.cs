@@ -408,6 +408,13 @@ namespace MoreShipUpgrades.Managers
         {
             UpgradeBus.instance.GenerateSales(seed);
         }
+
+        [ClientRpc]
+        public void CoordinateInterceptionClientRpc()
+        {
+            UpgradeBus.instance.LightningIntercepted = true;
+            FindObjectOfType<StormyWeather>(true).staticElectricityParticle.gameObject.SetActive(false);
+        }
     }
 
     [Serializable]

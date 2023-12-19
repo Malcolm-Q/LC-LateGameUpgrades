@@ -61,6 +61,7 @@ namespace MoreShipUpgrades.Managers
         public AudioClip flashNoise;
         public GameObject modStorePrefab;
         public TerminalNode modStoreInterface;
+        public Terminal terminal;
 
         public List<CustomTerminalNode> terminalNodes = new List<CustomTerminalNode>();
 
@@ -78,6 +79,9 @@ namespace MoreShipUpgrades.Managers
         internal string version;
 
         public AssetBundle UpgradeAssets;
+
+        public bool CanTryInterceptLightning { get; internal set; }
+        public bool LightningIntercepted { get; internal set; }
 
         void Awake()
         {
@@ -490,7 +494,7 @@ namespace MoreShipUpgrades.Managers
             // discombob
             GameObject flash = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/terminalFlash.prefab");
             AudioClip flashSFX = UpgradeAssets.LoadAsset<AudioClip>("Assets/ShipUpgrades/flashbangsfx.ogg");
-            UpgradeBus.instance.flashNoise = flashSFX;
+            flashNoise = flashSFX;
             shareStatus = cfg.SHARED_UPGRADES ? true : cfg.DISCOMBOBULATOR_INDIVIDUAL;
             IndividualUpgrades.Add("Discombobulator", shareStatus);
             if(cfg.DISCOMBOBULATOR_ENABLED)
@@ -538,7 +542,7 @@ namespace MoreShipUpgrades.Managers
             IndividualUpgrades.Add(lightningRodScript.UPGRADE_NAME, shareStatus);
             if (cfg.LIGHTNING_ROD_ENABLED)
             {
-                CustomTerminalNode node = new CustomTerminalNode(lightningRodScript.UPGRADE_NAME, cfg.LIGHTNING_ROD_PRICE, string.Format(infoJson[lightningRodScript.UPGRADE_NAME], cfg.LIGHTNING_ROD_PRICE), lightningRod);
+                CustomTerminalNode node = new CustomTerminalNode(lightningRodScript.UPGRADE_NAME, cfg.LIGHTNING_ROD_PRICE, string.Format(infoJson[lightningRodScript.UPGRADE_NAME], cfg.LIGHTNING_ROD_PRICE,cfg.LIGHTNING_ROD_DIST), lightningRod);
                 terminalNodes.Add(node);
             }
 

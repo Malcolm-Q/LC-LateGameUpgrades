@@ -16,10 +16,6 @@ namespace MoreShipUpgrades.UpgradeComponents
         public static string PRICE_SECTION = string.Format("{0} Price", UPGRADE_NAME);
         public static int PRICE_DEFAULT = 1000;
 
-        public static string PROBABILITY_SECTION = string.Format("Probability that {0} will redirect a lightning bolt to the ship.", UPGRADE_NAME);
-        public static float PROBABILITY_DEFAULT = 1.0f;
-        public static string PROBABILITY_DESCRIPTION = "Values from [0,1], being 0 equivalent to zero chance and 1 being guaranteed to redirect.";
-
         public static string ACTIVE_SECTION = "Active on Purchase";
         public static bool ACTIVE_DEFAULT = true;
         public static string ACTIVE_DESCRIPTION = string.Format("If true: {0} will be active on purchase.", UPGRADE_NAME);
@@ -36,6 +32,11 @@ namespace MoreShipUpgrades.UpgradeComponents
         private static string TOGGLE_ON_MESSAGE = string.Format("{0} has been enabled. Lightning bolts will now be redirected to the ship.\n", UPGRADE_NAME);
         private static string TOGGLE_OFF_MESSAGE = string.Format("{0} has been disabled. Lightning bolts will no longer be redirected to the ship.\n", UPGRADE_NAME);
 
+        // distance
+        public static string DIST_SECTION = "Effective Distance of lightning rod.";
+        public static float DIST_DEFAULT = 150f;
+        public static string DIST_DESCRIPTION = string.Format("The closer you are the more likely the rod will reroute lightning.", UPGRADE_NAME);
+
         void Start()
         {
             DontDestroyOnLoad(gameObject);
@@ -50,7 +51,6 @@ namespace MoreShipUpgrades.UpgradeComponents
         public override void load()
         {
             UpgradeBus.instance.lightningRod = true;
-            UpgradeBus.instance.lightningRodProbability = UpgradeBus.instance.cfg.LIGHTNING_ROD_PROBABILITY;
             UpgradeBus.instance.lightningRodActive = UpgradeBus.instance.cfg.LIGHTNING_ROD_ACTIVE;
             HUDManager.Instance.chatText.text += LOAD_MESSAGE;
         }

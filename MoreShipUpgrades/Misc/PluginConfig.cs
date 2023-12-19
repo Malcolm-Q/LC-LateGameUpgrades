@@ -125,8 +125,8 @@ namespace MoreShipUpgrades.Misc
         public bool WALKIE_INDIVIDUAL { get; set; }
         public int PROTEIN_UNLOCK_FORCE {  get; set; }
         public bool INTRO_ENABLED { get; set; }
-        public float LIGHTNING_ROD_PROBABILITY { get; set; }
         public bool LIGHTNING_ROD_ACTIVE { get; set; }
+        public float LIGHTNING_ROD_DIST {  get; set; }
 
 
         public PluginConfig(ConfigFile cfg)
@@ -260,8 +260,8 @@ namespace MoreShipUpgrades.Misc
 
             LIGHTNING_ROD_ENABLED = ConfigEntry(lightningRodScript.UPGRADE_NAME, lightningRodScript.ENABLED_SECTION, lightningRodScript.ENABLED_DEFAULT, lightningRodScript.ENABLED_DESCRIPTION);
             LIGHTNING_ROD_PRICE = ConfigEntry(lightningRodScript.UPGRADE_NAME, lightningRodScript.PRICE_SECTION, lightningRodScript.PRICE_DEFAULT, "");
-            LIGHTNING_ROD_PROBABILITY = ConfigEntry(lightningRodScript.UPGRADE_NAME, lightningRodScript.PROBABILITY_SECTION, lightningRodScript.PROBABILITY_DEFAULT, lightningRodScript.PROBABILITY_DESCRIPTION);
             LIGHTNING_ROD_ACTIVE = ConfigEntry(lightningRodScript.UPGRADE_NAME, lightningRodScript.ACTIVE_SECTION, lightningRodScript.ACTIVE_DEFAULT, lightningRodScript.ACTIVE_DESCRIPTION);
+            LIGHTNING_ROD_DIST = ConfigEntry(lightningRodScript.UPGRADE_NAME, lightningRodScript.DIST_SECTION, lightningRodScript.DIST_DEFAULT, lightningRodScript.DIST_DESCRIPTION);
 
             WALKIE_ENABLED = ConfigEntry("Walkie", "Enable the walkie talkie gps upgrade", true, "Holding a walkie talkie displays location.");
             WALKIE_PRICE = ConfigEntry("Walkie", "Walkie GPS Price", 450, "Default price for upgrade.");
