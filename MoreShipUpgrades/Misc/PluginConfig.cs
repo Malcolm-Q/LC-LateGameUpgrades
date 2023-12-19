@@ -4,10 +4,12 @@ using System.Drawing;
 using System.Collections.Generic;
 using System;
 using UnityEngine.InputSystem;
+using Newtonsoft.Json;
 
 
 namespace MoreShipUpgrades.Misc
 {
+    [Serializable]
     public class PluginConfig
     {
         readonly ConfigFile configFile;
@@ -87,6 +89,7 @@ namespace MoreShipUpgrades.Misc
         public float DISCOMBOBULATOR_RADIUS { get; set; }
         public float DISCOMBOBULATOR_STUN_DURATION { get; set; }
         public bool DISCOMBOBULATOR_NOTIFY_CHAT { get; set; }
+        [JsonIgnore]
         public UnityEngine.Color NIGHT_VIS_COLOR { get; set; }
         public float NIGHT_VIS_RANGE { get; set; }
         public float NIGHT_VIS_INTENSITY { get; set; }
@@ -120,6 +123,7 @@ namespace MoreShipUpgrades.Misc
         public bool WALKIE_ENABLED { get; set; }
         public bool WALKIE_INDIVIDUAL { get; set; }
         public int PROTEIN_UNLOCK_FORCE {  get; set; }
+        public bool INTRO_ENABLED { get; set; }
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -133,18 +137,17 @@ namespace MoreShipUpgrades.Misc
 
         public void InitBindings()
         {
-            SHARED_UPGRADES = ConfigEntry("Misc", "Convert all upgrades to be shared.", false, "Set true if you want no individual upgrades.");
+            SHARED_UPGRADES = ConfigEntry("Misc", "Convert all upgrades to be shared.", true, "Mod is designed to be played with this off.");
             SALE_PERC = ConfigEntry("Misc", "Chance of upgrades going on sale", 0.85f, "0.85 = 15% chance of an upgrade going on sale.");
+            INTRO_ENABLED = ConfigEntry("Misc", "Intro Enabled", true, "If true shows a splashscreen with some info once per update of LGU.");
 
             ADVANCED_TELE_ENABLED = ConfigEntry("Advanced Portable Teleporter","Enable Advanced Portable Teleporter", true, "");
             ADVANCED_TELE_PRICE = ConfigEntry("Advanced Portable Teleporter","Price of Advanced Portable Teleporter", 1750, "");
             ADV_CHANCE_TO_BREAK = ConfigEntry("Advanced Portable Teleporter","Chance to break on use", 0.1f, "value should be 0.00 - 1.00");
-            ADVANCED_TELE_INDIVIDUAL = ConfigEntry("Advanced Portable Teleporter","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
             WEAK_TELE_ENABLED = ConfigEntry("Portable Teleporter", "Enable Portable Teleporter", true, "");
             WEAK_TELE_PRICE = ConfigEntry("Portable Teleporter", "Price of Portable Teleporter", 300, "");
             CHANCE_TO_BREAK = ConfigEntry("Portable Teleporter","Chance to break on use", 0.9f, "value should be 0.00 - 1.00");
-            WEAK_TELE_INDIVIDUAL = ConfigEntry("Portable Teleporter","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
             KEEP_ITEMS_ON_TELE = ConfigEntry("Portable Teleporter","Keep Items When Using Portable Teleporters", true, "If set to false you will drop your items like when using the vanilla TP.");
 

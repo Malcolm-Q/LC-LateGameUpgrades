@@ -21,7 +21,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         void Start()
         {
             DontDestroyOnLoad(gameObject);
-            UpgradeBus.instance.UpgradeObjects.Add("NV Headset Batteries", gameObject);
+            Register();
             batteryBar = transform.GetChild(0).GetChild(0).transform;
             transform.GetChild(0).gameObject.SetActive(false);
             if(Enum.TryParse(UpgradeBus.instance.cfg.TOGGLE_NIGHT_VISION_KEY, out Key toggle))
@@ -162,11 +162,12 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         private void AdjustNightVisionProperties()
         {
-            float regenAdjustment = Mathf.Pow(1 + UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_INCREASE_PERCENT / 100f, UpgradeBus.instance.nightVisionLevel) * 0.01f;
-            float drainAdjustment = Mathf.Pow(1 - UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_DECREASE_PERCENT / 100f, UpgradeBus.instance.nightVisionLevel) * 0.01f;
+            int lvl = UpgradeBus.instance.nightVisionLevel;
+            float regenAdjustment = Mathf.Pow(1 + UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_INCREASE_PERCENT / 100f, lvl) * 0.01f;
+            float drainAdjustment = Mathf.Pow(1 - UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_DECREASE_PERCENT / 100f, lvl) * 0.01f;
 
-            regen = UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_SPEED + regenAdjustment;
-            drain = UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_SPEED - drainAdjustment;
+            regen = regenAdjustment;
+            drain = drainAdjustment;
         }
     }
 }

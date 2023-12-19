@@ -21,7 +21,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         void Start()
         {
             DontDestroyOnLoad(gameObject);
-            UpgradeBus.instance.UpgradeObjects.Add("Locksmith", gameObject);
+            Register();
             Transform tumbler = transform.GetChild(0).GetChild(0).GetChild(0);
             pin1 = tumbler.GetChild(0).gameObject;
             pin2 = tumbler.GetChild(1).gameObject;

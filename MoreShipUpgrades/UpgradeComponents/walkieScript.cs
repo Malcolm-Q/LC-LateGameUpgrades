@@ -14,7 +14,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         void Start()
         {
             DontDestroyOnLoad(gameObject);
-            UpgradeBus.instance.UpgradeObjects.Add("Walkie GPS", gameObject);
+            Register();
             UpgradeBus.instance.walkieHandler = this;
             canvas = transform.GetChild(0).gameObject;
             x = canvas.transform.GetChild(0).GetComponent<Text>();

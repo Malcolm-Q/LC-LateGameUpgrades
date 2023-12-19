@@ -9,16 +9,12 @@ namespace MoreShipUpgrades.UpgradeComponents
     {
         private bool Active, audioInit;
         private Animator anim;
-        private AudioSource audio;
-        public AudioClip robot, mineBeep;
 
         public override void Start()
         {
             base.Start();
             anim = GetComponent<Animator>();
             UpgradeBus.instance.coilHeadItems.Add(this);
-            audio = GetComponent<AudioSource>();
-            audio.maxDistance = 6;
         }
         public override void Update()
         {
@@ -27,19 +23,11 @@ namespace MoreShipUpgrades.UpgradeComponents
             {
                 Active = false;
                 anim.SetBool("Grounded", false);
-                audio.Stop();
-                audioInit = false;
             }
             else 
             {
                 Active = true; 
                 anim.SetBool("Grounded", true);
-                if(!audioInit)
-                {
-                    audio.PlayOneShot(mineBeep);
-                    audio.Play();
-                    audioInit = true;
-                }
             }
         }
 

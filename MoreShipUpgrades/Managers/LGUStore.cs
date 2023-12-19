@@ -7,6 +7,7 @@ using UnityEngine;
 using Newtonsoft.Json;
 using System.Collections;
 using MoreShipUpgrades.UpgradeComponents;
+using System.Linq;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -16,6 +17,7 @@ namespace MoreShipUpgrades.Managers
         public SaveInfo saveInfo;
         public LGUSave lguSave;
         private ulong playerID = 0;
+        private Action onConfigReceived;
 
         private static Dictionary<string, Func<SaveInfo, bool>> conditions = new Dictionary<string, Func<SaveInfo, bool>>
         {
@@ -31,6 +33,7 @@ namespace MoreShipUpgrades.Managers
             {"Back Muscles", SaveInfo => SaveInfo.exoskeleton },
             {"Locksmith", SaveInfo => SaveInfo.lockSmith },
             {"Walkie GPS", SaveInfo => SaveInfo.walkies },
+            {"Protein Powder", SaveInfo => SaveInfo.proteinPowder },
         };
 
         private static Dictionary<string, Func<SaveInfo, int>> levelConditions = new Dictionary<string, Func<SaveInfo, int>>
@@ -46,8 +49,11 @@ namespace MoreShipUpgrades.Managers
             { "Beekeeper", saveInfo => saveInfo.beeLevel },
             { "Back Muscles", saveInfo => saveInfo.backLevel },
             { "Locksmith", saveInfo => 0 },
-            { "Walkie GPS", saveInfo => 0 }
+            { "Walkie GPS", saveInfo => 0 },
+            {"Protein Powder", SaveInfo => SaveInfo.proteinLevel },
         };
+        private bool retrievedCfg;
+        private bool receivedSave;
 
         private void Start()
         {
@@ -60,32 +66,32 @@ namespace MoreShipUpgrades.Managers
                 {
                     string json = File.ReadAllText(filePath);
                     lguSave = JsonConvert.DeserializeObject<LGUSave>(json);
-                    HandleSpawns();
                     UpdateUpgradeBus();
                 }
                 else
                 {
                     lguSave = new LGUSave();
-                    HandleSpawns();
                     UpdateUpgradeBus();
                 }
+                UpgradeBus.instance.Reconstruct();
+                HandleSpawns();
             }
             else
             {
-                ShareSaveServerRpc();
+                SendConfigServerRpc();
             }
             string path = Path.Combine(Application.persistentDataPath, "IntroLGU");
             if(File.Exists(path))
             {
                 if(File.ReadAllText(path) != UpgradeBus.instance.version)
                 {
-                    Instantiate(UpgradeBus.instance.introScreen);
+                    if(UpgradeBus.instance.cfg.INTRO_ENABLED) Instantiate(UpgradeBus.instance.introScreen);
                     File.WriteAllText(path, UpgradeBus.instance.version);
                 }    
             }
             else
             {
-                Instantiate(UpgradeBus.instance.introScreen);
+                if(UpgradeBus.instance.cfg.INTRO_ENABLED) Instantiate(UpgradeBus.instance.introScreen);
                 File.WriteAllText(path, UpgradeBus.instance.version);
             }
         }
@@ -112,6 +118,37 @@ namespace MoreShipUpgrades.Managers
                 GameObject go = Instantiate(node.Prefab, Vector3.zero, Quaternion.identity);
                 go.GetComponent<NetworkObject>().Spawn();
             }
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void SendConfigServerRpc()
+        {
+            string json = JsonConvert.SerializeObject(UpgradeBus.instance.cfg);
+            SendConfigClientRpc(json);
+        }
+
+        [ClientRpc]
+        private void SendConfigClientRpc(string json)
+        {
+            if (retrievedCfg) return;
+            PluginConfig cfg = JsonConvert.DeserializeObject<PluginConfig>(json);
+            if( cfg != null && !IsHost && !IsServer)
+            {
+                UpgradeBus.instance.cfg = cfg;
+                UpgradeBus.instance.Reconstruct(); // do this 
+                retrievedCfg = true;
+
+            }
+            if(IsHost || IsServer)
+            {
+                StartCoroutine(WaitALittleToShareTheFile());
+            }
+        }
+
+        private IEnumerator WaitALittleToShareTheFile()
+        {
+            yield return new WaitForSeconds(0.5f);
+            ShareSaveServerRpc();
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -143,12 +180,24 @@ namespace MoreShipUpgrades.Managers
         [ClientRpc]
         public void ShareSaveClientRpc(string json)
         {
+            if (receivedSave) return;
+            receivedSave = true;
             foreach(BaseUpgrade upgrade in FindObjectsOfType<BaseUpgrade>())
             {
                 upgrade.Register();
             }
             lguSave = JsonConvert.DeserializeObject<LGUSave>(json);
-            UpdateUpgradeBus();
+            List<ulong> saves = lguSave.playerSaves.Keys.ToList();
+            if(UpgradeBus.instance.cfg.SHARED_UPGRADES && saves.Count > 0)
+            {
+                Debug.Log("LGU: Loading first players save");
+                saveInfo = lguSave.playerSaves[lguSave.playerSaves.Keys.ToList<ulong>()[0]];
+                UpdateUpgradeBus(false);
+            }
+            else
+            {
+                UpdateUpgradeBus();
+            }
         }
 
         [ServerRpc(RequireOwnership =false)]
@@ -348,6 +397,12 @@ namespace MoreShipUpgrades.Managers
             saveInfo = new SaveInfo();
             UpdateLGUSaveServerRpc(playerID, JsonConvert.SerializeObject(saveInfo));
         }
+
+        [ClientRpc]
+        public void GenerateSalesClientRpc(int seed)
+        {
+            UpgradeBus.instance.GenerateSales(seed);
+        }
     }
 
     [Serializable]
@@ -370,7 +425,7 @@ namespace MoreShipUpgrades.Managers
         public bool walkies = UpgradeBus.instance.walkies;
 
         public int beeLevel = UpgradeBus.instance.beeLevel;
-        public int proteinLevel = UpgradeBus.instance.beeLevel;
+        public int proteinLevel = UpgradeBus.instance.proteinLevel;
         public int lungLevel = UpgradeBus.instance.lungLevel;
         public int backLevel = UpgradeBus.instance.backLevel;
         public int runningLevel = UpgradeBus.instance.runningLevel;

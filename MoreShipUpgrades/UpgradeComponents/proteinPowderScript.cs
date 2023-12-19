@@ -8,7 +8,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         void Start()
         {
             DontDestroyOnLoad(gameObject);
-            UpgradeBus.instance.UpgradeObjects.Add("Protein Powder", gameObject);
+            Register();
         }
 
         public override void Increment()

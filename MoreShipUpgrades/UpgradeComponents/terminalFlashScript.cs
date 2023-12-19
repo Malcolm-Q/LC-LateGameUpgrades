@@ -11,7 +11,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         void Start()
         {
             DontDestroyOnLoad(gameObject);
-            UpgradeBus.instance.UpgradeObjects.Add("Discombobulator", gameObject);
+            Register();
         }
 
         public override void load()

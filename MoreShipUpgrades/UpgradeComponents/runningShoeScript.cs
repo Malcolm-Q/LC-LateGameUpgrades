@@ -8,7 +8,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         void Start()
         {
             DontDestroyOnLoad(gameObject);
-            UpgradeBus.instance.UpgradeObjects.Add("Running Shoes", gameObject);
+            Register();
         }
 
         public override void Increment()

@@ -10,7 +10,12 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("SyncNewProfitQuotaClientRpc")]
         private static void GenerateNewSales(TimeOfDay __instance)
         {
-            if(__instance.IsHost || __instance.IsServer)
+            if(UpgradeBus.instance.cfg.SHARED_UPGRADES && (__instance.IsHost || __instance.IsServer))
+            {
+                int seed = UnityEngine.Random.Range(0, 999999);
+                LGUStore.instance.GenerateSalesClientRpc(seed);
+            }
+            else
             {
                 UpgradeBus.instance.GenerateSales();
             }

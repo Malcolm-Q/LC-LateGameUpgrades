@@ -149,7 +149,7 @@ namespace MoreShipUpgrades.Patches
                 __result = node;
                 LGUStore.instance.SyncCreditsServerRpc(__instance.groupCredits);
             }
-            else if (text.ToLower() == "intern")
+            else if (text.ToLower() == "intern" || text.ToLower() == "interns")
             {
                 TerminalNode node = new TerminalNode();
                 node.clearPreviousText = true;
