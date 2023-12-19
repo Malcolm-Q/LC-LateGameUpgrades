@@ -34,6 +34,8 @@ namespace MoreShipUpgrades.Managers
         public bool lockSmith = false;
         public bool biggerLungs = false;
         public bool proteinPowder = false;
+        public bool lightningRod = false;
+        public bool lightningRodActive = false;
 
         public int lungLevel = 0;
         public int proteinLevel = 0;
@@ -45,6 +47,7 @@ namespace MoreShipUpgrades.Managers
         public int legLevel = 0;
         public int nightVisionLevel = 0;
 
+        public float lightningRodProbability = 1f;
         public float flashCooldown = 0f;
         public float alteredWeight = 1f;
 
@@ -119,6 +122,8 @@ namespace MoreShipUpgrades.Managers
             runningShoes = false;
             lockSmith = false;
             biggerLungs = false;
+            lightningRod = false;
+            lightningRodActive = false;
             lungLevel = 0;
             backLevel = 0;
             beeLevel = 0;
@@ -128,6 +133,7 @@ namespace MoreShipUpgrades.Managers
             legLevel = 0;
             nightVisionLevel = 0;
             flashCooldown = 0f;
+            lightningRodProbability = 1f;
             alteredWeight = 1f;
             trapHandler = null;
             flashScript = null;
@@ -427,7 +433,6 @@ namespace MoreShipUpgrades.Managers
                 terminalNodes.Add(node);
             }
 
-
             // night vision
             GameObject nightVision = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/nightVision.prefab");
             shareStatus = cfg.SHARED_UPGRADES ? true : cfg.NIGHT_VISION_INDIVIDUAL;
@@ -524,6 +529,16 @@ namespace MoreShipUpgrades.Managers
                 string LOS = cfg.REQUIRE_LINE_OF_SIGHT ? "Does not remove" : "Removes";
                 string info = $"Increase distance nodes can be scanned by {cfg.NODE_DISTANCE_INCREASE} units.  \nIncrease distance Ship and Entrance can be scanned by {cfg.SHIP_AND_ENTRANCE_DISTANCE_INCREASE} units.\n{LOS} LOS requirement\n";
                 CustomTerminalNode node = new CustomTerminalNode("Better Scanner", cfg.BETTER_SCANNER_PRICE, info, strongScan);
+                terminalNodes.Add(node);
+            }
+
+            //lightning
+            GameObject lightningRod = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/LightningRod.prefab");
+            shareStatus = true; // It doesn't really make sense making this individual
+            IndividualUpgrades.Add(lightningRodScript.UPGRADE_NAME, shareStatus);
+            if (cfg.LIGHTNING_ROD_ENABLED)
+            {
+                CustomTerminalNode node = new CustomTerminalNode(lightningRodScript.UPGRADE_NAME, cfg.LIGHTNING_ROD_PRICE, string.Format(infoJson[lightningRodScript.UPGRADE_NAME], cfg.LIGHTNING_ROD_PRICE), lightningRod);
                 terminalNodes.Add(node);
             }
 
