@@ -7,6 +7,7 @@ namespace MoreShipUpgrades.UpgradeComponents
     internal class lightningRodScript : BaseUpgrade
     {
         public static string UPGRADE_NAME = "Lightning Rod";
+        public static lightningRodScript instance;
 
         // Configuration
         public static string ENABLED_SECTION = string.Format("Enable {0} Upgrade", UPGRADE_NAME);
@@ -37,6 +38,14 @@ namespace MoreShipUpgrades.UpgradeComponents
         public static float DIST_DEFAULT = 150f;
         public static string DIST_DESCRIPTION = string.Format("The closer you are the more likely the rod will reroute lightning.", UPGRADE_NAME);
 
+        public bool CanTryInterceptLightning { get; internal set; }
+        public bool LightningIntercepted { get; internal set; }
+
+        void Awake()
+        {
+            instance = this;
+        }
+
         void Start()
         {
             DontDestroyOnLoad(gameObject);
@@ -63,18 +72,44 @@ namespace MoreShipUpgrades.UpgradeComponents
         public override void Unwind()
         {
             UpgradeBus.instance.lightningRod = false;
-            UpgradeBus.instance.lightningRodProbability = 0f;
             UpgradeBus.instance.lightningRodActive = false;
             HUDManager.Instance.chatText.text += UNLOAD_MESSAGE;
         }
 
-        public static void TryCatchLightningBolt(ref Vector3 explosionPosition)
+        public static void TryInterceptLightning(ref StormyWeather __instance, ref GrabbableObject ___targetingMetalObject)
         {
-            if (UpgradeBus.instance.lightningRodActive && Random.Range(0, 1) <= UpgradeBus.instance.lightningRodProbability)
+            if (!instance.CanTryInterceptLightning) return;
+            instance.CanTryInterceptLightning = false;
+
+            Terminal terminal = UpgradeBus.instance.GetTerminal();
+            float dist = Vector3.Distance(___targetingMetalObject.transform.position, terminal.transform.position);
+            Plugin.mls.LogInfo(string.Format("[{0}] Distance from ship: {1}\n", UPGRADE_NAME, dist));
+            Plugin.mls.LogInfo(string.Format("[{0}] Effective distance of the lightning rod: {1}", UPGRADE_NAME, UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST));
+
+            if (dist > UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST) return;
+
+            dist /= UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST;
+            float prob = 1 - dist;
+            float rand = Random.value;
+
+            Plugin.mls.LogInfo(string.Format("[{0}] Number to beat: {1}",UPGRADE_NAME, prob));
+            Plugin.mls.LogInfo(string.Format("[{0}] Number: {1}",UPGRADE_NAME, rand));
+            if (rand < prob)
             {
-                Terminal terminal = GameObject.Find("TerminalScript").GetComponent<Terminal>();
-                explosionPosition = terminal.transform.position;
+                Plugin.mls.LogInfo(string.Format("[{0}] Planning interception...", UPGRADE_NAME));
+                __instance.staticElectricityParticle.Stop();
+                instance.LightningIntercepted = true;
+                LGUStore.instance.CoordinateInterceptionClientRpc();
             }
+        }
+
+        public static void RerouteLightningBolt(ref Vector3 strikePosition, ref StormyWeather __instance)
+        {
+            Plugin.mls.LogInfo(string.Format("[{0}] Intercepted Lightning Strike...", UPGRADE_NAME));
+            Terminal terminal = UpgradeBus.instance.GetTerminal();
+            strikePosition = terminal.transform.position;
+            instance.LightningIntercepted = false;
+            __instance.staticElectricityParticle.gameObject.SetActive(true);
         }
 
         public static void ToggleLightningRod(ref TerminalNode __result)

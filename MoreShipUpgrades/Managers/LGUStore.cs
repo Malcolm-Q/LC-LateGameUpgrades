@@ -416,7 +416,7 @@ namespace MoreShipUpgrades.Managers
         [ClientRpc]
         public void CoordinateInterceptionClientRpc()
         {
-            UpgradeBus.instance.LightningIntercepted = true;
+            lightningRodScript.instance.LightningIntercepted = true;
             FindObjectOfType<StormyWeather>(true).staticElectricityParticle.gameObject.SetActive(false);
         }
     }
