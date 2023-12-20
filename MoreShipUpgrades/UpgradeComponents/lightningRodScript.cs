@@ -103,6 +103,15 @@ namespace MoreShipUpgrades.UpgradeComponents
             }
         }
 
+        public static void RerouteLightningBolt(ref Vector3 strikePosition, ref StormyWeather __instance)
+        {
+            Plugin.mls.LogInfo(string.Format("[{0}] Intercepted Lightning Strike...", UPGRADE_NAME));
+            Terminal terminal = UpgradeBus.instance.GetTerminal();
+            strikePosition = terminal.transform.position;
+            instance.LightningIntercepted = false;
+            __instance.staticElectricityParticle.gameObject.SetActive(true);
+        }
+
         public static void ToggleLightningRod(ref TerminalNode __result)
         {
             UpgradeBus.instance.lightningRodActive = !UpgradeBus.instance.lightningRodActive;

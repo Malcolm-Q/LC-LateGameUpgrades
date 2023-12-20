@@ -16,11 +16,7 @@ namespace MoreShipUpgrades.Patches
             if (lightningRodScript.instance.LightningIntercepted && useTargetedObject)
             {
                 // we need to check useTargetedObject so we're not rerouting random strikes to the ship.
-                Plugin.mls.LogInfo("Intercepted Lightning Strike...");
-                Terminal terminal = UpgradeBus.instance.GetTerminal();
-                strikePosition = UpgradeBus.instance.terminal.transform.position;
-                lightningRodScript.instance.LightningIntercepted = false;
-                __instance.staticElectricityParticle.gameObject.SetActive(true);
+                lightningRodScript.RerouteLightningBolt(ref strikePosition, ref __instance);
             }
         }
 
