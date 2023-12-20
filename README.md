@@ -40,14 +40,13 @@ Join [this modding discord](https://discord.gg/hzEcKFSSDX) and comment [on this 
     * If you enter `buy beekeeper` or `purchase beekeeper` it will not work.
 
 ## **Contributing:**
-You will need to set up Evaisa's [Netcode Patcher](https://github.com/EvaisaDev/UnityNetcodeWeaver) if you want to add more custom netcode. If you are making simple additions that don't need to be tested online you can still build an unpatched dll and test it.
+- You will need to set up Evaisa's [Netcode Patcher](https://github.com/EvaisaDev/UnityNetcodeWeaver) if you want to add more custom netcode. If you are making simple additions that don't need to be tested online you can still build an unpatched dll and test it.  
+- If adding custom objects you need to set up a unity environment for making asset bundles. I recommend using [Evaisa's Template](https://github.com/EvaisaDev/LethalCompanyUnityTemplate). Prefabs for the assets are in the [UnityFiles folder.](/UnityFiles/)  
+- IMPORTANT: ***Do not include your new assets in the assets.zip file.*** Create a new file called IncomingAssets<name>.zip that contains only the new assets you've made.  
+- This project uses [LethalLib](https://github.com/EvaisaDev/LethalLib) by, you guessed it, [Evaisa](https://ko-fi.com/evaisa) to add items to the shop, register network prefabs, and in the future probably more so you can read about it there.  
+- The most recent (good chance it's unstable) dll and asset bundle can be found in the [output folder.](/output/)  
 
-If adding custom objects you need to set up a unity environment for making asset bundles. I recommend using [Evaisa's Template](https://github.com/EvaisaDev/LethalCompanyUnityTemplate). Prefabs for the assets are in the [UnityFiles folder.](/UnityFiles/)
-
-This project uses [LethalLib](https://github.com/EvaisaDev/LethalLib) by, you guessed it, [Evaisa](https://ko-fi.com/evaisa) to add items to the shop, register network prefabs, and in the future probably more so you can read about it there.
-
-The most recent (good chance it's unstable) dll and asset bundle can be found in the [output folder.](/output/)
-
+*Included is a projectSetup.exe and projectSetup.py, you can run one or the other to quickly add all (or most of if some have been recently added) of the dependents to your .csproj
 
 ## **TODO:**
 * Upgraded walkie talkie (Navigation).
@@ -59,14 +58,10 @@ Something like: `<discordNickName>/<feature>`
 * Distraction Item
     * Switch target on chasing enemy.
     * Player can drop it to have agro switched to the item for x seconds.
-* Radar Booster Shockwave
-    * Pinging a Radar Booster stuns enemies in radius.
-    * Could create another more expensive upgrade that allows this for players.
-    * see discombobulator code for implementation.
-* Lightening Rod
-    * Occasionally or always redirect lightening to ship.
-* BioScanner
-    * Type `bioscan` in terminal to get list of living creatures in radius around player.
+* Planet Scanner
+    * When in orbit type something like scan <moon> to get info about what your visit to that moon would be like.
+    * This would involve generating random seeds for each moon in orbit and ensuring they use them for generation.
+    * Information about enemies, scrap, and maphazards could be retrieved with this info.
 * Scanner Picks up Leaking Pipes
     * Add a ScanNode to the valve you turn to stop steam leak things.
     * Probably just add this as a part of betterscanner
