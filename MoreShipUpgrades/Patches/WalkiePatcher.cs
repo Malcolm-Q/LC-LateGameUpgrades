@@ -1,8 +1,5 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.UpgradeComponents;
-using System.Security.Cryptography;
-using UnityEngine;
 
 namespace MoreShipUpgrades.Patches
 {

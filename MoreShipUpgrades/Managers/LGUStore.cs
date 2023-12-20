@@ -34,6 +34,7 @@ namespace MoreShipUpgrades.Managers
             {"Locksmith", SaveInfo => SaveInfo.lockSmith },
             {"Walkie GPS", SaveInfo => SaveInfo.walkies },
             {"Protein Powder", SaveInfo => SaveInfo.proteinPowder },
+            {"Fast Encryption", SaveInfo => SaveInfo.pager },
             {lightningRodScript.UPGRADE_NAME, SaveInfo => SaveInfo.lightningRod },
         };
 
@@ -46,12 +47,13 @@ namespace MoreShipUpgrades.Managers
             { "Running Shoes", saveInfo => saveInfo.runningLevel },
             { "NV Headset Batteries", saveInfo => saveInfo.nightVisionLevel },
             { "Strong Legs", saveInfo => saveInfo.legLevel },
-            { "Better Scanner", saveInfo => 0 },
+            { "Better Scanner", saveInfo => saveInfo.scanLevel },
             { "Beekeeper", saveInfo => saveInfo.beeLevel },
             { "Back Muscles", saveInfo => saveInfo.backLevel },
             { "Locksmith", saveInfo => 0 },
             { "Walkie GPS", saveInfo => 0 },
             {"Protein Powder", SaveInfo => SaveInfo.proteinLevel },
+            {"Fast Encryption", SaveInfo => 0 },
             { lightningRodScript.UPGRADE_NAME, saveInfo => 0},
         };
         private bool retrievedCfg;
@@ -303,6 +305,7 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.biggerLungs = saveInfo.biggerLungs;
             UpgradeBus.instance.proteinPowder = saveInfo.proteinPowder;
             UpgradeBus.instance.lightningRod = saveInfo.lightningRod;
+            UpgradeBus.instance.pager = saveInfo.pager;
 
             UpgradeBus.instance.beeLevel = saveInfo.beeLevel;
             UpgradeBus.instance.proteinLevel = saveInfo.proteinLevel;
@@ -313,6 +316,7 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.lightLevel = saveInfo.lightLevel;
             UpgradeBus.instance.discoLevel = saveInfo.discoLevel;
             UpgradeBus.instance.legLevel = saveInfo.legLevel;
+            UpgradeBus.instance.scanLevel = saveInfo.scanLevel;
             UpgradeBus.instance.nightVisionLevel = saveInfo.nightVisionLevel;
 
             StartCoroutine(WaitForUpgradeObject());
@@ -436,12 +440,14 @@ namespace MoreShipUpgrades.Managers
         public bool lockSmith = UpgradeBus.instance.lockSmith;
         public bool walkies = UpgradeBus.instance.walkies;
         public bool lightningRod = UpgradeBus.instance.lightningRod;
+        public bool pager = UpgradeBus.instance.pager;
 
         public int beeLevel = UpgradeBus.instance.beeLevel;
         public int proteinLevel = UpgradeBus.instance.proteinLevel;
         public int lungLevel = UpgradeBus.instance.lungLevel;
         public int backLevel = UpgradeBus.instance.backLevel;
         public int runningLevel = UpgradeBus.instance.runningLevel;
+        public int scanLevel = UpgradeBus.instance.scanLevel;
         public int lightLevel = UpgradeBus.instance.lightLevel;
         public int discoLevel = UpgradeBus.instance.discoLevel;
         public int legLevel = UpgradeBus.instance.legLevel;

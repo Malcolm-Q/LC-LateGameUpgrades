@@ -45,6 +45,7 @@ namespace MoreShipUpgrades.Managers
         public int lightLevel = 0;
         public int discoLevel = 0;
         public int legLevel = 0;
+        public int scanLevel = 0;
         public int nightVisionLevel = 0;
 
         public float lightningRodProbability = 1f;
@@ -79,6 +80,8 @@ namespace MoreShipUpgrades.Managers
         internal string version;
 
         public AssetBundle UpgradeAssets;
+        internal bool pager;
+        internal pagerScript pageScript;
 
         public bool CanTryInterceptLightning { get; internal set; }
         public bool LightningIntercepted { get; internal set; }
@@ -128,9 +131,11 @@ namespace MoreShipUpgrades.Managers
             biggerLungs = false;
             lightningRod = false;
             lightningRodActive = false;
+            pager = false;
             proteinLevel = 0;
             lungLevel = 0;
             backLevel = 0;
+            scanLevel = 0;
             beeLevel = 0;
             runningLevel = 0;
             lightLevel = 0;
@@ -142,6 +147,7 @@ namespace MoreShipUpgrades.Managers
             alteredWeight = 1f;
             trapHandler = null;
             flashScript = null;
+            pageScript = null;
             if (wipeObjRefs) { UpgradeObjects = new Dictionary<string, GameObject>(); }
             foreach(CustomTerminalNode node in terminalNodes)
             {
@@ -177,7 +183,7 @@ namespace MoreShipUpgrades.Managers
 
         internal void AlterStoreItems()
         {
-            // nothing works
+            // nothing works :(
             Terminal[] terms = GameObject.FindObjectsOfType<Terminal>();
             foreach(Terminal term in terms)
             {
@@ -215,6 +221,7 @@ namespace MoreShipUpgrades.Managers
 
         internal void Reconstruct()
         {
+            //AlterStoreItems();
             BuildCustomNodes();
         }
         internal void BuildCustomNodes()
@@ -531,9 +538,18 @@ namespace MoreShipUpgrades.Managers
             IndividualUpgrades.Add("Better Scanner", shareStatus);
             if(cfg.BETTER_SCANNER_ENABLED)
             {
-                string LOS = cfg.REQUIRE_LINE_OF_SIGHT ? "Does not remove" : "Removes";
-                string info = $"Increase distance nodes can be scanned by {cfg.NODE_DISTANCE_INCREASE} units.  \nIncrease distance Ship and Entrance can be scanned by {cfg.SHIP_AND_ENTRANCE_DISTANCE_INCREASE} units.\n{LOS} LOS requirement\n";
-                CustomTerminalNode node = new CustomTerminalNode("Better Scanner", cfg.BETTER_SCANNER_PRICE, info, strongScan);
+                string infoString = string.Format(infoJson["Better Scanner1"],1,cfg.BETTER_SCANNER_PRICE,cfg.NODE_DISTANCE_INCREASE, cfg.SHIP_AND_ENTRANCE_DISTANCE_INCREASE);
+                infoString += string.Format(infoJson["Better Scanner2"], 2, cfg.BETTER_SCANNER_PRICE2);
+                string enemStatus = cfg.BETTER_SCANNER_ENEMIES ? " and enemies" : "";
+                infoString += string.Format(infoJson["Better Scanner3"], 3, cfg.BETTER_SCANNER_PRICE3,enemStatus);
+                infoString += "hives and scrap command display the location of the most valuable hives and scrap on the map.\n";
+                CustomTerminalNode node = new CustomTerminalNode(
+                    "Better Scanner",
+                    cfg.BETTER_SCANNER_PRICE,
+                    infoString,
+                    strongScan,
+                    new int[] {cfg.BETTER_SCANNER_PRICE2, cfg.BETTER_SCANNER_PRICE3},
+                    2);
                 terminalNodes.Add(node);
             }
 
@@ -588,12 +604,21 @@ namespace MoreShipUpgrades.Managers
             }
 
             // interns
-            GameObject intern = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/Pager.prefab");
+            GameObject intern = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/Intern.prefab");
             shareStatus = cfg.SHARED_UPGRADES ? true : cfg.INTERN_INDIVIDUAL;
             IndividualUpgrades.Add("Interns", shareStatus);
             if (cfg.INTERN_ENABLED)
             {
                 CustomTerminalNode node = new CustomTerminalNode("Interns", cfg.INTERN_PRICE, string.Format(infoJson["Interns"], cfg.INTERN_PRICE), intern);
+                terminalNodes.Add(node);
+            }
+
+            // pager
+            GameObject pager = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/Pager.prefab");
+            IndividualUpgrades.Add("Fast Encryption", true);
+            if (cfg.PAGER_ENABLED)
+            {
+                CustomTerminalNode node = new CustomTerminalNode("Fast Encryption", cfg.PAGER_PRICE, "Unrestrict the transmitter", pager);
                 terminalNodes.Add(node);
             }
 

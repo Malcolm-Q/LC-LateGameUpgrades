@@ -12,6 +12,11 @@ namespace MoreShipUpgrades.UpgradeComponents
             Register();
         }
 
+        public override void Increment()
+        {
+            UpgradeBus.instance.scanLevel++;
+        }
+
         public override void load()
         {
             UpgradeBus.instance.scannerUpgrade = true;
@@ -20,6 +25,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         public override void Unwind()
         {
             UpgradeBus.instance.scannerUpgrade = false;
+            UpgradeBus.instance.scanLevel = 0;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Better Scanner has been disabled.</color>";
         }
         public override void Register()

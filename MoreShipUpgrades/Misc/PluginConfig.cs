@@ -124,9 +124,14 @@ namespace MoreShipUpgrades.Misc
         public bool WALKIE_ENABLED { get; set; }
         public bool WALKIE_INDIVIDUAL { get; set; }
         public int PROTEIN_UNLOCK_FORCE {  get; set; }
+        public int BETTER_SCANNER_PRICE2 {  get; set; }
+        public int BETTER_SCANNER_PRICE3 {  get; set; }
+        public bool BETTER_SCANNER_ENEMIES {  get; set; }
         public bool INTRO_ENABLED { get; set; }
         public bool LIGHTNING_ROD_ACTIVE { get; set; }
         public float LIGHTNING_ROD_DIST {  get; set; }
+        public bool PAGER_ENABLED {  get; set; }
+        public int PAGER_PRICE {  get; set; }
 
 
         public PluginConfig(ConfigFile cfg)
@@ -235,10 +240,12 @@ namespace MoreShipUpgrades.Misc
 
             BETTER_SCANNER_ENABLED = ConfigEntry("Better Scanner", "Enable Better Scanner Upgrade", true, "Further scan distance, no LOS needed.");
             BETTER_SCANNER_PRICE = ConfigEntry("Better Scanner", "Price of Better Scanner Upgrade", 650, "");
-            REQUIRE_LINE_OF_SIGHT = ConfigEntry("Better Scanner", "Require Line Of Sight", false, "Default mod value is false.");
             SHIP_AND_ENTRANCE_DISTANCE_INCREASE = ConfigEntry("Better Scanner", "Ship and Entrance node distance boost", 150f, "How much further away you can scan the ship and entrance.");
             NODE_DISTANCE_INCREASE = ConfigEntry("Better Scanner", "Node distance boost", 20f, "How much further away you can scan other nodes.");
             BETTER_SCANNER_INDIVIDUAL = ConfigEntry("Better Scanner","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
+            BETTER_SCANNER_PRICE2 = ConfigEntry("Better Scanner", "Price of first Better Scanner tier", 500, "This tier unlocks hives and scrap command.");
+            BETTER_SCANNER_PRICE3 = ConfigEntry("Better Scanner", "Price of second Better Scanner tier", 800, "This tier unlocks scanning through walls.");
+            BETTER_SCANNER_ENEMIES = ConfigEntry("Better Scanner", "Scan enemies through walls on final upgrade", false, "If true the final upgrade will scan scrap AND enemies through walls.");
 
             BACK_MUSCLES_ENABLED = ConfigEntry("Back Muscles", "Enable Back Muscles Upgrade", true, "Reduce carry weight");
             BACK_MUSCLES_PRICE = ConfigEntry("Back Muscles", "Price of Back Muscles Upgrade", 715, "");
@@ -250,6 +257,9 @@ namespace MoreShipUpgrades.Misc
             INTERN_ENABLED = ConfigEntry("Interns", "Enable hiring of interns", true, "Pay x amount of credits to revive a player.");
             INTERN_PRICE = ConfigEntry("Interns", "Intern Price", 1000, "Default price to hire an intern.");
             INTERN_INDIVIDUAL = ConfigEntry("Interns","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
+
+            PAGER_ENABLED = ConfigEntry("Fast Encryption", "Enable Fast Encryption", true, "Upgrades the transmitter.");
+            PAGER_PRICE = ConfigEntry("Fast Encryption", "Fast Encryption Price", 300, "");
 
             LOCKSMITH_ENABLED = ConfigEntry("Locksmith", "Enable Locksmith upgrade", true, "Allows you to pick locked doors by completing a minigame.");
             LOCKSMITH_PRICE = ConfigEntry("Locksmith", "Locksmith Price", 640, "Default price of Locksmith upgrade.");
