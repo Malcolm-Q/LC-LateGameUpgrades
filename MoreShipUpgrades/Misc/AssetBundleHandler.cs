@@ -34,7 +34,7 @@ namespace MoreShipUpgrades.Misc
         /// </summary>
         /// <param name="bundle">The asset bundle we wish to gather the asset from</param>
         /// <param name="path">The path to the asset we wish to load</param>
-        /// <returns>The asset's gameObject if it's present in the asset bundle, otherwise null</returns>
+        /// <returns>The asset's AudioClip if it's present in the asset bundle, otherwise null</returns>
         public static AudioClip TryLoadAudioClipAsset(ref AssetBundle bundle, string path)
         {
             AudioClip result = bundle.LoadAsset<AudioClip>(path);
