@@ -268,6 +268,7 @@ namespace MoreShipUpgrades.Patches
                         UpgradeBus.instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>().Unwind();
                         LGUStore.instance.UpdateLGUSaveServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, JsonConvert.SerializeObject(new SaveInfo()));
                         TerminalNode node = new TerminalNode();
+                        customNode.Unlocked = false;
                         node.displayText = $"Unwinding {customNode.Name.ToLower()}";
                         node.clearPreviousText = true;
                         __result = node;
