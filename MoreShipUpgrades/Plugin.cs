@@ -225,9 +225,14 @@ namespace MoreShipUpgrades
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(exoskel);
 
             // interns
-            GameObject intern = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/Pager.prefab");
+            GameObject intern = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/Intern.prefab");
             intern.AddComponent<defibScript>();
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(intern);
+
+            // pager
+            GameObject pager = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/Pager.prefab");
+            pager.AddComponent<pagerScript>();
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(pager);
 
             // Lightning Rod
             GameObject lightningRod = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/LightningRod.prefab");

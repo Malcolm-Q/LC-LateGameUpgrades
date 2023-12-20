@@ -6,6 +6,8 @@ using MoreShipUpgrades.UpgradeComponents;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Patches
@@ -215,6 +217,179 @@ namespace MoreShipUpgrades.Patches
                 node.displayText = $"The name {playerNameToSearch} was not found. The following names were found:\n{string.Join(", ",playerNames)}\n";
                 __result = node;
                 return;
+            }
+            else if (text.ToLower().Contains("scan hives"))
+            {
+                TerminalNode node = new TerminalNode();
+                node.clearPreviousText = true;
+                if(UpgradeBus.instance.scanLevel < 1)
+                {
+                    node.displayText = "\nUpgrade Better Scanner to level 2 to use this command\nEnter `info better scanner` to check upgrades.\n\n";
+                    __result = node;
+                    return;
+                }
+                GrabbableObject[] scrapItems = GameObject.FindObjectsOfType<GrabbableObject>().ToArray();
+                GrabbableObject[] filteredHives = scrapItems.Where(scrap => scrap.itemProperties.itemName == "Hive").ToArray();
+                GrabbableObject[] bestHives = filteredHives.OrderByDescending(v => v.scrapValue).ToArray();
+                node.displayText = $"Found {bestHives.Length} Hives:";
+                foreach(GrabbableObject scrap in bestHives)
+                {
+                    node.displayText += $"\n${scrap.scrapValue} // X: {scrap.gameObject.transform.position.x.ToString("F1")}, Y: {scrap.gameObject.transform.position.y.ToString("F1")}, Z: {scrap.gameObject.transform.position.z.ToString("F1")}";
+                }
+                node.displayText += "\nDon't forget your GPS!\n\n";
+                __result = node;
+            }
+            else if (text.ToLower().Contains("scan scrap"))
+            {
+                TerminalNode node = new TerminalNode();
+                node.clearPreviousText = true;
+                if(UpgradeBus.instance.scanLevel < 1)
+                {
+                    node.displayText = "\nUpgrade Better Scanner to level 2 to use this command\nEnter `info better scanner` to check upgrades.\n\n";
+                    __result = node;
+                    return;
+                }
+                GrabbableObject[] scrapItems = GameObject.FindObjectsOfType<GrabbableObject>().ToArray();
+                GrabbableObject[] filteredScrap = scrapItems.Where(scrap => scrap.isInFactory && scrap.itemProperties.isScrap).ToArray();
+                GrabbableObject[] bestScrap = filteredScrap.OrderByDescending(v => v.scrapValue).Take(5).ToArray();
+                node.displayText = "Most valuable items:\n";
+                foreach(GrabbableObject scrap in bestScrap)
+                {
+                    node.displayText += $"\n{scrap.itemProperties.itemName}: ${scrap.scrapValue}\nX: {Mathf.RoundToInt(scrap.gameObject.transform.position.x)}, Y: {Mathf.RoundToInt(scrap.gameObject.transform.position.y)}, Z: {Mathf.RoundToInt(scrap.gameObject.transform.position.z)}\n";
+                }
+                node.displayText += "\n\nDon't forget your GPS!\n\n";
+                __result = node;
+            }
+            else if (text.ToLower().Contains("scan player"))
+            {
+                TerminalNode node = new TerminalNode();
+                node.clearPreviousText = true;
+                if(UpgradeBus.instance.scanLevel < 1)
+                {
+                    node.displayText = "\nUpgrade Better Scanner to level 2 to use this command\nEnter `info better scanner` to check upgrades.\n\n";
+                    __result = node;
+                    return;
+                }
+                PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>().ToArray();
+                PlayerControllerB[] filteredPlayers = players.Where(player => player.playerSteamId != 0).ToArray();
+                PlayerControllerB[] alivePlayers = filteredPlayers.Where(player => !player.isPlayerDead).ToArray();
+                PlayerControllerB[] deadPlayers = filteredPlayers.Where(player => player.isPlayerDead).ToArray();
+                node.displayText = "Alive Players:\n";
+                foreach(PlayerControllerB player in alivePlayers)
+                {
+                    node.displayText += $"\n{player.playerUsername} - X:{Mathf.RoundToInt(player.transform.position.x)},Y:{Mathf.RoundToInt(player.transform.position.y)},Z:{Mathf.RoundToInt(player.transform.position.z)}";
+                }
+                node.displayText += "\nDead Players:\n";
+                foreach(PlayerControllerB player in deadPlayers)
+                {
+                    node.displayText += $"\n{player.playerUsername} - X:{Mathf.RoundToInt(player.transform.position.x)},Y:{Mathf.RoundToInt(player.transform.position.y)},Z:{Mathf.RoundToInt(player.transform.position.z)}";
+                }
+                __result = node;
+            }
+            else if (text.ToLower().Contains("scan enemies"))
+            {
+                TerminalNode node = new TerminalNode();
+                node.clearPreviousText = true;
+                if(UpgradeBus.instance.scanLevel < 1)
+                {
+                    node.displayText = "\nUpgrade Better Scanner to level 2 to use this command\nEnter `info better scanner` to check upgrades.\n\n";
+                    __result = node;
+                    return;
+                }
+                EnemyAI[] enemies = GameObject.FindObjectsOfType<EnemyAI>().Where(enem => !enem.isEnemyDead).ToArray();
+                if(enemies.Length > 0)
+                {
+                    Dictionary<string, int> enemyCount = new Dictionary<string, int>();
+                    foreach(EnemyAI enemy in enemies)
+                    {
+                        string realName = enemy.GetComponentInChildren<ScanNodeProperties>().headerText;
+                        if (enemyCount.ContainsKey(realName)) { enemyCount[realName]++; }
+                        else { enemyCount.Add(realName, 1); }
+                    }
+                    node.displayText = $"Alive Enemies: {enemies.Length}\n";
+                    foreach(KeyValuePair<string, int> count in enemyCount)
+                    {
+                        node.displayText += $"\n{count.Key} - {count.Value}";
+                    }
+                }
+                else
+                {
+                    node.displayText = "0 enemies detected\n\n";
+                }
+                __result = node;
+            }
+            else if (text.ToLower().Contains("scan doors"))
+            {
+                TerminalNode node = new TerminalNode();
+                node.clearPreviousText = true;
+                if(UpgradeBus.instance.scanLevel < 1)
+                {
+                    node.displayText = "\nUpgrade Better Scanner to level 2 to use this command\nEnter `info better scanner` to check upgrades.\n\n";
+                    __result = node;
+                    return;
+                }
+                List<GameObject> fireEscape = GameObject.FindObjectsOfType<GameObject>().Where(obj => obj.name == "SpawnEntranceB").ToList();
+                List<EntranceTeleport> mainDoors = GameObject.FindObjectsOfType<EntranceTeleport>().ToList();
+                List<EntranceTeleport> doorsToRemove = new List<EntranceTeleport>();
+
+                foreach (EntranceTeleport door in mainDoors)
+                {
+                    if (door.gameObject.transform.position.y < -170)
+                    {
+                        doorsToRemove.Add(door);
+                    }
+                }
+                foreach (EntranceTeleport doorToRemove in doorsToRemove)
+                {
+                    mainDoors.Remove(doorToRemove);
+                    fireEscape.Add(doorToRemove.gameObject);
+                }
+                PlayerControllerB player = StartOfRound.Instance.mapScreen.targetedPlayer;
+
+                if(player.isInsideFactory)
+                {
+                    node.displayText = $"Closest exits to {player.playerUsername} (X:{Mathf.RoundToInt(player.transform.position.x)},Y{Mathf.RoundToInt(player.transform.position.y)},Z{Mathf.RoundToInt(player.transform.position.z)}:\n";
+                    GameObject[] Closest3 = fireEscape.OrderBy(door => Vector3.Distance(door.transform.position, player.transform.position)).Take(3).ToArray();
+                    foreach(GameObject door in fireEscape)
+                    {
+                        node.displayText += $"\nX:{Mathf.RoundToInt(door.transform.position.x)},Y:{Mathf.RoundToInt(door.transform.position.y)},Z:{Mathf.RoundToInt(door.transform.position.z)} - {Mathf.RoundToInt(Vector3.Distance(door.transform.position, player.transform.position))} units away.";
+                    }
+                }
+                else
+                {
+                    node.displayText = $"Entrances for {player.playerUsername} (X:{player.transform.position.x},Y{player.transform.position.y},Z{player.transform.position.z}:\n";
+                    foreach(EntranceTeleport door in mainDoors)
+                    {
+                        node.displayText += $"\nX:{Mathf.RoundToInt(door.transform.position.x)},Y:{Mathf.RoundToInt(door.transform.position.y)},Z:{Mathf.RoundToInt(door.transform.position.z)} - {Mathf.RoundToInt(Vector3.Distance(door.transform.position, player.transform.position))} units away.";
+                    }               
+                }
+                __result = node;
+            }
+            else if (text.ToLower().Split()[0] == "transmit")
+            {
+                string[] splits = text.Split();
+                TerminalNode node = new TerminalNode();
+                node.clearPreviousText = true;
+                if(GameObject.FindObjectOfType<SignalTranslator>() == null)
+                {
+                    node.displayText = "You have to buy a Signal Translator to use this command\n\n";
+                    __result = node;
+                }
+                else if (UpgradeBus.instance.pager)
+                {
+                    if (splits.Length == 1)
+                    {
+                        node.displayText = "You have to enter a message to broadcast\nEX: `page get back to the ship!`";
+                        __result = node;
+                    }
+                    else
+                    {
+                        string msg = string.Join(" ", splits.Skip(1));
+                        UpgradeBus.instance.pageScript.ReqBroadcastChatServerRpc(msg);
+                        node.displayText = $"Broadcasted message: '{msg}'";
+                        __result = node;
+                    }
+                }
             }
             else
             {
