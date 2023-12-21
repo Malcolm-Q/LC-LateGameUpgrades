@@ -3,10 +3,7 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Security.Cryptography;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -66,6 +63,18 @@ namespace MoreShipUpgrades.Managers
         public List<CustomTerminalNode> terminalNodes = new List<CustomTerminalNode>();
 
         public Dictionary<string, GameObject> UpgradeObjects = new Dictionary<string, GameObject>();
+
+        private Dictionary<string, System.Func<int, float>> infoFunctions = new Dictionary<string, System.Func<int, float>>()
+        {
+            { "Back Muscles", level => (instance.cfg.CARRY_WEIGHT_REDUCTION - (level * instance.cfg.CARRY_WEIGHT_INCREMENT)) * 100 },
+            { "Discombobulator", level => instance.cfg.DISCOMBOBULATOR_STUN_DURATION + (level * instance.cfg.DISCOMBOBULATOR_INCREMENT) },
+            { "Light Footed", level => instance.cfg.NOISE_REDUCTION + (level * instance.cfg.NOISE_REDUCTION_INCREMENT)},
+            { "Strong Legs", level =>  instance.cfg.JUMP_FORCE + (level * instance.cfg.JUMP_FORCE_INCREMENT) - 13f },
+            { "Running Shoes", level => instance.cfg.MOVEMENT_SPEED + (level * instance.cfg.MOVEMENT_INCREMENT) - 4.6f },
+            { "Bigger Lungs", level => instance.cfg.SPRINT_TIME_INCREASE + (level * instance.cfg.SPRINT_TIME_INCREMENT) - 11f },
+            { "Protein Powder", level => instance.cfg.PROTEIN_UNLOCK_FORCE + 1 + (instance.cfg.PROTEIN_INCREMENT * level) },
+            { "Beekeeper", level => 100 * (instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (level * instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT)) },
+        };
 
         public Dictionary<ulong,float> beePercs = new Dictionary<ulong,float>();
         public Dictionary<ulong,int> forceMults = new Dictionary<ulong,int>();
@@ -233,457 +242,345 @@ namespace MoreShipUpgrades.Managers
 
             Dictionary<string,string> infoJson = JsonConvert.DeserializeObject<Dictionary<string,string>>(UpgradeAssets.LoadAsset<TextAsset>("Assets/ShipUpgrades/InfoStrings.json").text);
 
-            bool shareStatus;
+            IndividualUpgrades = new Dictionary<string, bool>();
 
-            //Beekeeper
-            GameObject beekeeper = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/beekeeper.prefab");
-            if (beekeeper != null) 
+            SetupBeekeperTerminalNode(ref infoJson);
+
+            SetupProteinPowderTerminalNode(ref infoJson);
+
+            SetupBiggerLungsTerminalNode(ref infoJson);
+
+            SetupRunningShoesTerminalNode(ref infoJson);
+
+            SetupStrongLegsTerminalNode(ref infoJson);
+
+            SetupMalwareBroadcasterTerminalNode(ref infoJson);
+
+            SetupLightFootedTerminalNode(ref infoJson);
+
+            SetupNightVisionBatteryTerminalNode(ref infoJson);
+
+            SetupDiscombobulatorTerminalNode(ref infoJson);
+
+            SetupBetterScannerTerminalNode(ref infoJson);
+
+            SetupLightningRodTerminalNode(ref infoJson);
+
+            SetupWalkieGPSTerminalNode(ref infoJson);
+
+            SetupBackMusclesTerminalNode(ref infoJson);
+
+            SetupInternsTerminalNode(ref infoJson);
+
+            SetupPagerTerminalNode();
+
+            SetupLocksmithTerminalNode();
+        }
+
+        private void SetupBeekeperTerminalNode(ref Dictionary<string, string> infoJSON)
+        {
+            SetupMultiplePurchasableTerminalNode("Beekeeper",
+                                                "Assets/ShipUpgrades/beekeeper.prefab",
+                                                cfg.SHARED_UPGRADES ? true : cfg.BEEKEEPER_INDIVIDUAL,
+                                                cfg.BEEKEEPER_ENABLED,
+                                                cfg.BEEKEEPER_PRICE,
+                                                ParseUpgradePrices(cfg.BEEKEEPER_UPGRADE_PRICES),
+                                                infoJSON["Beekeeper"]);
+        }
+
+        private void SetupProteinPowderTerminalNode(ref Dictionary<string, string> infoJSON) 
+        {
+            SetupMultiplePurchasableTerminalNode("Protein Powder",
+                                                "Assets/ShipUpgrades/ProteinPowder.prefab",
+                                                cfg.SHARED_UPGRADES ? true : cfg.PROTEIN_INDIVIDUAL,
+                                                cfg.PROTEIN_ENABLED,
+                                                cfg.PROTEIN_PRICE,
+                                                ParseUpgradePrices(cfg.PROTEIN_UPGRADE_PRICES),
+                                                infoJSON["Protein Powder"]);
+        }
+        private void SetupBiggerLungsTerminalNode(ref Dictionary<string, string> infoJSON)
+        {
+            SetupMultiplePurchasableTerminalNode("Bigger Lungs",
+                                                "Assets/ShipUpgrades/BiggerLungs.prefab",
+                                                cfg.SHARED_UPGRADES ? true : cfg.BIGGER_LUNGS_INDIVIDUAL,
+                                                cfg.BIGGER_LUNGS_ENABLED,
+                                                cfg.BIGGER_LUNGS_PRICE,
+                                                ParseUpgradePrices(cfg.RUNNING_SHOES_UPGRADE_PRICES),
+                                                infoJSON["Running Shoes"]);
+        }
+        private void SetupRunningShoesTerminalNode(ref Dictionary<string, string> infoJSON)
+        {
+            SetupMultiplePurchasableTerminalNode("Running Shoes",
+                                                "Assets/ShipUpgrades/runningShoes.prefab",
+                                                cfg.SHARED_UPGRADES ? true : cfg.RUNNING_SHOES_INDIVIDUAL,
+                                                cfg.RUNNING_SHOES_ENABLED,
+                                                cfg.RUNNING_SHOES_PRICE,
+                                                ParseUpgradePrices(cfg.RUNNING_SHOES_UPGRADE_PRICES),
+                                                infoJSON["Running Shoes"]);
+        }
+        private void SetupStrongLegsTerminalNode(ref Dictionary<string, string> infoJSON)
+        {
+            SetupMultiplePurchasableTerminalNode("Strong Legs",
+                                                "Assets/ShipUpgrades/strongLegs.prefab",
+                                                cfg.SHARED_UPGRADES ? true : cfg.STRONG_LEGS_INDIVIDUAL,
+                                                cfg.STRONG_LEGS_ENABLED,
+                                                cfg.STRONG_LEGS_PRICE,
+                                                ParseUpgradePrices(cfg.STRONG_LEGS_UPGRADE_PRICES),
+                                                infoJSON["Strong Legs"]);
+        }
+        private void SetupMalwareBroadcasterTerminalNode(ref Dictionary<string, string> infoJSON)
+        {
+            string desc;
+            if (cfg.DESTROY_TRAP)
             {
-                shareStatus = cfg.SHARED_UPGRADES ? true : cfg.BEEKEEPER_INDIVIDUAL;
-                IndividualUpgrades = new Dictionary<string, bool>
+                if (cfg.EXPLODE_TRAP)
                 {
-                    { "Beekeeper", shareStatus }
-                };
-                if (cfg.BEEKEEPER_ENABLED)
+                    desc = "Broadcasted codes now explode map hazards.";
+                }
+                else
                 {
-                    string[] priceString = cfg.BEEKEEPER_UPGRADE_PRICES.Split(',').ToArray();
-                    int[] prices = new int[priceString.Length];
-
-                    for (int i = 0; i < priceString.Length; i++)
-                    {
-                        if (int.TryParse(priceString[i], out int price))
-                        {
-                            prices[i] = price;
-                        }
-                        else
-                        {
-                            Debug.LogWarning($"[LGU] Invalid upgrade price submitted: {prices[i]}");
-                            prices[i] = -1;
-                        }
-                    }
-                    if (prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
-
-                    string infoString = string.Format(infoJson["Beekeeper"], 1, cfg.BEEKEEPER_PRICE, (int)(100 * cfg.BEEKEEPER_DAMAGE_MULTIPLIER));
-                    for (int i = 0; i < prices.Length; i++)
-                    {
-                        infoString += string.Format(infoJson["Beekeeper"], i + 2, prices[i], (int)(100 * (cfg.BEEKEEPER_DAMAGE_MULTIPLIER - ((i + 1) * cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT))));
-                    }
-                    CustomTerminalNode beeNode = new CustomTerminalNode("Beekeeper", cfg.BEEKEEPER_PRICE, infoString, beekeeper, prices, prices.Length);
-                    terminalNodes.Add(beeNode);
+                    desc = "Broadcasted codes now destroy map hazards.";
                 }
             }
+            else { desc = $"Broadcasted codes now disable map hazards for {cfg.DISARM_TIME} seconds."; }
 
-            // protein
-            GameObject prot = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/ProteinPowder.prefab");
-            if (prot != null)
-            {
-                shareStatus = cfg.SHARED_UPGRADES ? true : cfg.PROTEIN_INDIVIDUAL;
-                IndividualUpgrades.Add("Protein Powder", shareStatus);
-                if (cfg.PROTEIN_ENABLED)
-                {
-                    string[] priceString = cfg.PROTEIN_UPGRADE_PRICES.Split(',').ToArray();
-                    int[] prices = new int[priceString.Length];
-
-                    for (int i = 0; i < priceString.Length; i++)
-                    {
-                        if (int.TryParse(priceString[i], out int price))
-                        {
-                            prices[i] = price;
-                        }
-                        else
-                        {
-                            Debug.LogWarning($"[LGU] Invalid upgrade price submitted: {prices[i]}");
-                            prices[i] = -1;
-                        }
-                    }
-                    if (prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
-
-                    string infoString = string.Format(infoJson["Protein Powder"], 1, cfg.PROTEIN_PRICE, cfg.PROTEIN_UNLOCK_FORCE);
-                    for (int i = 0; i < prices.Length; i++)
-                    {
-                        infoString += string.Format(infoJson["Protein Powder"], i + 2, prices[i], cfg.PROTEIN_UNLOCK_FORCE + 1 + (cfg.PROTEIN_INCREMENT * i));
-                    }
-                    CustomTerminalNode protNode = new CustomTerminalNode("Protein Powder", cfg.PROTEIN_PRICE, infoString, prot, prices, prices.Length);
-                    terminalNodes.Add(protNode);
-                }
-            }
-
-            // lungs
-            GameObject biggerLungs = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/BiggerLungs.prefab");
-            if (biggerLungs != null) 
-            {
-                shareStatus = cfg.SHARED_UPGRADES ? true : cfg.BIGGER_LUNGS_INDIVIDUAL;
-                IndividualUpgrades.Add("Bigger Lungs", shareStatus);
-                if (cfg.BIGGER_LUNGS_ENABLED)
-                {
-                    string[] priceString = cfg.BIGGER_LUNGS_UPGRADE_PRICES.Split(',').ToArray();
-                    int[] prices = new int[priceString.Length];
-
-                    for (int i = 0; i < priceString.Length; i++)
-                    {
-                        if (int.TryParse(priceString[i], out int price))
-                        {
-                            prices[i] = price;
-                        }
-                        else
-                        {
-                            Debug.LogWarning($"[LGU] Invalid upgrade price submitted: {prices[i]}");
-                            prices[i] = -1;
-                        }
-                    }
-                    if (prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
-                    string infoString = string.Format(infoJson["Bigger Lungs"], 1, cfg.BIGGER_LUNGS_PRICE, cfg.SPRINT_TIME_INCREASE - 11f);
-                    for (int i = 0; i < prices.Length; i++)
-                    {
-                        infoString += string.Format(infoJson["Bigger Lungs"], i + 2, prices[i], (cfg.SPRINT_TIME_INCREASE + ((i + 1) * cfg.SPRINT_TIME_INCREMENT)) - 11f);
-                    }
-
-                    CustomTerminalNode lungNode = new CustomTerminalNode("Bigger Lungs", cfg.BIGGER_LUNGS_PRICE, infoString, biggerLungs, prices, prices.Length);
-                    terminalNodes.Add(lungNode);
-                }
-            }
-
-
-            // running shoes
-            GameObject runningShoes = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/runningShoes.prefab");
-            if (runningShoes != null) 
-            {
-                shareStatus = cfg.SHARED_UPGRADES ? true : cfg.RUNNING_SHOES_INDIVIDUAL;
-                IndividualUpgrades.Add("Running Shoes", shareStatus);
-                if (cfg.RUNNING_SHOES_ENABLED)
-                {
-                    string[] priceString = cfg.RUNNING_SHOES_UPGRADE_PRICES.Split(',').ToArray();
-                    int[] prices = new int[priceString.Length];
-
-                    for (int i = 0; i < priceString.Length; i++)
-                    {
-                        if (int.TryParse(priceString[i], out int price))
-                        {
-                            prices[i] = price;
-                        }
-                        else
-                        {
-                            Debug.LogWarning($"[LGU] Invalid upgrade price submitted: {prices[i]}");
-                            prices[i] = -1;
-                        }
-                    }
-                    if (prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
-                    string infoString = string.Format(infoJson["Running Shoes"], 1, cfg.RUNNING_SHOES_PRICE, cfg.MOVEMENT_SPEED - 4.6f);
-                    for (int i = 0; i < prices.Length; i++)
-                    {
-                        infoString += string.Format(infoJson["Running Shoes"], i + 2, prices[i], (cfg.MOVEMENT_SPEED + ((i + 1) * cfg.MOVEMENT_INCREMENT)) - 4.6f);
-                    }
-                    CustomTerminalNode node = new CustomTerminalNode("Running Shoes", cfg.RUNNING_SHOES_PRICE, infoString, runningShoes, prices, prices.Length);
-                    terminalNodes.Add(node);
-                }
-            }
-
-            // strong legs
-            GameObject strongLegs = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/strongLegs.prefab");
-            if (strongLegs != null) 
-            {
-                shareStatus = cfg.SHARED_UPGRADES ? true : cfg.STRONG_LEGS_INDIVIDUAL;
-                IndividualUpgrades.Add("Strong Legs", shareStatus);
-                if (cfg.STRONG_LEGS_ENABLED)
-                {
-                    string[] priceString = cfg.STRONG_LEGS_UPGRADE_PRICES.Split(',').ToArray();
-                    int[] prices = new int[priceString.Length];
-
-                    for (int i = 0; i < priceString.Length; i++)
-                    {
-                        if (int.TryParse(priceString[i], out int price))
-                        {
-                            prices[i] = price;
-                        }
-                        else
-                        {
-                            Debug.LogWarning($"[LGU] Invalid upgrade price submitted: {prices[i]}");
-                            prices[i] = -1;
-                        }
-                    }
-                    if (prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
-                    string infoString = string.Format(infoJson["Strong Legs"], 1, cfg.STRONG_LEGS_PRICE, cfg.JUMP_FORCE - 13f);
-                    for (int i = 0; i < prices.Length; i++)
-                    {
-                        infoString += string.Format(infoJson["Strong Legs"], i + 2, prices[i], (cfg.JUMP_FORCE + ((i + 1) * cfg.JUMP_FORCE_INCREMENT)) - 13f);
-                    }
-                    CustomTerminalNode node = new CustomTerminalNode("Strong Legs", cfg.STRONG_LEGS_PRICE, infoString, strongLegs, prices, prices.Length);
-                    terminalNodes.Add(node);
-                }
-            }
-
-            // destructive codes
-            GameObject destructiveCodes = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/destructiveCodes.prefab");
-            if (destructiveCodes != null) 
-            {
-                string desc;
-                if (cfg.DESTROY_TRAP)
-                {
-                    if (cfg.EXPLODE_TRAP)
-                    {
-                        desc = "Broadcasted codes now explode map hazards.";
-                    }
-                    else
-                    {
-                        desc = "Broadcasted codes now destroy map hazards.";
-                    }
-                }
-                else { desc = $"Broadcasted codes now disable map hazards for {cfg.DISARM_TIME} seconds."; }
-                shareStatus = cfg.SHARED_UPGRADES ? true : cfg.MALWARE_BROADCASTER_INDIVIDUAL;
-                IndividualUpgrades.Add("Malware Broadcaster", shareStatus);
-                if (cfg.MALWARE_BROADCASTER_ENABLED)
-                {
-                    CustomTerminalNode node = new CustomTerminalNode("Malware Broadcaster", cfg.MALWARE_BROADCASTER_PRICE, desc, destructiveCodes);
-                    terminalNodes.Add(node);
-                }
-            }
-
-
-            // light footed[{0}]
-            GameObject lightFooted = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/lightFooted.prefab");
-            if (lightFooted != null)
-            {
-                shareStatus = cfg.SHARED_UPGRADES ? true : cfg.LIGHT_FOOTED_INDIVIDUAL;
-                IndividualUpgrades.Add("Light Footed", shareStatus);
-                if (cfg.LIGHT_FOOTED_ENABLED)
-                {
-                    string[] priceString = cfg.LIGHT_FOOTED_UPGRADE_PRICES.Split(',').ToArray();
-                    int[] prices = new int[priceString.Length];
-
-                    for (int i = 0; i < priceString.Length; i++)
-                    {
-                        if (int.TryParse(priceString[i], out int price))
-                        {
-                            prices[i] = price;
-                        }
-                        else
-                        {
-                            Debug.LogWarning($"[LGU] Invalid upgrade price submitted: {prices[i]}");
-                            prices[i] = -1;
-                        }
-                    }
-                    if (prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
-                    string infoString = string.Format(infoJson["Light Footed"], 1, cfg.LIGHT_FOOTED_PRICE, cfg.NOISE_REDUCTION);
-                    for (int i = 0; i < prices.Length; i++)
-                    {
-                        infoString += string.Format(infoJson["Light Footed"], i + 2, prices[i], cfg.NOISE_REDUCTION + ((i + 1) * cfg.NOISE_REDUCTION_INCREMENT));
-                    }
-                    CustomTerminalNode node = new CustomTerminalNode("Light Footed", cfg.LIGHT_FOOTED_PRICE, infoString, lightFooted, prices, prices.Length);
-                    terminalNodes.Add(node);
-                }
-            }
-            
-
-            // night vision
+            SetupOneTimeTerminalNode("Malware Broadcaster",
+                                    "Assets/ShipUpgrades/destructiveCodes.prefab",
+                                    cfg.SHARED_UPGRADES ? true : cfg.MALWARE_BROADCASTER_INDIVIDUAL,
+                                    cfg.MALWARE_BROADCASTER_ENABLED,
+                                    cfg.MALWARE_BROADCASTER_PRICE,
+                                    desc);
+        }
+        private void SetupLightFootedTerminalNode(ref Dictionary<string, string> infoJSON)
+        {
+            SetupMultiplePurchasableTerminalNode("Light Footed",
+                                                "Assets/ShipUpgrades/lightFooted.prefab",
+                                                cfg.SHARED_UPGRADES ? true : cfg.LIGHT_FOOTED_INDIVIDUAL,
+                                                cfg.LIGHT_FOOTED_ENABLED,
+                                                cfg.LIGHT_FOOTED_PRICE,
+                                                ParseUpgradePrices(cfg.STRONG_LEGS_UPGRADE_PRICES),
+                                                infoJSON["Light Footed"]);
+        }
+        private void SetupNightVisionBatteryTerminalNode(ref Dictionary<string, string> infoJSON)
+        {
             GameObject nightVision = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/nightVision.prefab");
-            if (nightVision != null)
+            if (!nightVision) return;
+
+            bool shareStatus = cfg.SHARED_UPGRADES ? true : cfg.NIGHT_VISION_INDIVIDUAL;
+            IndividualUpgrades.Add("NV Headset Batteries", shareStatus);
+            if (!cfg.NIGHT_VISION_ENABLED) return;
+
+            int[] prices = ParseUpgradePrices(cfg.NIGHT_VISION_UPGRADE_PRICES);
+
+            string infoString = "";
+
+            float drain = (cfg.NIGHT_BATTERY_MAX - (cfg.NIGHT_BATTERY_MAX * cfg.NIGHT_VIS_STARTUP)) / cfg.NIGHT_VIS_DRAIN_SPEED;
+            float regen = cfg.NIGHT_BATTERY_MAX / cfg.NIGHT_VIS_REGEN_SPEED;
+            infoString += string.Format(infoJSON["NV Headset Batteries"], 1, "0", drain, regen);
+            for (int i = 0; i < prices.Length; i++)
             {
-                shareStatus = cfg.SHARED_UPGRADES ? true : cfg.NIGHT_VISION_INDIVIDUAL;
-                IndividualUpgrades.Add("NV Headset Batteries", shareStatus);
-                if (cfg.NIGHT_VISION_ENABLED)
-                {
-                    string[] priceString = cfg.NIGHT_VISION_UPGRADE_PRICES.Split(',').ToArray();
-                    int[] prices = new int[priceString.Length];
+                float regenAdjustment = Mathf.Clamp(cfg.NIGHT_VIS_REGEN_SPEED + (cfg.NIGHT_VIS_REGEN_INCREMENT * (i + 1)), 0, 1000);
+                float drainAdjustment = Mathf.Clamp(cfg.NIGHT_VIS_DRAIN_SPEED - (cfg.NIGHT_VIS_DRAIN_INCREMENT * (i + 1)), 0, 1000);
+                float batteryLife = cfg.NIGHT_BATTERY_MAX + (cfg.NIGHT_VIS_BATTERY_INCREMENT * (i + 1));
 
-                    for (int i = 0; i < priceString.Length; i++)
-                    {
-                        if (int.TryParse(priceString[i], out int price))
-                        {
-                            prices[i] = price;
-                        }
-                        else
-                        {
-                            Debug.LogWarning($"[LGU] Invalid upgrade price submitted: {prices[i]}");
-                            prices[i] = -1;
-                        }
-                    }
-                    if (prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
-                    string infoString = "";
+                string drainTime = "infinite";
+                if (drainAdjustment != 0) drainTime = ((batteryLife - (batteryLife * cfg.NIGHT_VIS_STARTUP)) / drainAdjustment).ToString("F2");
 
-                    float drain = (cfg.NIGHT_BATTERY_MAX - (cfg.NIGHT_BATTERY_MAX * cfg.NIGHT_VIS_STARTUP)) / cfg.NIGHT_VIS_DRAIN_SPEED;
-                    float regen = cfg.NIGHT_BATTERY_MAX / cfg.NIGHT_VIS_REGEN_SPEED;
-                    infoString += string.Format(infoJson["NV Headset Batteries"], 1, "0", drain, regen);
-                    for (int i = 0; i < prices.Length; i++)
-                    {
-                        float regenAdjustment = Mathf.Clamp(cfg.NIGHT_VIS_REGEN_SPEED + (cfg.NIGHT_VIS_REGEN_INCREMENT * (i + 1)), 0, 1000);
-                        float drainAdjustment = Mathf.Clamp(cfg.NIGHT_VIS_DRAIN_SPEED - (cfg.NIGHT_VIS_DRAIN_INCREMENT * (i + 1)), 0, 1000);
-                        float batteryLife = cfg.NIGHT_BATTERY_MAX + (cfg.NIGHT_VIS_BATTERY_INCREMENT * (i + 1));
+                string regenTime = "infinite";
+                if (regenAdjustment != 0) regenTime = (batteryLife / regenAdjustment).ToString("F2");
 
-                        string drainTime = "infinite";
-                        if (drainAdjustment != 0) drainTime = ((batteryLife - (batteryLife * cfg.NIGHT_VIS_STARTUP)) / drainAdjustment).ToString("F2");
-
-                        string regenTime = "infinite";
-                        if (regenAdjustment != 0) regenTime = (batteryLife / regenAdjustment).ToString("F2");
-
-                        infoString += string.Format(infoJson["NV Headset Batteries"], i + 2, prices[i], drainTime, regenTime);
-                    }
-                    CustomTerminalNode node = new CustomTerminalNode(
-                        "NV Headset Batteries",
-                        cfg.NIGHT_VISION_PRICE,
-                        infoString,
-                        nightVision,
-                        prices,
-                        prices.Length
-                        );
-                    node.Unlocked = true;
-                    terminalNodes.Add(node);
-                }
+                infoString += string.Format(infoJSON["NV Headset Batteries"], i + 2, prices[i], drainTime, regenTime);
             }
-            
-
-
-            // discombob
-            GameObject flash = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/terminalFlash.prefab");
+            CustomTerminalNode node = new CustomTerminalNode(
+                "NV Headset Batteries",
+                cfg.NIGHT_VISION_PRICE,
+                infoString,
+                nightVision,
+                prices,
+                prices.Length
+                );
+            node.Unlocked = true;
+            terminalNodes.Add(node);
+        }
+        private void SetupDiscombobulatorTerminalNode(ref Dictionary<string, string> infoJSON)
+        {
             AudioClip flashSFX = AssetBundleHandler.TryLoadAudioClipAsset(ref UpgradeAssets, "Assets/ShipUpgrades/flashbangsfx.ogg");
-            if (flash != null && flashSFX != null)
-            {
-                flashNoise = flashSFX;
-                shareStatus = cfg.SHARED_UPGRADES ? true : cfg.DISCOMBOBULATOR_INDIVIDUAL;
-                IndividualUpgrades.Add("Discombobulator", shareStatus);
-                if (cfg.DISCOMBOBULATOR_ENABLED)
-                {
-                    string[] priceString = cfg.DISCO_UPGRADE_PRICES.Split(',').ToArray();
-                    int[] prices = new int[priceString.Length];
+            if (!flashSFX) return;
 
-                    for (int i = 0; i < priceString.Length; i++)
-                    {
-                        if (int.TryParse(priceString[i], out int price))
-                        {
-                            prices[i] = price;
-                        }
-                        else
-                        {
-                            Debug.LogWarning($"[LGU] Invalid upgrade price submitted: {prices[i]}");
-                            prices[i] = -1;
-                        }
-                    }
-                    if (prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
-                    string infoString = string.Format(infoJson["Discombobulator"], 1, cfg.DISCOMBOBULATOR_PRICE, cfg.DISCOMBOBULATOR_STUN_DURATION);
-                    for (int i = 0; i < prices.Length; i++)
-                    {
-                        infoString += string.Format(infoJson["Discombobulator"], i + 2, prices[i], cfg.DISCOMBOBULATOR_STUN_DURATION + ((i + 1) * cfg.DISCOMBOBULATOR_INCREMENT));
-                    }
-                    CustomTerminalNode node = new CustomTerminalNode("Discombobulator", cfg.DISCOMBOBULATOR_PRICE, infoString, flash, prices, prices.Length);
-                    terminalNodes.Add(node);
-                }
-            }
-
-            //stronger scanner
+            flashNoise = flashSFX;
+            SetupMultiplePurchasableTerminalNode("Discombobulator",
+                                                "Assets/ShipUpgrades/terminalFlash.prefab",
+                                                cfg.SHARED_UPGRADES ? true : cfg.DISCOMBOBULATOR_INDIVIDUAL,
+                                                cfg.DISCOMBOBULATOR_ENABLED,
+                                                cfg.DISCOMBOBULATOR_PRICE,
+                                                ParseUpgradePrices(cfg.DISCO_UPGRADE_PRICES),
+                                                infoJSON["Discombobulator"]);
+        }
+        private void SetupBetterScannerTerminalNode(ref Dictionary<string, string> infoJSON)
+        {
             GameObject strongScan = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/strongScanner.prefab");
-            if (strongScan != null) 
-            {
-                string infoString = string.Format(infoJson["Better Scanner1"],1,cfg.BETTER_SCANNER_PRICE,cfg.NODE_DISTANCE_INCREASE, cfg.SHIP_AND_ENTRANCE_DISTANCE_INCREASE);
-                infoString += string.Format(infoJson["Better Scanner2"], 2, cfg.BETTER_SCANNER_PRICE2);
-                string enemStatus = cfg.BETTER_SCANNER_ENEMIES ? " and enemies" : "";
-                infoString += string.Format(infoJson["Better Scanner3"], 3, cfg.BETTER_SCANNER_PRICE3,enemStatus);
-                infoString += "hives and scrap command display the location of the most valuable hives and scrap on the map.\n";
-                CustomTerminalNode node = new CustomTerminalNode(
-                    "Better Scanner",
-                    cfg.BETTER_SCANNER_PRICE,
-                    infoString,
-                    strongScan,
-                    new int[] {cfg.BETTER_SCANNER_PRICE2, cfg.BETTER_SCANNER_PRICE3},
-                    2);
-                terminalNodes.Add(node);
-            }
+            if (!strongScan) return;
 
-
-            //lightning
-            GameObject lightningRod = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/LightningRod.prefab");
-            if (lightningRod != null) 
-            {
-                shareStatus = true; // It doesn't really make sense making this individual
-                IndividualUpgrades.Add(lightningRodScript.UPGRADE_NAME, shareStatus);
-                if (cfg.LIGHTNING_ROD_ENABLED)
-                {
-                    CustomTerminalNode node = new CustomTerminalNode(lightningRodScript.UPGRADE_NAME, cfg.LIGHTNING_ROD_PRICE, string.Format(infoJson[lightningRodScript.UPGRADE_NAME], cfg.LIGHTNING_ROD_PRICE, cfg.LIGHTNING_ROD_DIST), lightningRod);
-                    terminalNodes.Add(node);
-                }
-            }
-
-            // walkie
+            string infoString = string.Format(infoJSON["Better Scanner1"], 1, cfg.BETTER_SCANNER_PRICE, cfg.NODE_DISTANCE_INCREASE, cfg.SHIP_AND_ENTRANCE_DISTANCE_INCREASE);
+            infoString += string.Format(infoJSON["Better Scanner2"], 2, cfg.BETTER_SCANNER_PRICE2);
+            string enemStatus = cfg.BETTER_SCANNER_ENEMIES ? " and enemies" : "";
+            infoString += string.Format(infoJSON["Better Scanner3"], 3, cfg.BETTER_SCANNER_PRICE3, enemStatus);
+            infoString += "hives and scrap command display the location of the most valuable hives and scrap on the map.\n";
+            CustomTerminalNode node = new CustomTerminalNode(
+                "Better Scanner",
+                cfg.BETTER_SCANNER_PRICE,
+                infoString,
+                strongScan,
+                new int[] { cfg.BETTER_SCANNER_PRICE2, cfg.BETTER_SCANNER_PRICE3 },
+                2);
+            terminalNodes.Add(node);
+        }
+        private void SetupLightningRodTerminalNode(ref Dictionary<string, string> infoJSON)
+        {
+            SetupOneTimeTerminalNode(lightningRodScript.UPGRADE_NAME,
+                                    "Assets/ShipUpgrades/LightningRod.prefab",
+                                    true,
+                                    cfg.LIGHTNING_ROD_ENABLED,
+                                    cfg.LIGHTNING_ROD_PRICE,
+                                    string.Format(infoJSON[lightningRodScript.UPGRADE_NAME], cfg.LIGHTNING_ROD_PRICE, cfg.LIGHTNING_ROD_DIST));
+        }
+        private void SetupWalkieGPSTerminalNode(ref Dictionary<string, string> infoJSON)
+        {
             GameObject walkie = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/walkieUpgrade.prefab");
-            if (walkie != null) 
+            if (!walkie) return;
+
+            IndividualUpgrades.Add("Walkie GPS", true);
+            if (!cfg.WALKIE_ENABLED) return;
+
+            CustomTerminalNode node = new CustomTerminalNode("Walkie GPS", cfg.WALKIE_PRICE, "Displays your location and time when holding a walkie talkie.\nEspecially useful for fog.", walkie);
+            terminalNodes.Add(node);
+        }
+        private void SetupBackMusclesTerminalNode(ref Dictionary<string, string> infoJSON)
+        {
+            SetupMultiplePurchasableTerminalNode("Back Muscles",
+                                                "Assets/ShipUpgrades/exoskeleton.prefab",
+                                                cfg.SHARED_UPGRADES ? true : cfg.BACK_MUSCLES_INDIVIDUAL,
+                                                cfg.BACK_MUSCLES_ENABLED,
+                                                cfg.BACK_MUSCLES_PRICE,
+                                                ParseUpgradePrices(cfg.BACK_MUSCLES_UPGRADE_PRICES),
+                                                infoJSON["Back Muscles"]);
+        }
+        private void SetupInternsTerminalNode(ref Dictionary<string, string> infoJSON)
+        {
+            SetupOneTimeTerminalNode("Interns",
+                                    "Assets/ShipUpgrades/Intern.prefab",
+                                    cfg.SHARED_UPGRADES ? true : cfg.INTERN_INDIVIDUAL,
+                                    cfg.INTERN_ENABLED,
+                                    cfg.INTERN_PRICE,
+                                    string.Format(infoJSON["Interns"], cfg.INTERN_PRICE));
+        }
+        private void SetupPagerTerminalNode()
+        {
+            SetupOneTimeTerminalNode("Fast Encryption",
+                                    "Assets/ShipUpgrades/Pager.prefab",
+                                    true,
+                                    cfg.PAGER_ENABLED,
+                                    cfg.PAGER_PRICE,
+                                    "Unrestrict the transmitter");
+        }
+        private void SetupLocksmithTerminalNode()
+        {
+            SetupOneTimeTerminalNode("Locksmith",
+                                    "Assets/ShipUpgrades/LockSmith.prefab",
+                                    cfg.SHARED_UPGRADES ? true : cfg.LOCKSMITH_INDIVIDUAL,
+                                    cfg.LOCKSMITH_ENABLED,
+                                    cfg.LOCKSMITH_PRICE,
+                                    "Allows you to pick door locks by completing a minigame.");
+        }
+        /// <summary>
+        /// Generic function where it adds a terminal node for an upgrade that can be purchased multiple times
+        /// </summary>
+        /// <param name="upgradeName"> Name of the upgrade </param>
+        /// <param name="path"> Path to the asset associated to this upgrade </param>
+        /// <param name="shareStatus"> Wether the upgrade is shared through all players or only for the player who purchased it</param>
+        /// <param name="enabled"> Wether the upgrade is enabled for gameplay or not</param>
+        /// <param name="initialPrice"> The initial price when purchasing the upgrade for the first time</param>
+        /// <param name="prices"> Prices for any subsequent purchases of the upgrade</param>
+        /// <param name="infoFormat"> The format of the information displayed when checking the upgrade's info</param>
+        private void SetupMultiplePurchasableTerminalNode(string upgradeName,
+                                                        string path,
+                                                        bool shareStatus,
+                                                        bool enabled,
+                                                        int initialPrice,
+                                                        int[] prices,
+                                                        string infoFormat
+                                                        )
+        {
+            GameObject multiPerk = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, path);
+            if (!multiPerk) return;
+
+            IndividualUpgrades.Add(upgradeName, shareStatus);
+
+            if (!enabled) return;
+
+            string infoString = string.Format(infoFormat, 1, initialPrice, infoFunctions[upgradeName](0));
+            for (int i = 0; i < prices.Length; i++)
             {
-                IndividualUpgrades.Add("Walkie GPS", true);
-                if (cfg.WALKIE_ENABLED)
+                float infoResult = infoFunctions[upgradeName](i);
+                if (infoResult % 1 == 0) // It's an Integer
+                    infoString += string.Format(infoFormat, i + 2, prices[i], Mathf.RoundToInt(infoFunctions[upgradeName](i+1)));
+                else
+                    infoString += string.Format(infoFormat, i + 2, prices[i], infoFunctions[upgradeName](i + 1));
+            }
+            CustomTerminalNode node = new CustomTerminalNode(upgradeName, initialPrice, infoString, multiPerk, prices, prices.Length);
+            terminalNodes.Add(node);
+        }
+        /// <summary>
+        /// Generic function where it adds a terminal node for an upgrade that can only be bought once
+        /// </summary>
+        /// <param name="upgradeName"> Name of the upgrade</param>
+        /// <param name="path">Path to the asset associated to this upgrade</param>
+        /// <param name="shareStatus"> Wether the upgrade is shared through all players or only for the player who purchased it</param>
+        /// <param name="enabled"> Wether the upgrade is enabled for gameplay or not</param>
+        /// <param name="price"></param>
+        /// <param name="info"> The information displayed when checking the upgrade's info</param>
+        private void SetupOneTimeTerminalNode(string upgradeName,
+                                              string path,
+                                              bool shareStatus,
+                                              bool enabled,
+                                              int price,
+                                              string info
+                                              )
+        {
+            GameObject oneTimeUpgrade = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, path);
+            if (!oneTimeUpgrade) return;
+
+            IndividualUpgrades.Add(upgradeName, shareStatus);
+            if (!enabled) return;
+
+            CustomTerminalNode node = new CustomTerminalNode(upgradeName, price, info, oneTimeUpgrade);
+            terminalNodes.Add(node);
+        }
+        /// <summary>
+        /// Function which parses the prices present in a given string and inserts them into an array of integers
+        /// </summary>
+        /// <param name="upgradePrices">The string which contains the list of prices</param>
+        /// <returns>An array of integers with the values that were present in the string</returns>
+        private int[] ParseUpgradePrices(string upgradePrices)
+        {
+            string[] priceString = upgradePrices.Split(',').ToArray();
+            int[] prices = new int[priceString.Length];
+
+            for (int i = 0; i < priceString.Length; i++)
+            {
+                if (int.TryParse(priceString[i], out int price))
                 {
-                    CustomTerminalNode node = new CustomTerminalNode("Walkie GPS", cfg.WALKIE_PRICE, "Displays your location and time when holding a walkie talkie.\nEspecially useful for fog.", walkie);
-                    terminalNodes.Add(node);
+                    prices[i] = price;
+                }
+                else
+                {
+                    Debug.LogWarning($"[LGU] Invalid upgrade price submitted: {prices[i]}");
+                    prices[i] = -1;
                 }
             }
+            if (prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
 
-            // back muscles
-            GameObject exoskel = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/exoskeleton.prefab");
-            if (exoskel != null) 
-            {
-                shareStatus = cfg.SHARED_UPGRADES ? true : cfg.BACK_MUSCLES_INDIVIDUAL;
-                IndividualUpgrades.Add("Back Muscles", shareStatus);
-                if (cfg.BACK_MUSCLES_ENABLED)
-                {
-                    string[] priceString = cfg.BACK_MUSCLES_UPGRADE_PRICES.Split(',').ToArray();
-                    int[] prices = new int[priceString.Length];
-
-                    for (int i = 0; i < priceString.Length; i++)
-                    {
-                        if (int.TryParse(priceString[i], out int price))
-                        {
-                            prices[i] = price;
-                        }
-                        else
-                        {
-                            Debug.LogWarning($"[LGU] Invalid upgrade price submitted: {prices[i]}");
-                            prices[i] = -1;
-                        }
-                    }
-                    if (prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
-                    string infoString = string.Format(infoJson["Back Muscles"], 1, cfg.BACK_MUSCLES_PRICE, Mathf.RoundToInt(cfg.CARRY_WEIGHT_REDUCTION * 100));
-                    for (int i = 0; i < prices.Length; i++)
-                    {
-                        infoString += string.Format(infoJson["Back Muscles"], i + 2, prices[i], Mathf.RoundToInt((cfg.CARRY_WEIGHT_REDUCTION - ((i + 1) * cfg.CARRY_WEIGHT_INCREMENT)) * 100));
-                    }
-                    CustomTerminalNode node = new CustomTerminalNode("Back Muscles", cfg.BACK_MUSCLES_PRICE, infoString, exoskel, prices, prices.Length);
-                    terminalNodes.Add(node);
-                }
-            }
-            
-            // interns
-            GameObject intern = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/Intern.prefab");
-            shareStatus = cfg.SHARED_UPGRADES ? true : cfg.INTERN_INDIVIDUAL;
-            IndividualUpgrades.Add("Interns", shareStatus);
-            if (cfg.INTERN_ENABLED)
-            {
-                shareStatus = cfg.SHARED_UPGRADES ? true : cfg.INTERN_INDIVIDUAL;
-                IndividualUpgrades.Add("Interns", shareStatus);
-                if (cfg.INTERN_ENABLED)
-                {
-                    CustomTerminalNode node = new CustomTerminalNode("Interns", cfg.INTERN_PRICE, string.Format(infoJson["Interns"], cfg.INTERN_PRICE), intern);
-                    terminalNodes.Add(node);
-                }
-            }
-
-            // pager
-            GameObject pager = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/Pager.prefab");
-            IndividualUpgrades.Add("Fast Encryption", true);
-            if (cfg.PAGER_ENABLED)
-            {
-                CustomTerminalNode node = new CustomTerminalNode("Fast Encryption", cfg.PAGER_PRICE, "Unrestrict the transmitter", pager);
-                terminalNodes.Add(node);
-            }
-
-            //lockSmith
-            GameObject lockSmith = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/LockSmith.prefab");
-            if (lockSmith != null) 
-            {
-                shareStatus = cfg.SHARED_UPGRADES ? true : cfg.LOCKSMITH_INDIVIDUAL;
-                IndividualUpgrades.Add("Locksmith", shareStatus);
-                if (cfg.LOCKSMITH_ENABLED)
-                {
-                    CustomTerminalNode node = new CustomTerminalNode("Locksmith", cfg.LOCKSMITH_PRICE, "Allows you to pick door locks by completing a minigame.", lockSmith);
-                    terminalNodes.Add(node);
-                }
-            }
-
+            return prices;
         }
     }
 }

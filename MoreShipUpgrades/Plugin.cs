@@ -13,6 +13,7 @@ using System.Reflection;
 using MoreShipUpgrades.Misc;
 using BepInEx.Bootstrap;
 using Newtonsoft.Json;
+using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
 namespace MoreShipUpgrades
 {
@@ -64,185 +65,13 @@ namespace MoreShipUpgrades
             UpgradeBus.instance.internNames = infoJson["InternNames"].Split(",");
             UpgradeBus.instance.internInterests = infoJson["InternInterests"].Split(",");
 
-            GameObject modStore = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/LGUStore.prefab");
-            modStore.AddComponent<LGUStore>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(modStore);
-            UpgradeBus.instance.modStorePrefab = modStore;
+            SetupModStore(ref UpgradeAssets);
 
-            //TP button sfx 
-            AudioClip itemBreak = UpgradeAssets.LoadAsset<AudioClip>("Assets/ShipUpgrades/break.mp3");
-            AudioClip error = UpgradeAssets.LoadAsset<AudioClip>("Assets/ShipUpgrades/error.mp3");
-            AudioClip buttonPressed = UpgradeAssets.LoadAsset<AudioClip>("Assets/ShipUpgrades/ButtonPress2.ogg");
+            SetupIntroScreen(ref UpgradeAssets);
 
-            // intro screen
-            UpgradeBus.instance.introScreen = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/IntroScreen.prefab");
-            UpgradeBus.instance.introScreen.AddComponent<IntroScreenScript>();
+            SetupItems(ref UpgradeAssets, ref infoJson);
 
-            //tp button
-            Item tpBut = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/TpButton.asset");
-            tpBut.itemName = "Portable Tele";
-            tpBut.itemId = 492012;
-            TPButtonScript tpScript = tpBut.spawnPrefab.AddComponent<TPButtonScript>();
-            tpScript.itemProperties = tpBut;
-            tpScript.grabbable = true;
-            tpScript.grabbableToEnemies = true;
-            tpScript.ItemBreak = itemBreak;
-            tpScript.useCooldown = 2f;
-            tpScript.error = error;
-            tpScript.buttonPress = buttonPressed;
-            tpBut.creditsWorth = cfg.WEAK_TELE_PRICE;
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(tpBut.spawnPrefab);
-
-            if(cfg.WEAK_TELE_ENABLED)
-            {
-                TerminalNode PortNode = new TerminalNode();
-                PortNode.displayText = string.Format(infoJson["Portable Tele"], (int)(cfg.CHANCE_TO_BREAK * 100));
-                Items.RegisterShopItem(tpBut,null,null,PortNode, tpBut.creditsWorth);
-            }
-
-            //TP button advanced
-            Item tpButAdvanced = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/TpButtonAdv.asset");
-            tpButAdvanced.creditsWorth = cfg.ADVANCED_TELE_PRICE;
-            tpButAdvanced.itemName = "Advanced Portable Tele";
-            tpButAdvanced.itemId = 492013;
-            AdvTPButtonScript butScript = tpButAdvanced.spawnPrefab.AddComponent<AdvTPButtonScript>();
-            butScript.itemProperties = tpButAdvanced;
-            butScript.grabbable = true;
-            butScript.useCooldown = 2f;
-            butScript.grabbableToEnemies = true;
-            butScript.ItemBreak = itemBreak;
-            butScript.error = error;
-            butScript.buttonPress = buttonPressed;
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(tpButAdvanced.spawnPrefab);
-
-            if(cfg.ADVANCED_TELE_ENABLED)
-            {
-                TerminalNode advNode = new TerminalNode();
-                advNode.displayText = string.Format(infoJson["Advanced Portable Tele"], (int)(cfg.ADV_CHANCE_TO_BREAK * 100));
-                Items.RegisterShopItem(tpButAdvanced,null,null,advNode, tpButAdvanced.creditsWorth);
-            }
-
-            //Night Vision Item
-            Item nightVisionItem = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/NightVisionItem.asset");
-            nightVisionItem.creditsWorth = cfg.NIGHT_VISION_PRICE;
-            nightVisionItem.spawnPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-            nightVisionItem.itemId = 492014;
-            NightVisionItemScript visScript = nightVisionItem.spawnPrefab.AddComponent<NightVisionItemScript>(); 
-            visScript.itemProperties = nightVisionItem;
-            visScript.grabbable = true;
-            visScript.useCooldown = 2f;
-            visScript.grabbableToEnemies=true;
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(nightVisionItem.spawnPrefab);
-            if (cfg.NIGHT_VISION_ENABLED)
-            {
-                TerminalNode nightNode = new TerminalNode();
-                string grantStatus = cfg.NIGHT_VISION_INDIVIDUAL || UpgradeBus.instance.cfg.SHARED_UPGRADES ? "one" : "all";
-                string loseOnDeath = cfg.LOSE_NIGHT_VIS_ON_DEATH ? "be" : "not be";
-                nightNode.displayText = string.Format(infoJson["Night Vision"], grantStatus, loseOnDeath);
-                Items.RegisterShopItem(nightVisionItem,null,null,nightNode, nightVisionItem.creditsWorth);
-            }
-
-            //coil head Item
-            Item Peeper = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/coilHead.asset");
-            Peeper.creditsWorth = cfg.PEEPER_PRICE;
-            Peeper.twoHanded = false;
-            Peeper.itemId = 492015;
-            Peeper.twoHandedAnimation = false;
-            Peeper.spawnPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-            coilHeadItem peepScript = Peeper.spawnPrefab.AddComponent<coilHeadItem>(); 
-            peepScript.itemProperties = Peeper;
-            peepScript.grabbable = true;
-            peepScript.grabbableToEnemies=true;
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(Peeper.spawnPrefab);
-            if(cfg.PEEPER_ENABLED)
-            {
-                TerminalNode peepNode = new TerminalNode();
-                peepNode.displayText = "Looks at coil heads, don't lose it\n";
-                Items.RegisterShopItem(Peeper,null,null,peepNode, Peeper.creditsWorth);
-            }
-
-            //beekeeper
-            GameObject beekeeper = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/beekeeper.prefab");
-            beekeeper.AddComponent<beekeeperScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(beekeeper);
-            
-
-            //protein powder
-            GameObject prot = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/ProteinPowder.prefab");
-            prot.AddComponent<proteinPowderScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(prot);
-            
-            //lungs
-            GameObject biggerLungs = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/BiggerLungs.prefab");
-            biggerLungs.AddComponent<biggerLungScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(biggerLungs);
-
-            //running shoes
-            GameObject runningShoes = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/runningShoes.prefab");
-            runningShoes.AddComponent<runningShoeScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(runningShoes);
-
-            //strong legs
-            GameObject strongLegs = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/strongLegs.prefab");
-            strongLegs.AddComponent<strongLegsScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(strongLegs);
-
-            //destructive codes
-            GameObject destructiveCodes = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/destructiveCodes.prefab");
-            destructiveCodes.AddComponent<trapDestroyerScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(destructiveCodes);
-
-            //light footed
-            GameObject lightFooted = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/lightFooted.prefab");
-            lightFooted.AddComponent<lightFootedScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(lightFooted);
-
-            //night vision
-            GameObject nightVision = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/nightVision.prefab");
-            nightVision.AddComponent<nightVisionScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(nightVision);
-
-            //terminal flashbang
-            GameObject flash = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/terminalFlash.prefab");
-            AudioClip flashSFX = UpgradeAssets.LoadAsset<AudioClip>("Assets/ShipUpgrades/flashbangsfx.ogg");
-            UpgradeBus.instance.flashNoise = flashSFX;
-            flash.AddComponent<terminalFlashScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(flash);
-
-            //stronger scanner
-            GameObject strongScan = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/strongScanner.prefab");
-            strongScan.AddComponent<strongerScannerScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(strongScan);
-
-            // walkie
-            GameObject walkie = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/walkieUpgrade.prefab");
-            walkie.AddComponent<walkieScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(walkie);
-
-            // back muscles
-            GameObject exoskel = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/exoskeleton.prefab");
-            exoskel.AddComponent<exoskeletonScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(exoskel);
-
-            // interns
-            GameObject intern = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/Intern.prefab");
-            intern.AddComponent<defibScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(intern);
-
-            // pager
-            GameObject pager = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/Pager.prefab");
-            pager.AddComponent<pagerScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(pager);
-
-            // Lightning Rod
-            GameObject lightningRod = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/LightningRod.prefab");
-            lightningRod.AddComponent<lightningRodScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(lightningRod);
-
-            //lockSmith
-            GameObject lockSmith = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/LockSmith.prefab");
-            lockSmith.AddComponent<lockSmithScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(lockSmith);
+            SetupPerks(ref UpgradeAssets);
 
             harmony.PatchAll();
 
@@ -274,6 +103,233 @@ namespace MoreShipUpgrades
                 }
 
             }
+        }
+
+        private void SetupModStore(ref AssetBundle bundle)
+        {
+            GameObject modStore = AssetBundleHandler.TryLoadGameObjectAsset(ref bundle, "Assets/ShipUpgrades/LGUStore.prefab");
+            if (modStore == null) return;
+
+            modStore.AddComponent<LGUStore>();
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(modStore);
+            UpgradeBus.instance.modStorePrefab = modStore;
+        }
+        private void SetupIntroScreen(ref AssetBundle bundle)
+        {
+            UpgradeBus.instance.introScreen = AssetBundleHandler.TryLoadGameObjectAsset(ref bundle, "Assets/ShipUpgrades/IntroScreen.prefab");
+            if (UpgradeBus.instance.introScreen != null) UpgradeBus.instance.introScreen.AddComponent<IntroScreenScript>();
+        }
+        private void SetupItems(ref AssetBundle bundle, ref Dictionary<string, string> infoJSON)
+        {
+            SetupTeleporterButtons(ref bundle, ref infoJSON);
+            SetupNightVision(ref bundle, ref infoJSON);
+            SetupPeeper(ref bundle);
+        }
+        private void SetupTeleporterButtons(ref AssetBundle bundle, ref Dictionary<string, string> infoJSON)
+        {
+            // Teleporter Button SFX
+            AudioClip itemBreak = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, "Assets/ShipUpgrades/break.mp3");
+            AudioClip error = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, "Assets/ShipUpgrades/error.mp3");
+            AudioClip buttonPressed = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, "Assets/ShipUpgrades/ButtonPress2.ogg");
+
+            if (itemBreak == null || error == null || buttonPressed == null) return;
+
+            SetupRegularTeleporterButton(ref bundle, ref itemBreak, ref error, ref buttonPressed, ref infoJSON);
+            SetupAdvancedTeleporterButton(ref bundle, ref itemBreak, ref error, ref buttonPressed, ref infoJSON);
+        }
+        private void SetupRegularTeleporterButton(ref AssetBundle bundle, ref AudioClip itemBreak, ref AudioClip error, ref AudioClip buttonPressed, ref Dictionary<string, string> infoJSON)
+        {
+            Item tpBut = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/TpButton.asset");
+            if (tpBut == null) return;
+
+            tpBut.itemName = "Portable Tele";
+            tpBut.itemId = 492012;
+            TPButtonScript tpScript = tpBut.spawnPrefab.AddComponent<TPButtonScript>();
+            tpScript.itemProperties = tpBut;
+            tpScript.grabbable = true;
+            tpScript.grabbableToEnemies = true;
+            tpScript.ItemBreak = itemBreak;
+            tpScript.useCooldown = 2f;
+            tpScript.error = error;
+            tpScript.buttonPress = buttonPressed;
+            tpBut.creditsWorth = cfg.WEAK_TELE_PRICE;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(tpBut.spawnPrefab);
+
+            if (!cfg.WEAK_TELE_ENABLED) return;
+
+            TerminalNode PortNode = new TerminalNode();
+            PortNode.displayText = string.Format(infoJSON["Portable Tele"], (int)(cfg.CHANCE_TO_BREAK * 100));
+            Items.RegisterShopItem(tpBut, null, null, PortNode, tpBut.creditsWorth);
+        }
+        private void SetupAdvancedTeleporterButton(ref AssetBundle bundle, ref AudioClip itemBreak, ref AudioClip error, ref AudioClip buttonPressed, ref Dictionary<string, string> infoJSON)
+        {
+            Item tpButAdvanced = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/TpButtonAdv.asset");
+            if (tpButAdvanced == null) return;
+
+            tpButAdvanced.creditsWorth = cfg.ADVANCED_TELE_PRICE;
+            tpButAdvanced.itemName = "Advanced Portable Tele";
+            tpButAdvanced.itemId = 492013;
+            AdvTPButtonScript butScript = tpButAdvanced.spawnPrefab.AddComponent<AdvTPButtonScript>();
+            butScript.itemProperties = tpButAdvanced;
+            butScript.grabbable = true;
+            butScript.useCooldown = 2f;
+            butScript.grabbableToEnemies = true;
+            butScript.ItemBreak = itemBreak;
+            butScript.error = error;
+            butScript.buttonPress = buttonPressed;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(tpButAdvanced.spawnPrefab);
+
+            if (!cfg.ADVANCED_TELE_ENABLED) return;
+
+            TerminalNode advNode = new TerminalNode();
+            advNode.displayText = string.Format(infoJSON["Advanced Portable Tele"], (int)(cfg.ADV_CHANCE_TO_BREAK * 100));
+            Items.RegisterShopItem(tpButAdvanced, null, null, advNode, tpButAdvanced.creditsWorth);
+        }
+        private void SetupNightVision(ref AssetBundle bundle, ref Dictionary<string, string> infoJSON)
+        {
+            Item nightVisionItem = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/NightVisionItem.asset");
+            if (nightVisionItem == null) return;
+
+            nightVisionItem.creditsWorth = cfg.NIGHT_VISION_PRICE;
+            nightVisionItem.spawnPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+            nightVisionItem.itemId = 492014;
+            NightVisionItemScript visScript = nightVisionItem.spawnPrefab.AddComponent<NightVisionItemScript>();
+            visScript.itemProperties = nightVisionItem;
+            visScript.grabbable = true;
+            visScript.useCooldown = 2f;
+            visScript.grabbableToEnemies = true;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(nightVisionItem.spawnPrefab);
+
+            if (!cfg.NIGHT_VISION_ENABLED) return;
+
+            TerminalNode nightNode = new TerminalNode();
+            string grantStatus = cfg.NIGHT_VISION_INDIVIDUAL || UpgradeBus.instance.cfg.SHARED_UPGRADES ? "one" : "all";
+            string loseOnDeath = cfg.LOSE_NIGHT_VIS_ON_DEATH ? "be" : "not be";
+            nightNode.displayText = string.Format(infoJSON["Night Vision"], grantStatus, loseOnDeath);
+            Items.RegisterShopItem(nightVisionItem, null, null, nightNode, nightVisionItem.creditsWorth);
+        }
+        private void SetupPeeper(ref AssetBundle bundle)
+        {
+            Item Peeper = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/coilHead.asset");
+            if (Peeper == null) return;
+
+            Peeper.creditsWorth = cfg.PEEPER_PRICE;
+            Peeper.twoHanded = false;
+            Peeper.itemId = 492015;
+            Peeper.twoHandedAnimation = false;
+            Peeper.spawnPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+            coilHeadItem peepScript = Peeper.spawnPrefab.AddComponent<coilHeadItem>();
+            peepScript.itemProperties = Peeper;
+            peepScript.grabbable = true;
+            peepScript.grabbableToEnemies = true;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(Peeper.spawnPrefab);
+
+            if (!cfg.PEEPER_ENABLED) return;
+
+            TerminalNode peepNode = new TerminalNode();
+            peepNode.displayText = "Looks at coil heads, don't lose it\n";
+            Items.RegisterShopItem(Peeper, null, null, peepNode, Peeper.creditsWorth);
+        }
+        private void SetupPerks(ref AssetBundle bundle)
+        {
+            SetupBeekeeper(ref bundle);
+            SetupProteinPowder(ref bundle);
+            SetupBiggerLungs(ref bundle);
+            SetupRunningShoes(ref bundle);
+            SetupStrongLegs(ref bundle);
+            SetupMalwareBroadcaster(ref bundle);
+            SetupLightFooted(ref bundle);
+            SetupNightVisionBattery(ref bundle);
+            SetupDiscombobulator(ref bundle);
+            SetupBetterScanner(ref bundle);
+            SetupWalkieGPS(ref bundle);
+            SetupBackMuscles(ref bundle);
+            SetupInterns(ref bundle);
+            SetupPager(ref bundle);
+            SetupLightningRod(ref bundle);
+            SetupLocksmith(ref bundle);
+        }
+        private void SetupBeekeeper(ref AssetBundle bundle)
+        {
+            SetupGenericPerk<beekeeperScript>(ref bundle, "Assets/ShipUpgrades/beekeeper.prefab");
+        }
+        private void SetupProteinPowder(ref AssetBundle bundle) 
+        {
+            SetupGenericPerk<proteinPowderScript>(ref bundle, "Assets/ShipUpgrades/ProteinPowder.prefab");
+        }
+        private void SetupBiggerLungs(ref AssetBundle bundle)
+        {
+            SetupGenericPerk<biggerLungScript>(ref bundle, "Assets/ShipUpgrades/BiggerLungs.prefab");
+        }
+        private void SetupRunningShoes(ref AssetBundle bundle) 
+        {
+            SetupGenericPerk<runningShoeScript>(ref bundle, "Assets/ShipUpgrades/runningShoes.prefab");
+        }
+        private void SetupStrongLegs(ref AssetBundle bundle) 
+        {
+            SetupGenericPerk<strongLegsScript>(ref bundle, "Assets/ShipUpgrades/strongLegs.prefab");
+        }
+        private void SetupMalwareBroadcaster(ref AssetBundle bundle)
+        {
+            SetupGenericPerk<trapDestroyerScript>(ref bundle, "Assets/ShipUpgrades/destructiveCodes.prefab");
+        }
+        private void SetupLightFooted(ref AssetBundle bundle) 
+        {
+            SetupGenericPerk<lightFootedScript>(ref bundle, "Assets/ShipUpgrades/lightFooted.prefab");
+        }
+        private void SetupNightVisionBattery(ref AssetBundle bundle) 
+        {
+            SetupGenericPerk<nightVisionScript>(ref bundle, "Assets/ShipUpgrades/nightVision.prefab");
+        }
+        private void SetupDiscombobulator(ref AssetBundle bundle)
+        {
+            AudioClip flashSFX = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, "Assets/ShipUpgrades/flashbangsfx.ogg");
+            if (flashSFX != null) UpgradeBus.instance.flashNoise = flashSFX;
+
+            SetupGenericPerk<terminalFlashScript>(ref bundle, "Assets/ShipUpgrades/terminalFlash.prefab");
+        }
+        private void SetupBetterScanner(ref AssetBundle bundle)
+        {
+            SetupGenericPerk<strongerScannerScript>(ref bundle, "Assets/ShipUpgrades/strongScanner.prefab");
+        }
+        private void SetupWalkieGPS(ref AssetBundle bundle)
+        {
+            SetupGenericPerk<walkieScript>(ref bundle, "Assets/ShipUpgrades/walkieUpgrade.prefab");
+        }
+        private void SetupBackMuscles(ref AssetBundle bundle)
+        {
+            SetupGenericPerk<exoskeletonScript>(ref bundle, "Assets/ShipUpgrades/exoskeleton.prefab");
+        }
+        private void SetupInterns(ref AssetBundle bundle)
+        {
+            SetupGenericPerk<defibScript>(ref bundle, "Assets/ShipUpgrades/Intern.prefab");
+        }
+        private void SetupPager(ref AssetBundle bundle)
+        {
+            SetupGenericPerk<pagerScript>(ref bundle, "Assets/ShipUpgrades/Pager.prefab");
+        }
+        private void SetupLightningRod(ref AssetBundle bundle)
+        {
+            SetupGenericPerk<lightningRodScript>(ref bundle, "Assets/ShipUpgrades/LightningRod.prefab");
+        }
+        private void SetupLocksmith(ref AssetBundle bundle)
+        {
+            SetupGenericPerk<lockSmithScript>(ref bundle, "Assets/ShipUpgrades/LockSmith.prefab");
+        }
+        /// <summary>
+        /// Generic function where it adds a script (specificed through the type) into an GameObject asset 
+        /// which is present in a provided asset bundle in a given path and registers it as a network prefab.
+        /// </summary>
+        /// <typeparam name="T"> The script we wish to include into the GameObject asset</typeparam>
+        /// <param name="bundle"> The asset bundle where the asset is located</param>
+        /// <param name="path"> The path to access the asset in the asset bundle</param>
+        private void SetupGenericPerk<T>(ref AssetBundle bundle, string path) where T : Component
+        {
+            GameObject perk = AssetBundleHandler.TryLoadGameObjectAsset(ref bundle, path);
+            if (!perk) return;
+
+            perk.AddComponent<T>();
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(perk);
         }
     }
 }

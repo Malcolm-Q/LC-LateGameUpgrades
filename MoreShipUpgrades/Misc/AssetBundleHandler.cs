@@ -44,5 +44,24 @@ namespace MoreShipUpgrades.Misc
             }
             return result;
         }
+
+        /// <summary>
+        /// Tries to load an asset from provided asset bundle through a given path into a Item
+        /// <para>
+        /// If the asset requested does not exist in the bundle, it will be logged for easier tracking of what asset is missing from the bundle
+        /// </para>
+        /// </summary>
+        /// <param name="bundle">The asset bundle we wish to gather the asset from</param>
+        /// <param name="path">The path to the asset we wish to load</param>
+        /// <returns>The asset's Item if it's present in the asset bundle, otherwise null</returns>
+        public static Item TryLoadItemAsset(ref AssetBundle bundle, string path)
+        {
+            Item result = bundle.LoadAsset<Item>(path);
+            if (result == null)
+            {
+                Plugin.mls.LogError(string.Format("[{0}] An error has occurred trying to load asset from {1}\n", MODULE_NAME, path));
+            }
+            return result;
+        }
     }
 }
