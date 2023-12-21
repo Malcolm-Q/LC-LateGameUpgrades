@@ -72,16 +72,7 @@ namespace MoreShipUpgrades
             SetupItems(ref UpgradeAssets, ref infoJson);
             
             SetupPerks(ref UpgradeAssets);
-            // samples
-            Item fleaSample = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/SnareFleaSample.asset");
-            Item spiderSample = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/BunkerSpiderSample.asset");
-            Item hoardSample = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/HoardingBugSample.asset");
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(fleaSample.spawnPrefab);
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(spiderSample.spawnPrefab);
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(hoardSample.spawnPrefab);
-            UpgradeBus.instance.samplePrefabs.Add("snare flea", fleaSample.spawnPrefab);
-            UpgradeBus.instance.samplePrefabs.Add("bunker spider", spiderSample.spawnPrefab);
-            UpgradeBus.instance.samplePrefabs.Add("hoarding bug", hoardSample.spawnPrefab);
+
             harmony.PatchAll();
 
             mls.LogInfo("LGU has been patched");
@@ -133,6 +124,19 @@ namespace MoreShipUpgrades
             SetupTeleporterButtons(ref bundle, ref infoJSON);
             SetupNightVision(ref bundle, ref infoJSON);
             SetupPeeper(ref bundle);
+            SetupSamples(ref bundle);
+        }
+        private void SetupSamples(ref AssetBundle bundle)
+        {
+            Item fleaSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/SnareFleaSample.asset");
+            Item spiderSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/BunkerSpiderSample.asset");
+            Item hoardSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/HoardingBugSample.asset");
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(fleaSample.spawnPrefab);
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(spiderSample.spawnPrefab);
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(hoardSample.spawnPrefab);
+            UpgradeBus.instance.samplePrefabs.Add("snare flea", fleaSample.spawnPrefab);
+            UpgradeBus.instance.samplePrefabs.Add("bunker spider", spiderSample.spawnPrefab);
+            UpgradeBus.instance.samplePrefabs.Add("hoarding bug", hoardSample.spawnPrefab);
         }
         private void SetupTeleporterButtons(ref AssetBundle bundle, ref Dictionary<string, string> infoJSON)
         {

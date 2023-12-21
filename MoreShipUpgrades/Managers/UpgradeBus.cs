@@ -268,6 +268,8 @@ namespace MoreShipUpgrades.Managers
 
             SetupDiscombobulatorTerminalNode(ref infoJson);
 
+            SetupHunterTerminalNode(ref infoJson);
+
             SetupBetterScannerTerminalNode(ref infoJson);
 
             SetupLightningRodTerminalNode(ref infoJson);
@@ -424,29 +426,27 @@ namespace MoreShipUpgrades.Managers
                                                 ParseUpgradePrices(cfg.DISCO_UPGRADE_PRICES),
                                                 infoJSON["Discombobulator"]);
         }
+        private void SetupHunterTerminalNode(ref Dictionary<string, string> infoJSON)
+        {
+            GameObject hunter = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/Hunter.prefab");
+            if (!hunter) return;
+            IndividualUpgrades.Add("Hunter", true);
+            if (!cfg.HUNTER_ENABLED) return;
+
+            string infoString = "Not implemented, if you see this @_kieth and tell him how stupid he is.";
+            CustomTerminalNode node = new CustomTerminalNode(
+                "Hunter",
+                cfg.HUNTER_PRICE,
+                infoString,
+                hunter,
+                new int[] { cfg.HUNTER_PRICE2, cfg.HUNTER_PRICE3 },
+                2);
+            terminalNodes.Add(node);
+        }
         private void SetupBetterScannerTerminalNode(ref Dictionary<string, string> infoJSON)
         {
             GameObject strongScan = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/strongScanner.prefab");
             if (!strongScan) return;
-
-            //hunter
-            GameObject hunter = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/Hunter.prefab");
-            if (hunter != null) 
-            {
-                IndividualUpgrades.Add("Hunter", true);
-                if (cfg.HUNTER_ENABLED)
-                {
-                    string infoString = "Not implemented, if you see this @_kieth and tell him how stupid he is.";
-                    CustomTerminalNode node = new CustomTerminalNode(
-                        "Hunter",
-                        cfg.HUNTER_PRICE,
-                        infoString,
-                        hunter,
-                        new int[] { cfg.HUNTER_PRICE2, cfg.HUNTER_PRICE3 },
-                        2);
-                    terminalNodes.Add(node);
-                }
-            }
 
             string infoString = string.Format(infoJSON["Better Scanner1"], 1, cfg.BETTER_SCANNER_PRICE, cfg.NODE_DISTANCE_INCREASE, cfg.SHIP_AND_ENTRANCE_DISTANCE_INCREASE);
             infoString += string.Format(infoJSON["Better Scanner2"], 2, cfg.BETTER_SCANNER_PRICE2);
