@@ -36,6 +36,7 @@ namespace MoreShipUpgrades.Managers
             {"Fast Encryption", SaveInfo => SaveInfo.pager },
             {"Hunter", SaveInfo => SaveInfo.hunter },
             {lightningRodScript.UPGRADE_NAME, SaveInfo => SaveInfo.lightningRod },
+            {playerHealthScript.UPGRADE_NAME, SaveInfo => SaveInfo.playerHealth },
         };
 
         private static Dictionary<string, Func<SaveInfo, int>> levelConditions = new Dictionary<string, Func<SaveInfo, int>>
@@ -56,6 +57,7 @@ namespace MoreShipUpgrades.Managers
             {"Fast Encryption", SaveInfo => 0 },
             {"Hunter", SaveInfo => SaveInfo.huntLevel },
             { lightningRodScript.UPGRADE_NAME, saveInfo => 0},
+            { playerHealthScript.UPGRADE_NAME, saveInfo => saveInfo.playerHealthLevel },
         };
         private bool retrievedCfg;
         private bool receivedSave;
@@ -226,6 +228,21 @@ namespace MoreShipUpgrades.Managers
             }
         }
 
+        [ServerRpc(RequireOwnership = false)]
+        public void UpdatePlayerNewHealthsServerRpc(ulong id, int health) 
+        {
+            UpdatePlayerNewHealthsClientRpc(id, health);
+        }
+
+        [ClientRpc]
+        private void UpdatePlayerNewHealthsClientRpc(ulong id, int health)
+        {
+            if (UpgradeBus.instance.playerHPs.ContainsKey(id))
+                UpgradeBus.instance.playerHPs[id] = health;
+            else UpgradeBus.instance.playerHPs.Add(id, health);
+            playerHealthScript.CheckForAdditionalHealth(GameNetworkManager.Instance.localPlayerController);
+        }
+
         [ServerRpc(RequireOwnership =false)]
         public void UpdateForceMultsServerRpc(ulong id, int lvl)
         {
@@ -307,6 +324,7 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.lightningRod = saveInfo.lightningRod;
             UpgradeBus.instance.pager = saveInfo.pager;
             UpgradeBus.instance.hunter = saveInfo.hunter;
+            UpgradeBus.instance.playerHealth = saveInfo.playerHealth;
 
             UpgradeBus.instance.beeLevel = saveInfo.beeLevel;
             UpgradeBus.instance.huntLevel = saveInfo.huntLevel;
@@ -320,6 +338,7 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.legLevel = saveInfo.legLevel;
             UpgradeBus.instance.scanLevel = saveInfo.scanLevel;
             UpgradeBus.instance.nightVisionLevel = saveInfo.nightVisionLevel;
+            UpgradeBus.instance.playerHealthLevel = saveInfo.playerHealthLevel;
 
             StartCoroutine(WaitForUpgradeObject());
         }
@@ -443,6 +462,7 @@ namespace MoreShipUpgrades.Managers
         public bool lightningRod = UpgradeBus.instance.lightningRod;
         public bool pager = UpgradeBus.instance.pager;
         public bool hunter = UpgradeBus.instance.hunter;
+        public bool playerHealth = UpgradeBus.instance.playerHealth;
 
         public int beeLevel = UpgradeBus.instance.beeLevel;
         public int huntLevel = UpgradeBus.instance.huntLevel;
@@ -455,6 +475,7 @@ namespace MoreShipUpgrades.Managers
         public int discoLevel = UpgradeBus.instance.discoLevel;
         public int legLevel = UpgradeBus.instance.legLevel;
         public int nightVisionLevel = UpgradeBus.instance.nightVisionLevel;
+        public int playerHealthLevel = UpgradeBus.instance.playerHealthLevel;
     }
 
     [Serializable]
