@@ -259,6 +259,10 @@ namespace MoreShipUpgrades
             lockSmith.AddComponent<lockSmithScript>();
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(lockSmith);
 
+            GameObject playerHealth = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/PlayerHealth.prefab");
+            playerHealth.AddComponent<playerHealthScript>();
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(playerHealth);
+
             harmony.PatchAll();
 
             mls.LogInfo("LGU has been patched");

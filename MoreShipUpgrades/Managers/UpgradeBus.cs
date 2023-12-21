@@ -37,6 +37,7 @@ namespace MoreShipUpgrades.Managers
         public bool lightningRod = false;
         public bool lightningRodActive = false;
         public bool hunter = false;
+        public bool playerHealth = false;
 
         public int lungLevel = 0;
         public int huntLevel = 0;
@@ -49,6 +50,7 @@ namespace MoreShipUpgrades.Managers
         public int legLevel = 0;
         public int scanLevel = 0;
         public int nightVisionLevel = 0;
+        public int playerHealthLevel = 0;
 
         public float flashCooldown = 0f;
         public float alteredWeight = 1f;
@@ -71,6 +73,7 @@ namespace MoreShipUpgrades.Managers
 
         public Dictionary<ulong,float> beePercs = new Dictionary<ulong,float>();
         public Dictionary<ulong,int> forceMults = new Dictionary<ulong,int>();
+        public Dictionary<ulong, int> playerHPs = new Dictionary<ulong, int>();
 
         public Dictionary<string,bool> IndividualUpgrades = new Dictionary<string,bool>();
         public string[] internNames, internInterests;
@@ -141,6 +144,7 @@ namespace MoreShipUpgrades.Managers
             lightningRodActive = false;
             pager = false;
             hunter = false;
+            playerHealth = false;
             huntLevel = 0;
             proteinLevel = 0;
             lungLevel = 0;
@@ -152,6 +156,7 @@ namespace MoreShipUpgrades.Managers
             discoLevel = 0;
             legLevel = 0;
             nightVisionLevel = 0;
+            playerHealthLevel = 0;
             flashCooldown = 0f;
             alteredWeight = 1f;
             trapHandler = null;
@@ -712,6 +717,49 @@ namespace MoreShipUpgrades.Managers
                 }
             }
 
+            SetupPlayerHealthTerminalNode(ref infoJson);
+        }
+
+        private void SetupPlayerHealthTerminalNode(ref Dictionary<string, string> infoJSON)
+        {
+            string upgradeName = playerHealthScript.UPGRADE_NAME;
+            GameObject playerHealth = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/PlayerHealth.prefab");
+            if (playerHealth == null) return;
+
+            bool shareStatus = cfg.SHARED_UPGRADES ? true : !cfg.PLAYER_HEALTH_INDIVIDUAL;
+            IndividualUpgrades.Add(upgradeName, shareStatus);
+            if (!cfg.PLAYER_HEALTH_ENABLED) return;
+
+            int[] prices = ParsePrices(cfg.PLAYER_HEALTH_UPGRADE_PRICES);
+
+            string infoString = string.Format(infoJSON[upgradeName], 1, cfg.PLAYER_HEALTH_PRICE, cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK);
+            for (int i = 0; i < prices.Length; i++)
+            {
+                infoString += string.Format(infoJSON[upgradeName], i + 2, prices[i], cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK + ((i + 1) * cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT));
+            }
+            CustomTerminalNode node = new CustomTerminalNode(upgradeName, cfg.PLAYER_HEALTH_PRICE, infoString, playerHealth, prices, prices.Length);
+            terminalNodes.Add(node);
+        }
+
+        private int[] ParsePrices(string pricesToParse)
+        {
+            string[] priceString = pricesToParse.Split(',').ToArray();
+            int[] prices = new int[priceString.Length];
+
+            for (int i = 0; i < priceString.Length; i++)
+            {
+                if (int.TryParse(priceString[i], out int price))
+                {
+                    prices[i] = price;
+                }
+                else
+                {
+                    Debug.LogWarning($"[LGU] Invalid upgrade price submitted: {prices[i]}");
+                    prices[i] = -1;
+                }
+            }
+            if (prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
+            return prices;
         }
     }
 }

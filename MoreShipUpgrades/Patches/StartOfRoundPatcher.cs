@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.UpgradeComponents;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -35,6 +36,13 @@ namespace MoreShipUpgrades.Patches
             {
                 LGUStore.instance.PlayersFiredServerRpc();
             }
+        }
+
+        [HarmonyPostfix]
+        [HarmonyPatch("OpenShipDoors")]
+        private static void UpdatePlayersHealth(StartOfRound __instance)
+        {
+            playerHealthScript.CheckAdditionalHealth(__instance);
         }
     }
 }
