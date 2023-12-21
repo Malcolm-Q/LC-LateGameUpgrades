@@ -33,8 +33,10 @@ namespace MoreShipUpgrades.Managers
         public bool proteinPowder = false;
         public bool lightningRod = false;
         public bool lightningRodActive = false;
+        public bool hunter = false;
 
         public int lungLevel = 0;
+        public int huntLevel = 0;
         public int proteinLevel = 0;
         public int beeLevel = 0;
         public int backLevel = 0;
@@ -91,6 +93,8 @@ namespace MoreShipUpgrades.Managers
         internal bool pager;
         internal pagerScript pageScript;
 
+        public Dictionary<string,GameObject> samplePrefabs = new Dictionary<string,GameObject>();
+
 
         void Awake()
         {
@@ -145,6 +149,8 @@ namespace MoreShipUpgrades.Managers
             lightningRod = false;
             lightningRodActive = false;
             pager = false;
+            hunter = false;
+            huntLevel = 0;
             proteinLevel = 0;
             lungLevel = 0;
             backLevel = 0;
@@ -363,6 +369,8 @@ namespace MoreShipUpgrades.Managers
         }
         private void SetupNightVisionBatteryTerminalNode(ref Dictionary<string, string> infoJSON)
         {
+
+            // night vision
             GameObject nightVision = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/nightVision.prefab");
             if (!nightVision) return;
 
@@ -420,6 +428,25 @@ namespace MoreShipUpgrades.Managers
         {
             GameObject strongScan = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/strongScanner.prefab");
             if (!strongScan) return;
+
+            //hunter
+            GameObject hunter = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/Hunter.prefab");
+            if (hunter != null) 
+            {
+                IndividualUpgrades.Add("Hunter", true);
+                if (cfg.HUNTER_ENABLED)
+                {
+                    string infoString = "Not implemented, if you see this @_kieth and tell him how stupid he is.";
+                    CustomTerminalNode node = new CustomTerminalNode(
+                        "Hunter",
+                        cfg.HUNTER_PRICE,
+                        infoString,
+                        hunter,
+                        new int[] { cfg.HUNTER_PRICE2, cfg.HUNTER_PRICE3 },
+                        2);
+                    terminalNodes.Add(node);
+                }
+            }
 
             string infoString = string.Format(infoJSON["Better Scanner1"], 1, cfg.BETTER_SCANNER_PRICE, cfg.NODE_DISTANCE_INCREASE, cfg.SHIP_AND_ENTRANCE_DISTANCE_INCREASE);
             infoString += string.Format(infoJSON["Better Scanner2"], 2, cfg.BETTER_SCANNER_PRICE2);
@@ -576,6 +603,7 @@ namespace MoreShipUpgrades.Managers
                 {
                     Debug.LogWarning($"[LGU] Invalid upgrade price submitted: {prices[i]}");
                     prices[i] = -1;
+
                 }
             }
             if (prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }

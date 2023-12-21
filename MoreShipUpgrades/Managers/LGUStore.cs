@@ -17,7 +17,6 @@ namespace MoreShipUpgrades.Managers
         public SaveInfo saveInfo;
         public LGUSave lguSave;
         private ulong playerID = 0;
-        private Action onConfigReceived;
 
         private static Dictionary<string, Func<SaveInfo, bool>> conditions = new Dictionary<string, Func<SaveInfo, bool>>
         {
@@ -35,6 +34,7 @@ namespace MoreShipUpgrades.Managers
             {"Walkie GPS", SaveInfo => SaveInfo.walkies },
             {"Protein Powder", SaveInfo => SaveInfo.proteinPowder },
             {"Fast Encryption", SaveInfo => SaveInfo.pager },
+            {"Hunter", SaveInfo => SaveInfo.hunter },
             {lightningRodScript.UPGRADE_NAME, SaveInfo => SaveInfo.lightningRod },
         };
 
@@ -54,6 +54,7 @@ namespace MoreShipUpgrades.Managers
             { "Walkie GPS", saveInfo => 0 },
             {"Protein Powder", SaveInfo => SaveInfo.proteinLevel },
             {"Fast Encryption", SaveInfo => 0 },
+            {"Hunter", SaveInfo => SaveInfo.huntLevel },
             { lightningRodScript.UPGRADE_NAME, saveInfo => 0},
         };
         private bool retrievedCfg;
@@ -295,7 +296,6 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.softSteps = saveInfo.softSteps;
             UpgradeBus.instance.scannerUpgrade = saveInfo.scannerUpgrade;
             UpgradeBus.instance.nightVision = saveInfo.nightVision;
-            UpgradeBus.instance.nightVisionActive = saveInfo.nightVisionActive;
             UpgradeBus.instance.exoskeleton = saveInfo.exoskeleton;
             UpgradeBus.instance.TPButtonPressed = saveInfo.TPButtonPressed;
             UpgradeBus.instance.beekeeper = saveInfo.beekeeper;
@@ -306,8 +306,10 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.proteinPowder = saveInfo.proteinPowder;
             UpgradeBus.instance.lightningRod = saveInfo.lightningRod;
             UpgradeBus.instance.pager = saveInfo.pager;
+            UpgradeBus.instance.hunter = saveInfo.hunter;
 
             UpgradeBus.instance.beeLevel = saveInfo.beeLevel;
+            UpgradeBus.instance.huntLevel = saveInfo.huntLevel;
             UpgradeBus.instance.proteinLevel = saveInfo.proteinLevel;
             UpgradeBus.instance.lungLevel = saveInfo.lungLevel;
             UpgradeBus.instance.walkies = saveInfo.walkies;
@@ -351,7 +353,7 @@ namespace MoreShipUpgrades.Managers
 
         public void HandleUpgrade(string name, bool increment = false)
         {
-            if (!UpgradeBus.instance.IndividualUpgrades[name])
+            if (UpgradeBus.instance.IndividualUpgrades[name])
             {
                 HandleUpgradeServerRpc(name, increment);
                 Debug.Log("Shared Upgrade");
@@ -428,7 +430,6 @@ namespace MoreShipUpgrades.Managers
         public bool softSteps = UpgradeBus.instance.softSteps;
         public bool scannerUpgrade = UpgradeBus.instance.scannerUpgrade;
         public bool nightVision = UpgradeBus.instance.nightVision;
-        public bool nightVisionActive = UpgradeBus.instance.nightVisionActive;
         public bool exoskeleton = UpgradeBus.instance.exoskeleton;
         public bool TPButtonPressed = UpgradeBus.instance.TPButtonPressed;
         public bool beekeeper = UpgradeBus.instance.beekeeper;
@@ -441,8 +442,10 @@ namespace MoreShipUpgrades.Managers
         public bool walkies = UpgradeBus.instance.walkies;
         public bool lightningRod = UpgradeBus.instance.lightningRod;
         public bool pager = UpgradeBus.instance.pager;
+        public bool hunter = UpgradeBus.instance.hunter;
 
         public int beeLevel = UpgradeBus.instance.beeLevel;
+        public int huntLevel = UpgradeBus.instance.huntLevel;
         public int proteinLevel = UpgradeBus.instance.proteinLevel;
         public int lungLevel = UpgradeBus.instance.lungLevel;
         public int backLevel = UpgradeBus.instance.backLevel;

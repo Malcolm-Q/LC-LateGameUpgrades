@@ -35,7 +35,7 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         // distance
         public static string DIST_SECTION = "Effective Distance of lightning rod.";
-        public static float DIST_DEFAULT = 150f;
+        public static float DIST_DEFAULT = 175f;
         public static string DIST_DESCRIPTION = string.Format("The closer you are the more likely the rod will reroute lightning.", UPGRADE_NAME);
 
         public bool CanTryInterceptLightning { get; internal set; }
