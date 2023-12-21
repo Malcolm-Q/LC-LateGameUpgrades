@@ -27,6 +27,7 @@ namespace MoreShipUpgrades.Misc
         public bool MALWARE_BROADCASTER_ENABLED { get; set; }
         public bool LIGHTNING_ROD_ENABLED { get; set; }
         public bool HUNTER_ENABLED { get; set; }
+        public bool PLAYER_HEALTH_ENABLED { get; set; }
 
         // individual or shared
         public bool ADVANCED_TELE_INDIVIDUAL { get; set; }
@@ -38,6 +39,7 @@ namespace MoreShipUpgrades.Misc
         public bool LIGHT_FOOTED_INDIVIDUAL { get; set; }
         public bool NIGHT_VISION_INDIVIDUAL { get; set; }
         public bool HUNTER_INDIVIDUAL { get; set; }
+        public bool PLAYER_HEALTH_INDIVIDUAL { get; set; }
 
         public bool RUNNING_SHOES_INDIVIDUAL { get; set; }
         public bool BETTER_SCANNER_INDIVIDUAL { get; set; }
@@ -66,6 +68,7 @@ namespace MoreShipUpgrades.Misc
         public int MALWARE_BROADCASTER_PRICE { get; set; }
         public int WALKIE_PRICE { get; set; }
         public int LIGHTNING_ROD_PRICE { get; set; }
+        public int PLAYER_HEALTH_PRICE { get; set; }
 
         // attributes
         public int PROTEIN_INCREMENT { get; set; }
@@ -127,6 +130,7 @@ namespace MoreShipUpgrades.Misc
         public string STRONG_LEGS_UPGRADE_PRICES { get; set; }
         public string DISCO_UPGRADE_PRICES { get; set; }
         public string PROTEIN_UPGRADE_PRICES { get; set; }
+        public string PLAYER_HEALTH_UPGRADE_PRICES { get; set; }
         public bool SHARED_UPGRADES { get; set; }
         public bool WALKIE_ENABLED { get; set; }
         public bool WALKIE_INDIVIDUAL { get; set; }
@@ -141,6 +145,8 @@ namespace MoreShipUpgrades.Misc
         public bool PAGER_ENABLED {  get; set; }
         public int PAGER_PRICE {  get; set; }
         public bool VERBOSE_ENEMIES {  get; set; }
+        public int PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK { get; set; }
+        public int PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT { get; set; }
 
 
         public PluginConfig(ConfigFile cfg)
@@ -313,7 +319,13 @@ namespace MoreShipUpgrades.Misc
             topSection = "Hunter";
             HUNTER_ENABLED = ConfigEntry(topSection, "Enable the Hunter upgrade", true, "Collect and sell samples from dead enemies");
             HUNTER_PRICE = ConfigEntry(topSection, "Hunter price", 700, "Default price for upgrade.");
-        }
 
+            PLAYER_HEALTH_ENABLED = ConfigEntry(playerHealthScript.UPGRADE_NAME, playerHealthScript.ENABLED_SECTION, playerHealthScript.ENABLED_DEFAULT, playerHealthScript.ENABLED_DESCRIPTION);
+            PLAYER_HEALTH_PRICE = ConfigEntry(playerHealthScript.UPGRADE_NAME, playerHealthScript.PRICE_SECTION, playerHealthScript.PRICE_DEFAULT, "");
+            PLAYER_HEALTH_INDIVIDUAL = ConfigEntry(playerHealthScript.UPGRADE_NAME, playerHealthScript.INDIVIDUAL_SECTION, playerHealthScript.INDIVIDUAL_DEFAULT, playerHealthScript.INDIVIDUAL_DESCRIPTION);
+            PLAYER_HEALTH_UPGRADE_PRICES = ConfigEntry(playerHealthScript.UPGRADE_NAME, playerHealthScript.UPGRADE_PRICES_SECTION, playerHealthScript.UPGRADE_PRICES_DEFAULT, "");
+            PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK = ConfigEntry(playerHealthScript.UPGRADE_NAME, playerHealthScript.ADDITIONAL_HEALTH_UNLOCK_SECTION, playerHealthScript.ADDITIONAL_HEALTH_UNLOCK_DEFAULT, playerHealthScript.ADDITIONAL_HEALTH_UNLOCK_DESCRIPTION);
+            PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT = ConfigEntry(playerHealthScript.UPGRADE_NAME, playerHealthScript.ADDITIONAL_HEALTH_INCREMENT_SECTION, playerHealthScript.ADDITIONAL_HEALTH_INCREMENT_DEFAULT, playerHealthScript.ADDITIONAL_HEALTH_INCREMENT_DESCRIPTION);
+        }
     }
 }
