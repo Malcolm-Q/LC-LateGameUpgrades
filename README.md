@@ -1,43 +1,12 @@
 ![LUTransparent](https://github.com/Malcolm-Q/LC-LateGameUpgrades/assets/118214091/a39a7b59-651b-4fa2-8224-cdd9327c02ab)
 
-
 Source code for my [LateGameUpgrades mod.](https://thunderstore.io/c/lethal-company/p/malco/Lategame_Upgrades/)  for Lethal Company  
+#### [Frequently Asked Questions(FAQ)](https://github.com/Malcolm-Q/LC-LateGameUpgrades/issues/60#issue-2051585712)
 
-If reporting a bug. Please include your logoutput.log file if possible, it's in your bepinex folder.
-
-The releases contains a nightly build for V2.6.0.
+#### [Read This Before Creating An Issue](https://github.com/Malcolm-Q/LC-LateGameUpgrades/issues/56)
 
 Join [this modding discord](https://discord.gg/hzEcKFSSDX) and comment [on this post](https://discord.com/channels/1168655651455639582/1178407269994594435)  to discuss the mod.
 
-
-## **Frequently Asked Questions(FAQ)**
-
-* **the mod isn't working!**
-   * Make sure you have all dependencies installed. The current dependencies for v2.1.0 are [Bepinex](https://thunderstore.io/c/lethal-company/p/BepInEx/BepInExPack/), [LethalLib](https://thunderstore.io/c/lethal-company/p/Evaisa/LethalLib/), and [HookGenPatcher.](https://thunderstore.io/c/lethal-company/p/Evaisa/HookGenPatcher/)  
-   * Follow the instructions on Thunderstore or in the installation.txt file. If you're having trouble manually installing mods, use a modmanager like r2modman.
-* **I have the latest version and all the dependencies, but I cannot see the items besides the teleporters what do I do?**
-   * The store for the upgrades are no longer in the main terminal store. To access the new store you can type either lategame store, or lgu in the terminal.
-* **I don't like this feature, how do i turn it off/modify it?**
-   * There is a config which makes most of this mod entirely customizable to the user, configs for r2 modman are easy to access. Click Config editor once your profile is selected, and then choose the file called BepInEx\config\com.malco.lethalcompany.moreshipupgrades.cfg and hit edit.
-   * For manual installations the config would be in your Lethal Company\BepInEx\config folder, following the same naming convention the r2modman one is.
-* **Is this mod clientside or serverside??**
-   * This mod is not clientside, ***everyone*** needs to have it installed with the same configuration settings.
-* **Can I suggest an addition?**
-   * Absolutely, I cannot promise the mod will incorporate your suggestion but we suggestions are greatly appreciated.
-   * Simply place your suggestion in the discord channel for the mod, and be sure to ping either myself (@dilly_the_dillster) or keith (@_kieth)
-* **When will x feature be implemented?**
-   * As the case for all development goes, we can never give you an exact date, however we can say whether it will be soon, if its actively being worked on,  and anything along those lines. The usual answer will probably be "soon".  
-   * It may not always be up to date but you can check the TODO section of this README for what is currently being worked on.
-* **Can I contribute to the mod?**
-   * Absolutely! We welcome anyone who desires to help. Feel free to submit your new features or additions with a pull request [here.](https://github.com/Malcolm-Q/LC-LateGameUpgrades)
-   * If you want to contribute art / models please reach out to @dilly_the_dillster or @_kieth in the discord.
-   * Please make an effort to have additions be reasonably balanced and customizable via the config.
-* **Why are my credits desynced from other players when purchasing an upgrade?**
-   * This is an issue with MoreCompany/BiggerLobby. Effort has been made to provide stronger compatibility but this issue can still be present.
-* **Why can I not buy the upgrades in lategame store?**
-    * Enter the full name of the upgrade and the full name only (case insensitive).
-    * Ex: `beekeeper`
-    * If you enter `buy beekeeper` or `purchase beekeeper` it will not work.
 
 ## **Contributing:**
 - You will need to set up Evaisa's [Netcode Patcher](https://github.com/EvaisaDev/UnityNetcodeWeaver) if you want to add more custom netcode. If you are making simple additions that don't need to be tested online you can still build an unpatched dll and test it.  
@@ -49,15 +18,31 @@ Join [this modding discord](https://discord.gg/hzEcKFSSDX) and comment [on this 
 *Included is a projectSetup.exe and projectSetup.py, you can run one or the other to quickly add all (or most of if some have been recently added) of the dependents to your .csproj
 
 ## **TODO:**
-* Upgraded walkie talkie (Navigation).
-* More meaninful tiered upgrades.
+cleanup
+#### Complex Tiered Upgrades
+* better scanner - implemented
+* protein powder
+    * final upgrade unlocks a 'crit' ability that instakills any enemy.
+* strong legs - WIP
+    * final upgrade reduces/removes fall damage
+* bigger lungs
+    * second upgrade increases stamina regen time
+    * third upgrade reduces jump cost
+* discombobulator
+    * damage enemies on use
+* lightning rod
+    * maybe an expensive upgrade that grants a chance to redirect attracted lightning onto a nearby enemy?
+* beekeeper
+    * final upgrade increases beehive price
 
 ## **Community Suggested Additions:**
 If you want to implement one of these please create a branch indicating which feature you are implementing.  
-Something like: `<discordNickName>/<feature>`  
-* Distraction Item
-    * Switch target on chasing enemy.
-    * Player can drop it to have agro switched to the item for x seconds.
+Something like: `<discordNickName>/<feature>` 
+* Medkit item
+    * override itemactivate to heal localplayer (must have rpc)
+    * limited uses
+* health upgrade
+    * increase player health
 * Planet Scanner
     * When in orbit type something like scan <moon> to get info about what your visit to that moon would be like.
     * This would involve generating random seeds for each moon in orbit and ensuring they use them for generation.
@@ -69,8 +54,6 @@ Something like: `<discordNickName>/<feature>`
     * Drop landmine, if enemy hits it, they're stunned for x seconds.
 * RC Car?
     * Use it to find lost teammates or something.
-* Rare Scrap With Utility
-    * EX. a crucifix that if held prevents the Dress Girl monster from targetting you.
 
 
-This is MIT, do with it whatever you want.
+*This is MIT, do with it whatever you want.*
