@@ -135,6 +135,7 @@ namespace MoreShipUpgrades.Misc
         public bool WALKIE_ENABLED { get; set; }
         public bool WALKIE_INDIVIDUAL { get; set; }
         public int PROTEIN_UNLOCK_FORCE {  get; set; }
+        public float PROTEIN_CRIT_CHANCE { get; set; }
         public int BETTER_SCANNER_PRICE2 {  get; set; }
         public int BETTER_SCANNER_PRICE3 {  get; set; }
         public bool BETTER_SCANNER_ENEMIES {  get; set; }
@@ -160,142 +161,164 @@ namespace MoreShipUpgrades.Misc
 
         public void InitBindings()
         {
-            SHARED_UPGRADES = ConfigEntry("Misc", "Convert all upgrades to be shared.", true, "Mod is designed to be played with this off.");
-            SALE_PERC = ConfigEntry("Misc", "Chance of upgrades going on sale", 0.85f, "0.85 = 15% chance of an upgrade going on sale.");
-            INTRO_ENABLED = ConfigEntry("Misc", "Intro Enabled", true, "If true shows a splashscreen with some info once per update of LGU.");
+            string topSection = "Misc";
+            SHARED_UPGRADES = ConfigEntry(topSection, "Convert all upgrades to be shared.", true, "Mod is designed to be played with this off.");
+            SALE_PERC = ConfigEntry(topSection, "Chance of upgrades going on sale", 0.85f, "0.85 = 15% chance of an upgrade going on sale.");
+            INTRO_ENABLED = ConfigEntry(topSection, "Intro Enabled", true, "If true shows a splashscreen with some info once per update of LGU.");
 
-            ADVANCED_TELE_ENABLED = ConfigEntry("Advanced Portable Teleporter","Enable Advanced Portable Teleporter", true, "");
-            ADVANCED_TELE_PRICE = ConfigEntry("Advanced Portable Teleporter","Price of Advanced Portable Teleporter", 1750, "");
-            ADV_CHANCE_TO_BREAK = ConfigEntry("Advanced Portable Teleporter","Chance to break on use", 0.1f, "value should be 0.00 - 1.00");
+            topSection = "Advanced Portable Teleporter";
+            ADVANCED_TELE_ENABLED = ConfigEntry(topSection, "Enable Advanced Portable Teleporter", true, "");
+            ADVANCED_TELE_PRICE = ConfigEntry(topSection, "Price of Advanced Portable Teleporter", 1750, "");
+            ADV_CHANCE_TO_BREAK = ConfigEntry(topSection, "Chance to break on use", 0.1f, "value should be 0.00 - 1.00");
 
-            WEAK_TELE_ENABLED = ConfigEntry("Portable Teleporter", "Enable Portable Teleporter", true, "");
-            WEAK_TELE_PRICE = ConfigEntry("Portable Teleporter", "Price of Portable Teleporter", 300, "");
-            CHANCE_TO_BREAK = ConfigEntry("Portable Teleporter","Chance to break on use", 0.9f, "value should be 0.00 - 1.00");
+            topSection = "Portable Teleporter";
+            WEAK_TELE_ENABLED = ConfigEntry(topSection, "Enable Portable Teleporter", true, "");
+            WEAK_TELE_PRICE = ConfigEntry(topSection, "Price of Portable Teleporter", 300, "");
+            CHANCE_TO_BREAK = ConfigEntry(topSection, "Chance to break on use", 0.9f, "value should be 0.00 - 1.00");
 
-            KEEP_ITEMS_ON_TELE = ConfigEntry("Portable Teleporter","Keep Items When Using Portable Teleporters", true, "If set to false you will drop your items like when using the vanilla TP.");
+            KEEP_ITEMS_ON_TELE = ConfigEntry(topSection,"Keep Items When Using Portable Teleporters", true, "If set to false you will drop your items like when using the vanilla TP.");
 
-            BEEKEEPER_ENABLED = ConfigEntry("Beekeeper","Enable Beekeeper Upgrade", true, "Take less damage from bees");
-            BEEKEEPER_PRICE = ConfigEntry("Beekeeper","Price of Beekeeper Upgrade", 450, "");
-            BEEKEEPER_DAMAGE_MULTIPLIER = ConfigEntry("Beekeeper","Multiplied to incoming damage (rounded to int)", 0.64f, "Incoming damage from bees is 10.");
-            BEEKEEPER_UPGRADE_PRICES = ConfigEntry("Beekeeper","Price of each additional upgrade", "225,280,340", "");
-            BEEKEEPER_INDIVIDUAL = ConfigEntry("Beekeeper","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
+            topSection = "Beekeeper";
+            BEEKEEPER_ENABLED = ConfigEntry(topSection, "Enable Beekeeper Upgrade", true, "Take less damage from bees");
+            BEEKEEPER_PRICE = ConfigEntry(topSection, "Price of Beekeeper Upgrade", 450, "");
+            BEEKEEPER_DAMAGE_MULTIPLIER = ConfigEntry(topSection, "Multiplied to incoming damage (rounded to int)", 0.64f, "Incoming damage from bees is 10.");
+            BEEKEEPER_UPGRADE_PRICES = ConfigEntry(topSection, "Price of each additional upgrade", "225,280,340", "");
+            BEEKEEPER_INDIVIDUAL = ConfigEntry(topSection, "Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
-            BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT = ConfigEntry("Beekeeper","Additional % Reduced per level", 0.15f, "Every time beekeeper is upgraded this value will be subtracted to the base multiplier above.");
+            BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT = ConfigEntry(topSection, "Additional % Reduced per level", 0.15f, "Every time beekeeper is upgraded this value will be subtracted to the base multiplier above.");
 
-            PROTEIN_ENABLED = ConfigEntry("Protein Powder","Enable Protein Powder Upgrade", true, "Do more damage with shovels");
-            PROTEIN_PRICE = ConfigEntry("Protein Powder","Price of Protein Powder Upgrade", 500, "");
-            PROTEIN_UNLOCK_FORCE = ConfigEntry("Protein Powder", "Initial additional hit force", 1, "The value added to hit force on initial unlock.");
-            PROTEIN_INCREMENT = ConfigEntry("Protein Powder", "Additional hit force per level", 1, "Every time protein powder is upgraded this value will be added to the value above.");
-            PROTEIN_INDIVIDUAL = ConfigEntry("Protein Powder","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
-            PROTEIN_UPGRADE_PRICES = ConfigEntry("Protein Powder","Price of each additional upgrade", "700", "Value must be seperated by commas EX: '123,321,222'");
+            topSection = proteinPowderScript.UPGRADE_NAME;
+            PROTEIN_ENABLED = ConfigEntry(topSection, proteinPowderScript.ENABLED_SECTION, proteinPowderScript.ENABLED_DEFAULT, proteinPowderScript.ENABLED_DESCRIPTION);
+            PROTEIN_PRICE = ConfigEntry(topSection, proteinPowderScript.PRICE_SECTION, proteinPowderScript.PRICE_DEFAULT, "");
+            PROTEIN_UNLOCK_FORCE = ConfigEntry(topSection, proteinPowderScript.UNLOCK_FORCE_SECTION, proteinPowderScript.UNLOCK_FORCE_DEFAULT, proteinPowderScript.UNLOCK_FORCE_DESCRIPTION);
+            PROTEIN_INCREMENT = ConfigEntry(topSection, proteinPowderScript.INCREMENT_FORCE_SECTION, proteinPowderScript.INCREMENT_FORCE_DEFAULT, proteinPowderScript.INCREMENT_FORCE_DESCRIPTION);
+            PROTEIN_INDIVIDUAL = ConfigEntry(topSection, proteinPowderScript.INDIVIDUAL_SECTION, proteinPowderScript.INDIVIDUAL_DEFAULT, proteinPowderScript.INDIVIDUAL_DESCRIPTION);
+            PROTEIN_UPGRADE_PRICES = ConfigEntry(topSection, proteinPowderScript.PRICES_SECTION, proteinPowderScript.PRICES_DEFAULT, proteinPowderScript.PRICES_DESCRIPTION);
+            PROTEIN_CRIT_CHANCE = ConfigEntry(topSection, proteinPowderScript.CRIT_CHANCE_SECTION, proteinPowderScript.CRIT_CHANCE_DEFAULT, proteinPowderScript.CRIT_CHANCE_DESCRIPTION);
 
-            BIGGER_LUNGS_ENABLED = ConfigEntry("Bigger Lungs","Enable Bigger Lungs Upgrade", true, "More Stamina");
-            BIGGER_LUNGS_PRICE = ConfigEntry("Bigger Lungs","Price of Bigger Lungs Upgrade", 600, "");
-            SPRINT_TIME_INCREASE = ConfigEntry("Bigger Lungs","SprintTime value", 17f, "Vanilla value is 11");
-            SPRINT_TIME_INCREMENT = ConfigEntry("Bigger Lungs","SprintTime Increment", 1.25f,"How much the above value is increased on upgrade.");
-            BIGGER_LUNGS_UPGRADE_PRICES = ConfigEntry("Bigger Lungs","Price of each additional upgrade", "350,450,550", "");
-            BIGGER_LUNGS_INDIVIDUAL = ConfigEntry("Bigger Lungs","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
+            topSection = "Bigger Lungs";
+            BIGGER_LUNGS_ENABLED = ConfigEntry(topSection, "Enable Bigger Lungs Upgrade", true, "More Stamina");
+            BIGGER_LUNGS_PRICE = ConfigEntry(topSection, "Price of Bigger Lungs Upgrade", 600, "");
+            SPRINT_TIME_INCREASE = ConfigEntry(topSection, "SprintTime value", 17f, "Vanilla value is 11");
+            SPRINT_TIME_INCREMENT = ConfigEntry(topSection, "SprintTime Increment", 1.25f,"How much the above value is increased on upgrade.");
+            BIGGER_LUNGS_UPGRADE_PRICES = ConfigEntry(topSection, "Price of each additional upgrade", "350,450,550", "");
+            BIGGER_LUNGS_INDIVIDUAL = ConfigEntry(topSection, "Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
-            RUNNING_SHOES_ENABLED = ConfigEntry("Running Shoes","Enable Running Shoes Upgrade", true, "Run Faster");
-            RUNNING_SHOES_PRICE = ConfigEntry("Running Shoes","Price of Running Shoes Upgrade", 650, "");
-            MOVEMENT_SPEED = ConfigEntry("Running Shoes","Movement Speed Value", 6f, "Vanilla value is 4.6");
-            MOVEMENT_INCREMENT = ConfigEntry("Running Shoes", "Movement Speed Increment", 0.5f, "How much the above value is increased on upgrade.");
-            RUNNING_SHOES_UPGRADE_PRICES = ConfigEntry("Running Shoes","Price of each additional upgrade", "500,750,1000", "");
-            RUNNING_SHOES_INDIVIDUAL = ConfigEntry("Running Shoes","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
+            topSection = "Running Shoes";
+            RUNNING_SHOES_ENABLED = ConfigEntry(topSection, "Enable Running Shoes Upgrade", true, "Run Faster");
+            RUNNING_SHOES_PRICE = ConfigEntry(topSection, "Price of Running Shoes Upgrade", 650, "");
+            MOVEMENT_SPEED = ConfigEntry(topSection, "Movement Speed Value", 6f, "Vanilla value is 4.6");
+            MOVEMENT_INCREMENT = ConfigEntry(topSection, "Movement Speed Increment", 0.5f, "How much the above value is increased on upgrade.");
+            RUNNING_SHOES_UPGRADE_PRICES = ConfigEntry(topSection, "Price of each additional upgrade", "500,750,1000", "");
+            RUNNING_SHOES_INDIVIDUAL = ConfigEntry(topSection, "Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
-            STRONG_LEGS_ENABLED = ConfigEntry("Strong Legs","Enable Strong Legs Upgrade", true, "Jump Higher");
-            STRONG_LEGS_PRICE = ConfigEntry("Strong Legs","Price of Strong Legs Upgrade", 300, "");
-            JUMP_FORCE = ConfigEntry("Strong Legs","Jump Force", 16f, "Vanilla value is 13");
-            JUMP_FORCE_INCREMENT = ConfigEntry("Strong Legs","Jump Force Increment", 0.75f, "How much the above value is increased on upgrade.");
-            STRONG_LEGS_UPGRADE_PRICES = ConfigEntry("Strong Legs","Price of each additional upgrade", "150,190,250", "");
-            STRONG_LEGS_INDIVIDUAL = ConfigEntry("Strong Legs","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
+            topSection = "Strong Legs";
+            STRONG_LEGS_ENABLED = ConfigEntry(topSection, "Enable Strong Legs Upgrade", true, "Jump Higher");
+            STRONG_LEGS_PRICE = ConfigEntry(topSection, "Price of Strong Legs Upgrade", 300, "");
+            JUMP_FORCE = ConfigEntry(topSection, "Jump Force", 16f, "Vanilla value is 13");
+            JUMP_FORCE_INCREMENT = ConfigEntry(topSection, "Jump Force Increment", 0.75f, "How much the above value is increased on upgrade.");
+            STRONG_LEGS_UPGRADE_PRICES = ConfigEntry(topSection, "Price of each additional upgrade", "150,190,250", "");
+            STRONG_LEGS_INDIVIDUAL = ConfigEntry(topSection, "Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
-            MALWARE_BROADCASTER_ENABLED = ConfigEntry("Malware Broadcaster", "Enable Malware Broadcaster Upgrade", true, "Explode Map Hazards");
-            MALWARE_BROADCASTER_PRICE = ConfigEntry("Malware Broadcaster", "Price of Malware Broadcaster Upgrade", 550, "");
-            DESTROY_TRAP = ConfigEntry("Malware Broadcaster", "Destroy Trap", true, "If false Malware Broadcaster will disable the trap for a long time instead of destroying.");
-            DISARM_TIME = ConfigEntry("Malware Broadcaster", "Disarm Time", 7f, "If `Destroy Trap` is false this is the duration traps will be disabled.");
-            EXPLODE_TRAP = ConfigEntry("Malware Broadcaster", "Explode Trap", true, "Destroy Trap must be true! If this is true when destroying a trap it will also explode.");
-            MALWARE_BROADCASTER_INDIVIDUAL = ConfigEntry("Malware Broadcaster","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
+            topSection = "Malware Broadcaster";
+            MALWARE_BROADCASTER_ENABLED = ConfigEntry(topSection, "Enable Malware Broadcaster Upgrade", true, "Explode Map Hazards");
+            MALWARE_BROADCASTER_PRICE = ConfigEntry(topSection, "Price of Malware Broadcaster Upgrade", 550, "");
+            DESTROY_TRAP = ConfigEntry(topSection, "Destroy Trap", true, "If false Malware Broadcaster will disable the trap for a long time instead of destroying.");
+            DISARM_TIME = ConfigEntry(topSection, "Disarm Time", 7f, "If `Destroy Trap` is false this is the duration traps will be disabled.");
+            EXPLODE_TRAP = ConfigEntry(topSection, "Explode Trap", true, "Destroy Trap must be true! If this is true when destroying a trap it will also explode.");
+            MALWARE_BROADCASTER_INDIVIDUAL = ConfigEntry(topSection, "Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
-            LIGHT_FOOTED_ENABLED = ConfigEntry("Light Footed", "Enable Light Footed Upgrade", true, "Make less noise moving.");
-            LIGHT_FOOTED_PRICE = ConfigEntry("Light Footed", "Price of Light Footed Upgrade", 350, "");
-            NOISE_REDUCTION = ConfigEntry("Light Footed", "Noise Reduction", 7f, "Distance units to subtract from footstep noise.");
-            NOISE_REDUCTION_INCREMENT = ConfigEntry("Light Footed", "Noise Reduction Increment", 1f, "The amount added to above value on upgrade.");
-            LIGHT_FOOTED_UPGRADE_PRICES = ConfigEntry("Light Footed","Price of each additional upgrade", "175,235,290", "");
-            LIGHT_FOOTED_INDIVIDUAL = ConfigEntry("Light Footed","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
+            topSection = "Light Footed";
+            LIGHT_FOOTED_ENABLED = ConfigEntry(topSection, "Enable Light Footed Upgrade", true, "Make less noise moving.");
+            LIGHT_FOOTED_PRICE = ConfigEntry(topSection, "Price of Light Footed Upgrade", 350, "");
+            NOISE_REDUCTION = ConfigEntry(topSection, "Noise Reduction", 7f, "Distance units to subtract from footstep noise.");
+            NOISE_REDUCTION_INCREMENT = ConfigEntry(topSection, "Noise Reduction Increment", 1f, "The amount added to above value on upgrade.");
+            LIGHT_FOOTED_UPGRADE_PRICES = ConfigEntry(topSection,"Price of each additional upgrade", "175,235,290", "");
+            LIGHT_FOOTED_INDIVIDUAL = ConfigEntry(topSection, "Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
-            NIGHT_VISION_ENABLED = ConfigEntry("Night Vision", "Enable Night Vision Upgrade", true, "Toggleable night vision.");
-            NIGHT_VISION_PRICE = ConfigEntry("Night Vision", "Price of Night Vision Upgrade", 380, "");
-            NIGHT_BATTERY_MAX = ConfigEntry("Night Vision", "The max charge for your night vision battery", 10f, "Default settings this will be the unupgraded time in seconds the battery will drain and regen in. Increase to increase battery life.");
-            NIGHT_VIS_DRAIN_SPEED = ConfigEntry("Night Vision", "Multiplier for night vis battery drain", 1f, "Multiplied by timedelta, lower to increase battery life.");
-            NIGHT_VIS_REGEN_SPEED = ConfigEntry("Night Vision", "Multiplier for night vis battery regen", 1f, "Multiplied by timedelta, raise to speed up battery regen time.");
-            NIGHT_VIS_COLOR = ConfigEntry("Night Vision", "Night Vision Color", UnityEngine.Color.green, "The color your night vision light emits.");
-            NIGHT_VIS_RANGE = ConfigEntry("Night Vision", "Night Vision Range", 2000f, "Kind of like the distance your night vision travels.");
-            NIGHT_VIS_RANGE_INCREMENT = ConfigEntry("Night Vision", "Night Vision Range Increment", 0f, "Increases your range by this value each upgrade.");
-            NIGHT_VIS_INTENSITY = ConfigEntry("Night Vision", "Night Vision Intensity", 1000f, "Kind of like the brightness of your Night Vision.");
-            NIGHT_VIS_INTENSITY_INCREMENT = ConfigEntry("Night Vision", "Night Vision Intensity Increment", 0f, "Increases your intensity by this value each upgrade.");
-            NIGHT_VIS_STARTUP = ConfigEntry("Night Vision", "Night Vision StartUp Cost", 0.1f, "The percent battery drained when turned on (0.1 = 10%).");
-            NIGHT_VIS_EXHAUST = ConfigEntry("Night Vision", "Night Vision Exhaustion", 2f, "How many seconds night vision stays fully depleted.");
-            TOGGLE_NIGHT_VISION_KEY = ConfigEntry("Night Vision", "Toggle Night Vision Key", "LeftAlt", "Key to toggle Night Vision, you can use any key on your system such as LeftAlt, LeftShift, or any letter which exists.");
-            NIGHT_VIS_DRAIN_INCREMENT = ConfigEntry("Night Vision", "Decrease for night vis battery drain", 0.15f, "Applied to drain speed on each upgrade.");
-            NIGHT_VIS_REGEN_INCREMENT = ConfigEntry("Night Vision", "Increase for night vis battery regen", 0.40f, "Applied to regen speed on each upgrade.");
-            NIGHT_VIS_BATTERY_INCREMENT = ConfigEntry("Night Vision", "Increase for night vis battery life", 2f, "Applied to the max charge for night vis battery on each upgrade.");
-            LOSE_NIGHT_VIS_ON_DEATH = ConfigEntry("Night Vision", "Lose Night Vision On Death", true, "If true when you die you will have to re purchase and equip night vision goggles.");
-            NIGHT_VISION_UPGRADE_PRICES = ConfigEntry("Night Vision","Price of each additional upgrade", "300,400,500", "");
-            NIGHT_VISION_INDIVIDUAL = ConfigEntry("Night Vision","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
+            topSection = "Night Vision";
+            NIGHT_VISION_ENABLED = ConfigEntry(topSection, "Enable Night Vision Upgrade", true, "Toggleable night vision.");
+            NIGHT_VISION_PRICE = ConfigEntry(topSection, "Price of Night Vision Upgrade", 380, "");
+            NIGHT_BATTERY_MAX = ConfigEntry(topSection, "The max charge for your night vision battery", 10f, "Default settings this will be the unupgraded time in seconds the battery will drain and regen in. Increase to increase battery life.");
+            NIGHT_VIS_DRAIN_SPEED = ConfigEntry(topSection, "Multiplier for night vis battery drain", 1f, "Multiplied by timedelta, lower to increase battery life.");
+            NIGHT_VIS_REGEN_SPEED = ConfigEntry(topSection, "Multiplier for night vis battery regen", 1f, "Multiplied by timedelta, raise to speed up battery regen time.");
+            NIGHT_VIS_COLOR = ConfigEntry(topSection, "Night Vision Color", UnityEngine.Color.green, "The color your night vision light emits.");
+            NIGHT_VIS_RANGE = ConfigEntry(topSection, "Night Vision Range", 2000f, "Kind of like the distance your night vision travels.");
+            NIGHT_VIS_RANGE_INCREMENT = ConfigEntry(topSection, "Night Vision Range Increment", 0f, "Increases your range by this value each upgrade.");
+            NIGHT_VIS_INTENSITY = ConfigEntry(topSection, "Night Vision Intensity", 1000f, "Kind of like the brightness of your Night Vision.");
+            NIGHT_VIS_INTENSITY_INCREMENT = ConfigEntry(topSection, "Night Vision Intensity Increment", 0f, "Increases your intensity by this value each upgrade.");
+            NIGHT_VIS_STARTUP = ConfigEntry(topSection, "Night Vision StartUp Cost", 0.1f, "The percent battery drained when turned on (0.1 = 10%).");
+            NIGHT_VIS_EXHAUST = ConfigEntry(topSection, "Night Vision Exhaustion", 2f, "How many seconds night vision stays fully depleted.");
+            TOGGLE_NIGHT_VISION_KEY = ConfigEntry(topSection, "Toggle Night Vision Key", "LeftAlt", "Key to toggle Night Vision, you can use any key on your system such as LeftAlt, LeftShift, or any letter which exists.");
+            NIGHT_VIS_DRAIN_INCREMENT = ConfigEntry(topSection, "Decrease for night vis battery drain", 0.15f, "Applied to drain speed on each upgrade.");
+            NIGHT_VIS_REGEN_INCREMENT = ConfigEntry(topSection, "Increase for night vis battery regen", 0.40f, "Applied to regen speed on each upgrade.");
+            NIGHT_VIS_BATTERY_INCREMENT = ConfigEntry(topSection, "Increase for night vis battery life", 2f, "Applied to the max charge for night vis battery on each upgrade.");
+            LOSE_NIGHT_VIS_ON_DEATH = ConfigEntry(topSection, "Lose Night Vision On Death", true, "If true when you die you will have to re purchase and equip night vision goggles.");
+            NIGHT_VISION_UPGRADE_PRICES = ConfigEntry(topSection,"Price of each additional upgrade", "300,400,500", "");
+            NIGHT_VISION_INDIVIDUAL = ConfigEntry(topSection,"Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
-            DISCOMBOBULATOR_ENABLED = ConfigEntry("Discombobulator", "Enable Discombobulator Upgrade", true, "Stun enemies around the ship.");
-            DISCOMBOBULATOR_PRICE = ConfigEntry("Discombobulator", "Price of Discombobulator Upgrade", 450, "");
-            DISCOMBOBULATOR_COOLDOWN = ConfigEntry("Discombobulator", "Discombobulator Cooldown", 120f, "");
-            DISCOMBOBULATOR_RADIUS  = ConfigEntry("Discombobulator", "Discombobulator Effect Radius", 40f, "");
-            DISCOMBOBULATOR_STUN_DURATION  = ConfigEntry("Discombobulator", "Discombobulator Stun Duration", 7.5f, "");
-            DISCOMBOBULATOR_NOTIFY_CHAT = ConfigEntry("Discombobulator", "Notify Local Chat of Enemy Stun Duration", true, "");
-            DISCOMBOBULATOR_INCREMENT  = ConfigEntry("Discombobulator", "Discombobulator Increment", 1f, "The amount added to stun duration on upgrade.");
-            DISCO_UPGRADE_PRICES = ConfigEntry("Discombobulator","Price of each additional upgrade", "330,460,620", "");
-            DISCOMBOBULATOR_INDIVIDUAL = ConfigEntry("Discombobulator","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
+            topSection = "Discombobulator";
+            DISCOMBOBULATOR_ENABLED = ConfigEntry(topSection, "Enable Discombobulator Upgrade", true, "Stun enemies around the ship.");
+            DISCOMBOBULATOR_PRICE = ConfigEntry(topSection, "Price of Discombobulator Upgrade", 450, "");
+            DISCOMBOBULATOR_COOLDOWN = ConfigEntry(topSection, "Discombobulator Cooldown", 120f, "");
+            DISCOMBOBULATOR_RADIUS  = ConfigEntry(topSection, "Discombobulator Effect Radius", 40f, "");
+            DISCOMBOBULATOR_STUN_DURATION  = ConfigEntry(topSection, "Discombobulator Stun Duration", 7.5f, "");
+            DISCOMBOBULATOR_NOTIFY_CHAT = ConfigEntry(topSection, "Notify Local Chat of Enemy Stun Duration", true, "");
+            DISCOMBOBULATOR_INCREMENT  = ConfigEntry(topSection, "Discombobulator Increment", 1f, "The amount added to stun duration on upgrade.");
+            DISCO_UPGRADE_PRICES = ConfigEntry(topSection, "Price of each additional upgrade", "330,460,620", "");
+            DISCOMBOBULATOR_INDIVIDUAL = ConfigEntry(topSection, "Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
-            BETTER_SCANNER_ENABLED = ConfigEntry("Better Scanner", "Enable Better Scanner Upgrade", true, "Further scan distance, no LOS needed.");
-            BETTER_SCANNER_PRICE = ConfigEntry("Better Scanner", "Price of Better Scanner Upgrade", 650, "");
-            SHIP_AND_ENTRANCE_DISTANCE_INCREASE = ConfigEntry("Better Scanner", "Ship and Entrance node distance boost", 150f, "How much further away you can scan the ship and entrance.");
-            NODE_DISTANCE_INCREASE = ConfigEntry("Better Scanner", "Node distance boost", 20f, "How much further away you can scan other nodes.");
-            BETTER_SCANNER_INDIVIDUAL = ConfigEntry("Better Scanner","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
-            BETTER_SCANNER_PRICE2 = ConfigEntry("Better Scanner", "Price of first Better Scanner tier", 500, "This tier unlocks ship scan commands.");
-            BETTER_SCANNER_PRICE3 = ConfigEntry("Better Scanner", "Price of second Better Scanner tier", 800, "This tier unlocks scanning through walls.");
-            BETTER_SCANNER_ENEMIES = ConfigEntry("Better Scanner", "Scan enemies through walls on final upgrade", false, "If true the final upgrade will scan scrap AND enemies through walls.");
-            VERBOSE_ENEMIES = ConfigEntry("Better Scanner", "Verbose `scan enemies` command", true, "If false `scan enemies` only returns a count of outside and inside enemies, else it returns the count for each enemy type.");
+            topSection = "Better Scanner";
+            BETTER_SCANNER_ENABLED = ConfigEntry(topSection, "Enable Better Scanner Upgrade", true, "Further scan distance, no LOS needed.");
+            BETTER_SCANNER_PRICE = ConfigEntry(topSection, "Price of Better Scanner Upgrade", 650, "");
+            SHIP_AND_ENTRANCE_DISTANCE_INCREASE = ConfigEntry(topSection, "Ship and Entrance node distance boost", 150f, "How much further away you can scan the ship and entrance.");
+            NODE_DISTANCE_INCREASE = ConfigEntry(topSection, "Node distance boost", 20f, "How much further away you can scan other nodes.");
+            BETTER_SCANNER_INDIVIDUAL = ConfigEntry(topSection, "Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
+            BETTER_SCANNER_PRICE2 = ConfigEntry(topSection, "Price of first Better Scanner tier", 500, "This tier unlocks ship scan commands.");
+            BETTER_SCANNER_PRICE3 = ConfigEntry(topSection, "Price of second Better Scanner tier", 800, "This tier unlocks scanning through walls.");
+            BETTER_SCANNER_ENEMIES = ConfigEntry(topSection, "Scan enemies through walls on final upgrade", false, "If true the final upgrade will scan scrap AND enemies through walls.");
+            VERBOSE_ENEMIES = ConfigEntry(topSection, "Verbose `scan enemies` command", true, "If false `scan enemies` only returns a count of outside and inside enemies, else it returns the count for each enemy type.");
 
-            BACK_MUSCLES_ENABLED = ConfigEntry("Back Muscles", "Enable Back Muscles Upgrade", true, "Reduce carry weight");
-            BACK_MUSCLES_PRICE = ConfigEntry("Back Muscles", "Price of Back Muscles Upgrade", 715, "");
-            CARRY_WEIGHT_REDUCTION = ConfigEntry("Back Muscles", "Carry Weight Multiplier", 0.5f, "Your carry weight is multiplied by this.");
-            CARRY_WEIGHT_INCREMENT = ConfigEntry("Back Muscles", "Carry Weight Increment", 0.1f, "Each upgrade subtracts this from the above coefficient.");
-            BACK_MUSCLES_UPGRADE_PRICES = ConfigEntry("Back Muscles","Price of each additional upgrade", "600,700,800", "");
-            BACK_MUSCLES_INDIVIDUAL = ConfigEntry("Back Muscles","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
+            topSection = "Back Muscles";
+            BACK_MUSCLES_ENABLED = ConfigEntry(topSection, "Enable Back Muscles Upgrade", true, "Reduce carry weight");
+            BACK_MUSCLES_PRICE = ConfigEntry(topSection, "Price of Back Muscles Upgrade", 715, "");
+            CARRY_WEIGHT_REDUCTION = ConfigEntry(topSection, "Carry Weight Multiplier", 0.5f, "Your carry weight is multiplied by this.");
+            CARRY_WEIGHT_INCREMENT = ConfigEntry(topSection, "Carry Weight Increment", 0.1f, "Each upgrade subtracts this from the above coefficient.");
+            BACK_MUSCLES_UPGRADE_PRICES = ConfigEntry(topSection, "Price of each additional upgrade", "600,700,800", "");
+            BACK_MUSCLES_INDIVIDUAL = ConfigEntry(topSection,"Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
-            INTERN_ENABLED = ConfigEntry("Interns", "Enable hiring of interns", true, "Pay x amount of credits to revive a player.");
-            INTERN_PRICE = ConfigEntry("Interns", "Intern Price", 1000, "Default price to hire an intern.");
-            INTERN_INDIVIDUAL = ConfigEntry("Interns","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
+            topSection = "Interns";
+            INTERN_ENABLED = ConfigEntry(topSection, "Enable hiring of interns", true, "Pay x amount of credits to revive a player.");
+            INTERN_PRICE = ConfigEntry(topSection, "Intern Price", 1000, "Default price to hire an intern.");
+            INTERN_INDIVIDUAL = ConfigEntry(topSection, "Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
-            PAGER_ENABLED = ConfigEntry("Fast Encryption", "Enable Fast Encryption", true, "Upgrades the transmitter.");
-            PAGER_PRICE = ConfigEntry("Fast Encryption", "Fast Encryption Price", 300, "");
+            topSection = "Fast Encryption";
+            PAGER_ENABLED = ConfigEntry(topSection, "Enable Fast Encryption", true, "Upgrades the transmitter.");
+            PAGER_PRICE = ConfigEntry(topSection, "Fast Encryption Price", 300, "");
 
-            LOCKSMITH_ENABLED = ConfigEntry("Locksmith", "Enable Locksmith upgrade", true, "Allows you to pick locked doors by completing a minigame.");
-            LOCKSMITH_PRICE = ConfigEntry("Locksmith", "Locksmith Price", 640, "Default price of Locksmith upgrade.");
-            LOCKSMITH_INDIVIDUAL = ConfigEntry("Locksmith","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
+            topSection = "Locksmith";
+            LOCKSMITH_ENABLED = ConfigEntry(topSection, "Enable Locksmith upgrade", true, "Allows you to pick locked doors by completing a minigame.");
+            LOCKSMITH_PRICE = ConfigEntry(topSection, "Locksmith Price", 640, "Default price of Locksmith upgrade.");
+            LOCKSMITH_INDIVIDUAL = ConfigEntry(topSection, "Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
-            PEEPER_ENABLED = ConfigEntry("Peeper", "Enable Peeper item", true, "An item that will stare at coilheads for you.");
-            PEEPER_PRICE = ConfigEntry("Peeper", "Peeper Price", 500, "Default price to purchase a Peeper.");
+            topSection = "Peeper";
+            PEEPER_ENABLED = ConfigEntry(topSection, "Enable Peeper item", true, "An item that will stare at coilheads for you.");
+            PEEPER_PRICE = ConfigEntry(topSection, "Peeper Price", 500, "Default price to purchase a Peeper.");
 
-            LIGHTNING_ROD_ENABLED = ConfigEntry(lightningRodScript.UPGRADE_NAME, lightningRodScript.ENABLED_SECTION, lightningRodScript.ENABLED_DEFAULT, lightningRodScript.ENABLED_DESCRIPTION);
-            LIGHTNING_ROD_PRICE = ConfigEntry(lightningRodScript.UPGRADE_NAME, lightningRodScript.PRICE_SECTION, lightningRodScript.PRICE_DEFAULT, "");
-            LIGHTNING_ROD_ACTIVE = ConfigEntry(lightningRodScript.UPGRADE_NAME, lightningRodScript.ACTIVE_SECTION, lightningRodScript.ACTIVE_DEFAULT, lightningRodScript.ACTIVE_DESCRIPTION);
-            LIGHTNING_ROD_DIST = ConfigEntry(lightningRodScript.UPGRADE_NAME, lightningRodScript.DIST_SECTION, lightningRodScript.DIST_DEFAULT, lightningRodScript.DIST_DESCRIPTION);
+            topSection = lightningRodScript.UPGRADE_NAME;
+            LIGHTNING_ROD_ENABLED = ConfigEntry(topSection, lightningRodScript.ENABLED_SECTION, lightningRodScript.ENABLED_DEFAULT, lightningRodScript.ENABLED_DESCRIPTION);
+            LIGHTNING_ROD_PRICE = ConfigEntry(topSection, lightningRodScript.PRICE_SECTION, lightningRodScript.PRICE_DEFAULT, "");
+            LIGHTNING_ROD_ACTIVE = ConfigEntry(topSection, lightningRodScript.ACTIVE_SECTION, lightningRodScript.ACTIVE_DEFAULT, lightningRodScript.ACTIVE_DESCRIPTION);
+            LIGHTNING_ROD_DIST = ConfigEntry(topSection, lightningRodScript.DIST_SECTION, lightningRodScript.DIST_DEFAULT, lightningRodScript.DIST_DESCRIPTION);
 
-            WALKIE_ENABLED = ConfigEntry("Walkie", "Enable the walkie talkie gps upgrade", true, "Holding a walkie talkie displays location.");
-            WALKIE_PRICE = ConfigEntry("Walkie", "Walkie GPS Price", 450, "Default price for upgrade.");
-            WALKIE_INDIVIDUAL = ConfigEntry("Walkie","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
+            topSection = "Walkie";
+            WALKIE_ENABLED = ConfigEntry(topSection, "Enable the walkie talkie gps upgrade", true, "Holding a walkie talkie displays location.");
+            WALKIE_PRICE = ConfigEntry(topSection, "Walkie GPS Price", 450, "Default price for upgrade.");
+            WALKIE_INDIVIDUAL = ConfigEntry(topSection, "Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
 
-            HUNTER_ENABLED = ConfigEntry("Hunter", "Enable the Hunter upgrade", true, "Collect and sell samples from dead enemies");
-            HUNTER_PRICE = ConfigEntry("Hunter", "Hunter price", 700, "Default price for upgrade.");
+            topSection = "Hunter";
+            HUNTER_ENABLED = ConfigEntry(topSection, "Enable the Hunter upgrade", true, "Collect and sell samples from dead enemies");
+            HUNTER_PRICE = ConfigEntry(topSection, "Hunter price", 700, "Default price for upgrade.");
 
             PLAYER_HEALTH_ENABLED = ConfigEntry(playerHealthScript.UPGRADE_NAME, playerHealthScript.ENABLED_SECTION, playerHealthScript.ENABLED_DEFAULT, playerHealthScript.ENABLED_DESCRIPTION);
             PLAYER_HEALTH_PRICE = ConfigEntry(playerHealthScript.UPGRADE_NAME, playerHealthScript.PRICE_SECTION, playerHealthScript.PRICE_DEFAULT, "");

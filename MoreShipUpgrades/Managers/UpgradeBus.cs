@@ -313,6 +313,8 @@ namespace MoreShipUpgrades.Managers
                     for (int i = 0; i < prices.Length; i++)
                     {
                         infoString += string.Format(infoJson["Protein Powder"], i + 2, prices[i], cfg.PROTEIN_UNLOCK_FORCE + 1 + (cfg.PROTEIN_INCREMENT * i));
+                        if (i == prices.Length - 1)
+                            infoString += "Unlocks a \"crit\" ability which can instakill any enemy.";
                     }
                     CustomTerminalNode protNode = new CustomTerminalNode("Protein Powder", cfg.PROTEIN_PRICE, infoString, prot, prices, prices.Length);
                     terminalNodes.Add(protNode);
