@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Patches
@@ -300,16 +299,29 @@ namespace MoreShipUpgrades.Patches
                 if(enemies.Length > 0)
                 {
                     Dictionary<string, int> enemyCount = new Dictionary<string, int>();
-                    foreach(EnemyAI enemy in enemies)
+                    if (!UpgradeBus.instance.cfg.VERBOSE_ENEMIES)
                     {
-                        string realName = enemy.GetComponentInChildren<ScanNodeProperties>().headerText;
-                        if (enemyCount.ContainsKey(realName)) { enemyCount[realName]++; }
-                        else { enemyCount.Add(realName, 1); }
+                        enemyCount.Add("Outside Enemies", 0);
+                        enemyCount.Add("Inside Enemies", 0);
+                        foreach (EnemyAI enemy in enemies)
+                        {
+                            if (enemy.isOutside) enemyCount["Outside Enemies"]++;
+                            else enemyCount["Inside Enemies"]++;
+                        }
                     }
-                    node.displayText = $"Alive Enemies: {enemies.Length}\n";
-                    foreach(KeyValuePair<string, int> count in enemyCount)
+                    else
                     {
-                        node.displayText += $"\n{count.Key} - {count.Value}";
+                        foreach (EnemyAI enemy in enemies)
+                        {
+                            string realName = enemy.GetComponentInChildren<ScanNodeProperties>().headerText;
+                            if (enemyCount.ContainsKey(realName)) { enemyCount[realName]++; }
+                            else { enemyCount.Add(realName, 1); }
+                        }
+                        node.displayText = $"Alive Enemies: {enemies.Length}\n";
+                        foreach (KeyValuePair<string, int> count in enemyCount)
+                        {
+                            node.displayText += $"\n{count.Key} - {count.Value}";
+                        }
                     }
                 }
                 else
@@ -328,7 +340,7 @@ namespace MoreShipUpgrades.Patches
                     __result = node;
                     return;
                 }
-                List<GameObject> fireEscape = GameObject.FindObjectsOfType<GameObject>().Where(obj => obj.name == "SpawnEntranceB").ToList();
+                List<GameObject> fireEscape = GameObject.FindObjectsOfType<GameObject>().Where(obj => obj.name == "SpawnEntranceBTrigger").ToList();
                 List<EntranceTeleport> mainDoors = GameObject.FindObjectsOfType<EntranceTeleport>().ToList();
                 List<EntranceTeleport> doorsToRemove = new List<EntranceTeleport>();
 
@@ -342,13 +354,13 @@ namespace MoreShipUpgrades.Patches
                 foreach (EntranceTeleport doorToRemove in doorsToRemove)
                 {
                     mainDoors.Remove(doorToRemove);
-                    fireEscape.Add(doorToRemove.gameObject);
+                    if (!fireEscape.Contains(doorToRemove.gameObject)) fireEscape.Add(doorToRemove.gameObject);
                 }
                 PlayerControllerB player = StartOfRound.Instance.mapScreen.targetedPlayer;
 
                 if(player.isInsideFactory)
                 {
-                    node.displayText = $"Closest exits to {player.playerUsername} (X:{Mathf.RoundToInt(player.transform.position.x)},Y{Mathf.RoundToInt(player.transform.position.y)},Z{Mathf.RoundToInt(player.transform.position.z)}:\n";
+                    node.displayText = $"Closest exits to {player.playerUsername} (X:{Mathf.RoundToInt(player.transform.position.x)},Y:{Mathf.RoundToInt(player.transform.position.y)},Z:{Mathf.RoundToInt(player.transform.position.z)}):\n";
                     GameObject[] Closest3 = fireEscape.OrderBy(door => Vector3.Distance(door.transform.position, player.transform.position)).Take(3).ToArray();
                     foreach(GameObject door in fireEscape)
                     {
@@ -357,7 +369,7 @@ namespace MoreShipUpgrades.Patches
                 }
                 else
                 {
-                    node.displayText = $"Entrances for {player.playerUsername} (X:{player.transform.position.x},Y{player.transform.position.y},Z{player.transform.position.z}:\n";
+                    node.displayText = $"Entrances for {player.playerUsername} (X:{Mathf.RoundToInt(player.transform.position.x)},Y:{Mathf.RoundToInt(player.transform.position.y)},Z:{Mathf.RoundToInt(player.transform.position.z)}):\n";
                     foreach(EntranceTeleport door in mainDoors)
                     {
                         node.displayText += $"\nX:{Mathf.RoundToInt(door.transform.position.x)},Y:{Mathf.RoundToInt(door.transform.position.y)},Z:{Mathf.RoundToInt(door.transform.position.z)} - {Mathf.RoundToInt(Vector3.Distance(door.transform.position, player.transform.position))} units away.";

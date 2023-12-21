@@ -105,8 +105,8 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             UpgradeBus.instance.nightVisionActive = false;
             client.nightVision.color = UpgradeBus.instance.nightVisColor;
-            client.nightVision.range = UpgradeBus.instance.nightVisRange;
-            client.nightVision.intensity = UpgradeBus.instance.nightVisIntensity;
+            client.nightVision.range = UpgradeBus.instance.nightVisRange + (UpgradeBus.instance.nightVisionLevel * UpgradeBus.instance.cfg.NIGHT_VIS_RANGE_INCREMENT);
+            client.nightVision.intensity = UpgradeBus.instance.nightVisIntensity + (UpgradeBus.instance.nightVisionLevel * UpgradeBus.instance.cfg.NIGHT_VIS_INTENSITY_INCREMENT);
             if(exhaust)
             {
                 batteryExhaustion = true;

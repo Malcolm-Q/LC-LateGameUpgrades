@@ -26,6 +26,7 @@ namespace MoreShipUpgrades.Misc
         public bool DISCOMBOBULATOR_ENABLED { get; set; }
         public bool MALWARE_BROADCASTER_ENABLED { get; set; }
         public bool LIGHTNING_ROD_ENABLED { get; set; }
+        public bool HUNTER_ENABLED { get; set; }
 
         // individual or shared
         public bool ADVANCED_TELE_INDIVIDUAL { get; set; }
@@ -36,6 +37,7 @@ namespace MoreShipUpgrades.Misc
         public bool BACK_MUSCLES_INDIVIDUAL { get; set; }
         public bool LIGHT_FOOTED_INDIVIDUAL { get; set; }
         public bool NIGHT_VISION_INDIVIDUAL { get; set; }
+        public bool HUNTER_INDIVIDUAL { get; set; }
 
         public bool RUNNING_SHOES_INDIVIDUAL { get; set; }
         public bool BETTER_SCANNER_INDIVIDUAL { get; set; }
@@ -48,6 +50,7 @@ namespace MoreShipUpgrades.Misc
 
         // prices
         public int PEEPER_PRICE { get; set; }
+        public int HUNTER_PRICE { get; set; }
         public int ADVANCED_TELE_PRICE { get; set; }
         public int WEAK_TELE_PRICE { get; set; }
         public int BEEKEEPER_PRICE { get; set; }
@@ -66,6 +69,8 @@ namespace MoreShipUpgrades.Misc
 
         // attributes
         public int PROTEIN_INCREMENT { get; set; }
+        public int HUNTER_PRICE2 { get; set; }
+        public int HUNTER_PRICE3 { get; set; }
         public bool KEEP_ITEMS_ON_TELE { get; set; }
         public float SPRINT_TIME_INCREASE { get; set; }
         public float MOVEMENT_SPEED { get; set; }
@@ -92,7 +97,9 @@ namespace MoreShipUpgrades.Misc
         public float NIGHT_VIS_REGEN_SPEED { get; set; }
         public float NIGHT_BATTERY_MAX { get; set; }
         public float NIGHT_VIS_RANGE { get; set; }
+        public float NIGHT_VIS_RANGE_INCREMENT { get; set; }
         public float NIGHT_VIS_INTENSITY { get; set; }
+        public float NIGHT_VIS_INTENSITY_INCREMENT { get; set; }
         public float NIGHT_VIS_STARTUP { get; set; }
         public float NIGHT_VIS_EXHAUST { get; set; }
         public float NIGHT_VIS_DRAIN_INCREMENT { get; set; }
@@ -132,6 +139,7 @@ namespace MoreShipUpgrades.Misc
         public float LIGHTNING_ROD_DIST {  get; set; }
         public bool PAGER_ENABLED {  get; set; }
         public int PAGER_PRICE {  get; set; }
+        public bool VERBOSE_ENEMIES {  get; set; }
 
 
         public PluginConfig(ConfigFile cfg)
@@ -217,7 +225,9 @@ namespace MoreShipUpgrades.Misc
             NIGHT_VIS_REGEN_SPEED = ConfigEntry("Night Vision", "Multiplier for night vis battery regen", 1f, "Multiplied by timedelta, raise to speed up battery regen time.");
             NIGHT_VIS_COLOR = ConfigEntry("Night Vision", "Night Vision Color", UnityEngine.Color.green, "The color your night vision light emits.");
             NIGHT_VIS_RANGE = ConfigEntry("Night Vision", "Night Vision Range", 2000f, "Kind of like the distance your night vision travels.");
+            NIGHT_VIS_RANGE_INCREMENT = ConfigEntry("Night Vision", "Night Vision Range Increment", 0f, "Increases your range by this value each upgrade.");
             NIGHT_VIS_INTENSITY = ConfigEntry("Night Vision", "Night Vision Intensity", 1000f, "Kind of like the brightness of your Night Vision.");
+            NIGHT_VIS_INTENSITY_INCREMENT = ConfigEntry("Night Vision", "Night Vision Intensity Increment", 0f, "Increases your intensity by this value each upgrade.");
             NIGHT_VIS_STARTUP = ConfigEntry("Night Vision", "Night Vision StartUp Cost", 0.1f, "The percent battery drained when turned on (0.1 = 10%).");
             NIGHT_VIS_EXHAUST = ConfigEntry("Night Vision", "Night Vision Exhaustion", 2f, "How many seconds night vision stays fully depleted.");
             TOGGLE_NIGHT_VISION_KEY = ConfigEntry("Night Vision", "Toggle Night Vision Key", "LeftAlt", "Key to toggle Night Vision, you can use any key on your system such as LeftAlt, LeftShift, or any letter which exists.");
@@ -243,9 +253,10 @@ namespace MoreShipUpgrades.Misc
             SHIP_AND_ENTRANCE_DISTANCE_INCREASE = ConfigEntry("Better Scanner", "Ship and Entrance node distance boost", 150f, "How much further away you can scan the ship and entrance.");
             NODE_DISTANCE_INCREASE = ConfigEntry("Better Scanner", "Node distance boost", 20f, "How much further away you can scan other nodes.");
             BETTER_SCANNER_INDIVIDUAL = ConfigEntry("Better Scanner","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
-            BETTER_SCANNER_PRICE2 = ConfigEntry("Better Scanner", "Price of first Better Scanner tier", 500, "This tier unlocks hives and scrap command.");
+            BETTER_SCANNER_PRICE2 = ConfigEntry("Better Scanner", "Price of first Better Scanner tier", 500, "This tier unlocks ship scan commands.");
             BETTER_SCANNER_PRICE3 = ConfigEntry("Better Scanner", "Price of second Better Scanner tier", 800, "This tier unlocks scanning through walls.");
             BETTER_SCANNER_ENEMIES = ConfigEntry("Better Scanner", "Scan enemies through walls on final upgrade", false, "If true the final upgrade will scan scrap AND enemies through walls.");
+            VERBOSE_ENEMIES = ConfigEntry("Better Scanner", "Verbose `scan enemies` command", true, "If false `scan enemies` only returns a count of outside and inside enemies, else it returns the count for each enemy type.");
 
             BACK_MUSCLES_ENABLED = ConfigEntry("Back Muscles", "Enable Back Muscles Upgrade", true, "Reduce carry weight");
             BACK_MUSCLES_PRICE = ConfigEntry("Back Muscles", "Price of Back Muscles Upgrade", 715, "");
@@ -276,6 +287,9 @@ namespace MoreShipUpgrades.Misc
             WALKIE_ENABLED = ConfigEntry("Walkie", "Enable the walkie talkie gps upgrade", true, "Holding a walkie talkie displays location.");
             WALKIE_PRICE = ConfigEntry("Walkie", "Walkie GPS Price", 450, "Default price for upgrade.");
             WALKIE_INDIVIDUAL = ConfigEntry("Walkie","Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
+
+            HUNTER_ENABLED = ConfigEntry("Hunter", "Enable the Hunter upgrade", true, "Collect and sell samples from dead enemies");
+            HUNTER_PRICE = ConfigEntry("Hunter", "Hunter price", 700, "Default price for upgrade.");
         }
 
     }

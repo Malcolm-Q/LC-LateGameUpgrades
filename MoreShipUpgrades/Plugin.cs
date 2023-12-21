@@ -3,7 +3,6 @@ using BepInEx.Logging;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using LethalLib.Modules;
 using MoreShipUpgrades.UpgradeComponents;
@@ -17,6 +16,7 @@ using Newtonsoft.Json;
 namespace MoreShipUpgrades
 {
     [BepInEx.BepInPlugin(Metadata.GUID,Metadata.NAME,Metadata.VERSION)]
+    [BepInDependency("evaisa.lethallib","0.6.0")]
     public class Plugin : BaseUnityPlugin
     {
         private readonly Harmony harmony = new Harmony(Metadata.GUID);
@@ -77,6 +77,17 @@ namespace MoreShipUpgrades
             // intro screen
             UpgradeBus.instance.introScreen = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/IntroScreen.prefab");
             UpgradeBus.instance.introScreen.AddComponent<IntroScreenScript>();
+
+            // samples
+            Item fleaSample = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/SnareFleaSample.asset");
+            Item spiderSample = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/BunkerSpiderSample.asset");
+            Item hoardSample = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/HoardingBugSample.asset");
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(fleaSample.spawnPrefab);
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(spiderSample.spawnPrefab);
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(hoardSample.spawnPrefab);
+            UpgradeBus.instance.samplePrefabs.Add("snare flea", fleaSample.spawnPrefab);
+            UpgradeBus.instance.samplePrefabs.Add("bunker spider", spiderSample.spawnPrefab);
+            UpgradeBus.instance.samplePrefabs.Add("hoarding bug", hoardSample.spawnPrefab);
 
             //tp button
             Item tpBut = UpgradeAssets.LoadAsset<Item>("Assets/ShipUpgrades/TpButton.asset");
@@ -165,7 +176,11 @@ namespace MoreShipUpgrades
             GameObject beekeeper = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/beekeeper.prefab");
             beekeeper.AddComponent<beekeeperScript>();
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(beekeeper);
-            
+
+             //hunter
+            GameObject hunter = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/Hunter.prefab");
+            hunter.AddComponent<hunterScript>();
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(hunter);
 
             //protein powder
             GameObject prot = UpgradeAssets.LoadAsset<GameObject>("Assets/ShipUpgrades/ProteinPowder.prefab");

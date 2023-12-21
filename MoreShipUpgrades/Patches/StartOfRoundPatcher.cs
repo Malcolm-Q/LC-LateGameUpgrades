@@ -18,6 +18,14 @@ namespace MoreShipUpgrades.Patches
                 GameObject refStore = GameObject.Instantiate(UpgradeBus.instance.modStorePrefab);
                 refStore.GetComponent<NetworkObject>().Spawn();
             }
+            foreach(GameObject sample in UpgradeBus.instance.samplePrefabs.Values)
+            {
+                Item item = sample.GetComponent<PhysicsProp>().itemProperties;
+                if(StartOfRound.Instance.allItemsList.itemsList.Contains(item))
+                {
+                    StartOfRound.Instance.allItemsList.itemsList.Add(item);
+                }
+            }
         }
         [HarmonyPrefix]
         [HarmonyPatch("playersFiredGameOver")]
