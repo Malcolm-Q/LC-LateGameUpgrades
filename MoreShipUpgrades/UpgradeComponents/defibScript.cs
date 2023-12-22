@@ -47,14 +47,16 @@ namespace MoreShipUpgrades.UpgradeComponents
         private void ReviveTargetedPlayerClientRpc()
         {
             PlayerControllerB player = StartOfRound.Instance.mapScreen.targetedPlayer;
-
+            bool playerRegistered = UpgradeBus.instance.playerHPs.ContainsKey(player.playerSteamId);
+            int health = playerRegistered ? UpgradeBus.instance.playerHPs[player.playerSteamId] : 100;
             player.ResetPlayerBloodObjects(player.isPlayerDead);
+
             if (player.isPlayerDead || player.isPlayerControlled)
             {
                 player.isClimbingLadder = false;
                 player.ResetZAndXRotation();
                 player.thisController.enabled = true;
-                player.health = 100;
+                player.health = health;
                 player.disableLookInput = false;
                 if (player.isPlayerDead)
                 {
@@ -86,7 +88,7 @@ namespace MoreShipUpgrades.UpgradeComponents
                     player.sinkingValue = 0f;
                     player.statusEffectAudio.Stop();
                     player.DisableJetpackControlsLocally();
-                    player.health = 100;
+                    player.health = health;
                     player.mapRadarDotAnimator.SetBool("dead", false);
                     player.deadBody = null;
                     if (player == GameNetworkManager.Instance.localPlayerController)
@@ -126,7 +128,7 @@ namespace MoreShipUpgrades.UpgradeComponents
                 player.bleedingHeavily = false;
                 player.criticallyInjured = false;
                 player.playerBodyAnimator.SetBool("Limp", false);
-                player.health = 100;
+                player.health = health;
                 HUDManager.Instance.UpdateHealthUI(100, false);
                 player.spectatedPlayerScript = null;
                 HUDManager.Instance.audioListenerLowPass.enabled = false;

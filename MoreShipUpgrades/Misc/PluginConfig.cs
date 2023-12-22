@@ -147,7 +147,7 @@ namespace MoreShipUpgrades.Misc
         public bool VERBOSE_ENEMIES {  get; set; }
         public int PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK { get; set; }
         public int PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT { get; set; }
-
+        public int HUNTER_PRICE4 { get; internal set; }
 
         public PluginConfig(ConfigFile cfg)
         {

@@ -4,6 +4,7 @@ using MoreShipUpgrades.Misc;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -169,6 +170,33 @@ namespace MoreShipUpgrades.UpgradeComponents
             UpgradeBus.instance.nightVision = false;
             LGUStore.instance.UpdateLGUSaveServerRpc(client.playerSteamId, JsonConvert.SerializeObject(new SaveInfo()));
             client = null;
+        }
+
+        public static string GetNightVisionInfo(int level, int price)
+        {
+            switch (level) 
+            {
+                case 1:
+                    {
+                        float drain = (UpgradeBus.instance.cfg.NIGHT_BATTERY_MAX - (UpgradeBus.instance.cfg.NIGHT_BATTERY_MAX * UpgradeBus.instance.cfg.NIGHT_VIS_STARTUP)) / UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_SPEED;
+                        float regen = UpgradeBus.instance.cfg.NIGHT_BATTERY_MAX / UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_SPEED;
+                        return string.Format(AssetBundleHandler.GetInfoFromJSON("NV Headset Batteries"), level, price, drain, regen);
+                    }
+                default:
+                    {
+                        float regenAdjustment = Mathf.Clamp(UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_SPEED + (UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_INCREMENT * (level - 1)), 0, 1000);
+                        float drainAdjustment = Mathf.Clamp(UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_SPEED - (UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_INCREMENT * (level - 1)), 0, 1000);
+                        float batteryLife = UpgradeBus.instance.cfg.NIGHT_BATTERY_MAX + (UpgradeBus.instance.cfg.NIGHT_VIS_BATTERY_INCREMENT * (level - 1));
+
+                        string drainTime = "infinite";
+                        if (drainAdjustment != 0) drainTime = ((batteryLife - (batteryLife * UpgradeBus.instance.cfg.NIGHT_VIS_STARTUP)) / drainAdjustment).ToString("F2");
+
+                        string regenTime = "infinite";
+                        if (regenAdjustment != 0) regenTime = (batteryLife / regenAdjustment).ToString("F2");
+
+                        return string.Format(AssetBundleHandler.GetInfoFromJSON("NV Headset Batteries"), level, price, drainTime, regenTime);
+                    }
+            }
         }
     }
 }

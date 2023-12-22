@@ -164,7 +164,7 @@ namespace MoreShipUpgrades.Managers
         public void PlayersFiredServerRpc()
         {
             ResetUpgradeBusClientRpc();
-            UpgradeBus.instance.ResetAllValues();
+            UpgradeBus.instance.ResetAllValues(false);
             string saveNum = GameNetworkManager.Instance.saveFileNum.ToString();
             string filePath = Path.Combine(Application.persistentDataPath, $"LGU_{saveNum}.json");
             lguSave = new LGUSave();
@@ -175,7 +175,8 @@ namespace MoreShipUpgrades.Managers
         [ClientRpc]
         private void ResetUpgradeBusClientRpc()
         {
-            UpgradeBus.instance.ResetAllValues();
+            UpgradeBus.instance.ResetAllValues(false);
+            if(!IsHost || !IsServer) lguSave = new LGUSave();
             saveInfo = new SaveInfo();
         }
 
