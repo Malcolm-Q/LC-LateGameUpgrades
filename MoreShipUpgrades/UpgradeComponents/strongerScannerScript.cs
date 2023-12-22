@@ -34,5 +34,21 @@ namespace MoreShipUpgrades.UpgradeComponents
             Debug.Log("SLKDJF");
             if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Better Scanner")) { UpgradeBus.instance.UpgradeObjects.Add("Better Scanner", gameObject); }
         }
+
+        public static string GetBetterScannerInfo(int level, int price)
+        {
+            switch (level)
+            {
+                case 1: return string.Format(AssetBundleHandler.GetInfoFromJSON("Better Scanner1"), level, price, UpgradeBus.instance.cfg.NODE_DISTANCE_INCREASE, UpgradeBus.instance.cfg.SHIP_AND_ENTRANCE_DISTANCE_INCREASE);
+                case 2: return string.Format(AssetBundleHandler.GetInfoFromJSON("Better Scanner2"), level, price);
+                case 3:
+                    {
+                        string result = string.Format(AssetBundleHandler.GetInfoFromJSON("Better Scanner3"), level, price, UpgradeBus.instance.cfg.BETTER_SCANNER_ENEMIES ? " and enemies" : "");
+                        result += "hives and scrap command display the location of the most valuable hives and scrap on the map.\n";
+                        return result;
+                    }
+            }
+            return "";
+        }
     }
 }

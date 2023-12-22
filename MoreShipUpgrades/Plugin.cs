@@ -72,9 +72,6 @@ namespace MoreShipUpgrades
             
             SetupPerks(ref UpgradeAssets);
 
-            GameObject playerHealth = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/PlayerHealth.prefab");
-            playerHealth.AddComponent<playerHealthScript>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(playerHealth);
 
             harmony.PatchAll();
 
@@ -279,6 +276,7 @@ namespace MoreShipUpgrades
             SetupPager(ref bundle);
             SetupLightningRod(ref bundle);
             SetupLocksmith(ref bundle);
+            SetupPlayerHealth(ref bundle);
             SetupHunter(ref bundle);
         }
         private void SetupBeekeeper(ref AssetBundle bundle)
@@ -351,6 +349,10 @@ namespace MoreShipUpgrades
         private void SetupLocksmith(ref AssetBundle bundle)
         {
             SetupGenericPerk<lockSmithScript>(ref bundle, "Assets/ShipUpgrades/LockSmith.prefab");
+        }
+        private void SetupPlayerHealth(ref AssetBundle bundle)
+        {
+            SetupGenericPerk<playerHealthScript>(ref bundle, "Assets/ShipUpgrades/PlayerHealth.prefab");
         }
         /// <summary>
         /// Generic function where it adds a script (specificed through the type) into an GameObject asset 
