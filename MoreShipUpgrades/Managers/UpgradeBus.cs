@@ -168,10 +168,12 @@ namespace MoreShipUpgrades.Managers
             playerHealthLevel = 0;
             flashCooldown = 0f;
             alteredWeight = 1f;
-            trapHandler = null;
-            flashScript = null;
-            pageScript = null;
-            if (wipeObjRefs) { UpgradeObjects = new Dictionary<string, GameObject>(); }
+            if (wipeObjRefs) {
+                UpgradeObjects = new Dictionary<string, GameObject>(); 
+                trapHandler = null;
+                flashScript = null;
+                pageScript = null;
+            }
             foreach(CustomTerminalNode node in terminalNodes)
             {
                 node.Unlocked = false;
@@ -285,6 +287,8 @@ namespace MoreShipUpgrades.Managers
 
             SetupInternsTerminalNode(ref infoJson);
 
+            SetupPlayerHealthTerminalNode(ref infoJson);
+
             SetupPagerTerminalNode();
 
             SetupLocksmithTerminalNode();
@@ -292,54 +296,59 @@ namespace MoreShipUpgrades.Managers
 
         private void SetupBeekeperTerminalNode(ref Dictionary<string, string> infoJSON)
         {
-            SetupMultiplePurchasableTerminalNode("Beekeeper",
-                                                "Assets/ShipUpgrades/beekeeper.prefab",
-                                                cfg.SHARED_UPGRADES ? true : cfg.BEEKEEPER_INDIVIDUAL,
-                                                cfg.BEEKEEPER_ENABLED,
-                                                cfg.BEEKEEPER_PRICE,
-                                                ParseUpgradePrices(cfg.BEEKEEPER_UPGRADE_PRICES),
-                                                infoJSON["Beekeeper"]);
+            SetupMultiplePurchasableTerminalNode(
+                "Beekeeper",
+                "Assets/ShipUpgrades/beekeeper.prefab",
+                cfg.SHARED_UPGRADES ? true : !cfg.BEEKEEPER_INDIVIDUAL,
+                cfg.BEEKEEPER_ENABLED,
+                cfg.BEEKEEPER_PRICE,
+                ParseUpgradePrices(cfg.BEEKEEPER_UPGRADE_PRICES),
+                infoJSON["Beekeeper"]);
         }
 
         private void SetupProteinPowderTerminalNode(ref Dictionary<string, string> infoJSON) 
         {
-            SetupMultiplePurchasableTerminalNode("Protein Powder",
-                                                "Assets/ShipUpgrades/ProteinPowder.prefab",
-                                                cfg.SHARED_UPGRADES ? true : cfg.PROTEIN_INDIVIDUAL,
-                                                cfg.PROTEIN_ENABLED,
-                                                cfg.PROTEIN_PRICE,
-                                                ParseUpgradePrices(cfg.PROTEIN_UPGRADE_PRICES),
-                                                infoJSON["Protein Powder"]);
+            SetupMultiplePurchasableTerminalNode(
+                "Protein Powder",
+                "Assets/ShipUpgrades/ProteinPowder.prefab",
+                cfg.SHARED_UPGRADES ? true : !cfg.PROTEIN_INDIVIDUAL,
+                cfg.PROTEIN_ENABLED,
+                cfg.PROTEIN_PRICE,
+                ParseUpgradePrices(cfg.PROTEIN_UPGRADE_PRICES),
+                infoJSON["Protein Powder"]);
         }
         private void SetupBiggerLungsTerminalNode(ref Dictionary<string, string> infoJSON)
         {
-            SetupMultiplePurchasableTerminalNode("Bigger Lungs",
-                                                "Assets/ShipUpgrades/BiggerLungs.prefab",
-                                                cfg.SHARED_UPGRADES ? true : cfg.BIGGER_LUNGS_INDIVIDUAL,
-                                                cfg.BIGGER_LUNGS_ENABLED,
-                                                cfg.BIGGER_LUNGS_PRICE,
-                                                ParseUpgradePrices(cfg.RUNNING_SHOES_UPGRADE_PRICES),
-                                                infoJSON["Running Shoes"]);
+            SetupMultiplePurchasableTerminalNode(
+                "Bigger Lungs",
+                "Assets/ShipUpgrades/BiggerLungs.prefab",
+                cfg.SHARED_UPGRADES ? true : !cfg.BIGGER_LUNGS_INDIVIDUAL,
+                cfg.BIGGER_LUNGS_ENABLED,
+                cfg.BIGGER_LUNGS_PRICE,
+                ParseUpgradePrices(cfg.RUNNING_SHOES_UPGRADE_PRICES),
+                infoJSON["Running Shoes"]);
         }
         private void SetupRunningShoesTerminalNode(ref Dictionary<string, string> infoJSON)
         {
-            SetupMultiplePurchasableTerminalNode("Running Shoes",
-                                                "Assets/ShipUpgrades/runningShoes.prefab",
-                                                cfg.SHARED_UPGRADES ? true : cfg.RUNNING_SHOES_INDIVIDUAL,
-                                                cfg.RUNNING_SHOES_ENABLED,
-                                                cfg.RUNNING_SHOES_PRICE,
-                                                ParseUpgradePrices(cfg.RUNNING_SHOES_UPGRADE_PRICES),
-                                                infoJSON["Running Shoes"]);
+            SetupMultiplePurchasableTerminalNode(
+                "Running Shoes",
+                "Assets/ShipUpgrades/runningShoes.prefab",
+                cfg.SHARED_UPGRADES ? true : !cfg.RUNNING_SHOES_INDIVIDUAL,
+                cfg.RUNNING_SHOES_ENABLED,
+                cfg.RUNNING_SHOES_PRICE,
+                ParseUpgradePrices(cfg.RUNNING_SHOES_UPGRADE_PRICES),
+                infoJSON["Running Shoes"]);
         }
         private void SetupStrongLegsTerminalNode(ref Dictionary<string, string> infoJSON)
         {
-            SetupMultiplePurchasableTerminalNode("Strong Legs",
-                                                "Assets/ShipUpgrades/strongLegs.prefab",
-                                                cfg.SHARED_UPGRADES ? true : cfg.STRONG_LEGS_INDIVIDUAL,
-                                                cfg.STRONG_LEGS_ENABLED,
-                                                cfg.STRONG_LEGS_PRICE,
-                                                ParseUpgradePrices(cfg.STRONG_LEGS_UPGRADE_PRICES),
-                                                infoJSON["Strong Legs"]);
+            SetupMultiplePurchasableTerminalNode(
+                "Strong Legs",
+                "Assets/ShipUpgrades/strongLegs.prefab",
+                cfg.SHARED_UPGRADES ? true : !cfg.STRONG_LEGS_INDIVIDUAL,
+                cfg.STRONG_LEGS_ENABLED,
+                cfg.STRONG_LEGS_PRICE,
+                ParseUpgradePrices(cfg.STRONG_LEGS_UPGRADE_PRICES),
+                infoJSON["Strong Legs"]);
         }
         private void SetupMalwareBroadcasterTerminalNode(ref Dictionary<string, string> infoJSON)
         {
@@ -357,22 +366,24 @@ namespace MoreShipUpgrades.Managers
             }
             else { desc = $"Broadcasted codes now disable map hazards for {cfg.DISARM_TIME} seconds."; }
 
-            SetupOneTimeTerminalNode("Malware Broadcaster",
-                                    "Assets/ShipUpgrades/destructiveCodes.prefab",
-                                    cfg.SHARED_UPGRADES ? true : cfg.MALWARE_BROADCASTER_INDIVIDUAL,
-                                    cfg.MALWARE_BROADCASTER_ENABLED,
-                                    cfg.MALWARE_BROADCASTER_PRICE,
-                                    desc);
+            SetupOneTimeTerminalNode(
+                "Malware Broadcaster",
+                "Assets/ShipUpgrades/destructiveCodes.prefab",
+                cfg.SHARED_UPGRADES ? true : !cfg.MALWARE_BROADCASTER_INDIVIDUAL,
+                cfg.MALWARE_BROADCASTER_ENABLED,
+                cfg.MALWARE_BROADCASTER_PRICE,
+                desc);
         }
         private void SetupLightFootedTerminalNode(ref Dictionary<string, string> infoJSON)
         {
-            SetupMultiplePurchasableTerminalNode("Light Footed",
-                                                "Assets/ShipUpgrades/lightFooted.prefab",
-                                                cfg.SHARED_UPGRADES ? true : cfg.LIGHT_FOOTED_INDIVIDUAL,
-                                                cfg.LIGHT_FOOTED_ENABLED,
-                                                cfg.LIGHT_FOOTED_PRICE,
-                                                ParseUpgradePrices(cfg.STRONG_LEGS_UPGRADE_PRICES),
-                                                infoJSON["Light Footed"]);
+            SetupMultiplePurchasableTerminalNode(
+                "Light Footed",
+                "Assets/ShipUpgrades/lightFooted.prefab",
+                cfg.SHARED_UPGRADES ? true : !cfg.LIGHT_FOOTED_INDIVIDUAL,
+                cfg.LIGHT_FOOTED_ENABLED,
+                cfg.LIGHT_FOOTED_PRICE,
+                ParseUpgradePrices(cfg.STRONG_LEGS_UPGRADE_PRICES),
+                infoJSON["Light Footed"]);
         }
         private void SetupNightVisionBatteryTerminalNode(ref Dictionary<string, string> infoJSON)
         {
@@ -381,7 +392,7 @@ namespace MoreShipUpgrades.Managers
             GameObject nightVision = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/nightVision.prefab");
             if (!nightVision) return;
 
-            bool shareStatus = cfg.SHARED_UPGRADES ? true : cfg.NIGHT_VISION_INDIVIDUAL;
+            bool shareStatus = cfg.SHARED_UPGRADES ? true : !cfg.NIGHT_VISION_INDIVIDUAL;
             IndividualUpgrades.Add("NV Headset Batteries", shareStatus);
             if (!cfg.NIGHT_VISION_ENABLED) return;
 
@@ -423,13 +434,14 @@ namespace MoreShipUpgrades.Managers
             if (!flashSFX) return;
 
             flashNoise = flashSFX;
-            SetupMultiplePurchasableTerminalNode("Discombobulator",
-                                                "Assets/ShipUpgrades/terminalFlash.prefab",
-                                                cfg.SHARED_UPGRADES ? true : cfg.DISCOMBOBULATOR_INDIVIDUAL,
-                                                cfg.DISCOMBOBULATOR_ENABLED,
-                                                cfg.DISCOMBOBULATOR_PRICE,
-                                                ParseUpgradePrices(cfg.DISCO_UPGRADE_PRICES),
-                                                infoJSON["Discombobulator"]);
+            SetupMultiplePurchasableTerminalNode(
+                "Discombobulator",
+                "Assets/ShipUpgrades/terminalFlash.prefab",
+                cfg.SHARED_UPGRADES ? true : !cfg.DISCOMBOBULATOR_INDIVIDUAL,
+                cfg.DISCOMBOBULATOR_ENABLED,
+                cfg.DISCOMBOBULATOR_PRICE,
+                ParseUpgradePrices(cfg.DISCO_UPGRADE_PRICES),
+                infoJSON["Discombobulator"]);
         }
         private void SetupHunterTerminalNode(ref Dictionary<string, string> infoJSON)
         {
@@ -438,13 +450,18 @@ namespace MoreShipUpgrades.Managers
             IndividualUpgrades.Add("Hunter", true);
             if (!cfg.HUNTER_ENABLED) return;
 
-            string infoString = "Not implemented, if you see this @_kieth and tell him how stupid he is.";
+            int[] prices = new int[] { cfg.HUNTER_PRICE2, cfg.HUNTER_PRICE3, cfg.HUNTER_PRICE4 };
+            string infoString = string.Format(infoJSON["Hunter"],1,cfg.HUNTER_PRICE,hunterScript.tiers[0]);
+            for(int i = 2; i < 4; i++)
+            {
+                infoString += string.Format(infoJSON["Hunter"], i, prices[i - 2], hunterScript.tiers[i - 1]);
+            }
             CustomTerminalNode node = new CustomTerminalNode(
                 "Hunter",
                 cfg.HUNTER_PRICE,
                 infoString,
                 hunter,
-                new int[] { cfg.HUNTER_PRICE2, cfg.HUNTER_PRICE3 },
+                prices,
                 2);
             terminalNodes.Add(node);
         }
@@ -458,6 +475,10 @@ namespace MoreShipUpgrades.Managers
             string enemStatus = cfg.BETTER_SCANNER_ENEMIES ? " and enemies" : "";
             infoString += string.Format(infoJSON["Better Scanner3"], 3, cfg.BETTER_SCANNER_PRICE3, enemStatus);
             infoString += "hives and scrap command display the location of the most valuable hives and scrap on the map.\n";
+
+            bool shareStatus = cfg.SHARED_UPGRADES ? true : !cfg.BETTER_SCANNER_INDIVIDUAL;
+            IndividualUpgrades.Add("Better Scanner", shareStatus);
+
             CustomTerminalNode node = new CustomTerminalNode(
                 "Better Scanner",
                 cfg.BETTER_SCANNER_PRICE,
@@ -469,12 +490,13 @@ namespace MoreShipUpgrades.Managers
         }
         private void SetupLightningRodTerminalNode(ref Dictionary<string, string> infoJSON)
         {
-            SetupOneTimeTerminalNode(lightningRodScript.UPGRADE_NAME,
-                                    "Assets/ShipUpgrades/LightningRod.prefab",
-                                    true,
-                                    cfg.LIGHTNING_ROD_ENABLED,
-                                    cfg.LIGHTNING_ROD_PRICE,
-                                    string.Format(infoJSON[lightningRodScript.UPGRADE_NAME], cfg.LIGHTNING_ROD_PRICE, cfg.LIGHTNING_ROD_DIST));
+            SetupOneTimeTerminalNode(
+                lightningRodScript.UPGRADE_NAME,
+                "Assets/ShipUpgrades/LightningRod.prefab",
+                true,
+                cfg.LIGHTNING_ROD_ENABLED,
+                cfg.LIGHTNING_ROD_PRICE,
+                string.Format(infoJSON[lightningRodScript.UPGRADE_NAME], cfg.LIGHTNING_ROD_PRICE, cfg.LIGHTNING_ROD_DIST));
         }
         private void SetupWalkieGPSTerminalNode(ref Dictionary<string, string> infoJSON)
         {
@@ -489,40 +511,44 @@ namespace MoreShipUpgrades.Managers
         }
         private void SetupBackMusclesTerminalNode(ref Dictionary<string, string> infoJSON)
         {
-            SetupMultiplePurchasableTerminalNode("Back Muscles",
-                                                "Assets/ShipUpgrades/exoskeleton.prefab",
-                                                cfg.SHARED_UPGRADES ? true : cfg.BACK_MUSCLES_INDIVIDUAL,
-                                                cfg.BACK_MUSCLES_ENABLED,
-                                                cfg.BACK_MUSCLES_PRICE,
-                                                ParseUpgradePrices(cfg.BACK_MUSCLES_UPGRADE_PRICES),
-                                                infoJSON["Back Muscles"]);
+            SetupMultiplePurchasableTerminalNode(
+                "Back Muscles",
+                "Assets/ShipUpgrades/exoskeleton.prefab",
+                cfg.SHARED_UPGRADES ? true : !cfg.BACK_MUSCLES_INDIVIDUAL,
+                cfg.BACK_MUSCLES_ENABLED,
+                cfg.BACK_MUSCLES_PRICE,
+                ParseUpgradePrices(cfg.BACK_MUSCLES_UPGRADE_PRICES),
+                infoJSON["Back Muscles"]);
         }
         private void SetupInternsTerminalNode(ref Dictionary<string, string> infoJSON)
         {
-            SetupOneTimeTerminalNode("Interns",
-                                    "Assets/ShipUpgrades/Intern.prefab",
-                                    cfg.SHARED_UPGRADES ? true : cfg.INTERN_INDIVIDUAL,
-                                    cfg.INTERN_ENABLED,
-                                    cfg.INTERN_PRICE,
-                                    string.Format(infoJSON["Interns"], cfg.INTERN_PRICE));
+            SetupOneTimeTerminalNode(
+                "Interns",
+                "Assets/ShipUpgrades/Intern.prefab",
+                cfg.SHARED_UPGRADES ? true : !cfg.INTERN_INDIVIDUAL,
+                cfg.INTERN_ENABLED,
+                cfg.INTERN_PRICE,
+                string.Format(infoJSON["Interns"], cfg.INTERN_PRICE));
         }
         private void SetupPagerTerminalNode()
         {
-            SetupOneTimeTerminalNode("Fast Encryption",
-                                    "Assets/ShipUpgrades/Pager.prefab",
-                                    true,
-                                    cfg.PAGER_ENABLED,
-                                    cfg.PAGER_PRICE,
-                                    "Unrestrict the transmitter");
+            SetupOneTimeTerminalNode(
+                "Fast Encryption",
+                "Assets/ShipUpgrades/Pager.prefab",
+                true,
+                cfg.PAGER_ENABLED,
+                cfg.PAGER_PRICE,
+                "Unrestrict the transmitter");
         }
         private void SetupLocksmithTerminalNode()
         {
-            SetupOneTimeTerminalNode("Locksmith",
-                                    "Assets/ShipUpgrades/LockSmith.prefab",
-                                    cfg.SHARED_UPGRADES ? true : cfg.LOCKSMITH_INDIVIDUAL,
-                                    cfg.LOCKSMITH_ENABLED,
-                                    cfg.LOCKSMITH_PRICE,
-                                    "Allows you to pick door locks by completing a minigame.");
+            SetupOneTimeTerminalNode(
+                "Locksmith",
+                "Assets/ShipUpgrades/LockSmith.prefab",
+                cfg.SHARED_UPGRADES ? true : !cfg.LOCKSMITH_INDIVIDUAL,
+                cfg.LOCKSMITH_ENABLED,
+                cfg.LOCKSMITH_PRICE,
+                "Allows you to pick door locks by completing a minigame.");
         }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can be purchased multiple times
@@ -534,14 +560,15 @@ namespace MoreShipUpgrades.Managers
         /// <param name="initialPrice"> The initial price when purchasing the upgrade for the first time</param>
         /// <param name="prices"> Prices for any subsequent purchases of the upgrade</param>
         /// <param name="infoFormat"> The format of the information displayed when checking the upgrade's info</param>
-        private void SetupMultiplePurchasableTerminalNode(string upgradeName,
-                                                        string path,
-                                                        bool shareStatus,
-                                                        bool enabled,
-                                                        int initialPrice,
-                                                        int[] prices,
-                                                        string infoFormat
-                                                        )
+        private void SetupMultiplePurchasableTerminalNode(
+            string upgradeName,
+            string path,
+            bool shareStatus,
+            bool enabled,
+            int initialPrice,
+            int[] prices,
+            string infoFormat
+            )
         {
             GameObject multiPerk = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, path);
             if (!multiPerk) return;
@@ -571,13 +598,14 @@ namespace MoreShipUpgrades.Managers
         /// <param name="enabled"> Wether the upgrade is enabled for gameplay or not</param>
         /// <param name="price"></param>
         /// <param name="info"> The information displayed when checking the upgrade's info</param>
-        private void SetupOneTimeTerminalNode(string upgradeName,
-                                              string path,
-                                              bool shareStatus,
-                                              bool enabled,
-                                              int price,
-                                              string info
-                                              )
+        private void SetupOneTimeTerminalNode(
+            string upgradeName,
+            string path,
+            bool shareStatus,
+            bool enabled,
+            int price,
+            string info
+            )
         {
             GameObject oneTimeUpgrade = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, path);
             if (!oneTimeUpgrade) return;
@@ -612,8 +640,7 @@ namespace MoreShipUpgrades.Managers
                 }
             }
             if (prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
-
-            SetupPlayerHealthTerminalNode(ref infoJson);
+            return prices;
         }
 
         private void SetupPlayerHealthTerminalNode(ref Dictionary<string, string> infoJSON)

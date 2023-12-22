@@ -10,7 +10,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         void Start()
         {
             DontDestroyOnLoad(gameObject);
-            UpgradeBus.instance.UpgradeObjects.Add("Fast Encryption", gameObject);
+            Register();
         }
 
         public override void load()
