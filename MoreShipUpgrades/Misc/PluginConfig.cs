@@ -319,6 +319,8 @@ namespace MoreShipUpgrades.Misc
             topSection = "Hunter";
             HUNTER_ENABLED = ConfigEntry(topSection, "Enable the Hunter upgrade", true, "Collect and sell samples from dead enemies");
             HUNTER_PRICE = ConfigEntry(topSection, "Hunter price", 700, "Default price for upgrade.");
+            HUNTER_PRICE2 = ConfigEntry(topSection, "Second Hunter level price", 500, "");
+            HUNTER_PRICE3 = ConfigEntry(topSection, "Third Hunter level price", 600, "");
 
             PLAYER_HEALTH_ENABLED = ConfigEntry(playerHealthScript.UPGRADE_NAME, playerHealthScript.ENABLED_SECTION, playerHealthScript.ENABLED_DEFAULT, playerHealthScript.ENABLED_DESCRIPTION);
             PLAYER_HEALTH_PRICE = ConfigEntry(playerHealthScript.UPGRADE_NAME, playerHealthScript.PRICE_SECTION, playerHealthScript.PRICE_DEFAULT, "");

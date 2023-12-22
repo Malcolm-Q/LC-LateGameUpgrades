@@ -294,8 +294,6 @@ namespace MoreShipUpgrades.Managers
 
             SetupPlayerHealthTerminalNode();
 
-            SetupPlayerHealthTerminalNode();
-
             SetupPagerTerminalNode();
 
             SetupLocksmithTerminalNode();
@@ -576,27 +574,6 @@ namespace MoreShipUpgrades.Managers
             }
             if (prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
             return prices;
-        }
-
-        private void SetupPlayerHealthTerminalNode(ref Dictionary<string, string> infoJSON)
-        {
-            string upgradeName = playerHealthScript.UPGRADE_NAME;
-            GameObject playerHealth = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/PlayerHealth.prefab");
-            if (playerHealth == null) return;
-
-            bool shareStatus = cfg.SHARED_UPGRADES ? true : !cfg.PLAYER_HEALTH_INDIVIDUAL;
-            IndividualUpgrades.Add(upgradeName, shareStatus);
-            if (!cfg.PLAYER_HEALTH_ENABLED) return;
-
-            int[] prices = ParseUpgradePrices(cfg.PLAYER_HEALTH_UPGRADE_PRICES);
-
-            string infoString = string.Format(infoJSON[upgradeName], 1, cfg.PLAYER_HEALTH_PRICE, cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK);
-            for (int i = 0; i < prices.Length; i++)
-            {
-                infoString += string.Format(infoJSON[upgradeName], i + 2, prices[i], cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK + ((i + 1) * cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT));
-            }
-            CustomTerminalNode node = new CustomTerminalNode(upgradeName, cfg.PLAYER_HEALTH_PRICE, infoString, playerHealth, prices, prices.Length);
-            terminalNodes.Add(node);
         }
     }
 }
