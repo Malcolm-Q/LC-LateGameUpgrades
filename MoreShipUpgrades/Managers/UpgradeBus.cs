@@ -78,6 +78,7 @@ namespace MoreShipUpgrades.Managers
             { "Bigger Lungs", level => instance.cfg.SPRINT_TIME_INCREASE + (level * instance.cfg.SPRINT_TIME_INCREMENT) - 11f },
             { "Protein Powder", level => instance.cfg.PROTEIN_UNLOCK_FORCE + 1 + (instance.cfg.PROTEIN_INCREMENT * level) },
             { "Beekeeper", level => 100 * (instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (level * instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT)) },
+            { playerHealthScript.UPGRADE_NAME, level => instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK + (level)*instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT }
         };
 
         public Dictionary<ulong,float> beePercs = new Dictionary<ulong,float>();
@@ -284,6 +285,8 @@ namespace MoreShipUpgrades.Managers
             SetupBackMusclesTerminalNode(ref infoJson);
 
             SetupInternsTerminalNode(ref infoJson);
+
+            SetupPlayerHealthTerminalNode(ref infoJson);
 
             SetupPagerTerminalNode();
 
@@ -613,49 +616,18 @@ namespace MoreShipUpgrades.Managers
             }
             if (prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
 
-            SetupPlayerHealthTerminalNode(ref infoJson);
+            return prices;
         }
 
         private void SetupPlayerHealthTerminalNode(ref Dictionary<string, string> infoJSON)
         {
-            string upgradeName = playerHealthScript.UPGRADE_NAME;
-            GameObject playerHealth = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/PlayerHealth.prefab");
-            if (playerHealth == null) return;
-
-            bool shareStatus = cfg.SHARED_UPGRADES ? true : !cfg.PLAYER_HEALTH_INDIVIDUAL;
-            IndividualUpgrades.Add(upgradeName, shareStatus);
-            if (!cfg.PLAYER_HEALTH_ENABLED) return;
-
-            int[] prices = ParsePrices(cfg.PLAYER_HEALTH_UPGRADE_PRICES);
-
-            string infoString = string.Format(infoJSON[upgradeName], 1, cfg.PLAYER_HEALTH_PRICE, cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK);
-            for (int i = 0; i < prices.Length; i++)
-            {
-                infoString += string.Format(infoJSON[upgradeName], i + 2, prices[i], cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK + ((i + 1) * cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT));
-            }
-            CustomTerminalNode node = new CustomTerminalNode(upgradeName, cfg.PLAYER_HEALTH_PRICE, infoString, playerHealth, prices, prices.Length);
-            terminalNodes.Add(node);
-        }
-
-        private int[] ParsePrices(string pricesToParse)
-        {
-            string[] priceString = pricesToParse.Split(',').ToArray();
-            int[] prices = new int[priceString.Length];
-
-            for (int i = 0; i < priceString.Length; i++)
-            {
-                if (int.TryParse(priceString[i], out int price))
-                {
-                    prices[i] = price;
-                }
-                else
-                {
-                    Debug.LogWarning($"[LGU] Invalid upgrade price submitted: {prices[i]}");
-                    prices[i] = -1;
-                }
-            }
-            if (prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
-            return prices;
+            SetupMultiplePurchasableTerminalNode(playerHealthScript.UPGRADE_NAME,
+                                                "Assets/ShipUpgrades/PlayerHealth.prefab",
+                                                cfg.SHARED_UPGRADES ? true : !cfg.PLAYER_HEALTH_INDIVIDUAL,
+                                                cfg.PLAYER_HEALTH_ENABLED,
+                                                cfg.PLAYER_HEALTH_PRICE,
+                                                ParseUpgradePrices(cfg.PLAYER_HEALTH_UPGRADE_PRICES),
+                                                infoJSON[playerHealthScript.UPGRADE_NAME]);
         }
     }
 }
