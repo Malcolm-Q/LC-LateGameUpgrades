@@ -294,7 +294,7 @@ namespace MoreShipUpgrades.Managers
 
             SetupPlayerHealthTerminalNode();
 
-            SetupPlayerHealthTerminalNode(ref infoJson);
+            SetupPlayerHealthTerminalNode();
 
             SetupPagerTerminalNode();
 
@@ -588,7 +588,7 @@ namespace MoreShipUpgrades.Managers
             IndividualUpgrades.Add(upgradeName, shareStatus);
             if (!cfg.PLAYER_HEALTH_ENABLED) return;
 
-            int[] prices = ParsePrices(cfg.PLAYER_HEALTH_UPGRADE_PRICES);
+            int[] prices = ParseUpgradePrices(cfg.PLAYER_HEALTH_UPGRADE_PRICES);
 
             string infoString = string.Format(infoJSON[upgradeName], 1, cfg.PLAYER_HEALTH_PRICE, cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK);
             for (int i = 0; i < prices.Length; i++)
