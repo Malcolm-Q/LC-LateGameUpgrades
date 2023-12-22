@@ -147,7 +147,10 @@ namespace MoreShipUpgrades.Misc
         public bool VERBOSE_ENEMIES {  get; set; }
         public int PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK { get; set; }
         public int PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT { get; set; }
-        public int HUNTER_PRICE4 { get; internal set; }
+        public bool MEDKIT_ENABLED { get; set; }
+        public int MEDKIT_PRICE { get; set; }
+        public int MEDKIT_HEAL_VALUE { get; set; }
+        public int MEDKIT_USES { get; set; }
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -328,6 +331,12 @@ namespace MoreShipUpgrades.Misc
             PLAYER_HEALTH_UPGRADE_PRICES = ConfigEntry(playerHealthScript.UPGRADE_NAME, playerHealthScript.UPGRADE_PRICES_SECTION, playerHealthScript.UPGRADE_PRICES_DEFAULT, "");
             PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK = ConfigEntry(playerHealthScript.UPGRADE_NAME, playerHealthScript.ADDITIONAL_HEALTH_UNLOCK_SECTION, playerHealthScript.ADDITIONAL_HEALTH_UNLOCK_DEFAULT, playerHealthScript.ADDITIONAL_HEALTH_UNLOCK_DESCRIPTION);
             PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT = ConfigEntry(playerHealthScript.UPGRADE_NAME, playerHealthScript.ADDITIONAL_HEALTH_INCREMENT_SECTION, playerHealthScript.ADDITIONAL_HEALTH_INCREMENT_DEFAULT, playerHealthScript.ADDITIONAL_HEALTH_INCREMENT_DESCRIPTION);
+
+            topSection = "Medkit";
+            MEDKIT_ENABLED = ConfigEntry(topSection, "Enable the medkit item", true, "Allows you to buy a medkit to heal yourself.");
+            MEDKIT_PRICE = ConfigEntry(topSection, "Medkit price", 300, "Default price for Medkit.");
+            MEDKIT_HEAL_VALUE = ConfigEntry(topSection, "Medkit Heal", 20, "The amount the medkit heals you.");
+            MEDKIT_USES = ConfigEntry(topSection, "Medkit Uses", 3, "The amount of times the medkit can heal you.");
         }
     }
 }

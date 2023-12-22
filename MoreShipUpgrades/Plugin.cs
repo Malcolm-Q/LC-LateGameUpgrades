@@ -22,6 +22,8 @@ namespace MoreShipUpgrades
         private readonly Harmony harmony = new Harmony(Metadata.GUID);
         public static Plugin instance;
         public static ManualLogSource mls;
+        private AudioClip buttonPressed, error;
+
         public static PluginConfig cfg { get; private set; }
 
 
@@ -123,6 +125,7 @@ namespace MoreShipUpgrades
         {
             SetupTeleporterButtons(ref bundle, ref infoJSON);
             SetupNightVision(ref bundle, ref infoJSON);
+            SetupMedkit(ref bundle, ref infoJSON);
             SetupPeeper(ref bundle);
             SetupSamples(ref bundle);
         }
@@ -156,8 +159,8 @@ namespace MoreShipUpgrades
         {
             // Teleporter Button SFX
             AudioClip itemBreak = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, "Assets/ShipUpgrades/break.mp3");
-            AudioClip error = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, "Assets/ShipUpgrades/error.mp3");
-            AudioClip buttonPressed = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, "Assets/ShipUpgrades/ButtonPress2.ogg");
+            error = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, "Assets/ShipUpgrades/error.mp3");
+            buttonPressed = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, "Assets/ShipUpgrades/ButtonPress2.ogg");
 
             if (itemBreak == null || error == null || buttonPressed == null) return;
 
@@ -235,6 +238,28 @@ namespace MoreShipUpgrades
             string loseOnDeath = cfg.LOSE_NIGHT_VIS_ON_DEATH ? "be" : "not be";
             nightNode.displayText = string.Format(infoJSON["Night Vision"], grantStatus, loseOnDeath);
             Items.RegisterShopItem(nightVisionItem, null, null, nightNode, nightVisionItem.creditsWorth);
+        }
+        private void SetupMedkit(ref AssetBundle bundle, ref Dictionary<string, string> infoJSON)
+        {
+            Item MedKitItem = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/MedKitItem.asset");
+            if (MedKitItem == null) return;
+
+            MedKitItem.creditsWorth = cfg.MEDKIT_PRICE;
+            MedKitItem.itemSpawnsOnGround = true;
+            MedkitScript medScript = MedKitItem.spawnPrefab.AddComponent<MedkitScript>();
+            medScript.itemProperties = MedKitItem;
+            medScript.grabbable = true;
+            medScript.useCooldown = 2f;
+            medScript.grabbableToEnemies = true;
+            medScript.error = error;
+            medScript.use = buttonPressed;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(MedKitItem.spawnPrefab);
+
+            if (!cfg.MEDKIT_ENABLED) return;
+
+            TerminalNode medNode = new TerminalNode();
+            medNode.displayText = string.Format("MEDKIT - ${0}\n\nLeft click to heal yourself for {1} health.\nCan be used {2} times.\n", cfg.MEDKIT_PRICE, cfg.MEDKIT_HEAL_VALUE, cfg.MEDKIT_USES);
+            Items.RegisterShopItem(MedKitItem, null, null,medNode, MedKitItem.creditsWorth);
         }
         private void SetupPeeper(ref AssetBundle bundle)
         {

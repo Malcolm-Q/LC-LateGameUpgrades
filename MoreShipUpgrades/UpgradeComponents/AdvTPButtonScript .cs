@@ -84,7 +84,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             {
                 audio.PlayOneShot(ItemBreak);
                 itemUsedUp = true;
-                HUDManager.Instance.chatText.text += "\n<color=#FF0000>The teleporter button has suffered irreparable damage and destroyed itself!</color>";
+                HUDManager.Instance.DisplayTip("TELEPORTER BROKE!", "The teleporter button has suffered irreparable damage and destroyed itself!", true, false, "LC_Tip1");
                 playerHeldBy.DespawnHeldObject();
             }
         }
