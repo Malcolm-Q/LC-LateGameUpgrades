@@ -84,7 +84,7 @@ namespace MoreShipUpgrades.Managers
         private Dictionary<string, System.Func<int, int, string>> complexInfoFunctions = new Dictionary<string, System.Func<int,int, string>>()
         {
             { "Better Scanner", (level, price) => strongerScannerScript.GetBetterScannerInfo(level, price) },
-            { "Hunter", (level, price) => "Not implemented, if you see this @_kieth and tell him how stupid he is."},
+            { "Hunter", (level, price) => hunterScript.GetHunterInfo(level, price)},
             { "NV Headset Batteries", (level, price) => nightVisionScript.GetNightVisionInfo(level, price) },
         };
 
