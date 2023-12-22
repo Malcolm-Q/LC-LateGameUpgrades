@@ -1,8 +1,5 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents
 {
@@ -33,6 +30,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         }
         public override void Register()
         {
+            Debug.Log("SLKDJF");
             if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Better Scanner")) { UpgradeBus.instance.UpgradeObjects.Add("Better Scanner", gameObject); }
         }
 

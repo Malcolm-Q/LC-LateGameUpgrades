@@ -12,7 +12,6 @@ using System.Reflection;
 using MoreShipUpgrades.Misc;
 using BepInEx.Bootstrap;
 using Newtonsoft.Json;
-using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
 namespace MoreShipUpgrades
 {
@@ -129,15 +128,29 @@ namespace MoreShipUpgrades
         }
         private void SetupSamples(ref AssetBundle bundle)
         {
-            Item fleaSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/SnareFleaSample.asset");
-            Item spiderSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/BunkerSpiderSample.asset");
-            Item hoardSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/HoardingBugSample.asset");
+            Item fleaSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/Samples/SnareFleaSample.asset");
+            Item spiderSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/Samples/BunkerSpiderSample.asset");
+            Item hoardSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/Samples/HoardingBugSample.asset");
+            Item brackSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/Samples/BrackenSample.asset");
+            Item eyelessSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/Samples/EyelessDogSample.asset");
+            Item baboonSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/Samples/BaboonHawkSample.asset");
+            Item thumperSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/Samples/ThumperSample.asset");
+
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(fleaSample.spawnPrefab);
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(spiderSample.spawnPrefab);
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(hoardSample.spawnPrefab);
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(brackSample.spawnPrefab);
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(eyelessSample.spawnPrefab);
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(baboonSample.spawnPrefab);
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(thumperSample.spawnPrefab);
+
             UpgradeBus.instance.samplePrefabs.Add("snare flea", fleaSample.spawnPrefab);
             UpgradeBus.instance.samplePrefabs.Add("bunker spider", spiderSample.spawnPrefab);
             UpgradeBus.instance.samplePrefabs.Add("hoarding bug", hoardSample.spawnPrefab);
+            UpgradeBus.instance.samplePrefabs.Add("bracken", brackSample.spawnPrefab);
+            UpgradeBus.instance.samplePrefabs.Add("eyeless dog", eyelessSample.spawnPrefab);
+            UpgradeBus.instance.samplePrefabs.Add("baboon hawk", baboonSample.spawnPrefab);
+            UpgradeBus.instance.samplePrefabs.Add("thumper", thumperSample.spawnPrefab);
         }
         private void SetupTeleporterButtons(ref AssetBundle bundle, ref Dictionary<string, string> infoJSON)
         {
@@ -199,6 +212,7 @@ namespace MoreShipUpgrades
             advNode.displayText = string.Format(infoJSON["Advanced Portable Tele"], (int)(cfg.ADV_CHANCE_TO_BREAK * 100));
             Items.RegisterShopItem(tpButAdvanced, null, null, advNode, tpButAdvanced.creditsWorth);
         }
+
         private void SetupNightVision(ref AssetBundle bundle, ref Dictionary<string, string> infoJSON)
         {
             Item nightVisionItem = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/NightVisionItem.asset");
@@ -263,10 +277,15 @@ namespace MoreShipUpgrades
             SetupLightningRod(ref bundle);
             SetupLocksmith(ref bundle);
             SetupPlayerHealth(ref bundle);
+            SetupHunter(ref bundle);
         }
         private void SetupBeekeeper(ref AssetBundle bundle)
         {
             SetupGenericPerk<beekeeperScript>(ref bundle, "Assets/ShipUpgrades/beekeeper.prefab");
+        }
+        private void SetupHunter(ref AssetBundle bundle)
+        {
+            SetupGenericPerk<hunterScript>(ref bundle, "Assets/ShipUpgrades/Hunter.prefab");
         }
         private void SetupProteinPowder(ref AssetBundle bundle) 
         {
