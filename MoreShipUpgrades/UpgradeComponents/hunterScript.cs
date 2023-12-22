@@ -41,5 +41,10 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Hunter")) { UpgradeBus.instance.UpgradeObjects.Add("Hunter", gameObject); }
         }
+
+        public static string GetHunterInfo(int level, int price)
+        {
+            return string.Format(AssetBundleHandler.GetInfoFromJSON("Hunter"), level, price, string.Join(",",tiers[level-1]));
+        }
     }
 }
