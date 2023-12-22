@@ -78,7 +78,14 @@ namespace MoreShipUpgrades.Managers
             { "Bigger Lungs", level => instance.cfg.SPRINT_TIME_INCREASE + (level * instance.cfg.SPRINT_TIME_INCREMENT) - 11f },
             { "Protein Powder", level => instance.cfg.PROTEIN_UNLOCK_FORCE + 1 + (instance.cfg.PROTEIN_INCREMENT * level) },
             { "Beekeeper", level => 100 * (instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (level * instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT)) },
-            { playerHealthScript.UPGRADE_NAME, level => instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK + (level)*instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT }
+            { playerHealthScript.UPGRADE_NAME, level => instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK + (level)*instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT },
+        };
+
+        private Dictionary<string, System.Func<int, int, string>> complexInfoFunctions = new Dictionary<string, System.Func<int,int, string>>()
+        {
+            { "Better Scanner", (level, price) => strongerScannerScript.GetBetterScannerInfo(level, price) },
+            { "Hunter", (level, price) => "Not implemented, if you see this @_kieth and tell him how stupid he is."},
+            { "NV Headset Batteries", (level, price) => nightVisionScript.GetNightVisionInfo(level, price) },
         };
 
         public Dictionary<ulong,float> beePercs = new Dictionary<ulong,float>();
@@ -98,7 +105,6 @@ namespace MoreShipUpgrades.Managers
         internal pagerScript pageScript;
 
         public Dictionary<string,GameObject> samplePrefabs = new Dictionary<string,GameObject>();
-
 
         void Awake()
         {
@@ -252,99 +258,92 @@ namespace MoreShipUpgrades.Managers
         {
             terminalNodes = new List<CustomTerminalNode>();
 
-            Dictionary<string,string> infoJson = JsonConvert.DeserializeObject<Dictionary<string,string>>(UpgradeAssets.LoadAsset<TextAsset>("Assets/ShipUpgrades/InfoStrings.json").text);
-
             IndividualUpgrades = new Dictionary<string, bool>();
 
-            SetupBeekeperTerminalNode(ref infoJson);
+            SetupBeekeperTerminalNode();
 
-            SetupProteinPowderTerminalNode(ref infoJson);
+            SetupProteinPowderTerminalNode();
 
-            SetupBiggerLungsTerminalNode(ref infoJson);
+            SetupBiggerLungsTerminalNode();
 
-            SetupRunningShoesTerminalNode(ref infoJson);
+            SetupRunningShoesTerminalNode();
 
-            SetupStrongLegsTerminalNode(ref infoJson);
+            SetupStrongLegsTerminalNode();
 
-            SetupMalwareBroadcasterTerminalNode(ref infoJson);
+            SetupMalwareBroadcasterTerminalNode();
 
-            SetupLightFootedTerminalNode(ref infoJson);
+            SetupLightFootedTerminalNode();
 
-            SetupNightVisionBatteryTerminalNode(ref infoJson);
+            SetupNightVisionBatteryTerminalNode();
 
-            SetupDiscombobulatorTerminalNode(ref infoJson);
+            SetupDiscombobulatorTerminalNode();
 
-            SetupHunterTerminalNode(ref infoJson);
+            SetupHunterTerminalNode();
 
-            SetupBetterScannerTerminalNode(ref infoJson);
+            SetupBetterScannerTerminalNode();
 
-            SetupLightningRodTerminalNode(ref infoJson);
+            SetupLightningRodTerminalNode();
 
-            SetupWalkieGPSTerminalNode(ref infoJson);
+            SetupWalkieGPSTerminalNode();
 
-            SetupBackMusclesTerminalNode(ref infoJson);
+            SetupBackMusclesTerminalNode();
 
-            SetupInternsTerminalNode(ref infoJson);
+            SetupInternsTerminalNode();
 
-            SetupPlayerHealthTerminalNode(ref infoJson);
+            SetupPlayerHealthTerminalNode();
 
             SetupPagerTerminalNode();
 
             SetupLocksmithTerminalNode();
         }
 
-        private void SetupBeekeperTerminalNode(ref Dictionary<string, string> infoJSON)
+        private void SetupBeekeperTerminalNode()
         {
             SetupMultiplePurchasableTerminalNode("Beekeeper",
-                                                "Assets/ShipUpgrades/beekeeper.prefab",
                                                 cfg.SHARED_UPGRADES ? true : cfg.BEEKEEPER_INDIVIDUAL,
                                                 cfg.BEEKEEPER_ENABLED,
                                                 cfg.BEEKEEPER_PRICE,
                                                 ParseUpgradePrices(cfg.BEEKEEPER_UPGRADE_PRICES),
-                                                infoJSON["Beekeeper"]);
+                                                AssetBundleHandler.GetInfoFromJSON("Beekeeper"));
         }
 
-        private void SetupProteinPowderTerminalNode(ref Dictionary<string, string> infoJSON) 
+        private void SetupProteinPowderTerminalNode() 
         {
             SetupMultiplePurchasableTerminalNode("Protein Powder",
-                                                "Assets/ShipUpgrades/ProteinPowder.prefab",
                                                 cfg.SHARED_UPGRADES ? true : cfg.PROTEIN_INDIVIDUAL,
                                                 cfg.PROTEIN_ENABLED,
                                                 cfg.PROTEIN_PRICE,
                                                 ParseUpgradePrices(cfg.PROTEIN_UPGRADE_PRICES),
-                                                infoJSON["Protein Powder"]);
+                                                AssetBundleHandler.GetInfoFromJSON("Protein Powder"));
         }
-        private void SetupBiggerLungsTerminalNode(ref Dictionary<string, string> infoJSON)
+        private void SetupBiggerLungsTerminalNode()
         {
             SetupMultiplePurchasableTerminalNode("Bigger Lungs",
-                                                "Assets/ShipUpgrades/BiggerLungs.prefab",
                                                 cfg.SHARED_UPGRADES ? true : cfg.BIGGER_LUNGS_INDIVIDUAL,
                                                 cfg.BIGGER_LUNGS_ENABLED,
                                                 cfg.BIGGER_LUNGS_PRICE,
                                                 ParseUpgradePrices(cfg.RUNNING_SHOES_UPGRADE_PRICES),
-                                                infoJSON["Running Shoes"]);
+                                                AssetBundleHandler.GetInfoFromJSON("Bigger Lungs"));
         }
-        private void SetupRunningShoesTerminalNode(ref Dictionary<string, string> infoJSON)
+        private void SetupRunningShoesTerminalNode()
         {
             SetupMultiplePurchasableTerminalNode("Running Shoes",
-                                                "Assets/ShipUpgrades/runningShoes.prefab",
                                                 cfg.SHARED_UPGRADES ? true : cfg.RUNNING_SHOES_INDIVIDUAL,
                                                 cfg.RUNNING_SHOES_ENABLED,
                                                 cfg.RUNNING_SHOES_PRICE,
                                                 ParseUpgradePrices(cfg.RUNNING_SHOES_UPGRADE_PRICES),
-                                                infoJSON["Running Shoes"]);
+                                                AssetBundleHandler.GetInfoFromJSON("Running Shoes"));
         }
-        private void SetupStrongLegsTerminalNode(ref Dictionary<string, string> infoJSON)
+        private void SetupStrongLegsTerminalNode()
         {
             SetupMultiplePurchasableTerminalNode("Strong Legs",
-                                                "Assets/ShipUpgrades/strongLegs.prefab",
                                                 cfg.SHARED_UPGRADES ? true : cfg.STRONG_LEGS_INDIVIDUAL,
                                                 cfg.STRONG_LEGS_ENABLED,
                                                 cfg.STRONG_LEGS_PRICE,
                                                 ParseUpgradePrices(cfg.STRONG_LEGS_UPGRADE_PRICES),
-                                                infoJSON["Strong Legs"]);
+                                                AssetBundleHandler.GetInfoFromJSON("Strong Legs"));
         }
-        private void SetupMalwareBroadcasterTerminalNode(ref Dictionary<string, string> infoJSON)
+        private void SetupMalwareBroadcasterTerminalNode()
         {
             string desc;
             if (cfg.DESTROY_TRAP)
@@ -361,125 +360,68 @@ namespace MoreShipUpgrades.Managers
             else { desc = $"Broadcasted codes now disable map hazards for {cfg.DISARM_TIME} seconds."; }
 
             SetupOneTimeTerminalNode("Malware Broadcaster",
-                                    "Assets/ShipUpgrades/destructiveCodes.prefab",
                                     cfg.SHARED_UPGRADES ? true : cfg.MALWARE_BROADCASTER_INDIVIDUAL,
                                     cfg.MALWARE_BROADCASTER_ENABLED,
                                     cfg.MALWARE_BROADCASTER_PRICE,
                                     desc);
         }
-        private void SetupLightFootedTerminalNode(ref Dictionary<string, string> infoJSON)
+        private void SetupLightFootedTerminalNode()
         {
             SetupMultiplePurchasableTerminalNode("Light Footed",
-                                                "Assets/ShipUpgrades/lightFooted.prefab",
                                                 cfg.SHARED_UPGRADES ? true : cfg.LIGHT_FOOTED_INDIVIDUAL,
                                                 cfg.LIGHT_FOOTED_ENABLED,
                                                 cfg.LIGHT_FOOTED_PRICE,
                                                 ParseUpgradePrices(cfg.STRONG_LEGS_UPGRADE_PRICES),
-                                                infoJSON["Light Footed"]);
+                                                AssetBundleHandler.GetInfoFromJSON("Light Footed"));
         }
-        private void SetupNightVisionBatteryTerminalNode(ref Dictionary<string, string> infoJSON)
+        private void SetupNightVisionBatteryTerminalNode()
         {
-
-            // night vision
-            GameObject nightVision = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/nightVision.prefab");
-            if (!nightVision) return;
-
-            bool shareStatus = cfg.SHARED_UPGRADES ? true : cfg.NIGHT_VISION_INDIVIDUAL;
-            IndividualUpgrades.Add("NV Headset Batteries", shareStatus);
-            if (!cfg.NIGHT_VISION_ENABLED) return;
-
-            int[] prices = ParseUpgradePrices(cfg.NIGHT_VISION_UPGRADE_PRICES);
-
-            string infoString = "";
-
-            float drain = (cfg.NIGHT_BATTERY_MAX - (cfg.NIGHT_BATTERY_MAX * cfg.NIGHT_VIS_STARTUP)) / cfg.NIGHT_VIS_DRAIN_SPEED;
-            float regen = cfg.NIGHT_BATTERY_MAX / cfg.NIGHT_VIS_REGEN_SPEED;
-            infoString += string.Format(infoJSON["NV Headset Batteries"], 1, "0", drain, regen);
-            for (int i = 0; i < prices.Length; i++)
-            {
-                float regenAdjustment = Mathf.Clamp(cfg.NIGHT_VIS_REGEN_SPEED + (cfg.NIGHT_VIS_REGEN_INCREMENT * (i + 1)), 0, 1000);
-                float drainAdjustment = Mathf.Clamp(cfg.NIGHT_VIS_DRAIN_SPEED - (cfg.NIGHT_VIS_DRAIN_INCREMENT * (i + 1)), 0, 1000);
-                float batteryLife = cfg.NIGHT_BATTERY_MAX + (cfg.NIGHT_VIS_BATTERY_INCREMENT * (i + 1));
-
-                string drainTime = "infinite";
-                if (drainAdjustment != 0) drainTime = ((batteryLife - (batteryLife * cfg.NIGHT_VIS_STARTUP)) / drainAdjustment).ToString("F2");
-
-                string regenTime = "infinite";
-                if (regenAdjustment != 0) regenTime = (batteryLife / regenAdjustment).ToString("F2");
-
-                infoString += string.Format(infoJSON["NV Headset Batteries"], i + 2, prices[i], drainTime, regenTime);
-            }
-            CustomTerminalNode node = new CustomTerminalNode(
-                "NV Headset Batteries",
-                cfg.NIGHT_VISION_PRICE,
-                infoString,
-                nightVision,
-                prices,
-                prices.Length
-                );
+            CustomTerminalNode node = SetupMultiplePurchasableTerminalNode("NV Headset Batteries",
+                                                cfg.SHARED_UPGRADES ? true : !cfg.NIGHT_VISION_INDIVIDUAL,
+                                                cfg.NIGHT_VISION_ENABLED,
+                                                0,
+                                                ParseUpgradePrices(cfg.NIGHT_VISION_UPGRADE_PRICES));
             node.Unlocked = true;
-            terminalNodes.Add(node);
         }
-        private void SetupDiscombobulatorTerminalNode(ref Dictionary<string, string> infoJSON)
+        private void SetupDiscombobulatorTerminalNode()
         {
             AudioClip flashSFX = AssetBundleHandler.TryLoadAudioClipAsset(ref UpgradeAssets, "Assets/ShipUpgrades/flashbangsfx.ogg");
             if (!flashSFX) return;
 
             flashNoise = flashSFX;
             SetupMultiplePurchasableTerminalNode("Discombobulator",
-                                                "Assets/ShipUpgrades/terminalFlash.prefab",
                                                 cfg.SHARED_UPGRADES ? true : cfg.DISCOMBOBULATOR_INDIVIDUAL,
                                                 cfg.DISCOMBOBULATOR_ENABLED,
                                                 cfg.DISCOMBOBULATOR_PRICE,
                                                 ParseUpgradePrices(cfg.DISCO_UPGRADE_PRICES),
-                                                infoJSON["Discombobulator"]);
+                                                AssetBundleHandler.GetInfoFromJSON("Discombobulator"));
         }
-        private void SetupHunterTerminalNode(ref Dictionary<string, string> infoJSON)
+        private void SetupHunterTerminalNode()
         {
-            GameObject hunter = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/Hunter.prefab");
-            if (!hunter) return;
-            IndividualUpgrades.Add("Hunter", true);
-            if (!cfg.HUNTER_ENABLED) return;
-
-            string infoString = "Not implemented, if you see this @_kieth and tell him how stupid he is.";
-            CustomTerminalNode node = new CustomTerminalNode(
-                "Hunter",
-                cfg.HUNTER_PRICE,
-                infoString,
-                hunter,
-                new int[] { cfg.HUNTER_PRICE2, cfg.HUNTER_PRICE3 },
-                2);
-            terminalNodes.Add(node);
+            SetupMultiplePurchasableTerminalNode("Hunter",
+                                                true,
+                                                cfg.HUNTER_ENABLED,
+                                                cfg.HUNTER_PRICE,
+                                                new int[] { cfg.HUNTER_PRICE2, cfg.HUNTER_PRICE3 });
         }
-        private void SetupBetterScannerTerminalNode(ref Dictionary<string, string> infoJSON)
+        private void SetupBetterScannerTerminalNode()
         {
-            GameObject strongScan = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/strongScanner.prefab");
-            if (!strongScan) return;
-
-            string infoString = string.Format(infoJSON["Better Scanner1"], 1, cfg.BETTER_SCANNER_PRICE, cfg.NODE_DISTANCE_INCREASE, cfg.SHIP_AND_ENTRANCE_DISTANCE_INCREASE);
-            infoString += string.Format(infoJSON["Better Scanner2"], 2, cfg.BETTER_SCANNER_PRICE2);
-            string enemStatus = cfg.BETTER_SCANNER_ENEMIES ? " and enemies" : "";
-            infoString += string.Format(infoJSON["Better Scanner3"], 3, cfg.BETTER_SCANNER_PRICE3, enemStatus);
-            infoString += "hives and scrap command display the location of the most valuable hives and scrap on the map.\n";
-            CustomTerminalNode node = new CustomTerminalNode(
-                "Better Scanner",
-                cfg.BETTER_SCANNER_PRICE,
-                infoString,
-                strongScan,
-                new int[] { cfg.BETTER_SCANNER_PRICE2, cfg.BETTER_SCANNER_PRICE3 },
-                2);
-            terminalNodes.Add(node);
+            SetupMultiplePurchasableTerminalNode("Better Scanner",
+                                                cfg.SHARED_UPGRADES ? true : !cfg.BETTER_SCANNER_INDIVIDUAL,
+                                                cfg.BETTER_SCANNER_ENABLED,
+                                                cfg.BETTER_SCANNER_PRICE,
+                                                new int[] { cfg.BETTER_SCANNER_PRICE2, cfg.BETTER_SCANNER_PRICE3 }
+                                                );
         }
-        private void SetupLightningRodTerminalNode(ref Dictionary<string, string> infoJSON)
+        private void SetupLightningRodTerminalNode()
         {
             SetupOneTimeTerminalNode(lightningRodScript.UPGRADE_NAME,
-                                    "Assets/ShipUpgrades/LightningRod.prefab",
                                     true,
                                     cfg.LIGHTNING_ROD_ENABLED,
                                     cfg.LIGHTNING_ROD_PRICE,
-                                    string.Format(infoJSON[lightningRodScript.UPGRADE_NAME], cfg.LIGHTNING_ROD_PRICE, cfg.LIGHTNING_ROD_DIST));
+                                    string.Format(AssetBundleHandler.GetInfoFromJSON(lightningRodScript.UPGRADE_NAME), cfg.LIGHTNING_ROD_PRICE, cfg.LIGHTNING_ROD_DIST));
         }
-        private void SetupWalkieGPSTerminalNode(ref Dictionary<string, string> infoJSON)
+        private void SetupWalkieGPSTerminalNode()
         {
             GameObject walkie = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/walkieUpgrade.prefab");
             if (!walkie) return;
@@ -490,29 +432,26 @@ namespace MoreShipUpgrades.Managers
             CustomTerminalNode node = new CustomTerminalNode("Walkie GPS", cfg.WALKIE_PRICE, "Displays your location and time when holding a walkie talkie.\nEspecially useful for fog.", walkie);
             terminalNodes.Add(node);
         }
-        private void SetupBackMusclesTerminalNode(ref Dictionary<string, string> infoJSON)
+        private void SetupBackMusclesTerminalNode()
         {
             SetupMultiplePurchasableTerminalNode("Back Muscles",
-                                                "Assets/ShipUpgrades/exoskeleton.prefab",
                                                 cfg.SHARED_UPGRADES ? true : cfg.BACK_MUSCLES_INDIVIDUAL,
                                                 cfg.BACK_MUSCLES_ENABLED,
                                                 cfg.BACK_MUSCLES_PRICE,
                                                 ParseUpgradePrices(cfg.BACK_MUSCLES_UPGRADE_PRICES),
-                                                infoJSON["Back Muscles"]);
+                                                AssetBundleHandler.GetInfoFromJSON("Back Muscles"));
         }
-        private void SetupInternsTerminalNode(ref Dictionary<string, string> infoJSON)
+        private void SetupInternsTerminalNode()
         {
             SetupOneTimeTerminalNode("Interns",
-                                    "Assets/ShipUpgrades/Intern.prefab",
                                     cfg.SHARED_UPGRADES ? true : cfg.INTERN_INDIVIDUAL,
                                     cfg.INTERN_ENABLED,
                                     cfg.INTERN_PRICE,
-                                    string.Format(infoJSON["Interns"], cfg.INTERN_PRICE));
+                                    string.Format(AssetBundleHandler.GetInfoFromJSON("Interns"), cfg.INTERN_PRICE));
         }
         private void SetupPagerTerminalNode()
         {
             SetupOneTimeTerminalNode("Fast Encryption",
-                                    "Assets/ShipUpgrades/Pager.prefab",
                                     true,
                                     cfg.PAGER_ENABLED,
                                     cfg.PAGER_PRICE,
@@ -521,11 +460,19 @@ namespace MoreShipUpgrades.Managers
         private void SetupLocksmithTerminalNode()
         {
             SetupOneTimeTerminalNode("Locksmith",
-                                    "Assets/ShipUpgrades/LockSmith.prefab",
                                     cfg.SHARED_UPGRADES ? true : cfg.LOCKSMITH_INDIVIDUAL,
                                     cfg.LOCKSMITH_ENABLED,
                                     cfg.LOCKSMITH_PRICE,
                                     "Allows you to pick door locks by completing a minigame.");
+        }
+        private void SetupPlayerHealthTerminalNode()
+        {
+            SetupMultiplePurchasableTerminalNode(playerHealthScript.UPGRADE_NAME,
+                                                cfg.SHARED_UPGRADES ? true : !cfg.PLAYER_HEALTH_INDIVIDUAL,
+                                                cfg.PLAYER_HEALTH_ENABLED,
+                                                cfg.PLAYER_HEALTH_PRICE,
+                                                ParseUpgradePrices(cfg.PLAYER_HEALTH_UPGRADE_PRICES),
+                                                AssetBundleHandler.GetInfoFromJSON(playerHealthScript.UPGRADE_NAME));
         }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can be purchased multiple times
@@ -537,33 +484,43 @@ namespace MoreShipUpgrades.Managers
         /// <param name="initialPrice"> The initial price when purchasing the upgrade for the first time</param>
         /// <param name="prices"> Prices for any subsequent purchases of the upgrade</param>
         /// <param name="infoFormat"> The format of the information displayed when checking the upgrade's info</param>
-        private void SetupMultiplePurchasableTerminalNode(string upgradeName,
-                                                        string path,
+        private CustomTerminalNode SetupMultiplePurchasableTerminalNode(string upgradeName,
                                                         bool shareStatus,
                                                         bool enabled,
                                                         int initialPrice,
                                                         int[] prices,
-                                                        string infoFormat
+                                                        string infoFormat = ""
                                                         )
         {
-            GameObject multiPerk = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, path);
-            if (!multiPerk) return;
+            GameObject multiPerk = AssetBundleHandler.GetPerkGameObject(upgradeName) ;
+            if (!multiPerk) return null;
 
             IndividualUpgrades.Add(upgradeName, shareStatus);
 
-            if (!enabled) return;
+            if (!enabled) return null;
 
-            string infoString = string.Format(infoFormat, 1, initialPrice, infoFunctions[upgradeName](0));
-            for (int i = 0; i < prices.Length; i++)
+            string infoString = "";
+            if (infoFunctions.ContainsKey(upgradeName))
             {
-                float infoResult = infoFunctions[upgradeName](i);
-                if (infoResult % 1 == 0) // It's an Integer
-                    infoString += string.Format(infoFormat, i + 2, prices[i], Mathf.RoundToInt(infoFunctions[upgradeName](i+1)));
-                else
-                    infoString += string.Format(infoFormat, i + 2, prices[i], infoFunctions[upgradeName](i + 1));
+                infoString = string.Format(infoFormat, 1, initialPrice, infoFunctions[upgradeName](0));
+                for (int i = 0; i < prices.Length; i++)
+                {
+                    float infoResult = infoFunctions[upgradeName](i);
+                    if (infoResult % 1 == 0) // It's an Integer
+                        infoString += string.Format(infoFormat, i + 2, prices[i], Mathf.RoundToInt(infoFunctions[upgradeName](i + 1)));
+                    else
+                        infoString += string.Format(infoFormat, i + 2, prices[i], infoFunctions[upgradeName](i + 1));
+                }
+            }
+            else if (complexInfoFunctions.ContainsKey(upgradeName))
+            {
+                infoString = complexInfoFunctions[upgradeName](1, initialPrice);
+                for(int i = 0; i < prices.Length; i++)
+                    infoString += complexInfoFunctions[upgradeName](i+2, prices[i]);
             }
             CustomTerminalNode node = new CustomTerminalNode(upgradeName, initialPrice, infoString, multiPerk, prices, prices.Length);
             terminalNodes.Add(node);
+            return node;
         }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can only be bought once
@@ -574,22 +531,22 @@ namespace MoreShipUpgrades.Managers
         /// <param name="enabled"> Wether the upgrade is enabled for gameplay or not</param>
         /// <param name="price"></param>
         /// <param name="info"> The information displayed when checking the upgrade's info</param>
-        private void SetupOneTimeTerminalNode(string upgradeName,
-                                              string path,
+        private CustomTerminalNode SetupOneTimeTerminalNode(string upgradeName,
                                               bool shareStatus,
                                               bool enabled,
                                               int price,
                                               string info
                                               )
         {
-            GameObject oneTimeUpgrade = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, path);
-            if (!oneTimeUpgrade) return;
+            GameObject oneTimeUpgrade = AssetBundleHandler.GetPerkGameObject(upgradeName);
+            if (!oneTimeUpgrade) return null;
 
             IndividualUpgrades.Add(upgradeName, shareStatus);
-            if (!enabled) return;
+            if (!enabled) return null;
 
             CustomTerminalNode node = new CustomTerminalNode(upgradeName, price, info, oneTimeUpgrade);
             terminalNodes.Add(node);
+            return node;
         }
         /// <summary>
         /// Function which parses the prices present in a given string and inserts them into an array of integers
@@ -617,17 +574,6 @@ namespace MoreShipUpgrades.Managers
             if (prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
 
             return prices;
-        }
-
-        private void SetupPlayerHealthTerminalNode(ref Dictionary<string, string> infoJSON)
-        {
-            SetupMultiplePurchasableTerminalNode(playerHealthScript.UPGRADE_NAME,
-                                                "Assets/ShipUpgrades/PlayerHealth.prefab",
-                                                cfg.SHARED_UPGRADES ? true : !cfg.PLAYER_HEALTH_INDIVIDUAL,
-                                                cfg.PLAYER_HEALTH_ENABLED,
-                                                cfg.PLAYER_HEALTH_PRICE,
-                                                ParseUpgradePrices(cfg.PLAYER_HEALTH_UPGRADE_PRICES),
-                                                infoJSON[playerHealthScript.UPGRADE_NAME]);
         }
     }
 }
