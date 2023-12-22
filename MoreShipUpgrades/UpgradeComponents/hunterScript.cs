@@ -7,8 +7,8 @@ namespace MoreShipUpgrades.UpgradeComponents
     internal class hunterScript : BaseUpgrade
     {
         static string[] lvl1 = new string[] { "hoarding bug", "snare flea" };
-        static string[] lvl2 = new string[] { "bunker spider","hoarding bug", "snare flea" };
-        static string[] lvl3 = new string[] { "" };
+        static string[] lvl2 = new string[] { "bunker spider","hoarding bug", "snare flea","baboon hawk" };
+        static string[] lvl3 = new string[] { "bunker spider","hoarding bug","snare flea","baboon hawk","bracken","thumper","eyeless dog" };
         static public Dictionary<int, string[]> tiers = new Dictionary<int, string[]>
         {
             {0,  lvl1 },

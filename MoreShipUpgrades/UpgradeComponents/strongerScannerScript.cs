@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents
 {
@@ -30,6 +31,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         }
         public override void Register()
         {
+            Debug.Log("SLKDJF");
             if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Better Scanner")) { UpgradeBus.instance.UpgradeObjects.Add("Better Scanner", gameObject); }
         }
     }
