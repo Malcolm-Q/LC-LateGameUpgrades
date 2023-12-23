@@ -1,9 +1,6 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MoreShipUpgrades.UpgradeComponents
 {

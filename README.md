@@ -20,9 +20,6 @@ Join [this modding discord](https://discord.gg/hzEcKFSSDX) and comment [on this 
 ## **TODO:**
 cleanup
 #### Complex Tiered Upgrades
-* better scanner - implemented
-* protein powder
-    * final upgrade unlocks a 'crit' ability that instakills any enemy.
 * strong legs - WIP
     * final upgrade reduces/removes fall damage
 * bigger lungs
@@ -34,15 +31,14 @@ cleanup
     * maybe an expensive upgrade that grants a chance to redirect attracted lightning onto a nearby enemy?
 * beekeeper
     * final upgrade increases beehive price
+* Running shoes
+    * Final upgrade grants what is now Light Footed (light footed will be removed)
+* Hunter
+    * Final upgrade allows the spawning of 'alpha' creatures, they're stronger bigger have more health and valuable samples.
 
 ## **Community Suggested Additions:**
 If you want to implement one of these please create a branch indicating which feature you are implementing.  
 Something like: `<discordNickName>/<feature>` 
-* Medkit item
-    * override itemactivate to heal localplayer (must have rpc)
-    * limited uses
-* health upgrade
-    * increase player health
 * Planet Scanner
     * When in orbit type something like scan <moon> to get info about what your visit to that moon would be like.
     * This would involve generating random seeds for each moon in orbit and ensuring they use them for generation.

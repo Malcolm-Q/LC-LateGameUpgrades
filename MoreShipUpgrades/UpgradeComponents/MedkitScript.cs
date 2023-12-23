@@ -40,7 +40,13 @@ namespace MoreShipUpgrades.UpgradeComponents
                 }
                 audio.PlayOneShot(use);
                 uses++;
-                playerHeldBy.DamagePlayer(-UpgradeBus.instance.cfg.MEDKIT_HEAL_VALUE, false, true, CauseOfDeath.Unknown, 0, false, Vector3.zero);
+                int heal_value = UpgradeBus.instance.cfg.MEDKIT_HEAL_VALUE;
+                int potentialHealth = playerHeldBy.health + heal_value;
+                if (potentialHealth > health)
+                {
+                    heal_value -= potentialHealth - health;
+                }
+                playerHeldBy.DamagePlayer(-heal_value, false, true, CauseOfDeath.Unknown, 0, false, Vector3.zero);
                 if(uses >= UpgradeBus.instance.cfg.MEDKIT_USES)
                 {
                     itemUsedUp = true;
