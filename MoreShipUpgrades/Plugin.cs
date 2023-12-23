@@ -22,7 +22,7 @@ namespace MoreShipUpgrades
         private readonly Harmony harmony = new Harmony(Metadata.GUID);
         public static Plugin instance;
         public static ManualLogSource mls;
-        private AudioClip buttonPressed, error;
+        private AudioClip itemBreak, buttonPressed, error;
 
         public static PluginConfig cfg { get; private set; }
 
@@ -55,24 +55,22 @@ namespace MoreShipUpgrades
             string assetDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "shipupgrades");
             AssetBundle UpgradeAssets = AssetBundle.LoadFromFile(assetDir);
 
-            Dictionary<string,string> infoJson = JsonConvert.DeserializeObject<Dictionary<string,string>>(UpgradeAssets.LoadAsset<TextAsset>("Assets/ShipUpgrades/InfoStrings.json").text);
-
             GameObject busGO = new GameObject("UpgradeBus");
             busGO.AddComponent<UpgradeBus>();
 
             UpgradeBus.instance.version = Metadata.VERSION;
             UpgradeBus.instance.UpgradeAssets = UpgradeAssets;
 
-            UpgradeBus.instance.internNames = infoJson["InternNames"].Split(",");
-            UpgradeBus.instance.internInterests = infoJson["InternInterests"].Split(",");
+            UpgradeBus.instance.internNames = AssetBundleHandler.GetInfoFromJSON("InternNames").Split(",");
+            UpgradeBus.instance.internInterests = AssetBundleHandler.GetInfoFromJSON("InternInterests").Split(",");
 
             SetupModStore(ref UpgradeAssets);
 
             SetupIntroScreen(ref UpgradeAssets);
 
-            SetupItems(ref UpgradeAssets, ref infoJson);
+            SetupItems();
             
-            SetupPerks(ref UpgradeAssets);
+            SetupPerks();
 
 
             harmony.PatchAll();
@@ -121,91 +119,43 @@ namespace MoreShipUpgrades
             UpgradeBus.instance.introScreen = AssetBundleHandler.TryLoadGameObjectAsset(ref bundle, "Assets/ShipUpgrades/IntroScreen.prefab");
             if (UpgradeBus.instance.introScreen != null) UpgradeBus.instance.introScreen.AddComponent<IntroScreenScript>();
         }
-        private void SetupItems(ref AssetBundle bundle, ref Dictionary<string, string> infoJSON)
+        private void SetupItems()
         {
-            SetupTeleporterButtons(ref bundle, ref infoJSON);
-            SetupNightVision(ref bundle, ref infoJSON);
-            SetupMedkit(ref bundle, ref infoJSON);
-            SetupDivingKit(ref bundle, ref infoJSON);
-            SetupPeeper(ref bundle);
-            SetupSamples(ref bundle);
+            SetupTeleporterButtons();
+            SetupNightVision();
+            SetupMedkit();
+            SetupPeeper();
+            SetupSamples();
+            SetupDivingKit(ref UpgradeBus.instance.UpgradeAssets);
         }
-        private void SetupSamples(ref AssetBundle bundle)
+        private void SetupSamples()
         {
-            Item fleaSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/Samples/SnareFleaSample.asset");
-            SampleItem fleaScript = fleaSample.spawnPrefab.AddComponent<SampleItem>();
-            fleaScript.grabbable = true;
-            fleaScript.grabbableToEnemies = true;
-            fleaScript.itemProperties = fleaSample;
-
-            Item spiderSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/Samples/BunkerSpiderSample.asset");
-            SampleItem spiderScript = spiderSample.spawnPrefab.AddComponent<SampleItem>();
-            spiderScript.grabbable = true;
-            spiderScript.grabbableToEnemies = true;
-            spiderScript.itemProperties = spiderSample;
-
-            Item hoardSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/Samples/HoardingBugSample.asset");
-            SampleItem hoardScript = hoardSample.spawnPrefab.AddComponent<SampleItem>();
-            hoardScript.grabbable = true;
-            hoardScript.grabbableToEnemies = true;
-            hoardScript.itemProperties = hoardSample;
-
-            Item brackSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/Samples/BrackenSample.asset");
-            SampleItem brackScript = brackSample.spawnPrefab.AddComponent<SampleItem>();
-            brackScript.grabbable = true;
-            brackScript.grabbableToEnemies = true;
-            brackScript.itemProperties = brackSample;
-
-            Item eyelessSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/Samples/EyelessDogSample.asset");
-            SampleItem eyelessScript = eyelessSample.spawnPrefab.AddComponent<SampleItem>();
-            eyelessScript.grabbable = true;
-            eyelessScript.grabbableToEnemies = true;
-            eyelessScript.itemProperties = eyelessSample;
-
-            Item baboonSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/Samples/BaboonHawkSample.asset");
-            SampleItem baboonScript = baboonSample.spawnPrefab.AddComponent<SampleItem>();
-            baboonScript.grabbable = true;
-            baboonScript.grabbableToEnemies = true;
-            baboonScript.itemProperties = baboonSample;
-
-            Item thumperSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/Samples/ThumperSample.asset");
-            SampleItem thumperScript = thumperSample.spawnPrefab.AddComponent<SampleItem>();
-            thumperScript.grabbable = true;
-            thumperScript.grabbableToEnemies = true;
-            thumperScript.itemProperties = thumperSample;
-
-
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(fleaSample.spawnPrefab);
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(spiderSample.spawnPrefab);
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(hoardSample.spawnPrefab);
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(brackSample.spawnPrefab);
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(eyelessSample.spawnPrefab);
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(baboonSample.spawnPrefab);
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(thumperSample.spawnPrefab);
-
-            UpgradeBus.instance.samplePrefabs.Add("snare flea", fleaSample.spawnPrefab);
-            UpgradeBus.instance.samplePrefabs.Add("bunker spider", spiderSample.spawnPrefab);
-            UpgradeBus.instance.samplePrefabs.Add("hoarding bug", hoardSample.spawnPrefab);
-            UpgradeBus.instance.samplePrefabs.Add("bracken", brackSample.spawnPrefab);
-            UpgradeBus.instance.samplePrefabs.Add("eyeless dog", eyelessSample.spawnPrefab);
-            UpgradeBus.instance.samplePrefabs.Add("baboon hawk", baboonSample.spawnPrefab);
-            UpgradeBus.instance.samplePrefabs.Add("thumper", thumperSample.spawnPrefab);
+            foreach (string creatureName in AssetBundleHandler.samplePaths.Keys)
+            {
+                Item sample = AssetBundleHandler.GetItemObject(creatureName);
+                SampleItem sampleScript = sample.spawnPrefab.AddComponent<SampleItem>();
+                sampleScript.grabbable = true;
+                sampleScript.grabbableToEnemies = true;
+                sampleScript.itemProperties = sample;
+                LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(sample.spawnPrefab);
+                UpgradeBus.instance.samplePrefabs.Add(creatureName, sample.spawnPrefab);
+            }
         }
-        private void SetupTeleporterButtons(ref AssetBundle bundle, ref Dictionary<string, string> infoJSON)
+        private void SetupTeleporterButtons()
         {
             // Teleporter Button SFX
-            AudioClip itemBreak = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, "Assets/ShipUpgrades/break.mp3");
-            error = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, "Assets/ShipUpgrades/error.mp3");
-            buttonPressed = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, "Assets/ShipUpgrades/ButtonPress2.ogg");
+            itemBreak = AssetBundleHandler.GetAudioClip("Break");
+            error = AssetBundleHandler.GetAudioClip("Error");
+            buttonPressed = AssetBundleHandler.GetAudioClip("Button Press");
 
             if (itemBreak == null || error == null || buttonPressed == null) return;
 
-            SetupRegularTeleporterButton(ref bundle, ref itemBreak, ref error, ref buttonPressed, ref infoJSON);
-            SetupAdvancedTeleporterButton(ref bundle, ref itemBreak, ref error, ref buttonPressed, ref infoJSON);
+            SetupRegularTeleporterButton();
+            SetupAdvancedTeleporterButton();
         }
-        private void SetupRegularTeleporterButton(ref AssetBundle bundle, ref AudioClip itemBreak, ref AudioClip error, ref AudioClip buttonPressed, ref Dictionary<string, string> infoJSON)
+        private void SetupRegularTeleporterButton()
         {
-            Item tpBut = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/TpButton.asset");
+            Item tpBut = AssetBundleHandler.GetItemObject("Portable Tele");
             if (tpBut == null) return;
 
             tpBut.itemName = "Portable Tele";
@@ -224,12 +174,12 @@ namespace MoreShipUpgrades
             if (!cfg.WEAK_TELE_ENABLED) return;
 
             TerminalNode PortNode = new TerminalNode();
-            PortNode.displayText = string.Format(infoJSON["Portable Tele"], (int)(cfg.CHANCE_TO_BREAK * 100));
+            PortNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Portable Tele"), (int)(cfg.CHANCE_TO_BREAK * 100));
             Items.RegisterShopItem(tpBut, null, null, PortNode, tpBut.creditsWorth);
         }
-        private void SetupAdvancedTeleporterButton(ref AssetBundle bundle, ref AudioClip itemBreak, ref AudioClip error, ref AudioClip buttonPressed, ref Dictionary<string, string> infoJSON)
+        private void SetupAdvancedTeleporterButton()
         {
-            Item tpButAdvanced = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/TpButtonAdv.asset");
+            Item tpButAdvanced = AssetBundleHandler.GetItemObject("Advanced Portable Tele");
             if (tpButAdvanced == null) return;
 
             tpButAdvanced.creditsWorth = cfg.ADVANCED_TELE_PRICE;
@@ -248,13 +198,13 @@ namespace MoreShipUpgrades
             if (!cfg.ADVANCED_TELE_ENABLED) return;
 
             TerminalNode advNode = new TerminalNode();
-            advNode.displayText = string.Format(infoJSON["Advanced Portable Tele"], (int)(cfg.ADV_CHANCE_TO_BREAK * 100));
+            advNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Advanced Portable Tele"), (int)(cfg.ADV_CHANCE_TO_BREAK * 100));
             Items.RegisterShopItem(tpButAdvanced, null, null, advNode, tpButAdvanced.creditsWorth);
         }
 
-        private void SetupNightVision(ref AssetBundle bundle, ref Dictionary<string, string> infoJSON)
+        private void SetupNightVision()
         {
-            Item nightVisionItem = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/NightVisionItem.asset");
+            Item nightVisionItem = AssetBundleHandler.GetItemObject("Night Vision");
             if (nightVisionItem == null) return;
 
             nightVisionItem.creditsWorth = cfg.NIGHT_VISION_PRICE;
@@ -272,10 +222,10 @@ namespace MoreShipUpgrades
             TerminalNode nightNode = new TerminalNode();
             string grantStatus = cfg.NIGHT_VISION_INDIVIDUAL || UpgradeBus.instance.cfg.SHARED_UPGRADES ? "one" : "all";
             string loseOnDeath = cfg.LOSE_NIGHT_VIS_ON_DEATH ? "be" : "not be";
-            nightNode.displayText = string.Format(infoJSON["Night Vision"], grantStatus, loseOnDeath);
+            nightNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Night Vision"), grantStatus, loseOnDeath);
             Items.RegisterShopItem(nightVisionItem, null, null, nightNode, nightVisionItem.creditsWorth);
         }
-        private void SetupDivingKit(ref AssetBundle bundle, ref Dictionary<string, string> infoJSON)
+        private void SetupDivingKit(ref AssetBundle bundle)
         {
             Item DiveItem = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/DivingKitItem.asset");
             if (DiveItem == null) return;
@@ -297,13 +247,14 @@ namespace MoreShipUpgrades
             medNode.displayText = $"DIVING KIT - ${cfg.DIVEKIT_PRICE}\n\nBreath underwater.\nWeights {Mathf.RoundToInt((DiveItem.weight -1 )*100)} lbs and is {hands} handed.\n\n";
             Items.RegisterShopItem(DiveItem, null, null,medNode, DiveItem.creditsWorth);
         }
-        private void SetupMedkit(ref AssetBundle bundle, ref Dictionary<string, string> infoJSON)
+        private void SetupMedkit()
         {
-            Item MedKitItem = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/MedKitItem.asset");
+            Item MedKitItem = AssetBundleHandler.GetItemObject("Medkit");
             if (MedKitItem == null) return;
 
             MedKitItem.creditsWorth = cfg.MEDKIT_PRICE;
             MedKitItem.itemSpawnsOnGround = true;
+            MedKitItem.itemId = 492016;
             MedkitScript medScript = MedKitItem.spawnPrefab.AddComponent<MedkitScript>();
             medScript.itemProperties = MedKitItem;
             medScript.grabbable = true;
@@ -319,9 +270,9 @@ namespace MoreShipUpgrades
             medNode.displayText = string.Format("MEDKIT - ${0}\n\nLeft click to heal yourself for {1} health.\nCan be used {2} times.\n", cfg.MEDKIT_PRICE, cfg.MEDKIT_HEAL_VALUE, cfg.MEDKIT_USES);
             Items.RegisterShopItem(MedKitItem, null, null,medNode, MedKitItem.creditsWorth);
         }
-        private void SetupPeeper(ref AssetBundle bundle)
+        private void SetupPeeper()
         {
-            Item Peeper = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/coilHead.asset");
+            Item Peeper = AssetBundleHandler.GetItemObject("Peeper");
             if (Peeper == null) return;
 
             Peeper.creditsWorth = cfg.PEEPER_PRICE;
@@ -341,101 +292,101 @@ namespace MoreShipUpgrades
             peepNode.displayText = "Looks at coil heads, don't lose it\n";
             Items.RegisterShopItem(Peeper, null, null, peepNode, Peeper.creditsWorth);
         }
-        private void SetupPerks(ref AssetBundle bundle)
+        private void SetupPerks()
         {
-            SetupBeekeeper(ref bundle);
-            SetupProteinPowder(ref bundle);
-            SetupBiggerLungs(ref bundle);
-            SetupRunningShoes(ref bundle);
-            SetupStrongLegs(ref bundle);
-            SetupMalwareBroadcaster(ref bundle);
-            SetupLightFooted(ref bundle);
-            SetupNightVisionBattery(ref bundle);
-            SetupDiscombobulator(ref bundle);
-            SetupBetterScanner(ref bundle);
-            SetupWalkieGPS(ref bundle);
-            SetupBackMuscles(ref bundle);
-            SetupInterns(ref bundle);
-            SetupPager(ref bundle);
-            SetupLightningRod(ref bundle);
-            SetupLocksmith(ref bundle);
-            SetupPlayerHealth(ref bundle);
-            SetupHunter(ref bundle);
+            SetupBeekeeper();
+            SetupProteinPowder();
+            SetupBiggerLungs();
+            SetupRunningShoes();
+            SetupStrongLegs();
+            SetupMalwareBroadcaster();
+            SetupLightFooted();
+            SetupNightVisionBattery();
+            SetupDiscombobulator();
+            SetupBetterScanner();
+            SetupWalkieGPS();
+            SetupBackMuscles();
+            SetupInterns();
+            SetupPager();
+            SetupLightningRod();
+            SetupLocksmith();
+            SetupPlayerHealth();
+            SetupHunter();
         }
-        private void SetupBeekeeper(ref AssetBundle bundle)
+        private void SetupBeekeeper()
         {
-            SetupGenericPerk<beekeeperScript>(ref bundle, "Assets/ShipUpgrades/beekeeper.prefab");
+            SetupGenericPerk<beekeeperScript>("Beekeeper");
         }
-        private void SetupHunter(ref AssetBundle bundle)
+        private void SetupHunter()
         {
-            SetupGenericPerk<hunterScript>(ref bundle, "Assets/ShipUpgrades/Hunter.prefab");
+            SetupGenericPerk<hunterScript>("Hunter");
         }
-        private void SetupProteinPowder(ref AssetBundle bundle) 
+        private void SetupProteinPowder() 
         {
-            SetupGenericPerk<proteinPowderScript>(ref bundle, "Assets/ShipUpgrades/ProteinPowder.prefab");
+            SetupGenericPerk<proteinPowderScript>(proteinPowderScript.UPGRADE_NAME);
         }
-        private void SetupBiggerLungs(ref AssetBundle bundle)
+        private void SetupBiggerLungs()
         {
-            SetupGenericPerk<biggerLungScript>(ref bundle, "Assets/ShipUpgrades/BiggerLungs.prefab");
+            SetupGenericPerk<biggerLungScript>("Bigger Lungs");
         }
-        private void SetupRunningShoes(ref AssetBundle bundle) 
+        private void SetupRunningShoes() 
         {
-            SetupGenericPerk<runningShoeScript>(ref bundle, "Assets/ShipUpgrades/runningShoes.prefab");
+            SetupGenericPerk<runningShoeScript>("Running Shoes");
         }
-        private void SetupStrongLegs(ref AssetBundle bundle) 
+        private void SetupStrongLegs() 
         {
-            SetupGenericPerk<strongLegsScript>(ref bundle, "Assets/ShipUpgrades/strongLegs.prefab");
+            SetupGenericPerk<strongLegsScript>("Strong Legs");
         }
-        private void SetupMalwareBroadcaster(ref AssetBundle bundle)
+        private void SetupMalwareBroadcaster()
         {
-            SetupGenericPerk<trapDestroyerScript>(ref bundle, "Assets/ShipUpgrades/destructiveCodes.prefab");
+            SetupGenericPerk<trapDestroyerScript>("Malware Broadcaster");
         }
-        private void SetupLightFooted(ref AssetBundle bundle) 
+        private void SetupLightFooted() 
         {
-            SetupGenericPerk<lightFootedScript>(ref bundle, "Assets/ShipUpgrades/lightFooted.prefab");
+            SetupGenericPerk<lightFootedScript>("Light Footed");
         }
-        private void SetupNightVisionBattery(ref AssetBundle bundle) 
+        private void SetupNightVisionBattery() 
         {
-            SetupGenericPerk<nightVisionScript>(ref bundle, "Assets/ShipUpgrades/nightVision.prefab");
+            SetupGenericPerk<nightVisionScript>("NV Headset Batteries");
         }
-        private void SetupDiscombobulator(ref AssetBundle bundle)
+        private void SetupDiscombobulator()
         {
-            AudioClip flashSFX = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, "Assets/ShipUpgrades/flashbangsfx.ogg");
+            AudioClip flashSFX = AssetBundleHandler.GetAudioClip("Flashbang");
             if (flashSFX != null) UpgradeBus.instance.flashNoise = flashSFX;
 
-            SetupGenericPerk<terminalFlashScript>(ref bundle, "Assets/ShipUpgrades/terminalFlash.prefab");
+            SetupGenericPerk<terminalFlashScript>("Discombobulator");
         }
-        private void SetupBetterScanner(ref AssetBundle bundle)
+        private void SetupBetterScanner()
         {
-            SetupGenericPerk<strongerScannerScript>(ref bundle, "Assets/ShipUpgrades/strongScanner.prefab");
+            SetupGenericPerk<strongerScannerScript>("Better Scanner");
         }
-        private void SetupWalkieGPS(ref AssetBundle bundle)
+        private void SetupWalkieGPS()
         {
-            SetupGenericPerk<walkieScript>(ref bundle, "Assets/ShipUpgrades/walkieUpgrade.prefab");
+            SetupGenericPerk<walkieScript>("Walkie GPS");
         }
-        private void SetupBackMuscles(ref AssetBundle bundle)
+        private void SetupBackMuscles()
         {
-            SetupGenericPerk<exoskeletonScript>(ref bundle, "Assets/ShipUpgrades/exoskeleton.prefab");
+            SetupGenericPerk<exoskeletonScript>("Back Muscles");
         }
-        private void SetupInterns(ref AssetBundle bundle)
+        private void SetupInterns()
         {
-            SetupGenericPerk<defibScript>(ref bundle, "Assets/ShipUpgrades/Intern.prefab");
+            SetupGenericPerk<defibScript>("Interns");
         }
-        private void SetupPager(ref AssetBundle bundle)
+        private void SetupPager()
         {
-            SetupGenericPerk<pagerScript>(ref bundle, "Assets/ShipUpgrades/Pager.prefab");
+            SetupGenericPerk<pagerScript>("Fast Encryption");
         }
-        private void SetupLightningRod(ref AssetBundle bundle)
+        private void SetupLightningRod()
         {
-            SetupGenericPerk<lightningRodScript>(ref bundle, "Assets/ShipUpgrades/LightningRod.prefab");
+            SetupGenericPerk<lightningRodScript>(lightningRodScript.UPGRADE_NAME);
         }
-        private void SetupLocksmith(ref AssetBundle bundle)
+        private void SetupLocksmith()
         {
-            SetupGenericPerk<lockSmithScript>(ref bundle, "Assets/ShipUpgrades/LockSmith.prefab");
+            SetupGenericPerk<lockSmithScript>("Locksmith");
         }
-        private void SetupPlayerHealth(ref AssetBundle bundle)
+        private void SetupPlayerHealth()
         {
-            SetupGenericPerk<playerHealthScript>(ref bundle, "Assets/ShipUpgrades/PlayerHealth.prefab");
+            SetupGenericPerk<playerHealthScript>(playerHealthScript.UPGRADE_NAME);
         }
         /// <summary>
         /// Generic function where it adds a script (specificed through the type) into an GameObject asset 
@@ -444,9 +395,9 @@ namespace MoreShipUpgrades
         /// <typeparam name="T"> The script we wish to include into the GameObject asset</typeparam>
         /// <param name="bundle"> The asset bundle where the asset is located</param>
         /// <param name="path"> The path to access the asset in the asset bundle</param>
-        private void SetupGenericPerk<T>(ref AssetBundle bundle, string path) where T : Component
+        private void SetupGenericPerk<T>(string upgradeName) where T : Component
         {
-            GameObject perk = AssetBundleHandler.TryLoadGameObjectAsset(ref bundle, path);
+            GameObject perk = AssetBundleHandler.GetPerkGameObject(upgradeName);
             if (!perk) return;
 
             perk.AddComponent<T>();

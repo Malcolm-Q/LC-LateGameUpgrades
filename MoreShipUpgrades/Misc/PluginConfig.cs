@@ -329,12 +329,13 @@ namespace MoreShipUpgrades.Misc
             HUNTER_PRICE2 = ConfigEntry(topSection, "Second Hunter level price", 500, "");
             HUNTER_PRICE3 = ConfigEntry(topSection, "Third Hunter level price", 600, "");
 
-            PLAYER_HEALTH_ENABLED = ConfigEntry(playerHealthScript.UPGRADE_NAME, playerHealthScript.ENABLED_SECTION, playerHealthScript.ENABLED_DEFAULT, playerHealthScript.ENABLED_DESCRIPTION);
-            PLAYER_HEALTH_PRICE = ConfigEntry(playerHealthScript.UPGRADE_NAME, playerHealthScript.PRICE_SECTION, playerHealthScript.PRICE_DEFAULT, "");
-            PLAYER_HEALTH_INDIVIDUAL = ConfigEntry(playerHealthScript.UPGRADE_NAME, playerHealthScript.INDIVIDUAL_SECTION, playerHealthScript.INDIVIDUAL_DEFAULT, playerHealthScript.INDIVIDUAL_DESCRIPTION);
-            PLAYER_HEALTH_UPGRADE_PRICES = ConfigEntry(playerHealthScript.UPGRADE_NAME, playerHealthScript.UPGRADE_PRICES_SECTION, playerHealthScript.UPGRADE_PRICES_DEFAULT, "");
-            PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK = ConfigEntry(playerHealthScript.UPGRADE_NAME, playerHealthScript.ADDITIONAL_HEALTH_UNLOCK_SECTION, playerHealthScript.ADDITIONAL_HEALTH_UNLOCK_DEFAULT, playerHealthScript.ADDITIONAL_HEALTH_UNLOCK_DESCRIPTION);
-            PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT = ConfigEntry(playerHealthScript.UPGRADE_NAME, playerHealthScript.ADDITIONAL_HEALTH_INCREMENT_SECTION, playerHealthScript.ADDITIONAL_HEALTH_INCREMENT_DEFAULT, playerHealthScript.ADDITIONAL_HEALTH_INCREMENT_DESCRIPTION);
+            topSection = playerHealthScript.UPGRADE_NAME;
+            PLAYER_HEALTH_ENABLED = ConfigEntry(topSection, playerHealthScript.ENABLED_SECTION, playerHealthScript.ENABLED_DEFAULT, playerHealthScript.ENABLED_DESCRIPTION);
+            PLAYER_HEALTH_PRICE = ConfigEntry(topSection, playerHealthScript.PRICE_SECTION, playerHealthScript.PRICE_DEFAULT, "");
+            PLAYER_HEALTH_INDIVIDUAL = ConfigEntry(topSection, playerHealthScript.INDIVIDUAL_SECTION, playerHealthScript.INDIVIDUAL_DEFAULT, playerHealthScript.INDIVIDUAL_DESCRIPTION);
+            PLAYER_HEALTH_UPGRADE_PRICES = ConfigEntry(topSection, playerHealthScript.UPGRADE_PRICES_SECTION, playerHealthScript.UPGRADE_PRICES_DEFAULT, "");
+            PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK = ConfigEntry(topSection, playerHealthScript.ADDITIONAL_HEALTH_UNLOCK_SECTION, playerHealthScript.ADDITIONAL_HEALTH_UNLOCK_DEFAULT, playerHealthScript.ADDITIONAL_HEALTH_UNLOCK_DESCRIPTION);
+            PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT = ConfigEntry(topSection, playerHealthScript.ADDITIONAL_HEALTH_INCREMENT_SECTION, playerHealthScript.ADDITIONAL_HEALTH_INCREMENT_DEFAULT, playerHealthScript.ADDITIONAL_HEALTH_INCREMENT_DESCRIPTION);
 
             topSection = "Medkit";
             MEDKIT_ENABLED = ConfigEntry(topSection, "Enable the medkit item", true, "Allows you to buy a medkit to heal yourself.");

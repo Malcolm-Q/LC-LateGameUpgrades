@@ -18,10 +18,8 @@ namespace MoreShipUpgrades.Patches
             if (currentEnemy == __instance.NetworkObject.NetworkObjectId) return;
             currentEnemy = __instance.NetworkObject.NetworkObjectId;
             string name = __instance.GetComponentInChildren<ScanNodeProperties>().headerText.ToLower();
-            Debug.Log(name);
-            if (hunterScript.tiers[UpgradeBus.instance.huntLevel].Contains(name))
+            if (UpgradeBus.instance.hunter && hunterScript.tiers[UpgradeBus.instance.huntLevel].Contains(name))
             {
-                Debug.Log("SPAWNING SAMPLE");
                 GameObject go = GameObject.Instantiate(UpgradeBus.instance.samplePrefabs[name],__instance.transform.position + Vector3.up,Quaternion.identity);
                 PhysicsProp prop = go.GetComponent<PhysicsProp>();
                 int value = Random.Range(prop.itemProperties.minValue, prop.itemProperties.maxValue);

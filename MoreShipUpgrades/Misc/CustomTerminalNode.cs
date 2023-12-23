@@ -34,12 +34,12 @@ namespace MoreShipUpgrades.Misc
         {
             return new CustomTerminalNode
             (
-                Name = this.Name,
-                UnlockPrice = this.UnlockPrice,
-                Description = this.Description,
-                Prefab = this.Prefab,
-                Prices = this.Prices,
-                MaxUpgrade = this.MaxUpgrade
+                Name,
+                UnlockPrice,
+                Description,
+                Prefab,
+                Prices,
+                MaxUpgrade
             );
         }
     }

@@ -9,7 +9,7 @@ namespace MoreShipUpgrades.UpgradeComponents
     {
         static string[] lvl1 = new string[] { "hoarding bug", "snare flea" };
         static string[] lvl2 = new string[] { "bunker spider","hoarding bug", "snare flea","baboon hawk" };
-        static string[] lvl3 = new string[] { "bunker spider","hoarding bug","snare flea","baboon hawk","bracken","thumper","eyeless dog" };
+        static string[] lvl3 = new string[] { "bunker spider","hoarding bug","snare flea","baboon hawk","bracken","half","eyeless dog" };
         static public Dictionary<int, string[]> tiers = new Dictionary<int, string[]>
         {
             {0,  lvl1 },
@@ -46,8 +46,8 @@ namespace MoreShipUpgrades.UpgradeComponents
         public static string GetHunterInfo(int level, int price)
         {
             string enems = "";
-            if(level != 1) enems = string.Join(", ", tiers[level - 1].Except(tiers[level - 2]).ToArray());
-            else enems = string.Join(", ", tiers[level - 1]);
+            if(level != 1) enems = string.Join(", ", tiers[level-1].Except(tiers[level - 2]).ToArray());
+            else enems = string.Join(", ", tiers[level-1]);
             enems += "\n";
             return string.Format(AssetBundleHandler.GetInfoFromJSON("Hunter"), level, price, enems);
         }

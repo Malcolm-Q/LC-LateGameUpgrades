@@ -312,12 +312,12 @@ namespace MoreShipUpgrades.Managers
 
         private void SetupProteinPowderTerminalNode() 
         {
-            SetupMultiplePurchasableTerminalNode("Protein Powder",
+            SetupMultiplePurchasableTerminalNode(proteinPowderScript.UPGRADE_NAME,
                                                 cfg.SHARED_UPGRADES ? true : !cfg.PROTEIN_INDIVIDUAL,
                                                 cfg.PROTEIN_ENABLED,
                                                 cfg.PROTEIN_PRICE,
                                                 ParseUpgradePrices(cfg.PROTEIN_UPGRADE_PRICES),
-                                                AssetBundleHandler.GetInfoFromJSON("Protein Powder"));
+                                                AssetBundleHandler.GetInfoFromJSON(proteinPowderScript.UPGRADE_NAME));
         }
         private void SetupBiggerLungsTerminalNode()
         {
