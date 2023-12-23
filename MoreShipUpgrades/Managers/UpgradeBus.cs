@@ -90,6 +90,7 @@ namespace MoreShipUpgrades.Managers
         public Dictionary<ulong,float> beePercs = new Dictionary<ulong,float>();
         public Dictionary<ulong,int> forceMults = new Dictionary<ulong,int>();
         public Dictionary<ulong, int> playerHPs = new Dictionary<ulong, int>();
+        public Dictionary<ulong, int> currentPlayerHPs = new Dictionary<ulong, int>();
 
         public Dictionary<string,bool> IndividualUpgrades = new Dictionary<string,bool>();
         public string[] internNames, internInterests;

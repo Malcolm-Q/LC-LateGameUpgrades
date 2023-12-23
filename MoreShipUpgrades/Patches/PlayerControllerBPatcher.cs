@@ -2,6 +2,7 @@
 using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.UpgradeComponents;
+using System.Numerics;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Patches
@@ -28,7 +29,19 @@ namespace MoreShipUpgrades.Patches
             if (!UpgradeBus.instance.beePercs.ContainsKey(__instance.playerSteamId) || damageNumber != 10) { return; }
             damageNumber = Mathf.Clamp((int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beePercs[__instance.playerSteamId] * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT))),0,100);
         }
-        
+        [HarmonyPrefix]
+        [HarmonyPatch("DamagePlayer")]
+        private static void StimpackBeforeDamage(ref int damageNumber, PlayerControllerB __instance)
+        {
+            playerHealthScript.BeforeDamagePlayer(ref damageNumber, ref __instance);
+        }
+        [HarmonyPostfix]
+        [HarmonyPatch("DamagePlayer")]
+        private static void StimpackAfterDamage(PlayerControllerB __instance)
+        {
+            playerHealthScript.AfterDamagePlayer(ref __instance);
+        }
+
         [HarmonyPrefix]
         [HarmonyPatch("DamagePlayerServerRpc")]
         private static void beekeeperReduceDamageServer(ref int damageNumber, PlayerControllerB __instance)
