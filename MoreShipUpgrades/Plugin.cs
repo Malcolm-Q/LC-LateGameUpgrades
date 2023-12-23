@@ -126,7 +126,7 @@ namespace MoreShipUpgrades
             SetupMedkit();
             SetupPeeper();
             SetupSamples();
-            SetupDivingKit(UpgradeBus.instance.UpgradeAssets, AssetBundleHandler.GetInfoJSON());
+            SetupDivingKit(ref UpgradeBus.instance.UpgradeAssets);
         }
         private void SetupSamples()
         {
