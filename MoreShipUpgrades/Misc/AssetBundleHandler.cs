@@ -21,7 +21,7 @@ namespace MoreShipUpgrades.Misc
             { "bracken", "Assets/ShipUpgrades/Samples/BrackenSample.asset" },
             { "eyeless dog", "Assets/ShipUpgrades/Samples/EyelessDogSample.asset" },
             { "baboon hawk", "Assets/ShipUpgrades/Samples/BaboonHawkSample.asset" },
-            { "thumper", "Assets/ShipUpgrades/Samples/ThumperSample.asset" },
+            { "half", "Assets/ShipUpgrades/Samples/ThumperSample.asset" },
         };
         private static Dictionary<string, string> assetPaths = new Dictionary<string, string>()
         {
