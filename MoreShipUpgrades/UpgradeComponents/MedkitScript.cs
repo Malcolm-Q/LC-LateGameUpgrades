@@ -52,6 +52,7 @@ namespace MoreShipUpgrades.UpgradeComponents
                     itemUsedUp = true;
                     HUDManager.Instance.DisplayTip("NO MORE USES!", "This medkit doesn't have anymore supplies!", true, false, "LC_Tip1");
                 }
+                if (playerHeldBy.health >= 20) playerHeldBy.MakeCriticallyInjured(false);
             }
         }
     }

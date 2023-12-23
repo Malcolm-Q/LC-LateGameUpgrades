@@ -129,7 +129,7 @@ namespace MoreShipUpgrades.UpgradeComponents
                 player.criticallyInjured = false;
                 player.playerBodyAnimator.SetBool("Limp", false);
                 player.health = health;
-                HUDManager.Instance.UpdateHealthUI(100, false);
+                HUDManager.Instance.UpdateHealthUI(health, false);
                 player.spectatedPlayerScript = null;
                 HUDManager.Instance.audioListenerLowPass.enabled = false;
                 StartOfRound.Instance.SetSpectateCameraToGameOverMode(false, player);
