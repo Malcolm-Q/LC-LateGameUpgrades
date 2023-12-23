@@ -1,6 +1,7 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MoreShipUpgrades.UpgradeComponents
 {
@@ -44,7 +45,11 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public static string GetHunterInfo(int level, int price)
         {
-            return string.Format(AssetBundleHandler.GetInfoFromJSON("Hunter"), level, price, string.Join(",",tiers[level-1]));
+            string enems = "";
+            if(level != 1) enems = string.Join(", ", tiers[level - 1].Except(tiers[level - 2]).ToArray());
+            else enems = string.Join(", ", tiers[level - 1]);
+            enems += "\n";
+            return string.Format(AssetBundleHandler.GetInfoFromJSON("Hunter"), level, price, enems);
         }
     }
 }

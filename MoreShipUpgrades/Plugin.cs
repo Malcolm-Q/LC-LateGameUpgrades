@@ -126,12 +126,17 @@ namespace MoreShipUpgrades
             SetupMedkit();
             SetupPeeper();
             SetupSamples();
+            SetupDivingKit(UpgradeBus.instance.UpgradeAssets, AssetBundleHandler.GetInfoJSON());
         }
         private void SetupSamples()
         {
             foreach (string creatureName in AssetBundleHandler.samplePaths.Keys)
             {
                 Item sample = AssetBundleHandler.GetItemObject(creatureName);
+                SampleItem sampleScript = sample.spawnPrefab.AddComponent<SampleItem>();
+                sampleScript.grabbable = true;
+                sampleScript.grabbableToEnemies = true;
+                sampleScript.itemProperties = sample;
                 LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(sample.spawnPrefab);
                 UpgradeBus.instance.samplePrefabs.Add(creatureName, sample.spawnPrefab);
             }
@@ -219,6 +224,28 @@ namespace MoreShipUpgrades
             string loseOnDeath = cfg.LOSE_NIGHT_VIS_ON_DEATH ? "be" : "not be";
             nightNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Night Vision"), grantStatus, loseOnDeath);
             Items.RegisterShopItem(nightVisionItem, null, null, nightNode, nightVisionItem.creditsWorth);
+        }
+        private void SetupDivingKit(ref AssetBundle bundle)
+        {
+            Item DiveItem = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/DivingKitItem.asset");
+            if (DiveItem == null) return;
+
+            DiveItem.creditsWorth = cfg.DIVEKIT_PRICE;
+            DiveItem.twoHanded = cfg.DIVEKIT_TWO_HANDED;
+            DiveItem.weight = cfg.DIVEKIT_WEIGHT;
+            DiveItem.itemSpawnsOnGround = true;
+            DivingKitScript diveScript = DiveItem.spawnPrefab.AddComponent<DivingKitScript>();
+            diveScript.itemProperties = DiveItem;
+            diveScript.grabbable = true;
+            diveScript.grabbableToEnemies = true;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(DiveItem.spawnPrefab);
+
+            if (!cfg.DIVEKIT_ENABLED) return;
+
+            TerminalNode medNode = new TerminalNode();
+            string hands = cfg.DIVEKIT_TWO_HANDED ? "two" : "one";
+            medNode.displayText = $"DIVING KIT - ${cfg.DIVEKIT_PRICE}\n\nBreath underwater.\nWeights {Mathf.RoundToInt((DiveItem.weight -1 )*100)} lbs and is {hands} handed.\n\n";
+            Items.RegisterShopItem(DiveItem, null, null,medNode, DiveItem.creditsWorth);
         }
         private void SetupMedkit()
         {

@@ -151,6 +151,10 @@ namespace MoreShipUpgrades.Misc
         public int MEDKIT_PRICE { get; set; }
         public int MEDKIT_HEAL_VALUE { get; set; }
         public int MEDKIT_USES { get; set; }
+        public int DIVEKIT_PRICE { get; set; }
+        public bool DIVEKIT_ENABLED { get; set; }
+        public float DIVEKIT_WEIGHT { get; set; }
+        public bool DIVEKIT_TWO_HANDED { get; private set; }
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -335,9 +339,16 @@ namespace MoreShipUpgrades.Misc
 
             topSection = "Medkit";
             MEDKIT_ENABLED = ConfigEntry(topSection, "Enable the medkit item", true, "Allows you to buy a medkit to heal yourself.");
-            MEDKIT_PRICE = ConfigEntry(topSection, "Medkit price", 300, "Default price for Medkit.");
-            MEDKIT_HEAL_VALUE = ConfigEntry(topSection, "Medkit Heal", 20, "The amount the medkit heals you.");
-            MEDKIT_USES = ConfigEntry(topSection, "Medkit Uses", 3, "The amount of times the medkit can heal you.");
+            MEDKIT_PRICE = ConfigEntry(topSection, "price", 300, "Default price for Medkit.");
+            MEDKIT_HEAL_VALUE = ConfigEntry(topSection, "Heal Amount", 20, "The amount the medkit heals you.");
+            MEDKIT_USES = ConfigEntry(topSection, "Uses", 3, "The amount of times the medkit can heal you.");
+
+            topSection = "Diving Kit";
+            DIVEKIT_ENABLED = ConfigEntry(topSection, "Enable the Diving Kit Item", true, "Allows you to buy a diving kit to breathe underwater.");
+            DIVEKIT_PRICE = ConfigEntry(topSection, "price", 650, "Price for Diving Kit.");
+            DIVEKIT_WEIGHT = ConfigEntry(topSection, "Item weight", 1.65f, "-1 and multiply by 100 (1.65 = 65 lbs)");
+            DIVEKIT_TWO_HANDED = ConfigEntry(topSection, "Two Handed Item", true, "One or two handed item.");
+
         }
     }
 }

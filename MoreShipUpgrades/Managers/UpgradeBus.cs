@@ -383,7 +383,7 @@ namespace MoreShipUpgrades.Managers
                                                 cfg.NIGHT_VISION_ENABLED,
                                                 0,
                                                 ParseUpgradePrices(cfg.NIGHT_VISION_UPGRADE_PRICES));
-            node.Unlocked = true;
+            if(node != null) node.Unlocked = true;
         }
         private void SetupDiscombobulatorTerminalNode()
         {

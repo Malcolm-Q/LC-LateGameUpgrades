@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Patches
@@ -313,7 +314,10 @@ namespace MoreShipUpgrades.Patches
                     {
                         foreach (EnemyAI enemy in enemies)
                         {
-                            string realName = enemy.GetComponentInChildren<ScanNodeProperties>().headerText;
+                            ScanNodeProperties scanNode = enemy.GetComponentInChildren<ScanNodeProperties>();
+                            string realName = "";
+                            if (scanNode != null) realName = scanNode.headerText; // this should resolve the issue with this command
+                            else realName = "Unkown";
                             if (enemyCount.ContainsKey(realName)) { enemyCount[realName]++; }
                             else { enemyCount.Add(realName, 1); }
                         }
