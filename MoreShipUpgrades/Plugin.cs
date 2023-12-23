@@ -133,12 +133,47 @@ namespace MoreShipUpgrades
         private void SetupSamples(ref AssetBundle bundle)
         {
             Item fleaSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/Samples/SnareFleaSample.asset");
+            SampleItem fleaScript = fleaSample.spawnPrefab.AddComponent<SampleItem>();
+            fleaScript.grabbable = true;
+            fleaScript.grabbableToEnemies = true;
+            fleaScript.itemProperties = fleaSample;
+
             Item spiderSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/Samples/BunkerSpiderSample.asset");
+            SampleItem spiderScript = spiderSample.spawnPrefab.AddComponent<SampleItem>();
+            spiderScript.grabbable = true;
+            spiderScript.grabbableToEnemies = true;
+            spiderScript.itemProperties = spiderSample;
+
             Item hoardSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/Samples/HoardingBugSample.asset");
+            SampleItem hoardScript = hoardSample.spawnPrefab.AddComponent<SampleItem>();
+            hoardScript.grabbable = true;
+            hoardScript.grabbableToEnemies = true;
+            hoardScript.itemProperties = hoardSample;
+
             Item brackSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/Samples/BrackenSample.asset");
+            SampleItem brackScript = brackSample.spawnPrefab.AddComponent<SampleItem>();
+            brackScript.grabbable = true;
+            brackScript.grabbableToEnemies = true;
+            brackScript.itemProperties = brackSample;
+
             Item eyelessSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/Samples/EyelessDogSample.asset");
+            SampleItem eyelessScript = eyelessSample.spawnPrefab.AddComponent<SampleItem>();
+            eyelessScript.grabbable = true;
+            eyelessScript.grabbableToEnemies = true;
+            eyelessScript.itemProperties = eyelessSample;
+
             Item baboonSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/Samples/BaboonHawkSample.asset");
+            SampleItem baboonScript = baboonSample.spawnPrefab.AddComponent<SampleItem>();
+            baboonScript.grabbable = true;
+            baboonScript.grabbableToEnemies = true;
+            baboonScript.itemProperties = baboonSample;
+
             Item thumperSample = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/Samples/ThumperSample.asset");
+            SampleItem thumperScript = thumperSample.spawnPrefab.AddComponent<SampleItem>();
+            thumperScript.grabbable = true;
+            thumperScript.grabbableToEnemies = true;
+            thumperScript.itemProperties = thumperSample;
+
 
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(fleaSample.spawnPrefab);
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(spiderSample.spawnPrefab);
