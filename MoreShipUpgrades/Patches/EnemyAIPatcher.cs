@@ -17,7 +17,7 @@ namespace MoreShipUpgrades.Patches
         {
             if (currentEnemy == __instance.NetworkObject.NetworkObjectId) return;
             currentEnemy = __instance.NetworkObject.NetworkObjectId;
-            string name = __instance.GetComponentInChildren<ScanNodeProperties>().headerText.ToLower();
+            string name = __instance.enemyType.enemyName;
             if (UpgradeBus.instance.hunter && hunterScript.tiers[UpgradeBus.instance.huntLevel].Contains(name))
             {
                 GameObject go = GameObject.Instantiate(UpgradeBus.instance.samplePrefabs[name],__instance.transform.position + Vector3.up,Quaternion.identity);

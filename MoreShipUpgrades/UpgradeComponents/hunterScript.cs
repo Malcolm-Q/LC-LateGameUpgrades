@@ -7,9 +7,19 @@ namespace MoreShipUpgrades.UpgradeComponents
 {
     internal class hunterScript : BaseUpgrade
     {
-        static string[] lvl1 = new string[] { "hoarding bug", "snare flea" };
-        static string[] lvl2 = new string[] { "bunker spider","hoarding bug", "snare flea","baboon hawk" };
-        static string[] lvl3 = new string[] { "bunker spider","hoarding bug","snare flea","baboon hawk","bracken","half","eyeless dog" };
+        static string[] lvl1 = new string[] { "Hoarding Bug", "Centipede" };
+        static string[] lvl2 = new string[] { "Bunker Spider", "Hoarding Bug", "Centipede", "Baboon Hawk" };
+        static string[] lvl3 = new string[] { "Bunker Spider", "Hoarding Bug", "Centipede", "Baboon Hawk", "Flowerman", "Crawler", "MouthDog" };
+        static Dictionary<string, string> monsterNames = new Dictionary<string, string>()
+            {
+            { "Hoarding Bug", "Hoarding Bug" },
+            { "Centipede", "Snare Flea" },
+            { "Bunker Spider", "Bunker Spider" },
+            { "Baboon Hawk", "Baboon Hawk" },
+            { "Flowerman", "Bracken" },
+            { "Crawler", "Half/Thumper" },
+            { "MouthDog", "Eyeless Dog" },
+            };
         static public Dictionary<int, string[]> tiers = new Dictionary<int, string[]>
         {
             {0,  lvl1 },
@@ -45,11 +55,17 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public static string GetHunterInfo(int level, int price)
         {
-            string enems = "";
+            string enems;
             if(level != 1) enems = string.Join(", ", tiers[level-1].Except(tiers[level - 2]).ToArray());
             else enems = string.Join(", ", tiers[level-1]);
-            enems += "\n";
-            return string.Format(AssetBundleHandler.GetInfoFromJSON("Hunter"), level, price, enems);
+            string result = "";
+            foreach (string monsterTypeName in enems.Split(", "))
+            {
+                result += monsterNames[monsterTypeName] + ", ";
+            }
+            result = result.Substring(0, result.Length - 2);
+            result += "\n";
+            return string.Format(AssetBundleHandler.GetInfoFromJSON("Hunter"), level, price, result);
         }
     }
 }
