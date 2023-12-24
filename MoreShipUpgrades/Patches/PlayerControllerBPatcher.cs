@@ -112,38 +112,16 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("BeginGrabObject")]
         public static IEnumerable<CodeInstruction> BeginGrabObjectTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo affectWeight = typeof(exoskeletonScript).GetMethod("CalculateWeight");
-            bool found = false;
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            for (int i = 0; i < codes.Count; i++)
-            {
-                if (found) break;
-                if (!(codes[i].opcode == OpCodes.Call && codes[i].operand.ToString() == "Single Clamp(Single, Single, Single)")) continue;
-
-                codes[i] = new CodeInstruction(OpCodes.Call, affectWeight);
-                found = true;
-            }
-            if (!found) Plugin.mls.LogError("BeginGrabObject - Couldn't find Clamp function");
-            return codes.AsEnumerable();
+            ReplaceClampForBackMusclesFunction(ref instructions);
+            return instructions.AsEnumerable();
         }
 
         [HarmonyTranspiler]
         [HarmonyPatch("GrabObjectClientRpc")]
         public static IEnumerable<CodeInstruction> GrabObjectClientRpcTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo affectWeight = typeof(exoskeletonScript).GetMethod("CalculateWeight");
-            bool found = false;
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            for (int i = 0; i < codes.Count; i++)
-            {
-                if (found) break;
-                if (!(codes[i].opcode == OpCodes.Call && codes[i].operand.ToString() == "Single Clamp(Single, Single, Single)")) continue;
-
-                codes[i] = new CodeInstruction(OpCodes.Call, affectWeight);
-                found = true;
-            }
-            if (!found) Plugin.mls.LogError("GrabObject - Couldn't find Clamp function");
-            return codes.AsEnumerable();
+            ReplaceClampForBackMusclesFunction(ref instructions);
+            return instructions.AsEnumerable();
         }
 
         [HarmonyTranspiler]
