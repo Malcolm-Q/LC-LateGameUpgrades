@@ -166,7 +166,6 @@ namespace MoreShipUpgrades.Patches
                 codes[i] = new CodeInstruction(OpCodes.Call, affectWeight);
                 found = true;
             }
-            if (!found) Plugin.mls.LogError("MoveNext -Couldn't find Clamp function");
             instructions = codes.AsEnumerable();
         }
         
