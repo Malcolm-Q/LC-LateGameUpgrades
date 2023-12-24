@@ -2,7 +2,10 @@
 using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.UpgradeComponents;
-using System.Numerics;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Emit;
+using System.Linq;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Patches
@@ -29,25 +32,13 @@ namespace MoreShipUpgrades.Patches
             if (!UpgradeBus.instance.beePercs.ContainsKey(__instance.playerSteamId) || damageNumber != 10) { return; }
             damageNumber = Mathf.Clamp((int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beePercs[__instance.playerSteamId] * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT))),0,100);
         }
-        [HarmonyPrefix]
-        [HarmonyPatch("DamagePlayer")]
-        private static void StimpackBeforeDamage(ref int damageNumber, PlayerControllerB __instance)
-        {
-            playerHealthScript.BeforeDamagePlayer(ref damageNumber, ref __instance);
-        }
-        [HarmonyPostfix]
-        [HarmonyPatch("DamagePlayer")]
-        private static void StimpackAfterDamage(PlayerControllerB __instance)
-        {
-            playerHealthScript.AfterDamagePlayer(ref __instance);
-        }
 
         [HarmonyPrefix]
         [HarmonyPatch("DamagePlayerServerRpc")]
         private static void beekeeperReduceDamageServer(ref int damageNumber, PlayerControllerB __instance)
         {
             if (!UpgradeBus.instance.beePercs.ContainsKey(__instance.playerSteamId) || damageNumber != 10) { return; }
-            damageNumber = Mathf.Clamp((int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beePercs[__instance.playerSteamId] * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT))),0,100);
+            damageNumber = Mathf.Clamp((int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beePercs[__instance.playerSteamId] * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT))), 0, 100);
         }
 
         [HarmonyPrefix]
@@ -55,7 +46,7 @@ namespace MoreShipUpgrades.Patches
         private static void beekeeperReduceDamageClient(ref int damageNumber, PlayerControllerB __instance)
         {
             if (!UpgradeBus.instance.beePercs.ContainsKey(__instance.playerSteamId) || damageNumber != 10) { return; }
-            damageNumber = Mathf.Clamp((int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beePercs[__instance.playerSteamId] * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT))),0,100);
+            damageNumber = Mathf.Clamp((int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beePercs[__instance.playerSteamId] * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT))), 0, 100);
         }
 
         [HarmonyPrefix]
@@ -63,7 +54,41 @@ namespace MoreShipUpgrades.Patches
         private static void beekeeperReduceDamageOther(ref int damageNumber, PlayerControllerB __instance)
         {
             if (!UpgradeBus.instance.beePercs.ContainsKey(__instance.playerSteamId) || damageNumber != 10) { return; }
-            damageNumber = Mathf.Clamp((int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beePercs[__instance.playerSteamId] * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT))),0,100);
+            damageNumber = Mathf.Clamp((int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beePercs[__instance.playerSteamId] * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT))), 0, 100);
+        }
+
+        [HarmonyPatch("DamagePlayer")]
+        [HarmonyTranspiler]
+        public static IEnumerable<CodeInstruction> DamagePlayerTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            var maximumHealthMethod = typeof(playerHealthScript).GetMethod("CheckForAdditionalHealth", BindingFlags.Public | BindingFlags.Static);
+            List<CodeInstruction> codes = instructions.ToList();
+            /*
+             * ldfld int32 GameNetcodeStuff.PlayerControllerB::health
+             * ldarg.1 -> damageNumber
+             * sub -> health - damageNumber
+             * ldc.i4.0
+             * ldc.i4.s 100
+             * call int32 clamp(int32, int32, int32) -> Mathf.Clamp(health - damageNumber, 0, 100)
+             * stfld int32 health -> health = Mathf.Clamp(health - damageNumber, 0, 100)
+             * 
+             * We want change 100 to the maximum possible value the player's health can be due to Stimpack upgrade
+             */
+            bool foundHealthMaximum = false;
+            for (int i = 0; i < codes.Count; i++)
+            {
+                if (!(codes[i].opcode == OpCodes.Ldc_I4_S && codes[i].operand.ToString() == "100")) continue;
+                if (!(codes[i + 1] != null && codes[i + 1].opcode == OpCodes.Call && codes[i + 1].operand.ToString() == "Int32 Clamp(Int32, Int32, Int32)")) continue;
+                if (!(codes[i + 2] != null && codes[i + 2].opcode == OpCodes.Stfld && codes[i + 2].operand.ToString() == "System.Int32 health")) continue;
+
+                //Mathf.Clamp(health - damageNumber, 0, playerHealthScript.CheckForAdditionalHealth())
+                codes[i] = new CodeInstruction(OpCodes.Call, maximumHealthMethod); 
+                foundHealthMaximum = true;
+
+                if (foundHealthMaximum) break;
+            }
+            if (!foundHealthMaximum) Plugin.mls.LogError("Could not find the maximum of Mathf.Clamp that changes the health value");
+            return codes.AsEnumerable();
         }
 
 
