@@ -15,14 +15,7 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("Update")]
         private static IEnumerable<CodeInstruction> Update_Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo peeperMethod = null;
-            foreach (var method in typeof(coilHeadItem).GetMethods())
-            {
-                if (method.Name != "HasLineOfSightToPeepers") continue;
-                peeperMethod = method;
-                if (peeperMethod != null) break;
-            }
-                Plugin.mls.LogInfo(peeperMethod);
+            MethodInfo peeperMethod = typeof(coilHeadItem).GetMethod("HasLineOfSightToPeepers", BindingFlags.Public | BindingFlags.Static);
             MethodInfo transformMethod = typeof(SpringManAI).GetMethod("get_transform");
             MethodInfo positionMethod = typeof(UnityEngine.Transform).GetMethod("get_position");
             
@@ -30,7 +23,6 @@ namespace MoreShipUpgrades.Patches
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             for (int i = 3; i < codes.Count; i++)
             {
-                Plugin.mls.LogInfo("Operation Code: " + codes[i].opcode + ", Operation Operand: " + codes[i].operand);
                 if (codes[i - 1].opcode != OpCodes.Ldc_I4_1) continue;
                 if (codes[i].opcode != OpCodes.Stloc_1) continue;
                 if (codes[i+1].opcode != OpCodes.Ldloc_1) continue;
