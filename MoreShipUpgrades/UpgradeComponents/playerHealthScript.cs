@@ -2,6 +2,7 @@
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using System;
+using System.Numerics;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents
@@ -79,34 +80,20 @@ namespace MoreShipUpgrades.UpgradeComponents
             PlayerControllerB[] players = __instance.allPlayerScripts;
             foreach (PlayerControllerB player in players)
             {
-                CheckForAdditionalHealth(player);
+                UpdateMaxHealth(player);
             }
         }
+        public static int CheckForAdditionalHealth()
+        {
+            if (UpgradeBus.instance.playerHPs.ContainsKey(GameNetworkManager.Instance.localPlayerController.playerSteamId))
+               return UpgradeBus.instance.playerHPs[GameNetworkManager.Instance.localPlayerController.playerSteamId];
+            return DEFAULT_HEALTH;
+        }
 
-        public static void CheckForAdditionalHealth(PlayerControllerB player)
+        public static void UpdateMaxHealth(PlayerControllerB player)
         {
             if (UpgradeBus.instance.playerHPs.ContainsKey(player.playerSteamId))
                 player.health = UpgradeBus.instance.playerHPs[player.playerSteamId];
-            if (player.playerSteamId == GameNetworkManager.Instance.localPlayerController.playerSteamId)
-                HUDManager.Instance.UpdateHealthUI(player.health, hurtPlayer: false);
-        }
-
-        internal static void BeforeDamagePlayer(ref int damageNumber, ref PlayerControllerB __instance)
-        {
-            if (!UpgradeBus.instance.playerHPs.ContainsKey(__instance.playerSteamId)) { return; }
-            int newHealth = Mathf.Clamp(__instance.health - damageNumber, 5, UpgradeBus.instance.playerHPs[__instance.playerSteamId]);
-            if (!UpgradeBus.instance.currentPlayerHPs.ContainsKey(__instance.playerSteamId))
-                UpgradeBus.instance.currentPlayerHPs.Add(__instance.playerSteamId, newHealth);
-            else UpgradeBus.instance.currentPlayerHPs[__instance.playerSteamId] = newHealth;
-        }
-
-        internal static void AfterDamagePlayer(ref PlayerControllerB __instance)
-        {
-            if (!UpgradeBus.instance.playerHPs.ContainsKey(__instance.playerSteamId)) { return; }
-            if (__instance.isPlayerDead) { return; }
-
-            __instance.health = UpgradeBus.instance.currentPlayerHPs[__instance.playerSteamId];
-            HUDManager.Instance.UpdateHealthUI(__instance.health);
         }
     }
 }

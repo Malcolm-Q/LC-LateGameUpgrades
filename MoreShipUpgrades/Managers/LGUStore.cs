@@ -241,7 +241,7 @@ namespace MoreShipUpgrades.Managers
             if (UpgradeBus.instance.playerHPs.ContainsKey(id))
                 UpgradeBus.instance.playerHPs[id] = health;
             else UpgradeBus.instance.playerHPs.Add(id, health);
-            playerHealthScript.CheckForAdditionalHealth(GameNetworkManager.Instance.localPlayerController);
+            playerHealthScript.UpdateMaxHealth(GameNetworkManager.Instance.localPlayerController);
         }
 
         [ServerRpc(RequireOwnership =false)]
