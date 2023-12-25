@@ -7,12 +7,12 @@ namespace MoreShipUpgrades.UpgradeComponents
 {
     internal class hunterScript : BaseUpgrade
     {
-        static string[] lvl1 = new string[] { "Hoarding Bug", "Centipede" };
-        static string[] lvl2 = new string[] { "Bunker Spider", "Hoarding Bug", "Centipede", "Baboon Hawk" };
-        static string[] lvl3 = new string[] { "Bunker Spider", "Hoarding Bug", "Centipede", "Baboon Hawk", "Flowerman", "Crawler", "MouthDog" };
+        static string[] lvl1 = new string[] { "Hoarding bug", "Centipede" };
+        static string[] lvl2 = new string[] { "Bunker Spider", "Hoarding bug", "Centipede", "Baboon Hawk" };
+        static string[] lvl3 = new string[] { "Bunker Spider", "Hoarding bug", "Centipede", "Baboon Hawk", "Flowerman", "Crawler", "MouthDog" };
         static Dictionary<string, string> monsterNames = new Dictionary<string, string>()
             {
-            { "Hoarding Bug", "Hoarding Bug" },
+            { "Hoarding bug", "Hoarding Bug" },
             { "Centipede", "Snare Flea" },
             { "Bunker Spider", "Bunker Spider" },
             { "Baboon Hawk", "Baboon Hawk" },

@@ -11,7 +11,7 @@ namespace MoreShipUpgrades.Misc
 {
     internal class AssetBundleHandler
     {
-        private static string MODULE_NAME = "Asset Bundle Handler";
+        private static readonly LGULogger logger = new LGULogger(typeof(AssetBundleHandler).Name);
         private static Dictionary<string, string> infoJSON;
         public static Dictionary<string, string> samplePaths = new Dictionary<string, string>()
         {
@@ -67,11 +67,11 @@ namespace MoreShipUpgrades.Misc
         public static GameObject TryLoadGameObjectAsset(ref AssetBundle bundle, string path)
         {
             GameObject result = bundle.LoadAsset<GameObject>(path);
-            if (result == null) 
+            if (result == null)
             {
-                Plugin.mls.LogError(string.Format("[{0}] An error has occurred trying to load asset from {1}\n", MODULE_NAME, path));
+                logger.LogError(string.Format("An error has occurred trying to load asset from {0}", path));
             }
-            Plugin.mls.LogInfo(string.Format("[{0}] Loaded asset located in {1}", MODULE_NAME, path));
+            logger.LogInfo(string.Format("Loaded asset located in {0}", path));
             return result;
         }
         /// <summary>
@@ -88,9 +88,9 @@ namespace MoreShipUpgrades.Misc
             AudioClip result = bundle.LoadAsset<AudioClip>(path);
             if (result == null)
             {
-                Plugin.mls.LogError(string.Format("[{0}] An error has occurred trying to load asset from {1}\n", MODULE_NAME, path));
+                logger.LogError(string.Format("An error has occurred trying to load asset from {0}", path));
             }
-            Plugin.mls.LogInfo(string.Format("[{0}] Loaded asset located in {1}", MODULE_NAME, path));
+            logger.LogInfo(string.Format("Loaded asset located in {0}", path));
             return result;
         }
 
@@ -108,27 +108,27 @@ namespace MoreShipUpgrades.Misc
             Item result = bundle.LoadAsset<Item>(path);
             if (result == null)
             {
-                Plugin.mls.LogError(string.Format("[{0}] An error has occurred trying to load asset from {1}\n", MODULE_NAME, path));
+                logger.LogError(string.Format("An error has occurred trying to load asset from {0}", path));
             }
-            Plugin.mls.LogInfo(string.Format("[{0}] Loaded asset located in {1}", MODULE_NAME, path));
+            logger.LogInfo(string.Format("Loaded asset located in {0}", path));
             return result;
         }
 
-        public static Dictionary<string, string> GetInfoJSON(ref AssetBundle bundle) 
+        public static Dictionary<string, string> GetInfoJSON(ref AssetBundle bundle)
         {
             if (infoJSON != null) return infoJSON;
 
             TextAsset infoStringAsset = bundle.LoadAsset<TextAsset>("Assets/ShipUpgrades/InfoStrings.json");
             if (!infoStringAsset)
             {
-                Plugin.mls.LogError(string.Format("[{0}] An error has occurred trying to load info strings from the bundle\n", MODULE_NAME));
+                logger.LogError("An error has occurred trying to load info strings from the bundle");
                 return null;
             }
 
             infoJSON = JsonConvert.DeserializeObject<Dictionary<string, string>>(infoStringAsset.text);
             if (infoJSON == null)
             {
-                Plugin.mls.LogError(string.Format("[{0}] An error has occurred trying to deserialize info strings into a dictionary\n", MODULE_NAME));
+                logger.LogError("An error has occurred trying to deserialize info strings into a dictionary");
             }
             return infoJSON;
         }
@@ -141,7 +141,7 @@ namespace MoreShipUpgrades.Misc
 
             if (!infoJSON.ContainsKey(key))
             {
-                Plugin.mls.LogError(string.Format("[{0}] The key was not present in the info JSON file!\n", MODULE_NAME));
+                logger.LogError("The key was not present in the info JSON file!");
                 return "";
             }
             return infoJSON[key];
@@ -149,9 +149,9 @@ namespace MoreShipUpgrades.Misc
 
         public static GameObject GetPerkGameObject(string upgradeName)
         {
-            if (!assetPaths.ContainsKey(upgradeName)) 
+            if (!assetPaths.ContainsKey(upgradeName))
             {
-                Plugin.mls.LogError(string.Format("[{0}] {1} was not present in the asset dictionary!\n", MODULE_NAME, upgradeName));
+                logger.LogError(string.Format("{0} was not present in the asset dictionary!", upgradeName));
                 return null;
             }
             return TryLoadGameObjectAsset(ref UpgradeBus.instance.UpgradeAssets, assetPaths[upgradeName]);
@@ -162,7 +162,7 @@ namespace MoreShipUpgrades.Misc
             if (assetPaths.ContainsKey(itemName)) return TryLoadItemAsset(ref UpgradeBus.instance.UpgradeAssets, assetPaths[itemName]);
             if (samplePaths.ContainsKey(itemName)) return TryLoadItemAsset(ref UpgradeBus.instance.UpgradeAssets, samplePaths[itemName]);
 
-            Plugin.mls.LogError(string.Format("[{0}] {1} was not present in the asset or sample dictionary!\n", MODULE_NAME, itemName));
+            logger.LogError(string.Format("{0} was not present in the asset or sample dictionary!", itemName));
             return null;
         }
 
@@ -170,7 +170,7 @@ namespace MoreShipUpgrades.Misc
         {
             if (!assetPaths.ContainsKey(audioName))
             {
-                Plugin.mls.LogError(string.Format("[{0}] {1} was not present in the asset dictionary!\n", MODULE_NAME, audioName));
+                logger.LogError(string.Format("{0} was not present in the asset dictionary!", audioName));
                 return null;
             }
             return TryLoadAudioClipAsset(ref UpgradeBus.instance.UpgradeAssets, assetPaths[audioName]);
