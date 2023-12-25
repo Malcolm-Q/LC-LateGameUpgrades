@@ -173,7 +173,7 @@ namespace MoreShipUpgrades
 
             if (!cfg.WEAK_TELE_ENABLED) return;
 
-            TerminalNode PortNode = new TerminalNode();
+            TerminalNode PortNode = ScriptableObject.CreateInstance<TerminalNode>();
             PortNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Portable Tele"), (int)(cfg.CHANCE_TO_BREAK * 100));
             Items.RegisterShopItem(tpBut, null, null, PortNode, tpBut.creditsWorth);
         }
@@ -197,7 +197,7 @@ namespace MoreShipUpgrades
 
             if (!cfg.ADVANCED_TELE_ENABLED) return;
 
-            TerminalNode advNode = new TerminalNode();
+            TerminalNode advNode = ScriptableObject.CreateInstance<TerminalNode>();
             advNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Advanced Portable Tele"), (int)(cfg.ADV_CHANCE_TO_BREAK * 100));
             Items.RegisterShopItem(tpButAdvanced, null, null, advNode, tpButAdvanced.creditsWorth);
         }
@@ -219,7 +219,7 @@ namespace MoreShipUpgrades
 
             if (!cfg.NIGHT_VISION_ENABLED) return;
 
-            TerminalNode nightNode = new TerminalNode();
+            TerminalNode nightNode = ScriptableObject.CreateInstance<TerminalNode>();
             string grantStatus = cfg.NIGHT_VISION_INDIVIDUAL || UpgradeBus.instance.cfg.SHARED_UPGRADES ? "one" : "all";
             string loseOnDeath = cfg.LOSE_NIGHT_VIS_ON_DEATH ? "be" : "not be";
             nightNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Night Vision"), grantStatus, loseOnDeath);
@@ -242,7 +242,7 @@ namespace MoreShipUpgrades
 
             if (!cfg.DIVEKIT_ENABLED) return;
 
-            TerminalNode medNode = new TerminalNode();
+            TerminalNode medNode = ScriptableObject.CreateInstance<TerminalNode>();
             string hands = cfg.DIVEKIT_TWO_HANDED ? "two" : "one";
             medNode.displayText = $"DIVING KIT - ${cfg.DIVEKIT_PRICE}\n\nBreath underwater.\nWeights {Mathf.RoundToInt((DiveItem.weight -1 )*100)} lbs and is {hands} handed.\n\n";
             Items.RegisterShopItem(DiveItem, null, null,medNode, DiveItem.creditsWorth);
@@ -266,7 +266,7 @@ namespace MoreShipUpgrades
 
             if (!cfg.MEDKIT_ENABLED) return;
 
-            TerminalNode medNode = new TerminalNode();
+            TerminalNode medNode = ScriptableObject.CreateInstance<TerminalNode>();
             medNode.displayText = string.Format("MEDKIT - ${0}\n\nLeft click to heal yourself for {1} health.\nCan be used {2} times.\n", cfg.MEDKIT_PRICE, cfg.MEDKIT_HEAL_VALUE, cfg.MEDKIT_USES);
             Items.RegisterShopItem(MedKitItem, null, null,medNode, MedKitItem.creditsWorth);
         }
@@ -288,7 +288,7 @@ namespace MoreShipUpgrades
 
             if (!cfg.PEEPER_ENABLED) return;
 
-            TerminalNode peepNode = new TerminalNode();
+            TerminalNode peepNode = ScriptableObject.CreateInstance<TerminalNode>();
             peepNode.displayText = "Looks at coil heads, don't lose it\n";
             Items.RegisterShopItem(Peeper, null, null, peepNode, Peeper.creditsWorth);
         }
