@@ -244,26 +244,6 @@ namespace MoreShipUpgrades.Managers
             playerHealthScript.UpdateMaxHealth(GameNetworkManager.Instance.localPlayerController);
         }
 
-        [ServerRpc(RequireOwnership =false)]
-        public void UpdateForceMultsServerRpc(ulong id, int lvl)
-        {
-            UpdateForceMultsClientRpc(id, lvl);
-        }
-
-        [ClientRpc]
-        private void UpdateForceMultsClientRpc(ulong id, int lvl)
-        {
-            if(UpgradeBus.instance.forceMults.ContainsKey(id))
-            {
-                UpgradeBus.instance.forceMults[id] = lvl;
-            }
-            else
-            {
-                UpgradeBus.instance.forceMults.Add(id, lvl);
-            }
-        }
-
-
         [ServerRpc(RequireOwnership = false)]
         public void DeleteUpgradesServerRpc()
         {

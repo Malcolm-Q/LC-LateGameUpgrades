@@ -13,6 +13,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         public static string UPGRADE_NAME = "Protein Powder";
 
         private static int CRIT_DAMAGE_VALUE = 100;
+        private static int DEFAULT_HIT_VALUE = 1;
 
         // Configuration
         public static string ENABLED_SECTION = string.Format("Enable {0} Upgrade", UPGRADE_NAME);
@@ -58,14 +59,12 @@ namespace MoreShipUpgrades.UpgradeComponents
         public override void Increment()
         {
             UpgradeBus.instance.proteinLevel++;
-            LGUStore.instance.UpdateForceMultsServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, (UpgradeBus.instance.cfg.PROTEIN_INCREMENT * UpgradeBus.instance.proteinLevel)+UpgradeBus.instance.cfg.PROTEIN_UNLOCK_FORCE);
         }
 
         public override void load()
         {
             UpgradeBus.instance.proteinPowder = true;
             HUDManager.Instance.chatText.text += LOAD_MESSAGE;
-            LGUStore.instance.UpdateForceMultsServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, UpgradeBus.instance.cfg.PROTEIN_UNLOCK_FORCE);
         }
 
         public override void Register()
@@ -78,44 +77,14 @@ namespace MoreShipUpgrades.UpgradeComponents
             UpgradeBus.instance.proteinLevel = 0;
             UpgradeBus.instance.proteinPowder = false;
             HUDManager.Instance.chatText.text += UNLOAD_MESSAGE;
-            LGUStore.instance.UpdateForceMultsServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, 0);
         }
 
-        public static void DamageNearbyEnemies(ref Shovel __instance, ref List<RaycastHit> ___objectsHitByShovelList)
+        public static int GetShovelHitForce()
         {
-            PlayerControllerB player = __instance.playerHeldBy;
-            UnityEngine.Vector3 start = player.gameplayCamera.transform.position;
-            for (int i = 0; i < ___objectsHitByShovelList.Count; i++)
-            {
-                IHittable hittable;
-                RaycastHit hit;
-
-                bool hitEnemy = ___objectsHitByShovelList[i].transform.TryGetComponent<IHittable>(out hittable) &&
-                            !(___objectsHitByShovelList[i].transform == player.transform) &&
-                            (___objectsHitByShovelList[i].point == UnityEngine.Vector3.zero ||
-                            !Physics.Linecast(start, ___objectsHitByShovelList[i].point, out hit, StartOfRound.Instance.collidersAndRoomMaskAndDefault));
-                if (hitEnemy)
-                {
-                    try
-                    {
-                        bool canCrit = TryToCritEnemy(ref player);
-                        int damageValue = canCrit ? CRIT_DAMAGE_VALUE : UpgradeBus.instance.forceMults[player.playerSteamId];
-                        hittable.Hit(damageValue, player.gameplayCamera.transform.forward, player, true);
-                        Plugin.mls.LogInfo(string.Format("[{0}] Hitting the enemy with a force value of {1}", UPGRADE_NAME, damageValue));
-                    }
-                    catch (Exception e)
-                    {
-                        Plugin.mls.LogError(string.Format("[{0}] An error occurred when hitting the enemy: {1}", UPGRADE_NAME, e));
-                    }
-                }
-                else if (___objectsHitByShovelList[i].transform.gameObject.layer == 8 || ___objectsHitByShovelList[i].transform.gameObject.layer == 11)
-                {
-                    break;
-                }
-            }
+            return UpgradeBus.instance.proteinPowder ? TryToCritEnemy() ? CRIT_DAMAGE_VALUE : UpgradeBus.instance.cfg.PROTEIN_INCREMENT * UpgradeBus.instance.proteinLevel + UpgradeBus.instance.cfg.PROTEIN_UNLOCK_FORCE + DEFAULT_HIT_VALUE : DEFAULT_HIT_VALUE;
         }
 
-        private static bool TryToCritEnemy(ref PlayerControllerB player)
+        private static bool TryToCritEnemy()
         {
             Plugin.mls.LogInfo(string.Format("Levels purchaseable for Protein Powder: {0}",UpgradeBus.instance.cfg.PROTEIN_UPGRADE_PRICES.Split(',').Length));
             Plugin.mls.LogInfo("Current level on Protein Powder: " + UpgradeBus.instance.proteinLevel);
