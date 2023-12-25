@@ -108,31 +108,66 @@ namespace MoreShipUpgrades.Patches
             return true;
         }
 
-        [HarmonyPrefix]
-        [HarmonyPatch("Update")]
-        private static void noCarryWeight(ref PlayerControllerB __instance)
+        [HarmonyTranspiler]
+        [HarmonyPatch("BeginGrabObject")]
+        public static IEnumerable<CodeInstruction> BeginGrabObjectTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            /*
-            Doing carryWeight /= 2 will break it and not have the desired effect.
-            carryWeight is ~(-= 1 then * 100). Ex: when your carryweight is 86 lb it's actually 1.86.
-            Tallying it up in a for loop and dividing by two in the += in the best way imo.
-             */
-
-            // previous optimized solution caused some client side failure. TODO: Optimize this horrific bandaid fix.
-            if (UpgradeBus.instance.exoskeleton && __instance.ItemSlots.Length > 0 && GameNetworkManager.Instance.localPlayerController == __instance)
-            {
-                UpgradeBus.instance.alteredWeight = 1f;
-                for(int i = 0;  i < __instance.ItemSlots.Length; i++)
-                {
-                    GrabbableObject obj = __instance.ItemSlots[i];
-                    if(obj != null)
-                    {
-                        UpgradeBus.instance.alteredWeight += (Mathf.Clamp(obj.itemProperties.weight - 1f, 0f, 10f) * (UpgradeBus.instance.cfg.CARRY_WEIGHT_REDUCTION - (UpgradeBus.instance.backLevel * UpgradeBus.instance.cfg.CARRY_WEIGHT_INCREMENT)));
-                    }
-                }
-                __instance.carryWeight = UpgradeBus.instance.alteredWeight;
-                if(__instance.carryWeight < 1f) { __instance.carryWeight = 1f; }
-            }
+            ReplaceClampForBackMusclesFunction(ref instructions);
+            return instructions.AsEnumerable();
         }
+
+        [HarmonyTranspiler]
+        [HarmonyPatch("GrabObjectClientRpc")]
+        public static IEnumerable<CodeInstruction> GrabObjectClientRpcTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            ReplaceClampForBackMusclesFunction(ref instructions);
+            return instructions.AsEnumerable();
+        }
+
+        [HarmonyTranspiler]
+        [HarmonyPatch("DestroyItemInSlot")]
+        public static IEnumerable<CodeInstruction> DestroyItemInSlotTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            ReplaceClampForBackMusclesFunction(ref instructions);
+            return instructions.AsEnumerable();
+        }
+
+        [HarmonyTranspiler]
+        [HarmonyPatch("DespawnHeldObjectOnClient")]
+        public static IEnumerable<CodeInstruction> DespawnHeldObjectOnClientTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            ReplaceClampForBackMusclesFunction(ref instructions);
+            return instructions.AsEnumerable();
+        }
+        [HarmonyTranspiler]
+        [HarmonyPatch("SetObjectAsNoLongerHeld")]
+        public static IEnumerable<CodeInstruction> SetObjectAsNoLongerHeldTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            ReplaceClampForBackMusclesFunction(ref instructions);
+            return instructions.AsEnumerable();
+        }
+        [HarmonyTranspiler]
+        [HarmonyPatch("PlaceGrabbableObject")]
+        public static IEnumerable<CodeInstruction> PlaceGrabbableObjectTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            ReplaceClampForBackMusclesFunction(ref instructions);
+            return instructions.AsEnumerable();
+        }
+
+        private static void ReplaceClampForBackMusclesFunction(ref IEnumerable<CodeInstruction> instructions) 
+        {
+            MethodInfo affectWeight = typeof(exoskeletonScript).GetMethod("CalculateWeight");
+            bool found = false;
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            for (int i = 0; i < codes.Count; i++)
+            {
+                if (found) break;
+                if (!(codes[i].opcode == OpCodes.Call && codes[i].operand.ToString() == "Single Clamp(Single, Single, Single)")) continue;
+                codes[i] = new CodeInstruction(OpCodes.Call, affectWeight);
+                found = true;
+            }
+            instructions = codes.AsEnumerable();
+        }
+        
     }
 }
