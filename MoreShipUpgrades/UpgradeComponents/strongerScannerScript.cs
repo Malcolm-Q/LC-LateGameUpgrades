@@ -35,6 +35,22 @@ namespace MoreShipUpgrades.UpgradeComponents
             if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Better Scanner")) { UpgradeBus.instance.UpgradeObjects.Add("Better Scanner", gameObject); }
         }
 
+        public static void AddScannerNodeToValve(ref SteamValveHazard steamValveHazard)
+        {
+            if (UpgradeBus.instance.scanLevel < 0) return;
+            Plugin.mls.LogInfo("Adding scan node to the steam valve");
+            GameObject ScanNodeObject = Instantiate(GameObject.Find("ScanNode"), steamValveHazard.transform.position, Quaternion.Euler(Vector3.zero), steamValveHazard.transform);
+            ScanNodeProperties node = ScanNodeObject.GetComponent<ScanNodeProperties>();
+            node.headerText = "Bursted Steam Valve";
+            node.subText = "Fix it to get rid of the steam";
+            node.nodeType = 0;
+            node.creatureScanID = -1;
+        }
+
+        public static void RemoveScannerNodeFromValve(ref SteamValveHazard steamValveHazard)
+        {
+            Destroy(steamValveHazard.gameObject.GetComponentInChildren<ScanNodeProperties>());
+        }
         public static string GetBetterScannerInfo(int level, int price)
         {
             switch (level)
