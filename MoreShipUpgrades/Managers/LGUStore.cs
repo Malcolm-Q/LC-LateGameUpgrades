@@ -210,25 +210,6 @@ namespace MoreShipUpgrades.Managers
             }
         }
 
-        [ServerRpc(RequireOwnership =false)]
-        public void UpdateBeePercsServerRpc(ulong id, int lvl)
-        {
-            UpdateBeePercsClientRpc(id, lvl);
-        }
-
-        [ClientRpc]
-        private void UpdateBeePercsClientRpc(ulong id, int lvl)
-        {
-            if(UpgradeBus.instance.beePercs.ContainsKey(id))
-            {
-                UpgradeBus.instance.beePercs[id] = lvl;
-            }
-            else
-            {
-                UpgradeBus.instance.beePercs.Add(id, lvl);
-            }
-        }
-
         [ServerRpc(RequireOwnership = false)]
         public void UpdatePlayerNewHealthsServerRpc(ulong id, int health) 
         {

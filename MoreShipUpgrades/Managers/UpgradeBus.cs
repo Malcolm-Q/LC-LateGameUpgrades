@@ -87,7 +87,6 @@ namespace MoreShipUpgrades.Managers
             { "NV Headset Batteries", (level, price) => nightVisionScript.GetNightVisionInfo(level, price) },
         };
 
-        public Dictionary<ulong,float> beePercs = new Dictionary<ulong,float>();
         public Dictionary<ulong, int> playerHPs = new Dictionary<ulong, int>();
 
         public Dictionary<string,bool> IndividualUpgrades = new Dictionary<string,bool>();
