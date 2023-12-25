@@ -38,5 +38,22 @@ namespace MoreShipUpgrades.UpgradeComponents
             bool result = num < (float)range && !Physics.Linecast(transform.position, pos, StartOfRound.Instance.collidersRoomDefaultAndFoliage, QueryTriggerInteraction.Ignore);
             return result;
         }
+
+        public static bool HasLineOfSightToPeepers(Vector3 springPosition)
+        {
+            foreach (coilHeadItem peeper in UpgradeBus.instance.coilHeadItems)
+            {
+                if (peeper == null)
+                {
+                    UpgradeBus.instance.coilHeadItems.Remove(peeper);
+                    continue;
+                }
+                if (peeper.HasLineOfSightToPosition(springPosition))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
