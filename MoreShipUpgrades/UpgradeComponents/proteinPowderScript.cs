@@ -13,6 +13,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         public static string UPGRADE_NAME = "Protein Powder";
 
         private static int CRIT_DAMAGE_VALUE = 100;
+        private static int DEFAULT_HIT_VALUE = 1;
 
         // Configuration
         public static string ENABLED_SECTION = string.Format("Enable {0} Upgrade", UPGRADE_NAME);
@@ -58,14 +59,12 @@ namespace MoreShipUpgrades.UpgradeComponents
         public override void Increment()
         {
             UpgradeBus.instance.proteinLevel++;
-            LGUStore.instance.UpdateForceMultsServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, (UpgradeBus.instance.cfg.PROTEIN_INCREMENT * UpgradeBus.instance.proteinLevel)+UpgradeBus.instance.cfg.PROTEIN_UNLOCK_FORCE);
         }
 
         public override void load()
         {
             UpgradeBus.instance.proteinPowder = true;
             HUDManager.Instance.chatText.text += LOAD_MESSAGE;
-            LGUStore.instance.UpdateForceMultsServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, UpgradeBus.instance.cfg.PROTEIN_UNLOCK_FORCE);
         }
 
         public override void Register()
@@ -78,12 +77,11 @@ namespace MoreShipUpgrades.UpgradeComponents
             UpgradeBus.instance.proteinLevel = 0;
             UpgradeBus.instance.proteinPowder = false;
             HUDManager.Instance.chatText.text += UNLOAD_MESSAGE;
-            LGUStore.instance.UpdateForceMultsServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, 0);
         }
 
         public static int GetShovelHitForce()
         {
-            return UpgradeBus.instance.proteinPowder ? TryToCritEnemy() ? CRIT_DAMAGE_VALUE : UpgradeBus.instance.proteinLevel * UpgradeBus.instance.cfg.PROTEIN_INCREMENT + UpgradeBus.instance.cfg.PROTEIN_UNLOCK_FORCE + 1: 1;
+            return UpgradeBus.instance.proteinPowder ? TryToCritEnemy() ? CRIT_DAMAGE_VALUE : UpgradeBus.instance.cfg.PROTEIN_INCREMENT * UpgradeBus.instance.proteinLevel + UpgradeBus.instance.cfg.PROTEIN_UNLOCK_FORCE + DEFAULT_HIT_VALUE : DEFAULT_HIT_VALUE;
         }
 
         private static bool TryToCritEnemy()
