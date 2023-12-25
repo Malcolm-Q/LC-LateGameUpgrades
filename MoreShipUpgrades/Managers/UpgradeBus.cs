@@ -120,7 +120,7 @@ namespace MoreShipUpgrades.Managers
 
         public TerminalNode ConstructNode()
         {
-            modStoreInterface = new TerminalNode();
+            modStoreInterface = ScriptableObject.CreateInstance<TerminalNode>();
             modStoreInterface.clearPreviousText = true;
             foreach (CustomTerminalNode terminalNode in terminalNodes)
             {
