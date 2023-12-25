@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents
 {
@@ -14,14 +15,12 @@ namespace MoreShipUpgrades.UpgradeComponents
         public override void Increment()
         {
             UpgradeBus.instance.beeLevel++;
-            LGUStore.instance.UpdateBeePercsServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, UpgradeBus.instance.beeLevel);
         }
 
         public override void load()
         {
             UpgradeBus.instance.beekeeper = true;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Beekeeper is active!</color>";
-            LGUStore.instance.UpdateBeePercsServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, UpgradeBus.instance.beeLevel);
         }
 
         public override void Register()
@@ -34,7 +33,12 @@ namespace MoreShipUpgrades.UpgradeComponents
             UpgradeBus.instance.beeLevel = 0;
             UpgradeBus.instance.beekeeper = false;
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Beekeeper has been disabled</color>";
-            LGUStore.instance.UpdateBeePercsServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, 0);
+        }
+
+        public static int CalculateBeeDamage(int damageNumber)
+        {
+            if (!UpgradeBus.instance.beekeeper) return damageNumber;
+            return Mathf.Clamp((int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beeLevel * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT))), 0, damageNumber);
         }
     }
 }

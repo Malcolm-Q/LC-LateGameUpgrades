@@ -24,39 +24,6 @@ namespace MoreShipUpgrades.Patches
             if(UpgradeBus.instance.nightVision) { UpgradeBus.instance.UpgradeObjects["NV Headset Batteries"].GetComponent<nightVisionScript>().DisableOnClient(); }
         }
 
-
-        [HarmonyPrefix]
-        [HarmonyPatch("DamagePlayer")]
-        private static void beekeeperReduceDamage(ref int damageNumber, CauseOfDeath causeOfDeath, PlayerControllerB __instance)
-        {
-            if (!UpgradeBus.instance.beePercs.ContainsKey(__instance.playerSteamId) || damageNumber != 10) { return; }
-            damageNumber = Mathf.Clamp((int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beePercs[__instance.playerSteamId] * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT))),0,100);
-        }
-
-        [HarmonyPrefix]
-        [HarmonyPatch("DamagePlayerServerRpc")]
-        private static void beekeeperReduceDamageServer(ref int damageNumber, PlayerControllerB __instance)
-        {
-            if (!UpgradeBus.instance.beePercs.ContainsKey(__instance.playerSteamId) || damageNumber != 10) { return; }
-            damageNumber = Mathf.Clamp((int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beePercs[__instance.playerSteamId] * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT))), 0, 100);
-        }
-
-        [HarmonyPrefix]
-        [HarmonyPatch("DamagePlayerClientRpc")]
-        private static void beekeeperReduceDamageClient(ref int damageNumber, PlayerControllerB __instance)
-        {
-            if (!UpgradeBus.instance.beePercs.ContainsKey(__instance.playerSteamId) || damageNumber != 10) { return; }
-            damageNumber = Mathf.Clamp((int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beePercs[__instance.playerSteamId] * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT))), 0, 100);
-        }
-
-        [HarmonyPrefix]
-        [HarmonyPatch("DamageOnOtherClients")]
-        private static void beekeeperReduceDamageOther(ref int damageNumber, PlayerControllerB __instance)
-        {
-            if (!UpgradeBus.instance.beePercs.ContainsKey(__instance.playerSteamId) || damageNumber != 10) { return; }
-            damageNumber = Mathf.Clamp((int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beePercs[__instance.playerSteamId] * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT))), 0, 100);
-        }
-
         [HarmonyPatch("DamagePlayer")]
         [HarmonyTranspiler]
         public static IEnumerable<CodeInstruction> DamagePlayerTranspiler(IEnumerable<CodeInstruction> instructions)
