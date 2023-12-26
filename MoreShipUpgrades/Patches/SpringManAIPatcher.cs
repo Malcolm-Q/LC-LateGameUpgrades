@@ -21,19 +21,16 @@ namespace MoreShipUpgrades.Patches
             
             bool foundStopMovementFlag = false;
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            for (int i = 3; i < codes.Count; i++)
+            for (int i = 1; i < codes.Count; i++)
             {
-                if (codes[i - 1].opcode != OpCodes.Ldc_I4_1) continue;
+                if (codes[i - 1].opcode != OpCodes.Ldc_I4_0) continue;
                 if (codes[i].opcode != OpCodes.Stloc_1) continue;
-                if (codes[i+1].opcode != OpCodes.Ldloc_1) continue;
 
-                codes.Insert(i + 2, new CodeInstruction(OpCodes.Ldloc_1));
-                codes.Insert(i+2, new CodeInstruction(OpCodes.Stloc_1)); 
-                codes.Insert(i+2, new CodeInstruction(OpCodes.Or));
-                codes.Insert(i+2, new CodeInstruction(OpCodes.Call, peeperMethod));
-                codes.Insert(i+2, new CodeInstruction(OpCodes.Callvirt, positionMethod));
-                codes.Insert(i+2, new CodeInstruction(OpCodes.Call, transformMethod));
-                codes.Insert(i+2, new CodeInstruction(OpCodes.Ldarg_0));
+                codes.Insert(i, new CodeInstruction(OpCodes.Or));
+                codes.Insert(i, new CodeInstruction(OpCodes.Call, peeperMethod));
+                codes.Insert(i, new CodeInstruction(OpCodes.Callvirt, positionMethod));
+                codes.Insert(i, new CodeInstruction(OpCodes.Call, transformMethod));
+                codes.Insert(i, new CodeInstruction(OpCodes.Ldarg_0));
 
                 foundStopMovementFlag = true;
 
