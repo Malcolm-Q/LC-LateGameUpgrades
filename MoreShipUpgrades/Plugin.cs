@@ -75,7 +75,7 @@ namespace MoreShipUpgrades
 
             harmony.PatchAll();
 
-            mls.LogInfo("LGU has been patched");
+            mls.LogDebug("LGU has been patched");
         }
 
         // I don't even know if modsync is still used but here we are.
@@ -97,7 +97,7 @@ namespace MoreShipUpgrades
                     catch (Exception e)
                     {
                         // ignore mod if error, removing dependency
-                        mls.LogInfo($"Failed to send info to ModSync, go yell at Minx");
+                        mls.LogDebug($"Failed to send info to ModSync, go yell at Minx");
                     }
                     break;
                 }

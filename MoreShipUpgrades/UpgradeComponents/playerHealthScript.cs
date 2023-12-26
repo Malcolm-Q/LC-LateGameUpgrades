@@ -14,26 +14,14 @@ namespace MoreShipUpgrades.UpgradeComponents
         private static int DEFAULT_HEALTH = 100;
 
         // Configuration
-        public static string ENABLED_SECTION = string.Format("Enable {0} Upgrade", UPGRADE_NAME);
+        public static string ENABLED_SECTION = $"Enable {UPGRADE_NAME} Upgrade";
         public static bool ENABLED_DEFAULT = true;
         public static string ENABLED_DESCRIPTION = "Increases player's health.";
 
-        public static string PRICE_SECTION = string.Format("{0} Price", UPGRADE_NAME);
+        public static string PRICE_SECTION = $"{UPGRADE_NAME} Price";
         public static int PRICE_DEFAULT = 600;
 
-        public static string INDIVIDUAL_SECTION = "Individual Purchase";
-        public static bool INDIVIDUAL_DEFAULT = false;
-        public static string INDIVIDUAL_DESCRIPTION = "If true: upgrade will apply only to the client that purchased it.";
-
-        // Chat Messages
-        private static string LOAD_COLOUR = "#FF0000";
-        private static string LOAD_MESSAGE = string.Format("\n<color={0}>{1} is active!</color>", LOAD_COLOUR, UPGRADE_NAME);
-
-        private static string UNLOAD_COLOUR = LOAD_COLOUR;
-        private static string UNLOAD_MESSAGE = string.Format("\n<color={0}>{1} has been disabled</color>", UNLOAD_COLOUR, UPGRADE_NAME);
-
-        public static string UPGRADE_PRICES_SECTION = "Price of each additional upgrade";
-        public static string UPGRADE_PRICES_DEFAULT = "300, 450, 600";
+        public static string PRICES_DEFAULT = "300, 450, 600";
 
         public static string ADDITIONAL_HEALTH_UNLOCK_SECTION = "Initial health boost";
         public static int ADDITIONAL_HEALTH_UNLOCK_DEFAULT = 20;
@@ -41,10 +29,11 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public static string ADDITIONAL_HEALTH_INCREMENT_SECTION = "Additional health boost";
         public static int ADDITIONAL_HEALTH_INCREMENT_DEFAULT = 20;
-        public static string ADDITIONAL_HEALTH_INCREMENT_DESCRIPTION = string.Format("Every time {0} is upgraded this value will be added to the value above.", UPGRADE_NAME);
+        public static string ADDITIONAL_HEALTH_INCREMENT_DESCRIPTION = $"Every time {UPGRADE_NAME} is upgraded this value will be added to the value above.";
 
         void Start()
         {
+            upgradeName = UPGRADE_NAME;
             DontDestroyOnLoad(gameObject);
             UpgradeBus.instance.UpgradeObjects.Add(UPGRADE_NAME, gameObject);
         }
@@ -57,22 +46,24 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public override void load()
         {
+            base.load();
+
             UpgradeBus.instance.playerHealth = true;
-            HUDManager.Instance.chatText.text += LOAD_MESSAGE;
             LGUStore.instance.UpdatePlayerNewHealthsServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, DEFAULT_HEALTH + UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK + (UpgradeBus.instance.playerHealthLevel * UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT));
         }
 
         public override void Register()
         {
-            if (!UpgradeBus.instance.UpgradeObjects.ContainsKey(UPGRADE_NAME)) { UpgradeBus.instance.UpgradeObjects.Add(UPGRADE_NAME, gameObject); }
+            base.Register();
         }
 
         public override void Unwind()
         {
+            base.Unwind();
+
             UpgradeBus.instance.playerHealthLevel = 0;
             UpgradeBus.instance.playerHealth = false;
-            HUDManager.Instance.chatText.text += UNLOAD_MESSAGE;
-            LGUStore.instance.UpdatePlayerNewHealthsServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, 0);
+            LGUStore.instance.UpdatePlayerNewHealthsServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, DEFAULT_HEALTH);
         }
 
         public static void CheckAdditionalHealth(StartOfRound __instance)

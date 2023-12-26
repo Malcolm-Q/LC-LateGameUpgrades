@@ -13,6 +13,7 @@ namespace MoreShipUpgrades.Managers
         public static UpgradeBus instance;
         public PluginConfig cfg;
         public GameObject introScreen;
+        private static LGULogger logger;
 
         public bool DestroyTraps = false;
         public bool softSteps = false;
@@ -108,6 +109,7 @@ namespace MoreShipUpgrades.Managers
             instance = this;
             DontDestroyOnLoad(gameObject);
             cfg = Plugin.cfg;
+            logger = new LGULogger(typeof(UpgradeBus).Name);
         }
 
         public Terminal GetTerminal()
@@ -564,7 +566,7 @@ namespace MoreShipUpgrades.Managers
                 }
                 else
                 {
-                    Debug.LogWarning($"[LGU] Invalid upgrade price submitted: {prices[i]}");
+                    logger.LogWarning($"Invalid upgrade price submitted: {prices[i]}");
                     prices[i] = -1;
 
                 }

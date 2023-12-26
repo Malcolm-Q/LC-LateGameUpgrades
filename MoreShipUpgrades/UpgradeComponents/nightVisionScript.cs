@@ -19,8 +19,12 @@ namespace MoreShipUpgrades.UpgradeComponents
         private bool batteryExhaustion;
         private Key toggleKey;
 
+        public static string UPGRADE_NAME = "NV Headset Batteries";
+        public static string PRICES_DEFAULT = "300,400,500";
+
         void Start()
         {
+            upgradeName = UPGRADE_NAME;
             DontDestroyOnLoad(gameObject);
             Register();
             batteryBar = transform.GetChild(0).GetChild(0).transform;
@@ -39,7 +43,7 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public override void Register()
         {
-            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("NV Headset Batteries")) { UpgradeBus.instance.UpgradeObjects.Add("NV Headset Batteries", gameObject); }
+            base.Register();
         }
 
         void LateUpdate()
@@ -145,10 +149,11 @@ namespace MoreShipUpgrades.UpgradeComponents
         }
         public override void Unwind()
         {
+            base.Unwind();
+
             UpgradeBus.instance.nightVision = false;
             UpgradeBus.instance.nightVisionLevel = 0;
             DisableOnClient();
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>NV Headset Batteries has been disabled.</color>";
         }
         public void EnableOnClient(bool save = true)
         {

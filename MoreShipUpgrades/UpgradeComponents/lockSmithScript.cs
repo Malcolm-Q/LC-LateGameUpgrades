@@ -10,6 +10,8 @@ namespace MoreShipUpgrades.UpgradeComponents
 {
     public class lockSmithScript : BaseUpgrade
     {
+        public static string UPGRADE_NAME = "Locksmith";
+
         private GameObject pin1, pin2, pin3, pin4, pin5;
         private List<GameObject> pins;
         private List<int> order = new List<int> { 0, 1, 2, 3, 4 };
@@ -20,6 +22,7 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         void Start()
         {
+            upgradeName = UPGRADE_NAME;
             DontDestroyOnLoad(gameObject);
             Register();
             Transform tumbler = transform.GetChild(0).GetChild(0).GetChild(0);
@@ -40,14 +43,15 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public override void load()
         {
+            base.load();
+
             UpgradeBus.instance.lockSmith = true;
             UpgradeBus.instance.lockScript = this;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Locksmith is active!</color>";
         }
 
         public override void Register()
         {
-            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Locksmith")) { UpgradeBus.instance.UpgradeObjects.Add("Locksmith", gameObject); }
+            base.Register();
         }
 
         void Update()
@@ -79,8 +83,9 @@ namespace MoreShipUpgrades.UpgradeComponents
         }
         public override void Unwind()
         {
+            base.Unwind();
+
             UpgradeBus.instance.lockSmith = false;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Locksmith has been disabled.</color>";
         }
         public void StrikePin(int i)
         {
