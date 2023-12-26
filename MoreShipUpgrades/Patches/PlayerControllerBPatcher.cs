@@ -135,6 +135,45 @@ namespace MoreShipUpgrades.Patches
             }
             instructions = codes.AsEnumerable();
         }
-        
+
+        [HarmonyTranspiler]
+        [HarmonyPatch("LateUpdate")]
+        private static IEnumerable<CodeInstruction> LateUpdateTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo biggerLungsRegenMethod = typeof(biggerLungScript).GetMethod("ApplyPossibleIncreasedStaminaRegen", BindingFlags.Static | BindingFlags.Public);
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            bool first = false;
+            bool second = false;
+            for(int i = 0; i < codes.Count-3; i++) 
+            {
+                if (first && second) break;
+                if (!(codes[i].opcode == OpCodes.Add)) continue;
+                if (!(codes[i + 3].opcode == OpCodes.Call && codes[i + 3].operand.ToString() == "Single Clamp(Single, Single, Single)")) continue;
+
+                codes.Insert(i, new CodeInstruction(OpCodes.Call, biggerLungsRegenMethod));
+                if (!first) first = true;
+                else second = true;
+
+            }
+            return codes.AsEnumerable();
+        }
+
+        [HarmonyTranspiler]
+        [HarmonyPatch("Jump_performed")]
+        private static IEnumerable<CodeInstruction> JumpPerformedTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo biggerLungsReduceJumpCost = typeof(biggerLungScript).GetMethod("ApplyPossibleReducedJumpStaminaCost", BindingFlags.Static | BindingFlags.Public);
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            bool found = false;
+            for (int i = 0; i < codes.Count; i++)
+            {
+                if (found) break;
+                if (!(codes[i].opcode == OpCodes.Ldc_R4 && codes[i].operand.ToString() == "0,08")) continue;
+
+                codes.Insert(i+1, new CodeInstruction(OpCodes.Call, biggerLungsReduceJumpCost));
+                found = true;
+            }
+            return codes.AsEnumerable();
+        }
     }
 }
