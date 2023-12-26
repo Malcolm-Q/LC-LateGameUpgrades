@@ -29,9 +29,9 @@ namespace MoreShipUpgrades.UpgradeComponents
         private static string UNLOAD_MESSAGE = string.Format("\n<color={0}>{1} has been disabled</color>", UNLOAD_COLOUR, UPGRADE_NAME);
 
         // Toggle
-        private static string ACCESS_DENIED_MESSAGE = string.Format("You don't have access to this command yet. Purchase the '{0}'.\n", lightningRodScript.UPGRADE_NAME);
-        private static string TOGGLE_ON_MESSAGE = string.Format("{0} has been enabled. Lightning bolts will now be redirected to the ship.\n", UPGRADE_NAME);
-        private static string TOGGLE_OFF_MESSAGE = string.Format("{0} has been disabled. Lightning bolts will no longer be redirected to the ship.\n", UPGRADE_NAME);
+        public static string ACCESS_DENIED_MESSAGE = string.Format("You don't have access to this command yet. Purchase the '{0}'.\n", UPGRADE_NAME);
+        public static string TOGGLE_ON_MESSAGE = string.Format("{0} has been enabled. Lightning bolts will now be redirected to the ship.\n", UPGRADE_NAME);
+        public static string TOGGLE_OFF_MESSAGE = string.Format("{0} has been disabled. Lightning bolts will no longer be redirected to the ship.\n", UPGRADE_NAME);
 
         // distance
         public static string DIST_SECTION = "Effective Distance of lightning rod.";
