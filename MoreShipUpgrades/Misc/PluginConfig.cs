@@ -71,6 +71,8 @@ namespace MoreShipUpgrades.Misc
         public int PLAYER_HEALTH_PRICE { get; set; }
 
         // attributes
+        public float BIGGER_LUNGS_STAMINA_REGEN_INCREASE { get; set; }
+        public float BIGGER_LUNGS_JUMP_STAMINA_COST_DECREASE { get; set; }
         public int PROTEIN_INCREMENT { get; set; }
         public int HUNTER_PRICE2 { get; set; }
         public int HUNTER_PRICE3 { get; set; }
@@ -210,7 +212,9 @@ namespace MoreShipUpgrades.Misc
             SPRINT_TIME_INCREMENT = ConfigEntry(topSection, "SprintTime Increment", 1.25f,"How much the above value is increased on upgrade.");
             BIGGER_LUNGS_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, biggerLungScript.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             BIGGER_LUNGS_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-
+            BIGGER_LUNGS_STAMINA_REGEN_INCREASE = ConfigEntry(topSection, "Stamina Regeneration Increase", 1.05f, "Increase of stamina regeneration applied past level 1");
+            BIGGER_LUNGS_JUMP_STAMINA_COST_DECREASE = ConfigEntry(topSection, "Stamina cost decrease on jumps", 0.90f, "Multiplied with the vanilla cost of jumping");
+          
             topSection = runningShoeScript.UPGRADE_NAME;
             RUNNING_SHOES_ENABLED = ConfigEntry(topSection, "Enable Running Shoes Upgrade", true, "Run Faster");
             RUNNING_SHOES_PRICE = ConfigEntry(topSection, "Price of Running Shoes Upgrade", 650, "");
