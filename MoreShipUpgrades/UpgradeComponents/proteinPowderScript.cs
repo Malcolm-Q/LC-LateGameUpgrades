@@ -16,11 +16,11 @@ namespace MoreShipUpgrades.UpgradeComponents
         private static int DEFAULT_HIT_VALUE = 1;
 
         // Configuration
-        public static string ENABLED_SECTION = string.Format("Enable {0} Upgrade", UPGRADE_NAME);
+        public static string ENABLED_SECTION = $"Enable {UPGRADE_NAME} Upgrade";
         public static bool ENABLED_DEFAULT = true;
         public static string ENABLED_DESCRIPTION = "Do more damage with shovels";
 
-        public static string PRICE_SECTION = string.Format("Price of {0} Upgrade", UPGRADE_NAME);
+        public static string PRICE_SECTION = $"Price of {UPGRADE_NAME} Upgrade";
         public static int PRICE_DEFAULT = 1000;
 
         public static string UNLOCK_FORCE_SECTION = "Initial additional hit force";
@@ -31,27 +31,15 @@ namespace MoreShipUpgrades.UpgradeComponents
         public static int INCREMENT_FORCE_DEFAULT = 1;
         public static string INCREMENT_FORCE_DESCRIPTION = "Every time protein powder is upgraded this value will be added to the value above.";
 
-        public static string INDIVIDUAL_SECTION = "Individual Purchase";
-        public static bool INDIVIDUAL_DEFAULT = true;
-        public static string INDIVIDUAL_DESCRIPTION = "If true: upgrade will apply only to the client that purchased it.";
-
-        public static string PRICES_SECTION = "Price of each additional upgrade";
         public static string PRICES_DEFAULT = "700";
-        public static string PRICES_DESCRIPTION = "Value must be seperated by commas EX: '123,321,222'";
 
         public static string CRIT_CHANCE_SECTION = "Chance of dealing a crit which will instakill the enemy.";
         public static float CRIT_CHANCE_DEFAULT = 0.01f;
         public static string CRIT_CHANCE_DESCRIPTION = "This value is only valid when maxed out Protein Powder. Any previous levels will not apply crit.";
 
-        // Chat Messages
-        private static string LOAD_COLOUR = "#FF0000";
-        private static string LOAD_MESSAGE = string.Format("\n<color={0}>{1} is active!</color>", LOAD_COLOUR, UPGRADE_NAME);
-
-        private static string UNLOAD_COLOUR = LOAD_COLOUR;
-        private static string UNLOAD_MESSAGE = string.Format("\n<color={0}>{1} has been disabled</color>", UNLOAD_COLOUR, UPGRADE_NAME);
-
         void Start()
         {
+            upgradeName = UPGRADE_NAME;
             DontDestroyOnLoad(gameObject);
             Register();
         }
@@ -63,20 +51,22 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public override void load()
         {
+            base.load();
+
             UpgradeBus.instance.proteinPowder = true;
-            HUDManager.Instance.chatText.text += LOAD_MESSAGE;
         }
 
         public override void Register()
         {
-            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey(UPGRADE_NAME)) { UpgradeBus.instance.UpgradeObjects.Add(UPGRADE_NAME, gameObject); }
+            base.Register();
         }
 
         public override void Unwind()
         {
+            base.Unwind();
+
             UpgradeBus.instance.proteinLevel = 0;
             UpgradeBus.instance.proteinPowder = false;
-            HUDManager.Instance.chatText.text += UNLOAD_MESSAGE;
         }
 
         public static int GetShovelHitForce()
@@ -86,11 +76,13 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         private static bool TryToCritEnemy()
         {
-            Plugin.mls.LogInfo(string.Format("Levels purchaseable for Protein Powder: {0}",UpgradeBus.instance.cfg.PROTEIN_UPGRADE_PRICES.Split(',').Length));
-            Plugin.mls.LogInfo("Current level on Protein Powder: " + UpgradeBus.instance.proteinLevel);
+            int maximumLevel = UpgradeBus.instance.cfg.PROTEIN_UPGRADE_PRICES.Split(',').Length;
+            int currentLevel = UpgradeBus.instance.proteinLevel;
 
-            bool reachedLastUpgrade = UpgradeBus.instance.proteinLevel == UpgradeBus.instance.cfg.PROTEIN_UPGRADE_PRICES.Split(',').Length;
-            if (!reachedLastUpgrade) return false;
+            Plugin.mls.LogInfo($"Levels purchaseable for Protein Powder: {maximumLevel}");
+            Plugin.mls.LogInfo($"Current level on Protein Powder: {currentLevel}");
+
+            if (currentLevel != maximumLevel) return false;
 
             return UnityEngine.Random.value < UpgradeBus.instance.cfg.PROTEIN_CRIT_CHANCE;
         }

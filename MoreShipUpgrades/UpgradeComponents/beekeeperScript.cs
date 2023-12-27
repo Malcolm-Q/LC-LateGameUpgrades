@@ -6,8 +6,11 @@ namespace MoreShipUpgrades.UpgradeComponents
 {
     internal class beekeeperScript : BaseUpgrade
     {
+        public static string UPGRADE_NAME = "Beekeeper";
+        public static string PRICES_DEFAULT = "225,280,340";
         void Start()
         {
+            upgradeName = UPGRADE_NAME;
             DontDestroyOnLoad(gameObject);
             Register();
         }
@@ -19,20 +22,21 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public override void load()
         {
+            base.load();
             UpgradeBus.instance.beekeeper = true;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Beekeeper is active!</color>";
         }
 
         public override void Register()
         {
-            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Beekeeper")) { UpgradeBus.instance.UpgradeObjects.Add("Beekeeper", gameObject); }
+            base.Register();
         }
 
         public override void Unwind()
         {
+            base.Unwind();
+
             UpgradeBus.instance.beeLevel = 0;
             UpgradeBus.instance.beekeeper = false;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Beekeeper has been disabled</color>";
         }
 
         public static int CalculateBeeDamage(int damageNumber)

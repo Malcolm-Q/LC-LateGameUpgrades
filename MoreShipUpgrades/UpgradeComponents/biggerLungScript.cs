@@ -9,10 +9,13 @@ namespace MoreShipUpgrades.UpgradeComponents
     {
         PlayerControllerB localPlayer;
         private static LGULogger logger = new LGULogger("Bigger Lungs");
+        public static string UPGRADE_NAME = "Bigger Lungs";
+        public static string PRICES_DEFAULT = "350,450,550";
         private static float DEFAULT_SPRINT_TIME = 11f;
 
         void Start()
         {
+            upgradeName = UPGRADE_NAME;
             DontDestroyOnLoad(gameObject);
             Register();
         }
@@ -29,7 +32,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             PlayerControllerB player = GetLocalPlayer();
             player.sprintTime = UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE; //17
             UpgradeBus.instance.biggerLungs = true;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Bigger Lungs is active!</color>";
+            base.load();
 
             float amountToIncrement = 0;
             for(int i = 0; i < UpgradeBus.instance.lungLevel; i++)
@@ -44,13 +47,14 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             PlayerControllerB player = GetLocalPlayer();
             player.sprintTime = DEFAULT_SPRINT_TIME;
+            base.Unwind();
+
             UpgradeBus.instance.biggerLungs = false;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Bigger Lungs has been disabled.</color>";
         }
 
         public override void Register()
         {
-            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Bigger Lungs")) { UpgradeBus.instance.UpgradeObjects.Add("Bigger Lungs", gameObject); }
+            base.Register();
         }
 
         private PlayerControllerB GetLocalPlayer()
