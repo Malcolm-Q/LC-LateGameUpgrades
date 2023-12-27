@@ -226,6 +226,18 @@ namespace MoreShipUpgrades.Managers
         }
 
         [ServerRpc(RequireOwnership = false)]
+        public void ToggleIncreaseHivePriceServerRpc()
+        {
+            ToggleIncreaseHivePriceClientRpc();
+        }
+
+        [ClientRpc]
+        public void ToggleIncreaseHivePriceClientRpc()
+        {
+            UpgradeBus.instance.increaseHivePrice = true;
+        }
+
+        [ServerRpc(RequireOwnership = false)]
         public void DeleteUpgradesServerRpc()
         {
             BaseUpgrade[] upgradeObjects = GameObject.FindObjectsOfType<BaseUpgrade>();

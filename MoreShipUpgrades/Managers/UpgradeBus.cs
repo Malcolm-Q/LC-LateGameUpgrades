@@ -89,6 +89,8 @@ namespace MoreShipUpgrades.Managers
 
         public Dictionary<ulong, int> playerHPs = new Dictionary<ulong, int>();
 
+        public bool increaseHivePrice = false;
+
         public Dictionary<string,bool> IndividualUpgrades = new Dictionary<string,bool>();
         public string[] internNames, internInterests;
 

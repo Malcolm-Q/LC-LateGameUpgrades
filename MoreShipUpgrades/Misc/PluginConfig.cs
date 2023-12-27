@@ -122,6 +122,7 @@ namespace MoreShipUpgrades.Misc
         public float SALE_PERC { get; set; }
         public bool LOSE_NIGHT_VIS_ON_DEATH { get; set; }
         public string BEEKEEPER_UPGRADE_PRICES { get; set; }
+        public float BEEKEEPER_HIVE_VALUE_INCREASE { get; set; }
         public string BACK_MUSCLES_UPGRADE_PRICES { get; set; }
         public string BIGGER_LUNGS_UPGRADE_PRICES { get; set; }
         public string LIGHT_FOOTED_UPGRADE_PRICES { get; set; }
@@ -191,8 +192,8 @@ namespace MoreShipUpgrades.Misc
             BEEKEEPER_DAMAGE_MULTIPLIER = ConfigEntry(topSection, "Multiplied to incoming damage (rounded to int)", 0.64f, "Incoming damage from bees is 10.");
             BEEKEEPER_UPGRADE_PRICES = ConfigEntry(topSection, "Price of each additional upgrade", "225,280,340", "");
             BEEKEEPER_INDIVIDUAL = ConfigEntry(topSection, "Individual Purchase", true, "If true: upgrade will apply only to the client that purchased it.");
-
             BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT = ConfigEntry(topSection, "Additional % Reduced per level", 0.15f, "Every time beekeeper is upgraded this value will be subtracted to the base multiplier above.");
+            BEEKEEPER_HIVE_VALUE_INCREASE = ConfigEntry(topSection, "Hive value increase multiplier", 1.5f, "Multiplier applied to the value of beehive when reached max level");
 
             topSection = proteinPowderScript.UPGRADE_NAME;
             PROTEIN_ENABLED = ConfigEntry(topSection, proteinPowderScript.ENABLED_SECTION, proteinPowderScript.ENABLED_DEFAULT, proteinPowderScript.ENABLED_DESCRIPTION);

@@ -6,6 +6,7 @@ namespace MoreShipUpgrades.UpgradeComponents
 {
     internal class beekeeperScript : BaseUpgrade
     {
+        private static LGULogger logger = new LGULogger("Beekeeper");
         void Start()
         {
             DontDestroyOnLoad(gameObject);
@@ -15,6 +16,8 @@ namespace MoreShipUpgrades.UpgradeComponents
         public override void Increment()
         {
             UpgradeBus.instance.beeLevel++;
+            if (UpgradeBus.instance.beeLevel == UpgradeBus.instance.cfg.BEEKEEPER_UPGRADE_PRICES.Split(',').Length)
+                LGUStore.instance.ToggleIncreaseHivePriceServerRpc();
         }
 
         public override void load()
@@ -39,6 +42,12 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             if (!UpgradeBus.instance.beekeeper) return damageNumber;
             return Mathf.Clamp((int)(damageNumber * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (UpgradeBus.instance.beeLevel * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT))), 0, damageNumber);
+        }
+
+        public static int GetHiveScrapValue(int originalValue)
+        {
+            if (!UpgradeBus.instance.increaseHivePrice) return originalValue;
+            return (int)(originalValue * UpgradeBus.instance.cfg.BEEKEEPER_HIVE_VALUE_INCREASE);
         }
     }
 }
