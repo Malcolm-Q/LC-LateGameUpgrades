@@ -7,9 +7,13 @@ namespace MoreShipUpgrades.UpgradeComponents
 {
     internal class biggerLungScript : BaseUpgrade
     {
+        public static string UPGRADE_NAME = "Bigger Lungs";
+        public static string PRICES_DEFAULT = "350,450,550";
+        private static float DEFAULT_SPRINT_TIME = 11f;
 
         void Start()
         {
+            upgradeName = UPGRADE_NAME;
             DontDestroyOnLoad(gameObject);
             Register();
         }
@@ -22,9 +26,10 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public override void load()
         {
-            GameNetworkManager.Instance.localPlayerController.sprintTime = UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE; //17
+            base.load();
             UpgradeBus.instance.biggerLungs = true;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Bigger Lungs is active!</color>";
+
+            GameNetworkManager.Instance.localPlayerController.sprintTime = UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE; //17
 
             float amountToIncrement = 0;
             for(int i = 0; i < UpgradeBus.instance.lungLevel; i++)
@@ -37,14 +42,15 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public override void Unwind()
         {
+            base.Unwind();
+
             UpgradeBus.instance.biggerLungs = false;
-            GameNetworkManager.Instance.localPlayerController.sprintTime = 11f;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Bigger Lungs has been disabled.</color>";
+            GameNetworkManager.Instance.localPlayerController.sprintTime = DEFAULT_SPRINT_TIME;
         }
 
         public override void Register()
         {
-            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Bigger Lungs")) { UpgradeBus.instance.UpgradeObjects.Add("Bigger Lungs", gameObject); }
+            base.Register();
         }
     }
 }

@@ -8,35 +8,36 @@ namespace MoreShipUpgrades.UpgradeComponents
     {
         public static string UPGRADE_NAME = "Lightning Rod";
         public static lightningRodScript instance;
+        private static LGULogger logger;
 
         // Configuration
-        public static string ENABLED_SECTION = string.Format("Enable {0} Upgrade", UPGRADE_NAME);
+        public static string ENABLED_SECTION = $"Enable {UPGRADE_NAME} Upgrade";
         public static bool ENABLED_DEFAULT = true;
         public static string ENABLED_DESCRIPTION = "A device which redirects lightning bolts to the ship.";
 
-        public static string PRICE_SECTION = string.Format("{0} Price", UPGRADE_NAME);
+        public static string PRICE_SECTION = $"{UPGRADE_NAME} Price";
         public static int PRICE_DEFAULT = 1000;
 
         public static string ACTIVE_SECTION = "Active on Purchase";
         public static bool ACTIVE_DEFAULT = true;
-        public static string ACTIVE_DESCRIPTION = string.Format("If true: {0} will be active on purchase.", UPGRADE_NAME);
+        public static string ACTIVE_DESCRIPTION = $"If true: {UPGRADE_NAME} will be active on purchase.";
 
         // Chat Messages
         private static string LOAD_COLOUR = "#FF0000";
-        private static string LOAD_MESSAGE = string.Format("\n<color={0}>{1} is active!</color>", LOAD_COLOUR, UPGRADE_NAME);
+        private static string LOAD_MESSAGE = $"\n<color={LOAD_COLOUR}>{UPGRADE_NAME} is active!</color>";
 
         private static string UNLOAD_COLOUR = LOAD_COLOUR;
-        private static string UNLOAD_MESSAGE = string.Format("\n<color={0}>{1} has been disabled</color>", UNLOAD_COLOUR, UPGRADE_NAME);
+        private static string UNLOAD_MESSAGE = $"\n<color={UNLOAD_COLOUR}>{UPGRADE_NAME} has been disabled</color>";
 
         // Toggle
-        private static string ACCESS_DENIED_MESSAGE = string.Format("You don't have access to this command yet. Purchase the '{0}'.\n", lightningRodScript.UPGRADE_NAME);
-        private static string TOGGLE_ON_MESSAGE = string.Format("{0} has been enabled. Lightning bolts will now be redirected to the ship.\n", UPGRADE_NAME);
-        private static string TOGGLE_OFF_MESSAGE = string.Format("{0} has been disabled. Lightning bolts will no longer be redirected to the ship.\n", UPGRADE_NAME);
+        private static string ACCESS_DENIED_MESSAGE = $"You don't have access to this command yet. Purchase the '{UPGRADE_NAME}'.\n";
+        private static string TOGGLE_ON_MESSAGE = $"{UPGRADE_NAME} has been enabled. Lightning bolts will now be redirected to the ship.\n";
+        private static string TOGGLE_OFF_MESSAGE = $"{UPGRADE_NAME} has been disabled. Lightning bolts will no longer be redirected to the ship.\n";
 
         // distance
-        public static string DIST_SECTION = "Effective Distance of lightning rod.";
+        public static string DIST_SECTION = $"Effective Distance of {UPGRADE_NAME}.";
         public static float DIST_DEFAULT = 175f;
-        public static string DIST_DESCRIPTION = string.Format("The closer you are the more likely the rod will reroute lightning.", UPGRADE_NAME);
+        public static string DIST_DESCRIPTION = $"The closer you are the more likely the rod will reroute lightning.";
 
         public bool CanTryInterceptLightning { get; internal set; }
         public bool LightningIntercepted { get; internal set; }
@@ -44,6 +45,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         void Awake()
         {
             instance = this;
+            logger = new LGULogger(UPGRADE_NAME);
         }
 
         void Start()
@@ -83,8 +85,8 @@ namespace MoreShipUpgrades.UpgradeComponents
 
             Terminal terminal = UpgradeBus.instance.GetTerminal();
             float dist = Vector3.Distance(___targetingMetalObject.transform.position, terminal.transform.position);
-            Plugin.mls.LogInfo(string.Format("[{0}] Distance from ship: {1}\n", UPGRADE_NAME, dist));
-            Plugin.mls.LogInfo(string.Format("[{0}] Effective distance of the lightning rod: {1}", UPGRADE_NAME, UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST));
+            logger.LogInfo($"Distance from ship: {dist}");
+            logger.LogInfo($"Effective distance of the lightning rod: {UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST}");
 
             if (dist > UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST) return;
 
@@ -92,11 +94,11 @@ namespace MoreShipUpgrades.UpgradeComponents
             float prob = 1 - dist;
             float rand = Random.value;
 
-            Plugin.mls.LogInfo(string.Format("[{0}] Number to beat: {1}",UPGRADE_NAME, prob));
-            Plugin.mls.LogInfo(string.Format("[{0}] Number: {1}",UPGRADE_NAME, rand));
+            logger.LogInfo($"Number to beat: {prob}");
+            logger.LogInfo($"Number: {rand}");
             if (rand < prob)
             {
-                Plugin.mls.LogInfo(string.Format("[{0}] Planning interception...", UPGRADE_NAME));
+                logger.LogInfo("Planning interception...");
                 __instance.staticElectricityParticle.Stop();
                 instance.LightningIntercepted = true;
                 LGUStore.instance.CoordinateInterceptionClientRpc();
@@ -105,7 +107,7 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public static void RerouteLightningBolt(ref Vector3 strikePosition, ref StormyWeather __instance)
         {
-            Plugin.mls.LogInfo(string.Format("[{0}] Intercepted Lightning Strike...", UPGRADE_NAME));
+            logger.LogInfo($"Intercepted Lightning Strike...");
             Terminal terminal = UpgradeBus.instance.GetTerminal();
             strikePosition = terminal.transform.position;
             instance.LightningIntercepted = false;

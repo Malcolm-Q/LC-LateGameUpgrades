@@ -69,9 +69,9 @@ namespace MoreShipUpgrades.Misc
             GameObject result = bundle.LoadAsset<GameObject>(path);
             if (result == null)
             {
-                logger.LogError(string.Format("An error has occurred trying to load asset from {0}", path));
+                logger.LogError($"An error has occurred trying to load asset from {path}");
             }
-            logger.LogInfo(string.Format("Loaded asset located in {0}", path));
+            logger.LogDebug($"Loaded asset located in {path}");
             return result;
         }
         /// <summary>
@@ -88,9 +88,9 @@ namespace MoreShipUpgrades.Misc
             AudioClip result = bundle.LoadAsset<AudioClip>(path);
             if (result == null)
             {
-                logger.LogError(string.Format("An error has occurred trying to load asset from {0}", path));
+                logger.LogError($"An error has occurred trying to load asset from {path}");
             }
-            logger.LogInfo(string.Format("Loaded asset located in {0}", path));
+            logger.LogDebug($"Loaded asset located in {path}");
             return result;
         }
 
@@ -108,9 +108,9 @@ namespace MoreShipUpgrades.Misc
             Item result = bundle.LoadAsset<Item>(path);
             if (result == null)
             {
-                logger.LogError(string.Format("An error has occurred trying to load asset from {0}", path));
+                logger.LogError($"An error has occurred trying to load asset from {path}");
             }
-            logger.LogInfo(string.Format("Loaded asset located in {0}", path));
+            logger.LogDebug($"Loaded asset located in {path}");
             return result;
         }
 
@@ -151,7 +151,7 @@ namespace MoreShipUpgrades.Misc
         {
             if (!assetPaths.ContainsKey(upgradeName))
             {
-                logger.LogError(string.Format("{0} was not present in the asset dictionary!", upgradeName));
+                logger.LogError($"{upgradeName} was not present in the asset dictionary!");
                 return null;
             }
             return TryLoadGameObjectAsset(ref UpgradeBus.instance.UpgradeAssets, assetPaths[upgradeName]);
@@ -162,7 +162,7 @@ namespace MoreShipUpgrades.Misc
             if (assetPaths.ContainsKey(itemName)) return TryLoadItemAsset(ref UpgradeBus.instance.UpgradeAssets, assetPaths[itemName]);
             if (samplePaths.ContainsKey(itemName)) return TryLoadItemAsset(ref UpgradeBus.instance.UpgradeAssets, samplePaths[itemName]);
 
-            logger.LogError(string.Format("{0} was not present in the asset or sample dictionary!", itemName));
+            logger.LogError($"{itemName} was not present in the asset or sample dictionary!");
             return null;
         }
 
@@ -170,7 +170,7 @@ namespace MoreShipUpgrades.Misc
         {
             if (!assetPaths.ContainsKey(audioName))
             {
-                logger.LogError(string.Format("{0} was not present in the asset dictionary!", audioName));
+                logger.LogError($"{audioName} was not present in the asset dictionary!");
                 return null;
             }
             return TryLoadAudioClipAsset(ref UpgradeBus.instance.UpgradeAssets, assetPaths[audioName]);
