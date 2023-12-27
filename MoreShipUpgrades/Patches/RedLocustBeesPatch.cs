@@ -44,5 +44,27 @@ namespace MoreShipUpgrades.Patches
             if (!found) { logger.LogDebug("Did not find DamagePlayer function"); }
             return codes.AsEnumerable();
         }
+
+        [HarmonyTranspiler]
+        [HarmonyPatch("SpawnHiveClientRpc")]
+        public static IEnumerable<CodeInstruction> SpawnHiveClientRpcTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo beeIncreaseHiveValue = typeof(beekeeperScript).GetMethod("GetHiveScrapValue", BindingFlags.Public | BindingFlags.Static);
+
+            List<CodeInstruction> codes = instructions.ToList();
+            bool found = false;
+            for (int i = 0; i < codes.Count; i++)
+            {
+                if (found) break;
+                if (!(codes[i].opcode == OpCodes.Ldarg_2)) continue;
+                if (!(codes[i + 1].opcode == OpCodes.Stfld && codes[i + 1].operand.ToString() == "System.Int32 scrapValue")) continue;
+
+                codes.Insert(i + 1, new CodeInstruction(OpCodes.Ldarg_2));
+                codes.Insert(i + 1, new CodeInstruction(OpCodes.Starg, 2));
+                codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, beeIncreaseHiveValue));
+                found = true;
+            }
+            return codes.AsEnumerable();
+        }
     }
 }
