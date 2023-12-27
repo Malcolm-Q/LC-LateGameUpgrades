@@ -7,27 +7,31 @@ namespace MoreShipUpgrades.UpgradeComponents
 {
     public class trapDestroyerScript : BaseUpgrade
     {
+        public static string UPGRADE_NAME = "Malware Broadcaster";
         void Start()
         {
+            upgradeName = UPGRADE_NAME;
             DontDestroyOnLoad(gameObject);
             Register();
         }
 
         public override void load()
         {
+            base.load();
+
             UpgradeBus.instance.DestroyTraps = true;
             UpgradeBus.instance.trapHandler = this;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Malware Broadcaster is active!</color>";
         }
 
         public override void Unwind()
         {
+            base.Unwind();
+
             UpgradeBus.instance.DestroyTraps = false;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Malware Broadcaster has been disabled.</color>";
         }
         public override void Register()
         {
-            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Malware Broadcaster")) { UpgradeBus.instance.UpgradeObjects.Add("Malware Broadcaster", gameObject); }
+            base.Register();
         }
 
         [ServerRpc(RequireOwnership = false)]

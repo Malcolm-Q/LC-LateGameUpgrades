@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace MoreShipUpgrades.Patches
     [HarmonyPatch(typeof(RedLocustBees))]
     internal class RedLocustBeesPatch
     {
+        private static LGULogger logger = new LGULogger(typeof(RedLocustBeesPatch).Name);
         [HarmonyTranspiler]
         [HarmonyPatch("OnCollideWithPlayer")]
         public static IEnumerable<CodeInstruction> OnCollideWithPlayer_Transpiler(IEnumerable<CodeInstruction> instructions)
@@ -39,7 +41,7 @@ namespace MoreShipUpgrades.Patches
                 codes.Insert(i - 8, new CodeInstruction(OpCodes.Call, beeReduceDamage));
                 found = true;
             }
-            if (!found) { Plugin.mls.LogInfo("Did not find DamagePlayer function"); }
+            if (!found) { logger.LogDebug("Did not find DamagePlayer function"); }
             return codes.AsEnumerable();
         }
     }

@@ -5,8 +5,11 @@ namespace MoreShipUpgrades.UpgradeComponents
 {
     internal class runningShoeScript : BaseUpgrade
     {
+        public static string UPGRADE_NAME = "Running Shoes";
+        public static string PRICES_DEFAULT = "500,750,1000";
         void Start()
         {
+            upgradeName = UPGRADE_NAME;
             DontDestroyOnLoad(gameObject);
             Register();
         }
@@ -19,21 +22,24 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public override void Unwind()
         {
+            base.Unwind();
+
             UpgradeBus.instance.runningShoes = false;
             UpgradeBus.instance.runningLevel = 0;
             GameNetworkManager.Instance.localPlayerController.movementSpeed = 4.6f;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Running Shoes has been disabled.</color>";
         }
         public override void Register()
         {
-            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Running Shoes")) { UpgradeBus.instance.UpgradeObjects.Add("Running Shoes", gameObject); }
+            base.Register();
         }
 
         public override void load()
         {
+            base.load();
+
             UpgradeBus.instance.runningShoes = true;
             GameNetworkManager.Instance.localPlayerController.movementSpeed = UpgradeBus.instance.cfg.MOVEMENT_SPEED;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Running Shoes is active!</color>";
+
             float amountToIncrement = 0;
             for(int i = 0; i < UpgradeBus.instance.runningLevel; i++)
             {

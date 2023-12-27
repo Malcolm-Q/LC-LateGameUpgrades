@@ -5,8 +5,11 @@ namespace MoreShipUpgrades.UpgradeComponents
 {
     internal class strongLegsScript : BaseUpgrade
     {
+        public static string UPGRADE_NAME = "Strong Legs";
+        public static string PRICES_DEFAULT = "150,190,250";
         void Start()
         {
+            upgradeName = UPGRADE_NAME;
             DontDestroyOnLoad(gameObject);
             Register();
         }
@@ -18,21 +21,23 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public override void Unwind()
         {
+            base.Unwind();
+
             UpgradeBus.instance.strongLegs = false;
             UpgradeBus.instance.legLevel = 0;
             GameNetworkManager.Instance.localPlayerController.jumpForce = 13f;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Better Scanner has been disabled.</color>";
         }
         public override void Register()
         {
-            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Strong Legs")) { UpgradeBus.instance.UpgradeObjects.Add("Strong Legs", gameObject); }
+            base.Register();
         }
 
         public override void load()
         {
+            base.load();
+
             UpgradeBus.instance.strongLegs = true;
             GameNetworkManager.Instance.localPlayerController.jumpForce = UpgradeBus.instance.cfg.JUMP_FORCE;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Strong Legs is active!</color>";
             float amountToIncrement = 0;
             for(int i = 0; i < UpgradeBus.instance.legLevel; i++)
             {

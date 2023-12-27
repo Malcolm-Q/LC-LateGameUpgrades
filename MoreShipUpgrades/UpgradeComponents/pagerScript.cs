@@ -7,22 +7,26 @@ namespace MoreShipUpgrades.UpgradeComponents
 {
     public class pagerScript : BaseUpgrade
     {
+        public static string UPGRADE_NAME = "Fast Encryption";
+
         void Start()
         {
+            upgradeName = UPGRADE_NAME;
             DontDestroyOnLoad(gameObject);
             Register();
         }
 
         public override void load()
         {
+            base.load();
+
             UpgradeBus.instance.pager = true;
             UpgradeBus.instance.pageScript = this;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Fast Encryption is active!</color>";
         }
 
         public override void Register()
         {
-            if (!UpgradeBus.instance.UpgradeObjects.ContainsKey("Fast Encryption")) { UpgradeBus.instance.UpgradeObjects.Add("Fast Encryption", gameObject); }
+            base.Register();
         }
 
         [ServerRpc(RequireOwnership = false)]

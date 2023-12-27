@@ -7,6 +7,8 @@ namespace MoreShipUpgrades.UpgradeComponents
 {
     internal class hunterScript : BaseUpgrade
     {
+        public static string UPGRADE_NAME = "Hunter";
+
         static string[] lvl1 = new string[] { "Hoarding bug", "Centipede" };
         static string[] lvl2 = new string[] { "Bunker Spider", "Hoarding bug", "Centipede", "Baboon Hawk" };
         static string[] lvl3 = new string[] { "Bunker Spider", "Hoarding bug", "Centipede", "Baboon Hawk", "Flowerman", "Crawler", "MouthDog" };
@@ -28,6 +30,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         };
         void Start()
         {
+            upgradeName = UPGRADE_NAME;
             DontDestroyOnLoad(gameObject);
             Register();
         }
@@ -39,18 +42,20 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public override void load()
         {
+            base.load();
+
             UpgradeBus.instance.hunter = true;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Hunter is active!</color>";
         }
         public override void Unwind()
         {
+            base.Unwind();
+
             UpgradeBus.instance.hunter = false;
             UpgradeBus.instance.huntLevel = 0;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Hunter has been disabled.</color>";
         }
         public override void Register()
         {
-            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Hunter")) { UpgradeBus.instance.UpgradeObjects.Add("Hunter", gameObject); }
+            base.Register();
         }
 
         public static string GetHunterInfo(int level, int price)
