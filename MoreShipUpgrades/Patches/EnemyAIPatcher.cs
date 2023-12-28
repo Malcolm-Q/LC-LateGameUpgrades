@@ -23,10 +23,8 @@ namespace MoreShipUpgrades.Patches
                 GameObject go = GameObject.Instantiate(UpgradeBus.instance.samplePrefabs[name],__instance.transform.position + Vector3.up,Quaternion.identity);
                 PhysicsProp prop = go.GetComponent<PhysicsProp>();
                 int value = Random.Range(prop.itemProperties.minValue, prop.itemProperties.maxValue);
-                prop.scrapValue = value;
-                prop.itemProperties.creditsWorth = value;
-                go.GetComponentInChildren<ScanNodeProperties>().subText = $"Value: ${value}";
                 go.GetComponent<NetworkObject>().Spawn();
+                LGUStore.instance.SyncValuesClientRpc(value, new NetworkBehaviourReference(prop));
             }
         }
     }

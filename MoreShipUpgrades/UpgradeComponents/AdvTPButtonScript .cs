@@ -78,7 +78,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         private IEnumerator WaitToTP(ShipTeleporter tele)
         {
             yield return new WaitForSeconds(0.15f);
-            ReqUpdateTpDropStatusServerRpc();
+            if(UpgradeBus.instance.cfg.ADV_KEEP_ITEMS_ON_TELE) ReqUpdateTpDropStatusServerRpc();
             tele.PressTeleportButtonOnLocalClient();
             if (UnityEngine.Random.Range(0f, 1f) < UpgradeBus.instance.cfg.ADV_CHANCE_TO_BREAK) // 0.1f
             {

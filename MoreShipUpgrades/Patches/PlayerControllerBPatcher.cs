@@ -63,7 +63,7 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("DropAllHeldItems")]
         private static bool DontDropItems(PlayerControllerB __instance)
         {
-            if (UpgradeBus.instance.TPButtonPressed && UpgradeBus.instance.cfg.KEEP_ITEMS_ON_TELE)
+            if (UpgradeBus.instance.TPButtonPressed)
             {
                 UpgradeBus.instance.TPButtonPressed = false;
                 __instance.isSinking = false;

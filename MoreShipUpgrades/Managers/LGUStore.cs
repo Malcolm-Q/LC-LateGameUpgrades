@@ -410,6 +410,18 @@ namespace MoreShipUpgrades.Managers
             lightningRodScript.instance.LightningIntercepted = true;
             FindObjectOfType<StormyWeather>(true).staticElectricityParticle.gameObject.SetActive(false);
         }
+
+        [ClientRpc]
+        public void SyncValuesClientRpc(int value, NetworkBehaviourReference netRef)
+        {
+            netRef.TryGet(out SampleItem prop);
+            if (prop != null)
+            {
+                prop.scrapValue = value;
+                prop.itemProperties.creditsWorth = value;
+                prop.GetComponentInChildren<ScanNodeProperties>().subText = $"Value: ${value}";
+            }
+        }
     }
 
     [Serializable]

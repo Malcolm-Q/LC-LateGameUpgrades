@@ -90,6 +90,7 @@ namespace MoreShipUpgrades.Misc
         public float NOISE_REDUCTION { get; set; }
         public float DISCOMBOBULATOR_COOLDOWN { get; set; }
         public float ADV_CHANCE_TO_BREAK { get; set; }
+        public bool ADV_KEEP_ITEMS_ON_TELE { get; private set; }
         public float CHANCE_TO_BREAK { get; set; }
         public float BEEKEEPER_DAMAGE_MULTIPLIER { get; set; }
         public float BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT { get; set; }
@@ -182,13 +183,13 @@ namespace MoreShipUpgrades.Misc
             ADVANCED_TELE_ENABLED = ConfigEntry(topSection, "Enable Advanced Portable Teleporter", true, "");
             ADVANCED_TELE_PRICE = ConfigEntry(topSection, "Price of Advanced Portable Teleporter", 1750, "");
             ADV_CHANCE_TO_BREAK = ConfigEntry(topSection, "Chance to break on use", 0.1f, "value should be 0.00 - 1.00");
+            ADV_KEEP_ITEMS_ON_TELE = ConfigEntry(topSection,"Keep Items When Using Advanced Portable Teleporters", true, "If set to false you will drop your items like when using the vanilla TP.");
 
             topSection = "Portable Teleporter";
             WEAK_TELE_ENABLED = ConfigEntry(topSection, "Enable Portable Teleporter", true, "");
             WEAK_TELE_PRICE = ConfigEntry(topSection, "Price of Portable Teleporter", 300, "");
             CHANCE_TO_BREAK = ConfigEntry(topSection, "Chance to break on use", 0.9f, "value should be 0.00 - 1.00");
-
-            KEEP_ITEMS_ON_TELE = ConfigEntry(topSection,"Keep Items When Using Portable Teleporters", true, "If set to false you will drop your items like when using the vanilla TP.");
+            KEEP_ITEMS_ON_TELE = ConfigEntry(topSection,"Keep Items When Using Weak Portable Teleporters", true, "If set to false you will drop your items like when using the vanilla TP.");
 
             topSection = beekeeperScript.UPGRADE_NAME;
             BEEKEEPER_ENABLED = ConfigEntry(topSection, "Enable Beekeeper Upgrade", true, "Take less damage from bees");

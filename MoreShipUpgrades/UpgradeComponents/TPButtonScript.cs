@@ -86,7 +86,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             // if we don't do a little wait we'll tp the previously seleccted player.
             yield return new WaitForSeconds(0.15f);
-            ReqUpdateTpDropStatusServerRpc();
+            if(UpgradeBus.instance.cfg.KEEP_ITEMS_ON_TELE) ReqUpdateTpDropStatusServerRpc();
             tele.PressTeleportButtonOnLocalClient();
             if (UnityEngine.Random.Range(0f, 1f) < UpgradeBus.instance.cfg.CHANCE_TO_BREAK) // 0.9f
             {
