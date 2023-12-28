@@ -21,23 +21,12 @@ namespace MoreShipUpgrades.Misc
             return node;
         }
 
-        private static bool RequestedToggleLightning(string firstWord, string secondWord)
-        {
-            return firstWord == "toggle" && secondWord == "lightning";
-        }
-
         private static TerminalNode ExecuteToggleLightning()
         {
             if (!UpgradeBus.instance.lightningRod) return DisplayTerminalMessage(lightningRodScript.ACCESS_DENIED_MESSAGE);
 
             return DisplayTerminalMessage(UpgradeBus.instance.lightningRodActive ? lightningRodScript.TOGGLE_ON_MESSAGE : lightningRodScript.TOGGLE_OFF_MESSAGE);
         }
-
-        private static bool RequestedDiscombobulatorAttack(string word)
-        {
-            return word == "initattack" || word == "atk";
-        }
-
         private static TerminalNode ExecuteDiscombobulatorAttack(ref Terminal terminal)
         {
             if (!UpgradeBus.instance.terminalFlash) return DisplayTerminalMessage("You don't have access to this command yet. Purchase the 'Discombobulator'.");
@@ -57,11 +46,6 @@ namespace MoreShipUpgrades.Misc
             return DisplayTerminalMessage($"Stun grenade hit {array.Length} enemies.");
         }
 
-        private static bool RequestedDiscombobulatorCooldown(string word)
-        {
-            return word == "cooldown" || word == "cd";
-        }
-
         private static TerminalNode ExecuteDiscombobulatorCooldown()
         {
             if (!UpgradeBus.instance.terminalFlash) return DisplayTerminalMessage("You don't have access to this command yet. Purchase 'Discombobulator'.");
@@ -69,11 +53,6 @@ namespace MoreShipUpgrades.Misc
             if (UpgradeBus.instance.flashCooldown > 0f) return DisplayTerminalMessage($"You can discombobulate again in {Mathf.Round(UpgradeBus.instance.flashCooldown)} seconds.");
 
             return DisplayTerminalMessage("Discombobulate is ready, Type 'initattack' or 'atk' to execute.");
-        }
-
-        private static bool RequestedModInformation(string word)
-        {
-            return word == "lategame";
         }
 
         private static TerminalNode ExecuteModInformation()
@@ -85,16 +64,6 @@ namespace MoreShipUpgrades.Misc
             displayText += "\n\nTo reapply any upgrades that failed to apply type `load lgu`.";
             displayText += "\n\nIn the case of credit desync to force an amount of credits type `forceCredits 123`, to attempt to sync credits type `syncCredits`";
             return DisplayTerminalMessage(displayText);
-        }
-
-        private static bool RequestedLGUStore(string firstWord, string secondWord)
-        {
-            return (firstWord == "lategame" && secondWord == "store") || firstWord == "lgu";
-        }
-
-        private static bool RequestedResetLGUSave(string firstWord, string secondWord)
-        {
-            return firstWord == "reset" && secondWord == "lgu";
         }
 
         private static TerminalNode ExecuteResetLGUSave()
@@ -109,12 +78,6 @@ namespace MoreShipUpgrades.Misc
             }
             return DisplayTerminalMessage("LGU save has been wiped.");
         }
-
-        private static bool RequestedForceCredits(string word)
-        {
-            return word == "forcecredits";
-        }
-
         private static TerminalNode ExecuteForceCredits(string creditAmount, ref Terminal __instance)
         {
             if (int.TryParse(creditAmount, out int value))
@@ -126,14 +89,10 @@ namespace MoreShipUpgrades.Misc
             return DisplayTerminalMessage($"Failed to parse value {creditAmount}.");
         }
 
-        private static bool RequestedSyncCredits(string word)
+        private static TerminalNode ExecuteSyncCredits(ref Terminal terminal)
         {
-            return word == "synccredits";
-        }
-
-        private static bool RequestedInternsCommand(string text)
-        {
-            return text.ToLower() == "intern" || text.ToLower() == "interns";
+            LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits);
+            return DisplayTerminalMessage($"Sending an RPC to sync all clients credits with your credits. ({terminal.groupCredits})");
         }
 
         private static TerminalNode ExecuteInternsCommand(ref Terminal terminal)
@@ -150,17 +109,11 @@ namespace MoreShipUpgrades.Misc
             string interest = UpgradeBus.instance.internInterests[UnityEngine.Random.Range(0, UpgradeBus.instance.internInterests.Length)];
             return DisplayTerminalMessage($"{player.playerUsername} has been replaced with:\n\nNAME: {name}\nAGE: {UnityEngine.Random.Range(19, 76)}\nIQ: {UnityEngine.Random.Range(2, 160)}\nINTERESTS: {interest}\n\n{name} HAS BEEN TELEPORTED INSIDE THE FACILITY, PLEASE ACQUAINTANCE YOURSELF ACCORDINGLY");
         }
-
-        private static bool RequestedLoadLGUCommand(string text)
-        {
-            return text.ToLower().Contains(LOAD_LGU_COMMAND);
-        }
-
         private static TerminalNode ExecuteLoadLGUCommand(string text, ref Terminal terminal)
         {
             if (text.ToLower() == LOAD_LGU_COMMAND) return DisplayTerminalMessage("Enter the name of the user whos upgrades/save you want to copy. Ex: `load lgu steve`\n");
 
-            PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
+            PlayerControllerB[] players = UnityEngine.Object.FindObjectsOfType<PlayerControllerB>();
             List<string> playerNames = new List<string>();
             var playerNameToSearch = text.Substring(text.IndexOf(LOAD_LGU_COMMAND) + LOAD_LGU_COMMAND.Length).Trim();
             foreach (PlayerControllerB player in players)
@@ -176,52 +129,30 @@ namespace MoreShipUpgrades.Misc
             return DisplayTerminalMessage($"The name {playerNameToSearch} was not found. The following names were found:\n{string.Join(", ", playerNames)}\n");
         }
 
-        private static bool RequestTransmitMessage(string word)
+        private static TerminalNode ExecuteTransmitMessage(string message, ref TerminalNode __result)
         {
-            return word == "transmit";
-        }
+            if (UnityEngine.Object.FindObjectOfType<SignalTranslator>() == null) return DisplayTerminalMessage("You have to buy a Signal Translator to use this command\n\n");
 
-        private static void ExecuteTransmitMessage(string message, ref TerminalNode __result)
-        {
-            if (UnityEngine.Object.FindObjectOfType<SignalTranslator>() == null)
-            {
-                __result = DisplayTerminalMessage("You have to buy a Signal Translator to use this command\n\n");
-                return;
-            }
-            if (!UpgradeBus.instance.pager) return;
+            if (!UpgradeBus.instance.pager) return __result;
 
-            if (message == "")
-            {
-                __result = DisplayTerminalMessage("You have to enter a message to broadcast\nEX: `page get back to the ship!`");
-                return;
-            }
+            if (message == "") return DisplayTerminalMessage("You have to enter a message to broadcast\nEX: `page get back to the ship!`");
 
             UpgradeBus.instance.pageScript.ReqBroadcastChatServerRpc(message);
-            __result = DisplayTerminalMessage($"Broadcasted message: '{message}'");
+            return DisplayTerminalMessage($"Broadcasted message: '{message}'");
         }
 
-        private static void ExecuteUpgradeCommand(string text, ref Terminal terminal, ref TerminalNode __result)
+        private static TerminalNode ExecuteUpgradeCommand(string text, ref Terminal terminal, ref TerminalNode outputNode)
         {
             foreach (CustomTerminalNode customNode in UpgradeBus.instance.terminalNodes)
             {
-                if (text.ToLower() == customNode.Name.ToLower())
-                {
-                    __result = ExecuteBuyUpgrade(customNode, ref terminal);
-                    return;
-                }
 
-                if (text.ToLower() == $"info {customNode.Name.ToLower()}")
-                {
-                    __result = DisplayTerminalMessage(customNode.Description + "\n\n");
-                    return;
-                }
+                if (text.ToLower() == customNode.Name.ToLower()) return ExecuteBuyUpgrade(customNode, ref terminal);
 
-                if (text.ToLower() == $"unload {customNode.Name.ToLower()}")
-                {
-                    __result = ExecuteUnloadUpgrade(customNode);
-                    return;
-                }
+                if (text.ToLower() == $"info {customNode.Name.ToLower()}") return DisplayTerminalMessage(customNode.Description + "\n\n");
+
+                if (text.ToLower() == $"unload {customNode.Name.ToLower()}") return ExecuteUnloadUpgrade(customNode);
             }
+            return outputNode;
         }
 
         private static TerminalNode ExecuteBuyUpgrade(CustomTerminalNode customNode, ref Terminal terminal)
@@ -265,11 +196,6 @@ namespace MoreShipUpgrades.Misc
             LGUStore.instance.UpdateLGUSaveServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, JsonConvert.SerializeObject(new SaveInfo()));
             customNode.Unlocked = false;
             return DisplayTerminalMessage($"Unwinding {customNode.Name.ToLower()}");
-        }
-
-        private static bool RequestScanCommand(string word)
-        {
-            return word == "scan";
         }
 
         private static TerminalNode ExecuteScanHivesCommand()
@@ -412,105 +338,64 @@ namespace MoreShipUpgrades.Misc
             string[] textArray = fullText.Split();
             string firstWord = textArray[0].ToLower();
             string secondWord = textArray.Length > 1 ? textArray[1].ToLower() : "";
-            if (RequestedToggleLightning(firstWord, secondWord))
+            switch(firstWord)
             {
-                outputNode = ExecuteToggleLightning();
-                return;
-            }
-
-            if (RequestedDiscombobulatorAttack(firstWord))
-            {
-                outputNode = ExecuteDiscombobulatorAttack(ref terminal);
-                return;
-            }
-
-            if (RequestedDiscombobulatorCooldown(firstWord))
-            {
-                outputNode = ExecuteDiscombobulatorCooldown();
-                return;
-            }
-
-            if (RequestedModInformation(firstWord))
-            {
-                outputNode = ExecuteModInformation();
-                return;
-            }
-
-            if (RequestedLGUStore(firstWord, secondWord))
-            {
-                outputNode = UpgradeBus.instance.ConstructNode();
-                return;
-            }
-
-            if (RequestedResetLGUSave(firstWord, secondWord))
-            {
-                outputNode = ExecuteResetLGUSave();
-                return;
-            }
-
-            if (RequestedForceCredits(firstWord))
-            {
-                outputNode = ExecuteForceCredits(secondWord, ref terminal);
-                return;
-            }
-
-            if (RequestedSyncCredits(firstWord))
-            {
-                outputNode = DisplayTerminalMessage($"Sending an RPC to sync all clients credits with your credits. ({terminal.groupCredits})");
-                LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits);
-                return;
-            }
-
-            if (RequestedInternsCommand(firstWord))
-            {
-                outputNode = ExecuteInternsCommand(ref terminal);
-                return;
-            }
-
-            if (RequestedLoadLGUCommand(fullText))
-            {
-                outputNode = ExecuteLoadLGUCommand(fullText, ref terminal);
-                return;
-            }
-            if (RequestScanCommand(firstWord))
-            {
-                switch (secondWord)
-                {
-                    case "hives":
+                case "toggle":
+                    {
+                        switch(secondWord)
                         {
-                            outputNode = ExecuteScanHivesCommand();
-                            return;
+                            case "lightning": outputNode = ExecuteToggleLightning(); return;
+                            default: return;
                         }
-                    case "scrap":
+                    }
+                case "initattack":
+                case "atk": outputNode = ExecuteDiscombobulatorAttack(ref terminal); return;
+                case "cd":
+                case "cooldown": outputNode = ExecuteDiscombobulatorCooldown(); return;
+                case "lategame":
+                    {
+                        switch (secondWord)
                         {
-                            outputNode = ExecuteScanScrapCommand();
-                            return;
+                            case "store": outputNode = UpgradeBus.instance.ConstructNode(); return;
+                            default: outputNode = ExecuteModInformation(); return;
                         }
-                    case "player":
+                    }
+                case "lgu": outputNode = UpgradeBus.instance.ConstructNode(); return;
+                case "reset":
+                    {
+                        switch(secondWord)
                         {
-                            outputNode = ExecuteScanPlayerCommand();
-                            return;
+                            case "lgu": outputNode = ExecuteResetLGUSave(); return;
+                            default: return;
                         }
-                    case "enemies":
+                    }
+                case "forcecredits": outputNode = ExecuteForceCredits(secondWord, ref terminal); return;
+                case "synccredits": outputNode = ExecuteSyncCredits(ref terminal); return;
+                case "intern":
+                case "interns": outputNode = ExecuteInternsCommand(ref terminal); return;
+                case "load":
+                    {
+                        switch(secondWord)
                         {
-                            outputNode = ExecuteScanEnemiesCommand();
-                            return;
+                            case "lgu":outputNode = ExecuteLoadLGUCommand(fullText, ref terminal); return;
+                            default: return;
                         }
-                    case "doors":
+                    }
+                case "scan":
+                    {
+                        switch(secondWord)
                         {
-                            outputNode = ExecuteScanDoorsCommand();
-                            return;
+                            case "hives": outputNode = ExecuteScanHivesCommand(); return;
+                            case "scrap": outputNode = ExecuteScanScrapCommand(); return;
+                            case "player": outputNode = ExecuteScanPlayerCommand(); return;
+                            case "enemies": outputNode = ExecuteScanEnemiesCommand(); return;
+                            case "doors": outputNode= ExecuteScanDoorsCommand(); return;
+                            default: return;
                         }
-                    default: return; // execute vanilla scan
-                }
+                    }
+                case "transmit": outputNode = ExecuteTransmitMessage(fullText.Substring(firstWord.Length+1), ref outputNode); return;
+                default: outputNode = ExecuteUpgradeCommand(fullText, ref terminal, ref outputNode); return;
             }
-            if (RequestTransmitMessage(firstWord))
-            {
-                ExecuteTransmitMessage(fullText, ref outputNode);
-                return;
-            }
-
-            ExecuteUpgradeCommand(fullText, ref terminal, ref outputNode);
         }
         private static IEnumerator WaitForSync(ulong id)
         {
