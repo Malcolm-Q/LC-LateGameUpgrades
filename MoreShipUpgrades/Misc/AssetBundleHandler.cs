@@ -31,7 +31,6 @@ namespace MoreShipUpgrades.Misc
             { runningShoeScript.UPGRADE_NAME, "Assets/ShipUpgrades/runningShoes.prefab" },
             { strongLegsScript.UPGRADE_NAME, "Assets/ShipUpgrades/strongLegs.prefab" },
             { trapDestroyerScript.UPGRADE_NAME, "Assets/ShipUpgrades/destructiveCodes.prefab" },
-            { lightFootedScript.UPGRADE_NAME, "Assets/ShipUpgrades/lightFooted.prefab" },
             { nightVisionScript.UPGRADE_NAME, "Assets/ShipUpgrades/nightVision.prefab" },
             { terminalFlashScript.UPGRADE_NAME, "Assets/ShipUpgrades/terminalFlash.prefab" },
             { hunterScript.UPGRADE_NAME, "Assets/ShipUpgrades/Hunter.prefab" },

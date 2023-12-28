@@ -113,7 +113,6 @@ namespace MoreShipUpgrades.Misc
         public float CARRY_WEIGHT_INCREMENT { get; set; }
         public float MOVEMENT_INCREMENT { get; set; }
         public float SPRINT_TIME_INCREMENT { get; set; }
-        public float NOISE_REDUCTION_INCREMENT { get; set; }
         public float JUMP_FORCE_INCREMENT { get; set; }
         public float DISCOMBOBULATOR_INCREMENT { get; set; }
         public int INTERN_PRICE { get; set; }
@@ -223,6 +222,7 @@ namespace MoreShipUpgrades.Misc
             MOVEMENT_INCREMENT = ConfigEntry(topSection, "Movement Speed Increment", 0.5f, "How much the above value is increased on upgrade.");
             RUNNING_SHOES_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, biggerLungScript.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             RUNNING_SHOES_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            NOISE_REDUCTION = ConfigEntry(topSection, "Noise Reduction", 10f, "Distance units to subtract from footstep noise when reached final level.");
 
             topSection = strongLegsScript.UPGRADE_NAME;
             STRONG_LEGS_ENABLED = ConfigEntry(topSection, "Enable Strong Legs Upgrade", true, "Jump Higher");
@@ -239,14 +239,6 @@ namespace MoreShipUpgrades.Misc
             DISARM_TIME = ConfigEntry(topSection, "Disarm Time", 7f, "If `Destroy Trap` is false this is the duration traps will be disabled.");
             EXPLODE_TRAP = ConfigEntry(topSection, "Explode Trap", true, "Destroy Trap must be true! If this is true when destroying a trap it will also explode.");
             MALWARE_BROADCASTER_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-
-            topSection = lightFootedScript.UPGRADE_NAME;
-            LIGHT_FOOTED_ENABLED = ConfigEntry(topSection, "Enable Light Footed Upgrade", true, "Make less noise moving.");
-            LIGHT_FOOTED_PRICE = ConfigEntry(topSection, "Price of Light Footed Upgrade", 350, "");
-            NOISE_REDUCTION = ConfigEntry(topSection, "Noise Reduction", 7f, "Distance units to subtract from footstep noise.");
-            NOISE_REDUCTION_INCREMENT = ConfigEntry(topSection, "Noise Reduction Increment", 1f, "The amount added to above value on upgrade.");
-            LIGHT_FOOTED_UPGRADE_PRICES = ConfigEntry(topSection,BaseUpgrade.PRICES_SECTION, lightFootedScript.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            LIGHT_FOOTED_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
 
             topSection = "Night Vision";
             NIGHT_VISION_ENABLED = ConfigEntry(topSection, "Enable Night Vision Upgrade", true, "Toggleable night vision.");

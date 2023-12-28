@@ -21,7 +21,6 @@ namespace MoreShipUpgrades.Managers
         private static Dictionary<string, Func<SaveInfo, bool>> conditions = new Dictionary<string, Func<SaveInfo, bool>>
         {
             {trapDestroyerScript.UPGRADE_NAME, saveInfo => saveInfo.DestroyTraps },
-            {lightFootedScript.UPGRADE_NAME, saveInfo => saveInfo.softSteps },
             {terminalFlashScript.UPGRADE_NAME, SaveInfo => SaveInfo.terminalFlash },
             {biggerLungScript.UPGRADE_NAME, SaveInfo => SaveInfo.biggerLungs },
             {runningShoeScript.UPGRADE_NAME, SaveInfo => SaveInfo.runningShoes },
@@ -42,7 +41,6 @@ namespace MoreShipUpgrades.Managers
         private static Dictionary<string, Func<SaveInfo, int>> levelConditions = new Dictionary<string, Func<SaveInfo, int>>
         {
             { trapDestroyerScript.UPGRADE_NAME, saveInfo => 0 },
-            { lightFootedScript.UPGRADE_NAME, saveInfo => saveInfo.lightLevel },
             { terminalFlashScript.UPGRADE_NAME, saveInfo => saveInfo.discoLevel },
             { biggerLungScript.UPGRADE_NAME, saveInfo => saveInfo.lungLevel },
             { runningShoeScript.UPGRADE_NAME, saveInfo => saveInfo.runningLevel },
@@ -284,7 +282,6 @@ namespace MoreShipUpgrades.Managers
                 saveInfo = lguSave.playerSaves[playerID];
             }
             UpgradeBus.instance.DestroyTraps = saveInfo.DestroyTraps;
-            UpgradeBus.instance.softSteps = saveInfo.softSteps;
             UpgradeBus.instance.scannerUpgrade = saveInfo.scannerUpgrade;
             UpgradeBus.instance.nightVision = saveInfo.nightVision;
             UpgradeBus.instance.exoskeleton = saveInfo.exoskeleton;
@@ -307,7 +304,6 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.walkies = saveInfo.walkies;
             UpgradeBus.instance.backLevel = saveInfo.backLevel;
             UpgradeBus.instance.runningLevel = saveInfo.runningLevel;
-            UpgradeBus.instance.lightLevel = saveInfo.lightLevel;
             UpgradeBus.instance.discoLevel = saveInfo.discoLevel;
             UpgradeBus.instance.legLevel = saveInfo.legLevel;
             UpgradeBus.instance.scanLevel = saveInfo.scanLevel;
@@ -420,7 +416,6 @@ namespace MoreShipUpgrades.Managers
     public class SaveInfo
     {
         public bool DestroyTraps = UpgradeBus.instance.DestroyTraps;
-        public bool softSteps = UpgradeBus.instance.softSteps;
         public bool scannerUpgrade = UpgradeBus.instance.scannerUpgrade;
         public bool nightVision = UpgradeBus.instance.nightVision;
         public bool exoskeleton = UpgradeBus.instance.exoskeleton;
@@ -445,7 +440,6 @@ namespace MoreShipUpgrades.Managers
         public int backLevel = UpgradeBus.instance.backLevel;
         public int runningLevel = UpgradeBus.instance.runningLevel;
         public int scanLevel = UpgradeBus.instance.scanLevel;
-        public int lightLevel = UpgradeBus.instance.lightLevel;
         public int discoLevel = UpgradeBus.instance.discoLevel;
         public int legLevel = UpgradeBus.instance.legLevel;
         public int nightVisionLevel = UpgradeBus.instance.nightVisionLevel;

@@ -300,7 +300,6 @@ namespace MoreShipUpgrades
             SetupRunningShoes();
             SetupStrongLegs();
             SetupMalwareBroadcaster();
-            SetupLightFooted();
             SetupNightVisionBattery();
             SetupDiscombobulator();
             SetupBetterScanner();
@@ -340,10 +339,6 @@ namespace MoreShipUpgrades
         private void SetupMalwareBroadcaster()
         {
             SetupGenericPerk<trapDestroyerScript>(trapDestroyerScript.UPGRADE_NAME);
-        }
-        private void SetupLightFooted() 
-        {
-            SetupGenericPerk<lightFootedScript>(lightFootedScript.UPGRADE_NAME);
         }
         private void SetupNightVisionBattery() 
         {

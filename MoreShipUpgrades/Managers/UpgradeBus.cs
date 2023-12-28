@@ -16,7 +16,6 @@ namespace MoreShipUpgrades.Managers
         private static LGULogger logger;
 
         public bool DestroyTraps = false;
-        public bool softSteps = false;
         public bool scannerUpgrade = false;
         public bool nightVision = false;
         public bool nightVisionActive = false;
@@ -42,7 +41,6 @@ namespace MoreShipUpgrades.Managers
         public int beeLevel = 0;
         public int backLevel = 0;
         public int runningLevel = 0;
-        public int lightLevel = 0;
         public int discoLevel = 0;
         public int legLevel = 0;
         public int scanLevel = 0;
@@ -72,7 +70,6 @@ namespace MoreShipUpgrades.Managers
         {
             { exoskeletonScript.UPGRADE_NAME, level => (instance.cfg.CARRY_WEIGHT_REDUCTION - (level * instance.cfg.CARRY_WEIGHT_INCREMENT)) * 100 },
             { terminalFlashScript.UPGRADE_NAME, level => instance.cfg.DISCOMBOBULATOR_STUN_DURATION + (level * instance.cfg.DISCOMBOBULATOR_INCREMENT) },
-            { lightFootedScript.UPGRADE_NAME, level => instance.cfg.NOISE_REDUCTION + (level * instance.cfg.NOISE_REDUCTION_INCREMENT)},
             { strongLegsScript.UPGRADE_NAME, level =>  instance.cfg.JUMP_FORCE + (level * instance.cfg.JUMP_FORCE_INCREMENT) - 13f },
             { runningShoeScript.UPGRADE_NAME, level => instance.cfg.MOVEMENT_SPEED + (level * instance.cfg.MOVEMENT_INCREMENT) - 4.6f },
             { biggerLungScript.UPGRADE_NAME, level => instance.cfg.SPRINT_TIME_INCREASE + (level * instance.cfg.SPRINT_TIME_INCREMENT) - 11f },
@@ -144,7 +141,6 @@ namespace MoreShipUpgrades.Managers
         public void ResetAllValues(bool wipeObjRefs = true)
         {
             DestroyTraps = false;
-            softSteps = false;
             scannerUpgrade = false;
             nightVision = false;
             walkies = false;
@@ -169,7 +165,6 @@ namespace MoreShipUpgrades.Managers
             scanLevel = 0;
             beeLevel = 0;
             runningLevel = 0;
-            lightLevel = 0;
             discoLevel = 0;
             legLevel = 0;
             nightVisionLevel = 0;
@@ -275,8 +270,6 @@ namespace MoreShipUpgrades.Managers
 
             SetupMalwareBroadcasterTerminalNode();
 
-            SetupLightFootedTerminalNode();
-
             SetupNightVisionBatteryTerminalNode();
 
             SetupDiscombobulatorTerminalNode();
@@ -368,15 +361,6 @@ namespace MoreShipUpgrades.Managers
                                     cfg.MALWARE_BROADCASTER_ENABLED,
                                     cfg.MALWARE_BROADCASTER_PRICE,
                                     desc);
-        }
-        private void SetupLightFootedTerminalNode()
-        {
-            SetupMultiplePurchasableTerminalNode(lightFootedScript.UPGRADE_NAME,
-                                                cfg.SHARED_UPGRADES ? true : !cfg.LIGHT_FOOTED_INDIVIDUAL,
-                                                cfg.LIGHT_FOOTED_ENABLED,
-                                                cfg.LIGHT_FOOTED_PRICE,
-                                                ParseUpgradePrices(cfg.STRONG_LEGS_UPGRADE_PRICES),
-                                                AssetBundleHandler.GetInfoFromJSON(lightFootedScript.UPGRADE_NAME));
         }
         private void SetupNightVisionBatteryTerminalNode()
         {

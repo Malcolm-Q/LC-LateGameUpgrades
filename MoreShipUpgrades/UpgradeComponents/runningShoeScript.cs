@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents
 {
@@ -47,6 +48,12 @@ namespace MoreShipUpgrades.UpgradeComponents
             }
 
             GameNetworkManager.Instance.localPlayerController.movementSpeed += amountToIncrement;
+        }
+
+        public static float ApplyPossibleReducedNoiseRange(float defaultValue)
+        {
+            if (!(UpgradeBus.instance.runningShoes && UpgradeBus.instance.runningLevel == UpgradeBus.instance.cfg.RUNNING_SHOES_UPGRADE_PRICES.Split(',').Length)) return defaultValue;
+            return Mathf.Clamp(defaultValue - UpgradeBus.instance.cfg.NOISE_REDUCTION, 0f, defaultValue);
         }
     }
 }
