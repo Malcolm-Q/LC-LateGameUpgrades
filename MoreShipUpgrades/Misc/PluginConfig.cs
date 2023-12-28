@@ -161,6 +161,7 @@ namespace MoreShipUpgrades.Misc
         public int DISCOMBOBULATOR_DAMAGE_LEVEL { get; set; }
         public int DISCOMBOBULATOR_INITIAL_DAMAGE {  get; set; }
         public int DISCOMBOBULATOR_DAMAGE_INCREASE { get; set; }
+        public float STRONG_LEGS_REDUCE_FALL_DAMAGE_MULTIPLIER { get; set; }
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -235,6 +236,7 @@ namespace MoreShipUpgrades.Misc
             JUMP_FORCE_INCREMENT = ConfigEntry(topSection, "Jump Force Increment", 0.75f, "How much the above value is increased on upgrade.");
             STRONG_LEGS_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, strongLegsScript.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             STRONG_LEGS_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            STRONG_LEGS_REDUCE_FALL_DAMAGE_MULTIPLIER = ConfigEntry(topSection, "Damage mitigation when falling", 0.5f, "Multiplier applied on fall damage that you wish to ignore when reached max level");
 
             topSection = trapDestroyerScript.UPGRADE_NAME;
             MALWARE_BROADCASTER_ENABLED = ConfigEntry(topSection, "Enable Malware Broadcaster Upgrade", true, "Explode Map Hazards");

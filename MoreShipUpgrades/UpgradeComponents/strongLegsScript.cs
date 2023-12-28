@@ -47,6 +47,10 @@ namespace MoreShipUpgrades.UpgradeComponents
             GameNetworkManager.Instance.localPlayerController.jumpForce += amountToIncrement;
         }
 
-
+        public static int ReduceFallDamage(int defaultValue)
+        {
+            if (!(UpgradeBus.instance.strongLegs && UpgradeBus.instance.legLevel == UpgradeBus.instance.cfg.STRONG_LEGS_UPGRADE_PRICES.Split(',').Length)) return defaultValue;
+            return (int)(defaultValue * (1.0f - UpgradeBus.instance.cfg.STRONG_LEGS_REDUCE_FALL_DAMAGE_MULTIPLIER));
+        }
     }
 }
