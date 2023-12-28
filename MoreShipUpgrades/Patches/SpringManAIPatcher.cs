@@ -11,6 +11,12 @@ namespace MoreShipUpgrades.Patches
     [HarmonyPatch(typeof(SpringManAI))]
     internal class SpringManAIPatcher
     {
+        [HarmonyPrefix]
+        [HarmonyPatch("DoAIInterval")]
+        private static void DoAllIntervalPrefix(ref SpringManAI __instance)
+        {
+            if (coilHeadItem.HasLineOfSightToPeepers(__instance.transform.position)) __instance.currentBehaviourStateIndex = 1;
+        }
         [HarmonyTranspiler]
         [HarmonyPatch("Update")]
         private static IEnumerable<CodeInstruction> Update_Transpiler(IEnumerable<CodeInstruction> instructions)
