@@ -9,8 +9,10 @@ namespace MoreShipUpgrades.UpgradeComponents
 {
     public class defibScript : BaseUpgrade
     {
+        public static string UPGRADE_NAME = "Interns";
         void Start()
         {
+            upgradeName = UPGRADE_NAME;
             DontDestroyOnLoad(gameObject);
             Register();
             UpgradeBus.instance.internScript = this;
@@ -18,7 +20,7 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public override void Register()
         {
-            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Interns")) { UpgradeBus.instance.UpgradeObjects.Add("Interns", gameObject); }
+            base.Register();
         }
 
         [ServerRpc(RequireOwnership = false)]
