@@ -158,6 +158,9 @@ namespace MoreShipUpgrades.Misc
         public bool DIVEKIT_ENABLED { get; set; }
         public float DIVEKIT_WEIGHT { get; set; }
         public bool DIVEKIT_TWO_HANDED { get; private set; }
+        public int DISCOMBOBULATOR_DAMAGE_LEVEL { get; set; }
+        public int DISCOMBOBULATOR_INITIAL_DAMAGE {  get; set; }
+        public int DISCOMBOBULATOR_DAMAGE_INCREASE { get; set; }
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -279,6 +282,9 @@ namespace MoreShipUpgrades.Misc
             DISCOMBOBULATOR_INCREMENT  = ConfigEntry(topSection, "Discombobulator Increment", 1f, "The amount added to stun duration on upgrade.");
             DISCO_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, terminalFlashScript.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             DISCOMBOBULATOR_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            DISCOMBOBULATOR_DAMAGE_LEVEL = ConfigEntry(topSection, "Initial level of dealing damage", 2, "Level of Discombobulator in which it starts dealing damage on enemies it stuns");
+            DISCOMBOBULATOR_INITIAL_DAMAGE = ConfigEntry(topSection, "Initial amount of damage", 2, "Amount of damage when reaching the first level that unlocks damage on stun\nTo give an idea of what's too much, Eyeless Dogs have 12 health.");
+            DISCOMBOBULATOR_DAMAGE_INCREASE = ConfigEntry(topSection, "Damage Increase on Purchase", 1, "Damage increase when purchasing later levels");
 
             topSection = strongerScannerScript.UPGRADE_NAME;
             BETTER_SCANNER_ENABLED = ConfigEntry(topSection, "Enable Better Scanner Upgrade", true, "Further scan distance, no LOS needed.");

@@ -72,12 +72,23 @@ namespace MoreShipUpgrades.UpgradeComponents
                     EnemyAICollisionDetect component = array[i].GetComponent<EnemyAICollisionDetect>();
                     if (component != null)
                     {
-                        component.mainScript.SetEnemyStunned(true, UpgradeBus.instance.cfg.DISCOMBOBULATOR_STUN_DURATION + (UpgradeBus.instance.cfg.DISCOMBOBULATOR_INCREMENT * UpgradeBus.instance.discoLevel), null);
+                        EnemyAI enemy = component.mainScript;
+                        if (CanDealDamage())
+                        {
+                            int forceValue = UpgradeBus.instance.cfg.DISCOMBOBULATOR_INITIAL_DAMAGE + (UpgradeBus.instance.cfg.DISCOMBOBULATOR_DAMAGE_INCREASE * (UpgradeBus.instance.discoLevel - UpgradeBus.instance.cfg.DISCOMBOBULATOR_DAMAGE_LEVEL));
+                            enemy.HitEnemy(forceValue);
+                        }
+                        if (!enemy.isEnemyDead) 
+                            enemy.SetEnemyStunned(true, UpgradeBus.instance.cfg.DISCOMBOBULATOR_STUN_DURATION + (UpgradeBus.instance.cfg.DISCOMBOBULATOR_INCREMENT * UpgradeBus.instance.discoLevel), null);
                     }
                 }
             }
         }
 
+        private bool CanDealDamage()
+        {
+            return UpgradeBus.instance.cfg.DISCOMBOBULATOR_DAMAGE_LEVEL > 0 && UpgradeBus.instance.discoLevel + 1 >= UpgradeBus.instance.cfg.DISCOMBOBULATOR_DAMAGE_LEVEL;
+        }
         private IEnumerator ResetRange(Terminal terminal)
         {
             yield return new WaitForSeconds(2f);
