@@ -16,18 +16,6 @@ namespace MoreShipUpgrades.Patches
     [HarmonyPatch(typeof(Terminal))]
     internal class TerminalPatcher
     {
-
-        [HarmonyPostfix]
-        [HarmonyPatch("Update")]
-        private static void Counter()
-        {
-            if(UpgradeBus.instance.flashCooldown > 0f)
-            {
-                UpgradeBus.instance.flashCooldown -= Time.deltaTime;
-            }
-        }
-        
-
         [HarmonyPostfix]
         [HarmonyPatch("ParsePlayerSentence")]
         private static void CustomParser(ref Terminal __instance, ref TerminalNode __result)
