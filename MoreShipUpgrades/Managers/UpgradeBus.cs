@@ -70,22 +70,22 @@ namespace MoreShipUpgrades.Managers
 
         private Dictionary<string, System.Func<int, float>> infoFunctions = new Dictionary<string, System.Func<int, float>>()
         {
-            { "Back Muscles", level => (instance.cfg.CARRY_WEIGHT_REDUCTION - (level * instance.cfg.CARRY_WEIGHT_INCREMENT)) * 100 },
-            { "Discombobulator", level => instance.cfg.DISCOMBOBULATOR_STUN_DURATION + (level * instance.cfg.DISCOMBOBULATOR_INCREMENT) },
-            { "Light Footed", level => instance.cfg.NOISE_REDUCTION + (level * instance.cfg.NOISE_REDUCTION_INCREMENT)},
-            { "Strong Legs", level =>  instance.cfg.JUMP_FORCE + (level * instance.cfg.JUMP_FORCE_INCREMENT) - 13f },
-            { "Running Shoes", level => instance.cfg.MOVEMENT_SPEED + (level * instance.cfg.MOVEMENT_INCREMENT) - 4.6f },
-            { "Bigger Lungs", level => instance.cfg.SPRINT_TIME_INCREASE + (level * instance.cfg.SPRINT_TIME_INCREMENT) - 11f },
-            { "Protein Powder", level => instance.cfg.PROTEIN_UNLOCK_FORCE + 1 + (instance.cfg.PROTEIN_INCREMENT * level) },
-            { "Beekeeper", level => 100 * (instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (level * instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT)) },
+            { exoskeletonScript.UPGRADE_NAME, level => (instance.cfg.CARRY_WEIGHT_REDUCTION - (level * instance.cfg.CARRY_WEIGHT_INCREMENT)) * 100 },
+            { terminalFlashScript.UPGRADE_NAME, level => instance.cfg.DISCOMBOBULATOR_STUN_DURATION + (level * instance.cfg.DISCOMBOBULATOR_INCREMENT) },
+            { lightFootedScript.UPGRADE_NAME, level => instance.cfg.NOISE_REDUCTION + (level * instance.cfg.NOISE_REDUCTION_INCREMENT)},
+            { strongLegsScript.UPGRADE_NAME, level =>  instance.cfg.JUMP_FORCE + (level * instance.cfg.JUMP_FORCE_INCREMENT) - 13f },
+            { runningShoeScript.UPGRADE_NAME, level => instance.cfg.MOVEMENT_SPEED + (level * instance.cfg.MOVEMENT_INCREMENT) - 4.6f },
+            { biggerLungScript.UPGRADE_NAME, level => instance.cfg.SPRINT_TIME_INCREASE + (level * instance.cfg.SPRINT_TIME_INCREMENT) - 11f },
+            { proteinPowderScript.UPGRADE_NAME, level => instance.cfg.PROTEIN_UNLOCK_FORCE + 1 + (instance.cfg.PROTEIN_INCREMENT * level) },
+            { beekeeperScript.UPGRADE_NAME, level => 100 * (instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (level * instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT)) },
             { playerHealthScript.UPGRADE_NAME, level => instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK + (level)*instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT },
         };
 
         private Dictionary<string, System.Func<int, int, string>> complexInfoFunctions = new Dictionary<string, System.Func<int,int, string>>()
         {
-            { "Better Scanner", (level, price) => strongerScannerScript.GetBetterScannerInfo(level, price) },
-            { "Hunter", (level, price) => hunterScript.GetHunterInfo(level, price)},
-            { "NV Headset Batteries", (level, price) => nightVisionScript.GetNightVisionInfo(level, price) },
+            { strongerScannerScript.UPGRADE_NAME, (level, price) => strongerScannerScript.GetBetterScannerInfo(level, price) },
+            { hunterScript.UPGRADE_NAME, (level, price) => hunterScript.GetHunterInfo(level, price)},
+            { nightVisionScript.UPGRADE_NAME, (level, price) => nightVisionScript.GetNightVisionInfo(level, price) },
         };
 
         public Dictionary<ulong, int> playerHPs = new Dictionary<ulong, int>();
@@ -186,7 +186,7 @@ namespace MoreShipUpgrades.Managers
             {
                 node.Unlocked = false;
                 node.CurrentUpgrade = 0;
-                if(node.Name == "NV Headset Batteries") { node.Unlocked = true; }
+                if(node.Name == nightVisionScript.UPGRADE_NAME) { node.Unlocked = true; }
             }
             PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
             foreach (PlayerControllerB player in players)
@@ -303,12 +303,12 @@ namespace MoreShipUpgrades.Managers
         private void SetupBeekeperTerminalNode()
         {
             SetupMultiplePurchasableTerminalNode(
-                "Beekeeper",
+                beekeeperScript.UPGRADE_NAME,
                 cfg.SHARED_UPGRADES ? true : !cfg.BEEKEEPER_INDIVIDUAL,
                 cfg.BEEKEEPER_ENABLED,
                 cfg.BEEKEEPER_PRICE,
                 ParseUpgradePrices(cfg.BEEKEEPER_UPGRADE_PRICES),
-                AssetBundleHandler.GetInfoFromJSON("Beekeeper"));
+                AssetBundleHandler.GetInfoFromJSON(beekeeperScript.UPGRADE_NAME));
         }
 
         private void SetupProteinPowderTerminalNode() 
@@ -322,30 +322,30 @@ namespace MoreShipUpgrades.Managers
         }
         private void SetupBiggerLungsTerminalNode()
         {
-            SetupMultiplePurchasableTerminalNode("Bigger Lungs",
+            SetupMultiplePurchasableTerminalNode(biggerLungScript.UPGRADE_NAME,
                                                 cfg.SHARED_UPGRADES ? true : !cfg.BIGGER_LUNGS_INDIVIDUAL,
                                                 cfg.BIGGER_LUNGS_ENABLED,
                                                 cfg.BIGGER_LUNGS_PRICE,
                                                 ParseUpgradePrices(cfg.RUNNING_SHOES_UPGRADE_PRICES),
-                                                AssetBundleHandler.GetInfoFromJSON("Bigger Lungs"));
+                                                AssetBundleHandler.GetInfoFromJSON(biggerLungScript.UPGRADE_NAME));
         }
         private void SetupRunningShoesTerminalNode()
         {
-            SetupMultiplePurchasableTerminalNode("Running Shoes",
+            SetupMultiplePurchasableTerminalNode(runningShoeScript.UPGRADE_NAME,
                                                 cfg.SHARED_UPGRADES ? true : !cfg.RUNNING_SHOES_INDIVIDUAL,
                                                 cfg.RUNNING_SHOES_ENABLED,
                                                 cfg.RUNNING_SHOES_PRICE,
                                                 ParseUpgradePrices(cfg.RUNNING_SHOES_UPGRADE_PRICES),
-                                                AssetBundleHandler.GetInfoFromJSON("Running Shoes"));
+                                                AssetBundleHandler.GetInfoFromJSON(runningShoeScript.UPGRADE_NAME));
         }
         private void SetupStrongLegsTerminalNode()
         {
-            SetupMultiplePurchasableTerminalNode("Strong Legs",
+            SetupMultiplePurchasableTerminalNode(strongLegsScript.UPGRADE_NAME,
                                                 cfg.SHARED_UPGRADES ? true : !cfg.STRONG_LEGS_INDIVIDUAL,
                                                 cfg.STRONG_LEGS_ENABLED,
                                                 cfg.STRONG_LEGS_PRICE,
                                                 ParseUpgradePrices(cfg.STRONG_LEGS_UPGRADE_PRICES),
-                                                AssetBundleHandler.GetInfoFromJSON("Strong Legs"));
+                                                AssetBundleHandler.GetInfoFromJSON(strongLegsScript.UPGRADE_NAME));
         }
         private void SetupMalwareBroadcasterTerminalNode()
         {
@@ -363,7 +363,7 @@ namespace MoreShipUpgrades.Managers
             }
             else { desc = $"Broadcasted codes now disable map hazards for {cfg.DISARM_TIME} seconds."; }
 
-            SetupOneTimeTerminalNode("Malware Broadcaster",
+            SetupOneTimeTerminalNode(trapDestroyerScript.UPGRADE_NAME,
                                     cfg.SHARED_UPGRADES ? true : !cfg.MALWARE_BROADCASTER_INDIVIDUAL,
                                     cfg.MALWARE_BROADCASTER_ENABLED,
                                     cfg.MALWARE_BROADCASTER_PRICE,
@@ -371,16 +371,16 @@ namespace MoreShipUpgrades.Managers
         }
         private void SetupLightFootedTerminalNode()
         {
-            SetupMultiplePurchasableTerminalNode("Light Footed",
+            SetupMultiplePurchasableTerminalNode(lightFootedScript.UPGRADE_NAME,
                                                 cfg.SHARED_UPGRADES ? true : !cfg.LIGHT_FOOTED_INDIVIDUAL,
                                                 cfg.LIGHT_FOOTED_ENABLED,
                                                 cfg.LIGHT_FOOTED_PRICE,
                                                 ParseUpgradePrices(cfg.STRONG_LEGS_UPGRADE_PRICES),
-                                                AssetBundleHandler.GetInfoFromJSON("Light Footed"));
+                                                AssetBundleHandler.GetInfoFromJSON(lightFootedScript.UPGRADE_NAME));
         }
         private void SetupNightVisionBatteryTerminalNode()
         {
-            CustomTerminalNode node = SetupMultiplePurchasableTerminalNode("NV Headset Batteries",
+            CustomTerminalNode node = SetupMultiplePurchasableTerminalNode(nightVisionScript.UPGRADE_NAME,
                                                 cfg.SHARED_UPGRADES ? true : !cfg.NIGHT_VISION_INDIVIDUAL,
                                                 cfg.NIGHT_VISION_ENABLED,
                                                 0,
@@ -393,16 +393,16 @@ namespace MoreShipUpgrades.Managers
             if (!flashSFX) return;
 
             flashNoise = flashSFX;
-            SetupMultiplePurchasableTerminalNode("Discombobulator",
+            SetupMultiplePurchasableTerminalNode(terminalFlashScript.UPGRADE_NAME,
                                                 cfg.SHARED_UPGRADES ? true : !cfg.DISCOMBOBULATOR_INDIVIDUAL,
                                                 cfg.DISCOMBOBULATOR_ENABLED,
                                                 cfg.DISCOMBOBULATOR_PRICE,
                                                 ParseUpgradePrices(cfg.DISCO_UPGRADE_PRICES),
-                                                AssetBundleHandler.GetInfoFromJSON("Discombobulator"));
+                                                AssetBundleHandler.GetInfoFromJSON(terminalFlashScript.UPGRADE_NAME));
         }
         private void SetupHunterTerminalNode()
         {
-            SetupMultiplePurchasableTerminalNode("Hunter",
+            SetupMultiplePurchasableTerminalNode(hunterScript.UPGRADE_NAME,
                                                 true,
                                                 cfg.HUNTER_ENABLED,
                                                 cfg.HUNTER_PRICE,
@@ -410,7 +410,7 @@ namespace MoreShipUpgrades.Managers
         }
         private void SetupBetterScannerTerminalNode()
         {
-            SetupMultiplePurchasableTerminalNode("Better Scanner",
+            SetupMultiplePurchasableTerminalNode(strongerScannerScript.UPGRADE_NAME,
                                                 cfg.SHARED_UPGRADES ? true : !cfg.BETTER_SCANNER_INDIVIDUAL,
                                                 cfg.BETTER_SCANNER_ENABLED,
                                                 cfg.BETTER_SCANNER_PRICE,
@@ -430,20 +430,20 @@ namespace MoreShipUpgrades.Managers
             GameObject walkie = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/walkieUpgrade.prefab");
             if (!walkie) return;
 
-            IndividualUpgrades.Add("Walkie GPS", true);
+            IndividualUpgrades.Add(walkieScript.UPGRADE_NAME, true);
             if (!cfg.WALKIE_ENABLED) return;
 
-            CustomTerminalNode node = new CustomTerminalNode("Walkie GPS", cfg.WALKIE_PRICE, "Displays your location and time when holding a walkie talkie.\nEspecially useful for fog.", walkie);
+            CustomTerminalNode node = new CustomTerminalNode(walkieScript.UPGRADE_NAME, cfg.WALKIE_PRICE, "Displays your location and time when holding a walkie talkie.\nEspecially useful for fog.", walkie);
             terminalNodes.Add(node);
         }
         private void SetupBackMusclesTerminalNode()
         {
-            SetupMultiplePurchasableTerminalNode("Back Muscles",
+            SetupMultiplePurchasableTerminalNode(exoskeletonScript.UPGRADE_NAME,
                                                 cfg.SHARED_UPGRADES ? true : !cfg.BACK_MUSCLES_INDIVIDUAL,
                                                 cfg.BACK_MUSCLES_ENABLED,
                                                 cfg.BACK_MUSCLES_PRICE,
                                                 ParseUpgradePrices(cfg.BACK_MUSCLES_UPGRADE_PRICES),
-                                                AssetBundleHandler.GetInfoFromJSON("Back Muscles"));
+                                                AssetBundleHandler.GetInfoFromJSON(exoskeletonScript.UPGRADE_NAME));
         }
         private void SetupInternsTerminalNode()
         {
@@ -455,7 +455,7 @@ namespace MoreShipUpgrades.Managers
         }
         private void SetupPagerTerminalNode()
         {
-            SetupOneTimeTerminalNode("Fast Encryption",
+            SetupOneTimeTerminalNode(pagerScript.UPGRADE_NAME,
                                     true,
                                     cfg.PAGER_ENABLED,
                                     cfg.PAGER_PRICE,
@@ -463,7 +463,7 @@ namespace MoreShipUpgrades.Managers
         }
         private void SetupLocksmithTerminalNode()
         {
-            SetupOneTimeTerminalNode("Locksmith",
+            SetupOneTimeTerminalNode(lockSmithScript.UPGRADE_NAME,
                                     cfg.SHARED_UPGRADES ? true : !cfg.LOCKSMITH_INDIVIDUAL,
                                     cfg.LOCKSMITH_ENABLED,
                                     cfg.LOCKSMITH_PRICE,

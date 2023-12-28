@@ -29,13 +29,13 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public static string INCREMENT_FORCE_SECTION = "Additional hit force per level";
         public static int INCREMENT_FORCE_DEFAULT = 1;
-        public static string INCREMENT_FORCE_DESCRIPTION = "Every time protein powder is upgraded this value will be added to the value above.";
+        public static string INCREMENT_FORCE_DESCRIPTION = $"Every time {UPGRADE_NAME} is upgraded this value will be added to the value above.";
 
         public static string PRICES_DEFAULT = "700";
 
         public static string CRIT_CHANCE_SECTION = "Chance of dealing a crit which will instakill the enemy.";
         public static float CRIT_CHANCE_DEFAULT = 0.01f;
-        public static string CRIT_CHANCE_DESCRIPTION = "This value is only valid when maxed out Protein Powder. Any previous levels will not apply crit.";
+        public static string CRIT_CHANCE_DESCRIPTION = $"This value is only valid when maxed out {UPGRADE_NAME}. Any previous levels will not apply crit.";
 
         void Start()
         {
@@ -78,9 +78,6 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             int maximumLevel = UpgradeBus.instance.cfg.PROTEIN_UPGRADE_PRICES.Split(',').Length;
             int currentLevel = UpgradeBus.instance.proteinLevel;
-
-            Plugin.mls.LogInfo($"Levels purchaseable for Protein Powder: {maximumLevel}");
-            Plugin.mls.LogInfo($"Current level on Protein Powder: {currentLevel}");
 
             if (currentLevel != maximumLevel) return false;
 

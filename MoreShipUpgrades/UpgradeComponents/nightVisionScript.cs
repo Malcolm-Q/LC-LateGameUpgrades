@@ -185,7 +185,7 @@ namespace MoreShipUpgrades.UpgradeComponents
                     {
                         float drain = (UpgradeBus.instance.cfg.NIGHT_BATTERY_MAX - (UpgradeBus.instance.cfg.NIGHT_BATTERY_MAX * UpgradeBus.instance.cfg.NIGHT_VIS_STARTUP)) / UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_SPEED;
                         float regen = UpgradeBus.instance.cfg.NIGHT_BATTERY_MAX / UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_SPEED;
-                        return string.Format(AssetBundleHandler.GetInfoFromJSON("NV Headset Batteries"), level, price, drain, regen);
+                        return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), level, price, drain, regen);
                     }
                 default:
                     {
@@ -199,7 +199,7 @@ namespace MoreShipUpgrades.UpgradeComponents
                         string regenTime = "infinite";
                         if (regenAdjustment != 0) regenTime = (batteryLife / regenAdjustment).ToString("F2");
 
-                        return string.Format(AssetBundleHandler.GetInfoFromJSON("NV Headset Batteries"), level, price, drainTime, regenTime);
+                        return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), level, price, drainTime, regenTime);
                     }
             }
         }
