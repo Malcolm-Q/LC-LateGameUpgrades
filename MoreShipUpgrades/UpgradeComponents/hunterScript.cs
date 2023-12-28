@@ -70,7 +70,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             }
             result = result.Substring(0, result.Length - 2);
             result += "\n";
-            return string.Format(AssetBundleHandler.GetInfoFromJSON("Hunter"), level, price, result);
+            return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), level, price, result);
         }
     }
 }

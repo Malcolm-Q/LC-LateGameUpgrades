@@ -8,7 +8,7 @@ namespace MoreShipUpgrades.UpgradeComponents
     internal class biggerLungScript : BaseUpgrade
     {
         PlayerControllerB localPlayer;
-        private static LGULogger logger = new LGULogger("Bigger Lungs");
+        private static LGULogger logger = new LGULogger(UPGRADE_NAME);
         public static string UPGRADE_NAME = "Bigger Lungs";
         public static string PRICES_DEFAULT = "350,450,550";
         private static float DEFAULT_SPRINT_TIME = 11f;
