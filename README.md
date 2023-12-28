@@ -18,23 +18,16 @@ Join [this modding discord](https://discord.gg/hzEcKFSSDX) and comment [on this 
 *Included is a projectSetup.exe and projectSetup.py, you can run one or the other to quickly add all (or most of if some have been recently added) of the dependents to your .csproj
 
 ## **TODO:**
-cleanup
 #### Complex Tiered Upgrades
-* strong legs - WIP
+* strong legs
     * final upgrade reduces/removes fall damage
-* bigger lungs
-    * second upgrade increases stamina regen time
-    * third upgrade reduces jump cost
-* discombobulator
-    * damage enemies on use
 * lightning rod
     * maybe an expensive upgrade that grants a chance to redirect attracted lightning onto a nearby enemy?
-* beekeeper
-    * final upgrade increases beehive price
-* Running shoes
-    * Final upgrade grants what is now Light Footed (light footed will be removed)
 * Hunter
     * Final upgrade allows the spawning of 'alpha' creatures, they're stronger bigger have more health and valuable samples.
+#### Other
+* When LethalLib version with RemoveStoreItem() and UpdateStorePrice() reimpliment AlterStoreItems() in UpgradeBus.Reconstruct()
+* Add config options for hunter drop prices and what monsters are huntable on each tier
 
 ## **Community Suggested Additions:**
 If you want to implement one of these please create a branch indicating which feature you are implementing.  
