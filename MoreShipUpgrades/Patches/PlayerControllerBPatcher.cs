@@ -175,5 +175,49 @@ namespace MoreShipUpgrades.Patches
             }
             return codes.AsEnumerable();
         }
+
+        [HarmonyTranspiler]
+        [HarmonyPatch("PlayFootstepLocal")]
+        private static IEnumerable<CodeInstruction> PlayFootstepLocalTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            return AddReduceNoiseRangeFunctionToPlayerFootsteps(instructions);
+        }
+
+        [HarmonyTranspiler]
+        [HarmonyPatch("PlayFootstepServer")]
+        private static IEnumerable<CodeInstruction> PlayFootstepServerTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            return AddReduceNoiseRangeFunctionToPlayerFootsteps(instructions);
+        }
+
+        private static IEnumerable<CodeInstruction> AddReduceNoiseRangeFunctionToPlayerFootsteps(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo runningShoesReduceNoiseRange = typeof(runningShoeScript).GetMethod("ApplyPossibleReducedNoiseRange", BindingFlags.Static | BindingFlags.Public);
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            bool walking = false;
+            bool sprinting = false;
+            for (int i = 0; i < codes.Count; i++)
+            {
+                if (walking && sprinting) break;
+                if (codes[i].opcode != OpCodes.Ldc_R4) continue;
+                switch (codes[i].operand.ToString())
+                {
+                    case "22":
+                        {
+                            codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, runningShoesReduceNoiseRange));
+                            sprinting = true;
+                            break;
+                        }
+                    case "17":
+                        {
+                            codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, runningShoesReduceNoiseRange));
+                            walking = true;
+                            break;
+                        }
+                    default: break;
+                }
+            }
+            return codes.AsEnumerable();
+        }
     }
 }

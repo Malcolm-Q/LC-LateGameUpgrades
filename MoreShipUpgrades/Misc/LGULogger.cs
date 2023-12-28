@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MoreShipUpgrades.Misc
 {
-    internal class LGULogger
+    public class LGULogger
     {
         private string moduleName;
         private ManualLogSource logSource;
