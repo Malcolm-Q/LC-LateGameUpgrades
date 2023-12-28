@@ -30,9 +30,9 @@ namespace MoreShipUpgrades.UpgradeComponents
         private static string UNLOAD_MESSAGE = $"\n<color={UNLOAD_COLOUR}>{UPGRADE_NAME} has been disabled</color>";
 
         // Toggle
-        private static string ACCESS_DENIED_MESSAGE = $"You don't have access to this command yet. Purchase the '{UPGRADE_NAME}'.\n";
-        private static string TOGGLE_ON_MESSAGE = $"{UPGRADE_NAME} has been enabled. Lightning bolts will now be redirected to the ship.\n";
-        private static string TOGGLE_OFF_MESSAGE = $"{UPGRADE_NAME} has been disabled. Lightning bolts will no longer be redirected to the ship.\n";
+        public static string ACCESS_DENIED_MESSAGE = $"You don't have access to this command yet. Purchase the '{UPGRADE_NAME}'.\n";
+        public static string TOGGLE_ON_MESSAGE = $"{UPGRADE_NAME} has been enabled. Lightning bolts will now be redirected to the ship.\n";
+        public static string TOGGLE_OFF_MESSAGE = $"{UPGRADE_NAME} has been disabled. Lightning bolts will no longer be redirected to the ship.\n";
 
         // distance
         public static string DIST_SECTION = $"Effective Distance of {UPGRADE_NAME}.";

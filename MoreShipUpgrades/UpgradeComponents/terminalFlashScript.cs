@@ -17,6 +17,13 @@ namespace MoreShipUpgrades.UpgradeComponents
             Register();
         }
 
+        void Update()
+        {
+            if (UpgradeBus.instance.flashCooldown > 0f)
+            {
+                UpgradeBus.instance.flashCooldown -= Time.deltaTime;
+            }
+        }
         public override void load()
         {
             UpgradeBus.instance.terminalFlash = true;
