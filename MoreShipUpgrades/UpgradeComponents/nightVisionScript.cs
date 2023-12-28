@@ -110,8 +110,8 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             UpgradeBus.instance.nightVisionActive = false;
             client.nightVision.color = UpgradeBus.instance.nightVisColor;
-            client.nightVision.range = UpgradeBus.instance.nightVisRange + (UpgradeBus.instance.nightVisionLevel * UpgradeBus.instance.cfg.NIGHT_VIS_RANGE_INCREMENT);
-            client.nightVision.intensity = UpgradeBus.instance.nightVisIntensity + (UpgradeBus.instance.nightVisionLevel * UpgradeBus.instance.cfg.NIGHT_VIS_INTENSITY_INCREMENT);
+            client.nightVision.range = UpgradeBus.instance.nightVisRange;
+            client.nightVision.intensity = UpgradeBus.instance.nightVisIntensity;
             if(exhaust)
             {
                 batteryExhaustion = true;
@@ -126,8 +126,8 @@ namespace MoreShipUpgrades.UpgradeComponents
             UpgradeBus.instance.nightVisIntensity = client.nightVision.intensity;
 
             client.nightVision.color = UpgradeBus.instance.cfg.NIGHT_VIS_COLOR;
-            client.nightVision.range = UpgradeBus.instance.cfg.NIGHT_VIS_RANGE;
-            client.nightVision.intensity = UpgradeBus.instance.cfg.NIGHT_VIS_INTENSITY;
+            client.nightVision.range = UpgradeBus.instance.cfg.NIGHT_VIS_RANGE + (UpgradeBus.instance.nightVisionLevel * UpgradeBus.instance.cfg.NIGHT_VIS_RANGE_INCREMENT);
+            client.nightVision.intensity = UpgradeBus.instance.cfg.NIGHT_VIS_INTENSITY + (UpgradeBus.instance.nightVisionLevel * UpgradeBus.instance.cfg.NIGHT_VIS_INTENSITY_INCREMENT);
             nightBattery -= UpgradeBus.instance.cfg.NIGHT_VIS_STARTUP; // 0.1f
         }
 
