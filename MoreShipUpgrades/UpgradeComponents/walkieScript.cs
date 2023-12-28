@@ -9,10 +9,13 @@ namespace MoreShipUpgrades.UpgradeComponents
 {
     public class walkieScript : BaseUpgrade
     {
+        public static string UPGRADE_NAME = "Walkie GPS";
+
         private GameObject canvas;
         private Text x, y, z, time;
         void Start()
         {
+            upgradeName = UPGRADE_NAME;
             DontDestroyOnLoad(gameObject);
             Register();
             UpgradeBus.instance.walkieHandler = this;
@@ -25,59 +28,59 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public override void load()
         {
+            base.load();
+
             UpgradeBus.instance.walkies = true;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Walkie Talkies now have GPS!</color>";
         }
 
         public override void Register()
         {
-            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Walkie GPS")) { UpgradeBus.instance.UpgradeObjects.Add("Walkie GPS", gameObject); }
+            base.Register();
         }
 
         public override void Unwind()
         {
+            base.Unwind();
+
             UpgradeBus.instance.walkies = false;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>GPS Walkies have been disabled</color>";
         }
 
         public void Update()
         {
-            if(UpgradeBus.instance.walkieUIActive)
-            {
-                Vector3 pos = GameNetworkManager.Instance.localPlayerController.transform.position;
-                x.text = $"X: {pos.x.ToString("F1")}";
-                y.text = $"Y: {pos.y.ToString("F1")}";
-                z.text = $"Z: {pos.z.ToString("F1")}";
+            if (!UpgradeBus.instance.walkieUIActive) return;
 
-                int num = (int)(TimeOfDay.Instance.normalizedTimeOfDay * (60f * TimeOfDay.Instance.numberOfHours)) + 360;
-                int num2 = (int)Mathf.Floor((float)(num / 60));
-                string amPM = "AM";
-                string text = "";
-                if (num2 >= 24)
-                {
-                    text = "12:00 AM";
-                }
-                if (num2 > 12)
-                {
-                    amPM = "PM";
-                }
-                if (num2 > 12)
-                {
-                    num2 %= 12;
-                }
-                int num3 = num % 60;
-                text = string.Format("{0:00}:{1:00}", num2, num3).TrimStart('0') + amPM;
-                time.text = text;           
+            Vector3 pos = GameNetworkManager.Instance.localPlayerController.transform.position;
+            x.text = $"X: {pos.x.ToString("F1")}";
+            y.text = $"Y: {pos.y.ToString("F1")}";
+            z.text = $"Z: {pos.z.ToString("F1")}";
+
+            int num = (int)(TimeOfDay.Instance.normalizedTimeOfDay * (60f * TimeOfDay.Instance.numberOfHours)) + 360;
+            int num2 = (int)Mathf.Floor((float)(num / 60));
+            string amPM = "AM";
+            string text = "";
+            if (num2 >= 24)
+            {
+                text = "12:00 AM";
             }
+            if (num2 > 12)
+            {
+                amPM = "PM";
+            }
+            if (num2 > 12)
+            {
+                num2 %= 12;
+            }
+            int num3 = num % 60;
+            text = string.Format("{0:00}:{1:00}", num2, num3).TrimStart('0') + amPM;
+            time.text = text;
         }
 
         public void WalkieActive()
         {
-            if(!canvas.activeInHierarchy)
-            {
-                UpgradeBus.instance.walkieUIActive = true;
-                canvas.SetActive(true);
-            }
+            if (canvas.activeInHierarchy) return;
+
+            UpgradeBus.instance.walkieUIActive = true;
+            canvas.SetActive(true);
         }
 
         public void WalkieDeactivate()

@@ -8,8 +8,11 @@ namespace MoreShipUpgrades.UpgradeComponents
 {
     public class terminalFlashScript : BaseUpgrade
     {
+        public static string UPGRADE_NAME = "Discombobulator";
+        public static string PRICES_DEFAULT = "330,460,620";
         void Start()
         {
+            upgradeName = UPGRADE_NAME;
             DontDestroyOnLoad(gameObject);
             Register();
         }
@@ -31,7 +34,7 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public override void Register()
         {
-            if(!UpgradeBus.instance.UpgradeObjects.ContainsKey("Discombobulator")) { UpgradeBus.instance.UpgradeObjects.Add("Discombobulator", gameObject); }
+            base.Register();
         }
 
         public override void Increment()
@@ -41,9 +44,10 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public override void Unwind()
         {
+            base.Unwind();
+
             UpgradeBus.instance.terminalFlash = false;
             UpgradeBus.instance.discoLevel = 0;
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Discombobulator has been disabled.</color>";
         }
 
         [ServerRpc(RequireOwnership = false)]
