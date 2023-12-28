@@ -13,7 +13,6 @@ namespace MoreShipUpgrades.UpgradeComponents
         public static string UPGRADE_NAME = "Protein Powder";
 
         private static int CRIT_DAMAGE_VALUE = 100;
-        private static int DEFAULT_HIT_VALUE = 1;
 
         // Configuration
         public static string ENABLED_SECTION = $"Enable {UPGRADE_NAME} Upgrade";
@@ -69,9 +68,9 @@ namespace MoreShipUpgrades.UpgradeComponents
             UpgradeBus.instance.proteinPowder = false;
         }
 
-        public static int GetShovelHitForce()
+        public static int GetShovelHitForce(int force)
         {
-            return UpgradeBus.instance.proteinPowder ? TryToCritEnemy() ? CRIT_DAMAGE_VALUE : UpgradeBus.instance.cfg.PROTEIN_INCREMENT * UpgradeBus.instance.proteinLevel + UpgradeBus.instance.cfg.PROTEIN_UNLOCK_FORCE + DEFAULT_HIT_VALUE : DEFAULT_HIT_VALUE;
+            return UpgradeBus.instance.proteinPowder ? TryToCritEnemy() ? CRIT_DAMAGE_VALUE : UpgradeBus.instance.cfg.PROTEIN_INCREMENT * UpgradeBus.instance.proteinLevel + UpgradeBus.instance.cfg.PROTEIN_UNLOCK_FORCE + force : force;
         }
 
         private static bool TryToCritEnemy()

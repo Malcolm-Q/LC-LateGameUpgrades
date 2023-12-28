@@ -26,8 +26,7 @@ namespace MoreShipUpgrades.Patches
                 if (!(codes[i - 1].opcode == OpCodes.Ldarg_0)) continue;
                 if (!(codes[i].opcode == OpCodes.Ldfld && codes[i].operand.ToString() == "System.Int32 shovelHitForce")) continue;
 
-                codes[i] = new CodeInstruction(OpCodes.Call, proteinHitFoce);
-                codes.Remove(codes[i-1]);
+                codes.Insert(i+1, new CodeInstruction(OpCodes.Call, proteinHitFoce));
                 found = true;
             }
             return codes.AsEnumerable();
