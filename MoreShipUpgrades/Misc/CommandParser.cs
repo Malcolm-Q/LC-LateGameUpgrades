@@ -29,30 +29,30 @@ namespace MoreShipUpgrades.Misc
         }
         private static TerminalNode ExecuteDiscombobulatorAttack(ref Terminal terminal)
         {
-            if (!UpgradeBus.instance.terminalFlash) return DisplayTerminalMessage("You don't have access to this command yet. Purchase the 'Discombobulator'.");
+            if (!UpgradeBus.instance.terminalFlash) return DisplayTerminalMessage("You don't have access to this command yet. Purchase the 'Discombobulator'.\n\n");
 
-            if (UpgradeBus.instance.flashCooldown > 0f) return DisplayTerminalMessage($"You can discombobulate again in {Mathf.Round(UpgradeBus.instance.flashCooldown)} seconds.\nType 'cooldown' or 'cd' to check discombobulation cooldown.");
+            if (UpgradeBus.instance.flashCooldown > 0f) return DisplayTerminalMessage($"You can discombobulate again in {Mathf.Round(UpgradeBus.instance.flashCooldown)} seconds.\nType 'cooldown' or 'cd' to check discombobulation cooldown.\n\n");
 
             RoundManager.Instance.PlayAudibleNoise(terminal.transform.position, 60f, 0.8f, 0, false, 14155);
             UpgradeBus.instance.flashScript.PlayAudioAndUpdateCooldownServerRpc();
 
             Collider[] array = Physics.OverlapSphere(terminal.transform.position, UpgradeBus.instance.cfg.DISCOMBOBULATOR_RADIUS, 524288);
-            if (array.Length <= 0) return DisplayTerminalMessage("No stunned enemies detected.");
+            if (array.Length <= 0) return DisplayTerminalMessage("No stunned enemies detected.\n\n");
 
             if (UpgradeBus.instance.cfg.DISCOMBOBULATOR_NOTIFY_CHAT)
             {
                 terminal.StartCoroutine(CountDownChat(UpgradeBus.instance.cfg.DISCOMBOBULATOR_STUN_DURATION + (UpgradeBus.instance.cfg.DISCOMBOBULATOR_INCREMENT * UpgradeBus.instance.discoLevel)));
             }
-            return DisplayTerminalMessage($"Stun grenade hit {array.Length} enemies.");
+            return DisplayTerminalMessage($"Stun grenade hit {array.Length} enemies.\n\n");
         }
 
         private static TerminalNode ExecuteDiscombobulatorCooldown()
         {
-            if (!UpgradeBus.instance.terminalFlash) return DisplayTerminalMessage("You don't have access to this command yet. Purchase 'Discombobulator'.");
+            if (!UpgradeBus.instance.terminalFlash) return DisplayTerminalMessage("You don't have access to this command yet. Purchase the 'Discombobulator'.\n\n");
 
-            if (UpgradeBus.instance.flashCooldown > 0f) return DisplayTerminalMessage($"You can discombobulate again in {Mathf.Round(UpgradeBus.instance.flashCooldown)} seconds.");
+            if (UpgradeBus.instance.flashCooldown > 0f) return DisplayTerminalMessage($"You can discombobulate again in {Mathf.Round(UpgradeBus.instance.flashCooldown)} seconds.\n\n");
 
-            return DisplayTerminalMessage("Discombobulate is ready, Type 'initattack' or 'atk' to execute.");
+            return DisplayTerminalMessage("Discombobulate is ready, Type 'initattack' or 'atk' to execute.\n\n");
         }
 
         private static TerminalNode ExecuteModInformation()
@@ -63,6 +63,7 @@ namespace MoreShipUpgrades.Misc
             displayText += "\n\nTo force wipe an lgu save file type `reset lgu`. (will only wipe the clients save).";
             displayText += "\n\nTo reapply any upgrades that failed to apply type `load lgu`.";
             displayText += "\n\nIn the case of credit desync to force an amount of credits type `forceCredits 123`, to attempt to sync credits type `syncCredits`";
+            displayText += "\n\n";
             return DisplayTerminalMessage(displayText);
         }
 
@@ -76,23 +77,23 @@ namespace MoreShipUpgrades.Misc
                 LGUStore.instance.saveInfo = saveInfo;
                 LGUStore.instance.UpdateLGUSaveServerRpc(id, JsonConvert.SerializeObject(saveInfo));
             }
-            return DisplayTerminalMessage("LGU save has been wiped.");
+            return DisplayTerminalMessage("LGU save has been wiped.\n\n");
         }
         private static TerminalNode ExecuteForceCredits(string creditAmount, ref Terminal __instance)
         {
             if (int.TryParse(creditAmount, out int value))
             {
                 __instance.groupCredits = value;
-                return DisplayTerminalMessage($"This client now has {value} credits.  \n\nThis was intended to be used when credit desync occurs due to Bigger Lobby or More Company.\n");
+                return DisplayTerminalMessage($"This client now has {value} credits.  \n\nThis was intended to be used when credit desync occurs due to Bigger Lobby or More Company.\n\n");
             }
 
-            return DisplayTerminalMessage($"Failed to parse value {creditAmount}.");
+            return DisplayTerminalMessage($"Failed to parse value {creditAmount}.\n\n");
         }
 
         private static TerminalNode ExecuteSyncCredits(ref Terminal terminal)
         {
             LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits);
-            return DisplayTerminalMessage($"Sending an RPC to sync all clients credits with your credits. ({terminal.groupCredits})");
+            return DisplayTerminalMessage($"Sending an RPC to sync all clients credits with your credits. ({terminal.groupCredits})\n\n");
         }
 
         private static TerminalNode ExecuteInternsCommand(ref Terminal terminal)
@@ -135,10 +136,10 @@ namespace MoreShipUpgrades.Misc
 
             if (!UpgradeBus.instance.pager) return __result;
 
-            if (message == "") return DisplayTerminalMessage("You have to enter a message to broadcast\nEX: `page get back to the ship!`");
+            if (message == "") return DisplayTerminalMessage("You have to enter a message to broadcast\nEX: `page get back to the ship!`\n\n");
 
             UpgradeBus.instance.pageScript.ReqBroadcastChatServerRpc(message);
-            return DisplayTerminalMessage($"Broadcasted message: '{message}'");
+            return DisplayTerminalMessage($"Broadcasted message: '{message}'\n\n");
         }
 
         private static TerminalNode ExecuteUpgradeCommand(string text, ref Terminal terminal, ref TerminalNode outputNode)
@@ -169,23 +170,23 @@ namespace MoreShipUpgrades.Misc
                 if (!customNode.Unlocked)
                 {
                     LGUStore.instance.HandleUpgrade(customNode.Name);
-                    if (customNode.MaxUpgrade != 0) { displayText = $"You Upgraded {customNode.Name} to level {customNode.CurrentUpgrade + 1}  \n"; }
-                    else { displayText = $"You Purchased {customNode.Name}  \n"; }
+                    if (customNode.MaxUpgrade != 0) { displayText = $"You Upgraded {customNode.Name} to level {customNode.CurrentUpgrade + 1}  \n\n"; }
+                    else { displayText = $"You Purchased {customNode.Name}  \n\n"; }
                 }
                 else if (customNode.Unlocked && customNode.MaxUpgrade > customNode.CurrentUpgrade)
                 {
                     LGUStore.instance.HandleUpgrade(customNode.Name, true);
-                    displayText = $"You Upgraded {customNode.Name} to level {customNode.CurrentUpgrade + 1} \n";
+                    displayText = $"You Upgraded {customNode.Name} to level {customNode.CurrentUpgrade + 1} \n\n";
                 }
             }
             else if (customNode.Unlocked && canAfford)
             {
-                if (customNode.MaxUpgrade == 0) { displayText = "You already unlocked this upgrade.  \n"; }
-                else { displayText = "This upgrade is already max level  \n"; }
+                if (customNode.MaxUpgrade == 0) { displayText = "You already unlocked this upgrade.  \n\n"; }
+                else { displayText = "This upgrade is already max level  \n\n"; }
             }
             else
             {
-                displayText = "You can't afford this item.  \n";
+                displayText = "You can't afford this item.  \n\n";
             }
             return DisplayTerminalMessage(displayText);
         }
@@ -195,7 +196,7 @@ namespace MoreShipUpgrades.Misc
             UpgradeBus.instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>().Unwind();
             LGUStore.instance.UpdateLGUSaveServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, JsonConvert.SerializeObject(new SaveInfo()));
             customNode.Unlocked = false;
-            return DisplayTerminalMessage($"Unwinding {customNode.Name.ToLower()}");
+            return DisplayTerminalMessage($"Unwinding {customNode.Name.ToLower()}\n\n");
         }
 
         private static TerminalNode ExecuteScanHivesCommand()
@@ -248,6 +249,7 @@ namespace MoreShipUpgrades.Misc
             {
                 displayText += $"\n{player.playerUsername} - X:{Mathf.RoundToInt(player.transform.position.x)},Y:{Mathf.RoundToInt(player.transform.position.y)},Z:{Mathf.RoundToInt(player.transform.position.z)}";
             }
+            displayText += "\n\n";
             return DisplayTerminalMessage(displayText);
         }
 
@@ -288,6 +290,7 @@ namespace MoreShipUpgrades.Misc
             {
                 displayText += $"\n{count.Key} - {count.Value}";
             }
+            displayText += "\n\n";
             return DisplayTerminalMessage(displayText);
         }
 
@@ -331,6 +334,7 @@ namespace MoreShipUpgrades.Misc
                     displayText += $"\nX:{Mathf.RoundToInt(door.transform.position.x)},Y:{Mathf.RoundToInt(door.transform.position.y)},Z:{Mathf.RoundToInt(door.transform.position.z)} - {Mathf.RoundToInt(Vector3.Distance(door.transform.position, player.transform.position))} units away.";
                 }
             }
+            displayText += "\n";
             return DisplayTerminalMessage(displayText);
         }
         public static void ParseLGUCommands(string fullText, ref Terminal terminal, ref TerminalNode outputNode)
@@ -340,6 +344,7 @@ namespace MoreShipUpgrades.Misc
             string secondWord = textArray.Length > 1 ? textArray[1].ToLower() : "";
             switch(firstWord)
             {
+                case "help": outputNode.displayText += ">LATEGAME\nDisplays information related with Lategame-Upgrades mod\n"; return;
                 case "toggle":
                     {
                         switch(secondWord)
