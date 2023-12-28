@@ -315,11 +315,11 @@ namespace MoreShipUpgrades
         }
         private void SetupBeekeeper()
         {
-            SetupGenericPerk<beekeeperScript>("Beekeeper");
+            SetupGenericPerk<beekeeperScript>(beekeeperScript.UPGRADE_NAME);
         }
         private void SetupHunter()
         {
-            SetupGenericPerk<hunterScript>("Hunter");
+            SetupGenericPerk<hunterScript>(hunterScript.UPGRADE_NAME);
         }
         private void SetupProteinPowder() 
         {
@@ -327,54 +327,55 @@ namespace MoreShipUpgrades
         }
         private void SetupBiggerLungs()
         {
-            SetupGenericPerk<biggerLungScript>("Bigger Lungs");
+            SetupGenericPerk<biggerLungScript>(biggerLungScript.UPGRADE_NAME);
         }
         private void SetupRunningShoes() 
         {
-            SetupGenericPerk<runningShoeScript>("Running Shoes");
+            SetupGenericPerk<runningShoeScript>(runningShoeScript.UPGRADE_NAME);
         }
         private void SetupStrongLegs() 
         {
-            SetupGenericPerk<strongLegsScript>("Strong Legs");
+            SetupGenericPerk<strongLegsScript>(strongLegsScript.UPGRADE_NAME);
         }
         private void SetupMalwareBroadcaster()
         {
-            SetupGenericPerk<trapDestroyerScript>("Malware Broadcaster");
+            SetupGenericPerk<trapDestroyerScript>(trapDestroyerScript.UPGRADE_NAME);
         }
         private void SetupLightFooted() 
         {
-            SetupGenericPerk<lightFootedScript>("Light Footed");
+            SetupGenericPerk<lightFootedScript>(lightFootedScript.UPGRADE_NAME);
         }
         private void SetupNightVisionBattery() 
         {
-            SetupGenericPerk<nightVisionScript>("NV Headset Batteries");
+            SetupGenericPerk<nightVisionScript>(nightVisionScript.UPGRADE_NAME);
         }
         private void SetupDiscombobulator()
         {
             AudioClip flashSFX = AssetBundleHandler.GetAudioClip("Flashbang");
             if (flashSFX != null) UpgradeBus.instance.flashNoise = flashSFX;
 
-            SetupGenericPerk<terminalFlashScript>("Discombobulator");
+            SetupGenericPerk<terminalFlashScript>(terminalFlashScript.UPGRADE_NAME);
         }
         private void SetupBetterScanner()
         {
-            SetupGenericPerk<strongerScannerScript>("Better Scanner");
+            SetupGenericPerk<strongerScannerScript>(strongerScannerScript.UPGRADE_NAME);
         }
         private void SetupWalkieGPS()
         {
-            SetupGenericPerk<walkieScript>("Walkie GPS");
+            SetupGenericPerk<walkieScript>(walkieScript.UPGRADE_NAME);
+
         }
         private void SetupBackMuscles()
         {
-            SetupGenericPerk<exoskeletonScript>("Back Muscles");
+            SetupGenericPerk<exoskeletonScript>(exoskeletonScript.UPGRADE_NAME);
         }
         private void SetupInterns()
         {
-            SetupGenericPerk<defibScript>("Interns");
+            SetupGenericPerk<defibScript>(defibScript.UPGRADE_NAME);
         }
         private void SetupPager()
         {
-            SetupGenericPerk<pagerScript>("Fast Encryption");
+            SetupGenericPerk<pagerScript>(pagerScript.UPGRADE_NAME);
         }
         private void SetupLightningRod()
         {
@@ -382,7 +383,7 @@ namespace MoreShipUpgrades
         }
         private void SetupLocksmith()
         {
-            SetupGenericPerk<lockSmithScript>("Locksmith");
+            SetupGenericPerk<lockSmithScript>(lockSmithScript.UPGRADE_NAME);
         }
         private void SetupPlayerHealth()
         {

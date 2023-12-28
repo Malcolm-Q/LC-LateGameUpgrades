@@ -376,7 +376,7 @@ namespace MoreShipUpgrades.Managers
         [ClientRpc]
         private void EnableNightVisionClientRpc()
         {
-            UpgradeBus.instance.UpgradeObjects["NV Headset Batteries"].GetComponent<nightVisionScript>().EnableOnClient();
+            UpgradeBus.instance.UpgradeObjects[nightVisionScript.UPGRADE_NAME].GetComponent<nightVisionScript>().EnableOnClient();
         }
 
         [ServerRpc(RequireOwnership = false)]

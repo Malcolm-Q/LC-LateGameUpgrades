@@ -6,7 +6,7 @@ namespace MoreShipUpgrades.UpgradeComponents
 {
     internal class beekeeperScript : BaseUpgrade
     {
-        private static LGULogger logger = new LGULogger("Beekeeper");
+        private static LGULogger logger = new LGULogger(UPGRADE_NAME);
         public static string UPGRADE_NAME = "Beekeeper";
         public static string PRICES_DEFAULT = "225,280,340";
         
