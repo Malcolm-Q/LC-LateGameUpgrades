@@ -422,6 +422,19 @@ namespace MoreShipUpgrades.Managers
                 prop.GetComponentInChildren<ScanNodeProperties>().subText = $"Value: ${value}";
             }
         }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void SpawnNightVisionItemOnDeathServerRpc(Vector3 position)
+        {
+            SpawnNightVisionItemOnDeathClientRpc(position);
+        }
+
+        [ClientRpc]
+        public void SpawnNightVisionItemOnDeathClientRpc(Vector3 position)
+        {
+            GameObject go = Instantiate(UpgradeBus.instance.nightVisionPrefab, position + Vector3.up, Quaternion.identity);
+            go.GetComponent<NetworkObject>().Spawn();
+        }
     }
 
     [Serializable]
