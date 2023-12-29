@@ -90,7 +90,7 @@ namespace MoreShipUpgrades.Misc
         public float NOISE_REDUCTION { get; set; }
         public float DISCOMBOBULATOR_COOLDOWN { get; set; }
         public float ADV_CHANCE_TO_BREAK { get; set; }
-        public bool ADV_KEEP_ITEMS_ON_TELE { get; private set; }
+        public bool ADV_KEEP_ITEMS_ON_TELE { get; set; }
         public float CHANCE_TO_BREAK { get; set; }
         public float BEEKEEPER_DAMAGE_MULTIPLIER { get; set; }
         public float BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT { get; set; }
@@ -157,7 +157,7 @@ namespace MoreShipUpgrades.Misc
         public int DIVEKIT_PRICE { get; set; }
         public bool DIVEKIT_ENABLED { get; set; }
         public float DIVEKIT_WEIGHT { get; set; }
-        public bool DIVEKIT_TWO_HANDED { get; private set; }
+        public bool DIVEKIT_TWO_HANDED { get; set; }
         public int DISCOMBOBULATOR_DAMAGE_LEVEL { get; set; }
         public int DISCOMBOBULATOR_INITIAL_DAMAGE {  get; set; }
         public int DISCOMBOBULATOR_DAMAGE_INCREASE { get; set; }
