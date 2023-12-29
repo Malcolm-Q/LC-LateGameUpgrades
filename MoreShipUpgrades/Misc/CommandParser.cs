@@ -344,7 +344,7 @@ namespace MoreShipUpgrades.Misc
             string secondWord = textArray.Length > 1 ? textArray[1].ToLower() : "";
             switch(firstWord)
             {
-                case "help": outputNode.displayText += ">LATEGAME\nDisplays information related with Lategame-Upgrades mod\n"; return;
+                case "help": if (!outputNode.displayText.Contains(">LATEGAME\nDisplays information related with Lategame-Upgrades mod\n")) outputNode.displayText += ">LATEGAME\nDisplays information related with Lategame-Upgrades mod\n"; return;
                 case "toggle":
                     {
                         switch(secondWord)
