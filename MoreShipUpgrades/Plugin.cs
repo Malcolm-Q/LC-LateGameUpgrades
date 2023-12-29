@@ -138,7 +138,6 @@ namespace MoreShipUpgrades
                 sampleScript.grabbableToEnemies = true;
                 sampleScript.itemProperties = sample;
                 LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(sample.spawnPrefab);
-                Items.RegisterShopItem(sample, 0);
                 UpgradeBus.instance.samplePrefabs.Add(creatureName, sample.spawnPrefab);
             }
         }

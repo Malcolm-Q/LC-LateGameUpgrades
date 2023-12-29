@@ -58,6 +58,36 @@ namespace MoreShipUpgrades.Patches
             return codes.AsEnumerable();
         }
 
+        [HarmonyTranspiler]
+        [HarmonyPatch("PlayerHitGroundEffects")]
+        private static IEnumerable<CodeInstruction> PlayerHitGroundEffectsTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo reduceFallDamageMethod = typeof(strongLegsScript).GetMethod("ReduceFallDamage", BindingFlags.Static | BindingFlags.Public);
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            bool instakillFall = false;
+            bool regularFall = false;
+            for(int i = 0; i < codes.Count; i++)
+            {
+                if (instakillFall && regularFall) break;
+
+                if (codes[i].opcode == OpCodes.Ldc_I4_S)
+                {
+                    switch (codes[i].operand.ToString())
+                    {
+                        case "100":
+                        case "40":
+                            {
+                                codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, reduceFallDamageMethod));
+                                if (!instakillFall) instakillFall = true; else regularFall = true;
+                                continue;
+                            }
+                        default: continue;
+                    }
+                }
+            }
+
+            return codes.AsEnumerable();
+        }
 
         [HarmonyPrefix]
         [HarmonyPatch("DropAllHeldItems")]
