@@ -319,7 +319,7 @@ namespace MoreShipUpgrades.Managers
                                                 cfg.SHARED_UPGRADES ? true : !cfg.BIGGER_LUNGS_INDIVIDUAL,
                                                 cfg.BIGGER_LUNGS_ENABLED,
                                                 cfg.BIGGER_LUNGS_PRICE,
-                                                ParseUpgradePrices(cfg.RUNNING_SHOES_UPGRADE_PRICES),
+                                                ParseUpgradePrices(cfg.BIGGER_LUNGS_UPGRADE_PRICES),
                                                 AssetBundleHandler.GetInfoFromJSON(biggerLungScript.UPGRADE_NAME));
         }
         private void SetupRunningShoesTerminalNode()
