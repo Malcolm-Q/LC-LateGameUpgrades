@@ -40,9 +40,8 @@ namespace MoreShipUpgrades.UpgradeComponents
             base.Register();
         }
 
-        public static float CalculateWeight(float desiredValue, float minimumValue, float maximumValue)
+        public static float DecreasePossibleWeight(float defaultWeight)
         {
-            float defaultWeight = Mathf.Clamp(desiredValue, minimumValue, maximumValue);
             if (!UpgradeBus.instance.exoskeleton) return defaultWeight;
             return defaultWeight * (UpgradeBus.instance.cfg.CARRY_WEIGHT_REDUCTION - (UpgradeBus.instance.backLevel * UpgradeBus.instance.cfg.CARRY_WEIGHT_INCREMENT));
         }
@@ -57,7 +56,7 @@ namespace MoreShipUpgrades.UpgradeComponents
                 GrabbableObject obj = player.ItemSlots[i];
                 if (obj == null) continue;
 
-                UpgradeBus.instance.alteredWeight += CalculateWeight(obj.itemProperties.weight - 1f, 0f, 10f);
+                UpgradeBus.instance.alteredWeight += Mathf.Clamp(DecreasePossibleWeight(obj.itemProperties.weight - 1f), 0f, 10f);
             }
             player.carryWeight = UpgradeBus.instance.alteredWeight;
             if (player.carryWeight < 1f) { player.carryWeight = 1f; }

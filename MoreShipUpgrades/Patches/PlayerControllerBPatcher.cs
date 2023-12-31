@@ -7,12 +7,14 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Linq;
 using UnityEngine;
+using MoreShipUpgrades.Misc;
 
 namespace MoreShipUpgrades.Patches
 {
     [HarmonyPatch(typeof(PlayerControllerB))]
     internal class PlayerControllerBPatcher
     {
+        internal static LGULogger logger = new LGULogger(nameof(PlayerControllerBPatcher));
         [HarmonyPrefix]
         [HarmonyPatch("KillPlayer")]
         private static void DisableUpgradesOnDeath(PlayerControllerB __instance)
@@ -153,14 +155,16 @@ namespace MoreShipUpgrades.Patches
 
         private static void ReplaceClampForBackMusclesFunction(ref IEnumerable<CodeInstruction> instructions) 
         {
-            MethodInfo affectWeight = typeof(exoskeletonScript).GetMethod("CalculateWeight");
+            MethodInfo affectWeight = typeof(exoskeletonScript).GetMethod("DecreasePossibleWeight");
             bool found = false;
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             for (int i = 0; i < codes.Count; i++)
             {
                 if (found) break;
-                if (!(codes[i].opcode == OpCodes.Call && codes[i].operand.ToString() == "Single Clamp(Single, Single, Single)")) continue;
-                codes[i] = new CodeInstruction(OpCodes.Call, affectWeight);
+                if (!(codes[i].opcode == OpCodes.Ldc_R4 && codes[i].operand.ToString() == "0")) continue;
+                if (!(codes[i+1].opcode == OpCodes.Ldc_R4 && codes[i+1].operand.ToString() == "10")) continue;
+                if (!(codes[i+2].opcode == OpCodes.Call && codes[i+2].operand.ToString() == "Single Clamp(Single, Single, Single)")) continue;
+                codes.Insert(i, new CodeInstruction(OpCodes.Call, affectWeight));
                 found = true;
             }
             instructions = codes.AsEnumerable();
