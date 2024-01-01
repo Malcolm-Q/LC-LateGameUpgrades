@@ -36,6 +36,7 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("playersFiredGameOver")]
         private static void GameOverResetUpgradeManager(StartOfRound __instance)
         {
+            if (UpgradeBus.instance.cfg.KEEP_UPGRADES_AFTER_FIRED_CUTSCENE) return;
             if(__instance.NetworkManager.IsHost ||  __instance.NetworkManager.IsServer)
             {
                 LGUStore.instance.PlayersFiredServerRpc();
