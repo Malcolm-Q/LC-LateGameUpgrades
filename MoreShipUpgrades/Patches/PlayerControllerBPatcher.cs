@@ -23,7 +23,12 @@ namespace MoreShipUpgrades.Patches
             if (!__instance.IsOwner) { return; }
             else if (__instance.isPlayerDead) { return; }
             else if (!__instance.AllowPlayerDeath()) { return; }
-            if(UpgradeBus.instance.nightVision) { UpgradeBus.instance.UpgradeObjects[nightVisionScript.UPGRADE_NAME].GetComponent<nightVisionScript>().DisableOnClient(); }
+            if(UpgradeBus.instance.nightVision) 
+            {
+                UpgradeBus.instance.UpgradeObjects[nightVisionScript.UPGRADE_NAME].GetComponent<nightVisionScript>().DisableOnClient();
+                if (!UpgradeBus.instance.cfg.NIGHT_VISION_DROP_ON_DEATH) return;
+                LGUStore.instance.SpawnNightVisionItemOnDeathServerRpc(__instance.transform.position);
+            }
         }
 
         [HarmonyPatch("DamagePlayer")]

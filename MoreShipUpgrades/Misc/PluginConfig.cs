@@ -123,6 +123,7 @@ namespace MoreShipUpgrades.Misc
         public string TOGGLE_NIGHT_VISION_KEY { get; set; }
         public float SALE_PERC { get; set; }
         public bool LOSE_NIGHT_VIS_ON_DEATH { get; set; }
+        public bool NIGHT_VISION_DROP_ON_DEATH { get; set; }
         public string BEEKEEPER_UPGRADE_PRICES { get; set; }
         public float BEEKEEPER_HIVE_VALUE_INCREASE { get; set; }
         public string BACK_MUSCLES_UPGRADE_PRICES { get; set; }
@@ -263,7 +264,8 @@ namespace MoreShipUpgrades.Misc
             NIGHT_VIS_DRAIN_INCREMENT = ConfigEntry(topSection, "Decrease for night vis battery drain", 0.15f, "Applied to drain speed on each upgrade.");
             NIGHT_VIS_REGEN_INCREMENT = ConfigEntry(topSection, "Increase for night vis battery regen", 0.40f, "Applied to regen speed on each upgrade.");
             NIGHT_VIS_BATTERY_INCREMENT = ConfigEntry(topSection, "Increase for night vis battery life", 2f, "Applied to the max charge for night vis battery on each upgrade.");
-            LOSE_NIGHT_VIS_ON_DEATH = ConfigEntry(topSection, "Lose Night Vision On Death", true, "If true when you die you will have to re purchase and equip night vision goggles.");
+            LOSE_NIGHT_VIS_ON_DEATH = ConfigEntry(topSection, "Lose Night Vision On Death", true, "If true when you die the night vision will disable and will need a new pair of goggles.");
+            NIGHT_VISION_DROP_ON_DEATH = ConfigEntry(topSection, "Drop Night Vision item on Death", true, "If true, when you die and lose night vision upon death, you will drop the night vision goggles on your body.");
             NIGHT_VISION_UPGRADE_PRICES = ConfigEntry(topSection,BaseUpgrade.PRICES_SECTION, nightVisionScript.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             NIGHT_VISION_INDIVIDUAL = ConfigEntry(topSection,BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
 

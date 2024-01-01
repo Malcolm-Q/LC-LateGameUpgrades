@@ -20,7 +20,7 @@ namespace MoreShipUpgrades.Patches
             string name = __instance.enemyType.enemyName;
             if (UpgradeBus.instance.hunter && hunterScript.tiers[UpgradeBus.instance.huntLevel].Contains(name))
             {
-                GameObject go = GameObject.Instantiate(UpgradeBus.instance.samplePrefabs[name],__instance.transform.position + Vector3.up,Quaternion.identity);
+                GameObject go = Object.Instantiate(UpgradeBus.instance.samplePrefabs[name],__instance.transform.position + Vector3.up,Quaternion.identity);
                 PhysicsProp prop = go.GetComponent<PhysicsProp>();
                 int value = Random.Range(prop.itemProperties.minValue, prop.itemProperties.maxValue);
                 go.GetComponent<NetworkObject>().Spawn();

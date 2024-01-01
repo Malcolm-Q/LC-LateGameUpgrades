@@ -102,6 +102,7 @@ namespace MoreShipUpgrades.Managers
         internal pagerScript pageScript;
 
         public Dictionary<string,GameObject> samplePrefabs = new Dictionary<string,GameObject>();
+        public GameObject nightVisionPrefab;
 
         void Awake()
         {

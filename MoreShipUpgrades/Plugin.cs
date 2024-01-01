@@ -216,6 +216,7 @@ namespace MoreShipUpgrades
             visScript.useCooldown = 2f;
             visScript.grabbableToEnemies = true;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(nightVisionItem.spawnPrefab);
+            UpgradeBus.instance.nightVisionPrefab = nightVisionItem.spawnPrefab;
 
             if (!cfg.NIGHT_VISION_ENABLED) return;
 
