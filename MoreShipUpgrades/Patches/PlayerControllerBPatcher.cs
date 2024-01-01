@@ -7,12 +7,14 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Linq;
 using UnityEngine;
+using MoreShipUpgrades.Misc;
 
 namespace MoreShipUpgrades.Patches
 {
     [HarmonyPatch(typeof(PlayerControllerB))]
     internal class PlayerControllerBPatcher
     {
+        internal static LGULogger logger = new LGULogger(nameof(PlayerControllerBPatcher));
         [HarmonyPrefix]
         [HarmonyPatch("KillPlayer")]
         private static void DisableUpgradesOnDeath(PlayerControllerB __instance)
@@ -151,17 +153,27 @@ namespace MoreShipUpgrades.Patches
             return instructions.AsEnumerable();
         }
 
-        private static void ReplaceClampForBackMusclesFunction(ref IEnumerable<CodeInstruction> instructions) 
+        /// <summary>
+        /// Function responsible to multiply the result of the operation through vanilla code to our own multiplier.
+        /// This assumes that any other mods that do decide to transpile the function won't put an Add or Sub operations between the storing
+        /// of the "carryWeight" variable and actual sub/add associated with the vanila code
+        /// </summary>
+        /// <param name="instructions">List of IL instructions from a given function/method</param>
+        private static void ReplaceClampForBackMusclesFunction(ref IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo affectWeight = typeof(exoskeletonScript).GetMethod("CalculateWeight");
+            MethodInfo affectWeight = typeof(exoskeletonScript).GetMethod("DecreasePossibleWeight");
             bool found = false;
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            for (int i = 0; i < codes.Count; i++)
+            for (int i = codes.Count - 1; i >= 0 && !found; i--)
             {
-                if (found) break;
-                if (!(codes[i].opcode == OpCodes.Call && codes[i].operand.ToString() == "Single Clamp(Single, Single, Single)")) continue;
-                codes[i] = new CodeInstruction(OpCodes.Call, affectWeight);
-                found = true;
+                if (!(codes[i].opcode == OpCodes.Stfld && codes[i].operand.ToString() == "System.Single carryWeight")) continue;
+                for (int j = i - 2; j >= 0 && !found; j--)
+                {
+                    if (!(codes[j].opcode == OpCodes.Sub || codes[j].opcode == OpCodes.Add)) continue;
+
+                    codes.Insert(j+1, new CodeInstruction(OpCodes.Call, affectWeight));
+                    found = true;
+                }
             }
             instructions = codes.AsEnumerable();
         }
