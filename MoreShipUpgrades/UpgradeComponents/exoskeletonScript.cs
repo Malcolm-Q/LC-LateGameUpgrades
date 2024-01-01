@@ -9,6 +9,7 @@ namespace MoreShipUpgrades.UpgradeComponents
     {
         public static string UPGRADE_NAME = "Back Muscles";
         public static string PRICES_DEFAULT = "600,700,800";
+
         void Start()
         {
             upgradeName = UPGRADE_NAME;
@@ -48,7 +49,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         public static void UpdatePlayerWeight()
         {
             PlayerControllerB player = GameNetworkManager.Instance.localPlayerController;
-            if (!(UpgradeBus.instance.exoskeleton && player.ItemSlots.Length > 0)) return;
+            if (player.ItemSlots.Length <= 0) return;
 
             UpgradeBus.instance.alteredWeight = 1f;
             for (int i = 0; i < player.ItemSlots.Length; i++)
