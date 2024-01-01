@@ -14,15 +14,15 @@ namespace MoreShipUpgrades.Misc
             this.moduleName = moduleName;
             logSource = Plugin.mls;
         }
-        public void LogDebug(string message)
+        public void LogDebug(object message)
         {
             logSource.LogDebug($"[{moduleName}] {message}");
         }
-        public void LogMessage(string message)
+        public void LogMessage(object message)
         {
             logSource.LogMessage($"[{moduleName}] {message}");
         }
-        public void LogInfo(string message)
+        public void LogInfo(object message)
         {
             logSource.LogInfo($"[{moduleName}]  {message}");
         }

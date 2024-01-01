@@ -10,7 +10,7 @@ namespace MoreShipUpgrades.Patches
     {
         [HarmonyPrefix]
         [HarmonyPatch("CallFunctionFromTerminal")]
-        private static bool DestroyObject(ref TerminalAccessibleObject __instance, ref float ___currentCooldownTimer, ref bool ___inCooldown)
+        private static bool DestroyObject(ref TerminalAccessibleObject __instance, ref float ___codeAccessCooldownTimer, ref bool ___inCooldown)
         {
             if(!UpgradeBus.instance.DestroyTraps || __instance.gameObject.layer != LayerMask.NameToLayer("MapHazards")) { return true; }
             if (UpgradeBus.instance.cfg.DESTROY_TRAP)
@@ -18,7 +18,10 @@ namespace MoreShipUpgrades.Patches
                 UpgradeBus.instance.trapHandler.ReqDestroyObjectServerRpc(new NetworkObjectReference(__instance.gameObject.transform.parent.gameObject.GetComponent<NetworkObject>()));
                 return false;
             }
-            if (!___inCooldown) { ___currentCooldownTimer = UpgradeBus.instance.cfg.DISARM_TIME; }
+            if (!___inCooldown)
+            {
+                ___codeAccessCooldownTimer = UpgradeBus.instance.cfg.DISARM_TIME;
+            }
             return true;
         }
     }
