@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents;
 using System.Linq;
 using Unity.Netcode;
@@ -10,6 +11,7 @@ namespace MoreShipUpgrades.Patches
     [HarmonyPatch(typeof(EnemyAI))]
     internal class EnemyAIPatcher
     {
+        private static LGULogger logger = new LGULogger(nameof(EnemyAIPatcher));
         private static ulong currentEnemy = 0;
         [HarmonyPostfix]
         [HarmonyPatch("KillEnemyServerRpc")]
@@ -20,6 +22,7 @@ namespace MoreShipUpgrades.Patches
             string name = __instance.enemyType.enemyName;
             if (UpgradeBus.instance.hunter && hunterScript.tiers[UpgradeBus.instance.huntLevel].Contains(name))
             {
+                logger.LogDebug($"Spawning sample for {name}");
                 GameObject go = Object.Instantiate(UpgradeBus.instance.samplePrefabs[name],__instance.transform.position + Vector3.up,Quaternion.identity);
                 PhysicsProp prop = go.GetComponent<PhysicsProp>();
                 int value = Random.Range(prop.itemProperties.minValue, prop.itemProperties.maxValue);
