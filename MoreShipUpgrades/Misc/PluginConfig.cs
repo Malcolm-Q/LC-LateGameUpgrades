@@ -162,6 +162,7 @@ namespace MoreShipUpgrades.Misc
         public int DISCOMBOBULATOR_INITIAL_DAMAGE {  get; set; }
         public int DISCOMBOBULATOR_DAMAGE_INCREASE { get; set; }
         public float STRONG_LEGS_REDUCE_FALL_DAMAGE_MULTIPLIER { get; set; }
+        public bool KEEP_UPGRADES_AFTER_FIRED_CUTSCENE { get; set; }
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -179,6 +180,7 @@ namespace MoreShipUpgrades.Misc
             SHARED_UPGRADES = ConfigEntry(topSection, "Convert all upgrades to be shared.", true, "Mod is designed to be played with this off.");
             SALE_PERC = ConfigEntry(topSection, "Chance of upgrades going on sale", 0.85f, "0.85 = 15% chance of an upgrade going on sale.");
             INTRO_ENABLED = ConfigEntry(topSection, "Intro Enabled", true, "If true shows a splashscreen with some info once per update of LGU.");
+            KEEP_UPGRADES_AFTER_FIRED_CUTSCENE = ConfigEntry(topSection, "Keep upgrades after quota failure", false, "If true, you will keep your upgrades after being fired by The Company.");
 
             topSection = "Advanced Portable Teleporter";
             ADVANCED_TELE_ENABLED = ConfigEntry(topSection, "Enable Advanced Portable Teleporter", true, "");
