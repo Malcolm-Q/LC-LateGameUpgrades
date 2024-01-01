@@ -10,14 +10,14 @@ namespace MoreShipUpgrades.UpgradeComponents
         public static string UPGRADE_NAME = "Hunter";
 
         static string[] lvl1 = new string[] { "Hoarding bug", "Centipede" };
-        static string[] lvl2 = new string[] { "Bunker Spider", "Hoarding bug", "Centipede", "Baboon Hawk" };
-        static string[] lvl3 = new string[] { "Bunker Spider", "Hoarding bug", "Centipede", "Baboon Hawk", "Flowerman", "Crawler", "MouthDog" };
+        static string[] lvl2 = new string[] { "Bunker Spider", "Hoarding bug", "Centipede", "Baboon hawk" };
+        static string[] lvl3 = new string[] { "Bunker Spider", "Hoarding bug", "Centipede", "Baboon hawk", "Flowerman", "Crawler", "MouthDog" };
         static Dictionary<string, string> monsterNames = new Dictionary<string, string>()
             {
             { "Hoarding bug", "Hoarding Bug" },
             { "Centipede", "Snare Flea" },
             { "Bunker Spider", "Bunker Spider" },
-            { "Baboon Hawk", "Baboon Hawk" },
+            { "Baboon hawk", "Baboon Hawk" },
             { "Flowerman", "Bracken" },
             { "Crawler", "Half/Thumper" },
             { "MouthDog", "Eyeless Dog" },
