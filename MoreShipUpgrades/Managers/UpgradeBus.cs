@@ -50,6 +50,9 @@ namespace MoreShipUpgrades.Managers
         public float flashCooldown = 0f;
         public float alteredWeight = 1f;
 
+        public string contractLevel = "None";
+        public string contractType = "None";
+
         public trapDestroyerScript trapHandler = null;
         public terminalFlashScript flashScript = null;
         public lockSmithScript lockScript = null;

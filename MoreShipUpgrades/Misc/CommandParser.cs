@@ -13,6 +13,14 @@ namespace MoreShipUpgrades.Misc
     internal class CommandParser
     {
         const string LOAD_LGU_COMMAND = "load lgu";
+        private static string[] LEVELS = {
+            "41 Experimentation",
+            "220 Assurance",
+            "56 Vow",
+            "61 March",
+            "21 Offense"
+        };
+
         private static TerminalNode DisplayTerminalMessage(string message, bool clearPreviousText = true)
         {
             TerminalNode node = ScriptableObject.CreateInstance<TerminalNode>();
@@ -337,6 +345,37 @@ namespace MoreShipUpgrades.Misc
             displayText += "\n";
             return DisplayTerminalMessage(displayText);
         }
+
+        static TerminalNode TryGetContract(ref Terminal terminal, string extractionType)
+        {
+            string txt = null;
+            if(UpgradeBus.instance.contractLevel != "None")
+            {
+                txt = $"You currently have a {UpgradeBus.instance.contractType} contract on {UpgradeBus.instance.contractLevel}!\n\n";
+                return DisplayTerminalMessage(txt);
+            }
+            if(terminal.groupCredits < -1) //change this to cfg value
+            {
+                txt = $"This contract costs ${0} and you have ${terminal.groupCredits}\n\n";
+                return DisplayTerminalMessage(txt);
+            }
+            //LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits - cost);
+            UpgradeBus.instance.contractType = extractionType;
+            txt = $"A {extractionType} contract has been accepted for {RandomLevel()}!\n\n";
+            return DisplayTerminalMessage(txt);
+        }
+
+        static string RandomLevel()
+        {
+            string lvl = UpgradeBus.instance.contractLevel;
+            while(lvl == UpgradeBus.instance.contractLevel)
+            {
+                lvl = LEVELS[UnityEngine.Random.Range(0, LEVELS.Length)];
+            }
+            UpgradeBus.instance.contractLevel = lvl;
+            return lvl;
+        }
+
         public static void ParseLGUCommands(string fullText, ref Terminal terminal, ref TerminalNode outputNode)
         {
             string[] textArray = fullText.Split();
@@ -350,6 +389,16 @@ namespace MoreShipUpgrades.Misc
                         switch(secondWord)
                         {
                             case "lightning": outputNode = ExecuteToggleLightning(); return;
+                            default: return;
+                        }
+                    }
+                case "contract":
+                    {
+                        switch (secondWord)
+                        {
+                            case "extraction": outputNode = TryGetContract(ref terminal, secondWord); return;
+                            case "exterminator": outputNode = TryGetContract(ref terminal, secondWord); return;
+                            case "data": outputNode = TryGetContract(ref terminal, secondWord); return;
                             default: return;
                         }
                     }

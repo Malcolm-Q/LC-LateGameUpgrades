@@ -12,6 +12,7 @@ using System.Reflection;
 using MoreShipUpgrades.Misc;
 using BepInEx.Bootstrap;
 using Newtonsoft.Json;
+using LethalLib.Extras;
 
 namespace MoreShipUpgrades
 {
@@ -29,8 +30,6 @@ namespace MoreShipUpgrades
 
         void Awake()
         {
-            // TODO: Move item info strings to a json file for the love of god.
-
             cfg = new(base.Config);
             cfg.InitBindings();
 
@@ -72,6 +71,8 @@ namespace MoreShipUpgrades
             
             SetupPerks();
 
+            SetupContractMapObjects(ref UpgradeAssets);
+
 
             harmony.PatchAll();
 
@@ -102,6 +103,33 @@ namespace MoreShipUpgrades
                     break;
                 }
 
+            }
+        }
+
+        private void SetupContractMapObjects(ref AssetBundle bundle)
+        {
+            string root = "Assets/ShipUpgrades/";
+            string[] items = { "ScavItem.asset" };
+            string[] contractTypes = { "extraction" };
+
+            AnimationCurve curve = new AnimationCurve(new Keyframe(0,1), new Keyframe(1,1)); // always spawn 1
+
+            for(int i = 0; i < items.Length; i++)
+            {
+                Item item = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + items[i]);
+                if (item == null) return;
+
+                ContractObject co = item.spawnPrefab.AddComponent<ContractObject>();
+                co.contractType = contractTypes[i];
+                item.spawnPrefab.GetComponent<PhysicsProp>().scrapValue = 400; //asdf
+                item.spawnPrefab.GetComponentInChildren<ScanNodeProperties>().subText = $"VALUE: ${400}"; //asdf
+                Utilities.FixMixerGroups(item.spawnPrefab);
+                LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(item.spawnPrefab);
+                Items.RegisterItem(item);
+                SpawnableMapObjectDef mapObjDef = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
+                mapObjDef.spawnableMapObject = new SpawnableMapObject();
+                mapObjDef.spawnableMapObject.prefabToSpawn = item.spawnPrefab;
+                MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
             }
         }
 
