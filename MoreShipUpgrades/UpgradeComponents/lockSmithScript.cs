@@ -56,13 +56,11 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         void Update()
         {
-            if (Keyboard.current[Key.Escape].wasPressedThisFrame)
-            {
-                if (!transform.GetChild(0).gameObject.activeInHierarchy) { return; }
-                transform.GetChild(0).gameObject.SetActive(false);
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-            }
+            if (!Keyboard.current[Key.Escape].wasPressedThisFrame) return;
+            if (!transform.GetChild(0).gameObject.activeInHierarchy) return;
+            transform.GetChild(0).gameObject.SetActive(false);
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         public void BeginLockPick()
@@ -91,24 +89,22 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             if (!canPick) { return; }
             timesStruck++;
-            if (i == order[currentPin])
-            {
-                currentPin++;
-                pins[i].transform.localPosition = new Vector3(pins[i].transform.localPosition.x, 35f, pins[i].transform.localPosition.z);
-                if (currentPin == 5)
-                {
-                    Cursor.visible = false;
-                    Cursor.lockState = CursorLockMode.Locked;
-                    transform.GetChild(0).gameObject.SetActive(false);
-                    currentDoor.UnlockDoorSyncWithServer();
-                }
-                RoundManager.Instance.PlayAudibleNoise(currentDoor.transform.position, 10f, 0.65f, timesStruck, false, 0);
-            }
-            else
+            if (i != order[currentPin])
             {
                 BeginLockPick();
                 RoundManager.Instance.PlayAudibleNoise(currentDoor.transform.position, 30f, 0.65f, timesStruck, false, 0);
+                return;
             }
+            currentPin++;
+            pins[i].transform.localPosition = new Vector3(pins[i].transform.localPosition.x, 35f, pins[i].transform.localPosition.z);
+            if (currentPin == 5)
+            {
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+                transform.GetChild(0).gameObject.SetActive(false);
+                currentDoor.UnlockDoorSyncWithServer();
+            }
+            RoundManager.Instance.PlayAudibleNoise(currentDoor.transform.position, 10f, 0.65f, timesStruck, false, 0);
         }
         void RandomizeListOrder<T>(List<T> list)
         {

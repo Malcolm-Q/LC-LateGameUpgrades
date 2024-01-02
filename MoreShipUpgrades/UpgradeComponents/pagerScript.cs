@@ -38,7 +38,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         [ClientRpc]
         public void ReceiveChatClientRpc(string msg)
         {
-            SignalTranslator translator = GameObject.FindObjectOfType<SignalTranslator>();
+            SignalTranslator translator = FindObjectOfType<SignalTranslator>();
             if(translator != null )
             {
                 HUDManager.Instance.UIAudio.PlayOneShot(translator.startTransmissionSFX);

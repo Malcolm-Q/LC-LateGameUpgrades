@@ -8,6 +8,7 @@ using System.Reflection.Emit;
 using System.Linq;
 using UnityEngine;
 using MoreShipUpgrades.Misc;
+using UnityEngine.InputSystem;
 
 namespace MoreShipUpgrades.Patches
 {
@@ -19,16 +20,15 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("KillPlayer")]
         private static void DisableUpgradesOnDeath(PlayerControllerB __instance)
         {
-            if(!UpgradeBus.instance.cfg.LOSE_NIGHT_VIS_ON_DEATH) { return; }
+            if (!UpgradeBus.instance.cfg.LOSE_NIGHT_VIS_ON_DEATH) { return; }
             if (!__instance.IsOwner) { return; }
             else if (__instance.isPlayerDead) { return; }
             else if (!__instance.AllowPlayerDeath()) { return; }
-            if(UpgradeBus.instance.nightVision) 
-            {
-                UpgradeBus.instance.UpgradeObjects[nightVisionScript.UPGRADE_NAME].GetComponent<nightVisionScript>().DisableOnClient();
-                if (!UpgradeBus.instance.cfg.NIGHT_VISION_DROP_ON_DEATH) return;
-                LGUStore.instance.SpawnNightVisionItemOnDeathServerRpc(__instance.transform.position);
-            }
+            if (!UpgradeBus.instance.nightVision) return;
+
+            UpgradeBus.instance.UpgradeObjects[nightVisionScript.UPGRADE_NAME].GetComponent<nightVisionScript>().DisableOnClient();
+            if (!UpgradeBus.instance.cfg.NIGHT_VISION_DROP_ON_DEATH) return;
+            LGUStore.instance.SpawnNightVisionItemOnDeathServerRpc(__instance.transform.position);
         }
 
         [HarmonyPatch("DamagePlayer")]

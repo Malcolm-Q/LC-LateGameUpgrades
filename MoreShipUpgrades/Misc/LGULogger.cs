@@ -24,15 +24,15 @@ namespace MoreShipUpgrades.Misc
         }
         public void LogInfo(object message)
         {
-            logSource.LogInfo($"[{moduleName}]  {message}");
+            logSource.LogInfo($"[{moduleName}] {message}");
         }
         public void LogWarning(string message) 
         { 
-            logSource.LogWarning($"[{moduleName}]  {message}");
+            logSource.LogWarning($"[{moduleName}] {message}");
         }
         public void LogError(string message)
         {
-            logSource.LogError($"[{moduleName}]  {message}");
+            logSource.LogError($"[{moduleName}] {message}");
         }
     }
 }

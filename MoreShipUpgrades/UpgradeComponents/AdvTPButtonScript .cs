@@ -28,50 +28,39 @@ namespace MoreShipUpgrades.UpgradeComponents
         public override void ItemActivate(bool used, bool buttonDown = true)
         {
             base.ItemActivate(used, buttonDown);
-            if (Mouse.current.leftButton.isPressed)
+            if (!Mouse.current.leftButton.isPressed) return;
+
+            audio.PlayOneShot(buttonPress);
+            if (itemUsedUp) { audio.PlayOneShot(error); return; }
+
+            ShipTeleporter[] tele = GameObject.FindObjectsOfType<ShipTeleporter>();
+            ShipTeleporter NotInverseTele = null;
+            foreach (ShipTeleporter shipTeleporter in tele)
             {
-                audio.PlayOneShot(buttonPress);
-                if (!itemUsedUp)
-                {
-                    ShipTeleporter[] tele = GameObject.FindObjectsOfType<ShipTeleporter>();
-                    ShipTeleporter NotInverseTele = null;
-                    foreach (ShipTeleporter shipTeleporter in tele)
-                    {
-                        if (!shipTeleporter.isInverseTeleporter)
-                        {
-                            NotInverseTele = shipTeleporter;
-                            break;
-                        }
-                    }
-                    if (NotInverseTele == null)
-                    {
-                        audio.PlayOneShot(error);
-                        return;
-                    }
-                    int thisPlayersIndex = -1;
-                    for (int i = 0; i < StartOfRound.Instance.mapScreen.radarTargets.Count(); i++)
-                    {
-                        if (StartOfRound.Instance.mapScreen.radarTargets[i].transform.gameObject.GetComponent<PlayerControllerB>() == playerHeldBy)
-                        {
-                            thisPlayersIndex = i;
-                        }
-                    }
-                    if (thisPlayersIndex == -1)
-                    {
-                        StartOfRound.Instance.mapScreen.targetedPlayer = playerHeldBy;
-                        UpgradeBus.instance.TPButtonPressed = true;
-                        NotInverseTele.PressTeleportButtonOnLocalClient();
-                    }
-                    else
-                    {
-                        StartOfRound.Instance.mapScreen.SwitchRadarTargetAndSync(thisPlayersIndex);
-                        StartCoroutine(WaitToTP(NotInverseTele));
-                    }
-                }
-                else
-                {
-                    audio.PlayOneShot(error);
-                }
+                if (shipTeleporter.isInverseTeleporter) continue;
+
+                NotInverseTele = shipTeleporter;
+                break;
+            }
+            if (!NotInverseTele){ audio.PlayOneShot(error); return; }
+
+            int thisPlayersIndex = -1;
+            for (int i = 0; i < StartOfRound.Instance.mapScreen.radarTargets.Count(); i++)
+            {
+                if (StartOfRound.Instance.mapScreen.radarTargets[i].transform.gameObject.GetComponent<PlayerControllerB>() != playerHeldBy) continue;
+                thisPlayersIndex = i;
+                break;
+            }
+            if (thisPlayersIndex == -1)
+            {
+                StartOfRound.Instance.mapScreen.targetedPlayer = playerHeldBy;
+                UpgradeBus.instance.TPButtonPressed = true;
+                NotInverseTele.PressTeleportButtonOnLocalClient();
+            }
+            else
+            {
+                StartOfRound.Instance.mapScreen.SwitchRadarTargetAndSync(thisPlayersIndex);
+                StartCoroutine(WaitToTP(NotInverseTele));
             }
         }
 

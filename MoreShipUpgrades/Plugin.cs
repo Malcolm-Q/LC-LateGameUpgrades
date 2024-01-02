@@ -126,7 +126,7 @@ namespace MoreShipUpgrades
             SetupMedkit();
             SetupPeeper();
             SetupSamples();
-            SetupDivingKit(ref UpgradeBus.instance.UpgradeAssets);
+            SetupDivingKit();
         }
         private void SetupSamples()
         {
@@ -226,12 +226,13 @@ namespace MoreShipUpgrades
             nightNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Night Vision"), grantStatus, loseOnDeath);
             Items.RegisterShopItem(nightVisionItem, null, null, nightNode, nightVisionItem.creditsWorth);
         }
-        private void SetupDivingKit(ref AssetBundle bundle)
+        private void SetupDivingKit()
         {
-            Item DiveItem = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/DivingKitItem.asset");
+            Item DiveItem = AssetBundleHandler.GetItemObject("Diving Kit");
             if (DiveItem == null) return;
 
             DiveItem.creditsWorth = cfg.DIVEKIT_PRICE;
+            DiveItem.itemId = 492015;
             DiveItem.twoHanded = cfg.DIVEKIT_TWO_HANDED;
             DiveItem.weight = cfg.DIVEKIT_WEIGHT;
             DiveItem.itemSpawnsOnGround = true;

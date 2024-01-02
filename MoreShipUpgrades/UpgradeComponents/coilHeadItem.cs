@@ -7,7 +7,7 @@ namespace MoreShipUpgrades.UpgradeComponents
 {
     public class coilHeadItem : GrabbableObject
     {
-        private bool Active, audioInit;
+        private bool Active;
         private Animator anim;
 
         public override void Start()
@@ -19,16 +19,13 @@ namespace MoreShipUpgrades.UpgradeComponents
         public override void Update()
         {
             base.Update();
-            if (isHeld || isHeldByEnemy) 
-            {
-                Active = false;
-                anim.SetBool("Grounded", false);
-            }
-            else 
-            {
-                Active = true; 
-                anim.SetBool("Grounded", true);
-            }
+            SetActive(!isHeld && !isHeldByEnemy); 
+        }
+
+        private void SetActive(bool enable)
+        {
+            Active = enable;
+            anim.SetBool("Grounded", enable);
         }
 
         public bool HasLineOfSightToPosition(Vector3 pos, int range = 60)
@@ -48,10 +45,7 @@ namespace MoreShipUpgrades.UpgradeComponents
                     UpgradeBus.instance.coilHeadItems.Remove(peeper);
                     continue;
                 }
-                if (peeper.HasLineOfSightToPosition(springPosition))
-                {
-                    return true;
-                }
+                if (peeper.HasLineOfSightToPosition(springPosition)) return true;
             }
             return false;
         }
