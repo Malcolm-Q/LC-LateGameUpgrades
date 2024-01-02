@@ -9,7 +9,6 @@ namespace MoreShipUpgrades.Misc
     public class BaseUpgrade : NetworkBehaviour
     {
         protected string upgradeName = "Base Upgrade";
-        protected static LGULogger logger;
 
         public static string INDIVIDUAL_SECTION = "Individual Purchase";
         public static bool INDIVIDUAL_DEFAULT = true;
@@ -33,7 +32,6 @@ namespace MoreShipUpgrades.Misc
         public virtual void Register()
         {
             if (!UpgradeBus.instance.UpgradeObjects.ContainsKey(upgradeName)) { UpgradeBus.instance.UpgradeObjects.Add(upgradeName, gameObject); }
-            logger = new LGULogger(upgradeName);
         }
 
         public virtual void Unwind()

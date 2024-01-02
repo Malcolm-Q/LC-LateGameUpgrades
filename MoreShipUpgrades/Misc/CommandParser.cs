@@ -120,12 +120,11 @@ namespace MoreShipUpgrades.Misc
             foreach (PlayerControllerB player in players)
             {
                 playerNames.Add(player.playerUsername);
-                if (player.playerUsername.ToLower() == playerNameToSearch.ToLower())
-                {
-                    LGUStore.instance.ShareSaveServerRpc();
-                    terminal.StartCoroutine(WaitForSync(player.playerSteamId));
-                    return DisplayTerminalMessage($"Syncing with {player.playerUsername}\nThis should take 5 seconds\nPulling data...\n");
-                }
+                if (player.playerUsername.ToLower() != playerNameToSearch.ToLower()) continue;
+
+                LGUStore.instance.ShareSaveServerRpc();
+                terminal.StartCoroutine(WaitForSync(player.playerSteamId));
+                return DisplayTerminalMessage($"Syncing with {player.playerUsername}\nThis should take 5 seconds\nPulling data...\n");
             }
             return DisplayTerminalMessage($"The name {playerNameToSearch} was not found. The following names were found:\n{string.Join(", ", playerNames)}\n");
         }
@@ -146,7 +145,6 @@ namespace MoreShipUpgrades.Misc
         {
             foreach (CustomTerminalNode customNode in UpgradeBus.instance.terminalNodes)
             {
-
                 if (text.ToLower() == customNode.Name.ToLower()) return ExecuteBuyUpgrade(customNode, ref terminal);
 
                 if (text.ToLower() == $"info {customNode.Name.ToLower()}") return DisplayTerminalMessage(customNode.Description + "\n\n");
@@ -304,10 +302,8 @@ namespace MoreShipUpgrades.Misc
 
             foreach (EntranceTeleport door in mainDoors)
             {
-                if (door.gameObject.transform.position.y < -170)
-                {
-                    doorsToRemove.Add(door);
-                }
+                if (door.gameObject.transform.position.y >= -170) continue;
+                doorsToRemove.Add(door);
             }
             foreach (EntranceTeleport doorToRemove in doorsToRemove)
             {
@@ -337,6 +333,50 @@ namespace MoreShipUpgrades.Misc
             displayText += "\n";
             return DisplayTerminalMessage(displayText);
         }
+        private static TerminalNode ExecuteToggleCommands(string secondWord, ref TerminalNode outputNode)
+        {
+            switch (secondWord)
+            {
+                case "lightning": return ExecuteToggleLightning();
+                default: return outputNode;
+            }
+        }
+        private static TerminalNode ExecuteLategameCommands(string secondWord)
+        {
+            switch (secondWord)
+            {
+                case "store": return UpgradeBus.instance.ConstructNode();
+                default: return ExecuteModInformation();
+            }
+        }
+        private static TerminalNode ExecuteResetCommands(string secondWord, ref TerminalNode outputNode)
+        {
+            switch (secondWord)
+            {
+                case "lgu": return ExecuteResetLGUSave();
+                default: return outputNode;
+            }
+        }
+        private static TerminalNode ExecuteLoadCommands(string secondWord, string fullText, ref Terminal terminal, ref TerminalNode outputNode)
+        {
+            switch (secondWord)
+            {
+                case "lgu": return ExecuteLoadLGUCommand(fullText, ref terminal);
+                default: return outputNode;
+            }
+        }
+        private static TerminalNode ExecuteScanCommands(string secondWord, ref TerminalNode outputNode)
+        {
+            switch (secondWord)
+            {
+                case "hives": return ExecuteScanHivesCommand();
+                case "scrap": return ExecuteScanScrapCommand();
+                case "player": return ExecuteScanPlayerCommand();
+                case "enemies": return ExecuteScanEnemiesCommand();
+                case "doors": return ExecuteScanDoorsCommand();
+                default: return outputNode;
+            }
+        }
         public static void ParseLGUCommands(string fullText, ref Terminal terminal, ref TerminalNode outputNode)
         {
             string[] textArray = fullText.Split();
@@ -345,59 +385,20 @@ namespace MoreShipUpgrades.Misc
             switch(firstWord)
             {
                 case "help": if (!outputNode.displayText.Contains(">LATEGAME\nDisplays information related with Lategame-Upgrades mod\n")) outputNode.displayText += ">LATEGAME\nDisplays information related with Lategame-Upgrades mod\n"; return;
-                case "toggle":
-                    {
-                        switch(secondWord)
-                        {
-                            case "lightning": outputNode = ExecuteToggleLightning(); return;
-                            default: return;
-                        }
-                    }
+                case "toggle": outputNode = ExecuteToggleCommands(secondWord, ref outputNode); return;
                 case "initattack":
                 case "atk": outputNode = ExecuteDiscombobulatorAttack(ref terminal); return;
                 case "cd":
                 case "cooldown": outputNode = ExecuteDiscombobulatorCooldown(); return;
-                case "lategame":
-                    {
-                        switch (secondWord)
-                        {
-                            case "store": outputNode = UpgradeBus.instance.ConstructNode(); return;
-                            default: outputNode = ExecuteModInformation(); return;
-                        }
-                    }
+                case "lategame": outputNode = ExecuteLategameCommands(secondWord); return;
                 case "lgu": outputNode = UpgradeBus.instance.ConstructNode(); return;
-                case "reset":
-                    {
-                        switch(secondWord)
-                        {
-                            case "lgu": outputNode = ExecuteResetLGUSave(); return;
-                            default: return;
-                        }
-                    }
+                case "reset": outputNode = ExecuteResetCommands(secondWord, ref outputNode); return;
                 case "forcecredits": outputNode = ExecuteForceCredits(secondWord, ref terminal); return;
                 case "synccredits": outputNode = ExecuteSyncCredits(ref terminal); return;
                 case "intern":
                 case "interns": outputNode = ExecuteInternsCommand(ref terminal); return;
-                case "load":
-                    {
-                        switch(secondWord)
-                        {
-                            case "lgu":outputNode = ExecuteLoadLGUCommand(fullText, ref terminal); return;
-                            default: return;
-                        }
-                    }
-                case "scan":
-                    {
-                        switch(secondWord)
-                        {
-                            case "hives": outputNode = ExecuteScanHivesCommand(); return;
-                            case "scrap": outputNode = ExecuteScanScrapCommand(); return;
-                            case "player": outputNode = ExecuteScanPlayerCommand(); return;
-                            case "enemies": outputNode = ExecuteScanEnemiesCommand(); return;
-                            case "doors": outputNode= ExecuteScanDoorsCommand(); return;
-                            default: return;
-                        }
-                    }
+                case "load": outputNode = ExecuteLoadCommands(secondWord, fullText, ref terminal, ref outputNode); return;
+                case "scan": outputNode = ExecuteScanCommands(secondWord, ref outputNode); return;
                 case "transmit": outputNode = ExecuteTransmitMessage(fullText.Substring(firstWord.Length+1), ref outputNode); return;
                 default: outputNode = ExecuteUpgradeCommand(fullText, ref terminal, ref outputNode); return;
             }

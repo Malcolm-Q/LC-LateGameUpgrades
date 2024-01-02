@@ -12,10 +12,10 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("Disconnect")]
         private static void ResetUpgradeBus()
         {
-            BaseUpgrade[] upgradeObjects = GameObject.FindObjectsOfType<BaseUpgrade>();
+            BaseUpgrade[] upgradeObjects = Object.FindObjectsOfType<BaseUpgrade>();
             foreach (BaseUpgrade upgrade in upgradeObjects)
             {
-                GameObject.Destroy(upgrade.gameObject);
+                Object.Destroy(upgrade.gameObject);
             }           
             UpgradeBus.instance.ResetAllValues();
         }
@@ -24,10 +24,8 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("SaveGame")]
         private static void saveLGU(GameNetworkManager __instance)
         {
-            if(__instance.isHostingGame)
-            {
-                LGUStore.instance.ServerSaveFileServerRpc();
-            }
+            if (!__instance.isHostingGame) return;
+            LGUStore.instance.ServerSaveFileServerRpc();
         }
     }
 }

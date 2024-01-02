@@ -13,11 +13,7 @@ namespace MoreShipUpgrades.Patches
         private static void alterReqs(ScanNodeProperties node, ref bool __result, PlayerControllerB playerScript)
         {
             if (!UpgradeBus.instance.scannerUpgrade) { return; }
-            if (node == null)
-            {
-                __result = false;
-                return;
-            }
+            if (node == null) { __result = false; return; }
             bool throughWall = Physics.Linecast(playerScript.gameplayCamera.transform.position, node.transform.position, 256, QueryTriggerInteraction.Ignore);
             bool cannotSeeEnemiesThroughWalls = node.nodeType == 1 && !UpgradeBus.instance.cfg.BETTER_SCANNER_ENEMIES;
             if (throughWall)
