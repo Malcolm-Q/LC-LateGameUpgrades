@@ -377,10 +377,13 @@ namespace MoreShipUpgrades.Misc
                 default: return outputNode;
             }
         }
-        private static TerminalNode ExecuteExtendDeadlineCommand(string daysString, ref Terminal terminal)
+        private static TerminalNode ExecuteExtendDeadlineCommand(string daysString, ref Terminal terminal, ref TerminalNode outputNode)
         {
+            if (!UpgradeBus.instance.cfg.EXTEND_DEADLINE_ENABLED) return outputNode;
+
             if (daysString == "")
                 return DisplayTerminalMessage($"You need to specify how many days you wish to extend the deadline for: \"extend deadline <days>\"");
+
             if (!(int.TryParse(daysString, out int days) && days > 0)) 
                 return DisplayTerminalMessage($"Invalid value ({daysString}) inserted to extend the deadline.\n");
 
@@ -397,7 +400,7 @@ namespace MoreShipUpgrades.Misc
         {
             switch(secondWord)
             {
-                case "deadline": return ExecuteExtendDeadlineCommand(thirdWord, ref terminal);
+                case "deadline": return ExecuteExtendDeadlineCommand(thirdWord, ref terminal, ref outputNode);
                 default: return outputNode;
             }
         }
