@@ -54,6 +54,7 @@ namespace MoreShipUpgrades.Managers
         public terminalFlashScript flashScript = null;
         public lockSmithScript lockScript = null;
         public defibScript internScript = null;
+        public ExtendDeadlineScript extendScript = null;
         public walkieScript walkieHandler = null;
 
         public Color nightVisColor;
@@ -292,6 +293,8 @@ namespace MoreShipUpgrades.Managers
             SetupPagerTerminalNode();
 
             SetupLocksmithTerminalNode();
+            SetupExtendDeadlineTerminalNode();
+            terminalNodes.Sort();
         }
 
         private void SetupBeekeperTerminalNode()
@@ -437,6 +440,14 @@ namespace MoreShipUpgrades.Managers
                                     cfg.INTERN_ENABLED,
                                     cfg.INTERN_PRICE,
                                     string.Format(AssetBundleHandler.GetInfoFromJSON("Interns"), cfg.INTERN_PRICE));
+        }
+        private void SetupExtendDeadlineTerminalNode()
+        {
+            SetupOneTimeTerminalNode("Extend Deadline",
+                                    true,
+                                    cfg.EXTEND_DEADLINE_ENABLED,
+                                    cfg.EXTEND_DEADLINE_PRICE,
+                                    "Extends the deadline by a specified amount of days.");
         }
         private void SetupPagerTerminalNode()
         {

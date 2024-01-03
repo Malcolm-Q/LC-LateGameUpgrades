@@ -377,11 +377,34 @@ namespace MoreShipUpgrades.Misc
                 default: return outputNode;
             }
         }
+        private static TerminalNode ExecuteExtendDeadlineCommand(string daysString, ref Terminal terminal)
+        {
+            if (!(int.TryParse(daysString, out int days) && days > 0)) 
+                return DisplayTerminalMessage($"Invalid value ({daysString}) inserted to extend the deadline.\n");
+
+            if (terminal.groupCredits < days * UpgradeBus.instance.cfg.EXTEND_DEADLINE_PRICE) 
+                return DisplayTerminalMessage($"Not enough credits to purchase the proposed deadline extension.\n Total price: {days * UpgradeBus.instance.cfg.EXTEND_DEADLINE_PRICE}\n Current credits: {terminal.groupCredits}\n");
+
+            terminal.groupCredits -= days * UpgradeBus.instance.cfg.EXTEND_DEADLINE_PRICE;
+            LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits);
+            UpgradeBus.instance.extendScript.ExtendDeadlineClientRpc(days);
+
+            return DisplayTerminalMessage($"Extended the deadline by {days} day{(days == 1 ? "" : "s")}");
+        }
+        private static TerminalNode ExecuteExtendCommands(string secondWord, string thirdWord, ref Terminal terminal, ref TerminalNode outputNode)
+        {
+            switch(secondWord)
+            {
+                case "deadline": return ExecuteExtendDeadlineCommand(thirdWord, ref terminal);
+                default: return outputNode;
+            }
+        }
         public static void ParseLGUCommands(string fullText, ref Terminal terminal, ref TerminalNode outputNode)
         {
             string[] textArray = fullText.Split();
             string firstWord = textArray[0].ToLower();
             string secondWord = textArray.Length > 1 ? textArray[1].ToLower() : "";
+            string thirdWord = textArray.Length > 2 ? textArray[2].ToLower() : "";
             switch(firstWord)
             {
                 case "help": if (!outputNode.displayText.Contains(">LATEGAME\nDisplays information related with Lategame-Upgrades mod\n")) outputNode.displayText += ">LATEGAME\nDisplays information related with Lategame-Upgrades mod\n"; return;
@@ -397,6 +420,7 @@ namespace MoreShipUpgrades.Misc
                 case "synccredits": outputNode = ExecuteSyncCredits(ref terminal); return;
                 case "intern":
                 case "interns": outputNode = ExecuteInternsCommand(ref terminal); return;
+                case "extend": outputNode = ExecuteExtendCommands(secondWord, thirdWord, ref terminal, ref outputNode); return;
                 case "load": outputNode = ExecuteLoadCommands(secondWord, fullText, ref terminal, ref outputNode); return;
                 case "scan": outputNode = ExecuteScanCommands(secondWord, ref outputNode); return;
                 case "transmit": outputNode = ExecuteTransmitMessage(fullText.Substring(firstWord.Length+1), ref outputNode); return;

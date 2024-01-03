@@ -313,6 +313,7 @@ namespace MoreShipUpgrades
             SetupLocksmith();
             SetupPlayerHealth();
             SetupHunter();
+            SetupExtendDeadline();
         }
         private void SetupBeekeeper()
         {
@@ -385,6 +386,10 @@ namespace MoreShipUpgrades
         private void SetupPlayerHealth()
         {
             SetupGenericPerk<playerHealthScript>(playerHealthScript.UPGRADE_NAME);
+        }
+        private void SetupExtendDeadline()
+        {
+            SetupGenericPerk<ExtendDeadlineScript>(ExtendDeadlineScript.UPGRADE_NAME);
         }
         /// <summary>
         /// Generic function where it adds a script (specificed through the type) into an GameObject asset 

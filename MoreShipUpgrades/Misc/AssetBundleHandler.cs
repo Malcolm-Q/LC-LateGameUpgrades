@@ -42,6 +42,7 @@ namespace MoreShipUpgrades.Misc
             { pagerScript.UPGRADE_NAME, "Assets/ShipUpgrades/Pager.prefab" },
             { lockSmithScript.UPGRADE_NAME, "Assets/ShipUpgrades/LockSmith.prefab" },
             { playerHealthScript.UPGRADE_NAME, "Assets/ShipUpgrades/PlayerHealth.prefab" },
+            { ExtendDeadlineScript.UPGRADE_NAME, "Assets/ShipUpgrades/ExtendDeadline.prefab" },
 
             { "Advanced Portable Tele", "Assets/ShipUpgrades/TpButtonAdv.asset" },
             { "Portable Tele", "Assets/ShipUpgrades/TpButton.asset" },
