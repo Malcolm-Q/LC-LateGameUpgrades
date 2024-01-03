@@ -402,6 +402,14 @@ namespace MoreShipUpgrades.Misc
                             default: return;
                         }
                     }
+                case "bruteforce":
+                    {
+                        switch(secondWord)
+                        {
+                            case "": outputNode = DisplayTerminalMessage($"Enter a valid address for a device to connect to!\n\n"); return;
+                            default:  outputNode = HandleBruteForce(secondWord); return;
+                        }
+                    }
                 case "initattack":
                 case "atk": outputNode = ExecuteDiscombobulatorAttack(ref terminal); return;
                 case "cd":
@@ -451,6 +459,24 @@ namespace MoreShipUpgrades.Misc
                 default: outputNode = ExecuteUpgradeCommand(fullText, ref terminal, ref outputNode); return;
             }
         }
+
+        private static TerminalNode HandleBruteForce(string secondWord)
+        {
+            string txt = null;
+            string ip = UpgradeBus.instance.DataMinigameKey;
+            if(secondWord == ip)
+            {
+                txt = $"PING {ip} ({ip}): 56 data bytes\r\n64 bytes from {ip}: icmp_seq=0 ttl=64 time=1.234 ms\r\n64 bytes from {ip}: icmp_seq=1 ttl=64 time=1.345 ms\r\n64 bytes from {ip}: icmp_seq=2 ttl=64 time=1.123 ms\r\n64 bytes from {ip}: icmp_seq=3 ttl=64 time=1.456 ms\r\n\r\n--- {ip} ping statistics ---\r\n4 packets transmitted, 4 packets received, 0.0% packet loss\r\nround-trip min/avg/max/stddev = 1.123/1.289/1.456/0.123 ms\n\n";
+                txt += $"CONNECTION ESTABLISHED --- RETRIEVING CREDENTIALS...\n\nUSER: {UpgradeBus.instance.DataMinigameUser}\nPASSWORD: {UpgradeBus.instance.DataMinigamePass}\nn";
+            }
+            else
+            {
+                txt = $"PING {ip} ({ip}): 56 data bytes\r\nRequest timeout for icmp_seq 0\r\nRequest timeout for icmp_seq 1\r\nRequest timeout for icmp_seq 2\r\nRequest timeout for icmp_seq 3\r\n\r\n--- {ip} ping statistics ---\r\n4 packets transmitted, 0 packets received, 100.0% packet loss\n\n";
+                txt += $"CONNECTION FAILED -- INVALID ADDRESS?\n\n";
+            }
+            return DisplayTerminalMessage(txt);
+        }
+
         private static IEnumerator WaitForSync(ulong id)
         {
             yield return new WaitForSeconds(3f);

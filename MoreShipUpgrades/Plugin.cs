@@ -109,28 +109,55 @@ namespace MoreShipUpgrades
         private void SetupContractMapObjects(ref AssetBundle bundle)
         {
             string root = "Assets/ShipUpgrades/";
-            string[] items = { "ScavItem.asset" };
-            string[] contractTypes = { "extraction" };
-
             AnimationCurve curve = new AnimationCurve(new Keyframe(0,1), new Keyframe(1,1)); // always spawn 1
 
-            for(int i = 0; i < items.Length; i++)
-            {
-                Item item = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + items[i]);
-                if (item == null) return;
+            // scavenger extraction
+            Item scav = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + "ScavItem.asset");
+            if (scav == null) return;
 
-                ContractObject co = item.spawnPrefab.AddComponent<ContractObject>();
-                co.contractType = contractTypes[i];
-                item.spawnPrefab.GetComponent<PhysicsProp>().scrapValue = 400; //asdf
-                item.spawnPrefab.GetComponentInChildren<ScanNodeProperties>().subText = $"VALUE: ${400}"; //asdf
-                Utilities.FixMixerGroups(item.spawnPrefab);
-                LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(item.spawnPrefab);
-                Items.RegisterItem(item);
-                SpawnableMapObjectDef mapObjDef = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
-                mapObjDef.spawnableMapObject = new SpawnableMapObject();
-                mapObjDef.spawnableMapObject.prefabToSpawn = item.spawnPrefab;
-                MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
-            }
+            ContractObject co = scav.spawnPrefab.AddComponent<ContractObject>();
+            co.contractType = "extraction";
+            scav.spawnPrefab.GetComponent<PhysicsProp>().scrapValue = 400; //asdf
+            scav.spawnPrefab.GetComponentInChildren<ScanNodeProperties>().subText = $"VALUE: ${400}"; //asdf
+
+            Utilities.FixMixerGroups(scav.spawnPrefab);
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(scav.spawnPrefab);
+            Items.RegisterItem(scav);
+
+            SpawnableMapObjectDef mapObjDef = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
+            mapObjDef.spawnableMapObject = new SpawnableMapObject();
+            mapObjDef.spawnableMapObject.prefabToSpawn = scav.spawnPrefab;
+            MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
+
+
+            // data mission
+            Item dataLoot = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "DiscItem.asset");
+            dataLoot.spawnPrefab.GetComponent<PhysicsProp>().scrapValue = 400;
+            dataLoot.spawnPrefab.GetComponentInChildren<ScanNodeProperties>().subText =$"VALUE: ${400}";//asdf this too
+            Items.RegisterItem(dataLoot);
+            Utilities.FixMixerGroups(dataLoot.spawnPrefab);
+            NetworkPrefabs.RegisterNetworkPrefab(dataLoot.spawnPrefab);
+
+            Item pc = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + "DataPCItem.asset");
+            if (pc == null || dataLoot == null) return;
+
+            ContractObject coPC = pc.spawnPrefab.AddComponent<ContractObject>();
+            coPC.contractType = "data";
+
+            DataPCScript dataScript = pc.spawnPrefab.AddComponent<DataPCScript>();
+            dataScript.error = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, root + "winError.mp3");
+            dataScript.startup = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, root + "startup.mp3");
+            dataScript.loot = dataLoot.spawnPrefab;
+
+            Utilities.FixMixerGroups(pc.spawnPrefab);
+            NetworkPrefabs.RegisterNetworkPrefab(pc.spawnPrefab);
+            Items.RegisterItem(pc);
+
+            SpawnableMapObjectDef mapObjDefPC = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
+            mapObjDefPC.spawnableMapObject = new SpawnableMapObject();
+            mapObjDefPC.spawnableMapObject.prefabToSpawn = pc.spawnPrefab;
+            MapObjects.RegisterMapObject(mapObjDefPC, Levels.LevelTypes.All, (level) => curve);
+            Items.RegisterShopItem(pc, 0); // dont forget to remove
         }
 
         private void SetupModStore(ref AssetBundle bundle)

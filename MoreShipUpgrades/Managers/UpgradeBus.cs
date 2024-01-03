@@ -52,6 +52,9 @@ namespace MoreShipUpgrades.Managers
 
         public string contractLevel = "None";
         public string contractType = "None";
+        public string DataMinigameKey = "";
+        public string DataMinigameUser = "";
+        public string DataMinigamePass = "";
 
         public trapDestroyerScript trapHandler = null;
         public terminalFlashScript flashScript = null;
