@@ -17,15 +17,16 @@ namespace MoreShipUpgrades.UpgradeComponents
         public override void Increment()
         {
             UpgradeBus.instance.legLevel++;
+            GameNetworkManager.Instance.localPlayerController.jumpForce += UpgradeBus.instance.cfg.JUMP_FORCE_INCREMENT;
         }
 
         public override void Unwind()
         {
             base.Unwind();
 
+            GameNetworkManager.Instance.localPlayerController.jumpForce -= (UpgradeBus.instance.cfg.JUMP_FORCE_UNLOCK + (UpgradeBus.instance.legLevel * UpgradeBus.instance.cfg.JUMP_FORCE_INCREMENT));
             UpgradeBus.instance.strongLegs = false;
             UpgradeBus.instance.legLevel = 0;
-            GameNetworkManager.Instance.localPlayerController.jumpForce = 13f;
         }
         public override void Register()
         {
@@ -37,7 +38,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             base.load();
 
             UpgradeBus.instance.strongLegs = true;
-            GameNetworkManager.Instance.localPlayerController.jumpForce = UpgradeBus.instance.cfg.JUMP_FORCE;
+            GameNetworkManager.Instance.localPlayerController.jumpForce += UpgradeBus.instance.cfg.JUMP_FORCE_UNLOCK;
             float amountToIncrement = 0;
             for(int i = 0; i < UpgradeBus.instance.legLevel; i++)
             {

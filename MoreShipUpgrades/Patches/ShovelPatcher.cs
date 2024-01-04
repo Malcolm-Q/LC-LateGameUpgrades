@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace MoreShipUpgrades.Patches
     [HarmonyPatch(typeof(Shovel))]
     internal class ShovelPatcher
     {
+        private static LGULogger logger = new LGULogger(nameof(ShovelPatcher));
         [HarmonyTranspiler]
         [HarmonyPatch("HitShovel")]
         public static IEnumerable<CodeInstruction> HitShovelTranspiler(IEnumerable<CodeInstruction> instructions)
@@ -29,6 +31,7 @@ namespace MoreShipUpgrades.Patches
                 codes.Insert(i+1, new CodeInstruction(OpCodes.Call, proteinHitFoce));
                 found = true;
             }
+            if (!found) { logger.LogError($"Did not find the hit force of the shovel to influence with {proteinPowderScript.UPGRADE_NAME}"); }
             return codes.AsEnumerable();
         }
     }

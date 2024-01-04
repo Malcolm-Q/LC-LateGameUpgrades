@@ -77,9 +77,9 @@ namespace MoreShipUpgrades.Misc
         public int HUNTER_PRICE2 { get; set; }
         public int HUNTER_PRICE3 { get; set; }
         public bool KEEP_ITEMS_ON_TELE { get; set; }
-        public float SPRINT_TIME_INCREASE { get; set; }
-        public float MOVEMENT_SPEED { get; set; }
-        public float JUMP_FORCE { get; set; }
+        public float SPRINT_TIME_INCREASE_UNLOCK { get; set; }
+        public float MOVEMENT_SPEED_UNLOCK { get; set; }
+        public float JUMP_FORCE_UNLOCK { get; set; }
         public bool DESTROY_TRAP { get; set; }
         public float DISARM_TIME { get; set; }
         public bool EXPLODE_TRAP { get; set; }
@@ -216,8 +216,8 @@ namespace MoreShipUpgrades.Misc
             topSection = biggerLungScript.UPGRADE_NAME;
             BIGGER_LUNGS_ENABLED = ConfigEntry(topSection, "Enable Bigger Lungs Upgrade", true, "More Stamina");
             BIGGER_LUNGS_PRICE = ConfigEntry(topSection, "Price of Bigger Lungs Upgrade", 600, "");
-            SPRINT_TIME_INCREASE = ConfigEntry(topSection, "SprintTime value", 17f, "Vanilla value is 11");
-            SPRINT_TIME_INCREMENT = ConfigEntry(topSection, "SprintTime Increment", 1.25f,"How much the above value is increased on upgrade.");
+            SPRINT_TIME_INCREASE_UNLOCK = ConfigEntry(topSection, "Sprint Time Unlock", 6f, "Amount of sprint time gained when unlocking the upgrade.\nDefault vanilla value is 11f.");
+            SPRINT_TIME_INCREMENT = ConfigEntry(topSection, "Sprint Time Increment", 1.25f,"Amount of sprint time gained when increasing the level of upgrade.");
             BIGGER_LUNGS_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, biggerLungScript.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             BIGGER_LUNGS_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
             BIGGER_LUNGS_STAMINA_REGEN_INCREASE = ConfigEntry(topSection, "Stamina Regeneration Increase", 1.05f, "Increase of stamina regeneration applied past level 1");
@@ -226,7 +226,7 @@ namespace MoreShipUpgrades.Misc
             topSection = runningShoeScript.UPGRADE_NAME;
             RUNNING_SHOES_ENABLED = ConfigEntry(topSection, "Enable Running Shoes Upgrade", true, "Run Faster");
             RUNNING_SHOES_PRICE = ConfigEntry(topSection, "Price of Running Shoes Upgrade", 650, "");
-            MOVEMENT_SPEED = ConfigEntry(topSection, "Movement Speed Value", 6f, "Vanilla value is 4.6");
+            MOVEMENT_SPEED_UNLOCK = ConfigEntry(topSection, "Movement Speed Unlock", 1.4f, "Value added to player's movement speed when first purchased.\nDefault vanilla value is 4.6f.");
             MOVEMENT_INCREMENT = ConfigEntry(topSection, "Movement Speed Increment", 0.5f, "How much the above value is increased on upgrade.");
             RUNNING_SHOES_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, biggerLungScript.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             RUNNING_SHOES_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
@@ -235,7 +235,7 @@ namespace MoreShipUpgrades.Misc
             topSection = strongLegsScript.UPGRADE_NAME;
             STRONG_LEGS_ENABLED = ConfigEntry(topSection, "Enable Strong Legs Upgrade", true, "Jump Higher");
             STRONG_LEGS_PRICE = ConfigEntry(topSection, "Price of Strong Legs Upgrade", 300, "");
-            JUMP_FORCE = ConfigEntry(topSection, "Jump Force", 16f, "Vanilla value is 13");
+            JUMP_FORCE_UNLOCK = ConfigEntry(topSection, "Jump Force Unlock", 3f, "Amount of jump force added when unlocking the upgrade.\nDefault vanilla value is 13f.");
             JUMP_FORCE_INCREMENT = ConfigEntry(topSection, "Jump Force Increment", 0.75f, "How much the above value is increased on upgrade.");
             STRONG_LEGS_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, strongLegsScript.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             STRONG_LEGS_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
