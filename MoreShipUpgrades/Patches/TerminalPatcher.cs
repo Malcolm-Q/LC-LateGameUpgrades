@@ -21,10 +21,10 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("Start")]
         private static void StartPostfix(ref Terminal __instance)
         {
-            TerminalNode val2 = __instance.terminalNodes.specialNodes[HELP_TERMINAL_NODE];
-            val2.displayText += "Lategame Upgrades\n";
-            val2.displayText += ">LATEGAME\nDisplays information related with Lategame-Upgrades mod\n";
-            val2.displayText += ">LGU/LATEGAME STORE\nDisplays the purchaseable upgrades from Lategame store.\n";
+            TerminalNode helpNode = __instance.terminalNodes.specialNodes[HELP_TERMINAL_NODE];
+            helpNode.displayText += "Lategame Upgrades\n";
+            helpNode.displayText += ">LATEGAME\nDisplays information related with Lategame-Upgrades mod\n";
+            helpNode.displayText += ">LGU/LATEGAME STORE\nDisplays the purchaseable upgrades from Lategame store.\n";
         }
         [HarmonyPostfix]
         [HarmonyPatch("ParsePlayerSentence")]
