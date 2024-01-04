@@ -15,13 +15,13 @@ namespace MoreShipUpgrades.Misc
         private static Dictionary<string, string> infoJSON;
         public static Dictionary<string, string> samplePaths = new Dictionary<string, string>()
         {
-            { "Centipede", "Assets/ShipUpgrades/Samples/SnareFleaSample.asset" },
-            { "Bunker Spider", "Assets/ShipUpgrades/Samples/BunkerSpiderSample.asset" },
-            { "Hoarding bug", "Assets/ShipUpgrades/Samples/HoardingBugSample.asset" },
-            { "Flowerman", "Assets/ShipUpgrades/Samples/BrackenSample.asset" },
-            { "MouthDog", "Assets/ShipUpgrades/Samples/EyelessDogSample.asset" },
-            { "Baboon hawk", "Assets/ShipUpgrades/Samples/BaboonHawkSample.asset" },
-            { "Crawler", "Assets/ShipUpgrades/Samples/ThumperSample.asset" },
+            { "centipede", "Assets/ShipUpgrades/Samples/SnareFleaSample.asset" },
+            { "bunker spider", "Assets/ShipUpgrades/Samples/BunkerSpiderSample.asset" },
+            { "hoarding bug", "Assets/ShipUpgrades/Samples/HoardingBugSample.asset" },
+            { "flowerman", "Assets/ShipUpgrades/Samples/BrackenSample.asset" },
+            { "mouthdog", "Assets/ShipUpgrades/Samples/EyelessDogSample.asset" },
+            { "baboon hawk", "Assets/ShipUpgrades/Samples/BaboonHawkSample.asset" },
+            { "crawler", "Assets/ShipUpgrades/Samples/ThumperSample.asset" },
         };
         private static Dictionary<string, string> assetPaths = new Dictionary<string, string>()
         {

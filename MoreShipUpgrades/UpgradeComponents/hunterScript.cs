@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,26 +9,44 @@ namespace MoreShipUpgrades.UpgradeComponents
     internal class hunterScript : BaseUpgrade
     {
         public static string UPGRADE_NAME = "Hunter";
-
-        static string[] lvl1 = new string[] { "Hoarding bug", "Centipede" };
-        static string[] lvl2 = new string[] { "Bunker Spider", "Hoarding bug", "Centipede", "Baboon hawk" };
-        static string[] lvl3 = new string[] { "Bunker Spider", "Hoarding bug", "Centipede", "Baboon hawk", "Flowerman", "Crawler", "MouthDog" };
+        private static LGULogger logger = new LGULogger(UPGRADE_NAME);
         static Dictionary<string, string> monsterNames = new Dictionary<string, string>()
             {
-            { "Hoarding bug", "Hoarding Bug" },
-            { "Centipede", "Snare Flea" },
-            { "Bunker Spider", "Bunker Spider" },
-            { "Baboon hawk", "Baboon Hawk" },
-            { "Flowerman", "Bracken" },
-            { "Crawler", "Half/Thumper" },
-            { "MouthDog", "Eyeless Dog" },
+            { "hoarding", "Hoarding Bug" },
+            { "hoarding bug", "Hoarding Bug" },
+            { "snare", "Snare Flea" },
+            { "flea", "Snare Flea" },
+            { "snare flea", "Snare Flea" },
+            { "centipede", "Snare Flea" },
+            { "bunker spider", "Bunker Spider" },
+            { "bunker", "Bunker Spider" },
+            { "bunk", "Bunker Spider" },
+            { "spider", "Bunker Spider" },
+            { "baboon hawk", "Baboon Hawk" },
+            { "baboon", "Baboon Hawk" },
+            { "hawk", "Baboon Hawk" },
+            { "flowerman", "Bracken" },
+            { "bracken", "Bracken" },
+            { "crawler", "Half/Thumper" },
+            { "half", "Half/Thumper" },
+            { "thumper", "Half/Thumper" },
+            { "mouthdog", "Eyeless Dog" },
+            { "eyeless dog", "Eyeless Dog" },
+            { "eyeless", "Eyeless Dog" },
+            { "dog", "Eyeless Dog" },
             };
-        static public Dictionary<int, string[]> tiers = new Dictionary<int, string[]>
+        static public Dictionary<int, string[]> tiers;
+        public static void SetupTierList()
         {
-            {0,  lvl1 },
-            {1, lvl2 },
-            {2, lvl3 },
-        };
+            logger = new LGULogger(UPGRADE_NAME);
+            tiers = new Dictionary<int, string[]>();
+            string[] tiersList = UpgradeBus.instance.cfg.HUNTER_SAMPLE_TIERS.ToLower().Split('-');
+            tiers[0] = tiersList[0].Split(",");
+            for (int i = 1; i < tiersList.Length; i++)
+            {
+                tiers[i] = tiers[i - 1].Concat(tiersList[i].Split(",")).ToArray();
+            }
+        }
         void Start()
         {
             upgradeName = UPGRADE_NAME;
@@ -66,7 +85,9 @@ namespace MoreShipUpgrades.UpgradeComponents
             string result = "";
             foreach (string monsterTypeName in enems.Split(", "))
             {
-                result += monsterNames[monsterTypeName] + ", ";
+                logger.LogDebug(monsterTypeName.Trim().ToLower());
+                logger.LogDebug(monsterNames[monsterTypeName.Trim().ToLower()]);
+                result += monsterNames[monsterTypeName.Trim().ToLower()] + ", ";
             }
             result = result.Substring(0, result.Length - 2);
             result += "\n";

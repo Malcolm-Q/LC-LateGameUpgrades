@@ -387,11 +387,12 @@ namespace MoreShipUpgrades.Managers
         }
         private void SetupHunterTerminalNode()
         {
+            hunterScript.SetupTierList();
             SetupMultiplePurchasableTerminalNode(hunterScript.UPGRADE_NAME,
                                                 true,
                                                 cfg.HUNTER_ENABLED,
                                                 cfg.HUNTER_PRICE,
-                                                new int[] { cfg.HUNTER_PRICE2, cfg.HUNTER_PRICE3 });
+                                                ParseUpgradePrices(cfg.HUNTER_UPGRADE_PRICES));
         }
         private void SetupBetterScannerTerminalNode()
         {
