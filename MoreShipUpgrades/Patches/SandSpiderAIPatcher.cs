@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using MoreShipUpgrades.Misc;
 using System.Collections.Generic;
 using System.Linq;
 using static System.Reflection.Emit.OpCodes;
@@ -8,6 +9,7 @@ namespace MoreShipUpgrades.Patches
     [HarmonyPatch(typeof(SandSpiderAI))]
     internal class SandSpiderAIPatcher
     {
+        private static LGULogger logger = new LGULogger(nameof(SandSpiderAIPatcher));
         /// <summary>
         /// Transpiler for the HitEnemy function of SandSpiderAI script.
         /// This is only here for when the developer of the game solves the issue of the health decrease being affected by force instead of only being decremented by one.
@@ -30,7 +32,7 @@ namespace MoreShipUpgrades.Patches
                 codes[i] = new CodeInstruction(Ldarg_1);
                 found = true;
             }
-
+            if (!found) { logger.LogError("Did not find the health decrease instruction..."); }
             return codes.AsEnumerable();
         }
     }

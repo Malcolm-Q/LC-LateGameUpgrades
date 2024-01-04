@@ -25,9 +25,9 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             base.Unwind();
 
+            GameNetworkManager.Instance.localPlayerController.movementSpeed -= (UpgradeBus.instance.cfg.MOVEMENT_SPEED_UNLOCK + (UpgradeBus.instance.runningLevel * UpgradeBus.instance.cfg.MOVEMENT_INCREMENT));
             UpgradeBus.instance.runningShoes = false;
             UpgradeBus.instance.runningLevel = 0;
-            GameNetworkManager.Instance.localPlayerController.movementSpeed = 4.6f;
         }
         public override void Register()
         {
@@ -39,7 +39,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             base.load();
 
             UpgradeBus.instance.runningShoes = true;
-            GameNetworkManager.Instance.localPlayerController.movementSpeed = UpgradeBus.instance.cfg.MOVEMENT_SPEED;
+            GameNetworkManager.Instance.localPlayerController.movementSpeed += UpgradeBus.instance.cfg.MOVEMENT_SPEED_UNLOCK;
 
             float amountToIncrement = 0;
             for(int i = 0; i < UpgradeBus.instance.runningLevel; i++)

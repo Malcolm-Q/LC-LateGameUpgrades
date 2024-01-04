@@ -7,6 +7,11 @@ namespace MoreShipUpgrades.UpgradeComponents
     internal class strongerScannerScript : BaseUpgrade
     {
         public static string UPGRADE_NAME = "Better Scanner";
+        private static LGULogger logger;
+        void Awake()
+        {
+            logger = new LGULogger(UPGRADE_NAME);
+        }
         void Start()
         {
             upgradeName = UPGRADE_NAME;
@@ -40,6 +45,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         public static void AddScannerNodeToValve(ref SteamValveHazard steamValveHazard)
         {
             if (!UpgradeBus.instance.scannerUpgrade) return;
+            logger.LogDebug("Inserting a Scan Node on a broken steam valve...");
             GameObject ScanNodeObject = Instantiate(GameObject.Find("ScanNode"), steamValveHazard.transform.position, Quaternion.Euler(Vector3.zero), steamValveHazard.transform);
             ScanNodeProperties node = ScanNodeObject.GetComponent<ScanNodeProperties>();
             node.headerText = "Bursted Steam Valve";
@@ -50,6 +56,7 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public static void RemoveScannerNodeFromValve(ref SteamValveHazard steamValveHazard)
         {
+            logger.LogDebug("Removing the Scan Node from a fixed steam valve...");
             Destroy(steamValveHazard.gameObject.GetComponentInChildren<ScanNodeProperties>());
         }
         public static string GetBetterScannerInfo(int level, int price)

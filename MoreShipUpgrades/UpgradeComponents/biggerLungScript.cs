@@ -11,7 +11,6 @@ namespace MoreShipUpgrades.UpgradeComponents
         private static LGULogger logger = new LGULogger(UPGRADE_NAME);
         public static string UPGRADE_NAME = "Bigger Lungs";
         public static string PRICES_DEFAULT = "350,450,550";
-        private static float DEFAULT_SPRINT_TIME = 11f;
 
         void Start()
         {
@@ -24,13 +23,13 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             UpgradeBus.instance.lungLevel++;
             PlayerControllerB player = GetLocalPlayer();
-            player.sprintTime += UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT;  //17
+            player.sprintTime += UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT;
         }
 
         public override void load()
         {
             PlayerControllerB player = GetLocalPlayer();
-            player.sprintTime = UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE; //17
+            player.sprintTime += UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE_UNLOCK;
             UpgradeBus.instance.biggerLungs = true;
             base.load();
 
@@ -46,7 +45,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         public override void Unwind()
         {
             PlayerControllerB player = GetLocalPlayer();
-            player.sprintTime = DEFAULT_SPRINT_TIME;
+            player.sprintTime -= (UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE_UNLOCK + (UpgradeBus.instance.lungLevel * UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT));
             base.Unwind();
 
             UpgradeBus.instance.biggerLungs = false;

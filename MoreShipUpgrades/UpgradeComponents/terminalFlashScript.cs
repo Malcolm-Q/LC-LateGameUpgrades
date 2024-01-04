@@ -59,7 +59,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         [ClientRpc]
         private void PlayAudioAndUpdateCooldownClientRpc()
         {
-            Terminal terminal = GameObject.Find("TerminalScript").GetComponent<Terminal>();
+            Terminal terminal = UpgradeBus.instance.GetTerminal();
             terminal.terminalAudio.maxDistance = 100f;
             terminal.terminalAudio.PlayOneShot(UpgradeBus.instance.flashNoise);
             StartCoroutine(ResetRange(terminal));
