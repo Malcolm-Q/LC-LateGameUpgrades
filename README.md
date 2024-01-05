@@ -18,16 +18,16 @@ Join [this modding discord](https://discord.gg/hzEcKFSSDX) and comment [on this 
 *Included is a projectSetup.exe and projectSetup.py, you can run one or the other to quickly add all (or most of if some have been recently added) of the dependents to your .csproj
 
 ## **TODO:**
-#### Complex Tiered Upgrades
-* strong legs
-    * final upgrade reduces/removes fall damage
 * lightning rod
     * maybe an expensive upgrade that grants a chance to redirect attracted lightning onto a nearby enemy?
 * Hunter
     * Final upgrade allows the spawning of 'alpha' creatures, they're stronger bigger have more health and valuable samples.
-#### Other
-* When LethalLib version with RemoveStoreItem() and UpdateStorePrice() reimpliment AlterStoreItems() in UpgradeBus.Reconstruct()
-* Add config options for hunter drop prices and what monsters are huntable on each tier
+* Reimpliment AlterStoreItems() in UpgradeBus.Reconstruct() with new lethallib methods.
+* Add more Logging during loading process and integral systems.
+* during load change arbitrary wait for seconds yields to value contingent yields.
+* low priotity - compatibility checker tied to displayTip or terminal command
+* change intto screen to save file based displaytip system.
+
 
 ## **Community Suggested Additions:**
 If you want to implement one of these please create a branch indicating which feature you are implementing.  
