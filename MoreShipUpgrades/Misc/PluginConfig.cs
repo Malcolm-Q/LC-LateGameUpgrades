@@ -28,6 +28,8 @@ namespace MoreShipUpgrades.Misc
         public bool LIGHTNING_ROD_ENABLED { get; set; }
         public bool HUNTER_ENABLED { get; set; }
         public bool PLAYER_HEALTH_ENABLED { get; set; }
+        public bool PEEPER_ENABLED { get; set; }
+        public bool EXTEND_DEADLINE_ENABLED { get; set; }
 
         // individual or shared
         public bool ADVANCED_TELE_INDIVIDUAL { get; set; }
@@ -48,7 +50,6 @@ namespace MoreShipUpgrades.Misc
         public bool MALWARE_BROADCASTER_INDIVIDUAL { get; set; }
         public bool INTERN_INDIVIDUAL { get; set; }
         public bool LOCKSMITH_INDIVIDUAL { get; set; }
-        public bool PEEPER_ENABLED { get; set; }
 
         // prices
         public int PEEPER_PRICE { get; set; }
@@ -69,6 +70,7 @@ namespace MoreShipUpgrades.Misc
         public int WALKIE_PRICE { get; set; }
         public int LIGHTNING_ROD_PRICE { get; set; }
         public int PLAYER_HEALTH_PRICE { get; set; }
+        public int EXTEND_DEADLINE_PRICE { get; set; }
 
         // attributes
         public float BIGGER_LUNGS_STAMINA_REGEN_INCREASE { get; set; }
@@ -222,7 +224,11 @@ namespace MoreShipUpgrades.Misc
             BIGGER_LUNGS_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
             BIGGER_LUNGS_STAMINA_REGEN_INCREASE = ConfigEntry(topSection, "Stamina Regeneration Increase", 1.05f, "Increase of stamina regeneration applied past level 1");
             BIGGER_LUNGS_JUMP_STAMINA_COST_DECREASE = ConfigEntry(topSection, "Stamina cost decrease on jumps", 0.90f, "Multiplied with the vanilla cost of jumping");
-          
+
+            topSection = "Extend Deadline";
+            EXTEND_DEADLINE_ENABLED = ConfigEntry(topSection, "Enable Extend Deadline Purchase", true, "Increments the amount of days before deadline is reached.");
+            EXTEND_DEADLINE_PRICE = ConfigEntry(topSection, "Extend Deadline Price", 1500, "Price of each day extension requested in the terminal.");
+
             topSection = runningShoeScript.UPGRADE_NAME;
             RUNNING_SHOES_ENABLED = ConfigEntry(topSection, "Enable Running Shoes Upgrade", true, "Run Faster");
             RUNNING_SHOES_PRICE = ConfigEntry(topSection, "Price of Running Shoes Upgrade", 650, "");

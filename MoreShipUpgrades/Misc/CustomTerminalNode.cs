@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.Misc
 {
-    public class CustomTerminalNode
+    public class CustomTerminalNode : IComparable
     {
         public string Name;
         public int[] Prices;
@@ -41,6 +41,14 @@ namespace MoreShipUpgrades.Misc
                 Prices,
                 MaxUpgrade
             );
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj == null) return -1;
+            if (obj is not CustomTerminalNode) return -1;
+            CustomTerminalNode other = obj as CustomTerminalNode;
+            return Name.CompareTo(other.Name);
         }
     }
 }
