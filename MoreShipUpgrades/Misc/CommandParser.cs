@@ -2,7 +2,6 @@
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.UpgradeComponents;
 using Newtonsoft.Json;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +19,13 @@ namespace MoreShipUpgrades.Misc
             "61 March",
             "21 Offense"
         };
+        static string[] contracts = { "data", "exterminator", "extraction" };
+        static string[] contractInfos = {
+            "\n\nOur systems have detected an active PC somewhere in the facility.\nFind it, and with the help of the ship terminal operator, recover any valuable data that may exist on the system.\n\n",
+            "\n\nIt's been reported that the population of hoarder bugs on this moon have skyrocketed and become aggressive. You must destroy their nest at all costs.\n\n",
+            "\n\nCrew number 5339 have reported that one of their operatives was lost on this moon and left behind. Extract the operative, and more importantly, any scrap they may have.\n\n" 
+        };
+
 
         private static TerminalNode DisplayTerminalMessage(string message, bool clearPreviousText = true)
         {
@@ -346,7 +352,7 @@ namespace MoreShipUpgrades.Misc
             return DisplayTerminalMessage(displayText);
         }
 
-        static TerminalNode TryGetContract(ref Terminal terminal, string extractionType)
+        static TerminalNode TryGetContract(ref Terminal terminal)
         {
             string txt = null;
             if(UpgradeBus.instance.contractLevel != "None")
@@ -354,14 +360,17 @@ namespace MoreShipUpgrades.Misc
                 txt = $"You currently have a {UpgradeBus.instance.contractType} contract on {UpgradeBus.instance.contractLevel}!\n\n";
                 return DisplayTerminalMessage(txt);
             }
-            if(terminal.groupCredits < -1) //change this to cfg value
+            if(terminal.groupCredits < UpgradeBus.instance.cfg.CONTRACT_PRICE) //change this to cfg value
             {
-                txt = $"This contract costs ${0} and you have ${terminal.groupCredits}\n\n";
+                txt = $"This contract costs ${UpgradeBus.instance.cfg.CONTRACT_PRICE} and you have ${terminal.groupCredits}\n\n";
                 return DisplayTerminalMessage(txt);
             }
-            //LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits - cost);
-            UpgradeBus.instance.contractType = extractionType;
-            txt = $"A {extractionType} contract has been accepted for {RandomLevel()}!\n\n";
+            LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits - UpgradeBus.instance.cfg.CONTRACT_PRICE);
+            int i = Random.Range(0,contracts.Length);
+            UpgradeBus.instance.contractType = contracts[i];
+            txt = $"A {contracts[i]} contract has been accepted for {RandomLevel()}!{contractInfos[i]}";
+            if (terminal.IsHost || terminal.IsServer) LGUStore.instance.SyncContractDetailsClientRpc(UpgradeBus.instance.contractLevel, contracts[i]);
+            else LGUStore.instance.ReqSyncContractDetailsServerRpc(UpgradeBus.instance.contractLevel, contracts[i]);
             return DisplayTerminalMessage(txt);
         }
 
@@ -392,16 +401,7 @@ namespace MoreShipUpgrades.Misc
                             default: return;
                         }
                     }
-                case "contract":
-                    {
-                        switch (secondWord)
-                        {
-                            case "extraction": outputNode = TryGetContract(ref terminal, secondWord); return;
-                            case "exterminator": outputNode = TryGetContract(ref terminal, secondWord); return;
-                            case "data": outputNode = TryGetContract(ref terminal, secondWord); return;
-                            default: return;
-                        }
-                    }
+                case "contract": outputNode = TryGetContract(ref terminal); return;
                 case "bruteforce":
                     {
                         switch(secondWord)
@@ -471,7 +471,7 @@ namespace MoreShipUpgrades.Misc
             }
             else
             {
-                txt = $"PING {ip} ({ip}): 56 data bytes\r\nRequest timeout for icmp_seq 0\r\nRequest timeout for icmp_seq 1\r\nRequest timeout for icmp_seq 2\r\nRequest timeout for icmp_seq 3\r\n\r\n--- {ip} ping statistics ---\r\n4 packets transmitted, 0 packets received, 100.0% packet loss\n\n";
+                txt = $"PING {secondWord} ({secondWord}): 56 data bytes\r\nRequest timeout for icmp_seq 0\r\nRequest timeout for icmp_seq 1\r\nRequest timeout for icmp_seq 2\r\nRequest timeout for icmp_seq 3\r\n\r\n--- {secondWord} ping statistics ---\r\n4 packets transmitted, 0 packets received, 100.0% packet loss\n\n";
                 txt += $"CONNECTION FAILED -- INVALID ADDRESS?\n\n";
             }
             return DisplayTerminalMessage(txt);

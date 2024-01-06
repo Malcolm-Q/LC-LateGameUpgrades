@@ -102,8 +102,8 @@ namespace MoreShipUpgrades
                     }
                     break;
                 }
-
             }
+
         }
 
         private void SetupContractMapObjects(ref AssetBundle bundle)
@@ -117,8 +117,14 @@ namespace MoreShipUpgrades
 
             ContractObject co = scav.spawnPrefab.AddComponent<ContractObject>();
             co.contractType = "extraction";
-            scav.spawnPrefab.GetComponent<PhysicsProp>().scrapValue = 400; //asdf
-            scav.spawnPrefab.GetComponentInChildren<ScanNodeProperties>().subText = $"VALUE: ${400}"; //asdf
+
+            ExtractPlayerScript extractScript = scav.spawnPrefab.AddComponent<ExtractPlayerScript>();
+            TextAsset scavAudioPaths = AssetBundleHandler.TryLoadOtherAsset<TextAsset>(ref bundle, root + "scavSounds/scavAudio.json");
+            Dictionary<string, string[]> scavAudioDict = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(scavAudioPaths.text);
+            ExtractPlayerScript.clipDict.Add("lost", CreateAudioClipArray(scavAudioDict["lost"], ref bundle));
+            ExtractPlayerScript.clipDict.Add("heal", CreateAudioClipArray(scavAudioDict["heal"], ref bundle));
+            ExtractPlayerScript.clipDict.Add("safe", CreateAudioClipArray(scavAudioDict["safe"], ref bundle));
+            ExtractPlayerScript.clipDict.Add("held", CreateAudioClipArray(scavAudioDict["held"], ref bundle));
 
             Utilities.FixMixerGroups(scav.spawnPrefab);
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(scav.spawnPrefab);
@@ -132,8 +138,6 @@ namespace MoreShipUpgrades
 
             // data mission
             Item dataLoot = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "DiscItem.asset");
-            dataLoot.spawnPrefab.GetComponent<PhysicsProp>().scrapValue = 400;
-            dataLoot.spawnPrefab.GetComponentInChildren<ScanNodeProperties>().subText =$"VALUE: ${400}";//asdf this too
             Items.RegisterItem(dataLoot);
             Utilities.FixMixerGroups(dataLoot.spawnPrefab);
             NetworkPrefabs.RegisterNetworkPrefab(dataLoot.spawnPrefab);
@@ -157,7 +161,40 @@ namespace MoreShipUpgrades
             mapObjDefPC.spawnableMapObject = new SpawnableMapObject();
             mapObjDefPC.spawnableMapObject.prefabToSpawn = pc.spawnPrefab;
             MapObjects.RegisterMapObject(mapObjDefPC, Levels.LevelTypes.All, (level) => curve);
-            Items.RegisterShopItem(pc, 0); // dont forget to remove
+
+            // exterminator mission
+            Item bugLoot = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "EggLootItem.asset");
+            Items.RegisterItem(bugLoot);
+            Utilities.FixMixerGroups(bugLoot.spawnPrefab);
+            NetworkPrefabs.RegisterNetworkPrefab(bugLoot.spawnPrefab);
+
+            Item nest = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + "HoardingEggItem.asset");
+            if (nest == null || bugLoot == null) return;
+
+            ContractObject coNest = nest.spawnPrefab.AddComponent<ContractObject>();
+            coNest.contractType = "exterminator";
+
+            BugNestScript nestScript = nest.spawnPrefab.AddComponent<BugNestScript>();
+            nestScript.loot = bugLoot.spawnPrefab;
+
+            Utilities.FixMixerGroups(nest.spawnPrefab);
+            NetworkPrefabs.RegisterNetworkPrefab(nest.spawnPrefab);
+            Items.RegisterItem(nest);
+
+            SpawnableMapObjectDef mapObjDefBug = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
+            mapObjDefBug.spawnableMapObject = new SpawnableMapObject();
+            mapObjDefBug.spawnableMapObject.prefabToSpawn = nest.spawnPrefab;
+            MapObjects.RegisterMapObject(mapObjDefBug, Levels.LevelTypes.All, (level) => curve);
+        }
+
+        private AudioClip[] CreateAudioClipArray(string[] paths, ref AssetBundle bundle)
+        {
+            AudioClip[] clips = new AudioClip[paths.Length];
+            for(int i = 0; i < paths.Length; i++)
+            {
+                clips[i] = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, paths[i]);
+            }
+            return clips;
         }
 
         private void SetupModStore(ref AssetBundle bundle)
@@ -307,9 +344,9 @@ namespace MoreShipUpgrades
         {
             Item MedKitItem = AssetBundleHandler.GetItemObject("Medkit");
             if (MedKitItem == null) return;
+            AnimationCurve curve = new AnimationCurve(new Keyframe(0f, 3), new Keyframe(1f, 3));
 
             MedKitItem.creditsWorth = cfg.MEDKIT_PRICE;
-            MedKitItem.itemSpawnsOnGround = true;
             MedKitItem.itemId = 492016;
             MedkitScript medScript = MedKitItem.spawnPrefab.AddComponent<MedkitScript>();
             medScript.itemProperties = MedKitItem;
@@ -320,11 +357,30 @@ namespace MoreShipUpgrades
             medScript.use = buttonPressed;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(MedKitItem.spawnPrefab);
 
-            if (!cfg.MEDKIT_ENABLED) return;
+            if (cfg.MEDKIT_ENABLED)
+            {
+                TerminalNode medNode = ScriptableObject.CreateInstance<TerminalNode>();
+                medNode.displayText = string.Format("MEDKIT - ${0}\n\nLeft click to heal yourself for {1} health.\nCan be used {2} times.\n", cfg.MEDKIT_PRICE, cfg.MEDKIT_HEAL_VALUE, cfg.MEDKIT_USES);
+                Items.RegisterShopItem(MedKitItem, null, null,medNode, MedKitItem.creditsWorth);
+            }
 
-            TerminalNode medNode = ScriptableObject.CreateInstance<TerminalNode>();
-            medNode.displayText = string.Format("MEDKIT - ${0}\n\nLeft click to heal yourself for {1} health.\nCan be used {2} times.\n", cfg.MEDKIT_PRICE, cfg.MEDKIT_HEAL_VALUE, cfg.MEDKIT_USES);
-            Items.RegisterShopItem(MedKitItem, null, null,medNode, MedKitItem.creditsWorth);
+            Item MedKitMapItem = AssetBundleHandler.GetItemObject("MedkitMapItem");
+            if (MedKitMapItem == null) return;
+            MedkitScript medMapScript = MedKitMapItem.spawnPrefab.AddComponent<MedkitScript>();
+            ContractObject co = MedKitMapItem.spawnPrefab.AddComponent<ContractObject>();
+            co.contractType = "extraction";
+            medMapScript.itemProperties = MedKitMapItem;
+            medMapScript.grabbable = true;
+            medMapScript.useCooldown = 2f;
+            medMapScript.grabbableToEnemies = true;
+            medMapScript.error = error;
+            medMapScript.use = buttonPressed;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(MedKitMapItem.spawnPrefab);
+
+            SpawnableMapObjectDef mapObjDef = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
+            mapObjDef.spawnableMapObject = new SpawnableMapObject();
+            mapObjDef.spawnableMapObject.prefabToSpawn = MedKitMapItem.spawnPrefab;
+            MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
         }
         private void SetupPeeper()
         {
@@ -367,7 +423,20 @@ namespace MoreShipUpgrades
             SetupLocksmith();
             SetupPlayerHealth();
             SetupHunter();
+            SetupContract();
+            SetupSickBeats();
         }
+
+        private void SetupSickBeats()
+        {
+            SetupGenericPerk<BeatScript>(BeatScript.UPGRADE_NAME);
+        }
+
+        private void SetupContract()
+        {
+            SetupGenericPerk<ContractScript>(ContractScript.UPGRADE_NAME);
+        }
+
         private void SetupBeekeeper()
         {
             SetupGenericPerk<beekeeperScript>(beekeeperScript.UPGRADE_NAME);

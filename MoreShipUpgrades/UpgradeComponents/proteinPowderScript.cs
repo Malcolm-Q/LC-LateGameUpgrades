@@ -70,7 +70,9 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public static int GetShovelHitForce(int force)
         {
-            return UpgradeBus.instance.proteinPowder ? TryToCritEnemy() ? CRIT_DAMAGE_VALUE : UpgradeBus.instance.cfg.PROTEIN_INCREMENT * UpgradeBus.instance.proteinLevel + UpgradeBus.instance.cfg.PROTEIN_UNLOCK_FORCE + force : force;
+            // Truly one of THE ternary operators
+            return (UpgradeBus.instance.proteinPowder ? TryToCritEnemy() ? CRIT_DAMAGE_VALUE : UpgradeBus.instance.cfg.PROTEIN_INCREMENT * UpgradeBus.instance.proteinLevel + UpgradeBus.instance.cfg.PROTEIN_UNLOCK_FORCE + force : force) + UpgradeBus.instance.damageBoost;
+            // .damageBoost is tied to boombox upgrade, it will always be 0 when inactive or x when active.
         }
 
         private static bool TryToCritEnemy()

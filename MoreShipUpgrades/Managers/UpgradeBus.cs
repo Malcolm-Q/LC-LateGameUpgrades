@@ -68,6 +68,8 @@ namespace MoreShipUpgrades.Managers
         public TerminalNode modStoreInterface;
         public Terminal terminal;
 
+        public List<BoomboxItem> boomBoxes = new List<BoomboxItem>();
+
         public List<CustomTerminalNode> terminalNodes = new List<CustomTerminalNode>();
 
         public Dictionary<string, GameObject> UpgradeObjects = new Dictionary<string, GameObject>();
@@ -109,6 +111,12 @@ namespace MoreShipUpgrades.Managers
 
         public Dictionary<string,GameObject> samplePrefabs = new Dictionary<string,GameObject>();
         public GameObject nightVisionPrefab;
+        public bool sickBeats;
+        public float staminaDrainCoefficient;
+        public float incomingDamageCoefficient;
+        public int damageBoost;
+        public GameObject BoomboxIcon;
+        public bool EffectsActive;
 
         void Awake()
         {
@@ -199,7 +207,7 @@ namespace MoreShipUpgrades.Managers
             }
         }
 
-        internal void GenerateSales(int seed = -1)
+        internal void GenerateSales(int seed = -1) // TODO: Save sales
         {
             Random.InitState(seed);
             foreach(CustomTerminalNode node in terminalNodes)
@@ -218,40 +226,7 @@ namespace MoreShipUpgrades.Managers
 
         internal void AlterStoreItems()
         {
-            // nothing works :(
-            Terminal[] terms = GameObject.FindObjectsOfType<Terminal>();
-            foreach(Terminal term in terms)
-            {
-                List<CompatibleNoun> words = new List<CompatibleNoun>();
-                foreach(CompatibleNoun word in term.terminalNodes.allKeywords[0].compatibleNouns)
-                {
-                    if(word.noun.word == "peeper")
-                    {
-                        if(cfg.PEEPER_ENABLED)words.Add(word);
-                        word.result.itemCost = cfg.PEEPER_PRICE;
-                    }
-                    else if(word.noun.word == "night-vision-goggles")
-                    {
-                        if(cfg.NIGHT_VISION_ENABLED)words.Add(word);
-                        word.result.itemCost = cfg.NIGHT_VISION_PRICE;
-                    }
-                    else if(word.noun.word == "portable-tele")
-                    {
-                        if(cfg.WEAK_TELE_ENABLED)words.Add(word);
-                        word.result.itemCost = cfg.WEAK_TELE_PRICE;
-                    }
-                    else if(word.noun.word == "advanced-portable-tele")
-                    {
-                        if(cfg.ADVANCED_TELE_ENABLED)words.Add(word);
-                        word.result.itemCost = cfg.ADVANCED_TELE_PRICE;
-                    }
-                    else
-                    {
-                        words.Add(word);
-                    }
-                    term.terminalNodes.allKeywords[0].compatibleNouns = words.ToArray();
-                }
-            }
+            // TODO: LethalLib new runtime price and stock update methods !!
         }
 
         internal void Reconstruct()
@@ -293,11 +268,30 @@ namespace MoreShipUpgrades.Managers
 
             SetupInternsTerminalNode();
 
+            SetupContractTerminalNode();
+
             SetupPlayerHealthTerminalNode();
 
             SetupPagerTerminalNode();
 
             SetupLocksmithTerminalNode();
+
+            SetupSickBeatsTerminalNode();
+        }
+
+        private void SetupSickBeatsTerminalNode()
+        {
+            string txt = $"Sick Beats - ${cfg.BEATS_PRICE}\nPlayers within a {cfg.BEATS_RADIUS} unit radius from an active boombox will have the following effects:\n\n";
+            if (cfg.BEATS_SPEED) txt += $"Movement speed increased by {cfg.BEATS_SPEED_INC}\n";
+            if (cfg.BEATS_DMG) txt += $"Damage inflicted increased by {cfg.BEATS_DMG_INC}\n";
+            if (cfg.BEATS_DEF) txt += $"Incoming Damage multiplied by {cfg.BEATS_DEF_CO}\n";
+            if (cfg.BEATS_STAMINA) txt += $"Stamina Drain multiplied by {cfg.BEATS_STAMINA_CO}\n";
+            SetupOneTimeTerminalNode(
+                BeatScript.UPGRADE_NAME,
+                cfg.SHARED_UPGRADES ? true : !cfg.BEATS_INDIVIDUAL,
+                cfg.BEATS_ENABLED,
+                cfg.BEATS_PRICE,
+                txt);
         }
 
         private void SetupBeekeperTerminalNode()
@@ -443,6 +437,15 @@ namespace MoreShipUpgrades.Managers
                                     cfg.INTERN_ENABLED,
                                     cfg.INTERN_PRICE,
                                     string.Format(AssetBundleHandler.GetInfoFromJSON("Interns"), cfg.INTERN_PRICE));
+        }
+
+        private void SetupContractTerminalNode()
+        {
+            SetupOneTimeTerminalNode("Contract",
+                                    true,
+                                    cfg.CONTRACTS_ENABLED,
+                                    cfg.CONTRACT_PRICE,
+                                    string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), cfg.CONTRACT_PRICE));
         }
         private void SetupPagerTerminalNode()
         {

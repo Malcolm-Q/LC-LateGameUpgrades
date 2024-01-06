@@ -26,6 +26,8 @@ namespace MoreShipUpgrades.Misc
         private static Dictionary<string, string> assetPaths = new Dictionary<string, string>()
         {
             { beekeeperScript.UPGRADE_NAME, "Assets/ShipUpgrades/beekeeper.prefab" },
+            { BeatScript.UPGRADE_NAME, "Assets/ShipUpgrades/SickBeats.prefab" },
+            { ContractScript.UPGRADE_NAME, "Assets/ShipUpgrades/Contract.prefab" },
             { proteinPowderScript.UPGRADE_NAME, "Assets/ShipUpgrades/ProteinPowder.prefab" },
             { biggerLungScript.UPGRADE_NAME, "Assets/ShipUpgrades/BiggerLungs.prefab" },
             { runningShoeScript.UPGRADE_NAME, "Assets/ShipUpgrades/runningShoes.prefab" },
@@ -47,6 +49,7 @@ namespace MoreShipUpgrades.Misc
             { "Portable Tele", "Assets/ShipUpgrades/TpButton.asset" },
             { "Peeper", "Assets/ShipUpgrades/coilHead.asset" },
             { "Medkit", "Assets/ShipUpgrades/MedKitItem.asset" },
+            { "MedkitMapItem", "Assets/ShipUpgrades/MedKitMapItem.asset" },
             { "Night Vision", "Assets/ShipUpgrades/NightVisionItem.asset" },
 
             { "Break", "Assets/ShipUpgrades/break.mp3" },
@@ -85,6 +88,17 @@ namespace MoreShipUpgrades.Misc
         public static AudioClip TryLoadAudioClipAsset(ref AssetBundle bundle, string path)
         {
             AudioClip result = bundle.LoadAsset<AudioClip>(path);
+            if (result == null)
+            {
+                logger.LogError($"An error has occurred trying to load asset from {path}");
+            }
+            logger.LogDebug($"Loaded asset located in {path}");
+            return result;
+        }
+
+        public static T TryLoadOtherAsset<T>(ref AssetBundle bundle, string path) where T : UnityEngine.Object
+        {
+            T result = bundle.LoadAsset<T>(path);
             if (result == null)
             {
                 logger.LogError($"An error has occurred trying to load asset from {path}");

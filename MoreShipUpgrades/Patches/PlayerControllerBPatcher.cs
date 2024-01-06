@@ -8,6 +8,7 @@ using System.Reflection.Emit;
 using System.Linq;
 using UnityEngine;
 using MoreShipUpgrades.Misc;
+using UnityEngine.InputSystem.Composites;
 
 namespace MoreShipUpgrades.Patches
 {
@@ -15,6 +16,7 @@ namespace MoreShipUpgrades.Patches
     internal class PlayerControllerBPatcher
     {
         internal static LGULogger logger = new LGULogger(nameof(PlayerControllerBPatcher));
+
         [HarmonyPrefix]
         [HarmonyPatch("KillPlayer")]
         private static void DisableUpgradesOnDeath(PlayerControllerB __instance)
@@ -35,7 +37,9 @@ namespace MoreShipUpgrades.Patches
         [HarmonyTranspiler]
         public static IEnumerable<CodeInstruction> DamagePlayerTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            var maximumHealthMethod = typeof(playerHealthScript).GetMethod("CheckForAdditionalHealth", BindingFlags.Public | BindingFlags.Static);
+            MethodInfo maximumHealthMethod = typeof(playerHealthScript).GetMethod("CheckForAdditionalHealth", BindingFlags.Public | BindingFlags.Static);
+            MethodInfo boomboxDefenseMethod = typeof(BeatScript).GetMethod("CalculateDefense", BindingFlags.Public | BindingFlags.Static);
+
             List<CodeInstruction> codes = instructions.ToList();
             /*
              * ldfld int32 GameNetcodeStuff.PlayerControllerB::health
@@ -51,6 +55,10 @@ namespace MoreShipUpgrades.Patches
             bool foundHealthMaximum = false;
             for (int i = 0; i < codes.Count; i++)
             {
+                if (codes[i].opcode == OpCodes.Ldarg_1)
+                {
+                    codes[i] = new CodeInstruction(OpCodes.Ldarg_1, boomboxDefenseMethod);
+                }
                 if (!(codes[i].opcode == OpCodes.Ldc_I4_S && codes[i].operand.ToString() == "100")) continue;
                 if (!(codes[i + 1] != null && codes[i + 1].opcode == OpCodes.Call && codes[i + 1].operand.ToString() == "Int32 Clamp(Int32, Int32, Int32)")) continue;
                 if (!(codes[i + 2] != null && codes[i + 2].opcode == OpCodes.Stfld && codes[i + 2].operand.ToString() == "System.Int32 health")) continue;
@@ -181,6 +189,33 @@ namespace MoreShipUpgrades.Patches
                 }
             }
             instructions = codes.AsEnumerable();
+        }
+
+        [HarmonyPostfix]
+        [HarmonyPatch("Update")]
+        static void CheckForBoomboxes(PlayerControllerB __instance)
+        {
+            if (!UpgradeBus.instance.sickBeats || __instance != GameNetworkManager.Instance.localPlayerController) return;
+            UpgradeBus.instance.boomBoxes.RemoveAll(b => b == null);
+            bool result = false;
+            foreach(BoomboxItem boom in UpgradeBus.instance.boomBoxes)
+            {
+                if (!boom.isPlayingMusic)
+                {
+                    continue;
+                }
+                else if(Vector3.Distance(boom.transform.position, __instance.transform.position) < UpgradeBus.instance.cfg.BEATS_RADIUS)
+                {
+                    result = true;
+                    break;
+                }
+            }
+
+            if(result != UpgradeBus.instance.EffectsActive)
+            {
+                UpgradeBus.instance.EffectsActive = result;
+                BeatScript.HandlePlayerEffects(__instance);
+            }
         }
 
         [HarmonyTranspiler]

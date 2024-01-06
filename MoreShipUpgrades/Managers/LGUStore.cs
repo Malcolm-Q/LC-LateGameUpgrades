@@ -116,6 +116,19 @@ namespace MoreShipUpgrades.Managers
             lguSave.playerSaves[id] = JsonConvert.DeserializeObject<SaveInfo>(json);
         }
 
+        [ServerRpc(RequireOwnership = false)]
+        public void ReqSyncContractDetailsServerRpc(string contractLvl, string contractType)
+        {
+            SyncContractDetailsClientRpc(contractLvl, contractType);
+        }
+
+        [ClientRpc]
+        public void SyncContractDetailsClientRpc(string contractLvl, string contractType)
+        {
+            UpgradeBus.instance.contractLevel = contractLvl;
+            UpgradeBus.instance.contractType = contractType;
+        }
+
         public void HandleSpawns()
         {
             foreach (CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
@@ -310,6 +323,9 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.nightVisionLevel = saveInfo.nightVisionLevel;
             UpgradeBus.instance.playerHealthLevel = saveInfo.playerHealthLevel;
 
+            UpgradeBus.instance.contractLevel = saveInfo.contractLevel;
+            UpgradeBus.instance.contractType = saveInfo.contractType;
+
             StartCoroutine(WaitForUpgradeObject());
         }
 
@@ -469,6 +485,8 @@ namespace MoreShipUpgrades.Managers
         public int legLevel = UpgradeBus.instance.legLevel;
         public int nightVisionLevel = UpgradeBus.instance.nightVisionLevel;
         public int playerHealthLevel = UpgradeBus.instance.playerHealthLevel;
+        public string contractType = UpgradeBus.instance.contractType;
+        public string contractLevel = UpgradeBus.instance.contractLevel;
     }
 
     [Serializable]

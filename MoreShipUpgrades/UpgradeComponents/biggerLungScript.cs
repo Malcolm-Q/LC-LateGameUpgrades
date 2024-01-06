@@ -66,8 +66,8 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public static float ApplyPossibleIncreasedStaminaRegen(float regenValue)
         {
-            if (!UpgradeBus.instance.biggerLungs || UpgradeBus.instance.lungLevel < 0) return regenValue;
-            return regenValue*UpgradeBus.instance.cfg.BIGGER_LUNGS_STAMINA_REGEN_INCREASE;
+            if (!UpgradeBus.instance.biggerLungs || UpgradeBus.instance.lungLevel < 0) return regenValue * UpgradeBus.instance.staminaDrainCoefficient;
+            return (regenValue*UpgradeBus.instance.cfg.BIGGER_LUNGS_STAMINA_REGEN_INCREASE) * UpgradeBus.instance.staminaDrainCoefficient;
         }
 
         public static float ApplyPossibleReducedJumpStaminaCost(float jumpCost)

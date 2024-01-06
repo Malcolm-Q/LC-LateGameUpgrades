@@ -28,7 +28,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         public override void ItemActivate(bool used, bool buttonDown = true)
         {
             base.ItemActivate(used, buttonDown);
-            if (Mouse.current.leftButton.isPressed)
+            if (buttonDown)
             {
                 audio.PlayOneShot(buttonPress);
                 if (!itemUsedUp)

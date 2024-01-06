@@ -2,6 +2,7 @@
 using System;
 using Newtonsoft.Json;
 using MoreShipUpgrades.UpgradeComponents;
+using System.Collections.Generic;
 
 
 namespace MoreShipUpgrades.Misc
@@ -12,6 +13,7 @@ namespace MoreShipUpgrades.Misc
         readonly ConfigFile configFile;
 
         // enabled disabled
+        public bool CONTRACTS_ENABLED { get; set; }
         public bool ADVANCED_TELE_ENABLED { get; set; }
         public bool WEAK_TELE_ENABLED { get; set; }
         public bool BEEKEEPER_ENABLED { get; set; }
@@ -69,6 +71,7 @@ namespace MoreShipUpgrades.Misc
         public int WALKIE_PRICE { get; set; }
         public int LIGHTNING_ROD_PRICE { get; set; }
         public int PLAYER_HEALTH_PRICE { get; set; }
+        public int CONTRACT_PRICE { get; set; }
 
         // attributes
         public float BIGGER_LUNGS_STAMINA_REGEN_INCREASE { get; set; }
@@ -164,6 +167,23 @@ namespace MoreShipUpgrades.Misc
         public int DISCOMBOBULATOR_DAMAGE_INCREASE { get; set; }
         public float STRONG_LEGS_REDUCE_FALL_DAMAGE_MULTIPLIER { get; set; }
         public bool KEEP_UPGRADES_AFTER_FIRED_CUTSCENE { get; set; }
+        public int CONTRACT_BUG_REWARD {  get; set; }
+        public int CONTRACT_BUG_SPAWNS {  get; set; }
+        public int CONTRACT_EXTRACT_REWARD {  get; set; }
+        public float CONTRACT_EXTRACT_WEIGHT {  get; set; }
+        public int CONTRACT_DATA_REWARD {  get; set; }
+        public bool BEATS_INDIVIDUAL { get; set; }
+        public bool BEATS_ENABLED { get; set; }
+        public int BEATS_PRICE { get; set; }
+        public bool BEATS_SPEED { get; set; }
+        public bool BEATS_DMG { get; set; }
+        public bool BEATS_STAMINA { get; set; }
+        public float BEATS_STAMINA_CO { get; set; }
+        public bool BEATS_DEF { get; set; }
+        public float BEATS_DEF_CO { get; set; }
+        public float BEATS_SPEED_INC { get; set; }
+        public float BEATS_RADIUS { get; set; }
+        public int BEATS_DMG_INC { get; set; }
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -177,11 +197,33 @@ namespace MoreShipUpgrades.Misc
 
         public void InitBindings()
         {
-            string topSection = "Misc";
+            string topSection = "Contracts";
+            CONTRACTS_ENABLED = ConfigEntry(topSection, "Enable the ability to purchase contracts / missions", true, "");
+            CONTRACT_PRICE = ConfigEntry(topSection, "Price of a random contract", 500, "");
+            CONTRACT_BUG_REWARD = ConfigEntry(topSection, "Value of an exterminator contract reward", 500, "");
+            CONTRACT_EXTRACT_REWARD = ConfigEntry(topSection, "Value of an extraction contract reward", 500, "");
+            CONTRACT_DATA_REWARD = ConfigEntry(topSection, "Value of a data contract reward", 500, "");
+            CONTRACT_EXTRACT_WEIGHT = ConfigEntry(topSection,"Weight of an extraction human", 2.5f, "Subtract 1 and multiply by 100 (2.5 = 150lbs).");
+            
+            topSection = "Misc";
             SHARED_UPGRADES = ConfigEntry(topSection, "Convert all upgrades to be shared.", true, "Mod is designed to be played with this off.");
             SALE_PERC = ConfigEntry(topSection, "Chance of upgrades going on sale", 0.85f, "0.85 = 15% chance of an upgrade going on sale.");
             INTRO_ENABLED = ConfigEntry(topSection, "Intro Enabled", true, "If true shows a splashscreen with some info once per update of LGU.");
             KEEP_UPGRADES_AFTER_FIRED_CUTSCENE = ConfigEntry(topSection, "Keep upgrades after quota failure", false, "If true, you will keep your upgrades after being fired by The Company.");
+
+            topSection = "Sick Beats";
+            BEATS_ENABLED = ConfigEntry(topSection, "Enable Sick Beats Upgrade", true, "Get buffs from nearby active boomboxes.");
+            BEATS_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            BEATS_PRICE = ConfigEntry(topSection, "Default unlock price", 500, "");
+            BEATS_SPEED = ConfigEntry(topSection, "Enable Speed Boost Effect", true, "");
+            BEATS_DMG = ConfigEntry(topSection, "Enable Damage Boost Effect", true, "");
+            BEATS_STAMINA = ConfigEntry(topSection, "Enable Stamina Boost Effect", false, "");
+            BEATS_DEF = ConfigEntry(topSection, "Enable Defense Boost Effect", false, "");
+            BEATS_DEF_CO = ConfigEntry(topSection, "Defense Boost Coefficient", 0.5f, "Multiplied to incoming damage.");
+            BEATS_STAMINA_CO = ConfigEntry(topSection, "Stamina Regen Coefficient", 1.15f, "Multiplied to stamina regen.");
+            BEATS_DMG_INC = ConfigEntry(topSection, "Additional Damage Dealt", 1, "");
+            BEATS_SPEED_INC = ConfigEntry(topSection, "Speed Boost Addition", 1.25f, "");
+            BEATS_RADIUS = ConfigEntry(topSection, "Effect Radius", 15f, "Radius in unity units players will be effected by an active boombox.");
 
             topSection = "Advanced Portable Teleporter";
             ADVANCED_TELE_ENABLED = ConfigEntry(topSection, "Enable Advanced Portable Teleporter", true, "");

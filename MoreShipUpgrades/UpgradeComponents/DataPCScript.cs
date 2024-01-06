@@ -20,10 +20,12 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public AudioClip error, startup;
         AudioSource audio;
+        InteractTrigger trig;
 
         Text IPText;
         InputField userField, passField, gameField;
         string user, pass, ip;
+        string defaultText;
         string dir = "C:\\WINDOWS";
         static string rootDir = "C:\\WINDOWS";
         List<string> dirs = new List<string>() {
@@ -80,53 +82,77 @@ namespace MoreShipUpgrades.UpgradeComponents
             gameField = root.transform.GetChild(0).GetChild(3).GetChild(0).GetComponent<InputField>();
             root.transform.GetChild(0).GetChild(1).GetChild(2).GetComponent<Button>().onClick.AddListener(Login);
             GetComponent<InteractTrigger>().onInteract.AddListener(Interact);
+            defaultText = gameField.text;
+            gameField.onValueChanged.AddListener(OnChange);
+            trig = GetComponent<InteractTrigger>();
 
             audio = GetComponent<AudioSource>();
 
+            loot.GetComponent<PhysicsProp>().scrapValue = UpgradeBus.instance.cfg.CONTRACT_DATA_REWARD;
+            ScanNodeProperties node = loot.GetComponentInChildren<ScanNodeProperties>();
+            node.scrapValue = UpgradeBus.instance.cfg.CONTRACT_DATA_REWARD;
+            node.subText = $"VALUE: ${node.scrapValue}";
 
-            ip = $"{Random.Range(0, 255)}.{Random.Range(0, 255)}.{Random.Range(0, 255)}.{Random.Range(0, 255)}";
-            IPText.text = IPText.text.Replace("[IP]", ip);
-            user = RandomString();
-            pass = RandomString();
+
+            if(IsHost || IsServer)
+            {
+                ip = $"{Random.Range(0, 255)}.{Random.Range(0, 99)}.{Random.Range(0, 99)}.{Random.Range(0, 255)}";
+                IPText.text = IPText.text.Replace("[IP]", ip);
+                user = RandomString();
+                pass = RandomString();
+                SyncGameDetailsClientRpc(ip, user, pass);
+            }
             AddFiles();
         }
 
-        public void Interact(PlayerControllerB player)
+        void OnChange(string text)
+        {
+            StartCoroutine(PreserveDefaultText(text));
+        }
+
+
+        void Interact(PlayerControllerB player)
         {
             if (interactable)
             {
                 root.SetActive(true);
                 if(IsHost || IsServer)
                 {
-                    InitiateGameClientRpc(new NetworkBehaviourReference(this), ip, user, pass);
+                    InitiateGameClientRpc(new NetworkBehaviourReference(this));
                 }
                 else
                 {
-                    InitiateGameServerRpc(new NetworkBehaviourReference(this), ip, user, pass);
+                    InitiateGameServerRpc(new NetworkBehaviourReference(this));
                 }
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
             }
+            player.playerActions.Disable();
         }
 
         [ServerRpc(RequireOwnership = false)]
-        void InitiateGameServerRpc(NetworkBehaviourReference netRef, string Key, string user, string pass)
+        void InitiateGameServerRpc(NetworkBehaviourReference netRef)
         {
-            InitiateGameClientRpc(netRef, Key, user, pass);
+            InitiateGameClientRpc(netRef);
         }
 
         [ClientRpc]
-        void InitiateGameClientRpc(NetworkBehaviourReference netRef, string Key, string user, string pass)
+        void SyncGameDetailsClientRpc(string Key, string user, string pass)
         {
             logger.LogInfo($"Received Broadcasted minigame info!\nKey: {Key}\nuser: {user}\npassword: {pass}");
             UpgradeBus.instance.DataMinigameKey = Key;
             UpgradeBus.instance.DataMinigameUser = user;
             UpgradeBus.instance.DataMinigamePass = pass;
+        }
+
+        [ClientRpc]
+        void InitiateGameClientRpc(NetworkBehaviourReference netRef)
+        {
             netRef.TryGet(out DataPCScript pcScript);
             if (pcScript != null)
             {
                 pcScript.interactable = false;
-                pcScript.GetComponent<InteractTrigger>().interactable = false;
+                pcScript.trig.interactable = false;
                 pcScript.audio.PlayOneShot(startup);
             }
             else logger.LogError("Unable to resolve netRef!");
@@ -136,12 +162,6 @@ namespace MoreShipUpgrades.UpgradeComponents
         void ExitGameServerRpc(NetworkBehaviourReference netRef, bool succeeded)
         {
             ExitGameClientRpc(netRef, succeeded);
-            if(succeeded)
-            {
-                GameObject go = Instantiate(loot,transform.position + Vector3.up, Quaternion.identity);
-                go.GetComponent<NetworkObject>().Spawn();
-                logger.LogInfo("Loot successfully spawned");
-            }
         }
 
         [ClientRpc]
@@ -162,11 +182,11 @@ namespace MoreShipUpgrades.UpgradeComponents
             }
             if(succeeded)
             {
-                pcScript.GetComponent<InteractTrigger>().disabledHoverTip = "Data has been retrieved!";
+                pcScript.trig.disabledHoverTip = "Data has been retrieved!";
             }
             else
             {
-                pcScript.GetComponent<InteractTrigger>().interactable = true;
+                pcScript.trig.interactable = true;
             }
             root.SetActive(false);
         }
@@ -189,9 +209,11 @@ namespace MoreShipUpgrades.UpgradeComponents
                 if (dir == rootDir)
                 {
                     gameField.text = $"{string.Join("\n", dirs)}\n\n{dir}> ";
+                    defaultText = gameField.text;
                     return;
                 }
                 gameField.text = $"{string.Join("\n", fileDirs.Where(x => x.Contains(dir)))}\n\n{dir}> ";
+                defaultText = gameField.text;
                 return;
             }
             else if (firstWord == "cd")
@@ -199,6 +221,7 @@ namespace MoreShipUpgrades.UpgradeComponents
                 if (secondWord == "")
                 {
                     gameField.text = $"YOU MUST PROVIDE A VALID DIRECTORY TO SWITCH TO\n\n{dir}";
+                    defaultText = gameField.text;
                     return;
                 }
                 if (secondWord == ".." || secondWord == "~")
@@ -206,19 +229,23 @@ namespace MoreShipUpgrades.UpgradeComponents
                     if (dir == rootDir)
                     {
                         gameField.text = $"YOU ARE ALREADY IN THE ROOT DIRECTORY\n\n{dir}> ";
+                        defaultText = gameField.text;
                         return;
                     }
                     dir = rootDir;
                     gameField.text = $"{dir}> ";
+                    defaultText = gameField.text;
                     return;
                 }
                 if (dirs.Contains($"{dir}\\{secondWord}"))
                 {
                     dir = $"{dir}\\{secondWord}";
                     gameField.text = $"{dir}> ";
+                    defaultText = gameField.text;
                     return;
                 }
                 gameField.text = $"{dir}\\{secondWord} IS NOT A VALID DIRECTORY\n\nENTER LS TO VIEW DIRECTORIES\n\n{dir}> ";
+                defaultText = gameField.text;
                 return;
             }
             else if (firstWord == "mv")
@@ -226,6 +253,7 @@ namespace MoreShipUpgrades.UpgradeComponents
                 if (secondWord == "")
                 {
                     gameField.text = $"YOU MUST PROVIDE A VALID FILE TO MOVE\n\n{dir}";
+                    defaultText = gameField.text;
                     return;
                 }
                 if (secondWord == "survey.db")
@@ -233,6 +261,7 @@ namespace MoreShipUpgrades.UpgradeComponents
                     if (fileDirs.Contains($"{dir}\\survey.db"))
                     {
                         logger.LogInfo("Minigame completed, spawning loot and exiting...");
+                        GameNetworkManager.Instance.localPlayerController.playerActions.Enable();
                         if(IsHost || IsServer)
                         {
                             ExitGameClientRpc(new NetworkBehaviourReference(this), true);
@@ -249,17 +278,22 @@ namespace MoreShipUpgrades.UpgradeComponents
                     else
                     {
                         gameField.text = $"{dir}\\survey.db does not exist\n\n{dir}> ";
+                        defaultText = gameField.text;
                         return;
                     }
                 }
                 if (fileDirs.Contains($"{dir}\\{secondWord}"))
                 {
                     gameField.text = $"{dir}\\{secondWord} IS NOT A FILE OF INTEREST\n\n{dir}> ";
+                    defaultText = gameField.text;
                     return;
                 }
                 gameField.text = $"{dir}\\{secondWord} IS NOT A VALID FILE\n\nENTER LS TO VIEW FILES\n\n{dir}> ";
+                defaultText = gameField.text;
+                return;
             }
             gameField.text = $"{firstWord} {secondWord} WAS NOT RECOGNIZED AS A COMMAND\n\nCOMMANDS ARE :\nLS\nMV\nMV\n\n{dir}> ";
+            defaultText = gameField.text;
         }
 
         public void Login()
@@ -324,13 +358,13 @@ namespace MoreShipUpgrades.UpgradeComponents
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
                 interactable = true;
+                GameNetworkManager.Instance.localPlayerController.playerActions.Enable();
                 if(IsHost || IsServer)
                 {
                     ExitGameClientRpc(new NetworkBehaviourReference(this), false);
                 }
                 else
                 {
-
                     ExitGameServerRpc(new NetworkBehaviourReference(this), false);
                 }
             }
@@ -338,8 +372,18 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         private IEnumerator MoveCaret()
         {
-            yield return new WaitForEndOfFrame();
+            yield return null;
             gameField.caretPosition = gameField.text.Length;
+        }
+
+        private IEnumerator PreserveDefaultText(string text)
+        {
+            yield return null;
+            if (!text.Contains(defaultText))
+            {
+                gameField.text = defaultText;
+                gameField.caretPosition = defaultText.Length;
+            }
         }
     }
 }
