@@ -8,38 +8,48 @@ namespace MoreShipUpgrades.UpgradeComponents
     internal class biggerLungScript : BaseUpgrade
     {
         PlayerControllerB localPlayer;
-        private static LGULogger logger = new LGULogger(UPGRADE_NAME);
+        private static LGULogger logger;
         public static string UPGRADE_NAME = "Bigger Lungs";
         public static string PRICES_DEFAULT = "350,450,550";
+        private int currentLevel = 0; // For "Load LGU" issues
+        private bool active = false;
+
+
 
         void Start()
         {
             upgradeName = UPGRADE_NAME;
+            logger = new LGULogger(UPGRADE_NAME);
             DontDestroyOnLoad(gameObject);
             Register();
         }
 
         public override void Increment()
         {
-            UpgradeBus.instance.lungLevel++;
             PlayerControllerB player = GetLocalPlayer();
             player.sprintTime += UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT;
+            UpgradeBus.instance.lungLevel++;
+            currentLevel++;
         }
 
         public override void load()
         {
             PlayerControllerB player = GetLocalPlayer();
-            player.sprintTime += UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE_UNLOCK;
+            if (!active) player.sprintTime += UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE_UNLOCK;
             UpgradeBus.instance.biggerLungs = true;
+            active = true;
             base.load();
 
             float amountToIncrement = 0;
-            for(int i = 0; i < UpgradeBus.instance.lungLevel; i++)
+            for(int i = 1; i < UpgradeBus.instance.lungLevel+1; i++)
             {
+                if (i <= currentLevel) continue;
+                logger.LogDebug($"Adding {UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT} to the player's sprint time...");
                 amountToIncrement += UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT;
             }
 
             localPlayer.sprintTime += amountToIncrement;
+            currentLevel = UpgradeBus.instance.lungLevel;
         }
 
         public override void Unwind()
@@ -49,6 +59,9 @@ namespace MoreShipUpgrades.UpgradeComponents
             base.Unwind();
 
             UpgradeBus.instance.biggerLungs = false;
+            UpgradeBus.instance.lungLevel = 0;
+            active = false;
+            currentLevel = 0;
         }
 
         public override void Register()
