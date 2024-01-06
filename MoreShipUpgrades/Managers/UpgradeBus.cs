@@ -62,6 +62,7 @@ namespace MoreShipUpgrades.Managers
         public GameObject modStorePrefab;
         public TerminalNode modStoreInterface;
         public Terminal terminal;
+        public PlayerControllerB localPlayer;
 
         public List<CustomTerminalNode> terminalNodes = new List<CustomTerminalNode>();
 
@@ -119,7 +120,11 @@ namespace MoreShipUpgrades.Managers
 
             return terminal;
         }
-
+        public PlayerControllerB GetLocalPlayer()
+        {
+            if (localPlayer == null) localPlayer = GameNetworkManager.Instance.localPlayerController;
+            return localPlayer;
+        }
         public TerminalNode ConstructNode()
         {
             modStoreInterface = ScriptableObject.CreateInstance<TerminalNode>();
@@ -142,6 +147,7 @@ namespace MoreShipUpgrades.Managers
 
         public void ResetAllValues(bool wipeObjRefs = true)
         {
+            ResetPlayerAttributes();
             DestroyTraps = false;
             scannerUpgrade = false;
             nightVision = false;
@@ -185,13 +191,18 @@ namespace MoreShipUpgrades.Managers
                 node.CurrentUpgrade = 0;
                 if(node.Name == nightVisionScript.UPGRADE_NAME) { node.Unlocked = true; }
             }
-            PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
-            foreach (PlayerControllerB player in players)
-            {
-                player.movementSpeed = 4.6f;
-                player.sprintTime = 11;
-                player.jumpForce = 13;
-            }
+
+        }
+
+        private void ResetPlayerAttributes()
+        {
+            PlayerControllerB player = GameNetworkManager.Instance.localPlayerController;
+            if (player == null) return; // Disconnecting the game
+
+            logger.LogDebug($"Resetting {player.playerUsername}'s attributes");
+            if (runningShoes) runningShoeScript.ResetRunningShoesBuff(ref player);
+            if (biggerLungs) biggerLungScript.ResetBiggerLungsBuff(ref player);
+            if (strongLegs) strongLegsScript.ResetStrongLegsBuff(ref player);
         }
 
         internal void GenerateSales(int seed = -1)

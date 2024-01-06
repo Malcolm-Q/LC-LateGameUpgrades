@@ -1,4 +1,5 @@
-﻿using MoreShipUpgrades.Managers;
+﻿using GameNetcodeStuff;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using UnityEngine;
 
@@ -10,7 +11,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         private static LGULogger logger;
         public static string PRICES_DEFAULT = "500,750,1000";
         private int currentLevel = 0; // For "Load LGU" issues
-        private bool active = false;
+        private static bool active = false;
         void Start()
         {
             upgradeName = UPGRADE_NAME;
@@ -21,7 +22,9 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public override void Increment()
         {
-            GameNetworkManager.Instance.localPlayerController.movementSpeed += UpgradeBus.instance.cfg.MOVEMENT_INCREMENT;
+            PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
+            player.movementSpeed += UpgradeBus.instance.cfg.MOVEMENT_INCREMENT;
+            logger.LogDebug($"Adding {UpgradeBus.instance.cfg.MOVEMENT_INCREMENT} to the player's movement speed...");
             UpgradeBus.instance.runningLevel++;
             currentLevel++;
         }
@@ -29,8 +32,8 @@ namespace MoreShipUpgrades.UpgradeComponents
         public override void Unwind()
         {
             base.Unwind();
-
-            GameNetworkManager.Instance.localPlayerController.movementSpeed -= (UpgradeBus.instance.cfg.MOVEMENT_SPEED_UNLOCK + (UpgradeBus.instance.runningLevel * UpgradeBus.instance.cfg.MOVEMENT_INCREMENT));
+            PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
+            if (UpgradeBus.instance.runningShoes) ResetRunningShoesBuff(ref player);
             UpgradeBus.instance.runningShoes = false;
             UpgradeBus.instance.runningLevel = 0;
             active = false;
@@ -46,7 +49,12 @@ namespace MoreShipUpgrades.UpgradeComponents
             base.load();
 
             UpgradeBus.instance.runningShoes = true;
-            if (!active) GameNetworkManager.Instance.localPlayerController.movementSpeed += UpgradeBus.instance.cfg.MOVEMENT_SPEED_UNLOCK;
+            PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
+            if (!active)
+            {
+                logger.LogDebug($"Adding {UpgradeBus.instance.cfg.MOVEMENT_SPEED_UNLOCK} to the player's movement speed...");
+                player.movementSpeed += UpgradeBus.instance.cfg.MOVEMENT_SPEED_UNLOCK;
+            }
 
             float amountToIncrement = 0;
             for(int i = 1; i < UpgradeBus.instance.runningLevel+1; i++)
@@ -56,12 +64,23 @@ namespace MoreShipUpgrades.UpgradeComponents
                 logger.LogDebug($"Adding {UpgradeBus.instance.cfg.MOVEMENT_INCREMENT} to the player's movement speed...");
                 amountToIncrement += UpgradeBus.instance.cfg.MOVEMENT_INCREMENT;
             }
-
-            GameNetworkManager.Instance.localPlayerController.movementSpeed += amountToIncrement;
+            logger.LogDebug($"Adding player's movement speed ({player.movementSpeed}) with {amountToIncrement}");
+            player.movementSpeed += amountToIncrement;
             active = true;
             currentLevel = UpgradeBus.instance.runningLevel;
         }
-
+        public static void ResetRunningShoesBuff(ref PlayerControllerB player)
+        {
+            float movementSpeedRemoval = UpgradeBus.instance.cfg.MOVEMENT_SPEED_UNLOCK;
+            for (int i = 0; i < UpgradeBus.instance.runningLevel; i++)
+            {
+                movementSpeedRemoval += UpgradeBus.instance.cfg.MOVEMENT_INCREMENT;
+            }
+            logger.LogDebug($"Removing {player.playerUsername}'s movement speed boost ({player.movementSpeed}) with a boost of {movementSpeedRemoval}");
+            player.movementSpeed -= movementSpeedRemoval;
+            logger.LogDebug($"Upgrade reset on {player.playerUsername}");
+            active = false;
+        }
         public static float ApplyPossibleReducedNoiseRange(float defaultValue)
         {
             if (!(UpgradeBus.instance.runningShoes && UpgradeBus.instance.runningLevel == UpgradeBus.instance.cfg.RUNNING_SHOES_UPGRADE_PRICES.Split(',').Length)) return defaultValue;

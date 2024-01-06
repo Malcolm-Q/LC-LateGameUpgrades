@@ -4,3 +4,4 @@ MoreShipUpgrades/Properties/
 /.vs/
 MoreShipUpgrades/MoreShipUpgrades.csproj
 NetcodePatcher-2.4.0/
+**.user

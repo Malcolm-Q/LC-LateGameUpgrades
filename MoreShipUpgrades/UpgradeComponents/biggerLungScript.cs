@@ -7,14 +7,11 @@ namespace MoreShipUpgrades.UpgradeComponents
 {
     internal class biggerLungScript : BaseUpgrade
     {
-        PlayerControllerB localPlayer;
         private static LGULogger logger;
         public static string UPGRADE_NAME = "Bigger Lungs";
         public static string PRICES_DEFAULT = "350,450,550";
         private int currentLevel = 0; // For "Load LGU" issues
-        private bool active = false;
-
-
+        private static bool active = false;
 
         void Start()
         {
@@ -26,16 +23,21 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public override void Increment()
         {
-            PlayerControllerB player = GetLocalPlayer();
+            PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
             player.sprintTime += UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT;
+            logger.LogDebug($"Adding {UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT} to the player's sprint time...");
             UpgradeBus.instance.lungLevel++;
             currentLevel++;
         }
 
         public override void load()
         {
-            PlayerControllerB player = GetLocalPlayer();
-            if (!active) player.sprintTime += UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE_UNLOCK;
+            PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
+            if (!active)
+            {
+                logger.LogDebug($"Adding {UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE_UNLOCK} to the player's sprint time...");
+                player.sprintTime += UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE_UNLOCK;
+            }
             UpgradeBus.instance.biggerLungs = true;
             active = true;
             base.load();
@@ -48,14 +50,14 @@ namespace MoreShipUpgrades.UpgradeComponents
                 amountToIncrement += UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT;
             }
 
-            localPlayer.sprintTime += amountToIncrement;
+            player.sprintTime += amountToIncrement;
             currentLevel = UpgradeBus.instance.lungLevel;
         }
 
         public override void Unwind()
         {
-            PlayerControllerB player = GetLocalPlayer();
-            player.sprintTime -= (UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE_UNLOCK + (UpgradeBus.instance.lungLevel * UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT));
+            PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
+            if (active) ResetBiggerLungsBuff(ref player);
             base.Unwind();
 
             UpgradeBus.instance.biggerLungs = false;
@@ -63,19 +65,22 @@ namespace MoreShipUpgrades.UpgradeComponents
             active = false;
             currentLevel = 0;
         }
-
         public override void Register()
         {
             base.Register();
         }
-
-        private PlayerControllerB GetLocalPlayer()
+        public static void ResetBiggerLungsBuff(ref PlayerControllerB player)
         {
-            if (localPlayer == null) localPlayer = GameNetworkManager.Instance.localPlayerController;
-
-            return localPlayer;
+            float sprintTimeRemoval = UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE_UNLOCK;
+            for (int i = 0; i < UpgradeBus.instance.lungLevel; i++)
+            {
+                sprintTimeRemoval += UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT;
+            }
+            logger.LogDebug($"Removing {player.playerUsername}'s sprint time boost ({player.sprintTime}) with a boost of {sprintTimeRemoval}");
+            player.sprintTime -= sprintTimeRemoval;
+            logger.LogDebug($"Upgrade reset on {player.playerUsername}");
+            active = false;
         }
-
         public static float ApplyPossibleIncreasedStaminaRegen(float regenValue)
         {
             if (!UpgradeBus.instance.biggerLungs || UpgradeBus.instance.lungLevel < 0) return regenValue;
