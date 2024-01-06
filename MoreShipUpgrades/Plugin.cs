@@ -72,7 +72,6 @@ namespace MoreShipUpgrades
             
             SetupPerks();
 
-
             harmony.PatchAll();
 
             mls.LogDebug("LGU has been patched");
