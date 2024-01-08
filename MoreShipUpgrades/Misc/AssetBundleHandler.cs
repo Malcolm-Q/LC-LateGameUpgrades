@@ -51,7 +51,11 @@ namespace MoreShipUpgrades.Misc
             { "Medkit", "Assets/ShipUpgrades/MedKitItem.asset" },
             { "MedkitMapItem", "Assets/ShipUpgrades/MedKitMapItem.asset" },
             { "Night Vision", "Assets/ShipUpgrades/NightVisionItem.asset" },
+            { "HelmetItem", "Assets/ShipUpgrades/HelmetItem.asset" },
+            { "HelmetModel", "Assets/ShipUpgrades/HelmetModel.prefab" },
 
+            { "HelmetHit", "Assets/ShipUpgrades/bonk.mp3" },
+            { "breakWood", "Assets/ShipUpgrades/breakWood.mp3" },
             { "Break", "Assets/ShipUpgrades/break.mp3" },
             { "Error", "Assets/ShipUpgrades/error.mp3" },
             { "Button Press", "Assets/ShipUpgrades/ButtonPress2.ogg" },

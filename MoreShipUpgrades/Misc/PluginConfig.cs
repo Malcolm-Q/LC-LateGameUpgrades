@@ -184,6 +184,9 @@ namespace MoreShipUpgrades.Misc
         public float BEATS_SPEED_INC { get; set; }
         public float BEATS_RADIUS { get; set; }
         public int BEATS_DMG_INC { get; set; }
+        public bool HELMET_ENABLED { get; set; }
+        public int HELMET_PRICE { get; set; }
+        public int HELMET_HITS_BLOCKED { get; set; }
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -210,6 +213,11 @@ namespace MoreShipUpgrades.Misc
             SALE_PERC = ConfigEntry(topSection, "Chance of upgrades going on sale", 0.85f, "0.85 = 15% chance of an upgrade going on sale.");
             INTRO_ENABLED = ConfigEntry(topSection, "Intro Enabled", true, "If true shows a splashscreen with some info once per update of LGU.");
             KEEP_UPGRADES_AFTER_FIRED_CUTSCENE = ConfigEntry(topSection, "Keep upgrades after quota failure", false, "If true, you will keep your upgrades after being fired by The Company.");
+
+            topSection = "Helmet";
+            HELMET_ENABLED = ConfigEntry(topSection, "Enable the helmet for purchase", true, "");
+            HELMET_PRICE = ConfigEntry(topSection, "Price of the helmet", 750, "");
+            HELMET_HITS_BLOCKED = ConfigEntry(topSection, "Amount of hits blocked by helmet", 2, "");
 
             topSection = "Sick Beats";
             BEATS_ENABLED = ConfigEntry(topSection, "Enable Sick Beats Upgrade", true, "Get buffs from nearby active boomboxes.");

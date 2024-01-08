@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System.Collections;
 using MoreShipUpgrades.UpgradeComponents;
 using System.Linq;
+using GameNetcodeStuff;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -17,6 +18,7 @@ namespace MoreShipUpgrades.Managers
         public SaveInfo saveInfo;
         public LGUSave lguSave;
         private ulong playerID = 0;
+        private static LGULogger logger;
 
         private static Dictionary<string, Func<SaveInfo, bool>> conditions = new Dictionary<string, Func<SaveInfo, bool>>
         {
@@ -294,6 +296,7 @@ namespace MoreShipUpgrades.Managers
                 }
                 saveInfo = lguSave.playerSaves[playerID];
             }
+            bool oldHelmet = UpgradeBus.instance.wearingHelmet;
             UpgradeBus.instance.DestroyTraps = saveInfo.DestroyTraps;
             UpgradeBus.instance.scannerUpgrade = saveInfo.scannerUpgrade;
             UpgradeBus.instance.nightVision = saveInfo.nightVision;
@@ -309,6 +312,7 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.pager = saveInfo.pager;
             UpgradeBus.instance.hunter = saveInfo.hunter;
             UpgradeBus.instance.playerHealth = saveInfo.playerHealth;
+            UpgradeBus.instance.wearingHelmet = saveInfo.wearingHelmet;
 
             UpgradeBus.instance.beeLevel = saveInfo.beeLevel;
             UpgradeBus.instance.huntLevel = saveInfo.huntLevel;
@@ -325,6 +329,11 @@ namespace MoreShipUpgrades.Managers
 
             UpgradeBus.instance.contractLevel = saveInfo.contractLevel;
             UpgradeBus.instance.contractType = saveInfo.contractType;
+
+            if(oldHelmet != UpgradeBus.instance.wearingHelmet)
+            {
+                ReqSpawnAndMoveHelmetServerRpc(new NetworkObjectReference(GameNetworkManager.Instance.localPlayerController.gameObject), GameNetworkManager.Instance.localPlayerController.playerClientId);
+            }
 
             StartCoroutine(WaitForUpgradeObject());
         }
@@ -451,6 +460,68 @@ namespace MoreShipUpgrades.Managers
             GameObject go = Instantiate(UpgradeBus.instance.nightVisionPrefab, position + Vector3.up, Quaternion.identity);
             go.GetComponent<NetworkObject>().Spawn();
         }
+
+        [ClientRpc]
+        public void DestroyHelmetClientRpc(ulong id)
+        {
+            if(StartOfRound.Instance.allPlayerObjects.Length <= (int)id)
+            {
+                logger.LogError($"ID: {id} can not be used to index allPlayerObjects! (Length: {StartOfRound.Instance.allPlayerObjects.Length})");
+                return;
+            }
+
+            GameObject player = StartOfRound.Instance.allPlayerObjects[(int)id];
+            if (player == null) 
+            {
+                logger.LogError("Player is with helmet is null!");
+                return;
+            }
+            if (player.GetComponent<PlayerControllerB>().IsOwner) return; // owner doesn't have model
+
+            Transform helmet = player.transform.GetChild(0).GetChild(3).GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetChild(2).Find("HelmetModel(Clone)");
+            if(helmet == null)
+            {
+                logger.LogError("Unable to find 'HelmetModel(Clone) on player!");
+                return;
+            }
+            Destroy(helmet.gameObject); // this isn't a netobj hence the client side destruction
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void ReqDestroyHelmetServerRpc(ulong id)
+        {
+            DestroyHelmetClientRpc(id);
+        }
+
+        [ClientRpc]
+        internal void SpawnAndMoveHelmetClientRpc(NetworkObjectReference netRef, ulong id)
+        {
+            netRef.TryGet(out NetworkObject obj);
+            if (obj == null || obj.IsOwner) return;
+            Transform head = obj.transform.GetChild(0).GetChild(3).GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetChild(2); // phenomenal
+            GameObject go = Instantiate(UpgradeBus.instance.helmetModel, head);
+            go.transform.localPosition = new Vector3(0.01f,0.1f,0.08f);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        internal void ReqSpawnAndMoveHelmetServerRpc(NetworkObjectReference netRef, ulong id)
+        {
+            SpawnAndMoveHelmetClientRpc(netRef, id);
+        }
+
+        [ClientRpc]
+        internal void PlayAudioOnPlayerClientRpc(NetworkBehaviourReference netRef, string clip)
+        {
+            netRef.TryGet(out PlayerControllerB player);
+            if (player == null) return;
+            player.GetComponentInChildren<AudioSource>().PlayOneShot(UpgradeBus.instance.SFX[clip]);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        internal void ReqPlayAudioOnPlayerServerRpc(NetworkBehaviourReference netRef, string clip)
+        {
+            PlayAudioOnPlayerClientRpc(netRef, clip);
+        }
     }
 
     [Serializable]
@@ -473,6 +544,7 @@ namespace MoreShipUpgrades.Managers
         public bool pager = UpgradeBus.instance.pager;
         public bool hunter = UpgradeBus.instance.hunter;
         public bool playerHealth = UpgradeBus.instance.playerHealth;
+        public bool wearingHelmet = UpgradeBus.instance.wearingHelmet;
 
         public int beeLevel = UpgradeBus.instance.beeLevel;
         public int huntLevel = UpgradeBus.instance.huntLevel;

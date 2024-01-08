@@ -1,14 +1,13 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
-using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents
 {
     public class BeatScript : BaseUpgrade
     {
         public static string UPGRADE_NAME = "Sick Beats";
-        static float PreviousMovementSpeed;
+        public static float PreviousMovementSpeed;
 
         void Start()
         {

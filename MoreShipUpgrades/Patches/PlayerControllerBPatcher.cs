@@ -8,7 +8,8 @@ using System.Reflection.Emit;
 using System.Linq;
 using UnityEngine;
 using MoreShipUpgrades.Misc;
-using UnityEngine.InputSystem.Composites;
+using Unity.Netcode;
+using System.Diagnostics;
 
 namespace MoreShipUpgrades.Patches
 {
@@ -31,6 +32,10 @@ namespace MoreShipUpgrades.Patches
                 if (!UpgradeBus.instance.cfg.NIGHT_VISION_DROP_ON_DEATH) return;
                 LGUStore.instance.SpawnNightVisionItemOnDeathServerRpc(__instance.transform.position);
             }
+            UpgradeBus.instance.staminaDrainCoefficient = 1f;
+            UpgradeBus.instance.incomingDamageCoefficient = 1f;
+            UpgradeBus.instance.damageBoost = 0;
+            __instance.movementSpeed = BeatScript.PreviousMovementSpeed;
         }
 
         [HarmonyPatch("DamagePlayer")]
@@ -71,6 +76,34 @@ namespace MoreShipUpgrades.Patches
             }
             if (!foundHealthMaximum) Plugin.mls.LogError("Could not find the maximum of Mathf.Clamp that changes the health value");
             return codes.AsEnumerable();
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch("DamagePlayer")]
+        static bool WeDoALittleReturningFalse(PlayerControllerB __instance)
+        {
+            if (!__instance.IsOwner || __instance.isPlayerDead || !__instance.AllowPlayerDeath()) return true;
+            if(UpgradeBus.instance.wearingHelmet)
+            {
+                UpgradeBus.instance.helmetHits--;
+                if(UpgradeBus.instance.helmetHits <= 0)
+                {
+                    UpgradeBus.instance.wearingHelmet = false;
+                    UnityEngine.Debug.Log(__instance.IsHost);
+                    if(__instance.IsHost || __instance.IsServer)LGUStore.instance.DestroyHelmetClientRpc(__instance.playerClientId);
+                    else LGUStore.instance.ReqDestroyHelmetServerRpc(__instance.playerClientId);
+                    if(__instance.IsHost || __instance.IsServer) LGUStore.instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(__instance),"breakWood");
+                    else LGUStore.instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(__instance),"breakWood");
+                }
+                else
+                {
+                    if(__instance.IsHost || __instance.IsServer) LGUStore.instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(__instance),"helmet");
+                    else LGUStore.instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(__instance),"helmet");
+                }
+                StackTrace trace = new StackTrace();
+                return false;
+            }
+            return true;
         }
 
         [HarmonyTranspiler]

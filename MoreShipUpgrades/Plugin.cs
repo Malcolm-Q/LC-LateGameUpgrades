@@ -24,6 +24,7 @@ namespace MoreShipUpgrades
         public static Plugin instance;
         public static ManualLogSource mls;
         private AudioClip itemBreak, buttonPressed, error;
+        private AudioClip helmetBlockSound;
 
         public static PluginConfig cfg { get; private set; }
 
@@ -218,6 +219,7 @@ namespace MoreShipUpgrades
             SetupMedkit();
             SetupPeeper();
             SetupSamples();
+            SetupHelmet();
             SetupDivingKit(ref UpgradeBus.instance.UpgradeAssets);
         }
         private void SetupSamples()
@@ -244,6 +246,29 @@ namespace MoreShipUpgrades
 
             SetupRegularTeleporterButton();
             SetupAdvancedTeleporterButton();
+        }
+
+        private void SetupHelmet()
+        {
+            Item helmet = AssetBundleHandler.GetItemObject("HelmetItem");
+            UpgradeBus.instance.helmetModel = AssetBundleHandler.GetPerkGameObject("HelmetModel");
+            if (helmet == null) return;
+
+            UpgradeBus.instance.SFX.Add("helmet",AssetBundleHandler.GetAudioClip("HelmetHit"));
+            UpgradeBus.instance.SFX.Add("breakWood",AssetBundleHandler.GetAudioClip("breakWood"));
+
+            HelmetScript helmScript = helmet.spawnPrefab.AddComponent<HelmetScript>();
+            helmScript.itemProperties = helmet;
+            helmScript.grabbable = true;
+            helmScript.grabbableToEnemies = true;
+            helmet.creditsWorth = cfg.HELMET_PRICE;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(helmet.spawnPrefab);
+
+            if (!cfg.HELMET_ENABLED) return;
+
+            TerminalNode node = ScriptableObject.CreateInstance<TerminalNode>();
+            node.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Helmet"), cfg.HELMET_HITS_BLOCKED);
+            Items.RegisterShopItem(helmet, null, null, node, helmet.creditsWorth);
         }
         private void SetupRegularTeleporterButton()
         {

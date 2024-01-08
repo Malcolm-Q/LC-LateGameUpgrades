@@ -17,6 +17,7 @@ namespace MoreShipUpgrades.Managers
 
         public bool DestroyTraps = false;
         public bool scannerUpgrade = false;
+        public bool wearingHelmet = false;
         public bool nightVision = false;
         public bool nightVisionActive = false;
         public float nightVisRange;
@@ -36,6 +37,7 @@ namespace MoreShipUpgrades.Managers
         public bool playerHealth = false;
 
         public int lungLevel = 0;
+        public int helmetHits = 0;
         public int huntLevel = 0;
         public int proteinLevel = 0;
         public int beeLevel = 0;
@@ -117,6 +119,9 @@ namespace MoreShipUpgrades.Managers
         public int damageBoost;
         public GameObject BoomboxIcon;
         public bool EffectsActive;
+        public GameObject helmetModel;
+        public HelmetScript helmetScript;
+        public Dictionary<string, AudioClip> SFX = new Dictionary<string, AudioClip>();
 
         void Awake()
         {
