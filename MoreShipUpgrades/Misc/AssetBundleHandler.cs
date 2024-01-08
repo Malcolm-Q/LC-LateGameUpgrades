@@ -50,6 +50,7 @@ namespace MoreShipUpgrades.Misc
             { "Medkit", "Assets/ShipUpgrades/MedKitItem.asset" },
             { "Night Vision", "Assets/ShipUpgrades/NightVisionItem.asset" },
             { "Diving Kit", "Assets/ShipUpgrades/DivingKitItem.asset" },
+            { "Wheelbarrow", "Assets/ShipUpgrades/Items/WheelbarrowItem.asset" },
 
             { "Break", "Assets/ShipUpgrades/break.mp3" },
             { "Error", "Assets/ShipUpgrades/error.mp3" },

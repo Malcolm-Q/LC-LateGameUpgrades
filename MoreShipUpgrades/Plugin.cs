@@ -4,14 +4,14 @@ using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using LethalLib.Modules;
-using MoreShipUpgrades.UpgradeComponents;
 using MoreShipUpgrades.Managers;
 using System.IO;
 using System.Reflection;
 using MoreShipUpgrades.Misc;
 using BepInEx.Bootstrap;
 using Newtonsoft.Json;
+using MoreShipUpgrades.Patches;
+using MoreShipUpgrades.UpgradeComponents;
 
 namespace MoreShipUpgrades
 {
@@ -126,6 +126,7 @@ namespace MoreShipUpgrades
             SetupPeeper();
             SetupSamples();
             SetupDivingKit();
+            SetupWheelbarrow();
         }
         private void SetupSamples()
         {
@@ -196,7 +197,7 @@ namespace MoreShipUpgrades
 
             TerminalNode PortNode = ScriptableObject.CreateInstance<TerminalNode>();
             PortNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Portable Tele"), (int)(cfg.CHANCE_TO_BREAK * 100));
-            Items.RegisterShopItem(tpBut, null, null, PortNode, tpBut.creditsWorth);
+            LethalLib.Modules.Items.RegisterShopItem(tpBut, null, null, PortNode, tpBut.creditsWorth);
         }
         private void SetupAdvancedTeleporterButton()
         {
@@ -220,7 +221,7 @@ namespace MoreShipUpgrades
 
             TerminalNode advNode = ScriptableObject.CreateInstance<TerminalNode>();
             advNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Advanced Portable Tele"), (int)(cfg.ADV_CHANCE_TO_BREAK * 100));
-            Items.RegisterShopItem(tpButAdvanced, null, null, advNode, tpButAdvanced.creditsWorth);
+            LethalLib.Modules.Items.RegisterShopItem(tpButAdvanced, null, null, advNode, tpButAdvanced.creditsWorth);
         }
 
         private void SetupNightVision()
@@ -245,7 +246,7 @@ namespace MoreShipUpgrades
             string grantStatus = cfg.NIGHT_VISION_INDIVIDUAL || UpgradeBus.instance.cfg.SHARED_UPGRADES ? "one" : "all";
             string loseOnDeath = cfg.LOSE_NIGHT_VIS_ON_DEATH ? "be" : "not be";
             nightNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Night Vision"), grantStatus, loseOnDeath);
-            Items.RegisterShopItem(nightVisionItem, null, null, nightNode, nightVisionItem.creditsWorth);
+            LethalLib.Modules.Items.RegisterShopItem(nightVisionItem, null, null, nightNode, nightVisionItem.creditsWorth);
         }
         private void SetupDivingKit()
         {
@@ -268,7 +269,7 @@ namespace MoreShipUpgrades
             TerminalNode medNode = ScriptableObject.CreateInstance<TerminalNode>();
             string hands = cfg.DIVEKIT_TWO_HANDED ? "two" : "one";
             medNode.displayText = $"DIVING KIT - ${cfg.DIVEKIT_PRICE}\n\nBreath underwater.\nWeights {Mathf.RoundToInt((DiveItem.weight -1 )*100)} lbs and is {hands} handed.\n\n";
-            Items.RegisterShopItem(DiveItem, null, null,medNode, DiveItem.creditsWorth);
+            LethalLib.Modules.Items.RegisterShopItem(DiveItem, null, null,medNode, DiveItem.creditsWorth);
         }
         private void SetupMedkit()
         {
@@ -291,7 +292,7 @@ namespace MoreShipUpgrades
 
             TerminalNode medNode = ScriptableObject.CreateInstance<TerminalNode>();
             medNode.displayText = string.Format("MEDKIT - ${0}\n\nLeft click to heal yourself for {1} health.\nCan be used {2} times.\n", cfg.MEDKIT_PRICE, cfg.MEDKIT_HEAL_VALUE, cfg.MEDKIT_USES);
-            Items.RegisterShopItem(MedKitItem, null, null,medNode, MedKitItem.creditsWorth);
+            LethalLib.Modules.Items.RegisterShopItem(MedKitItem, null, null,medNode, MedKitItem.creditsWorth);
         }
         private void SetupPeeper()
         {
@@ -300,7 +301,7 @@ namespace MoreShipUpgrades
 
             Peeper.creditsWorth = cfg.PEEPER_PRICE;
             Peeper.twoHanded = false;
-            Peeper.itemId = 492015;
+            Peeper.itemId = 492017;
             Peeper.twoHandedAnimation = false;
             Peeper.spawnPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             coilHeadItem peepScript = Peeper.spawnPrefab.AddComponent<coilHeadItem>();
@@ -313,7 +314,30 @@ namespace MoreShipUpgrades
 
             TerminalNode peepNode = ScriptableObject.CreateInstance<TerminalNode>();
             peepNode.displayText = "Looks at coil heads, don't lose it\n";
-            Items.RegisterShopItem(Peeper, null, null, peepNode, Peeper.creditsWorth);
+            LethalLib.Modules.Items.RegisterShopItem(Peeper, null, null, peepNode, Peeper.creditsWorth);
+        }
+        private void SetupWheelbarrow()
+        {
+            Item wheelbarrow = AssetBundleHandler.GetItemObject("Wheelbarrow");
+            if (wheelbarrow == null) return;
+
+            wheelbarrow.itemId = 492018;
+            wheelbarrow.creditsWorth = cfg.WHEELBARROW_PRICE;
+            wheelbarrow.twoHanded = true;
+            wheelbarrow.twoHandedAnimation = false;
+            wheelbarrow.spawnPrefab.transform.localScale = new Vector3(1f, 1f, 1f); // TODO Change when model created
+            wheelbarrow.rotationOffset = new Vector3(0f, 90f, 0f); // TODO Change when model created
+            wheelbarrow.allowDroppingAheadOfPlayer = true;
+            wheelbarrow.isConductiveMetal = true;
+            WheelbarrowScript barrowScript = wheelbarrow.spawnPrefab.AddComponent<WheelbarrowScript>();
+            barrowScript.itemProperties = wheelbarrow;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
+
+            if (!cfg.WHEELBARROW_ENABLED) return;
+
+            TerminalNode wheelbarrowNode = ScriptableObject.CreateInstance<TerminalNode>();
+            wheelbarrowNode.displayText = $"A portable container which has a maximum capacity of {cfg.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS} and reduces the effective weight of the inserted items by {cfg.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER*100} %";
+            LethalLib.Modules.Items.RegisterShopItem(wheelbarrow, null, null, wheelbarrowNode, wheelbarrow.creditsWorth);
         }
         private void SetupPerks()
         {

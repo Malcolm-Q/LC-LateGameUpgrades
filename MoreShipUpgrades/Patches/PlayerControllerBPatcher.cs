@@ -1,7 +1,6 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
 using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.UpgradeComponents;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -9,6 +8,7 @@ using System.Linq;
 using UnityEngine;
 using MoreShipUpgrades.Misc;
 using UnityEngine.InputSystem;
+using MoreShipUpgrades.UpgradeComponents;
 
 namespace MoreShipUpgrades.Patches
 {
@@ -126,6 +126,14 @@ namespace MoreShipUpgrades.Patches
         {
             ReplaceClampForBackMusclesFunction(ref instructions);
             return instructions.AsEnumerable();
+        }
+        [HarmonyPostfix]
+        [HarmonyPatch("GrabObjectClientRpc")]
+        public static void GrabObjectClientRpcPostfix(PlayerControllerB __instance)
+        {
+            if (__instance.currentlyHeldObjectServer.GetComponentInParent<WheelbarrowScript>() == null) return;
+            logger.LogDebug("Removing item's parent to allow placing it back in again");
+            __instance.currentlyHeldObjectServer.transform.parent = null;
         }
 
         [HarmonyTranspiler]

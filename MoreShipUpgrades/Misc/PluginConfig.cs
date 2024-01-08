@@ -1,8 +1,8 @@
 ﻿using BepInEx.Configuration;
 using System;
 using Newtonsoft.Json;
-using MoreShipUpgrades.UpgradeComponents;
 using System.Collections.Generic;
+using MoreShipUpgrades.UpgradeComponents;
 
 
 namespace MoreShipUpgrades.Misc
@@ -31,6 +31,7 @@ namespace MoreShipUpgrades.Misc
         public bool PLAYER_HEALTH_ENABLED { get; set; }
         public bool PEEPER_ENABLED { get; set; }
         public bool EXTEND_DEADLINE_ENABLED { get; set; }
+        public bool WHEELBARROW_ENABLED { get; set; }
 
         // individual or shared
         public bool ADVANCED_TELE_INDIVIDUAL { get; set; }
@@ -72,6 +73,7 @@ namespace MoreShipUpgrades.Misc
         public int LIGHTNING_ROD_PRICE { get; set; }
         public int PLAYER_HEALTH_PRICE { get; set; }
         public int EXTEND_DEADLINE_PRICE { get; set; }
+        public int WHEELBARROW_PRICE { get; set; }
 
         // attributes
         public float BIGGER_LUNGS_STAMINA_REGEN_INCREASE { get; set; }
@@ -181,6 +183,8 @@ namespace MoreShipUpgrades.Misc
         public int BABOON_HAWK_SAMPLE_MAXIMUM_VALUE { get; set; }
         public int THUMPER_SAMPLE_MINIMUM_VALUE { get; set; }
         public int THUMPER_SAMPLE_MAXIMUM_VALUE { get; set; }
+        public int WHEELBARROW_MAXIMUM_AMOUNT_ITEMS {  get; set; }
+        public float WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER { get; set; }
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -397,6 +401,11 @@ namespace MoreShipUpgrades.Misc
             DIVEKIT_WEIGHT = ConfigEntry(topSection, "Item weight", 1.65f, "-1 and multiply by 100 (1.65 = 65 lbs)");
             DIVEKIT_TWO_HANDED = ConfigEntry(topSection, "Two Handed Item", true, "One or two handed item.");
 
+            topSection = "Wheelbarrow";
+            WHEELBARROW_ENABLED = ConfigEntry(topSection, "Enable the Wheelbarrow Item", true, "Allows you to buy a wheelbarrow to carry items outside of your inventory");
+            WHEELBARROW_PRICE = ConfigEntry(topSection, "Price of the Wheelbarrow Item", 400, "Price of the Wheelbarrow in the store");
+            WHEELBARROW_MAXIMUM_AMOUNT_ITEMS = ConfigEntry(topSection, "Maximum amount of items", 8, "Amount of items allowed before the wheelbarrow is considered full");
+            WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER = ConfigEntry(topSection, "Weight reduction multiplier", 0.5f, "How much an item's weight will be ignored to the wheelbarrow's total weight");
         }
     }
 }
