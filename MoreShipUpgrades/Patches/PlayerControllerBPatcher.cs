@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Linq;
 using MoreShipUpgrades.Misc;
-using System.ComponentModel.Design;
+using MoreShipUpgrades.UpgradeComponents;
 
 namespace MoreShipUpgrades.Patches
 {
