@@ -41,10 +41,10 @@ namespace MoreShipUpgrades.UpgradeComponents
             logger = new LGULogger(UPGRADE_NAME);
             tiers = new Dictionary<int, string[]>();
             string[] tiersList = UpgradeBus.instance.cfg.HUNTER_SAMPLE_TIERS.ToLower().Split('-');
-            tiers[0] = tiersList[0].Split(",");
+            tiers[0] = tiersList[0].Split(",").Select(x => x.Trim()).ToArray();
             for (int i = 1; i < tiersList.Length; i++)
             {
-                tiers[i] = tiers[i - 1].Concat(tiersList[i].Split(",")).ToArray();
+                tiers[i] = tiers[i - 1].Concat(tiersList[i].Split(",").Select(x => x.Trim())).ToArray();
             }
         }
         void Start()
