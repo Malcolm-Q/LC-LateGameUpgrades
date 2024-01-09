@@ -49,8 +49,8 @@ namespace MoreShipUpgrades.UpgradeComponents
         private void ReviveTargetedPlayerClientRpc()
         {
             PlayerControllerB player = StartOfRound.Instance.mapScreen.targetedPlayer;
-            bool playerRegistered = UpgradeBus.instance.playerHPs.ContainsKey(player.playerSteamId);
-            int health = playerRegistered ? UpgradeBus.instance.playerHPs[player.playerSteamId] : 100;
+            bool playerRegistered = UpgradeBus.instance.playerHealthLevels.ContainsKey(player.playerSteamId);
+            int health = playerRegistered ? playerHealthScript.GetHealthFromPlayer(100, player.playerSteamId) : 100;
             player.ResetPlayerBloodObjects(player.isPlayerDead);
 
             if (player.isPlayerDead || player.isPlayerControlled)

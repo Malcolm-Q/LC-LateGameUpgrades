@@ -54,8 +54,8 @@ namespace MoreShipUpgrades.Patches
                 if (!(codes[i + 1] != null && codes[i + 1].opcode == OpCodes.Call && codes[i + 1].operand.ToString() == "Int32 Clamp(Int32, Int32, Int32)")) continue;
                 if (!(codes[i + 2] != null && codes[i + 2].opcode == OpCodes.Stfld && codes[i + 2].operand.ToString() == "System.Int32 health")) continue;
 
-                //Mathf.Clamp(health - damageNumber, 0, playerHealthScript.CheckForAdditionalHealth())
-                codes[i] = new CodeInstruction(OpCodes.Call, maximumHealthMethod); 
+                //Mathf.Clamp(health - damageNumber, 0, playerHealthScript.CheckForAdditionalHealth(100))
+                codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, maximumHealthMethod));
                 foundHealthMaximum = true;
 
                 if (foundHealthMaximum) break;

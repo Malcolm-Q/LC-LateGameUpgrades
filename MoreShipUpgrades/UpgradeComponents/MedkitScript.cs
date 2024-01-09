@@ -31,7 +31,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             }
             if (!Mouse.current.leftButton.isPressed) return;
 
-            int health = UpgradeBus.instance.playerHPs.ContainsKey(playerHeldBy.playerSteamId) ? UpgradeBus.instance.playerHPs[playerHeldBy.playerSteamId] : 100;
+            int health = UpgradeBus.instance.playerHealthLevels.ContainsKey(playerHeldBy.playerSteamId) ? playerHealthScript.GetHealthFromPlayer(100, playerHeldBy.playerSteamId) : 100;
             if(playerHeldBy.health >= health)
             {
                 audio.PlayOneShot(error);

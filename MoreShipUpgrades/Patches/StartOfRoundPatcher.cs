@@ -69,14 +69,14 @@ namespace MoreShipUpgrades.Patches
                         codes[i + 1].opcode == OpCodes.Ldc_I4_0 &&
                         codes[i + 2].opcode == OpCodes.Callvirt && codes[i + 2].operand.ToString() == "Void UpdateHealthUI(Int32, Boolean)")
                     {
-                        codes[i] = new CodeInstruction(OpCodes.Call, maximumHealthMethod);
+                        codes.Insert(i+1, new CodeInstruction(OpCodes.Call, maximumHealthMethod));
                         updateHealth = true;
                     }
                 }
                 if (!(codes[i].opcode == OpCodes.Ldc_I4_S && codes[i].operand.ToString() == "100")) continue;
                 if (!(codes[i + 1].opcode == OpCodes.Stfld && codes[i + 1].operand.ToString() == "System.Int32 health")) continue;
 
-                codes[i] = new CodeInstruction(OpCodes.Call, maximumHealthMethod);
+                codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, maximumHealthMethod));
                 if (!first) first = true;
                 else if (!second) second = true;
                 else third = true;
