@@ -13,55 +13,56 @@ namespace MoreShipUpgrades.Misc
     {
         private static readonly LGULogger logger = new LGULogger(typeof(AssetBundleHandler).Name);
         private static Dictionary<string, string> infoJSON;
+        static string root = "Assets/ShipUpgrades/";
         public static Dictionary<string, string> samplePaths = new Dictionary<string, string>()
         {
-            { "centipede", "Assets/ShipUpgrades/Samples/SnareFleaSample.asset" },
-            { "bunker spider", "Assets/ShipUpgrades/Samples/BunkerSpiderSample.asset" },
-            { "hoarding bug", "Assets/ShipUpgrades/Samples/HoardingBugSample.asset" },
-            { "flowerman", "Assets/ShipUpgrades/Samples/BrackenSample.asset" },
-            { "mouthdog", "Assets/ShipUpgrades/Samples/EyelessDogSample.asset" },
-            { "baboon hawk", "Assets/ShipUpgrades/Samples/BaboonHawkSample.asset" },
-            { "crawler", "Assets/ShipUpgrades/Samples/ThumperSample.asset" },
+            { "centipede", root+"Samples/SnareFleaSample.asset" },
+            { "bunker spider", root+"Samples/BunkerSpiderSample.asset" },
+            { "hoarding bug", root+"Samples/HoardingBugSample.asset" },
+            { "flowerman", root+"Samples/BrackenSample.asset" },
+            { "mouthdog", root+"Samples/EyelessDogSample.asset" },
+            { "baboon hawk", root+"Samples/BaboonHawkSample.asset" },
+            { "crawler", root+"Samples/ThumperSample.asset" },
         };
         private static Dictionary<string, string> assetPaths = new Dictionary<string, string>()
         {
-            { beekeeperScript.UPGRADE_NAME, "Assets/ShipUpgrades/beekeeper.prefab" },
-            { BeatScript.UPGRADE_NAME, "Assets/ShipUpgrades/SickBeats.prefab" },
-            { ContractScript.UPGRADE_NAME, "Assets/ShipUpgrades/Contract.prefab" },
-            { proteinPowderScript.UPGRADE_NAME, "Assets/ShipUpgrades/ProteinPowder.prefab" },
-            { biggerLungScript.UPGRADE_NAME, "Assets/ShipUpgrades/BiggerLungs.prefab" },
-            { runningShoeScript.UPGRADE_NAME, "Assets/ShipUpgrades/runningShoes.prefab" },
-            { strongLegsScript.UPGRADE_NAME, "Assets/ShipUpgrades/strongLegs.prefab" },
-            { trapDestroyerScript.UPGRADE_NAME, "Assets/ShipUpgrades/destructiveCodes.prefab" },
-            { nightVisionScript.UPGRADE_NAME, "Assets/ShipUpgrades/nightVision.prefab" },
-            { terminalFlashScript.UPGRADE_NAME, "Assets/ShipUpgrades/terminalFlash.prefab" },
-            { hunterScript.UPGRADE_NAME, "Assets/ShipUpgrades/Hunter.prefab" },
-            { strongerScannerScript.UPGRADE_NAME, "Assets/ShipUpgrades/strongScanner.prefab" },
-            { lightningRodScript.UPGRADE_NAME, "Assets/ShipUpgrades/LightningRod.prefab" },
-            { walkieScript.UPGRADE_NAME, "Assets/ShipUpgrades/walkieUpgrade.prefab" },
-            { exoskeletonScript.UPGRADE_NAME, "Assets/ShipUpgrades/exoskeleton.prefab" },
-            { "Interns", "Assets/ShipUpgrades/Intern.prefab" },
-            { pagerScript.UPGRADE_NAME, "Assets/ShipUpgrades/Pager.prefab" },
-            { lockSmithScript.UPGRADE_NAME, "Assets/ShipUpgrades/LockSmith.prefab" },
-            { playerHealthScript.UPGRADE_NAME, "Assets/ShipUpgrades/PlayerHealth.prefab" },
-            { ExtendDeadlineScript.UPGRADE_NAME, "Assets/ShipUpgrades/ExtendDeadline.prefab" },
+            { beekeeperScript.UPGRADE_NAME, root+"beekeeper.prefab" },
+            { BeatScript.UPGRADE_NAME, root+"SickBeats.prefab" },
+            { ContractScript.UPGRADE_NAME, root+"Contract.prefab" },
+            { proteinPowderScript.UPGRADE_NAME, root+"ProteinPowder.prefab" },
+            { biggerLungScript.UPGRADE_NAME, root+"BiggerLungs.prefab" },
+            { runningShoeScript.UPGRADE_NAME, root+"runningShoes.prefab" },
+            { strongLegsScript.UPGRADE_NAME, root+"strongLegs.prefab" },
+            { trapDestroyerScript.UPGRADE_NAME, root+"destructiveCodes.prefab" },
+            { nightVisionScript.UPGRADE_NAME, root+"nightVision.prefab" },
+            { terminalFlashScript.UPGRADE_NAME, root+"terminalFlash.prefab" },
+            { hunterScript.UPGRADE_NAME, root+"Hunter.prefab" },
+            { strongerScannerScript.UPGRADE_NAME, root+"strongScanner.prefab" },
+            { lightningRodScript.UPGRADE_NAME, root+"LightningRod.prefab" },
+            { walkieScript.UPGRADE_NAME, root+"walkieUpgrade.prefab" },
+            { exoskeletonScript.UPGRADE_NAME, root+"exoskeleton.prefab" },
+            { "Interns", root+"Intern.prefab" },
+            { pagerScript.UPGRADE_NAME, root+"Pager.prefab" },
+            { lockSmithScript.UPGRADE_NAME, root+"LockSmith.prefab" },
+            { playerHealthScript.UPGRADE_NAME, root+"PlayerHealth.prefab" },
+            { ExtendDeadlineScript.UPGRADE_NAME, root+"ExtendDeadline.prefab" },
 
-            { "Advanced Portable Tele", "Assets/ShipUpgrades/TpButtonAdv.asset" },
-            { "Portable Tele", "Assets/ShipUpgrades/TpButton.asset" },
-            { "Peeper", "Assets/ShipUpgrades/coilHead.asset" },
-            { "Medkit", "Assets/ShipUpgrades/MedKitItem.asset" },
-            { "MedkitMapItem", "Assets/ShipUpgrades/MedKitMapItem.asset" },
-            { "Night Vision", "Assets/ShipUpgrades/NightVisionItem.asset" },
-            { "HelmetItem", "Assets/ShipUpgrades/HelmetItem.asset" },
-            { "HelmetModel", "Assets/ShipUpgrades/HelmetModel.prefab" },
-            { "Diving Kit", "Assets/ShipUpgrades/DivingKitItem.asset" },
+            { "Advanced Portable Tele", root+"TpButtonAdv.asset" },
+            { "Portable Tele", root+"TpButton.asset" },
+            { "Peeper", root+"coilHead.asset" },
+            { "Medkit", root+"MedKitItem.asset" },
+            { "MedkitMapItem", root+"MedKitMapItem.asset" },
+            { "Night Vision", root+"NightVisionItem.asset" },
+            { "HelmetItem", root+"HelmetItem.asset" },
+            { "HelmetModel", root+"HelmetModel.prefab" },
+            { "Diving Kit", root+"DivingKitItem.asset" },
 
-            { "HelmetHit", "Assets/ShipUpgrades/bonk.mp3" },
-            { "breakWood", "Assets/ShipUpgrades/breakWood.mp3" },
-            { "Break", "Assets/ShipUpgrades/break.mp3" },
-            { "Error", "Assets/ShipUpgrades/error.mp3" },
-            { "Button Press", "Assets/ShipUpgrades/ButtonPress2.ogg" },
-            { "Flashbang", "Assets/ShipUpgrades/flashbangsfx.ogg" },
+            { "HelmetHit", root+"bonk.mp3" },
+            { "breakWood", root+"breakWood.mp3" },
+            { "Break", root+"break.mp3" },
+            { "Error", root+"error.mp3" },
+            { "Button Press", root+"ButtonPress2.ogg" },
+            { "Flashbang", root+"flashbangsfx.ogg" },
         };
         /// <summary>
         /// Tries to load an asset from provided asset bundle through a given path into a GameObject
@@ -137,7 +138,7 @@ namespace MoreShipUpgrades.Misc
         {
             if (infoJSON != null) return infoJSON;
 
-            TextAsset infoStringAsset = bundle.LoadAsset<TextAsset>("Assets/ShipUpgrades/InfoStrings.json");
+            TextAsset infoStringAsset = bundle.LoadAsset<TextAsset>(root+"InfoStrings.json");
             if (!infoStringAsset)
             {
                 logger.LogError("An error has occurred trying to load info strings from the bundle");

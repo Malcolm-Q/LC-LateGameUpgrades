@@ -170,6 +170,8 @@ namespace MoreShipUpgrades.Misc
         public float STRONG_LEGS_REDUCE_FALL_DAMAGE_MULTIPLIER { get; set; }
         public bool KEEP_UPGRADES_AFTER_FIRED_CUTSCENE { get; set; }
         public int CONTRACT_BUG_REWARD {  get; set; }
+        public int CONTRACT_EXOR_REWARD {  get; set; }
+        public int CONTRACT_DEFUSE_REWARD {  get; set; }
         public int CONTRACT_BUG_SPAWNS {  get; set; }
         public int CONTRACT_EXTRACT_REWARD {  get; set; }
         public float CONTRACT_EXTRACT_WEIGHT {  get; set; }
@@ -220,6 +222,8 @@ namespace MoreShipUpgrades.Misc
             CONTRACTS_ENABLED = ConfigEntry(topSection, "Enable the ability to purchase contracts / missions", true, "");
             CONTRACT_PRICE = ConfigEntry(topSection, "Price of a random contract", 500, "");
             CONTRACT_BUG_REWARD = ConfigEntry(topSection, "Value of an exterminator contract reward", 500, "");
+            CONTRACT_EXOR_REWARD = ConfigEntry(topSection, "Value of an exorcism contract reward", 500, "");
+            CONTRACT_DEFUSE_REWARD = ConfigEntry(topSection, "Value of an defusal contract reward", 500, "");
             CONTRACT_EXTRACT_REWARD = ConfigEntry(topSection, "Value of an extraction contract reward", 500, "");
             CONTRACT_DATA_REWARD = ConfigEntry(topSection, "Value of a data contract reward", 500, "");
             CONTRACT_EXTRACT_WEIGHT = ConfigEntry(topSection,"Weight of an extraction human", 2.5f, "Subtract 1 and multiply by 100 (2.5 = 150lbs).");

@@ -19,11 +19,13 @@ namespace MoreShipUpgrades.Misc
             "61 March",
             "21 Offense"
         };
-        static string[] contracts = { "data", "exterminator", "extraction" };
+        static string[] contracts = { "data", "exterminator", "extraction","exorcism","defusal" };
         static string[] contractInfos = {
             "\n\nOur systems have detected an active PC somewhere in the facility.\nFind it, and with the help of the ship terminal operator, recover any valuable data that may exist on the system.\n\n",
             "\n\nIt's been reported that the population of hoarder bugs on this moon have skyrocketed and become aggressive. You must destroy their nest at all costs.\n\n",
-            "\n\nCrew number 5339 have reported that one of their operatives was lost on this moon and left behind. Extract the operative, and more importantly, any scrap they may have.\n\n" 
+            "\n\nCrew number 5339 have reported that one of their operatives was lost on this moon and left behind. Extract the operative, and more importantly, any scrap they may have.\n\n" ,
+            "\n\nUnusual activity in the spirit world has been reported at this facility.\nFind the ritual site, conduct the ritual, and get out.\n\n" ,
+            "\n\nAn unknown party has planted a bomb at an integral point in this facility.\nYou must find the bomb and work together to defuse it.\nUse the `Lookup` command with the bombs serial number to get defusal instructions.\n\n" 
         };
 
 
@@ -470,6 +472,7 @@ namespace MoreShipUpgrades.Misc
             string thirdWord = textArray.Length > 2 ? textArray[2].ToLower() : "";
             switch(firstWord)
             {
+                case "lookup": outputNode = DefuseBombCommand(secondWord); return;
                 case "toggle": outputNode = ExecuteToggleCommands(secondWord, ref outputNode); return;
                 case "initattack":
                 case "contract": outputNode = TryGetContract(ref terminal); return;
@@ -489,6 +492,33 @@ namespace MoreShipUpgrades.Misc
                 case "scan": outputNode = ExecuteScanCommands(secondWord, ref outputNode); return;
                 case "transmit": outputNode = ExecuteTransmitMessage(fullText.Substring(firstWord.Length+1), ref outputNode); return;
                 default: outputNode = ExecuteUpgradeCommand(fullText, ref terminal, ref outputNode); return;
+            }
+        }
+
+        private static TerminalNode DefuseBombCommand(string secondWord)
+        {
+            if(UpgradeBus.instance.contractLevel != StartOfRound.Instance.currentLevel.PlanetName || UpgradeBus.instance.contractType != "defusal")
+            {
+                return DisplayTerminalMessage("YOU MUST BE IN A DEFUSAL CONTRACT TO USE THIS COMMAND!\n\n");
+            }
+            if (secondWord == "") return DisplayTerminalMessage("YOU MUST ENTER A SERIAL NUMBER TO LOOK UP!\n\n");
+            if (secondWord.ToLower() == UpgradeBus.instance.SerialNumber.ToLower() || secondWord.ToLower() == UpgradeBus.instance.SerialNumber.Replace("-","").ToLower())
+            {
+                Debug.Log("CORRECT SEQUENCE");
+                return DisplayTerminalMessage("CUT THE WIRES IN THE FOLLOWING ORDER:\n\n" + string.Join("\n\n", UpgradeBus.instance.bombOrder) +"\n\n");
+            }
+            else
+            {
+                Debug.Log("WRONG SEQUENCE");
+                Debug.Log("CORRECT SEQUENCE IS: " + string.Join(",", UpgradeBus.instance.bombOrder));
+                if (UpgradeBus.instance.fakeBombOrders.ContainsKey(secondWord))
+                {
+                    return DisplayTerminalMessage("CUT THE WIRES IN THE FOLLOWING ORDER:\n\n" + string.Join("\n\n", UpgradeBus.instance.fakeBombOrders[secondWord]) +"\n\n");
+                }
+                List<string> falseOrder = new List<string> { "red","green","blue" };
+                Tools.ShuffleList(falseOrder);
+                UpgradeBus.instance.fakeBombOrders.Add(secondWord, falseOrder);
+                return DisplayTerminalMessage("CUT THE WIRES IN THE FOLLOWING ORDER:\n\n" + string.Join("\n\n", falseOrder) +"\n\n");
             }
         }
 

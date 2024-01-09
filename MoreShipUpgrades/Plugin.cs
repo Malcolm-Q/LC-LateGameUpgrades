@@ -24,7 +24,7 @@ namespace MoreShipUpgrades
         public static Plugin instance;
         public static ManualLogSource mls;
         private AudioClip itemBreak, buttonPressed, error;
-        private AudioClip helmetBlockSound;
+        string root = "Assets/ShipUpgrades/";
 
         public static PluginConfig cfg { get; private set; }
 
@@ -109,11 +109,109 @@ namespace MoreShipUpgrades
 
         private void SetupContractMapObjects(ref AssetBundle bundle)
         {
-            string root = "Assets/ShipUpgrades/";
             AnimationCurve curve = new AnimationCurve(new Keyframe(0,1), new Keyframe(1,1)); // always spawn 1
 
-            // scavenger extraction
-            Item scav = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + "ScavItem.asset");
+            SetupScavContract(ref bundle, curve);
+            SetupExterminatorContract(ref bundle, curve);
+            SetupDataContract(ref bundle, curve);
+            SetupExorcismContract(ref bundle, curve);
+            SetupBombContract(ref bundle, curve);
+        }
+
+        void SetupBombContract(ref AssetBundle bundle, AnimationCurve curve)
+        {
+            Item bomb = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "BombItem.asset");
+            if (bomb == null) return;
+
+            ContractObject coNest = bomb.spawnPrefab.AddComponent<ContractObject>();
+            coNest.contractType = "defusal";
+
+            BombDefusalScript bombScript = bomb.spawnPrefab.AddComponent<BombDefusalScript>();
+            bombScript.snip = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, root + "scissors.mp3");
+            bombScript.tick = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, root + "tick.mp3");
+
+
+            Utilities.FixMixerGroups(bomb.spawnPrefab);
+            NetworkPrefabs.RegisterNetworkPrefab(bomb.spawnPrefab);
+            Items.RegisterItem(bomb);
+
+            SpawnableMapObjectDef mapObjDefBug = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
+            mapObjDefBug.spawnableMapObject = new SpawnableMapObject();
+            mapObjDefBug.spawnableMapObject.prefabToSpawn = bomb.spawnPrefab;
+            MapObjects.RegisterMapObject(mapObjDefBug, Levels.LevelTypes.All, (level) => curve);
+
+            Items.RegisterShopItem(bomb, 0);
+        }
+
+
+        void SetupExorcismContract(ref AssetBundle bundle, AnimationCurve curve)
+        {
+            Item contractLoot = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "ExorcLootItem.asset");
+            Items.RegisterItem(contractLoot);
+            Utilities.FixMixerGroups(contractLoot.spawnPrefab);
+            NetworkPrefabs.RegisterNetworkPrefab(contractLoot.spawnPrefab);
+
+            Item mainItem = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + "PentagramItem.asset");
+            Item exorItem = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + "BonesItem.asset");
+            ContractObject exorCo = exorItem.spawnPrefab.AddComponent<ContractObject>();
+            exorCo.contractType = "exorcism";
+            Items.RegisterItem(exorItem);
+            Utilities.FixMixerGroups(exorItem.spawnPrefab);
+            NetworkPrefabs.RegisterNetworkPrefab(exorItem.spawnPrefab);
+
+            if (mainItem == null || contractLoot == null || exorItem == null) return;
+
+            ContractObject co = mainItem.spawnPrefab.AddComponent<ContractObject>();
+            co.contractType = "exorcism";
+
+            PentagramScript pentScript = mainItem.spawnPrefab.AddComponent<PentagramScript>();
+            pentScript.loot = contractLoot.spawnPrefab;
+
+            Utilities.FixMixerGroups(mainItem.spawnPrefab);
+            NetworkPrefabs.RegisterNetworkPrefab(mainItem.spawnPrefab);
+            Items.RegisterItem(mainItem);
+
+            SpawnableMapObjectDef mapObjDef = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
+            mapObjDef.spawnableMapObject = new SpawnableMapObject();
+            mapObjDef.spawnableMapObject.prefabToSpawn = mainItem.spawnPrefab;
+            MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
+
+            SpawnableMapObjectDef mapObjDefRitual = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
+            mapObjDefRitual.spawnableMapObject = new SpawnableMapObject();
+            mapObjDefRitual.spawnableMapObject.prefabToSpawn = exorItem.spawnPrefab;
+            MapObjects.RegisterMapObject(mapObjDefRitual, Levels.LevelTypes.All, (level) => new AnimationCurve(new Keyframe(0,3),new Keyframe(1,3)));
+        }
+
+
+        void SetupExterminatorContract(ref AssetBundle bundle, AnimationCurve curve)
+        {
+            Item bugLoot = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "EggLootItem.asset");
+            Items.RegisterItem(bugLoot);
+            Utilities.FixMixerGroups(bugLoot.spawnPrefab);
+            NetworkPrefabs.RegisterNetworkPrefab(bugLoot.spawnPrefab);
+
+            Item nest = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + "HoardingEggItem.asset");
+            if (nest == null || bugLoot == null) return;
+
+            ContractObject coNest = nest.spawnPrefab.AddComponent<ContractObject>();
+            coNest.contractType = "exterminator";
+
+            BugNestScript nestScript = nest.spawnPrefab.AddComponent<BugNestScript>();
+            nestScript.loot = bugLoot.spawnPrefab;
+
+            Utilities.FixMixerGroups(nest.spawnPrefab);
+            NetworkPrefabs.RegisterNetworkPrefab(nest.spawnPrefab);
+            Items.RegisterItem(nest);
+
+            SpawnableMapObjectDef mapObjDefBug = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
+            mapObjDefBug.spawnableMapObject = new SpawnableMapObject();
+            mapObjDefBug.spawnableMapObject.prefabToSpawn = nest.spawnPrefab;
+            MapObjects.RegisterMapObject(mapObjDefBug, Levels.LevelTypes.All, (level) => curve);
+        }
+
+        void SetupScavContract(ref AssetBundle bundle, AnimationCurve curve)
+        {
+            Item scav = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "ScavItem.asset");
             if (scav == null) return;
 
             ContractObject co = scav.spawnPrefab.AddComponent<ContractObject>();
@@ -135,9 +233,10 @@ namespace MoreShipUpgrades
             mapObjDef.spawnableMapObject = new SpawnableMapObject();
             mapObjDef.spawnableMapObject.prefabToSpawn = scav.spawnPrefab;
             MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
+        }
 
-
-            // data mission
+        void SetupDataContract(ref AssetBundle bundle, AnimationCurve curve)
+        {
             Item dataLoot = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "DiscItem.asset");
             Items.RegisterItem(dataLoot);
             Utilities.FixMixerGroups(dataLoot.spawnPrefab);
@@ -162,30 +261,6 @@ namespace MoreShipUpgrades
             mapObjDefPC.spawnableMapObject = new SpawnableMapObject();
             mapObjDefPC.spawnableMapObject.prefabToSpawn = pc.spawnPrefab;
             MapObjects.RegisterMapObject(mapObjDefPC, Levels.LevelTypes.All, (level) => curve);
-
-            // exterminator mission
-            Item bugLoot = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "EggLootItem.asset");
-            Items.RegisterItem(bugLoot);
-            Utilities.FixMixerGroups(bugLoot.spawnPrefab);
-            NetworkPrefabs.RegisterNetworkPrefab(bugLoot.spawnPrefab);
-
-            Item nest = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + "HoardingEggItem.asset");
-            if (nest == null || bugLoot == null) return;
-
-            ContractObject coNest = nest.spawnPrefab.AddComponent<ContractObject>();
-            coNest.contractType = "exterminator";
-
-            BugNestScript nestScript = nest.spawnPrefab.AddComponent<BugNestScript>();
-            nestScript.loot = bugLoot.spawnPrefab;
-
-            Utilities.FixMixerGroups(nest.spawnPrefab);
-            NetworkPrefabs.RegisterNetworkPrefab(nest.spawnPrefab);
-            Items.RegisterItem(nest);
-
-            SpawnableMapObjectDef mapObjDefBug = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
-            mapObjDefBug.spawnableMapObject = new SpawnableMapObject();
-            mapObjDefBug.spawnableMapObject.prefabToSpawn = nest.spawnPrefab;
-            MapObjects.RegisterMapObject(mapObjDefBug, Levels.LevelTypes.All, (level) => curve);
         }
 
         private AudioClip[] CreateAudioClipArray(string[] paths, ref AssetBundle bundle)

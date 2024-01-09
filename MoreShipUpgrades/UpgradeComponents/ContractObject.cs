@@ -10,6 +10,8 @@ namespace MoreShipUpgrades.UpgradeComponents
         static LGULogger logger = new LGULogger(nameof(ContractObject));
         void Start()
         {
+            UpgradeBus.instance.contractType = "defusal";
+            UpgradeBus.instance.contractLevel = StartOfRound.Instance.currentLevel.PlanetName;
             if(contractType == null) { logger.LogWarning($"contractType was not set on {gameObject.name}!"); }
             if(UpgradeBus.instance.contractType != contractType || StartOfRound.Instance.currentLevel.PlanetName != UpgradeBus.instance.contractLevel)
             {

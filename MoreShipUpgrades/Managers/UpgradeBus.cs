@@ -57,6 +57,7 @@ namespace MoreShipUpgrades.Managers
         public string DataMinigameKey = "";
         public string DataMinigameUser = "";
         public string DataMinigamePass = "";
+        public Dictionary<string, List<string>> fakeBombOrders = new Dictionary<string, List<string>>();
 
         public trapDestroyerScript trapHandler = null;
         public terminalFlashScript flashScript = null;
@@ -125,6 +126,8 @@ namespace MoreShipUpgrades.Managers
         public HelmetScript helmetScript;
         public Dictionary<string, AudioClip> SFX = new Dictionary<string, AudioClip>();
         public bool helmetDesync;
+        public List<string> bombOrder = new List<string>();
+        public string SerialNumber;
 
         void Awake()
         {

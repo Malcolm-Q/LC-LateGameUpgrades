@@ -129,6 +129,7 @@ namespace MoreShipUpgrades.Managers
         {
             UpgradeBus.instance.contractLevel = contractLvl;
             UpgradeBus.instance.contractType = contractType;
+            UpgradeBus.instance.fakeBombOrders = new Dictionary<string, List<string>>();
         }
 
         public void HandleSpawns()

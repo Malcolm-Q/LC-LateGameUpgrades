@@ -1,9 +1,4 @@
-﻿using GameNetcodeStuff;
-using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
-using Unity.Netcode;
-using UnityEngine;
-using UnityEngine.AI;
+﻿using MoreShipUpgrades.Misc;
 
 namespace MoreShipUpgrades.UpgradeComponents
 {
