@@ -46,7 +46,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             logger.LogDebug($"Adding {UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT} to the player's health...");
             UpgradeBus.instance.playerHealthLevel++;
             previousLevel++;
-            LGUStore.instance.PlayerHealthUpdateLevelServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, UpgradeBus.instance.playerHealthLevel);
+            LGUStore.instance.PlayerHealthUpdateLevelServerRpc(player.playerSteamId, UpgradeBus.instance.playerHealthLevel);
         }
 
         public override void load()
@@ -72,7 +72,7 @@ namespace MoreShipUpgrades.UpgradeComponents
 
             player.health += amountToIncrement;
             previousLevel = UpgradeBus.instance.playerHealthLevel;
-            LGUStore.instance.PlayerHealthUpdateLevelServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, UpgradeBus.instance.playerHealthLevel);
+            LGUStore.instance.PlayerHealthUpdateLevelServerRpc(player.playerSteamId, UpgradeBus.instance.playerHealthLevel);
         }
 
         public override void Register()
@@ -90,12 +90,13 @@ namespace MoreShipUpgrades.UpgradeComponents
             UpgradeBus.instance.playerHealth = false;
             previousLevel = 0;
             active = false;
-            LGUStore.instance.PlayerHealthUpdateLevelServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, -1);
+            LGUStore.instance.PlayerHealthUpdateLevelServerRpc(player.playerSteamId, -1);
         }
         public static int CheckForAdditionalHealth(int health)
         {
-            if (!UpgradeBus.instance.playerHealthLevels.ContainsKey(GameNetworkManager.Instance.localPlayerController.playerSteamId)) return health;
-            int currentLevel = UpgradeBus.instance.playerHealthLevels[GameNetworkManager.Instance.localPlayerController.playerSteamId];
+            PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
+            if (!UpgradeBus.instance.playerHealthLevels.ContainsKey(player.playerSteamId)) return health;
+            int currentLevel = UpgradeBus.instance.playerHealthLevels[player.playerSteamId];
 
             return health + UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK + currentLevel * UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT;
         }
