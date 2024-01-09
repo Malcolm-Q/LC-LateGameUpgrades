@@ -332,7 +332,8 @@ namespace MoreShipUpgrades.Managers
 
             if(oldHelmet != UpgradeBus.instance.wearingHelmet)
             {
-                ReqSpawnAndMoveHelmetServerRpc(new NetworkObjectReference(GameNetworkManager.Instance.localPlayerController.gameObject), GameNetworkManager.Instance.localPlayerController.playerClientId);
+                UpgradeBus.instance.helmetDesync = true;
+                // this will just sync the helmets on StartGame
             }
 
             StartCoroutine(WaitForUpgradeObject());

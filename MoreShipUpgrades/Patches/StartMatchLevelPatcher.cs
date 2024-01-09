@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
+using Unity.Netcode;
 
 namespace MoreShipUpgrades.Patches
 {
@@ -20,6 +21,16 @@ namespace MoreShipUpgrades.Patches
                 {
                     LGUStore.instance.ReqSyncContractDetailsServerRpc("None", "None");
                 }
+            }
+        }
+
+        [HarmonyPostfix]
+        [HarmonyPatch("StartGame")]
+        static void SyncHelmets()
+        {
+            if(UpgradeBus.instance.wearingHelmet && UpgradeBus.instance.helmetDesync)
+            {
+                LGUStore.instance.ReqSpawnAndMoveHelmetServerRpc(new NetworkObjectReference(GameNetworkManager.Instance.localPlayerController.gameObject), GameNetworkManager.Instance.localPlayerController.playerClientId);
             }
         }
     }

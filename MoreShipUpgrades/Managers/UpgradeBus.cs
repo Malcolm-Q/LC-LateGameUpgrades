@@ -122,6 +122,7 @@ namespace MoreShipUpgrades.Managers
         public GameObject helmetModel;
         public HelmetScript helmetScript;
         public Dictionary<string, AudioClip> SFX = new Dictionary<string, AudioClip>();
+        public bool helmetDesync;
 
         void Awake()
         {
