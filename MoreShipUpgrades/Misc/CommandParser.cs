@@ -382,14 +382,6 @@ namespace MoreShipUpgrades.Misc
             return lvl;
         }
 
-        public static void ParseLGUCommands(string fullText, ref Terminal terminal, ref TerminalNode outputNode)
-        {
-            switch (secondWord)
-            {
-                case "lightning": return ExecuteToggleLightning();
-                default: return outputNode;
-            }
-        }
         private static TerminalNode ExecuteLategameCommands(string secondWord)
         {
             switch (secondWord)
@@ -453,6 +445,23 @@ namespace MoreShipUpgrades.Misc
                 default: return outputNode;
             }
         }
+        private static TerminalNode ExecuteToggleCommands(string secondWord, ref TerminalNode outputNode)
+        {
+            switch (secondWord)
+            {
+                case "lightning": return ExecuteToggleLightning();
+                default: return outputNode;
+            }
+        }
+        private static TerminalNode ExecuteBruteForce(string secondWord)
+        {
+            switch (secondWord)
+            {
+                case "": return DisplayTerminalMessage($"Enter a valid address for a device to connect to!\n\n");
+                default: return HandleBruteForce(secondWord);
+            }
+        }
+
         public static void ParseLGUCommands(string fullText, ref Terminal terminal, ref TerminalNode outputNode)
         {
             string[] textArray = fullText.Split();
@@ -463,6 +472,8 @@ namespace MoreShipUpgrades.Misc
             {
                 case "toggle": outputNode = ExecuteToggleCommands(secondWord, ref outputNode); return;
                 case "initattack":
+                case "contract": outputNode = TryGetContract(ref terminal); return;
+                case "bruteforce": outputNode= ExecuteBruteForce(secondWord); return;
                 case "atk": outputNode = ExecuteDiscombobulatorAttack(ref terminal); return;
                 case "cd":
                 case "cooldown": outputNode = ExecuteDiscombobulatorCooldown(); return;

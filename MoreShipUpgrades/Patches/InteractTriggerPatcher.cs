@@ -2,7 +2,6 @@
 using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Patches
