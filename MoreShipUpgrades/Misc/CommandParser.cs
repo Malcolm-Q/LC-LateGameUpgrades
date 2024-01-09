@@ -454,5 +454,4 @@ namespace MoreShipUpgrades.Misc
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Effected enemies are no longer stunned!</color>";
         }
     }
-
 }

@@ -2,6 +2,7 @@ MoreShipUpgrades/bin/
 MoreShipUpgrades/obj/
 MoreShipUpgrades/Properties/
 /.vs/
-MoreShipUpgrades/MoreShipUpgrades.csproj
+.csproj
+.csproj.user
 NetcodePatcher-2.4.0/
 **.user
