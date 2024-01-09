@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,14 +15,17 @@ namespace MoreShipUpgrades.Patches
     [HarmonyPatch(typeof(StartOfRound))]
     internal class StartOfRoundPatcher
     {
+        private static LGULogger logger = new LGULogger(nameof(StartOfRoundPatcher));
         [HarmonyPrefix]
         [HarmonyPatch("Start")]
         private static void InitLGUStore(PlayerControllerB __instance)
         {
+            logger.LogDebug("Initiating components...");
             if(__instance.NetworkManager.IsHost || __instance.NetworkManager.IsServer)
             {
                 GameObject refStore = GameObject.Instantiate(UpgradeBus.instance.modStorePrefab);
                 refStore.GetComponent<NetworkObject>().Spawn();
+                logger.LogDebug("LGUStore component initiated...");
             }
             foreach(GameObject sample in UpgradeBus.instance.samplePrefabs.Values)
             {
@@ -30,6 +34,8 @@ namespace MoreShipUpgrades.Patches
                 {
                     StartOfRound.Instance.allItemsList.itemsList.Add(item);
                 }
+
+                logger.LogDebug($"{item.itemName} component initiated...");
             }
         }
         [HarmonyPrefix]
@@ -37,6 +43,7 @@ namespace MoreShipUpgrades.Patches
         private static void GameOverResetUpgradeManager(StartOfRound __instance)
         {
             if (UpgradeBus.instance.cfg.KEEP_UPGRADES_AFTER_FIRED_CUTSCENE) return;
+            logger.LogDebug("Configurations do not wish to keep upgrades, erasing...");
             if(__instance.NetworkManager.IsHost ||  __instance.NetworkManager.IsServer)
             {
                 LGUStore.instance.PlayersFiredServerRpc();
@@ -74,6 +81,8 @@ namespace MoreShipUpgrades.Patches
                 else if (!second) second = true;
                 else third = true;
             }
+            if (!(first && second && third && updateHealth)) 
+                logger.LogError($"Did not find the relevant code instructions to influence the player's health through {playerHealthScript.UPGRADE_NAME}");
             return codes.AsEnumerable();
         }
     }

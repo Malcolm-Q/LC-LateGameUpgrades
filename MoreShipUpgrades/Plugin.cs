@@ -17,7 +17,7 @@ using LethalLib.Extras;
 namespace MoreShipUpgrades
 {
     [BepInEx.BepInPlugin(Metadata.GUID,Metadata.NAME,Metadata.VERSION)]
-    [BepInDependency("evaisa.lethallib","0.6.0")]
+    [BepInDependency("evaisa.lethallib")]
     public class Plugin : BaseUnityPlugin
     {
         private readonly Harmony harmony = new Harmony(Metadata.GUID);
@@ -220,10 +220,30 @@ namespace MoreShipUpgrades
             SetupPeeper();
             SetupSamples();
             SetupHelmet();
-            SetupDivingKit(ref UpgradeBus.instance.UpgradeAssets);
+            SetupDivingKit();
         }
         private void SetupSamples()
         {
+            Dictionary<string, int> MINIMUM_VALUES = new Dictionary<string, int>()
+            {
+                { "centipede", cfg.SNARE_FLEA_SAMPLE_MINIMUM_VALUE },
+                { "bunker spider", cfg.BUNKER_SPIDER_SAMPLE_MINIMUM_VALUE },
+                { "hoarding bug", cfg.HOARDING_BUG_SAMPLE_MINIMUM_VALUE },
+                { "flowerman", cfg.BRACKEN_SAMPLE_MINIMUM_VALUE },
+                { "mouthdog", cfg.EYELESS_DOG_SAMPLE_MINIMUM_VALUE },
+                { "baboon hawk", cfg.BABOON_HAWK_SAMPLE_MINIMUM_VALUE },
+                { "crawler", cfg.THUMPER_SAMPLE_MINIMUM_VALUE },
+            };
+            Dictionary<string, int> MAXIMUM_VALUES = new Dictionary<string, int>()
+            {
+                { "centipede", cfg.SNARE_FLEA_SAMPLE_MAXIMUM_VALUE },
+                { "bunker spider", cfg.BUNKER_SPIDER_SAMPLE_MAXIMUM_VALUE },
+                { "hoarding bug", cfg.HOARDING_BUG_SAMPLE_MAXIMUM_VALUE },
+                { "flowerman", cfg.BRACKEN_SAMPLE_MAXIMUM_VALUE },
+                { "mouthdog", cfg.EYELESS_DOG_SAMPLE_MAXIMUM_VALUE },
+                { "baboon hawk", cfg.BABOON_HAWK_SAMPLE_MAXIMUM_VALUE },
+                { "crawler", cfg.THUMPER_SAMPLE_MAXIMUM_VALUE },
+            };
             foreach (string creatureName in AssetBundleHandler.samplePaths.Keys)
             {
                 Item sample = AssetBundleHandler.GetItemObject(creatureName);
@@ -231,6 +251,8 @@ namespace MoreShipUpgrades
                 sampleScript.grabbable = true;
                 sampleScript.grabbableToEnemies = true;
                 sampleScript.itemProperties = sample;
+                sampleScript.itemProperties.minValue = MINIMUM_VALUES[creatureName];
+                sampleScript.itemProperties.maxValue = MAXIMUM_VALUES[creatureName];
                 LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(sample.spawnPrefab);
                 UpgradeBus.instance.samplePrefabs.Add(creatureName, sample.spawnPrefab);
             }
@@ -343,12 +365,13 @@ namespace MoreShipUpgrades
             nightNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Night Vision"), grantStatus, loseOnDeath);
             Items.RegisterShopItem(nightVisionItem, null, null, nightNode, nightVisionItem.creditsWorth);
         }
-        private void SetupDivingKit(ref AssetBundle bundle)
+        private void SetupDivingKit()
         {
-            Item DiveItem = AssetBundleHandler.TryLoadItemAsset(ref bundle, "Assets/ShipUpgrades/DivingKitItem.asset");
+            Item DiveItem = AssetBundleHandler.GetItemObject("Diving Kit");
             if (DiveItem == null) return;
 
             DiveItem.creditsWorth = cfg.DIVEKIT_PRICE;
+            DiveItem.itemId = 492015;
             DiveItem.twoHanded = cfg.DIVEKIT_TWO_HANDED;
             DiveItem.weight = cfg.DIVEKIT_WEIGHT;
             DiveItem.itemSpawnsOnGround = true;
@@ -450,6 +473,7 @@ namespace MoreShipUpgrades
             SetupHunter();
             SetupContract();
             SetupSickBeats();
+            SetupExtendDeadline();
         }
 
         private void SetupSickBeats()
@@ -533,6 +557,10 @@ namespace MoreShipUpgrades
         private void SetupPlayerHealth()
         {
             SetupGenericPerk<playerHealthScript>(playerHealthScript.UPGRADE_NAME);
+        }
+        private void SetupExtendDeadline()
+        {
+            SetupGenericPerk<ExtendDeadlineScript>(ExtendDeadlineScript.UPGRADE_NAME);
         }
         /// <summary>
         /// Generic function where it adds a script (specificed through the type) into an GameObject asset 

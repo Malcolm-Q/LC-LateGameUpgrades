@@ -46,7 +46,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             if (netObj.gameObject.name == "Landmine(Clone)" || netObj.gameObject.name == "TurretContainer(Clone)")
             {
                 if (UpgradeBus.instance.cfg.EXPLODE_TRAP) { SpawnExplosionClientRpc(netObj.gameObject.transform.position); }
-                GameNetworkManager.Destroy(netObj.gameObject);
+                Destroy(netObj.gameObject);
             }
         }
 

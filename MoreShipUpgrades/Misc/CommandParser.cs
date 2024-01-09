@@ -134,12 +134,11 @@ namespace MoreShipUpgrades.Misc
             foreach (PlayerControllerB player in players)
             {
                 playerNames.Add(player.playerUsername);
-                if (player.playerUsername.ToLower() == playerNameToSearch.ToLower())
-                {
-                    LGUStore.instance.ShareSaveServerRpc();
-                    terminal.StartCoroutine(WaitForSync(player.playerSteamId));
-                    return DisplayTerminalMessage($"Syncing with {player.playerUsername}\nThis should take 5 seconds\nPulling data...\n");
-                }
+                if (player.playerUsername.ToLower() != playerNameToSearch.ToLower()) continue;
+
+                LGUStore.instance.ShareSaveServerRpc();
+                terminal.StartCoroutine(WaitForSync(player.playerSteamId));
+                return DisplayTerminalMessage($"Syncing with {player.playerUsername}\nThis should take 5 seconds\nPulling data...\n");
             }
             return DisplayTerminalMessage($"The name {playerNameToSearch} was not found. The following names were found:\n{string.Join(", ", playerNames)}\n");
         }
@@ -160,7 +159,6 @@ namespace MoreShipUpgrades.Misc
         {
             foreach (CustomTerminalNode customNode in UpgradeBus.instance.terminalNodes)
             {
-
                 if (text.ToLower() == customNode.Name.ToLower()) return ExecuteBuyUpgrade(customNode, ref terminal);
 
                 if (text.ToLower() == $"info {customNode.Name.ToLower()}") return DisplayTerminalMessage(customNode.Description + "\n\n");
@@ -210,6 +208,7 @@ namespace MoreShipUpgrades.Misc
             UpgradeBus.instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>().Unwind();
             LGUStore.instance.UpdateLGUSaveServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, JsonConvert.SerializeObject(new SaveInfo()));
             customNode.Unlocked = false;
+            customNode.CurrentUpgrade = 0;
             return DisplayTerminalMessage($"Unwinding {customNode.Name.ToLower()}\n\n");
         }
 
@@ -318,10 +317,8 @@ namespace MoreShipUpgrades.Misc
 
             foreach (EntranceTeleport door in mainDoors)
             {
-                if (door.gameObject.transform.position.y < -170)
-                {
-                    doorsToRemove.Add(door);
-                }
+                if (door.gameObject.transform.position.y >= -170) continue;
+                doorsToRemove.Add(door);
             }
             foreach (EntranceTeleport doorToRemove in doorsToRemove)
             {
@@ -387,74 +384,98 @@ namespace MoreShipUpgrades.Misc
 
         public static void ParseLGUCommands(string fullText, ref Terminal terminal, ref TerminalNode outputNode)
         {
+            switch (secondWord)
+            {
+                case "lightning": return ExecuteToggleLightning();
+                default: return outputNode;
+            }
+        }
+        private static TerminalNode ExecuteLategameCommands(string secondWord)
+        {
+            switch (secondWord)
+            {
+                case "store": return UpgradeBus.instance.ConstructNode();
+                default: return ExecuteModInformation();
+            }
+        }
+        private static TerminalNode ExecuteResetCommands(string secondWord, ref TerminalNode outputNode)
+        {
+            switch (secondWord)
+            {
+                case "lgu": return ExecuteResetLGUSave();
+                default: return outputNode;
+            }
+        }
+        private static TerminalNode ExecuteLoadCommands(string secondWord, string fullText, ref Terminal terminal, ref TerminalNode outputNode)
+        {
+            switch (secondWord)
+            {
+                case "lgu": return ExecuteLoadLGUCommand(fullText, ref terminal);
+                default: return outputNode;
+            }
+        }
+        private static TerminalNode ExecuteScanCommands(string secondWord, ref TerminalNode outputNode)
+        {
+            switch (secondWord)
+            {
+                case "hives": return ExecuteScanHivesCommand();
+                case "scrap": return ExecuteScanScrapCommand();
+                case "player": return ExecuteScanPlayerCommand();
+                case "enemies": return ExecuteScanEnemiesCommand();
+                case "doors": return ExecuteScanDoorsCommand();
+                default: return outputNode;
+            }
+        }
+        private static TerminalNode ExecuteExtendDeadlineCommand(string daysString, ref Terminal terminal, ref TerminalNode outputNode)
+        {
+            if (!UpgradeBus.instance.cfg.EXTEND_DEADLINE_ENABLED) return outputNode;
+
+            if (daysString == "")
+                return DisplayTerminalMessage($"You need to specify how many days you wish to extend the deadline for: \"extend deadline <days>\"");
+
+            if (!(int.TryParse(daysString, out int days) && days > 0)) 
+                return DisplayTerminalMessage($"Invalid value ({daysString}) inserted to extend the deadline.\n");
+
+            if (terminal.groupCredits < days * UpgradeBus.instance.cfg.EXTEND_DEADLINE_PRICE) 
+                return DisplayTerminalMessage($"Not enough credits to purchase the proposed deadline extension.\n Total price: {days * UpgradeBus.instance.cfg.EXTEND_DEADLINE_PRICE}\n Current credits: {terminal.groupCredits}\n");
+
+            terminal.groupCredits -= days * UpgradeBus.instance.cfg.EXTEND_DEADLINE_PRICE;
+            LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits);
+            UpgradeBus.instance.extendScript.ExtendDeadlineClientRpc(days);
+
+            return DisplayTerminalMessage($"Extended the deadline by {days} day{(days == 1 ? "" : "s")}");
+        }
+        private static TerminalNode ExecuteExtendCommands(string secondWord, string thirdWord, ref Terminal terminal, ref TerminalNode outputNode)
+        {
+            switch(secondWord)
+            {
+                case "deadline": return ExecuteExtendDeadlineCommand(thirdWord, ref terminal, ref outputNode);
+                default: return outputNode;
+            }
+        }
+        public static void ParseLGUCommands(string fullText, ref Terminal terminal, ref TerminalNode outputNode)
+        {
             string[] textArray = fullText.Split();
             string firstWord = textArray[0].ToLower();
             string secondWord = textArray.Length > 1 ? textArray[1].ToLower() : "";
+            string thirdWord = textArray.Length > 2 ? textArray[2].ToLower() : "";
             switch(firstWord)
             {
-                case "help": if (!outputNode.displayText.Contains(">LATEGAME\nDisplays information related with Lategame-Upgrades mod\n")) outputNode.displayText += ">LATEGAME\nDisplays information related with Lategame-Upgrades mod\n"; return;
-                case "toggle":
-                    {
-                        switch(secondWord)
-                        {
-                            case "lightning": outputNode = ExecuteToggleLightning(); return;
-                            default: return;
-                        }
-                    }
-                case "contract": outputNode = TryGetContract(ref terminal); return;
-                case "bruteforce":
-                    {
-                        switch(secondWord)
-                        {
-                            case "": outputNode = DisplayTerminalMessage($"Enter a valid address for a device to connect to!\n\n"); return;
-                            default:  outputNode = HandleBruteForce(secondWord); return;
-                        }
-                    }
+                case "toggle": outputNode = ExecuteToggleCommands(secondWord, ref outputNode); return;
                 case "initattack":
                 case "atk": outputNode = ExecuteDiscombobulatorAttack(ref terminal); return;
                 case "cd":
                 case "cooldown": outputNode = ExecuteDiscombobulatorCooldown(); return;
-                case "lategame":
-                    {
-                        switch (secondWord)
-                        {
-                            case "store": outputNode = UpgradeBus.instance.ConstructNode(); return;
-                            default: outputNode = ExecuteModInformation(); return;
-                        }
-                    }
+                case "lategame": outputNode = ExecuteLategameCommands(secondWord); return;
                 case "lgu": outputNode = UpgradeBus.instance.ConstructNode(); return;
-                case "reset":
-                    {
-                        switch(secondWord)
-                        {
-                            case "lgu": outputNode = ExecuteResetLGUSave(); return;
-                            default: return;
-                        }
-                    }
+                case "reset": outputNode = ExecuteResetCommands(secondWord, ref outputNode); return;
                 case "forcecredits": outputNode = ExecuteForceCredits(secondWord, ref terminal); return;
                 case "synccredits": outputNode = ExecuteSyncCredits(ref terminal); return;
                 case "intern":
                 case "interns": outputNode = ExecuteInternsCommand(ref terminal); return;
-                case "load":
-                    {
-                        switch(secondWord)
-                        {
-                            case "lgu":outputNode = ExecuteLoadLGUCommand(fullText, ref terminal); return;
-                            default: return;
-                        }
-                    }
-                case "scan":
-                    {
-                        switch(secondWord)
-                        {
-                            case "hives": outputNode = ExecuteScanHivesCommand(); return;
-                            case "scrap": outputNode = ExecuteScanScrapCommand(); return;
-                            case "player": outputNode = ExecuteScanPlayerCommand(); return;
-                            case "enemies": outputNode = ExecuteScanEnemiesCommand(); return;
-                            case "doors": outputNode= ExecuteScanDoorsCommand(); return;
-                            default: return;
-                        }
-                    }
+                case "extend": outputNode = ExecuteExtendCommands(secondWord, thirdWord, ref terminal, ref outputNode); return;
+                case "load": outputNode = ExecuteLoadCommands(secondWord, fullText, ref terminal, ref outputNode); return;
+                case "scan": outputNode = ExecuteScanCommands(secondWord, ref outputNode); return;
                 case "transmit": outputNode = ExecuteTransmitMessage(fullText.Substring(firstWord.Length+1), ref outputNode); return;
                 default: outputNode = ExecuteUpgradeCommand(fullText, ref terminal, ref outputNode); return;
             }

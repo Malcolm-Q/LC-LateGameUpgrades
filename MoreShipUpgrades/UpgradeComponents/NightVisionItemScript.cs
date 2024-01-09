@@ -16,20 +16,18 @@ namespace MoreShipUpgrades.UpgradeComponents
             base.ItemActivate(used, buttonDown);
             if (buttonDown)
             {
-                if (UpgradeBus.instance.nightVision) {
-                    HUDManager.Instance.chatText.text += "<color=#FF0000>Night vision is already active!</color>";
-                    return;
-                }
-                if (!UpgradeBus.instance.IndividualUpgrades[nightVisionScript.UPGRADE_NAME])
-                {
-                    LGUStore.instance.EnableNightVisionServerRpc();
-                }
-                else
-                {
-                    UpgradeBus.instance.UpgradeObjects[nightVisionScript.UPGRADE_NAME].GetComponent<nightVisionScript>().EnableOnClient();
-                }
-                playerHeldBy.DespawnHeldObject();
+                HUDManager.Instance.chatText.text += "<color=#FF0000>Night vision is already active!</color>";
+                return;
             }
+            if (!UpgradeBus.instance.IndividualUpgrades[nightVisionScript.UPGRADE_NAME])
+            {
+                LGUStore.instance.EnableNightVisionServerRpc();
+            }
+            else
+            {
+                UpgradeBus.instance.UpgradeObjects[nightVisionScript.UPGRADE_NAME].GetComponent<nightVisionScript>().EnableOnClient();
+            }
+            playerHeldBy.DespawnHeldObject();
         }
     }
 }

@@ -62,6 +62,7 @@ namespace MoreShipUpgrades.Managers
         public terminalFlashScript flashScript = null;
         public lockSmithScript lockScript = null;
         public defibScript internScript = null;
+        public ExtendDeadlineScript extendScript = null;
         public walkieScript walkieHandler = null;
 
         public Color nightVisColor;
@@ -69,6 +70,7 @@ namespace MoreShipUpgrades.Managers
         public GameObject modStorePrefab;
         public TerminalNode modStoreInterface;
         public Terminal terminal;
+        public PlayerControllerB localPlayer;
 
         public List<BoomboxItem> boomBoxes = new List<BoomboxItem>();
 
@@ -80,9 +82,9 @@ namespace MoreShipUpgrades.Managers
         {
             { exoskeletonScript.UPGRADE_NAME, level => (instance.cfg.CARRY_WEIGHT_REDUCTION - (level * instance.cfg.CARRY_WEIGHT_INCREMENT)) * 100 },
             { terminalFlashScript.UPGRADE_NAME, level => instance.cfg.DISCOMBOBULATOR_STUN_DURATION + (level * instance.cfg.DISCOMBOBULATOR_INCREMENT) },
-            { strongLegsScript.UPGRADE_NAME, level =>  instance.cfg.JUMP_FORCE + (level * instance.cfg.JUMP_FORCE_INCREMENT) - 13f },
-            { runningShoeScript.UPGRADE_NAME, level => instance.cfg.MOVEMENT_SPEED + (level * instance.cfg.MOVEMENT_INCREMENT) - 4.6f },
-            { biggerLungScript.UPGRADE_NAME, level => instance.cfg.SPRINT_TIME_INCREASE + (level * instance.cfg.SPRINT_TIME_INCREMENT) - 11f },
+            { strongLegsScript.UPGRADE_NAME, level =>  instance.cfg.JUMP_FORCE_UNLOCK + (level * instance.cfg.JUMP_FORCE_INCREMENT) },
+            { runningShoeScript.UPGRADE_NAME, level => instance.cfg.MOVEMENT_SPEED_UNLOCK + (level * instance.cfg.MOVEMENT_INCREMENT) },
+            { biggerLungScript.UPGRADE_NAME, level => instance.cfg.SPRINT_TIME_INCREASE_UNLOCK + (level * instance.cfg.SPRINT_TIME_INCREMENT) },
             { proteinPowderScript.UPGRADE_NAME, level => instance.cfg.PROTEIN_UNLOCK_FORCE + 1 + (instance.cfg.PROTEIN_INCREMENT * level) },
             { beekeeperScript.UPGRADE_NAME, level => 100 * (instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (level * instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT)) },
             { playerHealthScript.UPGRADE_NAME, level => instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK + (level)*instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT },
@@ -138,7 +140,11 @@ namespace MoreShipUpgrades.Managers
 
             return terminal;
         }
-
+        public PlayerControllerB GetLocalPlayer()
+        {
+            if (localPlayer == null) localPlayer = GameNetworkManager.Instance.localPlayerController;
+            return localPlayer;
+        }
         public TerminalNode ConstructNode()
         {
             modStoreInterface = ScriptableObject.CreateInstance<TerminalNode>();
@@ -161,6 +167,7 @@ namespace MoreShipUpgrades.Managers
 
         public void ResetAllValues(bool wipeObjRefs = true)
         {
+            ResetPlayerAttributes();
             DestroyTraps = false;
             scannerUpgrade = false;
             nightVision = false;
@@ -204,13 +211,18 @@ namespace MoreShipUpgrades.Managers
                 node.CurrentUpgrade = 0;
                 if(node.Name == nightVisionScript.UPGRADE_NAME) { node.Unlocked = true; }
             }
-            PlayerControllerB[] players = GameObject.FindObjectsOfType<PlayerControllerB>();
-            foreach (PlayerControllerB player in players)
-            {
-                player.movementSpeed = 4.6f;
-                player.sprintTime = 11;
-                player.jumpForce = 13;
-            }
+
+        }
+
+        private void ResetPlayerAttributes()
+        {
+            PlayerControllerB player = GameNetworkManager.Instance.localPlayerController;
+            if (player == null) return; // Disconnecting the game
+
+            logger.LogDebug($"Resetting {player.playerUsername}'s attributes");
+            if (runningShoes) runningShoeScript.ResetRunningShoesBuff(ref player);
+            if (biggerLungs) biggerLungScript.ResetBiggerLungsBuff(ref player);
+            if (strongLegs) strongLegsScript.ResetStrongLegsBuff(ref player);
         }
 
         internal void GenerateSales(int seed = -1) // TODO: Save sales
@@ -393,11 +405,12 @@ namespace MoreShipUpgrades.Managers
         }
         private void SetupHunterTerminalNode()
         {
+            hunterScript.SetupTierList();
             SetupMultiplePurchasableTerminalNode(hunterScript.UPGRADE_NAME,
                                                 true,
                                                 cfg.HUNTER_ENABLED,
                                                 cfg.HUNTER_PRICE,
-                                                new int[] { cfg.HUNTER_PRICE2, cfg.HUNTER_PRICE3 });
+                                                ParseUpgradePrices(cfg.HUNTER_UPGRADE_PRICES));
         }
         private void SetupBetterScannerTerminalNode()
         {
@@ -443,6 +456,14 @@ namespace MoreShipUpgrades.Managers
                                     cfg.INTERN_ENABLED,
                                     cfg.INTERN_PRICE,
                                     string.Format(AssetBundleHandler.GetInfoFromJSON("Interns"), cfg.INTERN_PRICE));
+        }
+        private void SetupExtendDeadlineTerminalNode()
+        {
+            SetupOneTimeTerminalNode("Extend Deadline",
+                                    true,
+                                    cfg.EXTEND_DEADLINE_ENABLED,
+                                    cfg.EXTEND_DEADLINE_PRICE,
+                                    "Extends the deadline by a specified amount of days.");
         }
 
         private void SetupContractTerminalNode()

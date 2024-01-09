@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Linq;
-using UnityEngine;
 using MoreShipUpgrades.Misc;
 using Unity.Netcode;
 using System.Diagnostics;
@@ -22,7 +21,7 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("KillPlayer")]
         private static void DisableUpgradesOnDeath(PlayerControllerB __instance)
         {
-            if(!UpgradeBus.instance.cfg.LOSE_NIGHT_VIS_ON_DEATH) { return; }
+            if (!UpgradeBus.instance.cfg.LOSE_NIGHT_VIS_ON_DEATH) { return; }
             if (!__instance.IsOwner) { return; }
             else if (__instance.isPlayerDead) { return; }
             else if (!__instance.AllowPlayerDeath()) { return; }
@@ -113,20 +112,24 @@ namespace MoreShipUpgrades.Patches
             MethodInfo reduceFallDamageMethod = typeof(strongLegsScript).GetMethod("ReduceFallDamage", BindingFlags.Static | BindingFlags.Public);
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             bool instakillFall = false;
-            bool regularFall = false;
+            bool smallFall = false;
+            bool bigFall = false;
             for(int i = 0; i < codes.Count; i++)
             {
-                if (instakillFall && regularFall) break;
+                if (instakillFall && smallFall && bigFall) break;
 
                 if (codes[i].opcode == OpCodes.Ldc_I4_S)
                 {
                     switch (codes[i].operand.ToString())
                     {
                         case "100":
-                        case "40":
+                        case "50":
+                        case "30":
                             {
                                 codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, reduceFallDamageMethod));
-                                if (!instakillFall) instakillFall = true; else regularFall = true;
+                                if (!instakillFall) instakillFall = true;
+                                else if( instakillFall ) smallFall = true;
+                                else bigFall = true;
                                 continue;
                             }
                         default: continue;

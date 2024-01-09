@@ -13,7 +13,7 @@ namespace MoreShipUpgrades.UpgradeComponents
 {
     internal class nightVisionScript : BaseUpgrade
     {
-        private float nightBattery, regen, drain;
+        private float nightBattery;
         private Transform batteryBar;
         private PlayerControllerB client;
         private bool batteryExhaustion;
@@ -22,6 +22,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         public static string UPGRADE_NAME = "NV Headset Batteries";
         public static string PRICES_DEFAULT = "300,400,500";
 
+        private static LGULogger logger = new LGULogger(UPGRADE_NAME);
         void Start()
         {
             upgradeName = UPGRADE_NAME;
@@ -35,10 +36,9 @@ namespace MoreShipUpgrades.UpgradeComponents
             }
             else
             {
+                logger.LogWarning("Error parsing the key for toggle night vision, defaulted to LeftAlt");
                 toggleKey = Key.LeftAlt;
             }
-            regen = UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_SPEED;
-            drain = UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_SPEED;
         }
 
         public override void Register()
@@ -102,8 +102,6 @@ namespace MoreShipUpgrades.UpgradeComponents
             {
                 TurnOff();
             }
-            regen = UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_SPEED;
-            drain = UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_SPEED;
         }
 
         private void TurnOff(bool exhaust = false)

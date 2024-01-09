@@ -8,14 +8,16 @@ namespace MoreShipUpgrades.Patches
     [HarmonyPatch(typeof(GameNetworkManager))]
     internal class GameNetworkManagerPatcher
     {
+        private static LGULogger logger = new LGULogger(nameof(GameNetworkManagerPatcher));
         [HarmonyPostfix]
         [HarmonyPatch("Disconnect")]
         private static void ResetUpgradeBus()
         {
-            BaseUpgrade[] upgradeObjects = GameObject.FindObjectsOfType<BaseUpgrade>();
+            logger.LogDebug("Resetting the Upgrade Bus due to disconnecting...");
+            BaseUpgrade[] upgradeObjects = Object.FindObjectsOfType<BaseUpgrade>();
             foreach (BaseUpgrade upgrade in upgradeObjects)
             {
-                GameObject.Destroy(upgrade.gameObject);
+                Object.Destroy(upgrade.gameObject);
             }           
             UpgradeBus.instance.ResetAllValues();
         }
@@ -24,10 +26,9 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("SaveGame")]
         private static void saveLGU(GameNetworkManager __instance)
         {
-            if(__instance.isHostingGame)
-            {
-                LGUStore.instance.ServerSaveFileServerRpc();
-            }
+            if (!__instance.isHostingGame) return;
+            logger.LogDebug("Saving the LGU upgrades unto a json file...");
+            LGUStore.instance.ServerSaveFileServerRpc();
         }
     }
 }

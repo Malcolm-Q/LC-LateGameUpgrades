@@ -5,12 +5,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 using System.Reflection;
+using MoreShipUpgrades.Misc;
 
 namespace MoreShipUpgrades.Patches
 {
     [HarmonyPatch(typeof(SpringManAI))]
     internal class SpringManAIPatcher
     {
+        private static LGULogger logger = new LGULogger(nameof(SpringManAIPatcher));
         [HarmonyPrefix]
         [HarmonyPatch("DoAIInterval")]
         private static void DoAllIntervalPrefix(ref SpringManAI __instance)
@@ -42,7 +44,7 @@ namespace MoreShipUpgrades.Patches
 
                 if (foundStopMovementFlag) break;
             }
-            if (!foundStopMovementFlag) Plugin.mls.LogError("Could not find the attribution of flag that stops movement");
+            if (!foundStopMovementFlag) logger.LogError("Could not find the attribution of flag that stops movement");
             return codes;
         }
     }

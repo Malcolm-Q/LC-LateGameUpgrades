@@ -41,7 +41,7 @@ namespace MoreShipUpgrades.Patches
                 codes.Insert(i - 8, new CodeInstruction(OpCodes.Call, beeReduceDamage));
                 found = true;
             }
-            if (!found) { logger.LogDebug("Did not find DamagePlayer function"); }
+            if (!found) { logger.LogError("Did not find DamagePlayer function"); }
             return codes.AsEnumerable();
         }
 
@@ -64,6 +64,7 @@ namespace MoreShipUpgrades.Patches
                 codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, beeIncreaseHiveValue));
                 found = true;
             }
+            if (!found) { logger.LogError("Did not find the hive scrap value..."); }
             return codes.AsEnumerable();
         }
     }

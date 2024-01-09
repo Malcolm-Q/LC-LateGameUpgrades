@@ -30,6 +30,8 @@ namespace MoreShipUpgrades.Misc
         public bool LIGHTNING_ROD_ENABLED { get; set; }
         public bool HUNTER_ENABLED { get; set; }
         public bool PLAYER_HEALTH_ENABLED { get; set; }
+        public bool PEEPER_ENABLED { get; set; }
+        public bool EXTEND_DEADLINE_ENABLED { get; set; }
 
         // individual or shared
         public bool ADVANCED_TELE_INDIVIDUAL { get; set; }
@@ -50,7 +52,6 @@ namespace MoreShipUpgrades.Misc
         public bool MALWARE_BROADCASTER_INDIVIDUAL { get; set; }
         public bool INTERN_INDIVIDUAL { get; set; }
         public bool LOCKSMITH_INDIVIDUAL { get; set; }
-        public bool PEEPER_ENABLED { get; set; }
 
         // prices
         public int PEEPER_PRICE { get; set; }
@@ -71,18 +72,17 @@ namespace MoreShipUpgrades.Misc
         public int WALKIE_PRICE { get; set; }
         public int LIGHTNING_ROD_PRICE { get; set; }
         public int PLAYER_HEALTH_PRICE { get; set; }
+        public int EXTEND_DEADLINE_PRICE { get; set; }
         public int CONTRACT_PRICE { get; set; }
 
         // attributes
         public float BIGGER_LUNGS_STAMINA_REGEN_INCREASE { get; set; }
         public float BIGGER_LUNGS_JUMP_STAMINA_COST_DECREASE { get; set; }
         public int PROTEIN_INCREMENT { get; set; }
-        public int HUNTER_PRICE2 { get; set; }
-        public int HUNTER_PRICE3 { get; set; }
         public bool KEEP_ITEMS_ON_TELE { get; set; }
-        public float SPRINT_TIME_INCREASE { get; set; }
-        public float MOVEMENT_SPEED { get; set; }
-        public float JUMP_FORCE { get; set; }
+        public float SPRINT_TIME_INCREASE_UNLOCK { get; set; }
+        public float MOVEMENT_SPEED_UNLOCK { get; set; }
+        public float JUMP_FORCE_UNLOCK { get; set; }
         public bool DESTROY_TRAP { get; set; }
         public float DISARM_TIME { get; set; }
         public bool EXPLODE_TRAP { get; set; }
@@ -138,6 +138,8 @@ namespace MoreShipUpgrades.Misc
         public string DISCO_UPGRADE_PRICES { get; set; }
         public string PROTEIN_UPGRADE_PRICES { get; set; }
         public string PLAYER_HEALTH_UPGRADE_PRICES { get; set; }
+        public string HUNTER_UPGRADE_PRICES { get; set; }
+        public string HUNTER_SAMPLE_TIERS {  get; set; }
         public bool SHARED_UPGRADES { get; set; }
         public bool WALKIE_ENABLED { get; set; }
         public bool WALKIE_INDIVIDUAL { get; set; }
@@ -187,13 +189,27 @@ namespace MoreShipUpgrades.Misc
         public bool HELMET_ENABLED { get; set; }
         public int HELMET_PRICE { get; set; }
         public int HELMET_HITS_BLOCKED { get; set; }
+        public int SNARE_FLEA_SAMPLE_MINIMUM_VALUE { get; set; }
+        public int SNARE_FLEA_SAMPLE_MAXIMUM_VALUE { get; set; }
+        public int BUNKER_SPIDER_SAMPLE_MINIMUM_VALUE { get; set; }
+        public int BUNKER_SPIDER_SAMPLE_MAXIMUM_VALUE { get; set; }
+        public int HOARDING_BUG_SAMPLE_MINIMUM_VALUE { get; set; }
+        public int HOARDING_BUG_SAMPLE_MAXIMUM_VALUE { get; set; }
+        public int BRACKEN_SAMPLE_MINIMUM_VALUE { get; set; }
+        public int BRACKEN_SAMPLE_MAXIMUM_VALUE { get; set; }
+        public int EYELESS_DOG_SAMPLE_MINIMUM_VALUE { get; set; }
+        public int EYELESS_DOG_SAMPLE_MAXIMUM_VALUE { get; set; }
+        public int BABOON_HAWK_SAMPLE_MINIMUM_VALUE { get; set; }
+        public int BABOON_HAWK_SAMPLE_MAXIMUM_VALUE { get; set; }
+        public int THUMPER_SAMPLE_MINIMUM_VALUE { get; set; }
+        public int THUMPER_SAMPLE_MAXIMUM_VALUE { get; set; }
 
         public PluginConfig(ConfigFile cfg)
         {
             configFile = cfg;
         }
 
-        private T ConfigEntry<T>(string section, string key, T defaultVal, string description)
+        private T ConfigEntry<T>(string section, string key, T defaultVal, string description = "")
         {
             return configFile.Bind(section, key, defaultVal, description).Value;
         }
@@ -266,17 +282,21 @@ namespace MoreShipUpgrades.Misc
             topSection = biggerLungScript.UPGRADE_NAME;
             BIGGER_LUNGS_ENABLED = ConfigEntry(topSection, "Enable Bigger Lungs Upgrade", true, "More Stamina");
             BIGGER_LUNGS_PRICE = ConfigEntry(topSection, "Price of Bigger Lungs Upgrade", 600, "");
-            SPRINT_TIME_INCREASE = ConfigEntry(topSection, "SprintTime value", 17f, "Vanilla value is 11");
-            SPRINT_TIME_INCREMENT = ConfigEntry(topSection, "SprintTime Increment", 1.25f,"How much the above value is increased on upgrade.");
+            SPRINT_TIME_INCREASE_UNLOCK = ConfigEntry(topSection, "Sprint Time Unlock", 6f, "Amount of sprint time gained when unlocking the upgrade.\nDefault vanilla value is 11f.");
+            SPRINT_TIME_INCREMENT = ConfigEntry(topSection, "Sprint Time Increment", 1.25f,"Amount of sprint time gained when increasing the level of upgrade.");
             BIGGER_LUNGS_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, biggerLungScript.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             BIGGER_LUNGS_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
             BIGGER_LUNGS_STAMINA_REGEN_INCREASE = ConfigEntry(topSection, "Stamina Regeneration Increase", 1.05f, "Increase of stamina regeneration applied past level 1");
             BIGGER_LUNGS_JUMP_STAMINA_COST_DECREASE = ConfigEntry(topSection, "Stamina cost decrease on jumps", 0.90f, "Multiplied with the vanilla cost of jumping");
-          
+
+            topSection = "Extend Deadline";
+            EXTEND_DEADLINE_ENABLED = ConfigEntry(topSection, "Enable Extend Deadline Purchase", true, "Increments the amount of days before deadline is reached.");
+            EXTEND_DEADLINE_PRICE = ConfigEntry(topSection, "Extend Deadline Price", 1500, "Price of each day extension requested in the terminal.");
+
             topSection = runningShoeScript.UPGRADE_NAME;
             RUNNING_SHOES_ENABLED = ConfigEntry(topSection, "Enable Running Shoes Upgrade", true, "Run Faster");
             RUNNING_SHOES_PRICE = ConfigEntry(topSection, "Price of Running Shoes Upgrade", 650, "");
-            MOVEMENT_SPEED = ConfigEntry(topSection, "Movement Speed Value", 6f, "Vanilla value is 4.6");
+            MOVEMENT_SPEED_UNLOCK = ConfigEntry(topSection, "Movement Speed Unlock", 1.4f, "Value added to player's movement speed when first purchased.\nDefault vanilla value is 4.6f.");
             MOVEMENT_INCREMENT = ConfigEntry(topSection, "Movement Speed Increment", 0.5f, "How much the above value is increased on upgrade.");
             RUNNING_SHOES_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, biggerLungScript.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             RUNNING_SHOES_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
@@ -285,7 +305,7 @@ namespace MoreShipUpgrades.Misc
             topSection = strongLegsScript.UPGRADE_NAME;
             STRONG_LEGS_ENABLED = ConfigEntry(topSection, "Enable Strong Legs Upgrade", true, "Jump Higher");
             STRONG_LEGS_PRICE = ConfigEntry(topSection, "Price of Strong Legs Upgrade", 300, "");
-            JUMP_FORCE = ConfigEntry(topSection, "Jump Force", 16f, "Vanilla value is 13");
+            JUMP_FORCE_UNLOCK = ConfigEntry(topSection, "Jump Force Unlock", 3f, "Amount of jump force added when unlocking the upgrade.\nDefault vanilla value is 13f.");
             JUMP_FORCE_INCREMENT = ConfigEntry(topSection, "Jump Force Increment", 0.75f, "How much the above value is increased on upgrade.");
             STRONG_LEGS_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, strongLegsScript.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             STRONG_LEGS_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
@@ -386,8 +406,25 @@ namespace MoreShipUpgrades.Misc
             topSection = hunterScript.UPGRADE_NAME;
             HUNTER_ENABLED = ConfigEntry(topSection, "Enable the Hunter upgrade", true, "Collect and sell samples from dead enemies");
             HUNTER_PRICE = ConfigEntry(topSection, "Hunter price", 700, "Default price for upgrade.");
-            HUNTER_PRICE2 = ConfigEntry(topSection, "Second Hunter level price", 500, "");
-            HUNTER_PRICE3 = ConfigEntry(topSection, "Third Hunter level price", 600, "");
+            HUNTER_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, "500,600", BaseUpgrade.PRICES_DESCRIPTION);
+            HUNTER_SAMPLE_TIERS = ConfigEntry(topSection,
+                                            "Samples dropping at each tier",
+                                            "Hoarding Bug, Centipede-Bunker Spider, Baboon hawk-Flowerman, MouthDog, Crawler",
+                                            "Specifies at which tier of Hunter do each sample start dropping from. Each tier is separated with a dash ('-') and each list of monsters will be separated with a comma (',')\nSupported Enemies: Hoarding Bug, Centipede (Snare Flea),Bunker Spider, Baboon Hawk, Crawler (Half/Thumper), Flowerman (Bracken) and MouthDog (Eyeless Dog)");
+            SNARE_FLEA_SAMPLE_MINIMUM_VALUE = ConfigEntry(topSection, "Minimum scrap value of a Snare Flea sample", 35);
+            SNARE_FLEA_SAMPLE_MAXIMUM_VALUE = ConfigEntry(topSection, "Maximum scrap value of a Snare Flea sample", 60);
+            BUNKER_SPIDER_SAMPLE_MINIMUM_VALUE = ConfigEntry(topSection, "Minimum scrap value of a Bunker Spider sample", 65);
+            BUNKER_SPIDER_SAMPLE_MAXIMUM_VALUE = ConfigEntry(topSection, "Maximum scrap value of a Bunker Spider sample", 95);
+            HOARDING_BUG_SAMPLE_MINIMUM_VALUE = ConfigEntry(topSection, "Minimum scrap value of a Hoarding Bug sample", 45);
+            HOARDING_BUG_SAMPLE_MAXIMUM_VALUE = ConfigEntry(topSection, "Maximum scrap value of a Hoarding Bug sample", 75);
+            BRACKEN_SAMPLE_MINIMUM_VALUE = ConfigEntry(topSection, "Minimum scrap value of a Bracken sample", 80);
+            BRACKEN_SAMPLE_MAXIMUM_VALUE = ConfigEntry(topSection, "Maximum scrap value of a Bracken sample", 125);
+            EYELESS_DOG_SAMPLE_MINIMUM_VALUE = ConfigEntry(topSection, "Minimum scrap value of a Eyeless Dog sample", 100);
+            EYELESS_DOG_SAMPLE_MAXIMUM_VALUE = ConfigEntry(topSection, "Maximum scrap value of a Eyeless Dog sample", 150);
+            BABOON_HAWK_SAMPLE_MINIMUM_VALUE = ConfigEntry(topSection, "Minimum scrap value of a Baboon Hawk sample", 75);
+            BABOON_HAWK_SAMPLE_MAXIMUM_VALUE = ConfigEntry(topSection, "Maximum scrap value of a Baboon Hawk sample", 115);
+            THUMPER_SAMPLE_MINIMUM_VALUE = ConfigEntry(topSection, "Minimum scrap value of a Half sample", 80);
+            THUMPER_SAMPLE_MAXIMUM_VALUE = ConfigEntry(topSection, "Maximum scrap value of a Half sample", 125);
 
             topSection = playerHealthScript.UPGRADE_NAME;
             PLAYER_HEALTH_ENABLED = ConfigEntry(topSection, playerHealthScript.ENABLED_SECTION, playerHealthScript.ENABLED_DEFAULT, playerHealthScript.ENABLED_DESCRIPTION);
