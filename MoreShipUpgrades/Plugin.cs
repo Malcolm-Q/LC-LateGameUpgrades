@@ -16,7 +16,7 @@ using Newtonsoft.Json;
 namespace MoreShipUpgrades
 {
     [BepInEx.BepInPlugin(Metadata.GUID,Metadata.NAME,Metadata.VERSION)]
-    [BepInDependency("evaisa.lethallib","0.6.0")]
+    [BepInDependency("evaisa.lethallib")]
     public class Plugin : BaseUnityPlugin
     {
         private readonly Harmony harmony = new Harmony(Metadata.GUID);
