@@ -21,7 +21,14 @@ namespace MoreShipUpgrades.Patches
             currentEnemy = __instance.NetworkObject.NetworkObjectId;
             string name = __instance.enemyType.enemyName;
 
-            if (!(UpgradeBus.instance.hunter && hunterScript.tiers[UpgradeBus.instance.huntLevel].Contains(name.ToLower()))) return;
+            if (!(UpgradeBus.instance.hunter && hunterScript.tiers[UpgradeBus.instance.huntLevel].Contains(name.ToLower())))
+            {
+                logger.LogDebug($"No sample was found to spawn for {name.ToLower()}");
+                logger.LogDebug("Enemies in the Hunter list");
+                foreach (string monsterName in hunterScript.tiers[UpgradeBus.instance.huntLevel])
+                    logger.LogDebug($"{monsterName}");
+                return;
+            }
 
             logger.LogDebug($"Spawning sample for {name}");
             GameObject go = Object.Instantiate(UpgradeBus.instance.samplePrefabs[name.ToLower()],__instance.transform.position + Vector3.up,Quaternion.identity);
