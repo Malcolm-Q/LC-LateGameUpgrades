@@ -40,6 +40,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
         private const string ITEM_DESCRIPTION = "Allows carrying multiple items";
         private const string NO_ITEMS_TEXT = "No items to deposit...";
         private const string FULL_TEXT = "Too many items in the wheelbarrow";
+        private const string WHEELBARROWCEPTION_TEXT = "You're not allowed to do that...";
         private const string DEPOSIT_TEXT = "Depositing item...";
         private const string START_DEPOSIT_TEXT = "Deposit item: [LMB]";
 
@@ -80,6 +81,13 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
             {
                 trigger.interactable = false;
                 trigger.disabledHoverTip = NO_ITEMS_TEXT;
+                return;
+            }
+            GrabbableObject holdingItem = player.currentlyHeldObjectServer;
+            if (holdingItem.GetComponent<WheelbarrowScript>() != null )
+            {
+                trigger.interactable = false;
+                trigger.disabledHoverTip = WHEELBARROWCEPTION_TEXT;
                 return;
             }
             GrabbableObject[] storedItems = GetComponentsInChildren<GrabbableObject>();

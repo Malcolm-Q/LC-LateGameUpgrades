@@ -137,7 +137,8 @@ namespace MoreShipUpgrades.Patches
             WheelbarrowScript wheelbarrow = __instance.currentlyHeldObjectServer.GetComponentInParent<WheelbarrowScript>();
             if (wheelbarrow == null) return;
             logger.LogDebug("Removing item's parent to allow placing it back in again");
-            __instance.currentlyHeldObjectServer.transform.parent = null;
+            __instance.currentlyHeldObjectServer.transform.SetParent(__instance.currentlyHeldObjectServer.parentObject);
+            __instance.currentlyHeldObjectServer.transform.localScale = __instance.currentlyHeldObjectServer.originalScale;
             wheelbarrow.DecrementStoredItems();
         }
 

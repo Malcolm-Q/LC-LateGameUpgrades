@@ -332,7 +332,7 @@ namespace MoreShipUpgrades
             wheelbarrow.maxValue = cfg.SCRAP_WHEELBARROW_MAXIMUM_VALUE;
             wheelbarrow.twoHanded = true;
             wheelbarrow.twoHandedAnimation = false;
-            wheelbarrow.spawnPrefab.transform.localScale = new Vector3(1f, 1f, 1f); // TODO Change when model created
+            wheelbarrow.spawnPrefab.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f); // TODO Change when model created
             wheelbarrow.rotationOffset = new Vector3(0f, 90f, 0f); // TODO Change when model created
             wheelbarrow.allowDroppingAheadOfPlayer = true;
             wheelbarrow.isConductiveMetal = true;
