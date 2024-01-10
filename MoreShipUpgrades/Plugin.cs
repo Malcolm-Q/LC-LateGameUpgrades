@@ -12,6 +12,7 @@ using BepInEx.Bootstrap;
 using Newtonsoft.Json;
 using MoreShipUpgrades.Patches;
 using MoreShipUpgrades.UpgradeComponents;
+using MoreShipUpgrades.UpgradeComponents.Wheelbarrow;
 
 namespace MoreShipUpgrades
 {
@@ -126,7 +127,7 @@ namespace MoreShipUpgrades
             SetupPeeper();
             SetupSamples();
             SetupDivingKit();
-            SetupWheelbarrow();
+            SetupWheelbarrows();
         }
         private void SetupSamples()
         {
@@ -316,9 +317,37 @@ namespace MoreShipUpgrades
             peepNode.displayText = "Looks at coil heads, don't lose it\n";
             LethalLib.Modules.Items.RegisterShopItem(Peeper, null, null, peepNode, Peeper.creditsWorth);
         }
-        private void SetupWheelbarrow()
+        private void SetupWheelbarrows()
         {
-            Item wheelbarrow = AssetBundleHandler.GetItemObject("Wheelbarrow");
+            SetupStoreWheelbarrow();
+            SetupScrapWheelbarrow();
+        }
+        private void SetupScrapWheelbarrow() 
+        {
+            Item wheelbarrow = AssetBundleHandler.GetItemObject("Scrap Wheelbarrow");
+            if (wheelbarrow == null) return;
+
+            wheelbarrow.itemId = 492018;
+            wheelbarrow.minValue = cfg.SCRAP_WHEELBARROW_MINIMUM_VALUE;
+            wheelbarrow.maxValue = cfg.SCRAP_WHEELBARROW_MAXIMUM_VALUE;
+            wheelbarrow.twoHanded = true;
+            wheelbarrow.twoHandedAnimation = false;
+            wheelbarrow.spawnPrefab.transform.localScale = new Vector3(1f, 1f, 1f); // TODO Change when model created
+            wheelbarrow.rotationOffset = new Vector3(0f, 90f, 0f); // TODO Change when model created
+            wheelbarrow.allowDroppingAheadOfPlayer = true;
+            wheelbarrow.isConductiveMetal = true;
+            wheelbarrow.isScrap = true;
+            ScrapWheelbarrow barrowScript = wheelbarrow.spawnPrefab.AddComponent<ScrapWheelbarrow>();
+            barrowScript.itemProperties = wheelbarrow;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
+
+            if (!cfg.SCRAP_WHEELBARROW_ENABLED) return;
+
+            LethalLib.Modules.Items.RegisterScrap(wheelbarrow, 10000, LethalLib.Modules.Levels.LevelTypes.All);
+        }
+        private void SetupStoreWheelbarrow()
+        {
+            Item wheelbarrow = AssetBundleHandler.GetItemObject("Store Wheelbarrow");
             if (wheelbarrow == null) return;
 
             wheelbarrow.itemId = 492018;
@@ -329,7 +358,7 @@ namespace MoreShipUpgrades
             wheelbarrow.rotationOffset = new Vector3(0f, 90f, 0f); // TODO Change when model created
             wheelbarrow.allowDroppingAheadOfPlayer = true;
             wheelbarrow.isConductiveMetal = true;
-            WheelbarrowScript barrowScript = wheelbarrow.spawnPrefab.AddComponent<WheelbarrowScript>();
+            StoreWheelbarrow barrowScript = wheelbarrow.spawnPrefab.AddComponent<StoreWheelbarrow>();
             barrowScript.itemProperties = wheelbarrow;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
 

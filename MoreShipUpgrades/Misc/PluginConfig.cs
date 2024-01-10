@@ -32,6 +32,7 @@ namespace MoreShipUpgrades.Misc
         public bool PEEPER_ENABLED { get; set; }
         public bool EXTEND_DEADLINE_ENABLED { get; set; }
         public bool WHEELBARROW_ENABLED { get; set; }
+        public bool SCRAP_WHEELBARROW_ENABLED { get; set; }
 
         // individual or shared
         public bool ADVANCED_TELE_INDIVIDUAL { get; set; }
@@ -185,6 +186,10 @@ namespace MoreShipUpgrades.Misc
         public int THUMPER_SAMPLE_MAXIMUM_VALUE { get; set; }
         public int WHEELBARROW_MAXIMUM_AMOUNT_ITEMS {  get; set; }
         public float WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER { get; set; }
+        public int SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS { get; set; }
+        public float SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER { get; set; }
+        public int SCRAP_WHEELBARROW_MINIMUM_VALUE { get; set; }
+        public int SCRAP_WHEELBARROW_MAXIMUM_VALUE { get; set; }
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -406,6 +411,11 @@ namespace MoreShipUpgrades.Misc
             WHEELBARROW_PRICE = ConfigEntry(topSection, "Price of the Wheelbarrow Item", 400, "Price of the Wheelbarrow in the store");
             WHEELBARROW_MAXIMUM_AMOUNT_ITEMS = ConfigEntry(topSection, "Maximum amount of items", 8, "Amount of items allowed before the wheelbarrow is considered full");
             WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER = ConfigEntry(topSection, "Weight reduction multiplier", 0.5f, "How much an item's weight will be ignored to the wheelbarrow's total weight");
+            SCRAP_WHEELBARROW_ENABLED = ConfigEntry(topSection, "Enable the Wheelbarrow Scrap Item", true, "Allows you to scavenge a wheelbarrow in which you can store items on");
+            SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS = ConfigEntry(topSection, "Maximum amount of items", 4, "Amount of items allowed before the scrap wheelbarrow is considered full");
+            SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER = ConfigEntry(topSection, "Weight reduction multiplier", 0.7f, "How much an item's weight will be ignored to the scrap wheelbarrow's total weight");
+            SCRAP_WHEELBARROW_MINIMUM_VALUE = ConfigEntry(topSection, "Minimum scrap value", 50, "Lower boundary of the scrap's possible value");
+            SCRAP_WHEELBARROW_MAXIMUM_VALUE = ConfigEntry(topSection, "Maximum scrap value", 100, "Higher boundary of the scrap's possible value");
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Reflection.Emit;
 using System.Linq;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents;
+using MoreShipUpgrades.UpgradeComponents.Wheelbarrow;
 
 namespace MoreShipUpgrades.Patches
 {
