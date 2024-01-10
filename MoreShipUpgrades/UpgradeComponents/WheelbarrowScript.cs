@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents
@@ -13,6 +14,10 @@ namespace MoreShipUpgrades.UpgradeComponents
         /// </summary>
         private int maximumAmountItems;
         /// <summary>
+        /// Current amount of items stored in the wheelbarrow
+        /// </summary>
+        private int currentAmountItems;
+        /// <summary>
         /// Multiplier to the inserted item's weight when inserted into the wheelbarrow to increase the wheelbarrow's total weight
         /// </summary>
         private float weightReduceMultiplier;
@@ -23,7 +28,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         /// <summary>
         /// The GameObject responsible to be containing all of the items stored in the wheelbarrow
         /// </summary>
-        private PlaceableObjectsSurface container;
+        private BoxCollider container;
         /// <summary>
         /// Trigger responsible to allow interacting with wheelbarrow's container of items
         /// </summary>
@@ -31,6 +36,7 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         private const string ITEM_NAME = "Wheelbarrow";
         private const string ITEM_DESCRIPTION = "Allows carrying multiple items";
+        private const string NO_ITEMS_TEXT = "No items to deposit...";
         private const string FULL_TEXT = "Too many items in the wheelbarrow";
         private const string DEPOSIT_TEXT = "Depositing item...";
         private const string START_DEPOSIT_TEXT = "Deposit item: [LMB]";
@@ -46,13 +52,43 @@ namespace MoreShipUpgrades.UpgradeComponents
             defaultWeight = itemProperties.weight;
 
             trigger = GetComponentInChildren<InteractTrigger>();
-            container = GetComponentInChildren<PlaceableObjectsSurface>();
-            if (container == null) logger.LogError($"Couldn't find {nameof(PlaceableObjectsSurface)} component in the prefab...");
+            container = GameObject.Find("PlaceableBounds").GetComponent<BoxCollider>();
+            if (container == null) logger.LogError($"Couldn't find {nameof(BoxCollider)} component in the prefab...");
             if (trigger == null) logger.LogError($"Couldn't find {nameof(InteractTrigger)} component in the prefab...");
-            trigger.onInteractEarly.AddListener(TryToStoreItemToWheelbarrow);
+
             trigger.onInteract.AddListener(StoreItemToWheelbarrow);
             trigger.tag = nameof(InteractTrigger); // Necessary for the interact UI to appear
+            trigger.interactCooldown = false;
+            trigger.cooldownTime = 0;
+            
             SetupItemAttributes();
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            PlayerControllerB player = GameNetworkManager.Instance.localPlayerController;
+            if (player == null)
+            {
+                trigger.interactable = false;
+                return;
+            }
+
+            if (!player.isHoldingObject)
+            {
+                trigger.interactable = false;
+                trigger.disabledHoverTip = NO_ITEMS_TEXT;
+                return;
+            }
+            GrabbableObject[] storedItems = GetComponentsInChildren<GrabbableObject>();
+            if (storedItems.Length > maximumAmountItems)
+            {
+                trigger.interactable = false;
+                trigger.disabledHoverTip = FULL_TEXT;
+                return;
+            }
+            trigger.interactable = true;
+            trigger.hoverTip = START_DEPOSIT_TEXT;
         }
         /// <summary>
         /// Setups attributes related to the wheelbarrow item
@@ -78,6 +114,10 @@ namespace MoreShipUpgrades.UpgradeComponents
             scanNode.headerText = ITEM_NAME;
             scanNode.nodeType = 0;
             scanNode.subText = ITEM_DESCRIPTION;
+        }
+        public void DecrementStoredItems()
+        {
+            currentAmountItems--;
         }
         /// <summary>
         /// Whenever a player grabs the wheelbarrow, update the weight value of the item according to the amount of items present in it
@@ -113,7 +153,7 @@ namespace MoreShipUpgrades.UpgradeComponents
 
             if (!(GameNetworkManager.Instance != null && playerInteractor == GameNetworkManager.Instance.localPlayerController)) return;
 
-            Collider triggerCollider = container.placeableBounds;
+            Collider triggerCollider = container;
             Vector3 vector = RoundManager.RandomPointInBounds(triggerCollider.bounds);
             vector.y = triggerCollider.bounds.min.y;
             RaycastHit raycastHit;
@@ -122,29 +162,11 @@ namespace MoreShipUpgrades.UpgradeComponents
                 vector = raycastHit.point;
             }
             vector.y += playerInteractor.currentlyHeldObjectServer.itemProperties.verticalOffset;
-            vector += triggerCollider.transform.position - container.parentTo.transform.position;
+            vector += (triggerCollider.transform.position - gameObject.transform.position);
             vector = container.transform.InverseTransformPoint(vector);
             logger.LogDebug($"Applying vector of ({vector.x},{vector.y},{vector.z})");
-            playerInteractor.DiscardHeldObject(true, container.parentTo, vector, false);
-        }
-        /// <summary>
-        /// Action which is triggered when the player starts interacting with wheelbarrow
-        /// It will check if it has enough capacity to hold another item.
-        /// Otherwise it will let the interaction continue
-        /// </summary>
-        /// <param name="playerInteractor"></param>
-        private void TryToStoreItemToWheelbarrow(PlayerControllerB playerInteractor)
-        {
-            GrabbableObject[] storedItems = GetComponentsInChildren<GrabbableObject>();
-            if (storedItems.Length >= maximumAmountItems + 1) // Because the wheelbarrow itself is a GrabbableObject
-            {
-                trigger.holdTip = FULL_TEXT;
-                trigger.enabled = false;
-                return;
-            }
-            trigger.hoverTip = START_DEPOSIT_TEXT;
-            trigger.holdTip = DEPOSIT_TEXT;
-            trigger.enabled = true;
+            playerInteractor.DiscardHeldObject(true, GetComponent<NetworkObject>(), vector, false);
+            currentAmountItems++;
         }
     }
 }

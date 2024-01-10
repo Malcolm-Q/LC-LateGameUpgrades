@@ -133,9 +133,11 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("GrabObjectClientRpc")]
         public static void GrabObjectClientRpcPostfix(PlayerControllerB __instance)
         {
-            if (__instance.currentlyHeldObjectServer.GetComponentInParent<WheelbarrowScript>() == null) return;
+            WheelbarrowScript wheelbarrow = __instance.currentlyHeldObjectServer.GetComponentInParent<WheelbarrowScript>();
+            if (wheelbarrow == null) return;
             logger.LogDebug("Removing item's parent to allow placing it back in again");
             __instance.currentlyHeldObjectServer.transform.parent = null;
+            wheelbarrow.DecrementStoredItems();
         }
 
         [HarmonyTranspiler]
