@@ -13,6 +13,8 @@ using Newtonsoft.Json;
 using MoreShipUpgrades.Patches;
 using MoreShipUpgrades.UpgradeComponents;
 using MoreShipUpgrades.UpgradeComponents.Wheelbarrow;
+using LethalLib.Extras;
+using LethalLib.Modules;
 
 namespace MoreShipUpgrades
 {
@@ -355,9 +357,12 @@ namespace MoreShipUpgrades
             barrowScript.wheelsClip = shoppingCartSound;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
 
-            if (!cfg.SCRAP_WHEELBARROW_ENABLED) return;
-
-            LethalLib.Modules.Items.RegisterScrap(wheelbarrow, cfg.SCRAP_WHEELBARROW_RARITY, LethalLib.Modules.Levels.LevelTypes.All);
+            if (!cfg.SCRAP_WHEELBARROW_ENABLED) return; 
+            AnimationCurve curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(cfg.SCRAP_WHEELBARROW_RARITY, 0), new Keyframe(1, 1));
+            SpawnableMapObjectDef mapObjDef = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
+            mapObjDef.spawnableMapObject = new SpawnableMapObject();
+            mapObjDef.spawnableMapObject.prefabToSpawn = wheelbarrow.spawnPrefab;
+            MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
         }
         private void SetupStoreWheelbarrow()
         {

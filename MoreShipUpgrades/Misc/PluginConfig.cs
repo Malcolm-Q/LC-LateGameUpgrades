@@ -202,7 +202,7 @@ namespace MoreShipUpgrades.Misc
         public int SCRAP_WHEELBARROW_MINIMUM_VALUE { get; set; }
         public int SCRAP_WHEELBARROW_MAXIMUM_VALUE { get; set; }
         public float SCRAP_WHEELBARROW_MOVEMENT_SLOPPY { get; set; }
-        public int SCRAP_WHEELBARROW_RARITY { get; set; }
+        public float SCRAP_WHEELBARROW_RARITY { get; set; }
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -431,7 +431,7 @@ namespace MoreShipUpgrades.Misc
             WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK = ConfigEntry(topSection, "Look sensitivity drawback of the Wheelbarrow Item", 0.4f, "Value multiplied on the player's look sensitivity when moving with the wheelbarrow Item");
             WHEELBARROW_MOVEMENT_SLOPPY = ConfigEntry(topSection, "Sloppiness of the Wheelbarrow Item", 5f, "Value multiplied on the player's movement to give the feeling of drifting while carrying the Wheelbarrow Item");
             SCRAP_WHEELBARROW_ENABLED = ConfigEntry(topSection, "Enable the Wheelbarrow Scrap Item", true, "Allows you to scavenge a wheelbarrow in which you can store items on");
-            SCRAP_WHEELBARROW_RARITY = ConfigEntry(topSection, "Spawn chance of Scrap Wheelbarrow Item", 1, "How likely it is to a scrap wheelbarrow item to spawn when landing on a moon.");
+            SCRAP_WHEELBARROW_RARITY = ConfigEntry(topSection, "Spawn chance of Scrap Wheelbarrow Item", 0.9f, "How likely it is to a scrap wheelbarrow item to spawn when landing on a moon.");
             SCRAP_WHEELBARROW_WEIGHT = ConfigEntry(topSection, "Weight of the Wheelbarrow Scrap Item", 25f, "Weight of the scrap wheelbarrow's without any items in lbs");
             SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS = ConfigEntry(topSection, "Maximum amount of items", 6, "Amount of items allowed before the scrap wheelbarrow is considered full");
             SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER = ConfigEntry(topSection, "Weight reduction multiplier", 0.5f, "How much an item's weight will be ignored to the scrap wheelbarrow's total weight");
