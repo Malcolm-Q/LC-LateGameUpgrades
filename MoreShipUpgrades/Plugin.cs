@@ -23,7 +23,7 @@ namespace MoreShipUpgrades
         private readonly Harmony harmony = new Harmony(Metadata.GUID);
         public static Plugin instance;
         public static ManualLogSource mls;
-        private AudioClip itemBreak, buttonPressed, error;
+        private AudioClip itemBreak, buttonPressed, error, wheelbarrowSound, shoppingCartSound;
 
         public static PluginConfig cfg { get; private set; }
 
@@ -319,6 +319,8 @@ namespace MoreShipUpgrades
         }
         private void SetupWheelbarrows()
         {
+            wheelbarrowSound = AssetBundleHandler.GetAudioClip("Wheelbarrow Sound");
+            shoppingCartSound = AssetBundleHandler.GetAudioClip("Scrap Wheelbarrow Sound");
             SetupStoreWheelbarrow();
             SetupScrapWheelbarrow();
         }
@@ -332,13 +334,15 @@ namespace MoreShipUpgrades
             wheelbarrow.twoHanded = true;
             wheelbarrow.twoHandedAnimation = true;
             wheelbarrow.grabAnim = "HoldJetpack";
-            wheelbarrow.rotationOffset = new Vector3(0f, 0f, 0f); // TODO Change when model created
+            wheelbarrow.floorYOffset = -90;
             wheelbarrow.positionOffset = new Vector3(0f, -1.7f, 0.35f);
             wheelbarrow.allowDroppingAheadOfPlayer = true;
             wheelbarrow.isConductiveMetal = true;
             wheelbarrow.isScrap = true;
+            wheelbarrow.weight = 1f + (cfg.SCRAP_WHEELBARROW_WEIGHT/100f);
             ScrapWheelbarrow barrowScript = wheelbarrow.spawnPrefab.AddComponent<ScrapWheelbarrow>();
             barrowScript.itemProperties = wheelbarrow;
+            barrowScript.wheelsClip = shoppingCartSound;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
 
             if (!cfg.SCRAP_WHEELBARROW_ENABLED) return;
@@ -360,14 +364,16 @@ namespace MoreShipUpgrades
             wheelbarrow.positionOffset = new Vector3(0f, -1f, 2.4f);
             wheelbarrow.allowDroppingAheadOfPlayer = true;
             wheelbarrow.isConductiveMetal = true;
+            wheelbarrow.weight = 1f + (cfg.WHEELBARROW_WEIGHT/100f);
             StoreWheelbarrow barrowScript = wheelbarrow.spawnPrefab.AddComponent<StoreWheelbarrow>();
             barrowScript.itemProperties = wheelbarrow;
+            barrowScript.wheelsClip = wheelbarrowSound;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
 
             if (!cfg.WHEELBARROW_ENABLED) return;
 
             TerminalNode wheelbarrowNode = ScriptableObject.CreateInstance<TerminalNode>();
-            wheelbarrowNode.displayText = $"A portable container which has a maximum capacity of {cfg.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS} and reduces the effective weight of the inserted items by {cfg.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER*100} %";
+            wheelbarrowNode.displayText = $"A portable container which has a maximum capacity of {cfg.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS} and reduces the effective weight of the inserted items by {cfg.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER*100} %.\nIt weighs {1f + (cfg.WHEELBARROW_WEIGHT/100f)} lbs";
             LethalLib.Modules.Items.RegisterShopItem(wheelbarrow, null, null, wheelbarrowNode, wheelbarrow.creditsWorth);
         }
         private void SetupPerks()

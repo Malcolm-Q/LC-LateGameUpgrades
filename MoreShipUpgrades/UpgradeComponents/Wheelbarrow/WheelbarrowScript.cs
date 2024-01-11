@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -9,6 +10,13 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
     internal class WheelbarrowScript : GrabbableObject
     {
         private static LGULogger logger = new LGULogger(nameof(WheelbarrowScript));
+        /// <summary>
+        /// Component responsible to emit sound when the wheelbarrow's moving
+        /// </summary>
+        private AudioSource wheelsNoise;
+
+        private int noiseRange;
+        public AudioClip wheelsClip;
         /// <summary>
         /// Maximum amount of items the wheelbarrow allows to store inside
         /// </summary>
@@ -54,7 +62,9 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
             weightReduceMultiplier = UpgradeBus.instance.cfg.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER;
             defaultWeight = itemProperties.weight;
             totalWeight = defaultWeight;
+            noiseRange = 3;
 
+            wheelsNoise = GetComponentInChildren<AudioSource>();
             triggers = GetComponentsInChildren<InteractTrigger>();
             logger.LogDebug(triggers.Length);
             foreach (BoxCollider collider in GetComponentsInChildren<BoxCollider>())
@@ -64,6 +74,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
                 container = collider;
                 break;
             }
+            if (wheelsNoise == null) logger.LogError($"Couldn't find {nameof(AudioSource)} component in the prefab...");
             if (container == null) logger.LogError($"Couldn't find {nameof(BoxCollider)} component in the prefab...");
             if (triggers == null) logger.LogError($"Couldn't find {nameof(InteractTrigger)} components in the prefab...");
             foreach (InteractTrigger trigger in  triggers)
@@ -80,6 +91,24 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
         public override void Update()
         {
             base.Update();
+            UpdateWheelbarrowSounds();
+            UpdateInteractTriggers();
+        }
+        private void UpdateWheelbarrowSounds()
+        {
+            if (!isHeld) return;
+            if (wheelsNoise == null) return;
+            if (playerHeldBy.thisController.velocity.magnitude == 0f)
+            {
+                wheelsNoise.Stop();
+                return;
+            }
+            wheelsNoise.PlayOneShot(wheelsClip);
+            WalkieTalkie.TransmitOneShotAudio(wheelsNoise, wheelsClip);
+            RoundManager.Instance.PlayAudibleNoise(base.transform.position, noiseRange, 0.5f, 0, isInElevator && StartOfRound.Instance.hangarDoorsClosed);
+        }
+        private void UpdateInteractTriggers()
+        {
             PlayerControllerB player = GameNetworkManager.Instance.localPlayerController;
             if (player == null)
             {
@@ -100,7 +129,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
                 return;
             }
             GrabbableObject holdingItem = player.currentlyHeldObjectServer;
-            if (holdingItem.GetComponent<WheelbarrowScript>() != null )
+            if (holdingItem.GetComponent<WheelbarrowScript>() != null)
             {
                 foreach (InteractTrigger trigger in triggers)
                 {
@@ -127,8 +156,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
         }
         public override void DiscardItem()
         {
-            playerHeldBy.drunkness = 0f;
-            playerHeldBy.drunknessInertia = 0f;
+            wheelsNoise.Stop();
             base.DiscardItem();
         }
         /// <summary>
@@ -210,17 +238,16 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
             PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
             if (!player.isHoldingObject) return defaultValue;
             if (player.currentlyHeldObjectServer is not WheelbarrowScript) return defaultValue;
-            if (player.thisController.velocity.magnitude <= 0.5f) return defaultValue;
-            return defaultValue * 0.4f;
+            if (player.thisController.velocity.magnitude <= 5.0f) return defaultValue;
+            return defaultValue * 0.3f;
         }
         public static float CheckIfPlayerCarryingWheelbarrowMovement(float defaultValue)
         {
             PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
             if (!player.isHoldingObject) return defaultValue;
             if (player.currentlyHeldObjectServer is not WheelbarrowScript) return defaultValue;
-            logger.LogDebug(player.thisController.velocity.magnitude);
             if (player.thisController.velocity.magnitude <= 5.0f) return defaultValue;
-            return defaultValue * 10f;
+            return defaultValue * 5f;
         }
     }
 }

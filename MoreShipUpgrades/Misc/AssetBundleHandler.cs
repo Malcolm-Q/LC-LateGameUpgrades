@@ -57,6 +57,8 @@ namespace MoreShipUpgrades.Misc
             { "Error", "Assets/ShipUpgrades/error.mp3" },
             { "Button Press", "Assets/ShipUpgrades/ButtonPress2.ogg" },
             { "Flashbang", "Assets/ShipUpgrades/flashbangsfx.ogg" },
+            { "Wheelbarrow Sound", "Assets/ShipUpgrades/Items/Wheelbarrow/Wheelbarrow_Moving.wav" },
+            { "Scrap Wheelbarrow Sound", "Assets/ShipUpgrades/Items/Wheelbarrow/Shopping_Cart_Squeeky_Wheel.wav" },
         };
         /// <summary>
         /// Tries to load an asset from provided asset bundle through a given path into a GameObject
