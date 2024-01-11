@@ -99,7 +99,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
 
             wheelsNoise = GetComponentInChildren<AudioSource>();
             triggers = GetComponentsInChildren<InteractTrigger>();
-            logger.LogDebug(triggers.Length);
             foreach (BoxCollider collider in GetComponentsInChildren<BoxCollider>())
             {
                 if (collider.name != "PlaceableBounds") continue;
@@ -247,6 +246,11 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
             wheelsNoise.Stop();
             base.DiscardItem();
         }
+        public override void GrabItem()
+        {
+            base.GrabItem();
+            if (playerHeldBy.isCrouching) playerHeldBy.Crouch(!playerHeldBy.isCrouching);
+        }
         /// <summary>
         /// Setups attributes related to the wheelbarrow item
         /// </summary>
@@ -319,14 +323,13 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
             UpdateWheelbarrowWeightServerRpc();
         }
 
-        public static float CheckIfPlayerCarryingWheelbarrow(float defaultValue)
+        public static float CheckIfPlayerCarryingWheelbarrowLookSensitivity(float defaultValue)
         {
             PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
             if (!player.isHoldingObject) return defaultValue;
             if (player.currentlyHeldObjectServer is not WheelbarrowScript) return defaultValue;
             if (player.thisController.velocity.magnitude <= 5.0f) return defaultValue;
-            player.currentlyHeldObjectServer.GetComponent<WheelbarrowScript>().GetLookSensitivityDrawback();
-            return defaultValue * 0.3f;
+            return defaultValue * player.currentlyHeldObjectServer.GetComponent<WheelbarrowScript>().GetLookSensitivityDrawback();
         }
         public static float CheckIfPlayerCarryingWheelbarrowMovement(float defaultValue)
         {
@@ -334,8 +337,11 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
             if (!player.isHoldingObject) return defaultValue;
             if (player.currentlyHeldObjectServer is not WheelbarrowScript) return defaultValue;
             if (player.thisController.velocity.magnitude <= 5.0f) return defaultValue;
-            player.currentlyHeldObjectServer.GetComponent<WheelbarrowScript>().GetSloppiness();
-            return defaultValue * 5f;
+            return defaultValue * player.currentlyHeldObjectServer.GetComponent<WheelbarrowScript>().GetSloppiness(); ;
+        }
+        public static bool CheckIfPlayerCarryingWheelbarrow(PlayerControllerB instance)
+        {
+            return instance.isHoldingObject && instance.currentlyHeldObjectServer is WheelbarrowScript;
         }
     }
 }

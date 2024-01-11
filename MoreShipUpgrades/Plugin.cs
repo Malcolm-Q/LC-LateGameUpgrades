@@ -369,9 +369,9 @@ namespace MoreShipUpgrades
             wheelbarrow.twoHanded = true;
             wheelbarrow.twoHandedAnimation = true;
             wheelbarrow.grabAnim = "HoldJetpack";
-            wheelbarrow.verticalOffset = 0.5f;
             wheelbarrow.floorYOffset = -90;
-            wheelbarrow.positionOffset = new Vector3(0f, -1f, 2.4f);
+            wheelbarrow.verticalOffset =0.6f;
+            wheelbarrow.positionOffset = new Vector3(0f, -0.7f, 1.4f);
             wheelbarrow.allowDroppingAheadOfPlayer = true;
             wheelbarrow.isConductiveMetal = true;
             wheelbarrow.weight = 1f + (cfg.WHEELBARROW_WEIGHT/100f);

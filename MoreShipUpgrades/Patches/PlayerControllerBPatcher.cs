@@ -285,7 +285,7 @@ namespace MoreShipUpgrades.Patches
         [HarmonyTranspiler]
         private static IEnumerable<CodeInstruction> PlayerLookInputTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo reduceLookSensitivity = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrow), BindingFlags.Static | BindingFlags.Public);
+            MethodInfo reduceLookSensitivity = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrowLookSensitivity), BindingFlags.Static | BindingFlags.Public);
             List<CodeInstruction> codes = new List<CodeInstruction> (instructions);
             bool flag = false;
             for (int i = 0; i < codes.Count; i++)
@@ -303,7 +303,6 @@ namespace MoreShipUpgrades.Patches
         [HarmonyTranspiler] // Just kidding
         private static IEnumerable<CodeInstruction> UpdateTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-
             MethodInfo reduceMovement = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrowMovement), BindingFlags.Static | BindingFlags.Public);
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             bool flag = false;
@@ -323,6 +322,26 @@ namespace MoreShipUpgrades.Patches
                 else secondFlag = true;
             }
             if (!flag || !secondFlag) logger.LogError("Couldn't find acceleration function we wanted to influence");
+            return codes;
+        }
+
+        [HarmonyPatch("Crouch_performed")]
+        [HarmonyTranspiler]
+        private static IEnumerable<CodeInstruction> CrouchPerformmedTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo carryingWheelbarrow = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrow), BindingFlags.Static | BindingFlags.Public);
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            bool flag = false;
+            for(int i =0 ; i < codes.Count; i++) 
+            {
+                if (flag) break;
+                if (!(codes[i].opcode == OpCodes.Ldfld && codes[i].operand.ToString() == "System.Boolean isMenuOpen")) continue;
+                codes.Insert(i + 1, new CodeInstruction(OpCodes.Or));
+                codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, carryingWheelbarrow));
+                codes.Insert(i + 1, new CodeInstruction(OpCodes.Ldarg_0));
+                flag = true;
+            }
+            if (!flag) logger.LogError("Couldn't find the if branch we wanted to change to include our wheelbarrow check");
             return codes;
         }
     }
