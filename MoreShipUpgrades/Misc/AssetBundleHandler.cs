@@ -57,8 +57,14 @@ namespace MoreShipUpgrades.Misc
             { "Error", "Assets/ShipUpgrades/error.mp3" },
             { "Button Press", "Assets/ShipUpgrades/ButtonPress2.ogg" },
             { "Flashbang", "Assets/ShipUpgrades/flashbangsfx.ogg" },
-            { "Wheelbarrow Sound", "Assets/ShipUpgrades/Items/Wheelbarrow/Wheelbarrow_Moving.wav" },
-            { "Scrap Wheelbarrow Sound", "Assets/ShipUpgrades/Items/Wheelbarrow/Shopping_Cart_Squeeky_Wheel.wav" },
+            { "Wheelbarrow Sound 0", "Assets/ShipUpgrades/Items/Wheelbarrow/Wheelbarrow_Move_1.mp3" },
+            { "Wheelbarrow Sound 1", "Assets/ShipUpgrades/Items/Wheelbarrow/Wheelbarrow_Move_2.ogg" },
+            { "Wheelbarrow Sound 2", "Assets/ShipUpgrades/Items/Wheelbarrow/Wheelbarrow_Move_3.ogg" },
+            { "Wheelbarrow Sound 3", "Assets/ShipUpgrades/Items/Wheelbarrow/Wheelbarrow_Move_4.ogg" },
+            { "Scrap Wheelbarrow Sound 0", "Assets/ShipUpgrades/Items/Wheelbarrow/Shopping_Cart_Move_1.ogg" },
+            { "Scrap Wheelbarrow Sound 1", "Assets/ShipUpgrades/Items/Wheelbarrow/Shopping_Cart_Move_2.ogg" },
+            { "Scrap Wheelbarrow Sound 2", "Assets/ShipUpgrades/Items/Wheelbarrow/Shopping_Cart_Move_3.ogg" },
+            { "Scrap Wheelbarrow Sound 3", "Assets/ShipUpgrades/Items/Wheelbarrow/Shopping_Cart_Move_4.ogg" },
         };
         /// <summary>
         /// Tries to load an asset from provided asset bundle through a given path into a GameObject

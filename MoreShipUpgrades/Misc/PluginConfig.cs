@@ -184,14 +184,24 @@ namespace MoreShipUpgrades.Misc
         public int BABOON_HAWK_SAMPLE_MAXIMUM_VALUE { get; set; }
         public int THUMPER_SAMPLE_MINIMUM_VALUE { get; set; }
         public int THUMPER_SAMPLE_MAXIMUM_VALUE { get; set; }
+        public string WHEELBARROW_RESTRICTION_MODE { get; set; }
         public int WHEELBARROW_MAXIMUM_AMOUNT_ITEMS {  get; set; }
+        public float WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED { get; set; }
         public float WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER { get; set; }
         public float WHEELBARROW_WEIGHT {  get; set; }
+        public float WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK {  get; set; }
+        public float WHEELBARROW_MOVEMENT_SLOPPY {  get; set; }
+        public float WHEELBARROW_NOISE_RANGE { get; set; }
+        public string SCRAP_WHEELBARROW_RESTRICTION_MODE { get; set; }
         public int SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS { get; set; }
+        public float SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED { get; set; }
         public float SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER { get; set; }
         public float SCRAP_WHEELBARROW_WEIGHT { get; set; }
+        public float SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK { get; set; }
+        public float SCRAP_WHEELBARROW_NOISE_RANGE { get; set; }
         public int SCRAP_WHEELBARROW_MINIMUM_VALUE { get; set; }
         public int SCRAP_WHEELBARROW_MAXIMUM_VALUE { get; set; }
+        public float SCRAP_WHEELBARROW_MOVEMENT_SLOPPY { get; set; }
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -412,14 +422,24 @@ namespace MoreShipUpgrades.Misc
             WHEELBARROW_ENABLED = ConfigEntry(topSection, "Enable the Wheelbarrow Item", true, "Allows you to buy a wheelbarrow to carry items outside of your inventory");
             WHEELBARROW_PRICE = ConfigEntry(topSection, "Price of the Wheelbarrow Item", 400, "Price of the Wheelbarrow in the store");
             WHEELBARROW_WEIGHT = ConfigEntry(topSection, "Weight of the Wheelbarrow Item", 30f, "Weight of the wheelbarrow without any items in lbs");
-            WHEELBARROW_MAXIMUM_AMOUNT_ITEMS = ConfigEntry(topSection, "Maximum amount of items", 8, "Amount of items allowed before the wheelbarrow is considered full");
-            WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER = ConfigEntry(topSection, "Weight reduction multiplier", 0.5f, "How much an item's weight will be ignored to the wheelbarrow's total weight");
+            WHEELBARROW_RESTRICTION_MODE = ConfigEntry(topSection, "Restrictions on the Wheelbarrow Item", "ItemCount", "Restriction applied when trying to insert an item on the wheelbarrow.\nSupported values: None, ItemCount, TotalWeight, All");
+            WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED = ConfigEntry(topSection, "Maximum amount of weight", 100f, "How much weight (in lbs) a wheelbarrow can carry in items before it is considered full.");
+            WHEELBARROW_MAXIMUM_AMOUNT_ITEMS = ConfigEntry(topSection, "Maximum amount of items", 4, "Amount of items allowed before the wheelbarrow is considered full");
+            WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER = ConfigEntry(topSection, "Weight reduction multiplier", 0.7f, "How much an item's weight will be ignored to the wheelbarrow's total weight");
+            WHEELBARROW_NOISE_RANGE = ConfigEntry(topSection, "Noise range of the Wheelbarrow Item", 14f, "How far the wheelbarrow sound propagates to nearby enemies when in movement");
+            WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK = ConfigEntry(topSection, "Look sensitivity drawback of the Wheelbarrow Item", 0.4f, "Value multiplied on the player's look sensitivity when moving with the wheelbarrow Item");
+            WHEELBARROW_MOVEMENT_SLOPPY = ConfigEntry(topSection, "Sloppiness of the Wheelbarrow Item", 5f, "Value multiplied on the player's movement to give the feeling of drifting while carrying the Wheelbarrow Item");
             SCRAP_WHEELBARROW_ENABLED = ConfigEntry(topSection, "Enable the Wheelbarrow Scrap Item", true, "Allows you to scavenge a wheelbarrow in which you can store items on");
-            WHEELBARROW_WEIGHT = ConfigEntry(topSection, "Weight of the Wheelbarrow Scrap Item", 25f, "Weight of the scrap wheelbarrow's without any items in lbs");
-            SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS = ConfigEntry(topSection, "Maximum amount of items", 4, "Amount of items allowed before the scrap wheelbarrow is considered full");
-            SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER = ConfigEntry(topSection, "Weight reduction multiplier", 0.7f, "How much an item's weight will be ignored to the scrap wheelbarrow's total weight");
+            SCRAP_WHEELBARROW_WEIGHT = ConfigEntry(topSection, "Weight of the Wheelbarrow Scrap Item", 25f, "Weight of the scrap wheelbarrow's without any items in lbs");
+            SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS = ConfigEntry(topSection, "Maximum amount of items", 6, "Amount of items allowed before the scrap wheelbarrow is considered full");
+            SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER = ConfigEntry(topSection, "Weight reduction multiplier", 0.5f, "How much an item's weight will be ignored to the scrap wheelbarrow's total weight");
             SCRAP_WHEELBARROW_MINIMUM_VALUE = ConfigEntry(topSection, "Minimum scrap value", 50, "Lower boundary of the scrap's possible value");
             SCRAP_WHEELBARROW_MAXIMUM_VALUE = ConfigEntry(topSection, "Maximum scrap value", 100, "Higher boundary of the scrap's possible value");
+            SCRAP_WHEELBARROW_RESTRICTION_MODE = ConfigEntry(topSection, "Restrictions on the Wheelbarrow Scrap Item", "ItemCount", "Restriction applied when trying to insert an item on the scrap wheelbarrow.\nSupported values: None, ItemCount, TotalWeight, All");
+            SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED = ConfigEntry(topSection, "Maximum amount of weight", 100f, "How much weight (in lbs) a scrap wheelbarrow can carry in items before it is considered full.");
+            SCRAP_WHEELBARROW_NOISE_RANGE = ConfigEntry(topSection, "Noise range of the Wheelbarrow Scrap Item", 18f, "How far the scrap wheelbarrow sound propagates to nearby enemies when in movement");
+            SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK = ConfigEntry(topSection, "Look sensitivity drawback of the Scrap Wheelbarrow Item", 0.8f, "Value multiplied on the player's look sensitivity when moving with the Scrap wheelbarrow Item");
+            SCRAP_WHEELBARROW_MOVEMENT_SLOPPY = ConfigEntry(topSection, "Sloppiness of the Scrap Wheelbarrow Item", 2f, "Value multiplied on the player's movement to give the feeling of drifting while carrying the Scrap Wheelbarrow Item");
         }
     }
 }

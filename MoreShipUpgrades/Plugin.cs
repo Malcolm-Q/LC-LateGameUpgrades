@@ -23,7 +23,8 @@ namespace MoreShipUpgrades
         private readonly Harmony harmony = new Harmony(Metadata.GUID);
         public static Plugin instance;
         public static ManualLogSource mls;
-        private AudioClip itemBreak, buttonPressed, error, wheelbarrowSound, shoppingCartSound;
+        private AudioClip itemBreak, buttonPressed, error;
+        private AudioClip[] wheelbarrowSound, shoppingCartSound;
 
         public static PluginConfig cfg { get; private set; }
 
@@ -319,10 +320,19 @@ namespace MoreShipUpgrades
         }
         private void SetupWheelbarrows()
         {
-            wheelbarrowSound = AssetBundleHandler.GetAudioClip("Wheelbarrow Sound");
-            shoppingCartSound = AssetBundleHandler.GetAudioClip("Scrap Wheelbarrow Sound");
+            wheelbarrowSound = GetAudioClipList("Wheelbarrow Sound", 4);
+            shoppingCartSound = GetAudioClipList("Scrap Wheelbarrow Sound", 4);
             SetupStoreWheelbarrow();
             SetupScrapWheelbarrow();
+        }
+        private AudioClip[] GetAudioClipList(string name, int length)
+        {
+            AudioClip[] array = new AudioClip[length];
+            for (int i = 0; i < length; i++)
+            {
+                array[i] = AssetBundleHandler.GetAudioClip($"{name} {i}");
+            }
+            return array;
         }
         private void SetupScrapWheelbarrow() 
         {

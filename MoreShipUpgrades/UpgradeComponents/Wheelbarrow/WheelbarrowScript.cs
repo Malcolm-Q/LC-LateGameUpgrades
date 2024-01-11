@@ -2,6 +2,7 @@
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using System;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -9,18 +10,40 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
 {
     internal class WheelbarrowScript : GrabbableObject
     {
+        protected enum Restrictions
+        {
+            None,
+            TotalWeight,
+            ItemCount,
+            All,
+        }
         private static LGULogger logger = new LGULogger(nameof(WheelbarrowScript));
+        protected Restrictions restriction;
+        private System.Random randomNoise;
         /// <summary>
         /// Component responsible to emit sound when the wheelbarrow's moving
         /// </summary>
         private AudioSource wheelsNoise;
-
-        private int noiseRange;
-        public AudioClip wheelsClip;
+        /// <summary>
+        /// The sound the wheelbarrow will be playing while in movement
+        /// </summary>
+        public AudioClip[] wheelsClip;
+        /// <summary>
+        /// How far the sound can be heard from nearby enemies
+        /// </summary>
+        protected float noiseRange;
+        /// <summary>
+        /// How long the last sound was played
+        /// </summary>
+        private float soundCounter;
         /// <summary>
         /// Maximum amount of items the wheelbarrow allows to store inside
         /// </summary>
         protected int maximumAmountItems;
+        /// <summary>
+        /// Maximum weight allowed to be stored in the wheelbarrow
+        /// </summary>
+        protected float maximumWeightAllowed;
         /// <summary>
         /// Current amount of items stored in the wheelbarrow
         /// </summary>
@@ -34,6 +57,14 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
         /// </summary>
         protected float defaultWeight;
         /// <summary>
+        /// How sloppy the player's movement is when moving with a wheelbarrow
+        /// </summary>
+        protected float sloppiness;
+        /// <summary>
+        /// Value multiplied on the look sensitivity of the player who's carrying the wheelbarrow
+        /// </summary>
+        protected float lookSensitivityDrawback;
+        /// <summary>
         /// The GameObject responsible to be containing all of the items stored in the wheelbarrow
         /// </summary>
         private BoxCollider container;
@@ -41,13 +72,15 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
         /// Trigger responsible to allow interacting with wheelbarrow's container of items
         /// </summary>
         private InteractTrigger[] triggers;
-        private float totalWeight;
+        private Dictionary<Restrictions, Func<bool>> checkMethods;
 
         private const string ITEM_NAME = "Wheelbarrow";
         private const string SCRAP_ITEM_NAME = "Shopping Cart";
         private const string ITEM_DESCRIPTION = "Allows carrying multiple items";
         private const string NO_ITEMS_TEXT = "No items to deposit...";
         private const string FULL_TEXT = "Too many items in the wheelbarrow";
+        private const string TOO_MUCH_WEIGHT_TEXT = "Too much weight in the wheelbarrow...";
+        private const string ALL_FULL_TEXT = "Cannot insert any more items in the wheelbarrow...";
         private const string WHEELBARROWCEPTION_TEXT = "You're not allowed to do that...";
         private const string DEPOSIT_TEXT = "Depositing item...";
         private const string START_DEPOSIT_TEXT = "Deposit item: [LMB]";
@@ -58,11 +91,11 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
         public override void Start()
         {
             base.Start();
+            randomNoise = new System.Random(StartOfRound.Instance.randomMapSeed + 80);
             maximumAmountItems = UpgradeBus.instance.cfg.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS;
             weightReduceMultiplier = UpgradeBus.instance.cfg.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER;
             defaultWeight = itemProperties.weight;
-            totalWeight = defaultWeight;
-            noiseRange = 3;
+            soundCounter = 0f;
 
             wheelsNoise = GetComponentInChildren<AudioSource>();
             triggers = GetComponentsInChildren<InteractTrigger>();
@@ -84,10 +117,21 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
                 trigger.interactCooldown = false;
                 trigger.cooldownTime = 0;
             }
+            checkMethods = new Dictionary<Restrictions, Func<bool>>();
+            checkMethods[Restrictions.ItemCount] = CheckWheelbarrowItemCountRestriction;
+            checkMethods[Restrictions.TotalWeight] = CheckWheelbarrowWeightRestriction;
+            checkMethods[Restrictions.All] = CheckWheelbarrowAllRestrictions;
 
             SetupItemAttributes();
         }
-
+        public float GetSloppiness()
+        {
+            return sloppiness;
+        }
+        public float GetLookSensitivityDrawback()
+        {
+            return lookSensitivityDrawback;
+        }
         public override void Update()
         {
             base.Update();
@@ -96,6 +140,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
         }
         private void UpdateWheelbarrowSounds()
         {
+            soundCounter += Time.deltaTime;
             if (!isHeld) return;
             if (wheelsNoise == null) return;
             if (playerHeldBy.thisController.velocity.magnitude == 0f)
@@ -103,8 +148,11 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
                 wheelsNoise.Stop();
                 return;
             }
-            wheelsNoise.PlayOneShot(wheelsClip);
-            WalkieTalkie.TransmitOneShotAudio(wheelsNoise, wheelsClip);
+            if (soundCounter < 2.0f) return;
+            soundCounter = 0f;
+            int index = randomNoise.Next(0, wheelsClip.Length);
+            wheelsNoise.PlayOneShot(wheelsClip[index]);
+            WalkieTalkie.TransmitOneShotAudio(wheelsNoise, wheelsClip[index]);
             RoundManager.Instance.PlayAudibleNoise(base.transform.position, noiseRange, 0.5f, 0, isInElevator && StartOfRound.Instance.hangarDoorsClosed);
         }
         private void UpdateInteractTriggers()
@@ -138,21 +186,61 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
                 }
                 return;
             }
-            GrabbableObject[] storedItems = GetComponentsInChildren<GrabbableObject>();
-            if (storedItems.Length > maximumAmountItems)
+            if (CheckWheelbarrowRestrictions()) return;
+            foreach (InteractTrigger trigger in triggers)
+            {
+                trigger.interactable = true;
+                trigger.hoverTip = START_DEPOSIT_TEXT;
+            }
+        }
+        private bool CheckWheelbarrowRestrictions()
+        {
+            if (restriction == Restrictions.None) return false;
+            logger.LogDebug(restriction);
+            return checkMethods[restriction].Invoke();
+        }
+        private bool CheckWheelbarrowAllRestrictions()
+        {
+            bool weightCondition = itemProperties.weight - (defaultWeight-1f) > 1f + (maximumWeightAllowed / 100f);
+            bool itemCountCondition = currentAmountItems >= maximumAmountItems;
+            logger.LogDebug(weightCondition);
+            logger.LogDebug(itemCountCondition);
+            if (weightCondition || itemCountCondition)
+            {
+                foreach (InteractTrigger trigger in triggers)
+                {
+                    trigger.interactable = false;
+                    trigger.disabledHoverTip = ALL_FULL_TEXT;
+                }
+                return true;
+            }
+            return false;
+        }
+        private bool CheckWheelbarrowWeightRestriction()
+        {
+            if (itemProperties.weight - (defaultWeight - 1f) > 1f + (maximumWeightAllowed/100f))
+            {
+                foreach (InteractTrigger trigger in triggers)
+                {
+                    trigger.interactable = false;
+                    trigger.disabledHoverTip = TOO_MUCH_WEIGHT_TEXT;
+                }
+                return true;
+            }
+            return false;
+        }
+        private bool CheckWheelbarrowItemCountRestriction()
+        {
+            if (currentAmountItems >= maximumAmountItems)
             {
                 foreach (InteractTrigger trigger in triggers)
                 {
                     trigger.interactable = false;
                     trigger.disabledHoverTip = FULL_TEXT;
                 }
-                return;
+                return true;
             }
-            foreach (InteractTrigger trigger in triggers)
-            {
-                trigger.interactable = true;
-                trigger.hoverTip = START_DEPOSIT_TEXT;
-            }
+            return false;
         }
         public override void DiscardItem()
         {
@@ -219,8 +307,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
         private void StoreItemToWheelbarrow(PlayerControllerB playerInteractor)
         {
             logger.LogDebug($"Attempting to store an item from {playerInteractor.playerUsername}");
-            GrabbableObject[] storedItems = GetComponentsInChildren<GrabbableObject>();
-            if (storedItems.Length >= maximumAmountItems + 1) return; // Can't store more items;
 
             Collider triggerCollider = container;
             Vector3 vector = RoundManager.RandomPointInBounds(triggerCollider.bounds);
@@ -239,6 +325,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
             if (!player.isHoldingObject) return defaultValue;
             if (player.currentlyHeldObjectServer is not WheelbarrowScript) return defaultValue;
             if (player.thisController.velocity.magnitude <= 5.0f) return defaultValue;
+            player.currentlyHeldObjectServer.GetComponent<WheelbarrowScript>().GetLookSensitivityDrawback();
             return defaultValue * 0.3f;
         }
         public static float CheckIfPlayerCarryingWheelbarrowMovement(float defaultValue)
@@ -247,6 +334,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
             if (!player.isHoldingObject) return defaultValue;
             if (player.currentlyHeldObjectServer is not WheelbarrowScript) return defaultValue;
             if (player.thisController.velocity.magnitude <= 5.0f) return defaultValue;
+            player.currentlyHeldObjectServer.GetComponent<WheelbarrowScript>().GetSloppiness();
             return defaultValue * 5f;
         }
     }
