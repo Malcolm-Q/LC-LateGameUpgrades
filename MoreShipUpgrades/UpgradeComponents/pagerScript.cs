@@ -8,6 +8,7 @@ namespace MoreShipUpgrades.UpgradeComponents
     public class pagerScript : BaseUpgrade
     {
         public static string UPGRADE_NAME = "Fast Encryption";
+        private static LGULogger logger = new LGULogger(nameof(pagerScript));
 
         void Start()
         {
@@ -32,6 +33,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         [ServerRpc(RequireOwnership = false)]
         public void ReqBroadcastChatServerRpc(string msg)
         {
+            logger.LogInfo($"Instructing clients to print broadcasted message...");
             ReceiveChatClientRpc(msg);
         }
 
@@ -42,7 +44,9 @@ namespace MoreShipUpgrades.UpgradeComponents
             if(translator != null )
             {
                 HUDManager.Instance.UIAudio.PlayOneShot(translator.startTransmissionSFX);
+                logger.LogError("Unable to find SignalTranslator!");
             }
+            logger.LogInfo("Broadcasted messaged received, printing.");
             HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Terminal</color><color=#0000FF>:</color> <color=#FF00FF>{msg}</color>";
             HUDManager.Instance.PingHUDElement(HUDManager.Instance.Chat, 4f, 1f, 0.2f);
         }

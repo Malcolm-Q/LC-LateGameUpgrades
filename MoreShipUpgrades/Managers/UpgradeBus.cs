@@ -1,4 +1,5 @@
 ﻿using GameNetcodeStuff;
+using LethalLib.Modules;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace MoreShipUpgrades.Managers
         public static UpgradeBus instance;
         public PluginConfig cfg;
         public GameObject introScreen;
-        private static LGULogger logger;
+        private static LGULogger logger = new LGULogger(nameof(UpgradeBus));
 
         public bool DestroyTraps = false;
         public bool scannerUpgrade = false;
@@ -57,7 +58,9 @@ namespace MoreShipUpgrades.Managers
         public string DataMinigameKey = "";
         public string DataMinigameUser = "";
         public string DataMinigamePass = "";
+
         public Dictionary<string, List<string>> fakeBombOrders = new Dictionary<string, List<string>>();
+        public Dictionary<string, float> SaleData = new Dictionary<string, float>();
 
         public trapDestroyerScript trapHandler = null;
         public terminalFlashScript flashScript = null;
@@ -90,6 +93,8 @@ namespace MoreShipUpgrades.Managers
             { beekeeperScript.UPGRADE_NAME, level => 100 * (instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (level * instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT)) },
             { playerHealthScript.UPGRADE_NAME, level => instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK + (level)*instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT },
         };
+
+        public Dictionary<string, Item> ItemsToSync = new Dictionary<string, Item>();
 
         private Dictionary<string, System.Func<int, int, string>> complexInfoFunctions = new Dictionary<string, System.Func<int,int, string>>()
         {
@@ -143,7 +148,7 @@ namespace MoreShipUpgrades.Managers
 
             return terminal;
         }
-        public PlayerControllerB GetLocalPlayer()
+        public PlayerControllerB GetLocalPlayer() // I keep forgetting we have this
         {
             if (localPlayer == null) localPlayer = GameNetworkManager.Instance.localPlayerController;
             return localPlayer;
@@ -171,6 +176,7 @@ namespace MoreShipUpgrades.Managers
         public void ResetAllValues(bool wipeObjRefs = true)
         {
             ResetPlayerAttributes();
+            EffectsActive = false;
             DestroyTraps = false;
             scannerUpgrade = false;
             nightVision = false;
@@ -189,6 +195,11 @@ namespace MoreShipUpgrades.Managers
             pager = false;
             hunter = false;
             playerHealth = false;
+            sickBeats = false;
+
+            contractType = "None";
+            contractLevel = "None";
+
             huntLevel = 0;
             proteinLevel = 0;
             lungLevel = 0;
@@ -230,30 +241,100 @@ namespace MoreShipUpgrades.Managers
 
         internal void GenerateSales(int seed = -1) // TODO: Save sales
         {
+            if (seed == -1) seed = Random.Range(0, 999999);
+            logger.LogInfo($"Generating sales with seed: {seed} on this client...");
             Random.InitState(seed);
+            SaleData = new Dictionary<string, float>();
             foreach(CustomTerminalNode node in terminalNodes)
             {
-                if(node.Name == "Interns") { continue; }
-                if(Random.value > UpgradeBus.instance.cfg.SALE_PERC)
+                if(node.Name == "Interns" || node.Name == "Contract") { continue; }
+                if(Random.value > cfg.SALE_PERC)
                 {
                     node.salePerc = Random.Range(0.60f, 0.90f);
+                    logger.LogInfo($"Set sale percentage to: {node.salePerc} for {node.Name}.");
                 }
                 else
                 {
                     node.salePerc = 1f;
+                }
+                if(IsHost || IsServer)
+                {
+                    SaleData.Add(node.Name, node.salePerc);
+                }
+            }
+        }
+
+        internal void LoadSales()
+        {
+            foreach(CustomTerminalNode node in terminalNodes)
+            {
+                node.salePerc = SaleData[node.Name];
+                if(node.salePerc != 1f)
+                {
+                    logger.LogInfo($"Loaded sale of {node.salePerc} for {node.Name}.");
                 }
             }
         }
 
         internal void AlterStoreItems()
         {
-            // TODO: LethalLib new runtime price and stock update methods !!
+            if (!cfg.PEEPER_ENABLED)
+            {
+                Items.RemoveShopItem(ItemsToSync["Peeper"]);
+                logger.LogInfo("Removing Peeper from store.");
+            }
+            else if (ItemsToSync["Peeper"].creditsWorth != cfg.PEEPER_PRICE) Items.UpdateShopItemPrice(ItemsToSync["Peeper"], cfg.PEEPER_PRICE);
+
+            if (!cfg.HELMET_ENABLED)
+            {
+                logger.LogInfo("Removing x from store.");
+                Items.RemoveShopItem(ItemsToSync["Helmet"]);
+            }
+            else if (ItemsToSync["Helmet"].creditsWorth != cfg.HELMET_PRICE) Items.UpdateShopItemPrice(ItemsToSync["Helmet"], cfg.HELMET_PRICE);
+
+            if (!cfg.DIVEKIT_ENABLED)
+            {
+                logger.LogInfo("Removing x from store.");
+                Items.RemoveShopItem(ItemsToSync["Dive"]);
+            }
+            else if (ItemsToSync["Dive"].creditsWorth != cfg.DIVEKIT_PRICE) Items.UpdateShopItemPrice(ItemsToSync["Dive"], cfg.DIVEKIT_PRICE);
+
+            if (!cfg.ADVANCED_TELE_ENABLED)
+            {
+                logger.LogInfo("Removing x from store.");
+                Items.RemoveShopItem(ItemsToSync["AdvTele"]);
+            }
+            else if (ItemsToSync["AdvTele"].creditsWorth != cfg.ADVANCED_TELE_PRICE) Items.UpdateShopItemPrice(ItemsToSync["AdvTele"], cfg.ADVANCED_TELE_PRICE);
+
+            if (!cfg.WEAK_TELE_ENABLED)
+            {
+                logger.LogInfo("Removing x from store.");
+                Items.RemoveShopItem(ItemsToSync["Tele"]);
+            }
+            else if (ItemsToSync["Tele"].creditsWorth != cfg.WEAK_TELE_PRICE) Items.UpdateShopItemPrice(ItemsToSync["Tele"], cfg.WEAK_TELE_PRICE);
+
+            if (!cfg.MEDKIT_ENABLED)
+            {
+                logger.LogInfo("Removing x from store.");
+                Items.RemoveShopItem(ItemsToSync["Medkit"]);
+            }
+            else if (ItemsToSync["Medkit"].creditsWorth != cfg.MEDKIT_PRICE) Items.UpdateShopItemPrice(ItemsToSync["Medkit"], cfg.MEDKIT_PRICE);
+
+            if (!cfg.NIGHT_VISION_ENABLED)
+            {
+                logger.LogInfo("Removing x from store.");
+                Items.RemoveShopItem(ItemsToSync["Night"]);
+            }
+            else if (ItemsToSync["Night"].creditsWorth != cfg.NIGHT_VISION_PRICE) Items.UpdateShopItemPrice(ItemsToSync["Night"], cfg.NIGHT_VISION_PRICE);
         }
 
         internal void Reconstruct()
         {
-            //AlterStoreItems();
+            AlterStoreItems();
             BuildCustomNodes();
+            LoadSales();
+
+            logger.LogInfo("Successfully reconstructed with hosts config.");
         }
         internal void BuildCustomNodes()
         {

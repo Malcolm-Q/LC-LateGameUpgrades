@@ -205,6 +205,7 @@ namespace MoreShipUpgrades.Misc
         public int BABOON_HAWK_SAMPLE_MAXIMUM_VALUE { get; set; }
         public int THUMPER_SAMPLE_MINIMUM_VALUE { get; set; }
         public int THUMPER_SAMPLE_MAXIMUM_VALUE { get; set; }
+        public int CONTRACT_GHOST_SPAWN { get; set; }
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -226,6 +227,8 @@ namespace MoreShipUpgrades.Misc
             CONTRACT_DEFUSE_REWARD = ConfigEntry(topSection, "Value of an defusal contract reward", 500, "");
             CONTRACT_EXTRACT_REWARD = ConfigEntry(topSection, "Value of an extraction contract reward", 500, "");
             CONTRACT_DATA_REWARD = ConfigEntry(topSection, "Value of a data contract reward", 500, "");
+            CONTRACT_BUG_SPAWNS = ConfigEntry(topSection, "Hoarder Bug Spawn Number", 20, "How many bugs to spawn during exterminator contracts.");
+            CONTRACT_GHOST_SPAWN = ConfigEntry(topSection, "Dress Girl Spawn Number", 3, "How many ghosts to spawn when failing exorcism contracts");
             CONTRACT_EXTRACT_WEIGHT = ConfigEntry(topSection,"Weight of an extraction human", 2.5f, "Subtract 1 and multiply by 100 (2.5 = 150lbs).");
             
             topSection = "Misc";

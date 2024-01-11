@@ -17,10 +17,6 @@ namespace MoreShipUpgrades.Patches
                 {
                     LGUStore.instance.SyncContractDetailsClientRpc("None", "None");
                 }
-                /*else
-                {
-                    LGUStore.instance.ReqSyncContractDetailsServerRpc("None", "None");
-                }*/
             }
         }
 

@@ -139,8 +139,6 @@ namespace MoreShipUpgrades
             mapObjDefBug.spawnableMapObject = new SpawnableMapObject();
             mapObjDefBug.spawnableMapObject.prefabToSpawn = bomb.spawnPrefab;
             MapObjects.RegisterMapObject(mapObjDefBug, Levels.LevelTypes.All, (level) => curve);
-
-            Items.RegisterShopItem(bomb, 0);
         }
 
 
@@ -152,20 +150,34 @@ namespace MoreShipUpgrades
             NetworkPrefabs.RegisterNetworkPrefab(contractLoot.spawnPrefab);
 
             Item mainItem = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + "PentagramItem.asset");
-            Item exorItem = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + "BonesItem.asset");
-            ContractObject exorCo = exorItem.spawnPrefab.AddComponent<ContractObject>();
-            exorCo.contractType = "exorcism";
-            Items.RegisterItem(exorItem);
-            Utilities.FixMixerGroups(exorItem.spawnPrefab);
-            NetworkPrefabs.RegisterNetworkPrefab(exorItem.spawnPrefab);
 
-            if (mainItem == null || contractLoot == null || exorItem == null) return;
+            string[] ritualItems = new string[] { "aItem.asset", "bItem.asset", "cItem.asset", "dItem.asset", "eItem.asset" };
+            foreach(string ritualItem in ritualItems)
+            {
+                Item exorItem = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + "RitualItems/" +ritualItem);
+                ContractObject exorCo = exorItem.spawnPrefab.AddComponent<ContractObject>();
+                exorCo.contractType = "exorcism";
+                Items.RegisterItem(exorItem);
+                Utilities.FixMixerGroups(exorItem.spawnPrefab);
+                NetworkPrefabs.RegisterNetworkPrefab(exorItem.spawnPrefab);
+
+                SpawnableMapObjectDef mapObjDefRitual = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
+                mapObjDefRitual.spawnableMapObject = new SpawnableMapObject();
+                mapObjDefRitual.spawnableMapObject.prefabToSpawn = exorItem.spawnPrefab;
+                MapObjects.RegisterMapObject(mapObjDefRitual, Levels.LevelTypes.All, (level) => new AnimationCurve(new Keyframe(0,3),new Keyframe(1,3)));
+
+                Items.RegisterShopItem(exorItem, 0);
+            }
+
+            if (mainItem == null || contractLoot == null) return;
 
             ContractObject co = mainItem.spawnPrefab.AddComponent<ContractObject>();
             co.contractType = "exorcism";
 
             PentagramScript pentScript = mainItem.spawnPrefab.AddComponent<PentagramScript>();
             pentScript.loot = contractLoot.spawnPrefab;
+            pentScript.chant = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, root + "ritualSFX.mp3");
+            pentScript.portal = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, root + "portal.mp3");
 
             Utilities.FixMixerGroups(mainItem.spawnPrefab);
             NetworkPrefabs.RegisterNetworkPrefab(mainItem.spawnPrefab);
@@ -175,11 +187,7 @@ namespace MoreShipUpgrades
             mapObjDef.spawnableMapObject = new SpawnableMapObject();
             mapObjDef.spawnableMapObject.prefabToSpawn = mainItem.spawnPrefab;
             MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
-
-            SpawnableMapObjectDef mapObjDefRitual = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
-            mapObjDefRitual.spawnableMapObject = new SpawnableMapObject();
-            mapObjDefRitual.spawnableMapObject.prefabToSpawn = exorItem.spawnPrefab;
-            MapObjects.RegisterMapObject(mapObjDefRitual, Levels.LevelTypes.All, (level) => new AnimationCurve(new Keyframe(0,3),new Keyframe(1,3)));
+            Items.RegisterShopItem(mainItem, 0);
         }
 
 
@@ -366,6 +374,8 @@ namespace MoreShipUpgrades
             TerminalNode node = ScriptableObject.CreateInstance<TerminalNode>();
             node.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Helmet"), cfg.HELMET_HITS_BLOCKED);
             Items.RegisterShopItem(helmet, null, null, node, helmet.creditsWorth);
+
+            UpgradeBus.instance.ItemsToSync.Add("Helmet", helmet);
         }
         private void SetupRegularTeleporterButton()
         {
@@ -390,6 +400,8 @@ namespace MoreShipUpgrades
             TerminalNode PortNode = ScriptableObject.CreateInstance<TerminalNode>();
             PortNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Portable Tele"), (int)(cfg.CHANCE_TO_BREAK * 100));
             Items.RegisterShopItem(tpBut, null, null, PortNode, tpBut.creditsWorth);
+
+            UpgradeBus.instance.ItemsToSync.Add("Tele", tpBut);
         }
         private void SetupAdvancedTeleporterButton()
         {
@@ -414,6 +426,8 @@ namespace MoreShipUpgrades
             TerminalNode advNode = ScriptableObject.CreateInstance<TerminalNode>();
             advNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Advanced Portable Tele"), (int)(cfg.ADV_CHANCE_TO_BREAK * 100));
             Items.RegisterShopItem(tpButAdvanced, null, null, advNode, tpButAdvanced.creditsWorth);
+
+            UpgradeBus.instance.ItemsToSync.Add("AdvTele", tpButAdvanced);
         }
 
         private void SetupNightVision()
@@ -439,6 +453,8 @@ namespace MoreShipUpgrades
             string loseOnDeath = cfg.LOSE_NIGHT_VIS_ON_DEATH ? "be" : "not be";
             nightNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Night Vision"), grantStatus, loseOnDeath);
             Items.RegisterShopItem(nightVisionItem, null, null, nightNode, nightVisionItem.creditsWorth);
+
+            UpgradeBus.instance.ItemsToSync.Add("Night", nightVisionItem);
         }
         private void SetupDivingKit()
         {
@@ -462,6 +478,8 @@ namespace MoreShipUpgrades
             string hands = cfg.DIVEKIT_TWO_HANDED ? "two" : "one";
             medNode.displayText = $"DIVING KIT - ${cfg.DIVEKIT_PRICE}\n\nBreath underwater.\nWeights {Mathf.RoundToInt((DiveItem.weight -1 )*100)} lbs and is {hands} handed.\n\n";
             Items.RegisterShopItem(DiveItem, null, null,medNode, DiveItem.creditsWorth);
+
+            UpgradeBus.instance.ItemsToSync.Add("Dive",DiveItem);
         }
         private void SetupMedkit()
         {
@@ -504,6 +522,8 @@ namespace MoreShipUpgrades
             mapObjDef.spawnableMapObject = new SpawnableMapObject();
             mapObjDef.spawnableMapObject.prefabToSpawn = MedKitMapItem.spawnPrefab;
             MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
+
+            UpgradeBus.instance.ItemsToSync.Add("Medkit",MedKitItem);
         }
         private void SetupPeeper()
         {
@@ -526,6 +546,8 @@ namespace MoreShipUpgrades
             TerminalNode peepNode = ScriptableObject.CreateInstance<TerminalNode>();
             peepNode.displayText = "Looks at coil heads, don't lose it\n";
             Items.RegisterShopItem(Peeper, null, null, peepNode, Peeper.creditsWorth);
+
+            UpgradeBus.instance.ItemsToSync.Add("Peeper", Peeper);
         }
         private void SetupPerks()
         {

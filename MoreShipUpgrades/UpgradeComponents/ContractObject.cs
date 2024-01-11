@@ -10,8 +10,6 @@ namespace MoreShipUpgrades.UpgradeComponents
         static LGULogger logger = new LGULogger(nameof(ContractObject));
         void Start()
         {
-            UpgradeBus.instance.contractType = "defusal";
-            UpgradeBus.instance.contractLevel = StartOfRound.Instance.currentLevel.PlanetName;
             if(contractType == null) { logger.LogWarning($"contractType was not set on {gameObject.name}!"); }
             if(UpgradeBus.instance.contractType != contractType || StartOfRound.Instance.currentLevel.PlanetName != UpgradeBus.instance.contractLevel)
             {
@@ -19,14 +17,14 @@ namespace MoreShipUpgrades.UpgradeComponents
             }
             else
             {
-                logger.LogInfo($"{contractType} object spawned and activated, unwinding contract lock.");
+                logger.LogInfo($"{contractType}-{name} spawned and activated.");
                 if(contractType == "exterminator" && IsHost)
                 {
                     for(int i = 0; i < RoundManager.Instance.currentLevel.Enemies.Count; i++)
                     {
                         if (RoundManager.Instance.currentLevel.Enemies[i].enemyType.enemyName == "Hoarding bug")
                         {
-                            for (int j = 0; j < 20; j++) // change to cfg
+                            for (int j = 0; j < UpgradeBus.instance.cfg.CONTRACT_BUG_SPAWNS; j++)
                             {
                                 RoundManager.Instance.SpawnEnemyOnServer(transform.position, 0f,i);
                             }
