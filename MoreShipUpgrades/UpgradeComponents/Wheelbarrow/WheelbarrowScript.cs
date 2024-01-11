@@ -3,7 +3,6 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.InputSystem.HID;
 
 namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
 {
@@ -33,7 +32,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
         /// <summary>
         /// Trigger responsible to allow interacting with wheelbarrow's container of items
         /// </summary>
-        private InteractTrigger trigger;
+        private InteractTrigger[] triggers;
+        private float totalWeight;
 
         private const string ITEM_NAME = "Wheelbarrow";
         private const string SCRAP_ITEM_NAME = "Shopping Cart";
@@ -53,16 +53,26 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
             maximumAmountItems = UpgradeBus.instance.cfg.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS;
             weightReduceMultiplier = UpgradeBus.instance.cfg.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER;
             defaultWeight = itemProperties.weight;
+            totalWeight = defaultWeight;
 
-            trigger = GetComponentInChildren<InteractTrigger>();
-            container = GameObject.Find("PlaceableBounds").GetComponent<BoxCollider>();
+            triggers = GetComponentsInChildren<InteractTrigger>();
+            logger.LogDebug(triggers.Length);
+            foreach (BoxCollider collider in GetComponentsInChildren<BoxCollider>())
+            {
+                if (collider.name != "PlaceableBounds") continue;
+
+                container = collider;
+                break;
+            }
             if (container == null) logger.LogError($"Couldn't find {nameof(BoxCollider)} component in the prefab...");
-            if (trigger == null) logger.LogError($"Couldn't find {nameof(InteractTrigger)} component in the prefab...");
-
-            trigger.onInteract.AddListener(StoreItemToWheelbarrow);
-            trigger.tag = nameof(InteractTrigger); // Necessary for the interact UI to appear
-            trigger.interactCooldown = false;
-            trigger.cooldownTime = 0;
+            if (triggers == null) logger.LogError($"Couldn't find {nameof(InteractTrigger)} components in the prefab...");
+            foreach (InteractTrigger trigger in  triggers)
+            {
+                trigger.onInteract.AddListener(StoreItemToWheelbarrow);
+                trigger.tag = nameof(InteractTrigger); // Necessary for the interact UI to appear
+                trigger.interactCooldown = false;
+                trigger.cooldownTime = 0;
+            }
 
             SetupItemAttributes();
         }
@@ -73,38 +83,60 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
             PlayerControllerB player = GameNetworkManager.Instance.localPlayerController;
             if (player == null)
             {
-                trigger.interactable = false;
+                foreach (InteractTrigger trigger in triggers)
+                {
+                    trigger.interactable = false;
+                }
                 return;
             }
 
             if (!player.isHoldingObject)
             {
-                trigger.interactable = false;
-                trigger.disabledHoverTip = NO_ITEMS_TEXT;
+                foreach (InteractTrigger trigger in triggers)
+                {
+                    trigger.interactable = false;
+                    trigger.disabledHoverTip = NO_ITEMS_TEXT;
+                }
                 return;
             }
             GrabbableObject holdingItem = player.currentlyHeldObjectServer;
             if (holdingItem.GetComponent<WheelbarrowScript>() != null )
             {
-                trigger.interactable = false;
-                trigger.disabledHoverTip = WHEELBARROWCEPTION_TEXT;
+                foreach (InteractTrigger trigger in triggers)
+                {
+                    trigger.interactable = false;
+                    trigger.disabledHoverTip = WHEELBARROWCEPTION_TEXT;
+                }
                 return;
             }
             GrabbableObject[] storedItems = GetComponentsInChildren<GrabbableObject>();
             if (storedItems.Length > maximumAmountItems)
             {
-                trigger.interactable = false;
-                trigger.disabledHoverTip = FULL_TEXT;
+                foreach (InteractTrigger trigger in triggers)
+                {
+                    trigger.interactable = false;
+                    trigger.disabledHoverTip = FULL_TEXT;
+                }
                 return;
             }
-            trigger.interactable = true;
-            trigger.hoverTip = START_DEPOSIT_TEXT;
+            foreach (InteractTrigger trigger in triggers)
+            {
+                trigger.interactable = true;
+                trigger.hoverTip = START_DEPOSIT_TEXT;
+            }
+        }
+        public override void DiscardItem()
+        {
+            playerHeldBy.drunkness = 0f;
+            playerHeldBy.drunknessInertia = 0f;
+            base.DiscardItem();
         }
         /// <summary>
         /// Setups attributes related to the wheelbarrow item
         /// </summary>
         private void SetupItemAttributes()
         {
+            itemProperties = Instantiate(itemProperties);
             grabbable = true;
             grabbableToEnemies = true;
             SetupScanNodeProperties();
@@ -128,27 +160,28 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
         public void DecrementStoredItems()
         {
             currentAmountItems--;
+            UpdateWheelbarrowWeightServerRpc();
         }
-        /// <summary>
-        /// Whenever a player grabs the wheelbarrow, update the weight value of the item according to the amount of items present in it
-        /// </summary>
-        public override void GrabItem()
+        [ServerRpc(RequireOwnership = false)]
+        private void UpdateWheelbarrowWeightServerRpc()
+        {
+            UpdateWheelbarrowWeightClientRpc();
+        }
+        [ClientRpc]
+        private void UpdateWheelbarrowWeightClientRpc()
         {
             GrabbableObject[] storedItems = GetComponentsInChildren<GrabbableObject>();
-            if (storedItems.Length <= 0) return;
-
-            playerHeldBy.carryWeight -= Mathf.Clamp(exoskeletonScript.DecreasePossibleWeight(itemProperties.weight - 1f), 0f, 10f);
+            logger.LogDebug(storedItems.Length);
+            if (playerHeldBy) playerHeldBy.carryWeight -= Mathf.Clamp(exoskeletonScript.DecreasePossibleWeight(itemProperties.weight - 1f), 0f, 10f);
             itemProperties.weight = defaultWeight;
 
             for (int i = 0; i < storedItems.Length; i++)
             {
                 if (storedItems[i].GetComponent<WheelbarrowScript>() != null) continue;
-                logger.LogDebug(storedItems[i].itemProperties.itemName);
-                logger.LogDebug(storedItems[i].itemProperties.weight);
                 GrabbableObject storedItem = storedItems[i];
                 itemProperties.weight += (storedItem.itemProperties.weight - 1f) * weightReduceMultiplier;
             }
-            playerHeldBy.carryWeight += Mathf.Clamp(exoskeletonScript.DecreasePossibleWeight(itemProperties.weight - 1f), 0f, 10f);
+            if (playerHeldBy) playerHeldBy.carryWeight += Mathf.Clamp(exoskeletonScript.DecreasePossibleWeight(itemProperties.weight - 1f), 0f, 10f);
         }
         /// <summary>
         /// Action when the interaction bar is completely filled on the container of the wheelbarrow.
@@ -161,21 +194,33 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
             GrabbableObject[] storedItems = GetComponentsInChildren<GrabbableObject>();
             if (storedItems.Length >= maximumAmountItems + 1) return; // Can't store more items;
 
-            if (!(GameNetworkManager.Instance != null && playerInteractor == GameNetworkManager.Instance.localPlayerController)) return;
             Collider triggerCollider = container;
             Vector3 vector = RoundManager.RandomPointInBounds(triggerCollider.bounds);
-            vector.y = triggerCollider.bounds.min.y;
-            RaycastHit raycastHit;
-            if (Physics.Raycast(new Ray(vector + Vector3.up * 3f, Vector3.down), out raycastHit, 8f, 1048640, QueryTriggerInteraction.Collide))
-            {
-                vector = raycastHit.point;
-            }
+            vector.y = triggerCollider.bounds.max.y;
             vector.y += playerInteractor.currentlyHeldObjectServer.itemProperties.verticalOffset;
-            vector += triggerCollider.transform.position - gameObject.transform.position;
-            vector = container.transform.InverseTransformPoint(vector);
+            vector = GetComponent<NetworkObject>().transform.InverseTransformPoint(vector);
             logger.LogDebug($"Applying vector of ({vector.x},{vector.y},{vector.z})");
-            playerInteractor.DiscardHeldObject(true, GetComponent<NetworkObject>(), vector, false);
+            playerInteractor.DiscardHeldObject(placeObject: true, parentObjectTo: GetComponent<NetworkObject>(), placePosition: vector, matchRotationOfParent: false);
             currentAmountItems++;
+            UpdateWheelbarrowWeightServerRpc();
+        }
+
+        public static float CheckIfPlayerCarryingWheelbarrow(float defaultValue)
+        {
+            PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
+            if (!player.isHoldingObject) return defaultValue;
+            if (player.currentlyHeldObjectServer is not WheelbarrowScript) return defaultValue;
+            if (player.thisController.velocity.magnitude <= 0.5f) return defaultValue;
+            return defaultValue * 0.4f;
+        }
+        public static float CheckIfPlayerCarryingWheelbarrowMovement(float defaultValue)
+        {
+            PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
+            if (!player.isHoldingObject) return defaultValue;
+            if (player.currentlyHeldObjectServer is not WheelbarrowScript) return defaultValue;
+            logger.LogDebug(player.thisController.velocity.magnitude);
+            if (player.thisController.velocity.magnitude <= 5.0f) return defaultValue;
+            return defaultValue * 10f;
         }
     }
 }

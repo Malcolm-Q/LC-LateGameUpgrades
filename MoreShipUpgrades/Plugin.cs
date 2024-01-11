@@ -326,14 +326,14 @@ namespace MoreShipUpgrades
         {
             Item wheelbarrow = AssetBundleHandler.GetItemObject("Scrap Wheelbarrow");
             if (wheelbarrow == null) return;
-
             wheelbarrow.itemId = 492018;
             wheelbarrow.minValue = cfg.SCRAP_WHEELBARROW_MINIMUM_VALUE;
             wheelbarrow.maxValue = cfg.SCRAP_WHEELBARROW_MAXIMUM_VALUE;
             wheelbarrow.twoHanded = true;
-            wheelbarrow.twoHandedAnimation = false;
-            wheelbarrow.spawnPrefab.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f); // TODO Change when model created
-            wheelbarrow.rotationOffset = new Vector3(0f, 90f, 0f); // TODO Change when model created
+            wheelbarrow.twoHandedAnimation = true;
+            wheelbarrow.grabAnim = "HoldJetpack";
+            wheelbarrow.rotationOffset = new Vector3(0f, 0f, 0f); // TODO Change when model created
+            wheelbarrow.positionOffset = new Vector3(0f, -1.7f, 0.35f);
             wheelbarrow.allowDroppingAheadOfPlayer = true;
             wheelbarrow.isConductiveMetal = true;
             wheelbarrow.isScrap = true;
@@ -350,12 +350,14 @@ namespace MoreShipUpgrades
             Item wheelbarrow = AssetBundleHandler.GetItemObject("Store Wheelbarrow");
             if (wheelbarrow == null) return;
 
-            wheelbarrow.itemId = 492018;
+            wheelbarrow.itemId = 492019;
             wheelbarrow.creditsWorth = cfg.WHEELBARROW_PRICE;
             wheelbarrow.twoHanded = true;
-            wheelbarrow.twoHandedAnimation = false;
-            wheelbarrow.spawnPrefab.transform.localScale = new Vector3(1f, 1f, 1f); // TODO Change when model created
-            wheelbarrow.rotationOffset = new Vector3(0f, 90f, 0f); // TODO Change when model created
+            wheelbarrow.twoHandedAnimation = true;
+            wheelbarrow.grabAnim = "HoldJetpack";
+            wheelbarrow.verticalOffset = 0.5f;
+            wheelbarrow.floorYOffset = -90;
+            wheelbarrow.positionOffset = new Vector3(0f, -1f, 2.4f);
             wheelbarrow.allowDroppingAheadOfPlayer = true;
             wheelbarrow.isConductiveMetal = true;
             StoreWheelbarrow barrowScript = wheelbarrow.spawnPrefab.AddComponent<StoreWheelbarrow>();
