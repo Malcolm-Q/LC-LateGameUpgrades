@@ -151,9 +151,9 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
             if (soundCounter < 2.0f) return;
             soundCounter = 0f;
             int index = randomNoise.Next(0, wheelsClip.Length);
-            wheelsNoise.PlayOneShot(wheelsClip[index]);
-            WalkieTalkie.TransmitOneShotAudio(wheelsNoise, wheelsClip[index]);
-            RoundManager.Instance.PlayAudibleNoise(base.transform.position, noiseRange, 0.5f, 0, isInElevator && StartOfRound.Instance.hangarDoorsClosed);
+            wheelsNoise.PlayOneShot(wheelsClip[index], 0.2f);
+            WalkieTalkie.TransmitOneShotAudio(wheelsNoise, wheelsClip[index], 0.2f);
+            RoundManager.Instance.PlayAudibleNoise(base.transform.position, noiseRange, 0.2f, 0, isInElevator && StartOfRound.Instance.hangarDoorsClosed);
         }
         private void UpdateInteractTriggers()
         {
