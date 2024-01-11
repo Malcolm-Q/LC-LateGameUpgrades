@@ -357,7 +357,7 @@ namespace MoreShipUpgrades
 
             if (!cfg.SCRAP_WHEELBARROW_ENABLED) return;
 
-            LethalLib.Modules.Items.RegisterScrap(wheelbarrow, 10000, LethalLib.Modules.Levels.LevelTypes.All);
+            LethalLib.Modules.Items.RegisterScrap(wheelbarrow, cfg.SCRAP_WHEELBARROW_RARITY, LethalLib.Modules.Levels.LevelTypes.All);
         }
         private void SetupStoreWheelbarrow()
         {
