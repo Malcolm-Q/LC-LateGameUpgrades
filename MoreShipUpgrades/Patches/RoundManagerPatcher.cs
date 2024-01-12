@@ -36,9 +36,9 @@ namespace MoreShipUpgrades.Patches
         {
             if (!UpgradeBus.instance.cfg.EXTEND_DEADLINE_ENABLED) return; //  Don't bother changing something if we never touch it
             if (!savedPrevious) return;
+            logger.LogDebug("Changing back the deadline...");
             TimeOfDay.Instance.daysUntilDeadline = previousDaysDeadline;
             savedPrevious = false;
-
         }
     }
 }
