@@ -7,7 +7,7 @@ namespace MoreShipUpgrades.Patches
     internal class RoundManagerPatcher
     {
         private static int previousDaysDeadline = TimeOfDay.Instance.daysUntilDeadline;
-        private static int DEFAULT_DAYS_DEADLINE = 3;
+        private static int DEFAULT_DAYS_DEADLINE = 4;
         private static bool savedPrevious = false;
         private static LGULogger logger = new LGULogger(nameof(RoundManagerPatcher));
 
@@ -20,6 +20,7 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPrefix]
         public static void ChangeDaysForEnemySpawns()
         {
+            if (TimeOfDay.Instance.daysUntilDeadline < DEFAULT_DAYS_DEADLINE) return; // Either it's already fine or some other mod already changed the value to be acceptable
             logger.LogDebug("Changing deadline to allow spawning enemies.");
             previousDaysDeadline = TimeOfDay.Instance.daysUntilDeadline;
             TimeOfDay.Instance.daysUntilDeadline %= DEFAULT_DAYS_DEADLINE;
