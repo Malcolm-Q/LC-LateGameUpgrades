@@ -32,9 +32,9 @@ namespace MoreShipUpgrades.Patches
         public static void UndoChangeDaysForEnemySpawns()
         {
             if (!savedPrevious) return;
+            logger.LogDebug("Changing back the deadline...");
             TimeOfDay.Instance.daysUntilDeadline = previousDaysDeadline;
             savedPrevious = false;
-
         }
     }
 }

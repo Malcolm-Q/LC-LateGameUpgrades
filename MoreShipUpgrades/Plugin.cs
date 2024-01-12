@@ -12,6 +12,7 @@ using System.Reflection;
 using MoreShipUpgrades.Misc;
 using BepInEx.Bootstrap;
 using Newtonsoft.Json;
+using MoreShipUpgrades.UpgradeComponents.PortableTeleporter;
 
 namespace MoreShipUpgrades
 {
@@ -176,51 +177,51 @@ namespace MoreShipUpgrades
         }
         private void SetupRegularTeleporterButton()
         {
-            Item tpBut = AssetBundleHandler.GetItemObject("Portable Tele");
-            if (tpBut == null) return;
+            Item regularPortableTeleporter = AssetBundleHandler.GetItemObject("Portable Tele");
+            if (regularPortableTeleporter == null) return;
 
-            tpBut.itemName = "Portable Tele";
-            tpBut.itemId = 492012;
-            TPButtonScript tpScript = tpBut.spawnPrefab.AddComponent<TPButtonScript>();
-            tpScript.itemProperties = tpBut;
-            tpScript.grabbable = true;
-            tpScript.grabbableToEnemies = true;
-            tpScript.ItemBreak = itemBreak;
-            tpScript.useCooldown = 2f;
-            tpScript.error = error;
-            tpScript.buttonPress = buttonPressed;
-            tpBut.creditsWorth = cfg.WEAK_TELE_PRICE;
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(tpBut.spawnPrefab);
+            regularPortableTeleporter.itemName = "Portable Tele";
+            regularPortableTeleporter.itemId = 492012;
+            RegularPortableTeleporter regularTeleportScript = regularPortableTeleporter.spawnPrefab.AddComponent<RegularPortableTeleporter>();
+            regularTeleportScript.itemProperties = regularPortableTeleporter;
+            regularTeleportScript.grabbable = true;
+            regularTeleportScript.grabbableToEnemies = true;
+            regularTeleportScript.ItemBreak = itemBreak;
+            regularTeleportScript.useCooldown = 2f;
+            regularTeleportScript.error = error;
+            regularTeleportScript.buttonPress = buttonPressed;
+            regularPortableTeleporter.creditsWorth = cfg.WEAK_TELE_PRICE;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(regularPortableTeleporter.spawnPrefab);
 
             if (!cfg.WEAK_TELE_ENABLED) return;
 
             TerminalNode PortNode = ScriptableObject.CreateInstance<TerminalNode>();
             PortNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Portable Tele"), (int)(cfg.CHANCE_TO_BREAK * 100));
-            Items.RegisterShopItem(tpBut, null, null, PortNode, tpBut.creditsWorth);
+            Items.RegisterShopItem(regularPortableTeleporter, null, null, PortNode, regularPortableTeleporter.creditsWorth);
         }
         private void SetupAdvancedTeleporterButton()
         {
-            Item tpButAdvanced = AssetBundleHandler.GetItemObject("Advanced Portable Tele");
-            if (tpButAdvanced == null) return;
+            Item advancedPortableTeleporter = AssetBundleHandler.GetItemObject("Advanced Portable Tele");
+            if (advancedPortableTeleporter == null) return;
 
-            tpButAdvanced.creditsWorth = cfg.ADVANCED_TELE_PRICE;
-            tpButAdvanced.itemName = "Advanced Portable Tele";
-            tpButAdvanced.itemId = 492013;
-            AdvTPButtonScript butScript = tpButAdvanced.spawnPrefab.AddComponent<AdvTPButtonScript>();
-            butScript.itemProperties = tpButAdvanced;
-            butScript.grabbable = true;
-            butScript.useCooldown = 2f;
-            butScript.grabbableToEnemies = true;
-            butScript.ItemBreak = itemBreak;
-            butScript.error = error;
-            butScript.buttonPress = buttonPressed;
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(tpButAdvanced.spawnPrefab);
+            advancedPortableTeleporter.creditsWorth = cfg.ADVANCED_TELE_PRICE;
+            advancedPortableTeleporter.itemName = "Advanced Portable Tele";
+            advancedPortableTeleporter.itemId = 492013;
+            AdvancedPortableTeleporter advancedTeleportScript = advancedPortableTeleporter.spawnPrefab.AddComponent<AdvancedPortableTeleporter>();
+            advancedTeleportScript.itemProperties = advancedPortableTeleporter;
+            advancedTeleportScript.grabbable = true;
+            advancedTeleportScript.useCooldown = 2f;
+            advancedTeleportScript.grabbableToEnemies = true;
+            advancedTeleportScript.ItemBreak = itemBreak;
+            advancedTeleportScript.error = error;
+            advancedTeleportScript.buttonPress = buttonPressed;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(advancedPortableTeleporter.spawnPrefab);
 
             if (!cfg.ADVANCED_TELE_ENABLED) return;
 
             TerminalNode advNode = ScriptableObject.CreateInstance<TerminalNode>();
             advNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Advanced Portable Tele"), (int)(cfg.ADV_CHANCE_TO_BREAK * 100));
-            Items.RegisterShopItem(tpButAdvanced, null, null, advNode, tpButAdvanced.creditsWorth);
+            Items.RegisterShopItem(advancedPortableTeleporter, null, null, advNode, advancedPortableTeleporter.creditsWorth);
         }
 
         private void SetupNightVision()

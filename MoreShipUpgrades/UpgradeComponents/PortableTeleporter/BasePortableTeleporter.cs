@@ -6,22 +6,22 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace MoreShipUpgrades.UpgradeComponents
+namespace MoreShipUpgrades.UpgradeComponents.PortableTeleporter
 {
-    internal class AdvTPButtonScript : GrabbableObject
+    internal class BasePortableTeleporter : GrabbableObject
     {
         public AudioClip ItemBreak, error, buttonPress;
         private AudioSource audio;
-
+        protected float breakChance;
+        protected bool keepItems;
         public override void Start()
         {
             base.Start();
             audio = GetComponent<AudioSource>();
         }
-
         public override void DiscardItem()
         {
-            this.playerHeldBy.activatingItem = false;
+            playerHeldBy.activatingItem = false;
             base.DiscardItem();
         }
 
@@ -29,11 +29,13 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             base.ItemActivate(used, buttonDown);
             if (!Mouse.current.leftButton.isPressed) return;
-
             audio.PlayOneShot(buttonPress);
-            if (itemUsedUp) { audio.PlayOneShot(error); return; }
-
-            ShipTeleporter[] tele = GameObject.FindObjectsOfType<ShipTeleporter>();
+            if (itemUsedUp)
+            {
+                audio.PlayOneShot(error);
+                return;
+            }
+            ShipTeleporter[] tele = FindObjectsOfType<ShipTeleporter>();
             ShipTeleporter NotInverseTele = null;
             foreach (ShipTeleporter shipTeleporter in tele)
             {
@@ -42,20 +44,31 @@ namespace MoreShipUpgrades.UpgradeComponents
                 NotInverseTele = shipTeleporter;
                 break;
             }
-            if (!NotInverseTele){ audio.PlayOneShot(error); return; }
-
+            if (NotInverseTele == null)
+            {
+                audio.PlayOneShot(error);
+                return;
+            }
             int thisPlayersIndex = -1;
             for (int i = 0; i < StartOfRound.Instance.mapScreen.radarTargets.Count(); i++)
             {
                 if (StartOfRound.Instance.mapScreen.radarTargets[i].transform.gameObject.GetComponent<PlayerControllerB>() != playerHeldBy) continue;
+
                 thisPlayersIndex = i;
                 break;
             }
             if (thisPlayersIndex == -1)
             {
+                //this shouldn't occur but if it does, this will teleport this client and the server targeted player.
                 StartOfRound.Instance.mapScreen.targetedPlayer = playerHeldBy;
                 UpgradeBus.instance.TPButtonPressed = true;
                 NotInverseTele.PressTeleportButtonOnLocalClient();
+                if (Random.Range(0f, 1f) > breakChance)
+                {
+                    audio.PlayOneShot(ItemBreak);
+                    itemUsedUp = true;
+                    playerHeldBy.DespawnHeldObject();
+                }
             }
             else
             {
@@ -66,10 +79,11 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         private IEnumerator WaitToTP(ShipTeleporter tele)
         {
+            // if we don't do a little wait we'll tp the previously seleccted player.
             yield return new WaitForSeconds(0.15f);
-            if(UpgradeBus.instance.cfg.ADV_KEEP_ITEMS_ON_TELE) ReqUpdateTpDropStatusServerRpc();
+            if (keepItems) ReqUpdateTpDropStatusServerRpc();
             tele.PressTeleportButtonOnLocalClient();
-            if (UnityEngine.Random.Range(0f, 1f) < UpgradeBus.instance.cfg.ADV_CHANCE_TO_BREAK) // 0.1f
+            if (Random.Range(0f, 1f) < breakChance) // 0.9f
             {
                 audio.PlayOneShot(ItemBreak);
                 itemUsedUp = true;
