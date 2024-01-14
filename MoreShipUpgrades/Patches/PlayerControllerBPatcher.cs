@@ -359,7 +359,7 @@ namespace MoreShipUpgrades.Patches
             for (int i = 0; i < codes.Count; i++)
             {
                 if (flag) break;
-                if (!(codes[i].opcode == OpCodes.Ldc_R4 && codes[i].operand.ToString() == "0.008")) continue;
+                if (!(codes[i].opcode == OpCodes.Ldc_R4 && (float)codes[i].operand == 0.008f)) continue;
                 codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, reduceLookSensitivity));
                 flag = true;
             }
