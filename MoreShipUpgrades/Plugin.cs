@@ -552,6 +552,7 @@ namespace MoreShipUpgrades
             TerminalNode peepNode = ScriptableObject.CreateInstance<TerminalNode>();
             peepNode.displayText = "Looks at coil heads, don't lose it\n";
             LethalLib.Modules.Items.RegisterShopItem(Peeper, null, null, peepNode, Peeper.creditsWorth);
+            UpgradeBus.instance.ItemsToSync.Add("Peeper", Peeper);
         }
         private void SetupWheelbarrows()
         {
@@ -623,9 +624,6 @@ namespace MoreShipUpgrades
             TerminalNode wheelbarrowNode = ScriptableObject.CreateInstance<TerminalNode>();
             wheelbarrowNode.displayText = $"A portable container which has a maximum capacity of {cfg.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS} and reduces the effective weight of the inserted items by {cfg.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER*100} %.\nIt weighs {1f + (cfg.WHEELBARROW_WEIGHT/100f)} lbs";
             LethalLib.Modules.Items.RegisterShopItem(wheelbarrow, null, null, wheelbarrowNode, wheelbarrow.creditsWorth);
-            Items.RegisterShopItem(Peeper, null, null, peepNode, Peeper.creditsWorth);
-
-            UpgradeBus.instance.ItemsToSync.Add("Peeper", Peeper);
         }
         private void SetupPerks()
         {
