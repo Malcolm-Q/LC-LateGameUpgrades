@@ -9,9 +9,9 @@ using System.IO;
 using System.Reflection;
 using MoreShipUpgrades.Misc;
 using BepInEx.Bootstrap;
-using MoreShipUpgrades.UpgradeComponents.PortableTeleporter;
-using MoreShipUpgrades.UpgradeComponents;
 using MoreShipUpgrades.UpgradeComponents.Wheelbarrow;
+using MoreShipUpgrades.UpgradeComponents.Items;
+using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
 using LethalLib.Extras;
 using LethalLib.Modules;
 
@@ -66,7 +66,7 @@ namespace MoreShipUpgrades
 
             UpgradeBus.instance.internNames = AssetBundleHandler.GetInfoFromJSON("InternNames").Split(",");
             UpgradeBus.instance.internInterests = AssetBundleHandler.GetInfoFromJSON("InternInterests").Split(",");
-
+            
             SetupModStore(ref UpgradeAssets);
 
             SetupIntroScreen(ref UpgradeAssets);
@@ -156,7 +156,7 @@ namespace MoreShipUpgrades
             foreach (string creatureName in AssetBundleHandler.samplePaths.Keys)
             {
                 Item sample = AssetBundleHandler.GetItemObject(creatureName);
-                SampleItem sampleScript = sample.spawnPrefab.AddComponent<SampleItem>();
+                MonsterSample sampleScript = sample.spawnPrefab.AddComponent<MonsterSample>();
                 sampleScript.grabbable = true;
                 sampleScript.grabbableToEnemies = true;
                 sampleScript.itemProperties = sample;
@@ -235,7 +235,7 @@ namespace MoreShipUpgrades
             nightVisionItem.creditsWorth = cfg.NIGHT_VISION_PRICE;
             nightVisionItem.spawnPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             nightVisionItem.itemId = 492014;
-            NightVisionItemScript visScript = nightVisionItem.spawnPrefab.AddComponent<NightVisionItemScript>();
+            NightVisionGoggles visScript = nightVisionItem.spawnPrefab.AddComponent<NightVisionGoggles>();
             visScript.itemProperties = nightVisionItem;
             visScript.grabbable = true;
             visScript.useCooldown = 2f;
@@ -261,7 +261,7 @@ namespace MoreShipUpgrades
             DiveItem.twoHanded = cfg.DIVEKIT_TWO_HANDED;
             DiveItem.weight = cfg.DIVEKIT_WEIGHT;
             DiveItem.itemSpawnsOnGround = true;
-            DivingKitScript diveScript = DiveItem.spawnPrefab.AddComponent<DivingKitScript>();
+            DivingKit diveScript = DiveItem.spawnPrefab.AddComponent<DivingKit>();
             diveScript.itemProperties = DiveItem;
             diveScript.grabbable = true;
             diveScript.grabbableToEnemies = true;
@@ -282,7 +282,7 @@ namespace MoreShipUpgrades
             MedKitItem.creditsWorth = cfg.MEDKIT_PRICE;
             MedKitItem.itemSpawnsOnGround = true;
             MedKitItem.itemId = 492016;
-            MedkitScript medScript = MedKitItem.spawnPrefab.AddComponent<MedkitScript>();
+            Medkit medScript = MedKitItem.spawnPrefab.AddComponent<Medkit>();
             medScript.itemProperties = MedKitItem;
             medScript.grabbable = true;
             medScript.useCooldown = 2f;
@@ -307,7 +307,7 @@ namespace MoreShipUpgrades
             Peeper.itemId = 492017;
             Peeper.twoHandedAnimation = false;
             Peeper.spawnPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-            coilHeadItem peepScript = Peeper.spawnPrefab.AddComponent<coilHeadItem>();
+            Peeper peepScript = Peeper.spawnPrefab.AddComponent<Peeper>();
             peepScript.itemProperties = Peeper;
             peepScript.grabbable = true;
             peepScript.grabbableToEnemies = true;

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Reflection.Emit;
 using System.Reflection;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.Items;
 
 namespace MoreShipUpgrades.Patches
 {
@@ -17,13 +18,13 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("DoAIInterval")]
         private static void DoAllIntervalPrefix(ref SpringManAI __instance)
         {
-            if (coilHeadItem.HasLineOfSightToPeepers(__instance.transform.position)) __instance.currentBehaviourStateIndex = 1;
+            if (Peeper.HasLineOfSightToPeepers(__instance.transform.position)) __instance.currentBehaviourStateIndex = 1;
         }
         [HarmonyTranspiler]
         [HarmonyPatch("Update")]
         private static IEnumerable<CodeInstruction> Update_Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo peeperMethod = typeof(coilHeadItem).GetMethod("HasLineOfSightToPeepers", BindingFlags.Public | BindingFlags.Static);
+            MethodInfo peeperMethod = typeof(Peeper).GetMethod("HasLineOfSightToPeepers", BindingFlags.Public | BindingFlags.Static);
             MethodInfo transformMethod = typeof(SpringManAI).GetMethod("get_transform");
             MethodInfo positionMethod = typeof(UnityEngine.Transform).GetMethod("get_position");
             
