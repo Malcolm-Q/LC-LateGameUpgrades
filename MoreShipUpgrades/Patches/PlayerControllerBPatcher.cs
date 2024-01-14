@@ -35,7 +35,7 @@ namespace MoreShipUpgrades.Patches
             UpgradeBus.instance.staminaDrainCoefficient = 1f;
             UpgradeBus.instance.incomingDamageCoefficient = 1f;
             UpgradeBus.instance.damageBoost = 0;
-            __instance.movementSpeed = BeatScript.PreviousMovementSpeed;
+            if (BeatScript.PreviousMovementSpeed > 0) __instance.movementSpeed = BeatScript.PreviousMovementSpeed;
         }
 
         [HarmonyPatch("DamagePlayer")]
