@@ -609,7 +609,7 @@ namespace MoreShipUpgrades
             wheelbarrow.twoHandedAnimation = true;
             wheelbarrow.grabAnim = "HoldJetpack";
             wheelbarrow.floorYOffset = -90;
-            wheelbarrow.verticalOffset =0.6f;
+            wheelbarrow.verticalOffset =0.3f;
             wheelbarrow.positionOffset = new Vector3(0f, -0.7f, 1.4f);
             wheelbarrow.allowDroppingAheadOfPlayer = true;
             wheelbarrow.isConductiveMetal = true;
