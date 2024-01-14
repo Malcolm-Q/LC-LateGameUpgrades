@@ -237,18 +237,13 @@ namespace MoreShipUpgrades.Managers
         public void PlayerHealthUpdateLevelServerRpc(ulong id, int level) 
         {
             logger.LogInfo("Request to update player max healths received. Calling ClientRpc...");
-            UpdatePlayerNewHealthsClientRpc(id, health);
             PlayerHealthUpdateLevelClientRpc(id, level);
         }
 
         [ClientRpc]
         private void PlayerHealthUpdateLevelClientRpc(ulong id, int level)
         {
-            logger.LogInfo($"Setting max health for player {id} to {health}");
-            if (UpgradeBus.instance.playerHPs.ContainsKey(id))
-                UpgradeBus.instance.playerHPs[id] = health;
-            else UpgradeBus.instance.playerHPs.Add(id, health);
-            playerHealthScript.UpdateMaxHealth(GameNetworkManager.Instance.localPlayerController);
+            logger.LogInfo($"Setting max health level for player {id} to {level}");
             if (level == -1)
             {
                 UpgradeBus.instance.playerHealthLevels.Remove(id);
