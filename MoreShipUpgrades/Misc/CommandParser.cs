@@ -23,10 +23,10 @@ namespace MoreShipUpgrades.Misc
         };
         static string[] contracts = { "data", "exterminator", "extraction","exorcism","defusal" };
         static string[] contractInfos = {
-            "\n\nOur systems have detected an active PC somewhere in the facility.\nFind it, and with the help of the ship terminal operator, recover any valuable data that may exist on the system.\n\n",
+            "\n\nOur systems have detected an active PC somewhere in the facility.\nFind it, use the bruteforce command on the ship terminal with the devices IP to get login credentials, then use the cd, ls, and mv commands to find the .db file (enter `mv survey.db` in the containing folder).\n\n",
             "\n\nIt's been reported that the population of hoarder bugs on this moon have skyrocketed and become aggressive. You must destroy their nest at all costs.\n\n",
-            "\n\nCrew number 5339 have reported that one of their operatives was lost on this moon and left behind. Extract the operative, and more importantly, any scrap they may have.\n\n" ,
-            "\n\nUnusual activity in the spirit world has been reported at this facility.\nFind the ritual site, conduct the ritual, and get out.\n\n" ,
+            "\n\nCrew number 5339 have reported that one of their operatives was lost on this moon and left behind. You will have to find or bring a medkit to heal and extract the lost operative.\n\n" ,
+            "\n\nUnusual activity in the spirit world has been reported at this facility.\nFind the ritual site to determine what type of demon it is, enter `demon DemonName` in the terminal to get the ritual instructions. Find ritual items and banish the demon.\n\n" ,
             "\n\nAn unknown party has planted a bomb at an integral point in this facility.\nYou must find the bomb and work together to defuse it.\nUse the `Lookup` command with the bombs serial number to get defusal instructions.\n\n" 
         };
 
@@ -393,7 +393,7 @@ namespace MoreShipUpgrades.Misc
             }
             if(terminal.groupCredits < UpgradeBus.instance.cfg.CONTRACT_PRICE) //change this to cfg value
             {
-                txt = $"This contract costs ${UpgradeBus.instance.cfg.CONTRACT_PRICE} and you have ${terminal.groupCredits}\n\n";
+                txt = $"Contracts costs ${UpgradeBus.instance.cfg.CONTRACT_PRICE} and you have ${terminal.groupCredits}\n\n";
                 return DisplayTerminalMessage(txt);
             }
             LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits - UpgradeBus.instance.cfg.CONTRACT_PRICE);

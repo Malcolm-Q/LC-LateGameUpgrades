@@ -273,9 +273,9 @@ namespace MoreShipUpgrades.Misc
             BEATS_STAMINA = ConfigEntry(topSection, "Enable Stamina Boost Effect", false, "");
             BEATS_DEF = ConfigEntry(topSection, "Enable Defense Boost Effect", false, "");
             BEATS_DEF_CO = ConfigEntry(topSection, "Defense Boost Coefficient", 0.5f, "Multiplied to incoming damage.");
-            BEATS_STAMINA_CO = ConfigEntry(topSection, "Stamina Regen Coefficient", 1.15f, "Multiplied to stamina regen.");
+            BEATS_STAMINA_CO = ConfigEntry(topSection, "Stamina Regen Coefficient", 1.25f, "Multiplied to stamina regen.");
             BEATS_DMG_INC = ConfigEntry(topSection, "Additional Damage Dealt", 1, "");
-            BEATS_SPEED_INC = ConfigEntry(topSection, "Speed Boost Addition", 1.25f, "");
+            BEATS_SPEED_INC = ConfigEntry(topSection, "Speed Boost Addition", 1.5f, "");
             BEATS_RADIUS = ConfigEntry(topSection, "Effect Radius", 15f, "Radius in unity units players will be effected by an active boombox.");
 
             topSection = "Advanced Portable Teleporter";

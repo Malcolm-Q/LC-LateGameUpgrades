@@ -170,8 +170,6 @@ namespace MoreShipUpgrades
                 mapObjDefRitual.spawnableMapObject = new SpawnableMapObject();
                 mapObjDefRitual.spawnableMapObject.prefabToSpawn = exorItem.spawnPrefab;
                 MapObjects.RegisterMapObject(mapObjDefRitual, Levels.LevelTypes.All, (level) => new AnimationCurve(new Keyframe(0,3),new Keyframe(1,3)));
-
-                Items.RegisterShopItem(exorItem, 0);
             }
 
             if (mainItem == null || contractLoot == null) return;
@@ -192,7 +190,6 @@ namespace MoreShipUpgrades
             mapObjDef.spawnableMapObject = new SpawnableMapObject();
             mapObjDef.spawnableMapObject.prefabToSpawn = mainItem.spawnPrefab;
             MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
-            Items.RegisterShopItem(mainItem, 0);
         }
 
 

@@ -1,15 +1,5 @@
-﻿using GameNetcodeStuff;
-using HarmonyLib;
-using MoreShipUpgrades.Managers;
+﻿using HarmonyLib;
 using MoreShipUpgrades.Misc;
-using MoreShipUpgrades.UpgradeComponents;
-using Newtonsoft.Json;
-using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Security.Cryptography;
-using UnityEngine;
 
 namespace MoreShipUpgrades.Patches
 {
@@ -25,9 +15,8 @@ namespace MoreShipUpgrades.Patches
             logger.LogDebug("Start");
             TerminalNode helpNode = __instance.terminalNodes.specialNodes[HELP_TERMINAL_NODE];
             if (helpNode.displayText.Contains("Lategame Upgrades")) return;
-            helpNode.displayText += "Lategame Upgrades\n";
-            helpNode.displayText += ">LATEGAME\nDisplays information related with Lategame-Upgrades mod\n";
-            helpNode.displayText += ">LGU/LATEGAME STORE\nDisplays the purchaseable upgrades from Lategame store.\n";
+            helpNode.displayText += ">LATEGAME\nDisplays information related with Lategame-Upgrades mod\n\n";
+            helpNode.displayText += ">LGU / LATEGAME STORE\nDisplays the purchaseable upgrades from Lategame store.\n\n";
         }
         [HarmonyPostfix]
         [HarmonyPatch("ParsePlayerSentence")]
