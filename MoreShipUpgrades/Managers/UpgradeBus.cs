@@ -238,6 +238,7 @@ namespace MoreShipUpgrades.Managers
             if (cfg.RUNNING_SHOES_ENABLED && runningShoes) runningShoeScript.ResetRunningShoesBuff(ref player);
             if (cfg.BIGGER_LUNGS_ENABLED && biggerLungs) biggerLungScript.ResetBiggerLungsBuff(ref player);
             if (cfg.STRONG_LEGS_ENABLED && strongLegs) strongLegsScript.ResetStrongLegsBuff(ref player);
+            if (cfg.PLAYER_HEALTH_ENABLED && playerHealth) playerHealthScript.ResetStimpackBuff(ref player);
         }
 
         internal void GenerateSales(int seed = -1) // TODO: Save sales
