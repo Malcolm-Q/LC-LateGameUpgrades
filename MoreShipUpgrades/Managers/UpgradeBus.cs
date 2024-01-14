@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents;
+using MoreShipUpgrades.UpgradeComponents.Items;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
@@ -94,7 +95,7 @@ namespace MoreShipUpgrades.Managers
         public Dictionary<string,bool> IndividualUpgrades = new Dictionary<string,bool>();
         public string[] internNames, internInterests;
 
-        public List<coilHeadItem> coilHeadItems = new List<coilHeadItem>();
+        public List<Peeper> coilHeadItems = new List<Peeper>();
         internal bool walkies;
         internal bool walkieUIActive;
         internal string version;
