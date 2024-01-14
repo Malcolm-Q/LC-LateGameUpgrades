@@ -104,7 +104,7 @@ namespace MoreShipUpgrades.Managers
             { nightVisionScript.UPGRADE_NAME, (level, price) => nightVisionScript.GetNightVisionInfo(level, price) },
         };
 
-        public Dictionary<ulong, int> playerHPs = new Dictionary<ulong, int>();
+        public Dictionary<ulong, int> playerHealthLevels = new Dictionary<ulong, int>();
 
         public bool increaseHivePrice = false;
 

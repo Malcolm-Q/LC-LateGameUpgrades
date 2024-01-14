@@ -234,20 +234,30 @@ namespace MoreShipUpgrades.Managers
         }
 
         [ServerRpc(RequireOwnership = false)]
-        public void UpdatePlayerNewHealthsServerRpc(ulong id, int health) 
+        public void PlayerHealthUpdateLevelServerRpc(ulong id, int level) 
         {
             logger.LogInfo("Request to update player max healths received. Calling ClientRpc...");
             UpdatePlayerNewHealthsClientRpc(id, health);
+            PlayerHealthUpdateLevelClientRpc(id, level);
         }
 
         [ClientRpc]
-        private void UpdatePlayerNewHealthsClientRpc(ulong id, int health)
+        private void PlayerHealthUpdateLevelClientRpc(ulong id, int level)
         {
             logger.LogInfo($"Setting max health for player {id} to {health}");
             if (UpgradeBus.instance.playerHPs.ContainsKey(id))
                 UpgradeBus.instance.playerHPs[id] = health;
             else UpgradeBus.instance.playerHPs.Add(id, health);
             playerHealthScript.UpdateMaxHealth(GameNetworkManager.Instance.localPlayerController);
+            if (level == -1)
+            {
+                UpgradeBus.instance.playerHealthLevels.Remove(id);
+                return;
+            }
+
+            if (UpgradeBus.instance.playerHealthLevels.ContainsKey(id))
+                UpgradeBus.instance.playerHealthLevels[id] = level;
+            else UpgradeBus.instance.playerHealthLevels.Add(id, level);
         }
 
         [ServerRpc(RequireOwnership = false)]
