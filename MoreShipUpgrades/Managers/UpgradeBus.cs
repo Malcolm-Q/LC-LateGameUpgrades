@@ -123,8 +123,8 @@ namespace MoreShipUpgrades.Managers
         public Dictionary<string,GameObject> samplePrefabs = new Dictionary<string,GameObject>();
         public GameObject nightVisionPrefab;
         public bool sickBeats;
-        public float staminaDrainCoefficient;
-        public float incomingDamageCoefficient;
+        public float staminaDrainCoefficient = 1f;
+        public float incomingDamageCoefficient = 1f;
         public int damageBoost;
         public GameObject BoomboxIcon;
         public bool EffectsActive;

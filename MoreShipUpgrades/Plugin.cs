@@ -402,8 +402,8 @@ namespace MoreShipUpgrades
             TerminalNode PortNode = ScriptableObject.CreateInstance<TerminalNode>();
             PortNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Portable Tele"), (int)(cfg.CHANCE_TO_BREAK * 100));
 
-            UpgradeBus.instance.ItemsToSync.Add("Tele", tpBut);
             Items.RegisterShopItem(regularPortableTeleporter, null, null, PortNode, regularPortableTeleporter.creditsWorth);
+            UpgradeBus.instance.ItemsToSync.Add("Tele", regularPortableTeleporter);
         }
         private void SetupAdvancedTeleporterButton()
         {
@@ -429,7 +429,7 @@ namespace MoreShipUpgrades
             advNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Advanced Portable Tele"), (int)(cfg.ADV_CHANCE_TO_BREAK * 100));
             Items.RegisterShopItem(advancedPortableTeleporter, null, null, advNode, advancedPortableTeleporter.creditsWorth);
 
-            UpgradeBus.instance.ItemsToSync.Add("AdvTele", tpButAdvanced);
+            UpgradeBus.instance.ItemsToSync.Add("AdvTele", advancedPortableTeleporter);
         }
 
         private void SetupNightVision()
@@ -509,7 +509,7 @@ namespace MoreShipUpgrades
 
             Item MedKitMapItem = AssetBundleHandler.GetItemObject("MedkitMapItem");
             if (MedKitMapItem == null) return;
-            MedkitScript medMapScript = MedKitMapItem.spawnPrefab.AddComponent<MedkitScript>();
+            Medkit medMapScript = MedKitMapItem.spawnPrefab.AddComponent<Medkit>();
             ContractObject co = MedKitMapItem.spawnPrefab.AddComponent<ContractObject>();
             co.contractType = "extraction";
             medMapScript.itemProperties = MedKitMapItem;

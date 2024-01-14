@@ -99,7 +99,6 @@ namespace MoreShipUpgrades.Patches
                     if(__instance.IsHost || __instance.IsServer) LGUStore.instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(__instance),"helmet");
                     else LGUStore.instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(__instance),"helmet");
                 }
-                StackTrace trace = new StackTrace();
                 return false;
             }
             return true;
