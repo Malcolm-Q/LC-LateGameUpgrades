@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
+namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
 {
     internal class WheelbarrowScript : GrabbableObject
     {
@@ -109,7 +109,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
             if (wheelsNoise == null) logger.LogError($"Couldn't find {nameof(AudioSource)} component in the prefab...");
             if (container == null) logger.LogError($"Couldn't find {nameof(BoxCollider)} component in the prefab...");
             if (triggers == null) logger.LogError($"Couldn't find {nameof(InteractTrigger)} components in the prefab...");
-            foreach (InteractTrigger trigger in  triggers)
+            foreach (InteractTrigger trigger in triggers)
             {
                 trigger.onInteract.AddListener(StoreItemToWheelbarrow);
                 trigger.tag = nameof(InteractTrigger); // Necessary for the interact UI to appear
@@ -152,7 +152,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
             int index = randomNoise.Next(0, wheelsClip.Length);
             wheelsNoise.PlayOneShot(wheelsClip[index], 0.2f);
             WalkieTalkie.TransmitOneShotAudio(wheelsNoise, wheelsClip[index], 0.2f);
-            RoundManager.Instance.PlayAudibleNoise(base.transform.position, noiseRange, 0.2f, 0, isInElevator && StartOfRound.Instance.hangarDoorsClosed);
+            RoundManager.Instance.PlayAudibleNoise(transform.position, noiseRange, 0.2f, 0, isInElevator && StartOfRound.Instance.hangarDoorsClosed);
         }
         private void UpdateInteractTriggers()
         {
@@ -200,7 +200,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
         }
         private bool CheckWheelbarrowAllRestrictions()
         {
-            bool weightCondition = itemProperties.weight - (defaultWeight-1f) > 1f + (maximumWeightAllowed / 100f);
+            bool weightCondition = itemProperties.weight - (defaultWeight - 1f) > 1f + maximumWeightAllowed / 100f;
             bool itemCountCondition = currentAmountItems >= maximumAmountItems;
             logger.LogDebug(weightCondition);
             logger.LogDebug(itemCountCondition);
@@ -217,7 +217,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
         }
         private bool CheckWheelbarrowWeightRestriction()
         {
-            if (itemProperties.weight - (defaultWeight - 1f) > 1f + (maximumWeightAllowed/100f))
+            if (itemProperties.weight - (defaultWeight - 1f) > 1f + maximumWeightAllowed / 100f)
             {
                 foreach (InteractTrigger trigger in triggers)
                 {

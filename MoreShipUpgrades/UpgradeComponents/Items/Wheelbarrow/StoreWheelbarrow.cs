@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
+namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
 {
     internal class StoreWheelbarrow : WheelbarrowScript
     {
@@ -38,7 +38,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Wheelbarrow
             if (!(isHeld && playerHeldBy.thisController.velocity.magnitude > 0f)) return;
 
             wheel.transform.Rotate(Time.deltaTime, 0f, 0f, Space.Self);
-            wheel.transform.rotation.Set(wheel.transform.rotation.x%360, wheel.transform.rotation.y, wheel.transform.rotation.z, wheel.transform.rotation.w) ;
+            wheel.transform.rotation.Set(wheel.transform.rotation.x % 360, wheel.transform.rotation.y, wheel.transform.rotation.z, wheel.transform.rotation.w);
         }
     }
 }

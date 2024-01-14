@@ -9,9 +9,10 @@ using System.IO;
 using System.Reflection;
 using MoreShipUpgrades.Misc;
 using BepInEx.Bootstrap;
-using MoreShipUpgrades.UpgradeComponents.Wheelbarrow;
+using MoreShipUpgrades.UpgradeComponents;
 using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
+using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using LethalLib.Extras;
 using LethalLib.Modules;
 
