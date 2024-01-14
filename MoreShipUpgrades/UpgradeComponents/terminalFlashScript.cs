@@ -10,6 +10,7 @@ namespace MoreShipUpgrades.UpgradeComponents
     {
         public static string UPGRADE_NAME = "Discombobulator";
         public static string PRICES_DEFAULT = "330,460,620";
+        private static LGULogger logger = new LGULogger(nameof(terminalFlashScript));
         void Start()
         {
             upgradeName = UPGRADE_NAME;
@@ -78,6 +79,7 @@ namespace MoreShipUpgrades.UpgradeComponents
                 }
                 if (!enemy.isEnemyDead) enemy.SetEnemyStunned(true, UpgradeBus.instance.cfg.DISCOMBOBULATOR_STUN_DURATION + (UpgradeBus.instance.cfg.DISCOMBOBULATOR_INCREMENT * UpgradeBus.instance.discoLevel), null);
             }
+            logger.LogInfo($"Discombobulator hit {array.Length} enemies!");
         }
 
         private bool CanDealDamage()

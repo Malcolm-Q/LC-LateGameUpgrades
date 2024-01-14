@@ -7,6 +7,8 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Linq;
 using MoreShipUpgrades.Misc;
+using Unity.Netcode;
+using UnityEngine;
 
 namespace MoreShipUpgrades.Patches
 {
@@ -14,6 +16,7 @@ namespace MoreShipUpgrades.Patches
     internal class PlayerControllerBPatcher
     {
         internal static LGULogger logger = new LGULogger(nameof(PlayerControllerBPatcher));
+
         [HarmonyPrefix]
         [HarmonyPatch("KillPlayer")]
         private static void DisableUpgradesOnDeath(PlayerControllerB __instance)
@@ -22,18 +25,25 @@ namespace MoreShipUpgrades.Patches
             if (!__instance.IsOwner) { return; }
             else if (__instance.isPlayerDead) { return; }
             else if (!__instance.AllowPlayerDeath()) { return; }
-            if (!UpgradeBus.instance.nightVision) return;
-
-            UpgradeBus.instance.UpgradeObjects[nightVisionScript.UPGRADE_NAME].GetComponent<nightVisionScript>().DisableOnClient();
-            if (!UpgradeBus.instance.cfg.NIGHT_VISION_DROP_ON_DEATH) return;
-            LGUStore.instance.SpawnNightVisionItemOnDeathServerRpc(__instance.transform.position);
+            if(UpgradeBus.instance.nightVision) 
+            {
+                UpgradeBus.instance.UpgradeObjects[nightVisionScript.UPGRADE_NAME].GetComponent<nightVisionScript>().DisableOnClient();
+                if (!UpgradeBus.instance.cfg.NIGHT_VISION_DROP_ON_DEATH) return;
+                LGUStore.instance.SpawnNightVisionItemOnDeathServerRpc(__instance.transform.position);
+            }
+            UpgradeBus.instance.staminaDrainCoefficient = 1f;
+            UpgradeBus.instance.incomingDamageCoefficient = 1f;
+            UpgradeBus.instance.damageBoost = 0;
+            __instance.movementSpeed = BeatScript.PreviousMovementSpeed;
         }
 
         [HarmonyPatch("DamagePlayer")]
         [HarmonyTranspiler]
         public static IEnumerable<CodeInstruction> DamagePlayerTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            var maximumHealthMethod = typeof(playerHealthScript).GetMethod("CheckForAdditionalHealth", BindingFlags.Public | BindingFlags.Static);
+            MethodInfo maximumHealthMethod = typeof(playerHealthScript).GetMethod("CheckForAdditionalHealth", BindingFlags.Public | BindingFlags.Static);
+            MethodInfo boomboxDefenseMethod = typeof(BeatScript).GetMethod("CalculateDefense", BindingFlags.Public | BindingFlags.Static);
+
             List<CodeInstruction> codes = instructions.ToList();
             /*
              * ldfld int32 GameNetcodeStuff.PlayerControllerB::health
@@ -49,6 +59,10 @@ namespace MoreShipUpgrades.Patches
             bool foundHealthMaximum = false;
             for (int i = 0; i < codes.Count; i++)
             {
+                if (codes[i].opcode == OpCodes.Ldarg_1)
+                {
+                    codes[i] = new CodeInstruction(OpCodes.Ldarg_1, boomboxDefenseMethod);
+                }
                 if (!(codes[i].opcode == OpCodes.Ldc_I4_S && codes[i].operand.ToString() == "100")) continue;
                 if (!(codes[i + 1] != null && codes[i + 1].opcode == OpCodes.Call && codes[i + 1].operand.ToString() == "Int32 Clamp(Int32, Int32, Int32)")) continue;
                 if (!(codes[i + 2] != null && codes[i + 2].opcode == OpCodes.Stfld && codes[i + 2].operand.ToString() == "System.Int32 health")) continue;
@@ -61,6 +75,34 @@ namespace MoreShipUpgrades.Patches
             }
             if (!foundHealthMaximum) Plugin.mls.LogError("Could not find the maximum of Mathf.Clamp that changes the health value");
             return codes.AsEnumerable();
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch("DamagePlayer")]
+        static bool WeDoALittleReturningFalse(PlayerControllerB __instance)
+        {
+            if (!__instance.IsOwner || __instance.isPlayerDead || !__instance.AllowPlayerDeath()) return true;
+            if(UpgradeBus.instance.wearingHelmet)
+            {
+                UpgradeBus.instance.helmetHits--;
+                if(UpgradeBus.instance.helmetHits <= 0)
+                {
+                    UpgradeBus.instance.wearingHelmet = false;
+                    UnityEngine.Debug.Log(__instance.IsHost);
+                    if(__instance.IsHost || __instance.IsServer)LGUStore.instance.DestroyHelmetClientRpc(__instance.playerClientId);
+                    else LGUStore.instance.ReqDestroyHelmetServerRpc(__instance.playerClientId);
+                    if(__instance.IsHost || __instance.IsServer) LGUStore.instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(__instance),"breakWood");
+                    else LGUStore.instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(__instance),"breakWood");
+                }
+                else
+                {
+                    if(__instance.IsHost || __instance.IsServer) LGUStore.instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(__instance),"helmet");
+                    else LGUStore.instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(__instance),"helmet");
+                }
+                StackTrace trace = new StackTrace();
+                return false;
+            }
+            return true;
         }
 
         [HarmonyTranspiler]
@@ -183,6 +225,33 @@ namespace MoreShipUpgrades.Patches
                 }
             }
             instructions = codes.AsEnumerable();
+        }
+
+        [HarmonyPostfix]
+        [HarmonyPatch("Update")]
+        static void CheckForBoomboxes(PlayerControllerB __instance)
+        {
+            if (!UpgradeBus.instance.sickBeats || __instance != GameNetworkManager.Instance.localPlayerController) return;
+            UpgradeBus.instance.boomBoxes.RemoveAll(b => b == null);
+            bool result = false;
+            foreach(BoomboxItem boom in UpgradeBus.instance.boomBoxes)
+            {
+                if (!boom.isPlayingMusic)
+                {
+                    continue;
+                }
+                else if(Vector3.Distance(boom.transform.position, __instance.transform.position) < UpgradeBus.instance.cfg.BEATS_RADIUS)
+                {
+                    result = true;
+                    break;
+                }
+            }
+
+            if(result != UpgradeBus.instance.EffectsActive)
+            {
+                UpgradeBus.instance.EffectsActive = result;
+                BeatScript.HandlePlayerEffects(__instance);
+            }
         }
 
         [HarmonyTranspiler]

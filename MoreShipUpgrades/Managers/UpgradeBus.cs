@@ -1,4 +1,5 @@
 ﻿using GameNetcodeStuff;
+using LethalLib.Modules;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents;
 using MoreShipUpgrades.UpgradeComponents.Items;
@@ -14,10 +15,11 @@ namespace MoreShipUpgrades.Managers
         public static UpgradeBus instance;
         public PluginConfig cfg;
         public GameObject introScreen;
-        private static LGULogger logger;
+        private static LGULogger logger = new LGULogger(nameof(UpgradeBus));
 
         public bool DestroyTraps = false;
         public bool scannerUpgrade = false;
+        public bool wearingHelmet = false;
         public bool nightVision = false;
         public bool nightVisionActive = false;
         public float nightVisRange;
@@ -37,6 +39,7 @@ namespace MoreShipUpgrades.Managers
         public bool playerHealth = false;
 
         public int lungLevel = 0;
+        public int helmetHits = 0;
         public int huntLevel = 0;
         public int proteinLevel = 0;
         public int beeLevel = 0;
@@ -51,6 +54,15 @@ namespace MoreShipUpgrades.Managers
         public float flashCooldown = 0f;
         public float alteredWeight = 1f;
 
+        public string contractLevel = "None";
+        public string contractType = "None";
+        public string DataMinigameKey = "";
+        public string DataMinigameUser = "";
+        public string DataMinigamePass = "";
+
+        public Dictionary<string, List<string>> fakeBombOrders = new Dictionary<string, List<string>>();
+        public Dictionary<string, float> SaleData = new Dictionary<string, float>();
+
         public trapDestroyerScript trapHandler = null;
         public terminalFlashScript flashScript = null;
         public lockSmithScript lockScript = null;
@@ -64,6 +76,8 @@ namespace MoreShipUpgrades.Managers
         public TerminalNode modStoreInterface;
         public Terminal terminal;
         public PlayerControllerB localPlayer;
+
+        public List<BoomboxItem> boomBoxes = new List<BoomboxItem>();
 
         public List<CustomTerminalNode> terminalNodes = new List<CustomTerminalNode>();
 
@@ -80,6 +94,8 @@ namespace MoreShipUpgrades.Managers
             { beekeeperScript.UPGRADE_NAME, level => 100 * (instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (level * instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT)) },
             { playerHealthScript.UPGRADE_NAME, level => instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK + (level)*instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT },
         };
+
+        public Dictionary<string, Item> ItemsToSync = new Dictionary<string, Item>();
 
         private Dictionary<string, System.Func<int, int, string>> complexInfoFunctions = new Dictionary<string, System.Func<int,int, string>>()
         {
@@ -106,6 +122,18 @@ namespace MoreShipUpgrades.Managers
 
         public Dictionary<string,GameObject> samplePrefabs = new Dictionary<string,GameObject>();
         public GameObject nightVisionPrefab;
+        public bool sickBeats;
+        public float staminaDrainCoefficient;
+        public float incomingDamageCoefficient;
+        public int damageBoost;
+        public GameObject BoomboxIcon;
+        public bool EffectsActive;
+        public GameObject helmetModel;
+        public HelmetScript helmetScript;
+        public Dictionary<string, AudioClip> SFX = new Dictionary<string, AudioClip>();
+        public bool helmetDesync;
+        public List<string> bombOrder = new List<string>();
+        public string SerialNumber;
 
         void Awake()
         {
@@ -121,7 +149,7 @@ namespace MoreShipUpgrades.Managers
 
             return terminal;
         }
-        public PlayerControllerB GetLocalPlayer()
+        public PlayerControllerB GetLocalPlayer() // I keep forgetting we have this
         {
             if (localPlayer == null) localPlayer = GameNetworkManager.Instance.localPlayerController;
             return localPlayer;
@@ -149,6 +177,7 @@ namespace MoreShipUpgrades.Managers
         public void ResetAllValues(bool wipeObjRefs = true)
         {
             ResetPlayerAttributes();
+            EffectsActive = false;
             DestroyTraps = false;
             scannerUpgrade = false;
             nightVision = false;
@@ -167,6 +196,11 @@ namespace MoreShipUpgrades.Managers
             pager = false;
             hunter = false;
             playerHealth = false;
+            sickBeats = false;
+
+            contractType = "None";
+            contractLevel = "None";
+
             huntLevel = 0;
             proteinLevel = 0;
             lungLevel = 0;
@@ -206,65 +240,106 @@ namespace MoreShipUpgrades.Managers
             if (cfg.STRONG_LEGS_ENABLED && strongLegs) strongLegsScript.ResetStrongLegsBuff(ref player);
         }
 
-        internal void GenerateSales(int seed = -1)
+        internal void GenerateSales(int seed = -1) // TODO: Save sales
         {
+            if (seed == -1) seed = Random.Range(0, 999999);
+            logger.LogInfo($"Generating sales with seed: {seed} on this client...");
             Random.InitState(seed);
+            SaleData = new Dictionary<string, float>();
             foreach(CustomTerminalNode node in terminalNodes)
             {
-                if(node.Name == "Interns") { continue; }
-                if(Random.value > UpgradeBus.instance.cfg.SALE_PERC)
+                if(node.Name == "Interns" || node.Name == "Contract") { continue; }
+                if(Random.value > cfg.SALE_PERC)
                 {
                     node.salePerc = Random.Range(0.60f, 0.90f);
+                    logger.LogInfo($"Set sale percentage to: {node.salePerc} for {node.Name}.");
                 }
                 else
                 {
                     node.salePerc = 1f;
+                }
+                if(IsHost || IsServer)
+                {
+                    SaleData.Add(node.Name, node.salePerc);
+                }
+            }
+        }
+
+        internal void LoadSales()
+        {
+            if(SaleData.Count == 0)
+            {
+                logger.LogInfo("Sale data empty, continuing...");
+                return;
+            }
+            foreach(CustomTerminalNode node in terminalNodes)
+            {
+                node.salePerc = SaleData[node.Name];
+                if(node.salePerc != 1f)
+                {
+                    logger.LogInfo($"Loaded sale of {node.salePerc} for {node.Name}.");
                 }
             }
         }
 
         internal void AlterStoreItems()
         {
-            // nothing works :(
-            Terminal[] terms = GameObject.FindObjectsOfType<Terminal>();
-            foreach(Terminal term in terms)
+            if (!cfg.PEEPER_ENABLED)
             {
-                List<CompatibleNoun> words = new List<CompatibleNoun>();
-                foreach(CompatibleNoun word in term.terminalNodes.allKeywords[0].compatibleNouns)
-                {
-                    if(word.noun.word == "peeper")
-                    {
-                        if(cfg.PEEPER_ENABLED)words.Add(word);
-                        word.result.itemCost = cfg.PEEPER_PRICE;
-                    }
-                    else if(word.noun.word == "night-vision-goggles")
-                    {
-                        if(cfg.NIGHT_VISION_ENABLED)words.Add(word);
-                        word.result.itemCost = cfg.NIGHT_VISION_PRICE;
-                    }
-                    else if(word.noun.word == "portable-tele")
-                    {
-                        if(cfg.WEAK_TELE_ENABLED)words.Add(word);
-                        word.result.itemCost = cfg.WEAK_TELE_PRICE;
-                    }
-                    else if(word.noun.word == "advanced-portable-tele")
-                    {
-                        if(cfg.ADVANCED_TELE_ENABLED)words.Add(word);
-                        word.result.itemCost = cfg.ADVANCED_TELE_PRICE;
-                    }
-                    else
-                    {
-                        words.Add(word);
-                    }
-                    term.terminalNodes.allKeywords[0].compatibleNouns = words.ToArray();
-                }
+                Items.RemoveShopItem(ItemsToSync["Peeper"]);
+                logger.LogInfo("Removing Peeper from store.");
             }
+            else if (ItemsToSync["Peeper"].creditsWorth != cfg.PEEPER_PRICE) Items.UpdateShopItemPrice(ItemsToSync["Peeper"], cfg.PEEPER_PRICE);
+
+            if (!cfg.HELMET_ENABLED)
+            {
+                logger.LogInfo("Removing x from store.");
+                Items.RemoveShopItem(ItemsToSync["Helmet"]);
+            }
+            else if (ItemsToSync["Helmet"].creditsWorth != cfg.HELMET_PRICE) Items.UpdateShopItemPrice(ItemsToSync["Helmet"], cfg.HELMET_PRICE);
+
+            if (!cfg.DIVEKIT_ENABLED)
+            {
+                logger.LogInfo("Removing x from store.");
+                Items.RemoveShopItem(ItemsToSync["Dive"]);
+            }
+            else if (ItemsToSync["Dive"].creditsWorth != cfg.DIVEKIT_PRICE) Items.UpdateShopItemPrice(ItemsToSync["Dive"], cfg.DIVEKIT_PRICE);
+
+            if (!cfg.ADVANCED_TELE_ENABLED)
+            {
+                logger.LogInfo("Removing x from store.");
+                Items.RemoveShopItem(ItemsToSync["AdvTele"]);
+            }
+            else if (ItemsToSync["AdvTele"].creditsWorth != cfg.ADVANCED_TELE_PRICE) Items.UpdateShopItemPrice(ItemsToSync["AdvTele"], cfg.ADVANCED_TELE_PRICE);
+
+            if (!cfg.WEAK_TELE_ENABLED)
+            {
+                logger.LogInfo("Removing x from store.");
+                Items.RemoveShopItem(ItemsToSync["Tele"]);
+            }
+            else if (ItemsToSync["Tele"].creditsWorth != cfg.WEAK_TELE_PRICE) Items.UpdateShopItemPrice(ItemsToSync["Tele"], cfg.WEAK_TELE_PRICE);
+
+            if (!cfg.MEDKIT_ENABLED)
+            {
+                logger.LogInfo("Removing x from store.");
+                Items.RemoveShopItem(ItemsToSync["Medkit"]);
+            }
+            else if (ItemsToSync["Medkit"].creditsWorth != cfg.MEDKIT_PRICE) Items.UpdateShopItemPrice(ItemsToSync["Medkit"], cfg.MEDKIT_PRICE);
+
+            if (!cfg.NIGHT_VISION_ENABLED)
+            {
+                logger.LogInfo("Removing x from store.");
+                Items.RemoveShopItem(ItemsToSync["Night"]);
+            }
+            else if (ItemsToSync["Night"].creditsWorth != cfg.NIGHT_VISION_PRICE) Items.UpdateShopItemPrice(ItemsToSync["Night"], cfg.NIGHT_VISION_PRICE);
         }
 
         internal void Reconstruct()
         {
-            //AlterStoreItems();
+            AlterStoreItems();
             BuildCustomNodes();
+
+            logger.LogInfo("Successfully reconstructed with hosts config.");
         }
         internal void BuildCustomNodes()
         {
@@ -300,13 +375,30 @@ namespace MoreShipUpgrades.Managers
 
             SetupInternsTerminalNode();
 
+            SetupContractTerminalNode();
+
             SetupPlayerHealthTerminalNode();
 
             SetupPagerTerminalNode();
 
             SetupLocksmithTerminalNode();
-            SetupExtendDeadlineTerminalNode();
-            terminalNodes.Sort();
+
+            SetupSickBeatsTerminalNode();
+        }
+
+        private void SetupSickBeatsTerminalNode()
+        {
+            string txt = $"Sick Beats - ${cfg.BEATS_PRICE}\nPlayers within a {cfg.BEATS_RADIUS} unit radius from an active boombox will have the following effects:\n\n";
+            if (cfg.BEATS_SPEED) txt += $"Movement speed increased by {cfg.BEATS_SPEED_INC}\n";
+            if (cfg.BEATS_DMG) txt += $"Damage inflicted increased by {cfg.BEATS_DMG_INC}\n";
+            if (cfg.BEATS_DEF) txt += $"Incoming Damage multiplied by {cfg.BEATS_DEF_CO}\n";
+            if (cfg.BEATS_STAMINA) txt += $"Stamina Drain multiplied by {cfg.BEATS_STAMINA_CO}\n";
+            SetupOneTimeTerminalNode(
+                BeatScript.UPGRADE_NAME,
+                cfg.SHARED_UPGRADES ? true : !cfg.BEATS_INDIVIDUAL,
+                cfg.BEATS_ENABLED,
+                cfg.BEATS_PRICE,
+                txt);
         }
 
         private void SetupBeekeperTerminalNode()
@@ -461,6 +553,15 @@ namespace MoreShipUpgrades.Managers
                                     cfg.EXTEND_DEADLINE_ENABLED,
                                     cfg.EXTEND_DEADLINE_PRICE,
                                     "Extends the deadline by a specified amount of days.");
+        }
+
+        private void SetupContractTerminalNode()
+        {
+            SetupOneTimeTerminalNode("Contract",
+                                    true,
+                                    cfg.CONTRACTS_ENABLED,
+                                    cfg.CONTRACT_PRICE,
+                                    string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), cfg.CONTRACT_PRICE));
         }
         private void SetupPagerTerminalNode()
         {

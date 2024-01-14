@@ -11,6 +11,8 @@ using System.IO;
 using System.Reflection;
 using MoreShipUpgrades.Misc;
 using BepInEx.Bootstrap;
+using Newtonsoft.Json;
+using LethalLib.Extras;
 using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
 
@@ -24,14 +26,13 @@ namespace MoreShipUpgrades
         public static Plugin instance;
         public static ManualLogSource mls;
         private AudioClip itemBreak, buttonPressed, error;
+        string root = "Assets/ShipUpgrades/";
 
         public static PluginConfig cfg { get; private set; }
 
 
         void Awake()
         {
-            // TODO: Move item info strings to a json file for the love of god.
-
             cfg = new(base.Config);
             cfg.InitBindings();
 
@@ -73,6 +74,9 @@ namespace MoreShipUpgrades
             
             SetupPerks();
 
+            SetupContractMapObjects(ref UpgradeAssets);
+
+
             harmony.PatchAll();
 
             mls.LogDebug("LGU has been patched");
@@ -101,8 +105,182 @@ namespace MoreShipUpgrades
                     }
                     break;
                 }
-
             }
+
+        }
+
+        private void SetupContractMapObjects(ref AssetBundle bundle)
+        {
+            AnimationCurve curve = new AnimationCurve(new Keyframe(0,1), new Keyframe(1,1)); // always spawn 1
+
+            SetupScavContract(ref bundle, curve);
+            SetupExterminatorContract(ref bundle, curve);
+            SetupDataContract(ref bundle, curve);
+            SetupExorcismContract(ref bundle, curve);
+            SetupBombContract(ref bundle, curve);
+        }
+
+        void SetupBombContract(ref AssetBundle bundle, AnimationCurve curve)
+        {
+            Item bomb = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "BombItem.asset");
+            if (bomb == null) return;
+
+            ContractObject coNest = bomb.spawnPrefab.AddComponent<ContractObject>();
+            coNest.contractType = "defusal";
+
+            BombDefusalScript bombScript = bomb.spawnPrefab.AddComponent<BombDefusalScript>();
+            bombScript.snip = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, root + "scissors.mp3");
+            bombScript.tick = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, root + "tick.mp3");
+
+
+            Utilities.FixMixerGroups(bomb.spawnPrefab);
+            NetworkPrefabs.RegisterNetworkPrefab(bomb.spawnPrefab);
+            Items.RegisterItem(bomb);
+
+            SpawnableMapObjectDef mapObjDefBug = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
+            mapObjDefBug.spawnableMapObject = new SpawnableMapObject();
+            mapObjDefBug.spawnableMapObject.prefabToSpawn = bomb.spawnPrefab;
+            MapObjects.RegisterMapObject(mapObjDefBug, Levels.LevelTypes.All, (level) => curve);
+        }
+
+
+        void SetupExorcismContract(ref AssetBundle bundle, AnimationCurve curve)
+        {
+            Item contractLoot = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "ExorcLootItem.asset");
+            Items.RegisterItem(contractLoot);
+            Utilities.FixMixerGroups(contractLoot.spawnPrefab);
+            NetworkPrefabs.RegisterNetworkPrefab(contractLoot.spawnPrefab);
+
+            Item mainItem = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + "PentagramItem.asset");
+
+            string[] ritualItems = new string[] { "Heart.asset", "Crucifix.asset", "candelabraItem.asset", "Teddy Bear.asset", "Bones.asset" };
+            foreach(string ritualItem in ritualItems)
+            {
+                Item exorItem = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + "RitualItems/" +ritualItem);
+                ContractObject exorCo = exorItem.spawnPrefab.AddComponent<ContractObject>();
+                exorCo.contractType = "exorcism";
+                Items.RegisterItem(exorItem);
+                Utilities.FixMixerGroups(exorItem.spawnPrefab);
+                NetworkPrefabs.RegisterNetworkPrefab(exorItem.spawnPrefab);
+
+                SpawnableMapObjectDef mapObjDefRitual = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
+                mapObjDefRitual.spawnableMapObject = new SpawnableMapObject();
+                mapObjDefRitual.spawnableMapObject.prefabToSpawn = exorItem.spawnPrefab;
+                MapObjects.RegisterMapObject(mapObjDefRitual, Levels.LevelTypes.All, (level) => new AnimationCurve(new Keyframe(0,3),new Keyframe(1,3)));
+
+                Items.RegisterShopItem(exorItem, 0);
+            }
+
+            if (mainItem == null || contractLoot == null) return;
+
+            ContractObject co = mainItem.spawnPrefab.AddComponent<ContractObject>();
+            co.contractType = "exorcism";
+
+            PentagramScript pentScript = mainItem.spawnPrefab.AddComponent<PentagramScript>();
+            pentScript.loot = contractLoot.spawnPrefab;
+            pentScript.chant = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, root + "ritualSFX.mp3");
+            pentScript.portal = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, root + "portal.mp3");
+
+            Utilities.FixMixerGroups(mainItem.spawnPrefab);
+            NetworkPrefabs.RegisterNetworkPrefab(mainItem.spawnPrefab);
+            Items.RegisterItem(mainItem);
+
+            SpawnableMapObjectDef mapObjDef = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
+            mapObjDef.spawnableMapObject = new SpawnableMapObject();
+            mapObjDef.spawnableMapObject.prefabToSpawn = mainItem.spawnPrefab;
+            MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
+            Items.RegisterShopItem(mainItem, 0);
+        }
+
+
+        void SetupExterminatorContract(ref AssetBundle bundle, AnimationCurve curve)
+        {
+            Item bugLoot = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "EggLootItem.asset");
+            Items.RegisterItem(bugLoot);
+            Utilities.FixMixerGroups(bugLoot.spawnPrefab);
+            NetworkPrefabs.RegisterNetworkPrefab(bugLoot.spawnPrefab);
+
+            Item nest = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + "HoardingEggItem.asset");
+            if (nest == null || bugLoot == null) return;
+
+            ContractObject coNest = nest.spawnPrefab.AddComponent<ContractObject>();
+            coNest.contractType = "exterminator";
+
+            BugNestScript nestScript = nest.spawnPrefab.AddComponent<BugNestScript>();
+            nestScript.loot = bugLoot.spawnPrefab;
+
+            Utilities.FixMixerGroups(nest.spawnPrefab);
+            NetworkPrefabs.RegisterNetworkPrefab(nest.spawnPrefab);
+            Items.RegisterItem(nest);
+
+            SpawnableMapObjectDef mapObjDefBug = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
+            mapObjDefBug.spawnableMapObject = new SpawnableMapObject();
+            mapObjDefBug.spawnableMapObject.prefabToSpawn = nest.spawnPrefab;
+            MapObjects.RegisterMapObject(mapObjDefBug, Levels.LevelTypes.All, (level) => curve);
+        }
+
+        void SetupScavContract(ref AssetBundle bundle, AnimationCurve curve)
+        {
+            Item scav = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "ScavItem.asset");
+            if (scav == null) return;
+
+            ContractObject co = scav.spawnPrefab.AddComponent<ContractObject>();
+            co.contractType = "extraction";
+
+            ExtractPlayerScript extractScript = scav.spawnPrefab.AddComponent<ExtractPlayerScript>();
+            TextAsset scavAudioPaths = AssetBundleHandler.TryLoadOtherAsset<TextAsset>(ref bundle, root + "scavSounds/scavAudio.json");
+            Dictionary<string, string[]> scavAudioDict = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(scavAudioPaths.text);
+            ExtractPlayerScript.clipDict.Add("lost", CreateAudioClipArray(scavAudioDict["lost"], ref bundle));
+            ExtractPlayerScript.clipDict.Add("heal", CreateAudioClipArray(scavAudioDict["heal"], ref bundle));
+            ExtractPlayerScript.clipDict.Add("safe", CreateAudioClipArray(scavAudioDict["safe"], ref bundle));
+            ExtractPlayerScript.clipDict.Add("held", CreateAudioClipArray(scavAudioDict["held"], ref bundle));
+
+            Utilities.FixMixerGroups(scav.spawnPrefab);
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(scav.spawnPrefab);
+            Items.RegisterItem(scav);
+
+            SpawnableMapObjectDef mapObjDef = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
+            mapObjDef.spawnableMapObject = new SpawnableMapObject();
+            mapObjDef.spawnableMapObject.prefabToSpawn = scav.spawnPrefab;
+            MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
+        }
+
+        void SetupDataContract(ref AssetBundle bundle, AnimationCurve curve)
+        {
+            Item dataLoot = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "DiscItem.asset");
+            Items.RegisterItem(dataLoot);
+            Utilities.FixMixerGroups(dataLoot.spawnPrefab);
+            NetworkPrefabs.RegisterNetworkPrefab(dataLoot.spawnPrefab);
+
+            Item pc = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + "DataPCItem.asset");
+            if (pc == null || dataLoot == null) return;
+
+            ContractObject coPC = pc.spawnPrefab.AddComponent<ContractObject>();
+            coPC.contractType = "data";
+
+            DataPCScript dataScript = pc.spawnPrefab.AddComponent<DataPCScript>();
+            dataScript.error = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, root + "winError.mp3");
+            dataScript.startup = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, root + "startup.mp3");
+            dataScript.loot = dataLoot.spawnPrefab;
+
+            Utilities.FixMixerGroups(pc.spawnPrefab);
+            NetworkPrefabs.RegisterNetworkPrefab(pc.spawnPrefab);
+            Items.RegisterItem(pc);
+
+            SpawnableMapObjectDef mapObjDefPC = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
+            mapObjDefPC.spawnableMapObject = new SpawnableMapObject();
+            mapObjDefPC.spawnableMapObject.prefabToSpawn = pc.spawnPrefab;
+            MapObjects.RegisterMapObject(mapObjDefPC, Levels.LevelTypes.All, (level) => curve);
+        }
+
+        private AudioClip[] CreateAudioClipArray(string[] paths, ref AssetBundle bundle)
+        {
+            AudioClip[] clips = new AudioClip[paths.Length];
+            for(int i = 0; i < paths.Length; i++)
+            {
+                clips[i] = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, paths[i]);
+            }
+            return clips;
         }
 
         private void SetupModStore(ref AssetBundle bundle)
@@ -126,6 +304,7 @@ namespace MoreShipUpgrades
             SetupMedkit();
             SetupPeeper();
             SetupSamples();
+            SetupHelmet();
             SetupDivingKit();
         }
         private void SetupSamples()
@@ -175,6 +354,31 @@ namespace MoreShipUpgrades
             SetupRegularTeleporterButton();
             SetupAdvancedTeleporterButton();
         }
+
+        private void SetupHelmet()
+        {
+            Item helmet = AssetBundleHandler.GetItemObject("HelmetItem");
+            UpgradeBus.instance.helmetModel = AssetBundleHandler.GetPerkGameObject("HelmetModel");
+            if (helmet == null) return;
+
+            UpgradeBus.instance.SFX.Add("helmet",AssetBundleHandler.GetAudioClip("HelmetHit"));
+            UpgradeBus.instance.SFX.Add("breakWood",AssetBundleHandler.GetAudioClip("breakWood"));
+
+            HelmetScript helmScript = helmet.spawnPrefab.AddComponent<HelmetScript>();
+            helmScript.itemProperties = helmet;
+            helmScript.grabbable = true;
+            helmScript.grabbableToEnemies = true;
+            helmet.creditsWorth = cfg.HELMET_PRICE;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(helmet.spawnPrefab);
+
+            if (!cfg.HELMET_ENABLED) return;
+
+            TerminalNode node = ScriptableObject.CreateInstance<TerminalNode>();
+            node.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Helmet"), cfg.HELMET_HITS_BLOCKED);
+            Items.RegisterShopItem(helmet, null, null, node, helmet.creditsWorth);
+
+            UpgradeBus.instance.ItemsToSync.Add("Helmet", helmet);
+        }
         private void SetupRegularTeleporterButton()
         {
             Item regularPortableTeleporter = AssetBundleHandler.GetItemObject("Portable Tele");
@@ -197,6 +401,8 @@ namespace MoreShipUpgrades
 
             TerminalNode PortNode = ScriptableObject.CreateInstance<TerminalNode>();
             PortNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Portable Tele"), (int)(cfg.CHANCE_TO_BREAK * 100));
+
+            UpgradeBus.instance.ItemsToSync.Add("Tele", tpBut);
             Items.RegisterShopItem(regularPortableTeleporter, null, null, PortNode, regularPortableTeleporter.creditsWorth);
         }
         private void SetupAdvancedTeleporterButton()
@@ -222,6 +428,8 @@ namespace MoreShipUpgrades
             TerminalNode advNode = ScriptableObject.CreateInstance<TerminalNode>();
             advNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Advanced Portable Tele"), (int)(cfg.ADV_CHANCE_TO_BREAK * 100));
             Items.RegisterShopItem(advancedPortableTeleporter, null, null, advNode, advancedPortableTeleporter.creditsWorth);
+
+            UpgradeBus.instance.ItemsToSync.Add("AdvTele", tpButAdvanced);
         }
 
         private void SetupNightVision()
@@ -247,6 +455,8 @@ namespace MoreShipUpgrades
             string loseOnDeath = cfg.LOSE_NIGHT_VIS_ON_DEATH ? "be" : "not be";
             nightNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Night Vision"), grantStatus, loseOnDeath);
             Items.RegisterShopItem(nightVisionItem, null, null, nightNode, nightVisionItem.creditsWorth);
+
+            UpgradeBus.instance.ItemsToSync.Add("Night", nightVisionItem);
         }
         private void SetupDivingKit()
         {
@@ -270,14 +480,16 @@ namespace MoreShipUpgrades
             string hands = cfg.DIVEKIT_TWO_HANDED ? "two" : "one";
             medNode.displayText = $"DIVING KIT - ${cfg.DIVEKIT_PRICE}\n\nBreath underwater.\nWeights {Mathf.RoundToInt((DiveItem.weight -1 )*100)} lbs and is {hands} handed.\n\n";
             Items.RegisterShopItem(DiveItem, null, null,medNode, DiveItem.creditsWorth);
+
+            UpgradeBus.instance.ItemsToSync.Add("Dive",DiveItem);
         }
         private void SetupMedkit()
         {
             Item MedKitItem = AssetBundleHandler.GetItemObject("Medkit");
             if (MedKitItem == null) return;
+            AnimationCurve curve = new AnimationCurve(new Keyframe(0f, 3), new Keyframe(1f, 3));
 
             MedKitItem.creditsWorth = cfg.MEDKIT_PRICE;
-            MedKitItem.itemSpawnsOnGround = true;
             MedKitItem.itemId = 492016;
             Medkit medScript = MedKitItem.spawnPrefab.AddComponent<Medkit>();
             medScript.itemProperties = MedKitItem;
@@ -288,11 +500,32 @@ namespace MoreShipUpgrades
             medScript.use = buttonPressed;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(MedKitItem.spawnPrefab);
 
-            if (!cfg.MEDKIT_ENABLED) return;
+            if (cfg.MEDKIT_ENABLED)
+            {
+                TerminalNode medNode = ScriptableObject.CreateInstance<TerminalNode>();
+                medNode.displayText = string.Format("MEDKIT - ${0}\n\nLeft click to heal yourself for {1} health.\nCan be used {2} times.\n", cfg.MEDKIT_PRICE, cfg.MEDKIT_HEAL_VALUE, cfg.MEDKIT_USES);
+                Items.RegisterShopItem(MedKitItem, null, null,medNode, MedKitItem.creditsWorth);
+            }
 
-            TerminalNode medNode = ScriptableObject.CreateInstance<TerminalNode>();
-            medNode.displayText = string.Format("MEDKIT - ${0}\n\nLeft click to heal yourself for {1} health.\nCan be used {2} times.\n", cfg.MEDKIT_PRICE, cfg.MEDKIT_HEAL_VALUE, cfg.MEDKIT_USES);
-            Items.RegisterShopItem(MedKitItem, null, null,medNode, MedKitItem.creditsWorth);
+            Item MedKitMapItem = AssetBundleHandler.GetItemObject("MedkitMapItem");
+            if (MedKitMapItem == null) return;
+            MedkitScript medMapScript = MedKitMapItem.spawnPrefab.AddComponent<MedkitScript>();
+            ContractObject co = MedKitMapItem.spawnPrefab.AddComponent<ContractObject>();
+            co.contractType = "extraction";
+            medMapScript.itemProperties = MedKitMapItem;
+            medMapScript.grabbable = true;
+            medMapScript.useCooldown = 2f;
+            medMapScript.grabbableToEnemies = true;
+            medMapScript.error = error;
+            medMapScript.use = buttonPressed;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(MedKitMapItem.spawnPrefab);
+
+            SpawnableMapObjectDef mapObjDef = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
+            mapObjDef.spawnableMapObject = new SpawnableMapObject();
+            mapObjDef.spawnableMapObject.prefabToSpawn = MedKitMapItem.spawnPrefab;
+            MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
+
+            UpgradeBus.instance.ItemsToSync.Add("Medkit",MedKitItem);
         }
         private void SetupPeeper()
         {
@@ -315,6 +548,8 @@ namespace MoreShipUpgrades
             TerminalNode peepNode = ScriptableObject.CreateInstance<TerminalNode>();
             peepNode.displayText = "Looks at coil heads, don't lose it\n";
             Items.RegisterShopItem(Peeper, null, null, peepNode, Peeper.creditsWorth);
+
+            UpgradeBus.instance.ItemsToSync.Add("Peeper", Peeper);
         }
         private void SetupPerks()
         {
@@ -335,8 +570,21 @@ namespace MoreShipUpgrades
             SetupLocksmith();
             SetupPlayerHealth();
             SetupHunter();
+            SetupContract();
+            SetupSickBeats();
             SetupExtendDeadline();
         }
+
+        private void SetupSickBeats()
+        {
+            SetupGenericPerk<BeatScript>(BeatScript.UPGRADE_NAME);
+        }
+
+        private void SetupContract()
+        {
+            SetupGenericPerk<ContractScript>(ContractScript.UPGRADE_NAME);
+        }
+
         private void SetupBeekeeper()
         {
             SetupGenericPerk<beekeeperScript>(beekeeperScript.UPGRADE_NAME);
