@@ -1,12 +1,13 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
 using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.UpgradeComponents;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Linq;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents;
+using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -169,6 +170,17 @@ namespace MoreShipUpgrades.Patches
         {
             ReplaceClampForBackMusclesFunction(ref instructions);
             return instructions.AsEnumerable();
+        }
+        [HarmonyPostfix]
+        [HarmonyPatch("GrabObjectClientRpc")]
+        public static void GrabObjectClientRpcPostfix(PlayerControllerB __instance)
+        {
+            WheelbarrowScript wheelbarrow = __instance.currentlyHeldObjectServer.GetComponentInParent<WheelbarrowScript>();
+            if (wheelbarrow == null || __instance.currentlyHeldObjectServer is WheelbarrowScript) return;
+            logger.LogDebug("Removing item's parent to allow placing it back in again");
+            __instance.currentlyHeldObjectServer.transform.SetParent(__instance.currentlyHeldObjectServer.parentObject);
+            __instance.currentlyHeldObjectServer.transform.localScale = __instance.currentlyHeldObjectServer.originalScale;
+            wheelbarrow.DecrementStoredItems();
         }
 
         [HarmonyTranspiler]
@@ -335,6 +347,70 @@ namespace MoreShipUpgrades.Patches
                 }
             }
             return codes.AsEnumerable();
+        }
+
+        [HarmonyPatch("PlayerLookInput")]
+        [HarmonyTranspiler]
+        private static IEnumerable<CodeInstruction> PlayerLookInputTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo reduceLookSensitivity = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrowLookSensitivity), BindingFlags.Static | BindingFlags.Public);
+            List<CodeInstruction> codes = new List<CodeInstruction> (instructions);
+            bool flag = false;
+            for (int i = 0; i < codes.Count; i++)
+            {
+                if (flag) break;
+                if (!(codes[i].opcode == OpCodes.Ldc_R4 && codes[i].operand.ToString() == "0,008")) continue;
+                codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, reduceLookSensitivity));
+                flag = true;
+            }
+            if (!flag) logger.LogError("Couldn't find look sensitivity value we wanted to influence");
+            return codes;
+        }
+
+        [HarmonyPatch("Update")] // We're all going to die
+        [HarmonyTranspiler] // Just kidding
+        private static IEnumerable<CodeInstruction> UpdateTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo reduceMovement = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrowMovement), BindingFlags.Static | BindingFlags.Public);
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            bool flag = false;
+            bool secondFlag = false;
+            bool ignoreFirst = false;
+            for (int i = 0; i < codes.Count; i++)
+            {
+                if (flag && secondFlag) break;
+                if (!(codes[i].opcode == OpCodes.Ldfld && codes[i].operand.ToString() == "System.Single carryWeight")) continue;
+                if (!ignoreFirst)
+                {
+                    ignoreFirst = true;
+                    continue;
+                }
+                codes.Insert(i +1, new CodeInstruction(OpCodes.Call, reduceMovement));
+                if (!flag) flag = true;
+                else secondFlag = true;
+            }
+            if (!flag || !secondFlag) logger.LogError("Couldn't find acceleration function we wanted to influence");
+            return codes;
+        }
+
+        [HarmonyPatch("Crouch_performed")]
+        [HarmonyTranspiler]
+        private static IEnumerable<CodeInstruction> CrouchPerformmedTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo carryingWheelbarrow = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrow), BindingFlags.Static | BindingFlags.Public);
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            bool flag = false;
+            for(int i =0 ; i < codes.Count; i++) 
+            {
+                if (flag) break;
+                if (!(codes[i].opcode == OpCodes.Ldfld && codes[i].operand.ToString() == "System.Boolean isMenuOpen")) continue;
+                codes.Insert(i + 1, new CodeInstruction(OpCodes.Or));
+                codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, carryingWheelbarrow));
+                codes.Insert(i + 1, new CodeInstruction(OpCodes.Ldarg_0));
+                flag = true;
+            }
+            if (!flag) logger.LogError("Couldn't find the if branch we wanted to change to include our wheelbarrow check");
+            return codes;
         }
     }
 }

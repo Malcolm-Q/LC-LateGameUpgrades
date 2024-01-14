@@ -4,17 +4,19 @@ using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using LethalLib.Modules;
-using MoreShipUpgrades.UpgradeComponents;
 using MoreShipUpgrades.Managers;
 using System.IO;
 using System.Reflection;
 using MoreShipUpgrades.Misc;
 using BepInEx.Bootstrap;
+using MoreShipUpgrades.UpgradeComponents;
 using Newtonsoft.Json;
 using LethalLib.Extras;
 using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
+using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
+using LethalLib.Extras;
+using LethalLib.Modules;
 
 namespace MoreShipUpgrades
 {
@@ -27,6 +29,7 @@ namespace MoreShipUpgrades
         public static ManualLogSource mls;
         private AudioClip itemBreak, buttonPressed, error;
         string root = "Assets/ShipUpgrades/";
+        private AudioClip[] wheelbarrowSound, shoppingCartSound;
 
         public static PluginConfig cfg { get; private set; }
 
@@ -306,6 +309,7 @@ namespace MoreShipUpgrades
             SetupSamples();
             SetupHelmet();
             SetupDivingKit();
+            SetupWheelbarrows();
         }
         private void SetupSamples()
         {
@@ -534,7 +538,7 @@ namespace MoreShipUpgrades
 
             Peeper.creditsWorth = cfg.PEEPER_PRICE;
             Peeper.twoHanded = false;
-            Peeper.itemId = 492015;
+            Peeper.itemId = 492017;
             Peeper.twoHandedAnimation = false;
             Peeper.spawnPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             Peeper peepScript = Peeper.spawnPrefab.AddComponent<Peeper>();
@@ -547,6 +551,78 @@ namespace MoreShipUpgrades
 
             TerminalNode peepNode = ScriptableObject.CreateInstance<TerminalNode>();
             peepNode.displayText = "Looks at coil heads, don't lose it\n";
+            LethalLib.Modules.Items.RegisterShopItem(Peeper, null, null, peepNode, Peeper.creditsWorth);
+        }
+        private void SetupWheelbarrows()
+        {
+            wheelbarrowSound = GetAudioClipList("Wheelbarrow Sound", 4);
+            shoppingCartSound = GetAudioClipList("Scrap Wheelbarrow Sound", 4);
+            SetupStoreWheelbarrow();
+            SetupScrapWheelbarrow();
+        }
+        private AudioClip[] GetAudioClipList(string name, int length)
+        {
+            AudioClip[] array = new AudioClip[length];
+            for (int i = 0; i < length; i++)
+            {
+                array[i] = AssetBundleHandler.GetAudioClip($"{name} {i}");
+            }
+            return array;
+        }
+        private void SetupScrapWheelbarrow() 
+        {
+            Item wheelbarrow = AssetBundleHandler.GetItemObject("Scrap Wheelbarrow");
+            if (wheelbarrow == null) return;
+            wheelbarrow.itemId = 492018;
+            wheelbarrow.minValue = cfg.SCRAP_WHEELBARROW_MINIMUM_VALUE;
+            wheelbarrow.maxValue = cfg.SCRAP_WHEELBARROW_MAXIMUM_VALUE;
+            wheelbarrow.twoHanded = true;
+            wheelbarrow.twoHandedAnimation = true;
+            wheelbarrow.grabAnim = "HoldJetpack";
+            wheelbarrow.floorYOffset = -90;
+            wheelbarrow.positionOffset = new Vector3(0f, -1.7f, 0.35f);
+            wheelbarrow.allowDroppingAheadOfPlayer = true;
+            wheelbarrow.isConductiveMetal = true;
+            wheelbarrow.isScrap = true;
+            wheelbarrow.weight = 1f + (cfg.SCRAP_WHEELBARROW_WEIGHT/100f);
+            ScrapWheelbarrow barrowScript = wheelbarrow.spawnPrefab.AddComponent<ScrapWheelbarrow>();
+            barrowScript.itemProperties = wheelbarrow;
+            barrowScript.wheelsClip = shoppingCartSound;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
+
+            if (!cfg.SCRAP_WHEELBARROW_ENABLED) return; 
+            AnimationCurve curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(cfg.SCRAP_WHEELBARROW_RARITY, 1), new Keyframe(1, 1));
+            SpawnableMapObjectDef mapObjDef = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
+            mapObjDef.spawnableMapObject = new SpawnableMapObject();
+            mapObjDef.spawnableMapObject.prefabToSpawn = wheelbarrow.spawnPrefab;
+            MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
+        }
+        private void SetupStoreWheelbarrow()
+        {
+            Item wheelbarrow = AssetBundleHandler.GetItemObject("Store Wheelbarrow");
+            if (wheelbarrow == null) return;
+
+            wheelbarrow.itemId = 492019;
+            wheelbarrow.creditsWorth = cfg.WHEELBARROW_PRICE;
+            wheelbarrow.twoHanded = true;
+            wheelbarrow.twoHandedAnimation = true;
+            wheelbarrow.grabAnim = "HoldJetpack";
+            wheelbarrow.floorYOffset = -90;
+            wheelbarrow.verticalOffset =0.6f;
+            wheelbarrow.positionOffset = new Vector3(0f, -0.7f, 1.4f);
+            wheelbarrow.allowDroppingAheadOfPlayer = true;
+            wheelbarrow.isConductiveMetal = true;
+            wheelbarrow.weight = 1f + (cfg.WHEELBARROW_WEIGHT/100f);
+            StoreWheelbarrow barrowScript = wheelbarrow.spawnPrefab.AddComponent<StoreWheelbarrow>();
+            barrowScript.itemProperties = wheelbarrow;
+            barrowScript.wheelsClip = wheelbarrowSound;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
+
+            if (!cfg.WHEELBARROW_ENABLED) return;
+
+            TerminalNode wheelbarrowNode = ScriptableObject.CreateInstance<TerminalNode>();
+            wheelbarrowNode.displayText = $"A portable container which has a maximum capacity of {cfg.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS} and reduces the effective weight of the inserted items by {cfg.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER*100} %.\nIt weighs {1f + (cfg.WHEELBARROW_WEIGHT/100f)} lbs";
+            LethalLib.Modules.Items.RegisterShopItem(wheelbarrow, null, null, wheelbarrowNode, wheelbarrow.creditsWorth);
             Items.RegisterShopItem(Peeper, null, null, peepNode, Peeper.creditsWorth);
 
             UpgradeBus.instance.ItemsToSync.Add("Peeper", Peeper);
