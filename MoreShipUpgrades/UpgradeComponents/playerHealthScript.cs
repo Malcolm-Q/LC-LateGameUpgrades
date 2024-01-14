@@ -10,9 +10,9 @@ namespace MoreShipUpgrades.UpgradeComponents
     internal class playerHealthScript : BaseUpgrade
     {
         public static string UPGRADE_NAME = "Stimpack";
-
-        private static int DEFAULT_HEALTH = 100;
-
+        private static bool active;
+        private int previousLevel;
+        private static LGULogger logger;
         // Configuration
         public static string ENABLED_SECTION = $"Enable {UPGRADE_NAME} Upgrade";
         public static bool ENABLED_DEFAULT = true;
@@ -36,20 +36,43 @@ namespace MoreShipUpgrades.UpgradeComponents
             upgradeName = UPGRADE_NAME;
             DontDestroyOnLoad(gameObject);
             UpgradeBus.instance.UpgradeObjects.Add(UPGRADE_NAME, gameObject);
+            logger = new LGULogger(UPGRADE_NAME);
         }
 
         public override void Increment()
         {
+            PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
+            player.health += UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT;
+            logger.LogDebug($"Adding {UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT} to the player's health...");
             UpgradeBus.instance.playerHealthLevel++;
-            LGUStore.instance.UpdatePlayerNewHealthsServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, DEFAULT_HEALTH + UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK + (UpgradeBus.instance.playerHealthLevel * UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT));
+            previousLevel++;
+            LGUStore.instance.PlayerHealthUpdateLevelServerRpc(player.playerSteamId, UpgradeBus.instance.playerHealthLevel);
         }
 
         public override void load()
         {
+            PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
+            if (!active)
+            {
+                logger.LogDebug($"Adding {UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK} to the player's health on unlock...");
+                player.health += UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK;
+            }
             base.load();
 
             UpgradeBus.instance.playerHealth = true;
-            LGUStore.instance.UpdatePlayerNewHealthsServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, DEFAULT_HEALTH + UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK + (UpgradeBus.instance.playerHealthLevel * UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT));
+            active = true;
+
+            int amountToIncrement = 0;
+            for (int i = 1; i < UpgradeBus.instance.playerHealthLevel + 1; i++)
+            {
+                if (i <= previousLevel) continue;
+                logger.LogDebug($"Adding {UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT} to the player's health on increment...");
+                amountToIncrement += UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT;
+            }
+
+            player.health += amountToIncrement;
+            previousLevel = UpgradeBus.instance.playerHealthLevel;
+            LGUStore.instance.PlayerHealthUpdateLevelServerRpc(player.playerSteamId, UpgradeBus.instance.playerHealthLevel);
         }
 
         public override void Register()
@@ -59,32 +82,48 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public override void Unwind()
         {
+            PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
+            if (active) ResetStimpackBuff(ref player);
             base.Unwind();
 
             UpgradeBus.instance.playerHealthLevel = 0;
             UpgradeBus.instance.playerHealth = false;
-            LGUStore.instance.UpdatePlayerNewHealthsServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, DEFAULT_HEALTH);
+            previousLevel = 0;
+            active = false;
+            LGUStore.instance.PlayerHealthUpdateLevelServerRpc(player.playerSteamId, -1);
         }
-
-        public static void CheckAdditionalHealth(StartOfRound __instance)
+        public static int CheckForAdditionalHealth(int health)
         {
-            PlayerControllerB[] players = __instance.allPlayerScripts;
-            foreach (PlayerControllerB player in players)
+            PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
+            if (!UpgradeBus.instance.playerHealthLevels.ContainsKey(player.playerSteamId)) return health;
+            int currentLevel = UpgradeBus.instance.playerHealthLevels[player.playerSteamId];
+
+            return health + UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK + currentLevel * UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT;
+        }
+        /// <summary>
+        /// Returns the maximum health possible for the player with given steam identifier
+        /// 
+        /// Precondition: playerHealthLevels contains the steam identifier as a key
+        /// </summary>
+        /// <param name="health">Health before applying the Stimpack upgrade</param>
+        /// <param name="steamId">Identifier of the client through steam</param>
+        /// <returns>Health of the player after applying the Stimpack effects</returns>
+        public static int GetHealthFromPlayer(int health, ulong steamId)
+        {
+            int currentLevel = UpgradeBus.instance.playerHealthLevels[steamId];
+            return health + UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK + (currentLevel * UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT);
+        }
+        public static void ResetStimpackBuff(ref PlayerControllerB player)
+        {
+            int healthRemoval = UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK;
+            for (int i = 0; i < UpgradeBus.instance.playerHealthLevel; i++)
             {
-                UpdateMaxHealth(player);
+                healthRemoval += UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT;
             }
-        }
-        public static int CheckForAdditionalHealth()
-        {
-            if (UpgradeBus.instance.playerHPs.ContainsKey(GameNetworkManager.Instance.localPlayerController.playerSteamId))
-               return UpgradeBus.instance.playerHPs[GameNetworkManager.Instance.localPlayerController.playerSteamId];
-            return DEFAULT_HEALTH;
-        }
-
-        public static void UpdateMaxHealth(PlayerControllerB player)
-        {
-            if (UpgradeBus.instance.playerHPs.ContainsKey(player.playerSteamId))
-                player.health = UpgradeBus.instance.playerHPs[player.playerSteamId];
+            logger.LogDebug($"Removing {player.playerUsername}'s health boost ({player.health}) with a boost of {healthRemoval}");
+            player.health -= healthRemoval;
+            logger.LogDebug($"Upgrade reset on {player.playerUsername}");
+            active = false;
         }
     }
 }

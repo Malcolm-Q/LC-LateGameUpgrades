@@ -63,9 +63,9 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         /// </summary>
         private void AttemptToHealPlayer()
         {
-            int maximumHealth = UpgradeBus.instance.playerHPs.ContainsKey(playerHeldBy.playerSteamId) ? UpgradeBus.instance.playerHPs[playerHeldBy.playerSteamId] : 100;
-            if (!CanUseMedkit(maximumHealth)) return;
-            UseMedkit(maximumHealth);
+            int health = UpgradeBus.instance.playerHealthLevels.ContainsKey(playerHeldBy.playerSteamId) ? playerHealthScript.GetHealthFromPlayer(100, playerHeldBy.playerSteamId) : 100;
+            if (!CanUseMedkit(health)) return;
+            UseMedkit(health);
         }
         /// <summary>
         /// <para>Consumes an use of the medkit to heal the player that is holding it.</para>

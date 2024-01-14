@@ -20,6 +20,7 @@ namespace MoreShipUpgrades.Patches
         public static IEnumerable<CodeInstruction> HitShovelTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo proteinHitFoce = typeof(proteinPowderScript).GetMethod("GetShovelHitForce", BindingFlags.Static | BindingFlags.Public);
+
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             bool found = false;
             for (int i = 1; i < codes.Count; i++)

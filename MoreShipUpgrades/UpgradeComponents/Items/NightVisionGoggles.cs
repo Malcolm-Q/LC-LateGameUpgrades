@@ -14,7 +14,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         public override void ItemActivate(bool used, bool buttonDown = true)
         {
             base.ItemActivate(used, buttonDown);
-            if (!Mouse.current.leftButton.isPressed) return;
+            if (!buttonDown) return;
             if (UpgradeBus.instance.nightVision)
             {
                 HUDManager.Instance.chatText.text += "<color=#FF0000>Night vision is already active!</color>";
