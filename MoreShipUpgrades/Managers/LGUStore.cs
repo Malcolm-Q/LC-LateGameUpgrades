@@ -299,11 +299,11 @@ namespace MoreShipUpgrades.Managers
             lguSave.playerSaves.Add(id,JsonConvert.DeserializeObject<SaveInfo>(json));
         }
 
-        public void UpdateUpgradeBus(bool UseLocalSteamID = true)
+        public void UpdateUpgradeBus(bool UseLocalSteamID = true, bool checkID = true)
         {
             if(UseLocalSteamID)
             {
-                if(playerID == 0)
+                if(playerID == 0 && checkID)
                 {
                     logger.LogInfo("SteamID is not available yet, waiting...");
                     StartCoroutine(WaitForSteamID());
@@ -361,6 +361,8 @@ namespace MoreShipUpgrades.Managers
                 // this will just sync the helmets on StartGame
             }
 
+            UpgradeBus.instance.LoadSales();
+
             StartCoroutine(WaitForUpgradeObject());
         }
 
@@ -368,15 +370,22 @@ namespace MoreShipUpgrades.Managers
         {
             yield return new WaitForSeconds(1f);
             int tries = 0;
-            while(playerID == 0 || tries < 10)
+            while(playerID == 0 && tries < 10)
             {
                 tries++;
                 playerID = GameNetworkManager.Instance.localPlayerController.playerSteamId;
                 yield return new WaitForSeconds(0.5f);
             }
-            if (playerID != 0) logger.LogInfo($"Loading SteamID: {playerID}");
-            else logger.LogInfo("Timeout reached, loading under ID 0");
-            UpdateUpgradeBus();
+            if (playerID != 0)
+            {
+                logger.LogInfo($"Loading SteamID: {playerID}");
+                UpdateUpgradeBus();
+            }
+            else
+            {
+                logger.LogInfo("Timeout reached, loading under ID 0");
+                UpdateUpgradeBus(true, false);
+            }
         }
 
         private IEnumerator WaitForUpgradeObject()

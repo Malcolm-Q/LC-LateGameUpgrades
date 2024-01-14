@@ -266,6 +266,11 @@ namespace MoreShipUpgrades.Managers
 
         internal void LoadSales()
         {
+            if(SaleData.Count == 0)
+            {
+                logger.LogInfo("Sale data empty, continuing...");
+                return;
+            }
             foreach(CustomTerminalNode node in terminalNodes)
             {
                 node.salePerc = SaleData[node.Name];
@@ -332,7 +337,6 @@ namespace MoreShipUpgrades.Managers
         {
             AlterStoreItems();
             BuildCustomNodes();
-            LoadSales();
 
             logger.LogInfo("Successfully reconstructed with hosts config.");
         }

@@ -21,16 +21,16 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public static Dictionary<string, string[]> DemonInstructions = new Dictionary<string, string[]>
         {   // I just stole these from phasmaphobia idk anything about ghosts
-            { "POLTERGEIST", new string[] {"a","b","c"} },
-            { "PHANTOM", new string[] { "a","b","d" } },
-            { "WRAITH", new string[] {"a", "b", "e" } },
-            { "BANSHEE", new string[] {"a", "c", "d" } },
-            { "JINN", new string[] {"a", "c", "e" } },
-            { "HANTU", new string[] {"a", "d", "e" } },
-            { "MOROI", new string[] {"b", "c", "d" } },
-            { "MYLING", new string[] {"b", "c", "e" } },
-            { "GORYO", new string[] {"b", "d", "e" } },
-            { "DE OGEN", new string[] {"c", "d", "e" } },
+            { "POLTERGEIST", new string[] {"Heart","Bones","Crucifix"} },
+            { "PHANTOM", new string[] { "Heart","Bones","Candelabra" } },
+            { "WRAITH", new string[] {"Heart", "Bones", "Teddy Bear" } },
+            { "BANSHEE", new string[] {"Heart", "Crucifix", "Candelabra" } },
+            { "JINN", new string[] {"Heart", "Crucifix", "Teddy Bear" } },
+            { "HANTU", new string[] {"Heart", "Candelabra", "Teddy Bear" } },
+            { "MOROI", new string[] {"Bones", "Crucifix", "Candelabra" } },
+            { "MYLING", new string[] {"Bones", "Crucifix", "Teddy Bear" } },
+            { "GORYO", new string[] {"Bones", "Candelabra", "Teddy Bear" } },
+            { "DE OGEN", new string[] {"Crucifix", "Candelabra", "Teddy Bear" } },
         };
 
         public List<string> currentRitual = new List<string>();
@@ -127,8 +127,6 @@ namespace MoreShipUpgrades.UpgradeComponents
         void ReqRitualStartServerRpc()
         {
             RitualStartClientRpc();
-            GameObject go = Instantiate(loot,transform.position+new Vector3(0,0.1f,0),Quaternion.identity);
-            go.GetComponent<NetworkObject>().Spawn();
         }
 
         [ClientRpc]
@@ -145,10 +143,14 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         private IEnumerator WaitALittleToStopParticlesGaming()
         {
-            yield return new WaitForSeconds(3.25f);
+            yield return new WaitForSeconds(3f);
             ParticleSystem sys = transform.GetChild(3).GetComponent<ParticleSystem>();
             sys.Stop();
-            sys.Clear();
+            if(IsHost || IsServer)
+            {
+                GameObject go = Instantiate(loot,transform.position+new Vector3(0,0.1f,0),Quaternion.identity);
+                go.GetComponent<NetworkObject>().Spawn();
+            }
         }
 
         void Update()

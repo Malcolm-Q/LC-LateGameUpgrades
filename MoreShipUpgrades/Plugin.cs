@@ -151,7 +151,7 @@ namespace MoreShipUpgrades
 
             Item mainItem = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + "PentagramItem.asset");
 
-            string[] ritualItems = new string[] { "aItem.asset", "bItem.asset", "cItem.asset", "dItem.asset", "eItem.asset" };
+            string[] ritualItems = new string[] { "Heart.asset", "Crucifix.asset", "candelabraItem.asset", "Teddy Bear.asset", "Bones.asset" };
             foreach(string ritualItem in ritualItems)
             {
                 Item exorItem = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + "RitualItems/" +ritualItem);
