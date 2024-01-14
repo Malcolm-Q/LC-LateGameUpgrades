@@ -8,7 +8,6 @@ using System.Reflection.Emit;
 using System.Linq;
 using MoreShipUpgrades.Misc;
 using Unity.Netcode;
-using System.Diagnostics;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Patches

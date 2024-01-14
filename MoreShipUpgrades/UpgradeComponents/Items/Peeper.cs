@@ -1,13 +1,17 @@
 ﻿using MoreShipUpgrades.Managers;
-using System.Collections;
-using System.Security.Cryptography;
 using UnityEngine;
 
-namespace MoreShipUpgrades.UpgradeComponents
+namespace MoreShipUpgrades.UpgradeComponents.Items
 {
-    public class coilHeadItem : GrabbableObject
+    public class Peeper : GrabbableObject
     {
+        /// <summary>
+        /// Wether the instance of the class can stop coil-heads from moving or not
+        /// </summary>
         private bool Active;
+        /// <summary>
+        /// The Animator component of the instance of the class
+        /// </summary>
         private Animator anim;
 
         public override void Start()
@@ -19,9 +23,9 @@ namespace MoreShipUpgrades.UpgradeComponents
         public override void Update()
         {
             base.Update();
-            SetActive(!isHeld && !isHeldByEnemy); 
+            SetActive(!isHeld && !isHeldByEnemy);
         }
-
+        
         private void SetActive(bool enable)
         {
             Active = enable;
@@ -30,15 +34,15 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         public bool HasLineOfSightToPosition(Vector3 pos, int range = 60)
         {
-            if(!Active) return false;
-            float num = Vector3.Distance(base.transform.position, pos);
-            bool result = num < (float)range && !Physics.Linecast(transform.position, pos, StartOfRound.Instance.collidersRoomDefaultAndFoliage, QueryTriggerInteraction.Ignore);
+            if (!Active) return false;
+            float num = Vector3.Distance(transform.position, pos);
+            bool result = num < range && !Physics.Linecast(transform.position, pos, StartOfRound.Instance.collidersRoomDefaultAndFoliage, QueryTriggerInteraction.Ignore);
             return result;
         }
 
         public static bool HasLineOfSightToPeepers(Vector3 springPosition)
         {
-            foreach (coilHeadItem peeper in UpgradeBus.instance.coilHeadItems)
+            foreach (Peeper peeper in UpgradeBus.instance.coilHeadItems)
             {
                 if (peeper == null)
                 {

@@ -2,6 +2,7 @@
 using LethalLib.Modules;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents;
+using MoreShipUpgrades.UpgradeComponents.Items;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
@@ -110,7 +111,7 @@ namespace MoreShipUpgrades.Managers
         public Dictionary<string,bool> IndividualUpgrades = new Dictionary<string,bool>();
         public string[] internNames, internInterests;
 
-        public List<coilHeadItem> coilHeadItems = new List<coilHeadItem>();
+        public List<Peeper> coilHeadItems = new List<Peeper>();
         internal bool walkies;
         internal bool walkieUIActive;
         internal string version;
@@ -234,9 +235,9 @@ namespace MoreShipUpgrades.Managers
             if (player == null) return; // Disconnecting the game
 
             logger.LogDebug($"Resetting {player.playerUsername}'s attributes");
-            if (runningShoes) runningShoeScript.ResetRunningShoesBuff(ref player);
-            if (biggerLungs) biggerLungScript.ResetBiggerLungsBuff(ref player);
-            if (strongLegs) strongLegsScript.ResetStrongLegsBuff(ref player);
+            if (cfg.RUNNING_SHOES_ENABLED && runningShoes) runningShoeScript.ResetRunningShoesBuff(ref player);
+            if (cfg.BIGGER_LUNGS_ENABLED && biggerLungs) biggerLungScript.ResetBiggerLungsBuff(ref player);
+            if (cfg.STRONG_LEGS_ENABLED && strongLegs) strongLegsScript.ResetStrongLegsBuff(ref player);
         }
 
         internal void GenerateSales(int seed = -1) // TODO: Save sales

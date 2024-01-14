@@ -298,7 +298,7 @@ namespace MoreShipUpgrades.Misc
 
             topSection = "Extend Deadline";
             EXTEND_DEADLINE_ENABLED = ConfigEntry(topSection, "Enable Extend Deadline Purchase", true, "Increments the amount of days before deadline is reached.");
-            EXTEND_DEADLINE_PRICE = ConfigEntry(topSection, "Extend Deadline Price", 1500, "Price of each day extension requested in the terminal.");
+            EXTEND_DEADLINE_PRICE = ConfigEntry(topSection, "Extend Deadline Price", 800, "Price of each day extension requested in the terminal.");
 
             topSection = runningShoeScript.UPGRADE_NAME;
             RUNNING_SHOES_ENABLED = ConfigEntry(topSection, "Enable Running Shoes Upgrade", true, "Run Faster");

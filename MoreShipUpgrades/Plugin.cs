@@ -13,6 +13,8 @@ using MoreShipUpgrades.Misc;
 using BepInEx.Bootstrap;
 using Newtonsoft.Json;
 using LethalLib.Extras;
+using MoreShipUpgrades.UpgradeComponents.Items;
+using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
 
 namespace MoreShipUpgrades
 {
@@ -63,7 +65,7 @@ namespace MoreShipUpgrades
 
             UpgradeBus.instance.internNames = AssetBundleHandler.GetInfoFromJSON("InternNames").Split(",");
             UpgradeBus.instance.internInterests = AssetBundleHandler.GetInfoFromJSON("InternInterests").Split(",");
-
+            
             SetupModStore(ref UpgradeAssets);
 
             SetupIntroScreen(ref UpgradeAssets);
@@ -330,7 +332,7 @@ namespace MoreShipUpgrades
             foreach (string creatureName in AssetBundleHandler.samplePaths.Keys)
             {
                 Item sample = AssetBundleHandler.GetItemObject(creatureName);
-                SampleItem sampleScript = sample.spawnPrefab.AddComponent<SampleItem>();
+                MonsterSample sampleScript = sample.spawnPrefab.AddComponent<MonsterSample>();
                 sampleScript.grabbable = true;
                 sampleScript.grabbableToEnemies = true;
                 sampleScript.itemProperties = sample;
@@ -379,53 +381,53 @@ namespace MoreShipUpgrades
         }
         private void SetupRegularTeleporterButton()
         {
-            Item tpBut = AssetBundleHandler.GetItemObject("Portable Tele");
-            if (tpBut == null) return;
+            Item regularPortableTeleporter = AssetBundleHandler.GetItemObject("Portable Tele");
+            if (regularPortableTeleporter == null) return;
 
-            tpBut.itemName = "Portable Tele";
-            tpBut.itemId = 492012;
-            TPButtonScript tpScript = tpBut.spawnPrefab.AddComponent<TPButtonScript>();
-            tpScript.itemProperties = tpBut;
-            tpScript.grabbable = true;
-            tpScript.grabbableToEnemies = true;
-            tpScript.ItemBreak = itemBreak;
-            tpScript.useCooldown = 2f;
-            tpScript.error = error;
-            tpScript.buttonPress = buttonPressed;
-            tpBut.creditsWorth = cfg.WEAK_TELE_PRICE;
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(tpBut.spawnPrefab);
+            regularPortableTeleporter.itemName = "Portable Tele";
+            regularPortableTeleporter.itemId = 492012;
+            RegularPortableTeleporter regularTeleportScript = regularPortableTeleporter.spawnPrefab.AddComponent<RegularPortableTeleporter>();
+            regularTeleportScript.itemProperties = regularPortableTeleporter;
+            regularTeleportScript.grabbable = true;
+            regularTeleportScript.grabbableToEnemies = true;
+            regularTeleportScript.ItemBreak = itemBreak;
+            regularTeleportScript.useCooldown = 2f;
+            regularTeleportScript.error = error;
+            regularTeleportScript.buttonPress = buttonPressed;
+            regularPortableTeleporter.creditsWorth = cfg.WEAK_TELE_PRICE;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(regularPortableTeleporter.spawnPrefab);
 
             if (!cfg.WEAK_TELE_ENABLED) return;
 
             TerminalNode PortNode = ScriptableObject.CreateInstance<TerminalNode>();
             PortNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Portable Tele"), (int)(cfg.CHANCE_TO_BREAK * 100));
-            Items.RegisterShopItem(tpBut, null, null, PortNode, tpBut.creditsWorth);
 
             UpgradeBus.instance.ItemsToSync.Add("Tele", tpBut);
+            Items.RegisterShopItem(regularPortableTeleporter, null, null, PortNode, regularPortableTeleporter.creditsWorth);
         }
         private void SetupAdvancedTeleporterButton()
         {
-            Item tpButAdvanced = AssetBundleHandler.GetItemObject("Advanced Portable Tele");
-            if (tpButAdvanced == null) return;
+            Item advancedPortableTeleporter = AssetBundleHandler.GetItemObject("Advanced Portable Tele");
+            if (advancedPortableTeleporter == null) return;
 
-            tpButAdvanced.creditsWorth = cfg.ADVANCED_TELE_PRICE;
-            tpButAdvanced.itemName = "Advanced Portable Tele";
-            tpButAdvanced.itemId = 492013;
-            AdvTPButtonScript butScript = tpButAdvanced.spawnPrefab.AddComponent<AdvTPButtonScript>();
-            butScript.itemProperties = tpButAdvanced;
-            butScript.grabbable = true;
-            butScript.useCooldown = 2f;
-            butScript.grabbableToEnemies = true;
-            butScript.ItemBreak = itemBreak;
-            butScript.error = error;
-            butScript.buttonPress = buttonPressed;
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(tpButAdvanced.spawnPrefab);
+            advancedPortableTeleporter.creditsWorth = cfg.ADVANCED_TELE_PRICE;
+            advancedPortableTeleporter.itemName = "Advanced Portable Tele";
+            advancedPortableTeleporter.itemId = 492013;
+            AdvancedPortableTeleporter advancedTeleportScript = advancedPortableTeleporter.spawnPrefab.AddComponent<AdvancedPortableTeleporter>();
+            advancedTeleportScript.itemProperties = advancedPortableTeleporter;
+            advancedTeleportScript.grabbable = true;
+            advancedTeleportScript.useCooldown = 2f;
+            advancedTeleportScript.grabbableToEnemies = true;
+            advancedTeleportScript.ItemBreak = itemBreak;
+            advancedTeleportScript.error = error;
+            advancedTeleportScript.buttonPress = buttonPressed;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(advancedPortableTeleporter.spawnPrefab);
 
             if (!cfg.ADVANCED_TELE_ENABLED) return;
 
             TerminalNode advNode = ScriptableObject.CreateInstance<TerminalNode>();
             advNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Advanced Portable Tele"), (int)(cfg.ADV_CHANCE_TO_BREAK * 100));
-            Items.RegisterShopItem(tpButAdvanced, null, null, advNode, tpButAdvanced.creditsWorth);
+            Items.RegisterShopItem(advancedPortableTeleporter, null, null, advNode, advancedPortableTeleporter.creditsWorth);
 
             UpgradeBus.instance.ItemsToSync.Add("AdvTele", tpButAdvanced);
         }
@@ -438,7 +440,7 @@ namespace MoreShipUpgrades
             nightVisionItem.creditsWorth = cfg.NIGHT_VISION_PRICE;
             nightVisionItem.spawnPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             nightVisionItem.itemId = 492014;
-            NightVisionItemScript visScript = nightVisionItem.spawnPrefab.AddComponent<NightVisionItemScript>();
+            NightVisionGoggles visScript = nightVisionItem.spawnPrefab.AddComponent<NightVisionGoggles>();
             visScript.itemProperties = nightVisionItem;
             visScript.grabbable = true;
             visScript.useCooldown = 2f;
@@ -466,7 +468,7 @@ namespace MoreShipUpgrades
             DiveItem.twoHanded = cfg.DIVEKIT_TWO_HANDED;
             DiveItem.weight = cfg.DIVEKIT_WEIGHT;
             DiveItem.itemSpawnsOnGround = true;
-            DivingKitScript diveScript = DiveItem.spawnPrefab.AddComponent<DivingKitScript>();
+            DivingKit diveScript = DiveItem.spawnPrefab.AddComponent<DivingKit>();
             diveScript.itemProperties = DiveItem;
             diveScript.grabbable = true;
             diveScript.grabbableToEnemies = true;
@@ -489,7 +491,7 @@ namespace MoreShipUpgrades
 
             MedKitItem.creditsWorth = cfg.MEDKIT_PRICE;
             MedKitItem.itemId = 492016;
-            MedkitScript medScript = MedKitItem.spawnPrefab.AddComponent<MedkitScript>();
+            Medkit medScript = MedKitItem.spawnPrefab.AddComponent<Medkit>();
             medScript.itemProperties = MedKitItem;
             medScript.grabbable = true;
             medScript.useCooldown = 2f;
@@ -535,7 +537,7 @@ namespace MoreShipUpgrades
             Peeper.itemId = 492015;
             Peeper.twoHandedAnimation = false;
             Peeper.spawnPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-            coilHeadItem peepScript = Peeper.spawnPrefab.AddComponent<coilHeadItem>();
+            Peeper peepScript = Peeper.spawnPrefab.AddComponent<Peeper>();
             peepScript.itemProperties = Peeper;
             peepScript.grabbable = true;
             peepScript.grabbableToEnemies = true;
