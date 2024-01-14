@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System.Collections;
 using MoreShipUpgrades.UpgradeComponents;
 using System.Linq;
+using MoreShipUpgrades.UpgradeComponents.Items;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -414,7 +415,7 @@ namespace MoreShipUpgrades.Managers
         [ClientRpc]
         public void SyncValuesClientRpc(int value, NetworkBehaviourReference netRef)
         {
-            netRef.TryGet(out SampleItem prop);
+            netRef.TryGet(out MonsterSample prop);
             if (prop != null)
             {
                 prop.scrapValue = value;

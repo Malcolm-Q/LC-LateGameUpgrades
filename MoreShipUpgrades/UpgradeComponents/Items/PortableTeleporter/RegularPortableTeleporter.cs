@@ -6,7 +6,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace MoreShipUpgrades.UpgradeComponents.PortableTeleporter
+namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
 {
     internal class RegularPortableTeleporter : BasePortableTeleporter
     {

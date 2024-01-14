@@ -1,13 +1,13 @@
 ﻿using MoreShipUpgrades.Managers;
 using UnityEngine.InputSystem;
 
-namespace MoreShipUpgrades.UpgradeComponents
+namespace MoreShipUpgrades.UpgradeComponents.Items
 {
-    internal class NightVisionItemScript : GrabbableObject
+    internal class NightVisionGoggles : GrabbableObject
     {
         public override void DiscardItem()
         {
-            this.playerHeldBy.activatingItem = false;
+            playerHeldBy.activatingItem = false;
             base.DiscardItem();
         }
 
@@ -15,7 +15,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             base.ItemActivate(used, buttonDown);
             if (!Mouse.current.leftButton.isPressed) return;
-            if (UpgradeBus.instance.nightVision) 
+            if (UpgradeBus.instance.nightVision)
             {
                 HUDManager.Instance.chatText.text += "<color=#FF0000>Night vision is already active!</color>";
                 return;
