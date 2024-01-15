@@ -1,0 +1,28 @@
+{
+    "heal": ["Assets/ShipUpgrades/scavSounds/scav_heal.mp3"],
+    "held": [
+        "Assets/ShipUpgrades/scavSounds/scav_held_1.mp3",
+        "Assets/ShipUpgrades/scavSounds/scav_held_2.mp3",
+        "Assets/ShipUpgrades/scavSounds/scav_held_3.mp3",
+        "Assets/ShipUpgrades/scavSounds/scav_held_4.mp3",
+        "Assets/ShipUpgrades/scavSounds/scav_held_5.mp3",
+        "Assets/ShipUpgrades/scavSounds/scav_held_6.mp3",
+        "Assets/ShipUpgrades/scavSounds/scav_held_7.mp3"
+    ],
+    "lost": [
+        "Assets/ShipUpgrades/scavSounds/scav_lost_1.mp3",
+        "Assets/ShipUpgrades/scavSounds/scav_lost_2.mp3",
+        "Assets/ShipUpgrades/scavSounds/scav_lost_3.mp3",
+        "Assets/ShipUpgrades/scavSounds/scav_lost_4.mp3",
+        "Assets/ShipUpgrades/scavSounds/scav_lost_5.mp3",
+        "Assets/ShipUpgrades/scavSounds/scav_lost_6.mp3"
+    ],
+    "safe": [
+        "Assets/ShipUpgrades/scavSounds/scav_safe_1.mp3",
+        "Assets/ShipUpgrades/scavSounds/scav_safe_2.mp3",
+        "Assets/ShipUpgrades/scavSounds/scav_safe_3.mp3",
+        "Assets/ShipUpgrades/scavSounds/scav_safe_4.mp3",
+        "Assets/ShipUpgrades/scavSounds/scav_safe_5.mp3",
+        "Assets/ShipUpgrades/scavSounds/scav_safe_6.mp3"
+    ]
+}
