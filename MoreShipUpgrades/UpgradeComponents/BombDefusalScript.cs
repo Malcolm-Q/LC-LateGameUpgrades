@@ -138,6 +138,7 @@ namespace MoreShipUpgrades.UpgradeComponents
                     // win
                     armed = false;
                     grabBox.enabled = true;
+                    audio.Stop();
                     this.enabled = false;
                 }
             }
