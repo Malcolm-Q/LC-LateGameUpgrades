@@ -372,13 +372,13 @@ namespace MoreShipUpgrades
             helmet.creditsWorth = cfg.HELMET_PRICE;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(helmet.spawnPrefab);
 
+            UpgradeBus.instance.ItemsToSync.Add("Helmet", helmet);
             if (!cfg.HELMET_ENABLED) return;
 
             TerminalNode node = ScriptableObject.CreateInstance<TerminalNode>();
             node.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Helmet"), cfg.HELMET_HITS_BLOCKED);
             Items.RegisterShopItem(helmet, null, null, node, helmet.creditsWorth);
 
-            UpgradeBus.instance.ItemsToSync.Add("Helmet", helmet);
         }
         private void SetupRegularTeleporterButton()
         {
@@ -398,13 +398,13 @@ namespace MoreShipUpgrades
             regularPortableTeleporter.creditsWorth = cfg.WEAK_TELE_PRICE;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(regularPortableTeleporter.spawnPrefab);
 
+            UpgradeBus.instance.ItemsToSync.Add("Tele", regularPortableTeleporter);
             if (!cfg.WEAK_TELE_ENABLED) return;
 
             TerminalNode PortNode = ScriptableObject.CreateInstance<TerminalNode>();
             PortNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Portable Tele"), (int)(cfg.CHANCE_TO_BREAK * 100));
 
             Items.RegisterShopItem(regularPortableTeleporter, null, null, PortNode, regularPortableTeleporter.creditsWorth);
-            UpgradeBus.instance.ItemsToSync.Add("Tele", regularPortableTeleporter);
         }
         private void SetupAdvancedTeleporterButton()
         {
@@ -424,13 +424,13 @@ namespace MoreShipUpgrades
             advancedTeleportScript.buttonPress = buttonPressed;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(advancedPortableTeleporter.spawnPrefab);
 
+            UpgradeBus.instance.ItemsToSync.Add("AdvTele", advancedPortableTeleporter);
             if (!cfg.ADVANCED_TELE_ENABLED) return;
 
             TerminalNode advNode = ScriptableObject.CreateInstance<TerminalNode>();
             advNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Advanced Portable Tele"), (int)(cfg.ADV_CHANCE_TO_BREAK * 100));
             Items.RegisterShopItem(advancedPortableTeleporter, null, null, advNode, advancedPortableTeleporter.creditsWorth);
 
-            UpgradeBus.instance.ItemsToSync.Add("AdvTele", advancedPortableTeleporter);
         }
 
         private void SetupNightVision()
@@ -449,6 +449,7 @@ namespace MoreShipUpgrades
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(nightVisionItem.spawnPrefab);
             UpgradeBus.instance.nightVisionPrefab = nightVisionItem.spawnPrefab;
 
+            UpgradeBus.instance.ItemsToSync.Add("Night", nightVisionItem);
             if (!cfg.NIGHT_VISION_ENABLED) return;
 
             TerminalNode nightNode = ScriptableObject.CreateInstance<TerminalNode>();
@@ -457,7 +458,6 @@ namespace MoreShipUpgrades
             nightNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Night Vision"), grantStatus, loseOnDeath);
             Items.RegisterShopItem(nightVisionItem, null, null, nightNode, nightVisionItem.creditsWorth);
 
-            UpgradeBus.instance.ItemsToSync.Add("Night", nightVisionItem);
         }
         private void SetupDivingKit()
         {
@@ -475,6 +475,7 @@ namespace MoreShipUpgrades
             diveScript.grabbableToEnemies = true;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(DiveItem.spawnPrefab);
 
+            UpgradeBus.instance.ItemsToSync.Add("Dive",DiveItem);
             if (!cfg.DIVEKIT_ENABLED) return;
 
             TerminalNode medNode = ScriptableObject.CreateInstance<TerminalNode>();
@@ -482,7 +483,6 @@ namespace MoreShipUpgrades
             medNode.displayText = $"DIVING KIT - ${cfg.DIVEKIT_PRICE}\n\nBreath underwater.\nWeights {Mathf.RoundToInt((DiveItem.weight -1 )*100)} lbs and is {hands} handed.\n\n";
             Items.RegisterShopItem(DiveItem, null, null,medNode, DiveItem.creditsWorth);
 
-            UpgradeBus.instance.ItemsToSync.Add("Dive",DiveItem);
         }
         private void SetupMedkit()
         {
@@ -544,12 +544,12 @@ namespace MoreShipUpgrades
             peepScript.grabbableToEnemies = true;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(Peeper.spawnPrefab);
 
+            UpgradeBus.instance.ItemsToSync.Add("Peeper", Peeper);
             if (!cfg.PEEPER_ENABLED) return;
 
             TerminalNode peepNode = ScriptableObject.CreateInstance<TerminalNode>();
             peepNode.displayText = "Looks at coil heads, don't lose it\n";
             LethalLib.Modules.Items.RegisterShopItem(Peeper, null, null, peepNode, Peeper.creditsWorth);
-            UpgradeBus.instance.ItemsToSync.Add("Peeper", Peeper);
         }
         private void SetupWheelbarrows()
         {
@@ -588,13 +588,13 @@ namespace MoreShipUpgrades
             barrowScript.wheelsClip = shoppingCartSound;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
 
+            LethalLib.Modules.Items.RegisterItem(wheelbarrow);
             if (!cfg.SCRAP_WHEELBARROW_ENABLED) return; 
             AnimationCurve curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(cfg.SCRAP_WHEELBARROW_RARITY, 1), new Keyframe(1, 1));
             SpawnableMapObjectDef mapObjDef = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
             mapObjDef.spawnableMapObject = new SpawnableMapObject();
             mapObjDef.spawnableMapObject.prefabToSpawn = wheelbarrow.spawnPrefab;
             MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
-            LethalLib.Modules.Items.RegisterItem(wheelbarrow);
         }
         private void SetupStoreWheelbarrow()
         {
