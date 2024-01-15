@@ -8,11 +8,12 @@ namespace MoreShipUpgrades.UpgradeComponents
     public class pagerScript : BaseUpgrade
     {
         public static string UPGRADE_NAME = "Fast Encryption";
-        private static LGULogger logger = new LGULogger(nameof(pagerScript));
+        private static LGULogger logger;
 
         void Start()
         {
             upgradeName = UPGRADE_NAME;
+            logger = new LGULogger(upgradeName);
             DontDestroyOnLoad(gameObject);
             Register();
         }
