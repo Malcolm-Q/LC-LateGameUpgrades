@@ -587,7 +587,6 @@ namespace MoreShipUpgrades
             barrowScript.itemProperties = wheelbarrow;
             barrowScript.wheelsClip = shoppingCartSound;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
-            LethalLib.Modules.Items.RegisterItem(wheelbarrow);
 
             if (!cfg.SCRAP_WHEELBARROW_ENABLED) return; 
             AnimationCurve curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(cfg.SCRAP_WHEELBARROW_RARITY, 1), new Keyframe(1, 1));
@@ -595,6 +594,7 @@ namespace MoreShipUpgrades
             mapObjDef.spawnableMapObject = new SpawnableMapObject();
             mapObjDef.spawnableMapObject.prefabToSpawn = wheelbarrow.spawnPrefab;
             MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
+            LethalLib.Modules.Items.RegisterItem(wheelbarrow);
         }
         private void SetupStoreWheelbarrow()
         {
