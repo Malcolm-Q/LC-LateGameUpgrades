@@ -15,7 +15,6 @@ using LethalLib.Extras;
 using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
 using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
-using LethalLib.Extras;
 using LethalLib.Modules;
 
 namespace MoreShipUpgrades
