@@ -10,6 +10,8 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("IsHoarderBugAngry")]
         private static void MakeHoarderBugSwarmAngry(ref bool __result)
         {
+            if (UpgradeBus.instance.contractLevel == "None") return;
+
             if(UpgradeBus.instance.contractLevel == RoundManager.Instance.currentLevel.PlanetName)
             {
                 __result = true;
