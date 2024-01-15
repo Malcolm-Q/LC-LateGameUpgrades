@@ -8,15 +8,17 @@ namespace MoreShipUpgrades.Patches
     {
         private static LGULogger logger = new LGULogger(nameof(TerminalPatcher));
         private static int HELP_TERMINAL_NODE = 13;
+        private static bool insertedHelp = false;
         [HarmonyPostfix]
         [HarmonyPatch("Start")]
         private static void StartPostfix(ref Terminal __instance)
         {
             logger.LogDebug("Start");
             TerminalNode helpNode = __instance.terminalNodes.specialNodes[HELP_TERMINAL_NODE];
-            if (helpNode.displayText.Contains("Lategame Upgrades")) return;
+            if (insertedHelp) return;
             helpNode.displayText += ">LATEGAME\nDisplays information related with Lategame-Upgrades mod\n\n";
             helpNode.displayText += ">LGU / LATEGAME STORE\nDisplays the purchaseable upgrades from Lategame store.\n\n";
+            insertedHelp = true;
         }
         [HarmonyPostfix]
         [HarmonyPatch("ParsePlayerSentence")]
