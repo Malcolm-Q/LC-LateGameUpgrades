@@ -1,32 +1,29 @@
 ![LUTransparent](https://github.com/Malcolm-Q/LC-LateGameUpgrades/assets/118214091/a39a7b59-651b-4fa2-8224-cdd9327c02ab)
 
-TODO for 3.0.0
+Source code for my [LateGameUpgrades mod.](https://thunderstore.io/c/lethal-company/p/malco/Lategame_Upgrades/)  for Lethal Company  
+#### [Frequently Asked Questions(FAQ)](https://github.com/Malcolm-Q/LC-LateGameUpgrades/issues/60#issue-2051585712)
 
-Contracts  
-Beaded Bag type item  
-Fire Mixtape upgrade  
+#### [Read This Before Creating An Issue](https://github.com/Malcolm-Q/LC-LateGameUpgrades/issues/56)
 
-## Contracts
-Contracts will target a random free moon and provide a tough objective that if completed provides a good reward.
-
-Exterminator Contract
-* spawn a bunch of hoarding bugs right away
-* make them more aggressive
-* you have to find and destroy a nest object
-Data Contract
-* Spawn a pc object
-* you have to find and complete a minigame
-* get a valuable disk
-Extraction Contract
-* Spawn a heavy, noisy playermodel
-* you have to find and retrieve it
-* Could use a bunch of different models (peter griffin etc)
+Join [this modding discord](https://discord.gg/hzEcKFSSDX) and comment [on this post](https://discord.com/channels/1168655651455639582/1178407269994594435)  to discuss the mod.
 
 
-## Fire Mixtape Upgrade
-Upgrades the boombox so players within radius of an active boombox get a speed boost and maybe damage boost and stuff
+## **Contributing:**
+- You will need to set up Evaisa's [Netcode Patcher](https://github.com/EvaisaDev/UnityNetcodeWeaver) if you want to add more custom netcode. If you are making simple additions that don't need to be tested online you can still build an unpatched dll and test it.  
+- If adding custom objects you need to set up a unity environment for making asset bundles. I recommend using [Evaisa's Template](https://github.com/EvaisaDev/LethalCompanyUnityTemplate). Prefabs for the assets are in the [UnityFiles folder.](/UnityFiles/)  
+- IMPORTANT: ***Do not include your new assets in the assets.zip file.*** Create a new file called IncomingAssets<name>.zip that contains only the new assets you've made.  
+- This project uses [LethalLib](https://github.com/EvaisaDev/LethalLib) by, you guessed it, [Evaisa](https://ko-fi.com/evaisa) to add items to the shop, register network prefabs, and in the future probably more so you can read about it there.  
+- The most recent (good chance it's unstable) dll and asset bundle can be found in the [output folder.](/output/)  
 
-## Beaded Bag
-A bag that players can go inside of and put scrap inside of
+*Included is a projectSetup.exe and projectSetup.py, you can run one or the other to quickly add all (or most of if some have been recently added) of the dependents to your .csproj
 
-Basically just instantiate a room prefab under the dungeon each moon and teleport players into it on interact.
+## **Community Suggested Additions:**
+If you want to implement one of these please create a branch indicating which feature you are implementing.  
+Something like: `<discordNickName>/<feature>` 
+* Planet Scanner
+    * When in orbit type something like scan <moon> to get info about what your visit to that moon would be like.
+    * This would involve generating random seeds for each moon in orbit and ensuring they use them for generation.
+    * Information about enemies, scrap, and maphazards could be retrieved with this info.
+
+
+*This is MIT, do with it whatever you want.*
