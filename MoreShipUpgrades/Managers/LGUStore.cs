@@ -599,12 +599,29 @@ namespace MoreShipUpgrades.Managers
             logger.LogInfo($"Playing '{clip}' SFX on player: {player.playerUsername}");
         }
 
-        [ServerRpc(RequireOwnership = false)]
+    [ServerRpc(RequireOwnership = false)]
         internal void ReqPlayAudioOnPlayerServerRpc(NetworkBehaviourReference netRef, string clip)
         {
             logger.LogInfo($"Instructing clients to play '{clip}' SFX");
             PlayAudioOnPlayerClientRpc(netRef, clip);
         }
+
+        [ClientRpc]
+        public void ExtendDeadlineClientRpc(int days)
+        {
+            float before = TimeOfDay.Instance.timeUntilDeadline;
+            TimeOfDay.Instance.timeUntilDeadline += TimeOfDay.Instance.totalTime * days;
+            TimeOfDay.Instance.UpdateProfitQuotaCurrentTime();
+            TimeOfDay.Instance.SyncTimeClientRpc(TimeOfDay.Instance.globalTime, (int)TimeOfDay.Instance.timeUntilDeadline);
+            logger.LogDebug($"Previous time: {before}, new time: {TimeOfDay.Instance.timeUntilDeadline}");
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void ExtendDeadlineServerRpc(int days)
+        {
+            ExtendDeadlineClientRpc(days);
+        }
+
     }
 
     [Serializable]

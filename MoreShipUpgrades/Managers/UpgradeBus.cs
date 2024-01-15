@@ -67,7 +67,6 @@ namespace MoreShipUpgrades.Managers
         public terminalFlashScript flashScript = null;
         public lockSmithScript lockScript = null;
         public defibScript internScript = null;
-        public ExtendDeadlineScript extendScript = null;
         public walkieScript walkieHandler = null;
 
         public Color nightVisColor;
