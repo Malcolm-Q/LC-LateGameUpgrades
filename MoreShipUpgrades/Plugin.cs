@@ -372,7 +372,6 @@ namespace MoreShipUpgrades
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(helmet.spawnPrefab);
 
             UpgradeBus.instance.ItemsToSync.Add("Helmet", helmet);
-            if (!cfg.HELMET_ENABLED) return;
 
             TerminalNode node = ScriptableObject.CreateInstance<TerminalNode>();
             node.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Helmet"), cfg.HELMET_HITS_BLOCKED);
@@ -398,7 +397,6 @@ namespace MoreShipUpgrades
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(regularPortableTeleporter.spawnPrefab);
 
             UpgradeBus.instance.ItemsToSync.Add("Tele", regularPortableTeleporter);
-            if (!cfg.WEAK_TELE_ENABLED) return;
 
             TerminalNode PortNode = ScriptableObject.CreateInstance<TerminalNode>();
             PortNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Portable Tele"), (int)(cfg.CHANCE_TO_BREAK * 100));
@@ -424,7 +422,6 @@ namespace MoreShipUpgrades
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(advancedPortableTeleporter.spawnPrefab);
 
             UpgradeBus.instance.ItemsToSync.Add("AdvTele", advancedPortableTeleporter);
-            if (!cfg.ADVANCED_TELE_ENABLED) return;
 
             TerminalNode advNode = ScriptableObject.CreateInstance<TerminalNode>();
             advNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Advanced Portable Tele"), (int)(cfg.ADV_CHANCE_TO_BREAK * 100));
@@ -449,7 +446,6 @@ namespace MoreShipUpgrades
             UpgradeBus.instance.nightVisionPrefab = nightVisionItem.spawnPrefab;
 
             UpgradeBus.instance.ItemsToSync.Add("Night", nightVisionItem);
-            if (!cfg.NIGHT_VISION_ENABLED) return;
 
             TerminalNode nightNode = ScriptableObject.CreateInstance<TerminalNode>();
             string grantStatus = cfg.NIGHT_VISION_INDIVIDUAL || UpgradeBus.instance.cfg.SHARED_UPGRADES ? "one" : "all";
@@ -475,7 +471,6 @@ namespace MoreShipUpgrades
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(DiveItem.spawnPrefab);
 
             UpgradeBus.instance.ItemsToSync.Add("Dive",DiveItem);
-            if (!cfg.DIVEKIT_ENABLED) return;
 
             TerminalNode medNode = ScriptableObject.CreateInstance<TerminalNode>();
             string hands = cfg.DIVEKIT_TWO_HANDED ? "two" : "one";
@@ -500,12 +495,9 @@ namespace MoreShipUpgrades
             medScript.use = buttonPressed;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(MedKitItem.spawnPrefab);
 
-            if (cfg.MEDKIT_ENABLED)
-            {
-                TerminalNode medNode = ScriptableObject.CreateInstance<TerminalNode>();
-                medNode.displayText = string.Format("MEDKIT - ${0}\n\nLeft click to heal yourself for {1} health.\nCan be used {2} times.\n", cfg.MEDKIT_PRICE, cfg.MEDKIT_HEAL_VALUE, cfg.MEDKIT_USES);
-                Items.RegisterShopItem(MedKitItem, null, null,medNode, MedKitItem.creditsWorth);
-            }
+            TerminalNode medNode = ScriptableObject.CreateInstance<TerminalNode>();
+            medNode.displayText = string.Format("MEDKIT - ${0}\n\nLeft click to heal yourself for {1} health.\nCan be used {2} times.\n", cfg.MEDKIT_PRICE, cfg.MEDKIT_HEAL_VALUE, cfg.MEDKIT_USES);
+            Items.RegisterShopItem(MedKitItem, null, null,medNode, MedKitItem.creditsWorth);
 
             Item MedKitMapItem = AssetBundleHandler.GetItemObject("MedkitMapItem");
             if (MedKitMapItem == null) return;
@@ -544,7 +536,6 @@ namespace MoreShipUpgrades
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(Peeper.spawnPrefab);
 
             UpgradeBus.instance.ItemsToSync.Add("Peeper", Peeper);
-            if (!cfg.PEEPER_ENABLED) return;
 
             TerminalNode peepNode = ScriptableObject.CreateInstance<TerminalNode>();
             peepNode.displayText = "Looks at coil heads, don't lose it\n";
@@ -587,7 +578,6 @@ namespace MoreShipUpgrades
             barrowScript.wheelsClip = shoppingCartSound;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
 
-            if (!cfg.SCRAP_WHEELBARROW_ENABLED) return; 
             AnimationCurve curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(cfg.SCRAP_WHEELBARROW_RARITY, 1), new Keyframe(1, 1));
             SpawnableMapObjectDef mapObjDef = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
             mapObjDef.spawnableMapObject = new SpawnableMapObject();
@@ -615,7 +605,6 @@ namespace MoreShipUpgrades
             barrowScript.wheelsClip = wheelbarrowSound;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
 
-            if (!cfg.WHEELBARROW_ENABLED) return;
 
             TerminalNode wheelbarrowNode = ScriptableObject.CreateInstance<TerminalNode>();
             wheelbarrowNode.displayText = $"A portable container which has a maximum capacity of {cfg.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS} and reduces the effective weight of the inserted items by {cfg.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER*100} %.\nIt weighs {1f + (cfg.WHEELBARROW_WEIGHT/100f)} lbs";
