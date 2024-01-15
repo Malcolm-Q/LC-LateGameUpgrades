@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
@@ -127,7 +127,6 @@ namespace MoreShipUpgrades.UpgradeComponents
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
             }
-            player.playerActions.Disable();
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -143,6 +142,8 @@ namespace MoreShipUpgrades.UpgradeComponents
             UpgradeBus.instance.DataMinigameKey = Key;
             UpgradeBus.instance.DataMinigameUser = user;
             UpgradeBus.instance.DataMinigamePass = pass;
+            if(IPText == null) IPText = transform.GetChild(2).GetChild(0).GetChild(2).GetChild(0).GetComponent<Text>();
+            IPText.text = IPText.text.Replace("[IP]", Key);
         }
 
         [ClientRpc]
@@ -187,6 +188,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             else
             {
                 pcScript.trig.interactable = true;
+                interactable = true;
             }
             root.SetActive(false);
         }
@@ -358,7 +360,6 @@ namespace MoreShipUpgrades.UpgradeComponents
                 Cursor.visible = false;
                 Cursor.lockState = CursorLockMode.Locked;
                 interactable = true;
-                GameNetworkManager.Instance.localPlayerController.playerActions.Enable();
                 if(IsHost || IsServer)
                 {
                     ExitGameClientRpc(new NetworkBehaviourReference(this), false);
