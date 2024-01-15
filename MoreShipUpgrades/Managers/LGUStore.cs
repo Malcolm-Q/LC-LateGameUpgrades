@@ -342,6 +342,7 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.hunter = saveInfo.hunter;
             UpgradeBus.instance.playerHealth = saveInfo.playerHealth;
             UpgradeBus.instance.wearingHelmet = saveInfo.wearingHelmet;
+            UpgradeBus.instance.sickBeats = saveInfo.sickBeats;
 
             UpgradeBus.instance.beeLevel = saveInfo.beeLevel;
             UpgradeBus.instance.huntLevel = saveInfo.huntLevel;
@@ -627,6 +628,7 @@ namespace MoreShipUpgrades.Managers
         public bool hunter = UpgradeBus.instance.hunter;
         public bool playerHealth = UpgradeBus.instance.playerHealth;
         public bool wearingHelmet = UpgradeBus.instance.wearingHelmet;
+        public bool sickBeats = UpgradeBus.instance.sickBeats;
 
         public int beeLevel = UpgradeBus.instance.beeLevel;
         public int huntLevel = UpgradeBus.instance.huntLevel;
