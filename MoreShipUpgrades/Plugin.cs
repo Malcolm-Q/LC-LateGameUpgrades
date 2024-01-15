@@ -127,7 +127,7 @@ namespace MoreShipUpgrades
         {
             Item bomb = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "BombItem.asset");
             if (bomb == null) return;
-
+            bomb.isConductiveMetal = false;
             ContractObject coNest = bomb.spawnPrefab.AddComponent<ContractObject>();
             coNest.contractType = "defusal";
 

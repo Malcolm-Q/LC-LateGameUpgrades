@@ -14,7 +14,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             base.Start();
             maximumAmountItems = UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS;
             weightReduceMultiplier = UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER;
-            defaultWeight = itemProperties.weight;
             Enum.TryParse(typeof(Restrictions), UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_RESTRICTION_MODE, out object parsedRestriction);
             if (parsedRestriction == null)
             {
