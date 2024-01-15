@@ -246,15 +246,27 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         public override void DiscardItem()
         {
             wheelsNoise.Stop();
-            playerHeldBy.carryWeight += Mathf.Clamp(exoskeletonScript.DecreasePossibleWeight(defaultWeight - 1f), 0, 10f);
-            playerHeldBy.carryWeight -= Mathf.Clamp(exoskeletonScript.DecreasePossibleWeight(totalWeight - 1f), 0, 10f);
+            if (playerHeldBy && GameNetworkManager.Instance.localPlayerController == playerHeldBy)
+            {
+                logger.LogDebug("Updating player's weight on drop");
+                playerHeldBy.carryWeight += Mathf.Clamp(exoskeletonScript.DecreasePossibleWeight(itemProperties.weight - 1f), 0, 10f);
+                playerHeldBy.carryWeight -= Mathf.Clamp(exoskeletonScript.DecreasePossibleWeight(totalWeight - 1f), 0, 10f);
+            }
             base.DiscardItem();
         }
         public override void GrabItem()
         {
             base.GrabItem();
-            if (playerHeldBy.isCrouching) playerHeldBy.Crouch(!playerHeldBy.isCrouching);
-            UpdateWheelbarrowWeightServerRpc();
+            if (playerHeldBy.isCrouching && GameNetworkManager.Instance.localPlayerController == playerHeldBy)
+            {
+                playerHeldBy.Crouch(!playerHeldBy.isCrouching);
+            }
+            if (playerHeldBy && GameNetworkManager.Instance.localPlayerController == playerHeldBy)
+            {
+                logger.LogDebug("Updating player's weight on drop");
+                playerHeldBy.carryWeight -= Mathf.Clamp(exoskeletonScript.DecreasePossibleWeight(itemProperties.weight - 1f), 0, 10f);
+                playerHeldBy.carryWeight += Mathf.Clamp(exoskeletonScript.DecreasePossibleWeight(totalWeight - 1f), 0, 10f);
+            }
         }
         /// <summary>
         /// Setups attributes related to the wheelbarrow item
@@ -294,8 +306,10 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         [ClientRpc]
         private void UpdateWheelbarrowWeightClientRpc()
         {
+            logger.LogDebug(nameof(UpdateWheelbarrowWeightClientRpc));
+            logger.LogDebug(GameNetworkManager.Instance.localPlayerController.playerUsername);
             GrabbableObject[] storedItems = GetComponentsInChildren<GrabbableObject>();
-            if (playerHeldBy) playerHeldBy.carryWeight -= Mathf.Clamp(exoskeletonScript.DecreasePossibleWeight(defaultWeight - 1f), 0f, 10f);
+            if (isHeld) playerHeldBy.carryWeight -= Mathf.Clamp(exoskeletonScript.DecreasePossibleWeight(totalWeight - 1f), 0f, 10f);
             totalWeight = defaultWeight;
 
             for (int i = 0; i < storedItems.Length; i++)
@@ -305,7 +319,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
                 totalWeight += (storedItem.itemProperties.weight - 1f) * weightReduceMultiplier;
             }
             logger.LogDebug($"There's currently {(totalWeight - 1f)*100} lbs in the wheelcart");
-            if (playerHeldBy) playerHeldBy.carryWeight += Mathf.Clamp(exoskeletonScript.DecreasePossibleWeight(totalWeight - 1f), 0f, 10f);
+            if (isHeld) playerHeldBy.carryWeight += Mathf.Clamp(exoskeletonScript.DecreasePossibleWeight(totalWeight - 1f), 0f, 10f);
         }
         /// <summary>
         /// Action when the interaction bar is completely filled on the container of the wheelbarrow.
