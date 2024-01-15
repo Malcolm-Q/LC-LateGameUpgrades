@@ -505,7 +505,7 @@ namespace MoreShipUpgrades.Misc
             string thirdWord = textArray.Length > 2 ? textArray[2].ToLower() : "";
             switch(firstWord)
             {
-                case "demon": outputNode = LookupDemon(secondWord); return;
+                case "demon": outputNode = LookupDemon(secondWord, thirdWord); return;
                 case "lookup": outputNode = DefuseBombCommand(secondWord); return;
                 case "toggle": outputNode = ExecuteToggleCommands(secondWord, ref outputNode); return;
                 case "initattack":
@@ -528,9 +528,10 @@ namespace MoreShipUpgrades.Misc
             }
         }
 
-        private static TerminalNode LookupDemon(string secondWord)
+        private static TerminalNode LookupDemon(string secondWord, string thirdWord)
         {
             string demon = secondWord.ToUpper();
+            if (demon == "DE" && thirdWord.ToUpper() == "OGEN") demon = demon + " " + thirdWord.ToUpper();
             if (PentagramScript.DemonInstructions.ContainsKey(demon))
             {
                 string[] items = PentagramScript.DemonInstructions[demon];
