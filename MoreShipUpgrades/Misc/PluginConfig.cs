@@ -217,6 +217,7 @@ namespace MoreShipUpgrades.Misc
         public float WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK {  get; set; }
         public float WHEELBARROW_MOVEMENT_SLOPPY {  get; set; }
         public float WHEELBARROW_NOISE_RANGE { get; set; }
+        public bool WHEELBARROW_PLAY_NOISE {  get; set; }
         public string SCRAP_WHEELBARROW_RESTRICTION_MODE { get; set; }
         public int SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS { get; set; }
         public float SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED { get; set; }
@@ -228,6 +229,7 @@ namespace MoreShipUpgrades.Misc
         public int SCRAP_WHEELBARROW_MAXIMUM_VALUE { get; set; }
         public float SCRAP_WHEELBARROW_MOVEMENT_SLOPPY { get; set; }
         public float SCRAP_WHEELBARROW_RARITY { get; set; }
+        public bool SCRAP_WHEELBARROW_PLAY_NOISE {  get; set; }
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -486,6 +488,7 @@ namespace MoreShipUpgrades.Misc
             WHEELBARROW_NOISE_RANGE = ConfigEntry(topSection, "Noise range of the Wheelbarrow Item", 14f, "How far the wheelbarrow sound propagates to nearby enemies when in movement");
             WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK = ConfigEntry(topSection, "Look sensitivity drawback of the Wheelbarrow Item", 0.4f, "Value multiplied on the player's look sensitivity when moving with the wheelbarrow Item");
             WHEELBARROW_MOVEMENT_SLOPPY = ConfigEntry(topSection, "Sloppiness of the Wheelbarrow Item", 5f, "Value multiplied on the player's movement to give the feeling of drifting while carrying the Wheelbarrow Item");
+            WHEELBARROW_PLAY_NOISE = ConfigEntry(topSection, "Plays noises for players with Wheelbarrow Item", true, "If false, it will just not play the sounds, it will still attract monsters to noise");
             SCRAP_WHEELBARROW_ENABLED = ConfigEntry(topSection, "Enable the Wheelbarrow Scrap Item", true, "Allows you to scavenge a wheelbarrow in which you can store items on");
             SCRAP_WHEELBARROW_RARITY = ConfigEntry(topSection, "Spawn chance of Scrap Wheelbarrow Item", 0.9f, "How likely it is to a scrap wheelbarrow item to spawn when landing on a moon.");
             SCRAP_WHEELBARROW_WEIGHT = ConfigEntry(topSection, "Weight of the Wheelbarrow Scrap Item", 25f, "Weight of the scrap wheelbarrow's without any items in lbs");
@@ -498,6 +501,7 @@ namespace MoreShipUpgrades.Misc
             SCRAP_WHEELBARROW_NOISE_RANGE = ConfigEntry(topSection, "Noise range of the Wheelbarrow Scrap Item", 18f, "How far the scrap wheelbarrow sound propagates to nearby enemies when in movement");
             SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK = ConfigEntry(topSection, "Look sensitivity drawback of the Scrap Wheelbarrow Item", 0.8f, "Value multiplied on the player's look sensitivity when moving with the Scrap wheelbarrow Item");
             SCRAP_WHEELBARROW_MOVEMENT_SLOPPY = ConfigEntry(topSection, "Sloppiness of the Scrap Wheelbarrow Item", 2f, "Value multiplied on the player's movement to give the feeling of drifting while carrying the Scrap Wheelbarrow Item");
+            SCRAP_WHEELBARROW_PLAY_NOISE = ConfigEntry(topSection, "Plays noises for players with Scrap Wheelbarrow Item", true, "If false, it will just not play the sounds, it will still attract monsters to noise");
         }
     }
 }

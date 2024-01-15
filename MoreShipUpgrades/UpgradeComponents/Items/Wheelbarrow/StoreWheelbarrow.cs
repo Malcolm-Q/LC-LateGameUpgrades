@@ -30,6 +30,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             noiseRange = UpgradeBus.instance.cfg.WHEELBARROW_NOISE_RANGE;
             sloppiness = UpgradeBus.instance.cfg.WHEELBARROW_MOVEMENT_SLOPPY;
             lookSensitivityDrawback = UpgradeBus.instance.cfg.WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK;
+            playSounds = UpgradeBus.instance.cfg.WHEELBARROW_PLAY_NOISE;
         }
 
         public override void Update()
