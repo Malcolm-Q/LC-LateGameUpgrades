@@ -294,42 +294,42 @@ namespace MoreShipUpgrades.Managers
 
             if (!cfg.HELMET_ENABLED)
             {
-                logger.LogInfo("Removing x from store.");
+                logger.LogInfo("Removing helmet from store.");
                 Items.RemoveShopItem(ItemsToSync["Helmet"]);
             }
             else if (ItemsToSync["Helmet"].creditsWorth != cfg.HELMET_PRICE) Items.UpdateShopItemPrice(ItemsToSync["Helmet"], cfg.HELMET_PRICE);
 
             if (!cfg.DIVEKIT_ENABLED)
             {
-                logger.LogInfo("Removing x from store.");
+                logger.LogInfo("Removing divekit from store.");
                 Items.RemoveShopItem(ItemsToSync["Dive"]);
             }
             else if (ItemsToSync["Dive"].creditsWorth != cfg.DIVEKIT_PRICE) Items.UpdateShopItemPrice(ItemsToSync["Dive"], cfg.DIVEKIT_PRICE);
 
             if (!cfg.ADVANCED_TELE_ENABLED)
             {
-                logger.LogInfo("Removing x from store.");
+                logger.LogInfo("Removing AdvTele from store.");
                 Items.RemoveShopItem(ItemsToSync["AdvTele"]);
             }
             else if (ItemsToSync["AdvTele"].creditsWorth != cfg.ADVANCED_TELE_PRICE) Items.UpdateShopItemPrice(ItemsToSync["AdvTele"], cfg.ADVANCED_TELE_PRICE);
 
             if (!cfg.WEAK_TELE_ENABLED)
             {
-                logger.LogInfo("Removing x from store.");
+                logger.LogInfo("Removing Tele from store.");
                 Items.RemoveShopItem(ItemsToSync["Tele"]);
             }
             else if (ItemsToSync["Tele"].creditsWorth != cfg.WEAK_TELE_PRICE) Items.UpdateShopItemPrice(ItemsToSync["Tele"], cfg.WEAK_TELE_PRICE);
 
             if (!cfg.MEDKIT_ENABLED)
             {
-                logger.LogInfo("Removing x from store.");
+                logger.LogInfo("Removing Medkit from store.");
                 Items.RemoveShopItem(ItemsToSync["Medkit"]);
             }
             else if (ItemsToSync["Medkit"].creditsWorth != cfg.MEDKIT_PRICE) Items.UpdateShopItemPrice(ItemsToSync["Medkit"], cfg.MEDKIT_PRICE);
 
             if (!cfg.NIGHT_VISION_ENABLED)
             {
-                logger.LogInfo("Removing x from store.");
+                logger.LogInfo("Removing Night Vision from store.");
                 Items.RemoveShopItem(ItemsToSync["Night"]);
             }
             else if (ItemsToSync["Night"].creditsWorth != cfg.NIGHT_VISION_PRICE) Items.UpdateShopItemPrice(ItemsToSync["Night"], cfg.NIGHT_VISION_PRICE);
