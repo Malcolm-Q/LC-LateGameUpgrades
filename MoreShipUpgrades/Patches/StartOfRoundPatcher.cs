@@ -49,6 +49,13 @@ namespace MoreShipUpgrades.Patches
                 LGUStore.instance.PlayersFiredServerRpc();
             }
         }
+        [HarmonyPrefix]
+        [HarmonyPatch(nameof(StartOfRound.PowerSurgeShip))]
+        private static bool PowerSurgeShip()
+        {
+            if (UpgradeBus.instance.lightningRod) return false;
+            return true;
+        }
 
         [HarmonyTranspiler]
         [HarmonyPatch("ReviveDeadPlayers")]
