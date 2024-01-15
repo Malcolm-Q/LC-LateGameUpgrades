@@ -32,10 +32,6 @@ namespace MoreShipUpgrades.Patches
                 if (!UpgradeBus.instance.cfg.NIGHT_VISION_DROP_ON_DEATH) return;
                 LGUStore.instance.SpawnNightVisionItemOnDeathServerRpc(__instance.transform.position);
             }
-            UpgradeBus.instance.staminaDrainCoefficient = 1f;
-            UpgradeBus.instance.incomingDamageCoefficient = 1f;
-            UpgradeBus.instance.damageBoost = 0;
-            if (BeatScript.PreviousMovementSpeed > 0) __instance.movementSpeed = BeatScript.PreviousMovementSpeed;
         }
 
         [HarmonyPatch("DamagePlayer")]
@@ -245,6 +241,13 @@ namespace MoreShipUpgrades.Patches
             if (!UpgradeBus.instance.sickBeats || __instance != GameNetworkManager.Instance.localPlayerController) return;
             UpgradeBus.instance.boomBoxes.RemoveAll(b => b == null);
             bool result = false;
+            if (__instance.isPlayerDead)
+            {
+                if (!UpgradeBus.instance.EffectsActive) return; // No need to do anything
+                UpgradeBus.instance.EffectsActive = result;
+                BeatScript.HandlePlayerEffects(__instance);
+                return; // Clean all effects from Sick Beats since the player's dead
+            }
             foreach(BoomboxItem boom in UpgradeBus.instance.boomBoxes)
             {
                 if (!boom.isPlayingMusic)

@@ -7,7 +7,7 @@ namespace MoreShipUpgrades.UpgradeComponents
     public class BeatScript : BaseUpgrade
     {
         public static string UPGRADE_NAME = "Sick Beats";
-        public static float PreviousMovementSpeed;
+        private static LGULogger logger = new LGULogger(UPGRADE_NAME);
 
         void Start()
         {
@@ -39,21 +39,20 @@ namespace MoreShipUpgrades.UpgradeComponents
             UpgradeBus.instance.BoomboxIcon.SetActive(UpgradeBus.instance.EffectsActive);
             if(UpgradeBus.instance.EffectsActive)
             {
-                if (UpgradeBus.instance.cfg.BEATS_SPEED)
-                {
-                    PreviousMovementSpeed = player.movementSpeed; // I don't like this
-                    player.movementSpeed += UpgradeBus.instance.cfg.BEATS_SPEED_INC;
-                }
-                if(UpgradeBus.instance.cfg.BEATS_STAMINA) UpgradeBus.instance.staminaDrainCoefficient = UpgradeBus.instance.cfg.BEATS_STAMINA_CO;
+                logger.LogDebug("Applying effects!");
+                logger.LogDebug($"Updating player's movement speed ({player.movementSpeed})");
+                if (UpgradeBus.instance.cfg.BEATS_SPEED) player.movementSpeed += UpgradeBus.instance.cfg.BEATS_SPEED_INC;
+                logger.LogDebug($"Updated player's movement speed ({player.movementSpeed})");
+                if (UpgradeBus.instance.cfg.BEATS_STAMINA) UpgradeBus.instance.staminaDrainCoefficient = UpgradeBus.instance.cfg.BEATS_STAMINA_CO;
                 if(UpgradeBus.instance.cfg.BEATS_DEF) UpgradeBus.instance.incomingDamageCoefficient = UpgradeBus.instance.cfg.BEATS_DEF_CO;
                 if(UpgradeBus.instance.cfg.BEATS_DMG) UpgradeBus.instance.damageBoost = UpgradeBus.instance.cfg.BEATS_DMG_INC;
             }
             else
             {
-                if (UpgradeBus.instance.cfg.BEATS_SPEED)
-                {
-                    player.movementSpeed = PreviousMovementSpeed; // but it should be fine...           right? 
-                }
+                logger.LogDebug("Removing effects!");
+                logger.LogDebug($"Updating player's movement speed ({player.movementSpeed})");
+                if (UpgradeBus.instance.cfg.BEATS_SPEED) player.movementSpeed -= UpgradeBus.instance.cfg.BEATS_SPEED_INC;
+                logger.LogDebug($"Updated player's movement speed ({player.movementSpeed})");
                 UpgradeBus.instance.staminaDrainCoefficient = 1f;
                 UpgradeBus.instance.incomingDamageCoefficient = 1f;
                 UpgradeBus.instance.damageBoost = 0;
