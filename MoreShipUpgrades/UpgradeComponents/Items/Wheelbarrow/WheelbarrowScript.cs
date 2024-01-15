@@ -72,6 +72,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         /// Trigger responsible to allow interacting with wheelbarrow's container of items
         /// </summary>
         private InteractTrigger[] triggers;
+        protected bool playSounds;
         private Dictionary<Restrictions, Func<bool>> checkMethods;
 
         private const string ITEM_NAME = "Wheelbarrow";
@@ -150,8 +151,10 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             if (soundCounter < 2.0f) return;
             soundCounter = 0f;
             int index = randomNoise.Next(0, wheelsClip.Length);
-            wheelsNoise.PlayOneShot(wheelsClip[index], 0.2f);
-            WalkieTalkie.TransmitOneShotAudio(wheelsNoise, wheelsClip[index], 0.2f);
+            
+            
+            if (playSounds) wheelsNoise.PlayOneShot(wheelsClip[index], 0.2f);
+            if (playSounds) WalkieTalkie.TransmitOneShotAudio(wheelsNoise, wheelsClip[index], 0.2f);
             RoundManager.Instance.PlayAudibleNoise(transform.position, noiseRange, 0.2f, 0, isInElevator && StartOfRound.Instance.hangarDoorsClosed);
         }
         private void UpdateInteractTriggers()

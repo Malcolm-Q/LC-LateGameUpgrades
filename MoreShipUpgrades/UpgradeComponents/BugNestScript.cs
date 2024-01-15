@@ -10,7 +10,6 @@ namespace MoreShipUpgrades.UpgradeComponents
     {
         Animator anim;
         public GameObject loot;
-        public string toolType;
         InteractTrigger trig;
         AudioSource audio;
         public AudioClip cleanNoise;

@@ -26,6 +26,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             noiseRange = UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_NOISE_RANGE;
             sloppiness = UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_MOVEMENT_SLOPPY;
             lookSensitivityDrawback = UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK;
+            playSounds = UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_PLAY_NOISE;
             logger.LogDebug("Spawned in the scene!");
         }
     }
