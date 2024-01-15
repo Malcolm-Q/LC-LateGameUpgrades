@@ -149,6 +149,7 @@ namespace MoreShipUpgrades
         void SetupExorcismContract(ref AssetBundle bundle, AnimationCurve curve)
         {
             Item contractLoot = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "ExorcLootItem.asset");
+            contractLoot.spawnPrefab.AddComponent<ScrapValueSyncer>();
             Items.RegisterItem(contractLoot);
             Utilities.FixMixerGroups(contractLoot.spawnPrefab);
             NetworkPrefabs.RegisterNetworkPrefab(contractLoot.spawnPrefab);

@@ -96,7 +96,7 @@ namespace MoreShipUpgrades.UpgradeComponents
 
             if(IsHost || IsServer)
             {
-                ip = $"{Random.Range(0, 255)}.{Random.Range(0, 99)}.{Random.Range(0, 99)}.{Random.Range(0, 255)}";
+                ip = $"{Random.Range(0, 213)}.{Random.Range(0, 99)}.{Random.Range(0, 99)}.{Random.Range(0, 255)}";
                 IPText.text = IPText.text.Replace("[IP]", ip);
                 user = RandomString();
                 pass = RandomString();
