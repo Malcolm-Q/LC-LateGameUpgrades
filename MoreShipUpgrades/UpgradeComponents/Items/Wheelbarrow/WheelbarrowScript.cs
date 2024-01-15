@@ -48,6 +48,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         /// Current amount of items stored in the wheelbarrow
         /// </summary>
         private int currentAmountItems;
+        private float totalWeight;
         /// <summary>
         /// Multiplier to the inserted item's weight when inserted into the wheelbarrow to increase the wheelbarrow's total weight
         /// </summary>
@@ -96,6 +97,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             maximumAmountItems = UpgradeBus.instance.cfg.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS;
             weightReduceMultiplier = UpgradeBus.instance.cfg.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER;
             defaultWeight = itemProperties.weight;
+            totalWeight = defaultWeight;
             soundCounter = 0f;
 
             wheelsNoise = GetComponentInChildren<AudioSource>();
@@ -198,15 +200,12 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         private bool CheckWheelbarrowRestrictions()
         {
             if (restriction == Restrictions.None) return false;
-            logger.LogDebug(restriction);
             return checkMethods[restriction].Invoke();
         }
         private bool CheckWheelbarrowAllRestrictions()
         {
             bool weightCondition = itemProperties.weight - (defaultWeight - 1f) > 1f + maximumWeightAllowed / 100f;
             bool itemCountCondition = currentAmountItems >= maximumAmountItems;
-            logger.LogDebug(weightCondition);
-            logger.LogDebug(itemCountCondition);
             if (weightCondition || itemCountCondition)
             {
                 foreach (InteractTrigger trigger in triggers)
@@ -247,19 +246,21 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         public override void DiscardItem()
         {
             wheelsNoise.Stop();
+            playerHeldBy.carryWeight += Mathf.Clamp(exoskeletonScript.DecreasePossibleWeight(defaultWeight - 1f), 0, 10f);
+            playerHeldBy.carryWeight -= Mathf.Clamp(exoskeletonScript.DecreasePossibleWeight(totalWeight - 1f), 0, 10f);
             base.DiscardItem();
         }
         public override void GrabItem()
         {
             base.GrabItem();
             if (playerHeldBy.isCrouching) playerHeldBy.Crouch(!playerHeldBy.isCrouching);
+            UpdateWheelbarrowWeightServerRpc();
         }
         /// <summary>
         /// Setups attributes related to the wheelbarrow item
         /// </summary>
         private void SetupItemAttributes()
         {
-            itemProperties = Instantiate(itemProperties);
             grabbable = true;
             grabbableToEnemies = true;
             SetupScanNodeProperties();
@@ -294,17 +295,17 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         private void UpdateWheelbarrowWeightClientRpc()
         {
             GrabbableObject[] storedItems = GetComponentsInChildren<GrabbableObject>();
-            logger.LogDebug(storedItems.Length);
-            if (playerHeldBy) playerHeldBy.carryWeight -= Mathf.Clamp(exoskeletonScript.DecreasePossibleWeight(itemProperties.weight - 1f), 0f, 10f);
-            itemProperties.weight = defaultWeight;
+            if (playerHeldBy) playerHeldBy.carryWeight -= Mathf.Clamp(exoskeletonScript.DecreasePossibleWeight(defaultWeight - 1f), 0f, 10f);
+            totalWeight = defaultWeight;
 
             for (int i = 0; i < storedItems.Length; i++)
             {
                 if (storedItems[i].GetComponent<WheelbarrowScript>() != null) continue;
                 GrabbableObject storedItem = storedItems[i];
-                itemProperties.weight += (storedItem.itemProperties.weight - 1f) * weightReduceMultiplier;
+                totalWeight += (storedItem.itemProperties.weight - 1f) * weightReduceMultiplier;
             }
-            if (playerHeldBy) playerHeldBy.carryWeight += Mathf.Clamp(exoskeletonScript.DecreasePossibleWeight(itemProperties.weight - 1f), 0f, 10f);
+            logger.LogDebug($"There's currently {(totalWeight - 1f)*100} lbs in the wheelcart");
+            if (playerHeldBy) playerHeldBy.carryWeight += Mathf.Clamp(exoskeletonScript.DecreasePossibleWeight(totalWeight - 1f), 0f, 10f);
         }
         /// <summary>
         /// Action when the interaction bar is completely filled on the container of the wheelbarrow.

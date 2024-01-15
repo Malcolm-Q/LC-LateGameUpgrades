@@ -18,7 +18,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             if (wheel == null) logger.LogError($"Couldn't find the wheel's {nameof(GameObject)} to perform rotations");
             maximumAmountItems = UpgradeBus.instance.cfg.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS;
             weightReduceMultiplier = UpgradeBus.instance.cfg.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER;
-            defaultWeight = itemProperties.weight;
             Enum.TryParse(typeof(Restrictions), UpgradeBus.instance.cfg.WHEELBARROW_RESTRICTION_MODE, out object parsedRestriction);
             if (parsedRestriction == null)
             {
