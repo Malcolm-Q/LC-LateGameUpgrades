@@ -468,7 +468,7 @@ namespace MoreShipUpgrades.Misc
 
             terminal.groupCredits -= days * UpgradeBus.instance.cfg.EXTEND_DEADLINE_PRICE;
             LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits);
-            UpgradeBus.instance.extendScript.ExtendDeadlineServerRpc(days);
+            LGUStore.instance.ExtendDeadlineServerRpc(days);
 
             return DisplayTerminalMessage($"Extended the deadline by {days} day{(days == 1 ? "" : "s")}.\n\n");
         }
