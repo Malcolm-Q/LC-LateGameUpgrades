@@ -16,26 +16,26 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         public override void Start()
         {
             base.Start();
-            particles = GetComponent<ParticleSystem>();
+            particles = GetComponentInChildren<ParticleSystem>();
             if (particles == null) logger.LogError($"Couldn't find {nameof(ParticleSystem)} component in the sample...");
         }
         public override void EquipItem()
         {
-            particles?.Play();
             base.EquipItem();
+            particles?.Play();
         }
 
         public override void DiscardItem()
         {
-            particles?.Play();
             base.DiscardItem();
+            particles?.Play();
         }
 
         public override void PocketItem()
         {
+            base.PocketItem();
             particles?.Stop();
             particles?.Clear();
-            base.PocketItem();
         }
     }
 }
