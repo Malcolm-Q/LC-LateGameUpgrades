@@ -187,7 +187,7 @@ namespace MoreShipUpgrades.Managers
         public void ResetAllValues(bool wipeObjRefs = true)
         {
             ResetPlayerAttributes();
-            ResetShipAttributes();
+            ResetShipAttributesServerRpc();
             EffectsActive = false;
             DestroyTraps = false;
             scannerUpgrade = false;
@@ -239,7 +239,7 @@ namespace MoreShipUpgrades.Managers
             }
 
         }
-
+        private 
         private void ResetPlayerAttributes()
         {
             PlayerControllerB player = GameNetworkManager.Instance.localPlayerController;
@@ -251,13 +251,17 @@ namespace MoreShipUpgrades.Managers
             if (cfg.STRONG_LEGS_ENABLED && strongLegs) strongLegsScript.ResetStrongLegsBuff(ref player);
             if (cfg.PLAYER_HEALTH_ENABLED && playerHealth) playerHealthScript.ResetStimpackBuff(ref player);
         }
-        private void ResetShipAttributes()
+        private void ResetShipAttributesClientRpc()
         {
             HangarShipDoor shipDoors = GetShipDoors();
             if (shipDoors == null) return; // Very edge case
 
             logger.LogDebug($"Resetting the ship's attributes");
             if (cfg.DOOR_HYDRAULICS_BATTERY_ENABLED && doorsHydraulicsBattery) DoorsHydraulicsBattery.ResetDoorsHydraulicsBattery(ref shipDoors);
+        }
+        private void ResetShipAttributesServerRpc()
+        {
+            ResetShipAttributesClientRpc();
         }
 
         internal void GenerateSales(int seed = -1) // TODO: Save sales
