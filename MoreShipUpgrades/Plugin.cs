@@ -190,8 +190,6 @@ namespace MoreShipUpgrades
             mapObjDef.spawnableMapObject = new SpawnableMapObject();
             mapObjDef.spawnableMapObject.prefabToSpawn = mainItem.spawnPrefab;
             MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
-            mainItem.isScrap = false;
-            Items.RegisterShopItem(mainItem, 0);
         }
 
 
