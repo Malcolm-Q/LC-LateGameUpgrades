@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using System;
 using System.Collections.Generic;
 using Unity.Netcode;

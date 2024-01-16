@@ -1,8 +1,10 @@
 ﻿using GameNetcodeStuff;
 using LethalLib.Modules;
 using MoreShipUpgrades.Misc;
-using MoreShipUpgrades.UpgradeComponents;
+using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Items;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
@@ -128,7 +130,7 @@ namespace MoreShipUpgrades.Managers
         public GameObject BoomboxIcon;
         public bool EffectsActive;
         public GameObject helmetModel;
-        public HelmetScript helmetScript;
+        public Helmet helmetScript;
         public Dictionary<string, AudioClip> SFX = new Dictionary<string, AudioClip>();
         public bool helmetDesync;
         public List<string> bombOrder = new List<string>();
@@ -383,6 +385,8 @@ namespace MoreShipUpgrades.Managers
             SetupInternsTerminalNode();
 
             SetupContractTerminalNode();
+
+            SetupExtendDeadlineTerminalNode();
 
             SetupPlayerHealthTerminalNode();
 

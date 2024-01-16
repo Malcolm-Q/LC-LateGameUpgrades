@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Misc;
-using MoreShipUpgrades.UpgradeComponents;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using System;
 using System.Collections.Generic;
 using System.Linq;

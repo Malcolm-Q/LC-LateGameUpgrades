@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.UpgradeComponents;
+using MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exorcism;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace MoreShipUpgrades.Misc
         private static LGULogger logger = new LGULogger(nameof(CommandParser));
 
         const string LOAD_LGU_COMMAND = "load lgu";
-        private static string[] LEVELS = {
+        internal static string[] LEVELS = {
             "41 Experimentation",
             "220 Assurance",
             "56 Vow",

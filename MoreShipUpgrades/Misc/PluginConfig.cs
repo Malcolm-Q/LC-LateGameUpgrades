@@ -2,7 +2,8 @@
 using System;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using MoreShipUpgrades.UpgradeComponents;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 
 
 namespace MoreShipUpgrades.Misc

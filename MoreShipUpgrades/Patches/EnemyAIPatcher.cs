@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
-using MoreShipUpgrades.UpgradeComponents;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;

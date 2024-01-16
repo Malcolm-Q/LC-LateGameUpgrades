@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
