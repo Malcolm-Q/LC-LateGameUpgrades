@@ -23,7 +23,6 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             prop = GetComponent<PhysicsProp>();
             prop.scrapValue = UpgradeBus.instance.cfg.CONTRACT_EXTRACT_REWARD;
-            prop.itemProperties.weight = UpgradeBus.instance.cfg.CONTRACT_EXTRACT_WEIGHT;
 
             ScanNodeProperties node = GetComponentInChildren<ScanNodeProperties>();
             node.scrapValue = UpgradeBus.instance.cfg.CONTRACT_EXTRACT_REWARD;

@@ -226,6 +226,7 @@ namespace MoreShipUpgrades
             Item scav = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "ScavItem.asset");
             if (scav == null) return;
 
+            scav.weight = UpgradeBus.instance.cfg.CONTRACT_EXTRACT_WEIGHT;
             ContractObject co = scav.spawnPrefab.AddComponent<ContractObject>();
             co.contractType = "extraction";
 

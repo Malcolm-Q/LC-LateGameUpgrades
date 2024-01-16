@@ -171,6 +171,8 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("GrabObjectClientRpc")]
         public static void GrabObjectClientRpcPostfix(PlayerControllerB __instance)
         {
+            if (__instance.currentlyHeldObjectServer == null) return;
+
             WheelbarrowScript wheelbarrow = __instance.currentlyHeldObjectServer.GetComponentInParent<WheelbarrowScript>();
             if (wheelbarrow == null || __instance.currentlyHeldObjectServer is WheelbarrowScript) return;
             logger.LogDebug("Removing item's parent to allow placing it back in again");
