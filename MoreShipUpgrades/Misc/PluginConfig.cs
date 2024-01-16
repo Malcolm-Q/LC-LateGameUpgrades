@@ -35,6 +35,7 @@ namespace MoreShipUpgrades.Misc
         public bool EXTEND_DEADLINE_ENABLED { get; set; }
         public bool WHEELBARROW_ENABLED { get; set; }
         public bool SCRAP_WHEELBARROW_ENABLED { get; set; }
+        public bool DOOR_HYDRAULICS_BATTERY_ENABLED {  get; set; }
 
         // individual or shared
         public bool ADVANCED_TELE_INDIVIDUAL { get; set; }
@@ -78,6 +79,7 @@ namespace MoreShipUpgrades.Misc
         public int EXTEND_DEADLINE_PRICE { get; set; }
         public int CONTRACT_PRICE { get; set; }
         public int WHEELBARROW_PRICE { get; set; }
+        public int DOOR_HYDRAULICS_BATTERY_PRICE { get; set; }
 
         // attributes
         public float BIGGER_LUNGS_STAMINA_REGEN_INCREASE { get; set; }
@@ -232,6 +234,9 @@ namespace MoreShipUpgrades.Misc
         public float SCRAP_WHEELBARROW_RARITY { get; set; }
         public bool SCRAP_WHEELBARROW_PLAY_NOISE {  get; set; }
         public float SCAV_VOLUME { get; set; }
+        public string DOOR_HYDRAULICS_BATTERY_PRICES { get; set; }
+        public float DOOR_HYDRAULICS_BATTERY_INITIAL { get; set; }
+        public float DOOR_HYDRAULICS_BATTERY_INCREMENTAL {  get; set; }
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -479,6 +484,13 @@ namespace MoreShipUpgrades.Misc
             DIVEKIT_PRICE = ConfigEntry(topSection, "price", 650, "Price for Diving Kit.");
             DIVEKIT_WEIGHT = ConfigEntry(topSection, "Item weight", 1.65f, "-1 and multiply by 100 (1.65 = 65 lbs)");
             DIVEKIT_TWO_HANDED = ConfigEntry(topSection, "Two Handed Item", true, "One or two handed item.");
+
+            topSection = DoorsHydraulicsBattery.UPGRADE_NAME;
+            DOOR_HYDRAULICS_BATTERY_ENABLED = ConfigEntry(topSection, DoorsHydraulicsBattery.ENABLED_SECTION, true, DoorsHydraulicsBattery.ENABLED_DESCRIPTION);
+            DOOR_HYDRAULICS_BATTERY_PRICE = ConfigEntry(topSection, DoorsHydraulicsBattery.PRICE_SECTION, DoorsHydraulicsBattery.PRICE_DEFAULT);
+            DOOR_HYDRAULICS_BATTERY_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, DoorsHydraulicsBattery.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            DOOR_HYDRAULICS_BATTERY_INITIAL = ConfigEntry(topSection, DoorsHydraulicsBattery.INITIAL_SECTION, DoorsHydraulicsBattery.INITIAL_DEFAULT, DoorsHydraulicsBattery.INITIAL_DESCRIPTION);
+            DOOR_HYDRAULICS_BATTERY_INCREMENTAL = ConfigEntry(topSection, DoorsHydraulicsBattery.INCREMENTAL_SECTION, DoorsHydraulicsBattery.INCREMENTAL_DEFAULT, DoorsHydraulicsBattery.INCREMENTAL_DESCRIPTION);
 
             topSection = "Wheelbarrow";
             WHEELBARROW_ENABLED = ConfigEntry(topSection, "Enable the Wheelbarrow Item", true, "Allows you to buy a wheelbarrow to carry items outside of your inventory");

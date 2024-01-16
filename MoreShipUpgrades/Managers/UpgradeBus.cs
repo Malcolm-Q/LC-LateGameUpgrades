@@ -39,6 +39,7 @@ namespace MoreShipUpgrades.Managers
         public bool lightningRodActive = false;
         public bool hunter = false;
         public bool playerHealth = false;
+        public bool doorsHydraulicsBattery = false;
 
         public int lungLevel = 0;
         public int helmetHits = 0;
@@ -52,6 +53,7 @@ namespace MoreShipUpgrades.Managers
         public int scanLevel = 0;
         public int nightVisionLevel = 0;
         public int playerHealthLevel = 0;
+        public int doorsHydraulicsBatteryLevel = 0;
 
         public float flashCooldown = 0f;
         public float alteredWeight = 1f;
@@ -77,6 +79,7 @@ namespace MoreShipUpgrades.Managers
         public TerminalNode modStoreInterface;
         public Terminal terminal;
         public PlayerControllerB localPlayer;
+        private HangarShipDoor hangarDoors;
 
         public List<BoomboxItem> boomBoxes = new List<BoomboxItem>();
 
@@ -94,6 +97,7 @@ namespace MoreShipUpgrades.Managers
             { proteinPowderScript.UPGRADE_NAME, level => instance.cfg.PROTEIN_UNLOCK_FORCE + 1 + (instance.cfg.PROTEIN_INCREMENT * level) },
             { beekeeperScript.UPGRADE_NAME, level => 100 * (instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (level * instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT)) },
             { playerHealthScript.UPGRADE_NAME, level => instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK + (level)*instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT },
+            { DoorsHydraulicsBattery.UPGRADE_NAME, level => instance.cfg.DOOR_HYDRAULICS_BATTERY_INITIAL + (level)*instance.cfg.DOOR_HYDRAULICS_BATTERY_INCREMENTAL },
         };
 
         public Dictionary<string, Item> ItemsToSync = new Dictionary<string, Item>();
@@ -155,6 +159,11 @@ namespace MoreShipUpgrades.Managers
             if (localPlayer == null) localPlayer = GameNetworkManager.Instance.localPlayerController;
             return localPlayer;
         }
+        public HangarShipDoor GetShipDoors()
+        {
+            if (hangarDoors == null) hangarDoors = FindObjectOfType<HangarShipDoor>();
+            return hangarDoors;
+        }
         public TerminalNode ConstructNode()
         {
             modStoreInterface = ScriptableObject.CreateInstance<TerminalNode>();
@@ -178,6 +187,7 @@ namespace MoreShipUpgrades.Managers
         public void ResetAllValues(bool wipeObjRefs = true)
         {
             ResetPlayerAttributes();
+            ResetShipAttributes();
             EffectsActive = false;
             DestroyTraps = false;
             scannerUpgrade = false;
@@ -240,6 +250,14 @@ namespace MoreShipUpgrades.Managers
             if (cfg.BIGGER_LUNGS_ENABLED && biggerLungs) biggerLungScript.ResetBiggerLungsBuff(ref player);
             if (cfg.STRONG_LEGS_ENABLED && strongLegs) strongLegsScript.ResetStrongLegsBuff(ref player);
             if (cfg.PLAYER_HEALTH_ENABLED && playerHealth) playerHealthScript.ResetStimpackBuff(ref player);
+        }
+        private void ResetShipAttributes()
+        {
+            HangarShipDoor shipDoors = GetShipDoors();
+            if (shipDoors == null) return; // Very edge case
+
+            logger.LogDebug($"Resetting the ship's attributes");
+            if (cfg.DOOR_HYDRAULICS_BATTERY_ENABLED && doorsHydraulicsBattery) DoorsHydraulicsBattery.ResetDoorsHydraulicsBattery(ref shipDoors);
         }
 
         internal void GenerateSales(int seed = -1) // TODO: Save sales
@@ -388,8 +406,19 @@ namespace MoreShipUpgrades.Managers
             SetupLocksmithTerminalNode();
 
             SetupSickBeatsTerminalNode();
-        }
 
+            SetupShutterBatteriesTerminalNode();
+            terminalNodes.Sort();
+        }
+        private void SetupShutterBatteriesTerminalNode()
+        {
+            SetupMultiplePurchasableTerminalNode(DoorsHydraulicsBattery.UPGRADE_NAME,
+                                                true,
+                                                cfg.DOOR_HYDRAULICS_BATTERY_ENABLED,
+                                                cfg.DOOR_HYDRAULICS_BATTERY_PRICE,
+                                                ParseUpgradePrices(cfg.DOOR_HYDRAULICS_BATTERY_PRICES),
+                                                "LVL {0} - ${1} - Increases the door's hydraulic capacity to remain closed by {2} units\n");
+        }
         private void SetupSickBeatsTerminalNode()
         {
             string txt = $"Sick Beats - ${cfg.BEATS_PRICE}\nPlayers within a {cfg.BEATS_RADIUS} unit radius from an active boombox will have the following effects:\n\n";
