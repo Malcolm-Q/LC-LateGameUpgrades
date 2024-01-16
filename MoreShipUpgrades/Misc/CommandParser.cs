@@ -515,9 +515,9 @@ namespace MoreShipUpgrades.Misc
                 case "demon": outputNode = LookupDemon(secondWord, thirdWord); return;
                 case "lookup": outputNode = DefuseBombCommand(secondWord); return;
                 case "toggle": outputNode = ExecuteToggleCommands(secondWord, ref outputNode); return;
-                case "initattack":
                 case "contract": outputNode = TryGetContract(ref terminal); return;
                 case "bruteforce": outputNode= ExecuteBruteForce(secondWord); return;
+                case "initattack":
                 case "atk": outputNode = ExecuteDiscombobulatorAttack(ref terminal); return;
                 case "cd":
                 case "cooldown": outputNode = ExecuteDiscombobulatorCooldown(); return;

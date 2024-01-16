@@ -250,7 +250,6 @@ namespace MoreShipUpgrades.Managers
             SaleData = new Dictionary<string, float>();
             foreach(CustomTerminalNode node in terminalNodes)
             {
-                if(node.Name == "Interns" || node.Name == "Contract") { continue; }
                 if(Random.value > cfg.SALE_PERC)
                 {
                     node.salePerc = Random.Range(0.60f, 0.90f);
@@ -381,12 +380,6 @@ namespace MoreShipUpgrades.Managers
             SetupWalkieGPSTerminalNode();
 
             SetupBackMusclesTerminalNode();
-
-            SetupInternsTerminalNode();
-
-            SetupContractTerminalNode();
-
-            SetupExtendDeadlineTerminalNode();
 
             SetupPlayerHealthTerminalNode();
 
@@ -548,31 +541,6 @@ namespace MoreShipUpgrades.Managers
                                                 cfg.BACK_MUSCLES_PRICE,
                                                 ParseUpgradePrices(cfg.BACK_MUSCLES_UPGRADE_PRICES),
                                                 AssetBundleHandler.GetInfoFromJSON(exoskeletonScript.UPGRADE_NAME));
-        }
-        private void SetupInternsTerminalNode()
-        {
-            SetupOneTimeTerminalNode("Interns",
-                                    cfg.SHARED_UPGRADES ? true : !cfg.INTERN_INDIVIDUAL,
-                                    cfg.INTERN_ENABLED,
-                                    cfg.INTERN_PRICE,
-                                    string.Format(AssetBundleHandler.GetInfoFromJSON("Interns"), cfg.INTERN_PRICE));
-        }
-        private void SetupExtendDeadlineTerminalNode()
-        {
-            SetupOneTimeTerminalNode("Extend Deadline",
-                                    true,
-                                    cfg.EXTEND_DEADLINE_ENABLED,
-                                    cfg.EXTEND_DEADLINE_PRICE,
-                                    "Extends the deadline by a specified amount of days.");
-        }
-
-        private void SetupContractTerminalNode()
-        {
-            SetupOneTimeTerminalNode("Contract",
-                                    true,
-                                    cfg.CONTRACTS_ENABLED,
-                                    cfg.CONTRACT_PRICE,
-                                    string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), cfg.CONTRACT_PRICE));
         }
         private void SetupPagerTerminalNode()
         {
