@@ -13,7 +13,7 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("MeetsScanNodeRequirements")]
         private static void alterReqs(ScanNodeProperties node, ref bool __result, PlayerControllerB playerScript)
         {
-            if (node.GetComponentInParent<WheelbarrowScript>() != null && (node.headerText != "Shopping Cart" && node.headerText != "Wheelbarrow")) { __result = false; return; }
+            if (node != null && node.GetComponentInParent<WheelbarrowScript>() != null && (node.headerText != "Shopping Cart" && node.headerText != "Wheelbarrow")) { __result = false; return; }
             if (!UpgradeBus.instance.scannerUpgrade) { return; }
             if (node == null) { __result = false; return; }
             bool throughWall = Physics.Linecast(playerScript.gameplayCamera.transform.position, node.transform.position, 256, QueryTriggerInteraction.Ignore);
