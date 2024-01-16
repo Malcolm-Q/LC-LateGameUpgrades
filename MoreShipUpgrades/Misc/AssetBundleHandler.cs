@@ -1,5 +1,7 @@
 ﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.UpgradeComponents;
+using MoreShipUpgrades.UpgradeComponents.Commands;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

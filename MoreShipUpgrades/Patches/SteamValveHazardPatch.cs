@@ -1,5 +1,5 @@
 ﻿using HarmonyLib;
-using MoreShipUpgrades.UpgradeComponents;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using System;
 using System.Collections.Generic;
 using System.Linq;

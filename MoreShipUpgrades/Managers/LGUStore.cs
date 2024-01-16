@@ -6,10 +6,11 @@ using Unity.Netcode;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.Collections;
-using MoreShipUpgrades.UpgradeComponents;
 using System.Linq;
 using GameNetcodeStuff;
 using MoreShipUpgrades.UpgradeComponents.Items;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 
 namespace MoreShipUpgrades.Managers
 {
