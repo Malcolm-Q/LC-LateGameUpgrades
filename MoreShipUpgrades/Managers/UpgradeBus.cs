@@ -332,6 +332,13 @@ namespace MoreShipUpgrades.Managers
                 Items.RemoveShopItem(ItemsToSync["Night"]);
             }
             else if (ItemsToSync["Night"].creditsWorth != cfg.NIGHT_VISION_PRICE) Items.UpdateShopItemPrice(ItemsToSync["Night"], cfg.NIGHT_VISION_PRICE);
+
+            if (!cfg.WHEELBARROW_ENABLED)
+            {
+                logger.LogInfo("Removing Wheelbarrow from store.");
+                Items.RemoveShopItem(ItemsToSync["Wheel"]);
+            }
+            else if (ItemsToSync["Wheel"].creditsWorth != cfg.NIGHT_VISION_PRICE) Items.UpdateShopItemPrice(ItemsToSync["Wheel"], cfg.NIGHT_VISION_PRICE);
         }
 
         internal void Reconstruct()
