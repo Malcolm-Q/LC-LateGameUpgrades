@@ -137,7 +137,7 @@ namespace MoreShipUpgrades
 
             Utilities.FixMixerGroups(bomb.spawnPrefab);
             NetworkPrefabs.RegisterNetworkPrefab(bomb.spawnPrefab);
-            Items.RegisterItem(bomb);
+            //Items.RegisterItem(bomb);
 
             SpawnableMapObjectDef mapObjDefBug = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
             mapObjDefBug.spawnableMapObject = new SpawnableMapObject();
@@ -190,6 +190,8 @@ namespace MoreShipUpgrades
             mapObjDef.spawnableMapObject = new SpawnableMapObject();
             mapObjDef.spawnableMapObject.prefabToSpawn = mainItem.spawnPrefab;
             MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
+            mainItem.isScrap = false;
+            Items.RegisterShopItem(mainItem, 0);
         }
 
 

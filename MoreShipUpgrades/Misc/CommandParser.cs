@@ -388,6 +388,12 @@ namespace MoreShipUpgrades.Misc
             if(UpgradeBus.instance.contractLevel != "None")
             {
                 txt = $"You currently have a {UpgradeBus.instance.contractType} contract on {UpgradeBus.instance.contractLevel}!\n\n";
+                foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
+                {
+                    if (node.Name != "Contract") continue;
+                    txt += node.Description;
+                    break;
+                }
                 logger.LogInfo($"User tried starting a new contract while they still have a {UpgradeBus.instance.contractType} contract on {UpgradeBus.instance.contractLevel}!");
                 return DisplayTerminalMessage(txt);
             }

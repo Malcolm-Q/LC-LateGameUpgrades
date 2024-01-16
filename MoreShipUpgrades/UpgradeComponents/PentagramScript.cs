@@ -39,8 +39,9 @@ namespace MoreShipUpgrades.UpgradeComponents
         public AudioClip chant, portal;
         AudioSource audio;
 
-        void Start()
+        public override void OnNetworkSpawn()
         {
+            base.OnNetworkSpawn();
             place = GetComponent<PlaceableObjectsSurface>();
             audio = GetComponent<AudioSource>();
             trig = GetComponent<InteractTrigger>();
@@ -54,6 +55,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             currentRitual = DemonInstructions[DemonInstructions.Keys.ElementAt(index)].ToList();
             DemonName = DemonInstructions.Keys.ElementAt(index);
+            if(trig == null) trig = GetComponent<InteractTrigger>();
             trig.disabledHoverTip = $"{DemonName} ALTAR";
         }
         void Interact(PlayerControllerB player)

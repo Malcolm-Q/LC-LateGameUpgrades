@@ -71,6 +71,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             "drinking_and_driving_tutorial.mp4",
         };
         private bool interactable = true;
+        private PlayerControllerB interactingPlayer;
 
         void Start()
         {
@@ -115,6 +116,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             if (interactable)
             {
+                interactingPlayer = player;
                 root.SetActive(true);
                 if(IsHost || IsServer)
                 {
@@ -350,6 +352,7 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         void Update() // don't yell at me
         {
+            if (GameNetworkManager.Instance.localPlayerController != interactingPlayer) return;
             if (Keyboard.current.enterKey.wasReleasedThisFrame)
             {
                 HandleInput(gameField.text);

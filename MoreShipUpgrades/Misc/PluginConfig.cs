@@ -230,6 +230,7 @@ namespace MoreShipUpgrades.Misc
         public float SCRAP_WHEELBARROW_MOVEMENT_SLOPPY { get; set; }
         public float SCRAP_WHEELBARROW_RARITY { get; set; }
         public bool SCRAP_WHEELBARROW_PLAY_NOISE {  get; set; }
+        public float SCAV_VOLUME { get; set; }
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -254,6 +255,7 @@ namespace MoreShipUpgrades.Misc
             CONTRACT_BUG_SPAWNS = ConfigEntry(topSection, "Hoarder Bug Spawn Number", 20, "How many bugs to spawn during exterminator contracts.");
             CONTRACT_GHOST_SPAWN = ConfigEntry(topSection, "Dress Girl Spawn Number", 3, "How many ghosts to spawn when failing exorcism contracts");
             CONTRACT_EXTRACT_WEIGHT = ConfigEntry(topSection,"Weight of an extraction human", 2.5f, "Subtract 1 and multiply by 100 (2.5 = 150lbs).");
+            SCAV_VOLUME = ConfigEntry(topSection,"Volume of the scavenger voice clips", 0.25f, "0.0 - 1.0");
             
             topSection = "Misc";
             SHARED_UPGRADES = ConfigEntry(topSection, "Convert all upgrades to be shared.", true, "Mod is designed to be played with this off.");

@@ -79,7 +79,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         void HealScavClientRpc()
         {
             trig.GetComponent<BoxCollider>().enabled = false;
-            audio.PlayOneShot(clipDict["heal"][0]);
+            audio.PlayOneShot(clipDict["heal"][0], UpgradeBus.instance.cfg.SCAV_VOLUME);
             anim.SetTrigger("heal");
             hurtState = false;
             StartCoroutine(WaitForHealAnim());
@@ -93,7 +93,9 @@ namespace MoreShipUpgrades.UpgradeComponents
 
         private IEnumerator AudioStream()
         {
-            yield return new WaitForSeconds(Random.Range(15f, 45f));
+            float TimeToWait = Random.Range(25f, 45f);
+            if (prop.isInShipRoom) TimeToWait *= 3f;
+            yield return new WaitForSeconds(TimeToWait);
             if(prop.isHeld)
             {
                 PlayAudioClientRpc(Random.Range(0, clipDict["held"].Length), "held");
@@ -112,7 +114,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         [ClientRpc]
         void PlayAudioClientRpc(int index, string soundType)
         {
-            audio.PlayOneShot(clipDict[soundType][index]);
+            audio.PlayOneShot(clipDict[soundType][index], UpgradeBus.instance.cfg.SCAV_VOLUME);
             RoundManager.Instance.PlayAudibleNoise(transform.position, 30f, 0.9f, 0, prop.isInShipRoom, 5);
         }
     }

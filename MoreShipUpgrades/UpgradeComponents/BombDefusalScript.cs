@@ -115,7 +115,7 @@ namespace MoreShipUpgrades.UpgradeComponents
             }
         }
 
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         void ReqBombStateChangeServerRpc(string wire)
         {
             BombStateChangeClientRpc(wire);
