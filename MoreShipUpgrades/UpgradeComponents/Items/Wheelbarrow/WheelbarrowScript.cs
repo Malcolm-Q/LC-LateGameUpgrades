@@ -309,6 +309,14 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
                 playerHeldBy.carryWeight += Mathf.Clamp(exoskeletonScript.DecreasePossibleWeight(itemProperties.weight - 1f), 0, 10f);
                 playerHeldBy.carryWeight -= Mathf.Clamp(exoskeletonScript.DecreasePossibleWeight(totalWeight - 1f), 0, 10f);
             }
+
+            GrabbableObject[] storedItems = GetComponentsInChildren<GrabbableObject>();
+            for (int i = 0; i < storedItems.Length; i++)
+            {
+                if (storedItems[i] is WheelbarrowScript) continue;
+                playerHeldBy.SetItemInElevator(playerHeldBy.isInHangarShipRoom, playerHeldBy.isInElevator, storedItems[i]);
+            }
+
             base.DiscardItem();
         }
         public override void GrabItem()

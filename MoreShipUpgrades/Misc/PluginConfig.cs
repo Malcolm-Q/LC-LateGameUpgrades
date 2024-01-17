@@ -495,12 +495,12 @@ namespace MoreShipUpgrades.Misc
             SCRAP_WHEELBARROW_ENABLED = ConfigEntry(topSection, "Enable the Wheelbarrow Scrap Item", true, "Allows you to scavenge a wheelbarrow in which you can store items on");
             SCRAP_WHEELBARROW_RARITY = ConfigEntry(topSection, "Spawn chance of Scrap Wheelbarrow Item", 0.9f, "How likely it is to a scrap wheelbarrow item to spawn when landing on a moon.");
             SCRAP_WHEELBARROW_WEIGHT = ConfigEntry(topSection, "Weight of the Wheelbarrow Scrap Item", 25f, "Weight of the scrap wheelbarrow's without any items in lbs");
-            SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS = ConfigEntry(topSection, "Maximum amount of items", 6, "Amount of items allowed before the scrap wheelbarrow is considered full");
-            SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER = ConfigEntry(topSection, "Weight reduction multiplier", 0.5f, "How much an item's weight will be ignored to the scrap wheelbarrow's total weight");
+            SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS = ConfigEntry(topSection, "Maximum amount of items for Scrap Wheelbarrow", 6, "Amount of items allowed before the scrap wheelbarrow is considered full");
+            SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER = ConfigEntry(topSection, "Weight reduction multiplier for Scrap Wheelbarrow", 0.5f, "How much an item's weight will be ignored to the scrap wheelbarrow's total weight");
             SCRAP_WHEELBARROW_MINIMUM_VALUE = ConfigEntry(topSection, "Minimum scrap value", 50, "Lower boundary of the scrap's possible value");
             SCRAP_WHEELBARROW_MAXIMUM_VALUE = ConfigEntry(topSection, "Maximum scrap value", 100, "Higher boundary of the scrap's possible value");
             SCRAP_WHEELBARROW_RESTRICTION_MODE = ConfigEntry(topSection, "Restrictions on the Wheelbarrow Scrap Item", "ItemCount", "Restriction applied when trying to insert an item on the scrap wheelbarrow.\nSupported values: None, ItemCount, TotalWeight, All");
-            SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED = ConfigEntry(topSection, "Maximum amount of weight", 100f, "How much weight (in lbs) a scrap wheelbarrow can carry in items before it is considered full.");
+            SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED = ConfigEntry(topSection, "Maximum amount of weight for Scrap Wheelbarrow", 100f, "How much weight (in lbs) a scrap wheelbarrow can carry in items before it is considered full.");
             SCRAP_WHEELBARROW_NOISE_RANGE = ConfigEntry(topSection, "Noise range of the Wheelbarrow Scrap Item", 18f, "How far the scrap wheelbarrow sound propagates to nearby enemies when in movement");
             SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK = ConfigEntry(topSection, "Look sensitivity drawback of the Scrap Wheelbarrow Item", 0.8f, "Value multiplied on the player's look sensitivity when moving with the Scrap wheelbarrow Item");
             SCRAP_WHEELBARROW_MOVEMENT_SLOPPY = ConfigEntry(topSection, "Sloppiness of the Scrap Wheelbarrow Item", 2f, "Value multiplied on the player's movement to give the feeling of drifting while carrying the Scrap Wheelbarrow Item");
