@@ -580,6 +580,7 @@ namespace MoreShipUpgrades
             barrowScript.itemProperties = wheelbarrow;
             barrowScript.wheelsClip = shoppingCartSound;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
+            Utilities.FixMixerGroups(wheelbarrow.spawnPrefab);
 
             AnimationCurve curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(cfg.SCRAP_WHEELBARROW_RARITY, 1), new Keyframe(1, 1));
             SpawnableMapObjectDef mapObjDef = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
@@ -607,6 +608,7 @@ namespace MoreShipUpgrades
             barrowScript.itemProperties = wheelbarrow;
             barrowScript.wheelsClip = wheelbarrowSound;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
+            Utilities.FixMixerGroups(wheelbarrow.spawnPrefab);
 
             UpgradeBus.instance.ItemsToSync.Add("Wheel", wheelbarrow);
 
