@@ -13,6 +13,7 @@ namespace MoreShipUpgrades.Misc
     internal class CommandParser
     {
         private static LGULogger logger = new LGULogger(nameof(CommandParser));
+        private static bool attemptCancelContract = false;
 
         const string LOAD_LGU_COMMAND = "load lgu";
         internal static string[] LEVELS = {
@@ -382,7 +383,28 @@ namespace MoreShipUpgrades.Misc
             displayText += "\n";
             return DisplayTerminalMessage(displayText);
         }
-
+        private static TerminalNode ExecuteContractCommands(string secondWord, ref Terminal terminal)
+        {
+            switch(secondWord)
+            {
+                case "cancel": return ExecuteContractCancelCommand(ref terminal);
+                default: return TryGetContract(ref terminal);
+            }
+        }
+        private static TerminalNode ExecuteContractCancelCommand(ref Terminal terminal)
+        {
+            TerminalNode node = ScriptableObject.CreateInstance<TerminalNode>();
+            if (UpgradeBus.instance.contractLevel == "None")
+            {
+                node.displayText = "You must have accepted a contract to execute this command...\n\n";
+                node.clearPreviousText = true;
+                return node;
+            }
+            attemptCancelContract = true;
+            node.clearPreviousText = true;
+            node.displayText = "Type CONFIRM to cancel your current contract. There will be no refunds.\n\n";
+            return node;
+        }
         static TerminalNode TryGetContract(ref Terminal terminal)
         {
             string txt = null;
@@ -503,19 +525,40 @@ namespace MoreShipUpgrades.Misc
                 default: return HandleBruteForce(secondWord);
             }
         }
+        private static TerminalNode CheckConfirmForCancel(string word, ref Terminal terminal)
+        {
+            attemptCancelContract = false;
+            TerminalNode node = ScriptableObject.CreateInstance<TerminalNode>();
+            if (word.ToLower() != "confirm")
+            {
+                node.displayText = "Failed to confirm user's input. Invalidated cancel contract request.\n\n";
+                node.clearPreviousText = true;
+                return node;
+            }
+            if (terminal.IsHost || terminal.IsServer) LGUStore.instance.SyncContractDetailsClientRpc("None", "None");
+            else LGUStore.instance.ReqSyncContractDetailsServerRpc("None", "None");
+            node.displayText = "Cancelling contract...\n\n";
+            node.clearPreviousText = true;
+            return node;
 
+        }
         public static void ParseLGUCommands(string fullText, ref Terminal terminal, ref TerminalNode outputNode)
         {
             string[] textArray = fullText.Split();
             string firstWord = textArray[0].ToLower();
             string secondWord = textArray.Length > 1 ? textArray[1].ToLower() : "";
             string thirdWord = textArray.Length > 2 ? textArray[2].ToLower() : "";
+            if (attemptCancelContract)
+            {
+                outputNode = CheckConfirmForCancel(firstWord, ref terminal);
+                return;
+            }
             switch(firstWord)
             {
                 case "demon": outputNode = LookupDemon(secondWord, thirdWord); return;
                 case "lookup": outputNode = DefuseBombCommand(secondWord); return;
                 case "toggle": outputNode = ExecuteToggleCommands(secondWord, ref outputNode); return;
-                case "contract": outputNode = TryGetContract(ref terminal); return;
+                case "contract": outputNode = ExecuteContractCommands(secondWord, ref terminal); return;
                 case "bruteforce": outputNode= ExecuteBruteForce(secondWord); return;
                 case "initattack":
                 case "atk": outputNode = ExecuteDiscombobulatorAttack(ref terminal); return;
