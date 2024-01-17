@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
 {
@@ -87,6 +88,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         private const string WHEELBARROWCEPTION_TEXT = "You're not allowed to do that...";
         private const string DEPOSIT_TEXT = "Depositing item...";
         private const string START_DEPOSIT_TEXT = "Deposit item: [LMB]";
+        private const string WITHDRAW_ITEM_TEXT = "Withdraw item: [LMB]";
 
         /// <summary>
         /// When the item spawns in-game, store the necessary variables for correct behaviours from the prefab asset
@@ -115,7 +117,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             if (triggers == null) logger.LogError($"Couldn't find {nameof(InteractTrigger)} components in the prefab...");
             foreach (InteractTrigger trigger in triggers)
             {
-                trigger.onInteract.AddListener(StoreItemToWheelbarrow);
+                trigger.onInteract.AddListener(InteractWheelbarrow);
                 trigger.tag = nameof(InteractTrigger); // Necessary for the interact UI to appear
                 trigger.interactCooldown = false;
                 trigger.cooldownTime = 0;
@@ -139,7 +141,62 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         {
             base.Update();
             UpdateWheelbarrowSounds();
+            UpdateWheelbarrowDrop();
             UpdateInteractTriggers();
+        }
+        private void UpdateWheelbarrowDrop()
+        {
+            if (!isHeld) return;
+            if (playerHeldBy != UpgradeBus.instance.GetLocalPlayer()) return;
+            if (currentAmountItems <= 0) return;
+            if (!Keyboard.current.vKey.wasPressedThisFrame) return;
+            DropAllItemsInWheelbarrow();
+        }
+        private void DropAllItemsInWheelbarrow()
+        {
+            GrabbableObject[] storedItems = GetComponentsInChildren<GrabbableObject>();
+            for(int i = 0; i < storedItems.Length; i++)
+            {
+                if (storedItems[i] is WheelbarrowScript) continue; // Don't drop the wheelbarrow
+                DropItem(ref storedItems[i]);
+                currentAmountItems--;
+            }
+            UpdateWheelbarrowWeightServerRpc();
+        }
+        /// <summary>
+        /// Copy paste from PlayerControllerB.DropAllHeldItems applied on a singular grabbable object script
+        /// </summary>
+        /// <param name="grabbableObject"></param>
+        private void DropItem(ref GrabbableObject grabbableObject)
+        {
+            grabbableObject.parentObject = null;
+            grabbableObject.heldByPlayerOnServer = false;
+            if (isInElevator)
+            {
+                grabbableObject.transform.SetParent(playerHeldBy.playersManager.elevatorTransform, worldPositionStays: true);
+            }
+            else
+            {
+                grabbableObject.transform.SetParent(playerHeldBy.playersManager.propsContainer, worldPositionStays: true);
+            }
+
+            playerHeldBy.SetItemInElevator(playerHeldBy.isInHangarShipRoom, isInElevator, grabbableObject);
+            grabbableObject.EnablePhysics(enable: true);
+            grabbableObject.EnableItemMeshes(enable: true);
+            grabbableObject.transform.localScale = grabbableObject.originalScale;
+            grabbableObject.isHeld = false;
+            grabbableObject.isPocketed = false;
+            grabbableObject.startFallingPosition = grabbableObject.transform.parent.InverseTransformPoint(grabbableObject.transform.position);
+            grabbableObject.FallToGround(randomizePosition: true);
+            grabbableObject.fallTime = UnityEngine.Random.Range(-0.3f, 0.05f);
+            if (base.IsOwner)
+            {
+                grabbableObject.DiscardItemOnClient();
+            }
+            else if (!grabbableObject.itemProperties.syncDiscardFunction)
+            {
+                grabbableObject.playerHeldBy = null;
+            }
         }
         private void UpdateWheelbarrowSounds()
         {
@@ -174,28 +231,30 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
 
             if (!player.isHoldingObject)
             {
-                foreach (InteractTrigger trigger in triggers)
+                if(currentAmountItems == 0)
                 {
-                    trigger.interactable = false;
-                    trigger.disabledHoverTip = NO_ITEMS_TEXT;
+                    SetInteractTriggers(false, NO_ITEMS_TEXT);
+                    return;
                 }
+
+                SetInteractTriggers(true, WITHDRAW_ITEM_TEXT);
                 return;
             }
             GrabbableObject holdingItem = player.currentlyHeldObjectServer;
             if (holdingItem.GetComponent<WheelbarrowScript>() != null)
             {
-                foreach (InteractTrigger trigger in triggers)
-                {
-                    trigger.interactable = false;
-                    trigger.disabledHoverTip = WHEELBARROWCEPTION_TEXT;
-                }
+                SetInteractTriggers(false, WHEELBARROWCEPTION_TEXT);
                 return;
             }
             if (CheckWheelbarrowRestrictions()) return;
+            SetInteractTriggers(true, START_DEPOSIT_TEXT);
+        }
+        private void SetInteractTriggers(bool interactable = false, string hoverTip = NO_ITEMS_TEXT)
+        {
             foreach (InteractTrigger trigger in triggers)
             {
-                trigger.interactable = true;
-                trigger.hoverTip = START_DEPOSIT_TEXT;
+                trigger.interactable = interactable;
+                trigger.disabledHoverTip = hoverTip;
             }
         }
         private bool CheckWheelbarrowRestrictions()
@@ -327,10 +386,28 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         /// It will store the item in the wheelbarrow, allowing it to be carried when grabbing the wheelbarrow
         /// </summary>
         /// <param name="playerInteractor"></param>
-        private void StoreItemToWheelbarrow(PlayerControllerB playerInteractor)
+        private void InteractWheelbarrow(PlayerControllerB playerInteractor)
+        {
+            if (playerInteractor.isHoldingObject)
+            {
+                StoreItemInWheelbarrow(ref playerInteractor);
+                return;
+            }
+            RemoveRandomItemFromWheelbarrow(ref playerInteractor);
+        }
+        private void RemoveRandomItemFromWheelbarrow(ref PlayerControllerB playerInteractor)
+        {
+            logger.LogDebug($"Attempting to remove an item from the wheelbarrow for {playerInteractor.playerUsername}");
+            GrabbableObject[] storedItems = GetComponentsInChildren<GrabbableObject>();
+            for(int i = UnityEngine.Random.Range(0, storedItems.Length); i < storedItems.Length; i = UnityEngine.Random.Range(0, storedItems.Length))
+            {
+                if (storedItems[i] is not WheelbarrowScript) break;
+            }
+            // TODO Make player grab the item
+        }
+        private void StoreItemInWheelbarrow(ref PlayerControllerB playerInteractor)
         {
             logger.LogDebug($"Attempting to store an item from {playerInteractor.playerUsername}");
-
             Collider triggerCollider = container;
             Vector3 vector = RoundManager.RandomPointInBounds(triggerCollider.bounds);
             vector.y = triggerCollider.bounds.max.y;
