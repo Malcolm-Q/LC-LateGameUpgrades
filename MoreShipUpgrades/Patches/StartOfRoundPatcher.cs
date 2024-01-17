@@ -85,5 +85,18 @@ namespace MoreShipUpgrades.Patches
                 logger.LogError($"Did not find the relevant code instructions to influence the player's health through {playerHealthScript.UPGRADE_NAME}");
             return codes.AsEnumerable();
         }
+
+        [HarmonyPatch(nameof(StartOfRound.ReviveDeadPlayers))]
+        [HarmonyPostfix]
+        private static void ResetContract(StartMatchLever __instance)
+        {
+            if (UpgradeBus.instance.contractLevel == RoundManager.Instance.currentLevel.PlanetName)
+            {
+                if (__instance.IsHost)
+                {
+                    LGUStore.instance.SyncContractDetailsClientRpc("None", "None");
+                }
+            }
+        }
     }
 }
