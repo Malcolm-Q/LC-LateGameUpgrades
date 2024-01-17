@@ -388,6 +388,7 @@ namespace MoreShipUpgrades.Misc
             switch(secondWord)
             {
                 case "cancel": return ExecuteContractCancelCommand(ref terminal);
+                case "info": return DisplayTerminalMessage(string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), UpgradeBus.instance.cfg.CONTRACT_PRICE));
                 default: return TryGetContract(ref terminal);
             }
         }
