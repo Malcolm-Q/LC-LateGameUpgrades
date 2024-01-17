@@ -149,17 +149,24 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             if (!isHeld) return;
             if (playerHeldBy != UpgradeBus.instance.GetLocalPlayer()) return;
             if (currentAmountItems <= 0) return;
-            if (!Keyboard.current.vKey.wasPressedThisFrame) return;
-            DropAllItemsInWheelbarrow();
+            if (!Mouse.current.middleButton.wasPressedThisFrame) return;
+            DropAllItemsInWheelbarrowServerRpc();
         }
-        private void DropAllItemsInWheelbarrow()
+        [ServerRpc(RequireOwnership = false)]
+        private void DropAllItemsInWheelbarrowServerRpc()
         {
+            DropAllItemsInWheelbarrowClientRpc();
+        }
+        [ClientRpc]
+        private void DropAllItemsInWheelbarrowClientRpc()
+        {
+            logger.LogDebug("Dropping all items from the wheelbarrow...");
             GrabbableObject[] storedItems = GetComponentsInChildren<GrabbableObject>();
             for(int i = 0; i < storedItems.Length; i++)
             {
-                if (storedItems[i] is WheelbarrowScript) continue; // Don't drop the wheelbarrow
+                if (storedItems[i] == this) continue; // Don't drop the wheelbarrow
+                logger.LogDebug($"Dropping {storedItems[i].itemProperties.itemName}");
                 DropItem(ref storedItems[i]);
-                currentAmountItems--;
             }
             UpdateWheelbarrowWeightServerRpc();
         }
@@ -189,11 +196,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             grabbableObject.startFallingPosition = grabbableObject.transform.parent.InverseTransformPoint(grabbableObject.transform.position);
             grabbableObject.FallToGround(randomizePosition: true);
             grabbableObject.fallTime = UnityEngine.Random.Range(-0.3f, 0.05f);
-            if (base.IsOwner)
-            {
-                grabbableObject.DiscardItemOnClient();
-            }
-            else if (!grabbableObject.itemProperties.syncDiscardFunction)
+            grabbableObject.hasHitGround = false;
+            if (!grabbableObject.itemProperties.syncDiscardFunction)
             {
                 grabbableObject.playerHeldBy = null;
             }
@@ -222,24 +226,16 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             PlayerControllerB player = GameNetworkManager.Instance.localPlayerController;
             if (player == null)
             {
-                foreach (InteractTrigger trigger in triggers)
-                {
-                    trigger.interactable = false;
-                }
+                SetInteractTriggers(false, NO_ITEMS_TEXT);
                 return;
             }
 
             if (!player.isHoldingObject)
             {
-                if(currentAmountItems == 0)
-                {
-                    SetInteractTriggers(false, NO_ITEMS_TEXT);
-                    return;
-                }
-
-                SetInteractTriggers(true, WITHDRAW_ITEM_TEXT);
+                SetInteractTriggers(false, NO_ITEMS_TEXT);
                 return;
             }
+
             GrabbableObject holdingItem = player.currentlyHeldObjectServer;
             if (holdingItem.GetComponent<WheelbarrowScript>() != null)
             {
@@ -249,12 +245,13 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             if (CheckWheelbarrowRestrictions()) return;
             SetInteractTriggers(true, START_DEPOSIT_TEXT);
         }
-        private void SetInteractTriggers(bool interactable = false, string hoverTip = NO_ITEMS_TEXT)
+        private void SetInteractTriggers(bool interactable = false, string hoverTip = START_DEPOSIT_TEXT)
         {
             foreach (InteractTrigger trigger in triggers)
             {
                 trigger.interactable = interactable;
-                trigger.disabledHoverTip = hoverTip;
+                if (interactable) trigger.hoverTip = hoverTip;
+                else trigger.disabledHoverTip = hoverTip;
             }
         }
         private bool CheckWheelbarrowRestrictions()
@@ -355,7 +352,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         }
         public void DecrementStoredItems()
         {
-            currentAmountItems--;
             UpdateWheelbarrowWeightServerRpc();
         }
         [ServerRpc(RequireOwnership = false)]
@@ -371,10 +367,11 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             GrabbableObject[] storedItems = GetComponentsInChildren<GrabbableObject>();
             if (isHeld) playerHeldBy.carryWeight -= Mathf.Clamp(exoskeletonScript.DecreasePossibleWeight(totalWeight - 1f), 0f, 10f);
             totalWeight = defaultWeight;
-
+            currentAmountItems = 0;
             for (int i = 0; i < storedItems.Length; i++)
             {
                 if (storedItems[i].GetComponent<WheelbarrowScript>() != null) continue;
+                currentAmountItems++;
                 GrabbableObject storedItem = storedItems[i];
                 totalWeight += (storedItem.itemProperties.weight - 1f) * weightReduceMultiplier;
             }
@@ -393,17 +390,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
                 StoreItemInWheelbarrow(ref playerInteractor);
                 return;
             }
-            RemoveRandomItemFromWheelbarrow(ref playerInteractor);
-        }
-        private void RemoveRandomItemFromWheelbarrow(ref PlayerControllerB playerInteractor)
-        {
-            logger.LogDebug($"Attempting to remove an item from the wheelbarrow for {playerInteractor.playerUsername}");
-            GrabbableObject[] storedItems = GetComponentsInChildren<GrabbableObject>();
-            for(int i = UnityEngine.Random.Range(0, storedItems.Length); i < storedItems.Length; i = UnityEngine.Random.Range(0, storedItems.Length))
-            {
-                if (storedItems[i] is not WheelbarrowScript) break;
-            }
-            // TODO Make player grab the item
         }
         private void StoreItemInWheelbarrow(ref PlayerControllerB playerInteractor)
         {
@@ -415,7 +401,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             vector = GetComponent<NetworkObject>().transform.InverseTransformPoint(vector);
             logger.LogDebug($"Applying vector of ({vector.x},{vector.y},{vector.z})");
             playerInteractor.DiscardHeldObject(placeObject: true, parentObjectTo: GetComponent<NetworkObject>(), placePosition: vector, matchRotationOfParent: false);
-            currentAmountItems++;
             UpdateWheelbarrowWeightServerRpc();
         }
 
