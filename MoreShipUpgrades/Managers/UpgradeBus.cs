@@ -121,6 +121,8 @@ namespace MoreShipUpgrades.Managers
         internal bool pager;
         internal pagerScript pageScript;
 
+        public bool insurance;
+
         public Dictionary<string,GameObject> samplePrefabs = new Dictionary<string,GameObject>();
         public GameObject nightVisionPrefab;
         public bool sickBeats;
@@ -179,6 +181,7 @@ namespace MoreShipUpgrades.Managers
         {
             ResetPlayerAttributes();
             EffectsActive = false;
+            insurance = false;
             DestroyTraps = false;
             scannerUpgrade = false;
             nightVision = false;

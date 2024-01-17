@@ -636,6 +636,7 @@ namespace MoreShipUpgrades
             SetupContract();
             SetupSickBeats();
             SetupExtendDeadline();
+            SetupScrapInsurance();
         }
 
         private void SetupSickBeats()
@@ -723,6 +724,10 @@ namespace MoreShipUpgrades
         private void SetupExtendDeadline()
         {
             SetupGenericPerk<ExtendDeadlineScript>(ExtendDeadlineScript.UPGRADE_NAME);
+        }
+        private void SetupScrapInsurance()
+        {
+            SetupGenericPerk<ScrapInsurance>(ScrapInsurance.COMMAND_NAME);
         }
         /// <summary>
         /// Generic function where it adds a script (specificed through the type) into an GameObject asset 

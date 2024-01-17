@@ -1,7 +1,12 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Emit;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Patches
@@ -37,6 +42,24 @@ namespace MoreShipUpgrades.Patches
         {
             if (UpgradeBus.instance.pager) return false; // return false gaming
             else return true;
+        }
+
+        [HarmonyPatch(nameof(HUDManager.FillEndGameStats))]
+        [HarmonyTranspiler]
+        private static IEnumerable<CodeInstruction> FillEndGameStatsTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            FieldInfo allPlayersDead = typeof(StartOfRound).GetField(nameof(StartOfRound.allPlayersDead));
+            MethodInfo scrapInsuranceStatus = typeof(ScrapInsurance).GetMethod(nameof(ScrapInsurance.GetScrapInsuranceStatus));
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            for(int i = 0; i < codes.Count; i++)
+            {
+                if (!(codes[i].opcode == OpCodes.Ldfld && codes[i].operand == (object)allPlayersDead)) continue;
+                codes.Insert(i + 1, new CodeInstruction(OpCodes.And));
+                codes.Insert(i + 1, new CodeInstruction(OpCodes.Not));
+                codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, scrapInsuranceStatus));
+                break;
+            }
+            return codes;
         }
     }
 }
