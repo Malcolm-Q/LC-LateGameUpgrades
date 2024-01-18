@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.Commands;
 
 
 namespace MoreShipUpgrades.Misc
@@ -35,6 +36,7 @@ namespace MoreShipUpgrades.Misc
         public bool EXTEND_DEADLINE_ENABLED { get; set; }
         public bool WHEELBARROW_ENABLED { get; set; }
         public bool SCRAP_WHEELBARROW_ENABLED { get; set; }
+        public bool SCRAP_INSURANCE_ENABLED {  get; set; }
 
         // individual or shared
         public bool ADVANCED_TELE_INDIVIDUAL { get; set; }
@@ -78,6 +80,7 @@ namespace MoreShipUpgrades.Misc
         public int EXTEND_DEADLINE_PRICE { get; set; }
         public int CONTRACT_PRICE { get; set; }
         public int WHEELBARROW_PRICE { get; set; }
+        public int SCRAP_INSURANCE_PRICE { get; set; }
 
         // attributes
         public float BIGGER_LUNGS_STAMINA_REGEN_INCREASE { get; set; }
@@ -479,6 +482,10 @@ namespace MoreShipUpgrades.Misc
             DIVEKIT_PRICE = ConfigEntry(topSection, "price", 650, "Price for Diving Kit.");
             DIVEKIT_WEIGHT = ConfigEntry(topSection, "Item weight", 1.65f, "-1 and multiply by 100 (1.65 = 65 lbs)");
             DIVEKIT_TWO_HANDED = ConfigEntry(topSection, "Two Handed Item", true, "One or two handed item.");
+
+            topSection = ScrapInsurance.COMMAND_NAME;
+            SCRAP_INSURANCE_ENABLED = ConfigEntry(topSection, "Enable Scrap Insurance Command", true, "One time purchase which allows you to keep all your scrap upon a team wipe on a moon trip");
+            SCRAP_INSURANCE_PRICE = ConfigEntry(topSection, "Price of Scrap Insurance", ScrapInsurance.DEFAULT_PRICE);
 
             topSection = "Wheelbarrow";
             WHEELBARROW_ENABLED = ConfigEntry(topSection, "Enable the Wheelbarrow Item", true, "Allows you to buy a wheelbarrow to carry items outside of your inventory");
