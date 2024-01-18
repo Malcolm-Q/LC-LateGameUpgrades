@@ -49,6 +49,13 @@ namespace MoreShipUpgrades.Patches
                 LGUStore.instance.PlayersFiredServerRpc();
             }
         }
+        [HarmonyPrefix]
+        [HarmonyPatch(nameof(StartOfRound.PowerSurgeShip))]
+        private static bool PowerSurgeShip()
+        {
+            if (UpgradeBus.instance.lightningRod) return false;
+            return true;
+        }
 
         [HarmonyTranspiler]
         [HarmonyPatch("ReviveDeadPlayers")]
@@ -84,6 +91,19 @@ namespace MoreShipUpgrades.Patches
             if (!(first && second && third && updateHealth)) 
                 logger.LogError($"Did not find the relevant code instructions to influence the player's health through {playerHealthScript.UPGRADE_NAME}");
             return codes.AsEnumerable();
+        }
+
+        [HarmonyPatch(nameof(StartOfRound.ReviveDeadPlayers))]
+        [HarmonyPostfix]
+        private static void ResetContract(StartMatchLever __instance)
+        {
+            if (UpgradeBus.instance.contractLevel == RoundManager.Instance.currentLevel.PlanetName)
+            {
+                if (__instance.IsHost)
+                {
+                    LGUStore.instance.SyncContractDetailsClientRpc("None", "None");
+                }
+            }
         }
     }
 }

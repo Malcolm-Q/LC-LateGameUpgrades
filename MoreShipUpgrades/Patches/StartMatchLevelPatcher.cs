@@ -8,19 +8,6 @@ namespace MoreShipUpgrades.Patches
     internal class StartMatchLevelPatcher
     {
         [HarmonyPostfix]
-        [HarmonyPatch("EndGame")]
-        private static void ResetContract(StartMatchLever __instance)
-        {
-            if(UpgradeBus.instance.contractLevel == RoundManager.Instance.currentLevel.PlanetName)
-            {
-                if(__instance.IsHost)
-                {
-                    LGUStore.instance.SyncContractDetailsClientRpc("None", "None");
-                }
-            }
-        }
-
-        [HarmonyPostfix]
         [HarmonyPatch("StartGame")]
         static void SyncHelmets()
         {

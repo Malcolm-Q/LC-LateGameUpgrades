@@ -1,6 +1,11 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.Commands;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Emit;
 
 namespace MoreShipUpgrades.Patches
 {
@@ -39,6 +44,14 @@ namespace MoreShipUpgrades.Patches
             logger.LogDebug("Changing back the deadline...");
             TimeOfDay.Instance.daysUntilDeadline = previousDaysDeadline;
             savedPrevious = false;
+        }
+
+        [HarmonyPatch(nameof(RoundManager.DespawnPropsAtEndOfRound))]
+        [HarmonyPostfix]
+        public static void DespawnPropsAtEndOfRoundPostfix()
+        {
+            if (!UpgradeBus.instance.cfg.SCRAP_INSURANCE_ENABLED) return;
+            ScrapInsurance.TurnOffScrapInsurance();
         }
     }
 }

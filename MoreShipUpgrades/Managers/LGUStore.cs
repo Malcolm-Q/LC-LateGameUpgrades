@@ -41,6 +41,7 @@ namespace MoreShipUpgrades.Managers
             {lightningRodScript.UPGRADE_NAME, SaveInfo => SaveInfo.lightningRod },
             {playerHealthScript.UPGRADE_NAME, SaveInfo => SaveInfo.playerHealth },
             {DoorsHydraulicsBattery.UPGRADE_NAME, SaveInfo => SaveInfo.doorsHydraulicsBattery },
+            {BeatScript.UPGRADE_NAME, SaveInfo => SaveInfo.sickBeats }
         };
 
         private static Dictionary<string, Func<SaveInfo, int>> levelConditions = new Dictionary<string, Func<SaveInfo, int>>
@@ -62,6 +63,7 @@ namespace MoreShipUpgrades.Managers
             { lightningRodScript.UPGRADE_NAME, saveInfo => 0},
             { playerHealthScript.UPGRADE_NAME, saveInfo => saveInfo.playerHealthLevel },
             { DoorsHydraulicsBattery.UPGRADE_NAME, saveInfo => saveInfo.doorsHydraulicsBatteryLevel},
+            { BeatScript.UPGRADE_NAME, saveInfo => 0 },
         };
         private bool retrievedCfg;
         private bool receivedSave;
@@ -339,6 +341,7 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.strongLegs = saveInfo.strongLegs;
             UpgradeBus.instance.runningShoes = saveInfo.runningShoes;
             UpgradeBus.instance.biggerLungs = saveInfo.biggerLungs;
+            UpgradeBus.instance.lockSmith = saveInfo.lockSmith;
             UpgradeBus.instance.proteinPowder = saveInfo.proteinPowder;
             UpgradeBus.instance.lightningRod = saveInfo.lightningRod;
             UpgradeBus.instance.pager = saveInfo.pager;

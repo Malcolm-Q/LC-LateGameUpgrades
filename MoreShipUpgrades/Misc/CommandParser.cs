@@ -1,5 +1,6 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exorcism;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ namespace MoreShipUpgrades.Misc
     internal class CommandParser
     {
         private static LGULogger logger = new LGULogger(nameof(CommandParser));
+        private static bool attemptCancelContract = false;
 
         const string LOAD_LGU_COMMAND = "load lgu";
         internal static string[] LEVELS = {
@@ -382,7 +384,29 @@ namespace MoreShipUpgrades.Misc
             displayText += "\n";
             return DisplayTerminalMessage(displayText);
         }
-
+        private static TerminalNode ExecuteContractCommands(string secondWord, ref Terminal terminal)
+        {
+            switch(secondWord)
+            {
+                case "cancel": return ExecuteContractCancelCommand(ref terminal);
+                case "info": return DisplayTerminalMessage(string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), UpgradeBus.instance.cfg.CONTRACT_PRICE));
+                default: return TryGetContract(ref terminal);
+            }
+        }
+        private static TerminalNode ExecuteContractCancelCommand(ref Terminal terminal)
+        {
+            TerminalNode node = ScriptableObject.CreateInstance<TerminalNode>();
+            if (UpgradeBus.instance.contractLevel == "None")
+            {
+                node.displayText = "You must have accepted a contract to execute this command...\n\n";
+                node.clearPreviousText = true;
+                return node;
+            }
+            attemptCancelContract = true;
+            node.clearPreviousText = true;
+            node.displayText = "Type CONFIRM to cancel your current contract. There will be no refunds.\n\n";
+            return node;
+        }
         static TerminalNode TryGetContract(ref Terminal terminal)
         {
             string txt = null;
@@ -503,19 +527,40 @@ namespace MoreShipUpgrades.Misc
                 default: return HandleBruteForce(secondWord);
             }
         }
+        private static TerminalNode CheckConfirmForCancel(string word, ref Terminal terminal)
+        {
+            attemptCancelContract = false;
+            TerminalNode node = ScriptableObject.CreateInstance<TerminalNode>();
+            if (word.ToLower() != "confirm")
+            {
+                node.displayText = "Failed to confirm user's input. Invalidated cancel contract request.\n\n";
+                node.clearPreviousText = true;
+                return node;
+            }
+            if (terminal.IsHost || terminal.IsServer) LGUStore.instance.SyncContractDetailsClientRpc("None", "None");
+            else LGUStore.instance.ReqSyncContractDetailsServerRpc("None", "None");
+            node.displayText = "Cancelling contract...\n\n";
+            node.clearPreviousText = true;
+            return node;
 
+        }
         public static void ParseLGUCommands(string fullText, ref Terminal terminal, ref TerminalNode outputNode)
         {
             string[] textArray = fullText.Split();
             string firstWord = textArray[0].ToLower();
             string secondWord = textArray.Length > 1 ? textArray[1].ToLower() : "";
             string thirdWord = textArray.Length > 2 ? textArray[2].ToLower() : "";
+            if (attemptCancelContract)
+            {
+                outputNode = CheckConfirmForCancel(firstWord, ref terminal);
+                return;
+            }
             switch(firstWord)
             {
                 case "demon": outputNode = LookupDemon(secondWord, thirdWord); return;
                 case "lookup": outputNode = DefuseBombCommand(secondWord); return;
                 case "toggle": outputNode = ExecuteToggleCommands(secondWord, ref outputNode); return;
-                case "contract": outputNode = TryGetContract(ref terminal); return;
+                case "contract": outputNode = ExecuteContractCommands(secondWord, ref terminal); return;
                 case "bruteforce": outputNode= ExecuteBruteForce(secondWord); return;
                 case "initattack":
                 case "atk": outputNode = ExecuteDiscombobulatorAttack(ref terminal); return;
@@ -531,10 +576,36 @@ namespace MoreShipUpgrades.Misc
                 case "load": outputNode = ExecuteLoadCommands(secondWord, fullText, ref terminal, ref outputNode); return;
                 case "scan": outputNode = ExecuteScanCommands(secondWord, ref outputNode); return;
                 case "transmit": outputNode = ExecuteTransmitMessage(fullText.Substring(firstWord.Length+1), ref outputNode); return;
+                case "scrap": outputNode = ExecuteScrapCommands(secondWord, ref terminal, ref outputNode); return;
                 default: outputNode = ExecuteUpgradeCommand(fullText, ref terminal, ref outputNode); return;
             }
         }
+        private static TerminalNode ExecuteScrapInsuranceCommand(ref Terminal terminal, ref TerminalNode outputNode)
+        {
+            if (!UpgradeBus.instance.cfg.SCRAP_INSURANCE_ENABLED) return outputNode;
 
+            if (ScrapInsurance.ScrapInsuranceStatus())
+                return DisplayTerminalMessage($"You already purchased insurance to protect your scrap belongings.\n\n");
+
+            if (!StartOfRound.Instance.inShipPhase)
+                return DisplayTerminalMessage($"You can only acquire insurance while in orbit.\n\n");
+
+            if (terminal.groupCredits < UpgradeBus.instance.cfg.SCRAP_INSURANCE_PRICE)
+                return DisplayTerminalMessage($"Not enough credits to purchase Scrap Insurance.\nPrice: {UpgradeBus.instance.cfg.SCRAP_INSURANCE_PRICE}\nCurrent credits: {terminal.groupCredits}\n\n");
+
+            terminal.groupCredits -= UpgradeBus.instance.cfg.SCRAP_INSURANCE_PRICE;
+            LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits);
+            ScrapInsurance.TurnOnScrapInsurance();
+            return DisplayTerminalMessage($"Scrap Insurance has been activated.\nIn case of a team wipe in your next trip, your scrap will be preserved.\n\n");
+        }
+        private static TerminalNode ExecuteScrapCommands(string secondWord, ref Terminal terminal, ref TerminalNode outputNode)
+        {
+            switch(secondWord)
+            {
+                case "insurance": return ExecuteScrapInsuranceCommand(ref terminal, ref outputNode);
+                default: return outputNode;
+            }
+        }
         private static TerminalNode LookupDemon(string secondWord, string thirdWord)
         {
             string demon = secondWord.ToUpper();
@@ -584,7 +655,7 @@ namespace MoreShipUpgrades.Misc
             {
                 logger.LogInfo($"USER CORRECTLY ENTERED IP ADDRESS, user: {UpgradeBus.instance.DataMinigameUser}, pass: {UpgradeBus.instance.DataMinigamePass}");
                 txt = $"PING {ip} ({ip}): 56 data bytes\r\n64 bytes from {ip}: icmp_seq=0 ttl=64 time=1.234 ms\r\n64 bytes from {ip}: icmp_seq=1 ttl=64 time=1.345 ms\r\n64 bytes from {ip}: icmp_seq=2 ttl=64 time=1.123 ms\r\n64 bytes from {ip}: icmp_seq=3 ttl=64 time=1.456 ms\r\n\r\n--- {ip} ping statistics ---\r\n4 packets transmitted, 4 packets received, 0.0% packet loss\r\nround-trip min/avg/max/stddev = 1.123/1.289/1.456/0.123 ms\n\n";
-                txt += $"CONNECTION ESTABLISHED --- RETRIEVING CREDENTIALS...\n\nUSER: {UpgradeBus.instance.DataMinigameUser}\nPASSWORD: {UpgradeBus.instance.DataMinigamePass}\nn";
+                txt += $"CONNECTION ESTABLISHED --- RETRIEVING CREDENTIALS...\n\nUSER: {UpgradeBus.instance.DataMinigameUser}\nPASSWORD: {UpgradeBus.instance.DataMinigamePass}\n";
             }
             else
             {

@@ -49,6 +49,7 @@ namespace MoreShipUpgrades.Misc
             { playerHealthScript.UPGRADE_NAME, root+"PlayerHealth.prefab" },
             { ExtendDeadlineScript.UPGRADE_NAME, root+"ExtendDeadline.prefab" },
             { DoorsHydraulicsBattery.UPGRADE_NAME, root+"DoorsHydraulicsBattery.prefab" },
+            { ScrapInsurance.COMMAND_NAME, root+"ScrapInsurance.prefab" },
 
             { "Advanced Portable Tele", "Assets/ShipUpgrades/TpButtonAdv.asset" },
             { "Portable Tele", "Assets/ShipUpgrades/TpButton.asset" },
