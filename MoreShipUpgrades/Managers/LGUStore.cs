@@ -339,6 +339,7 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.strongLegs = saveInfo.strongLegs;
             UpgradeBus.instance.runningShoes = saveInfo.runningShoes;
             UpgradeBus.instance.biggerLungs = saveInfo.biggerLungs;
+            UpgradeBus.instance.lockSmith = saveInfo.lockSmith;
             UpgradeBus.instance.proteinPowder = saveInfo.proteinPowder;
             UpgradeBus.instance.lightningRod = saveInfo.lightningRod;
             UpgradeBus.instance.pager = saveInfo.pager;
