@@ -189,7 +189,7 @@ namespace MoreShipUpgrades.Managers
         public void ResetAllValues(bool wipeObjRefs = true)
         {
             ResetPlayerAttributes();
-            ResetShipAttributesServerRpc();
+            if(IsHost || IsServer) ResetShipAttributesServerRpc();
             EffectsActive = false;
             insurance = false;
             DestroyTraps = false;
@@ -253,6 +253,8 @@ namespace MoreShipUpgrades.Managers
             if (cfg.STRONG_LEGS_ENABLED && strongLegs) strongLegsScript.ResetStrongLegsBuff(ref player);
             if (cfg.PLAYER_HEALTH_ENABLED && playerHealth) playerHealthScript.ResetStimpackBuff(ref player);
         }
+
+        [ClientRpc]
         private void ResetShipAttributesClientRpc()
         {
             HangarShipDoor shipDoors = GetShipDoors();
@@ -261,6 +263,8 @@ namespace MoreShipUpgrades.Managers
             logger.LogDebug($"Resetting the ship's attributes");
             if (cfg.DOOR_HYDRAULICS_BATTERY_ENABLED && doorsHydraulicsBattery) DoorsHydraulicsBattery.ResetDoorsHydraulicsBattery(ref shipDoors);
         }
+
+        [ServerRpc]
         private void ResetShipAttributesServerRpc()
         {
             ResetShipAttributesClientRpc();

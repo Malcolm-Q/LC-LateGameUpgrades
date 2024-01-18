@@ -751,11 +751,11 @@ namespace MoreShipUpgrades
         /// <param name="path"> The path to access the asset in the asset bundle</param>
         private void SetupGenericPerk<T>(string upgradeName) where T : Component
         {
-            GameObject perk = AssetBundleHandler.GetPerkGameObject(upgradeName);
+            GameObject perk = LethalLib.Modules.NetworkPrefabs.CreateNetworkPrefab(upgradeName);
             if (!perk) return;
 
             perk.AddComponent<T>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(perk);
+            //LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(perk);
         }
     }
 }
