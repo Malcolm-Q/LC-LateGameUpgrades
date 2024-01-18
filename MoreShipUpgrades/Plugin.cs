@@ -145,7 +145,7 @@ namespace MoreShipUpgrades
 
             Utilities.FixMixerGroups(bomb.spawnPrefab);
             NetworkPrefabs.RegisterNetworkPrefab(bomb.spawnPrefab);
-            //Items.RegisterItem(bomb);
+            Items.RegisterItem(bomb);
 
             SpawnableMapObjectDef mapObjDefBug = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
             mapObjDefBug.spawnableMapObject = new SpawnableMapObject();

@@ -140,6 +140,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
                     grabBox.enabled = true;
                     audio.Stop();
                     enabled = false;
+                    GetComponent<PhysicsProp>().enabled = true;
                 }
             }
             else

@@ -79,7 +79,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 }
                 if (!enemy.isEnemyDead) enemy.SetEnemyStunned(true, UpgradeBus.instance.cfg.DISCOMBOBULATOR_STUN_DURATION + UpgradeBus.instance.cfg.DISCOMBOBULATOR_INCREMENT * UpgradeBus.instance.discoLevel, null);
             }
-            logger.LogInfo($"Discombobulator hit {array.Length} enemies!");
         }
 
         private bool CanDealDamage()

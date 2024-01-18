@@ -171,7 +171,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exorcism
             if (player.currentlyHeldObjectServer == null) return false;
             ExorcismContract co = player.currentlyHeldObjectServer.GetComponent<ExorcismContract>();
             if (co == null) return false;
-            return false;
+            return true;
         }
     }
 }

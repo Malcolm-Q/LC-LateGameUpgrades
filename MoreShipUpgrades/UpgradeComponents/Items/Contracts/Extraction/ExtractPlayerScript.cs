@@ -81,6 +81,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Extraction
             anim.SetTrigger("heal");
             hurtState = false;
             StartCoroutine(WaitForHealAnim());
+            GetComponent<PhysicsProp>().enabled = true;
         }
 
         private IEnumerator WaitForHealAnim()
