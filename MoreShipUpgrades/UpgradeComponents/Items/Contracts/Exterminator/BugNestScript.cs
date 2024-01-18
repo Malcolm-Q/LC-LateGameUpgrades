@@ -12,7 +12,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exterminator
         public GameObject loot;
         InteractTrigger trig;
         AudioSource audio;
-        public AudioClip cleanNoise;
         int cleaning = 0;
 
         void Awake()
@@ -28,8 +27,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exterminator
             node.subText = $"VALUE: ${node.scrapValue}";
 
             anim = GetComponentInChildren<Animator>();
-            audio = GetComponent<AudioSource>();
-            audio.clip = cleanNoise;
         }
 
         void Update()

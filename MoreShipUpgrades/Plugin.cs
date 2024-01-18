@@ -136,6 +136,7 @@ namespace MoreShipUpgrades
             if (bomb == null) return;
             bomb.isConductiveMetal = false;
             DefusalContract coNest = bomb.spawnPrefab.AddComponent<DefusalContract>();
+            coNest.SetPosition = true;
 
             BombDefusalScript bombScript = bomb.spawnPrefab.AddComponent<BombDefusalScript>();
             bombScript.snip = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, root + "scissors.mp3");
@@ -176,11 +177,16 @@ namespace MoreShipUpgrades
                 mapObjDefRitual.spawnableMapObject = new SpawnableMapObject();
                 mapObjDefRitual.spawnableMapObject.prefabToSpawn = exorItem.spawnPrefab;
                 MapObjects.RegisterMapObject(mapObjDefRitual, Levels.LevelTypes.All, (level) => new AnimationCurve(new Keyframe(0,3),new Keyframe(1,3)));
+                exorItem.isScrap = false;
+                Items.RegisterShopItem(exorItem, 0);
             }
+            mainItem.isScrap = false;
+            Items.RegisterShopItem(mainItem, 0);
 
             if (mainItem == null || contractLoot == null) return;
 
             ExorcismContract co = mainItem.spawnPrefab.AddComponent<ExorcismContract>();
+            co.SetPosition = true;
 
             PentagramScript pentScript = mainItem.spawnPrefab.AddComponent<PentagramScript>();
             pentScript.loot = contractLoot.spawnPrefab;
@@ -209,6 +215,7 @@ namespace MoreShipUpgrades
             if (nest == null || bugLoot == null) return;
 
             ExterminatorContract coNest = nest.spawnPrefab.AddComponent<ExterminatorContract>();
+            coNest.SetPosition = true;
 
             BugNestScript nestScript = nest.spawnPrefab.AddComponent<BugNestScript>();
             nestScript.loot = bugLoot.spawnPrefab;
@@ -230,6 +237,7 @@ namespace MoreShipUpgrades
 
             scav.weight = UpgradeBus.instance.cfg.CONTRACT_EXTRACT_WEIGHT;
             ExtractionContract co = scav.spawnPrefab.AddComponent<ExtractionContract>();
+            co.SetPosition = true;
 
             ExtractPlayerScript extractScript = scav.spawnPrefab.AddComponent<ExtractPlayerScript>();
             TextAsset scavAudioPaths = AssetBundleHandler.TryLoadOtherAsset<TextAsset>(ref bundle, root + "scavSounds/scavAudio.json");
@@ -260,6 +268,7 @@ namespace MoreShipUpgrades
             if (pc == null || dataLoot == null) return;
 
             DataRetrievalContract coPC = pc.spawnPrefab.AddComponent<DataRetrievalContract>();
+            coPC.SetPosition = true;
 
             DataPCScript dataScript = pc.spawnPrefab.AddComponent<DataPCScript>();
             dataScript.error = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, root + "winError.mp3");
@@ -751,12 +760,12 @@ namespace MoreShipUpgrades
         /// <param name="path"> The path to access the asset in the asset bundle</param>
         private void SetupGenericPerk<T>(string upgradeName) where T : Component
         {
-            // soon I want to move this to use NetworkPrefabs.CreateNetworkPrefab but right now it's set up a little silly and won't work.
+            // soon I want to move this to use NetworkPrefabs.CreateNetworkPrefab
             GameObject perk = AssetBundleHandler.GetPerkGameObject(upgradeName);
             if (!perk) return;
 
             perk.AddComponent<T>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(perk);
+            NetworkPrefabs.RegisterNetworkPrefab(perk);
         }
     }
 }

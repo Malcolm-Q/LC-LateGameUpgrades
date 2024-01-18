@@ -8,7 +8,6 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Misc
@@ -21,7 +20,7 @@ namespace MoreShipUpgrades.Misc
         private static TerminalKeyword routeKeyword;
 
         const string LOAD_LGU_COMMAND = "load lgu";
-        static string[] contracts = { "data", "exterminator", "extraction","exorcism","defusal" };
+        public static string[] contracts = { "data", "exterminator", "extraction","exorcism","defusal" };
         static string[] contractInfos = {
             "\n\nOur systems have detected an active PC somewhere in the facility.\nFind it, use the bruteforce command on the ship terminal with the devices IP to get login credentials, then use the cd, ls, and mv commands to find the .db file (enter `mv survey.db` in the containing folder).\n\n",
             "\n\nIt's been reported that the population of hoarder bugs on this moon have skyrocketed and become aggressive. You must destroy their nest at all costs.\n\n",
@@ -448,11 +447,21 @@ namespace MoreShipUpgrades.Misc
             }
             LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits - UpgradeBus.instance.cfg.CONTRACT_PRICE);
             int i = Random.Range(0,contracts.Length);
+            if( contracts.Length > 1)
+            {
+                while (i == ContractScript.lastContractIndex)
+                {
+                    i = Random.Range(0, contracts.Length);
+                }
+            }
             UpgradeBus.instance.contractType = contracts[i];
             txt = $"A {contracts[i]} contract has been accepted for {RandomLevel()}!{contractInfos[i]}";
-            if (terminal.IsHost || terminal.IsServer) LGUStore.instance.SyncContractDetailsClientRpc(UpgradeBus.instance.contractLevel, contracts[i]);
-            else LGUStore.instance.ReqSyncContractDetailsServerRpc(UpgradeBus.instance.contractLevel, contracts[i]);
+
+            if (terminal.IsHost || terminal.IsServer) LGUStore.instance.SyncContractDetailsClientRpc(UpgradeBus.instance.contractLevel, i);
+            else LGUStore.instance.ReqSyncContractDetailsServerRpc(UpgradeBus.instance.contractLevel, i);
+
             logger.LogInfo($"User accepted a {UpgradeBus.instance.contractType} contract on {UpgradeBus.instance.contractLevel}");
+
             return DisplayTerminalMessage(txt);
         }
         static string GetSpecifiedLevel(string moon)
@@ -616,8 +625,8 @@ namespace MoreShipUpgrades.Misc
                 node.clearPreviousText = true;
                 return node;
             }
-            if (terminal.IsHost || terminal.IsServer) LGUStore.instance.SyncContractDetailsClientRpc("None", "None");
-            else LGUStore.instance.ReqSyncContractDetailsServerRpc("None", "None");
+            if (terminal.IsHost || terminal.IsServer) LGUStore.instance.SyncContractDetailsClientRpc("None", -1);
+            else LGUStore.instance.ReqSyncContractDetailsServerRpc("None", -1);
             node.displayText = "Cancelling contract...\n\n";
             node.clearPreviousText = true;
             return node;
@@ -639,8 +648,8 @@ namespace MoreShipUpgrades.Misc
             int i = Random.Range(0, contracts.Length);
             UpgradeBus.instance.contractType = contracts[i];
             UpgradeBus.instance.contractLevel = moon;
-            if (terminal.IsHost || terminal.IsServer) LGUStore.instance.SyncContractDetailsClientRpc(UpgradeBus.instance.contractLevel, contracts[i]);
-            else LGUStore.instance.ReqSyncContractDetailsServerRpc(UpgradeBus.instance.contractLevel, contracts[i]);
+            if (terminal.IsHost || terminal.IsServer) LGUStore.instance.SyncContractDetailsClientRpc(UpgradeBus.instance.contractLevel, i);
+            else LGUStore.instance.ReqSyncContractDetailsServerRpc(UpgradeBus.instance.contractLevel, i);
             logger.LogInfo($"User accepted a {UpgradeBus.instance.contractType} contract on {UpgradeBus.instance.contractLevel}");
             return DisplayTerminalMessage($"A {contracts[i]} contract has been accepted for {moon}!{contractInfos[i]}");
         }

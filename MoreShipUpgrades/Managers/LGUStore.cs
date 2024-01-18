@@ -11,6 +11,7 @@ using GameNetcodeStuff;
 using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.Commands;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -115,17 +116,22 @@ namespace MoreShipUpgrades.Managers
         }
 
         [ServerRpc(RequireOwnership = false)]
-        public void ReqSyncContractDetailsServerRpc(string contractLvl, string contractType)
+        public void ReqSyncContractDetailsServerRpc(string contractLvl, int contractType)
         {
             SyncContractDetailsClientRpc(contractLvl, contractType);
             logger.LogInfo("Syncing contract details on all clients...");
         }
 
         [ClientRpc]
-        public void SyncContractDetailsClientRpc(string contractLvl, string contractType)
+        public void SyncContractDetailsClientRpc(string contractLvl = "None", int contractType = -1)
         {
             UpgradeBus.instance.contractLevel = contractLvl;
-            UpgradeBus.instance.contractType = contractType;
+            if (contractType == -1) UpgradeBus.instance.contractType = "None";
+            else
+            {
+                UpgradeBus.instance.contractType = CommandParser.contracts[contractType];
+                ContractScript.lastContractIndex = contractType;
+            }
             UpgradeBus.instance.fakeBombOrders = new Dictionary<string, List<string>>();
             logger.LogInfo($"New contract details received. level: {contractLvl}, type: {contractType}");
         }

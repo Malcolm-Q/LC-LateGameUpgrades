@@ -95,13 +95,13 @@ namespace MoreShipUpgrades.Patches
 
         [HarmonyPatch(nameof(StartOfRound.ReviveDeadPlayers))]
         [HarmonyPostfix]
-        private static void ResetContract(StartMatchLever __instance)
+        private static void ResetContract(StartOfRound __instance)
         {
             if (UpgradeBus.instance.contractLevel == RoundManager.Instance.currentLevel.PlanetName)
             {
                 if (__instance.IsHost)
                 {
-                    LGUStore.instance.SyncContractDetailsClientRpc("None", "None");
+                    LGUStore.instance.SyncContractDetailsClientRpc("None", -1);
                 }
             }
         }
