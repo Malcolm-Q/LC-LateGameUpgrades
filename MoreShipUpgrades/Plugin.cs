@@ -644,6 +644,7 @@ namespace MoreShipUpgrades
             SetupContract();
             SetupSickBeats();
             SetupExtendDeadline();
+            SetupDoorsHydraulicsBattery();
             SetupScrapInsurance();
         }
 
@@ -733,6 +734,9 @@ namespace MoreShipUpgrades
         {
             SetupGenericPerk<ExtendDeadlineScript>(ExtendDeadlineScript.UPGRADE_NAME);
         }
+        private void SetupDoorsHydraulicsBattery()
+        {
+            SetupGenericPerk<DoorsHydraulicsBattery>(DoorsHydraulicsBattery.UPGRADE_NAME);
         private void SetupScrapInsurance()
         {
             SetupGenericPerk<ScrapInsurance>(ScrapInsurance.COMMAND_NAME);
