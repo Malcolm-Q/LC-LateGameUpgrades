@@ -1,6 +1,10 @@
-﻿using MoreShipUpgrades.Managers;
+﻿using LethalLib.Modules;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Misc
@@ -38,5 +42,6 @@ namespace MoreShipUpgrades.Misc
             }
             return false;
         }
+
     }
 }

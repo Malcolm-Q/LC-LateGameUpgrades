@@ -1,8 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace MoreShipUpgrades.Misc
 {
@@ -31,6 +29,7 @@ namespace MoreShipUpgrades.Misc
 
         public virtual void Register()
         {
+            Debug.Log("SDFSD");
             if (!UpgradeBus.instance.UpgradeObjects.ContainsKey(upgradeName)) { UpgradeBus.instance.UpgradeObjects.Add(upgradeName, gameObject); }
         }
 
