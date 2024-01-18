@@ -1,4 +1,5 @@
 ﻿using GameNetcodeStuff;
+using LethalLib.Modules;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exorcism;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
@@ -6,6 +7,7 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Misc
@@ -14,15 +16,10 @@ namespace MoreShipUpgrades.Misc
     {
         private static LGULogger logger = new LGULogger(nameof(CommandParser));
         private static bool attemptCancelContract = false;
+        private static string attemptSpecifyContract = null;
+        private static TerminalKeyword routeKeyword;
 
         const string LOAD_LGU_COMMAND = "load lgu";
-        internal static string[] LEVELS = {
-            "41 Experimentation",
-            "220 Assurance",
-            "56 Vow",
-            "61 March",
-            "21 Offense"
-        };
         static string[] contracts = { "data", "exterminator", "extraction","exorcism","defusal" };
         static string[] contractInfos = {
             "\n\nOur systems have detected an active PC somewhere in the facility.\nFind it, use the bruteforce command on the ship terminal with the devices IP to get login credentials, then use the cd, ls, and mv commands to find the .db file (enter `mv survey.db` in the containing folder).\n\n",
@@ -389,7 +386,7 @@ namespace MoreShipUpgrades.Misc
             {
                 case "cancel": return ExecuteContractCancelCommand(ref terminal);
                 case "info": return DisplayTerminalMessage(string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), UpgradeBus.instance.cfg.CONTRACT_PRICE));
-                default: return TryGetContract(ref terminal);
+                default: return TryGetContract(secondWord, ref terminal);
             }
         }
         private static TerminalNode ExecuteContractCancelCommand(ref Terminal terminal)
@@ -406,22 +403,44 @@ namespace MoreShipUpgrades.Misc
             node.displayText = "Type CONFIRM to cancel your current contract. There will be no refunds.\n\n";
             return node;
         }
-        static TerminalNode TryGetContract(ref Terminal terminal)
+        static TerminalNode TryGetMoonContract(string possibleMoon, ref Terminal terminal)
         {
+            logger.LogDebug($"Trying to assign a contract on moon called {possibleMoon}");
+            string txt = null;
+            if (UpgradeBus.instance.contractLevel != "None")
+            {
+                txt = $"You currently have a {UpgradeBus.instance.contractType} contract on {UpgradeBus.instance.contractLevel}!\n\n";
+                txt += string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE);
+                logger.LogInfo($"User tried starting a new specified moon contract while they still have a {UpgradeBus.instance.contractType} contract on {UpgradeBus.instance.contractLevel}!");
+                return DisplayTerminalMessage(txt);
+            }
+            if (terminal.groupCredits < UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE)
+            {
+                txt = $"Specified Moon contracts cost ${UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE} and you have ${terminal.groupCredits}\n\n";
+                return DisplayTerminalMessage(txt);
+            }
+            string moon = GetSpecifiedLevel(possibleMoon);
+            if (moon == "None")
+            {
+                txt = $"Wasn't possible to find any moons whose name contains {possibleMoon} to provide a contract on it...\n\n";
+                return DisplayTerminalMessage(txt);
+            }
+            attemptSpecifyContract = moon;
+            txt = $"Type CONFIRM if you wish to have a contract on {moon} for the cost of {UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE} Company credits.\n\n";
+            return DisplayTerminalMessage(txt);
+        }
+        static TerminalNode TryGetContract(string possibleMoon, ref Terminal terminal)
+        {
+            if (possibleMoon != "") return TryGetMoonContract(possibleMoon, ref terminal);
             string txt = null;
             if(UpgradeBus.instance.contractLevel != "None")
             {
                 txt = $"You currently have a {UpgradeBus.instance.contractType} contract on {UpgradeBus.instance.contractLevel}!\n\n";
-                foreach(CustomTerminalNode node in UpgradeBus.instance.terminalNodes)
-                {
-                    if (node.Name != "Contract") continue;
-                    txt += node.Description;
-                    break;
-                }
+                txt += string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), UpgradeBus.instance.cfg.CONTRACT_PRICE);
                 logger.LogInfo($"User tried starting a new contract while they still have a {UpgradeBus.instance.contractType} contract on {UpgradeBus.instance.contractLevel}!");
                 return DisplayTerminalMessage(txt);
             }
-            if(terminal.groupCredits < UpgradeBus.instance.cfg.CONTRACT_PRICE) //change this to cfg value
+            if(terminal.groupCredits < UpgradeBus.instance.cfg.CONTRACT_PRICE)
             {
                 txt = $"Contracts costs ${UpgradeBus.instance.cfg.CONTRACT_PRICE} and you have ${terminal.groupCredits}\n\n";
                 return DisplayTerminalMessage(txt);
@@ -435,14 +454,74 @@ namespace MoreShipUpgrades.Misc
             logger.LogInfo($"User accepted a {UpgradeBus.instance.contractType} contract on {UpgradeBus.instance.contractLevel}");
             return DisplayTerminalMessage(txt);
         }
-
+        static string GetSpecifiedLevel(string moon)
+        {
+            string lvl = UpgradeBus.instance.contractLevel;
+            SelectableLevel[] availableLevels = StartOfRound.Instance.levels;
+            for (int i = 0; i < availableLevels.Length; i++) 
+            {
+                logger.LogDebug(availableLevels[i].PlanetName.ToLower());
+                if (!availableLevels[i].PlanetName.ToLower().Contains(moon)) continue;
+                lvl = availableLevels[i].PlanetName;
+                break;
+            }
+            return lvl;
+        }
         static string RandomLevel()
         {
             string lvl = UpgradeBus.instance.contractLevel;
-            while(lvl == UpgradeBus.instance.contractLevel)
+            string lastLevel = null;
+            SelectableLevel[] availableLevels = StartOfRound.Instance.levels;
+            bool[] usedLevels = new bool[availableLevels.Length];
+            for(int i = 0; i < usedLevels.Length; i++)
             {
-                lvl = LEVELS[UnityEngine.Random.Range(0, LEVELS.Length)];
+                usedLevels[i] = false;
             }
+            bool allUsed = true;
+            while (lvl == UpgradeBus.instance.contractLevel)
+            {
+                int levelIndex = UnityEngine.Random.Range(0, availableLevels.Length);
+                if (usedLevels[levelIndex]) continue;
+                usedLevels[levelIndex] = true;
+                SelectableLevel level = availableLevels[levelIndex];
+                lastLevel = level.PlanetName;
+                if (level.PlanetName.Contains("Gordion")) continue;
+                logger.LogDebug($"Picked {level.PlanetName} as possible moon for contract...");
+                if (routeKeyword == null) routeKeyword = UpgradeBus.instance.GetTerminal().terminalNodes.allKeywords.First(k => k.word == "route");
+                for(int i = 0; i < routeKeyword.compatibleNouns.Length && lvl == UpgradeBus.instance.contractLevel; i++)
+                {
+                    TerminalNode routeMoon = routeKeyword.compatibleNouns[i].result;
+                    int itemCost = routeMoon.itemCost;
+                    if (UpgradeBus.instance.cfg.CONTRACT_FREE_MOONS_ONLY && itemCost != 0)
+                    {
+                        logger.LogDebug($"Criteria algorithm skipped a choice due to configuration only allowing free moons (Choice: {level.PlanetName})");
+                        break;
+                    }
+                    CompatibleNoun[] additionalNodes = routeMoon.terminalOptions;
+                    for(int j = 0; j < additionalNodes.Length && lvl == UpgradeBus.instance.contractLevel; j++)
+                    {
+                        TerminalNode confirmNode = additionalNodes[j].result;
+                        if (confirmNode == null) continue;
+                        if (confirmNode.buyRerouteToMoon != levelIndex) continue;
+
+                        logger.LogDebug($"Criteria algorithm made a choice and decided to assign contract on {level.PlanetName}");
+                        lvl = level.PlanetName;
+                    }
+                }
+                if (lvl != UpgradeBus.instance.contractLevel) break;
+                allUsed = true;
+                for (int i = 0; i < usedLevels.Length; i++)
+                {
+                    allUsed &= usedLevels[i];
+                }
+                if (allUsed) break;
+            }
+            if (lvl == UpgradeBus.instance.contractLevel && allUsed)
+            {
+                logger.LogDebug($"Criteria algorithm did not make a choice, we will use the last selected moon ({lastLevel})");
+                lvl = lastLevel;
+            }
+            logger.LogDebug($"{lvl} will be the moon for the random contract...");
             UpgradeBus.instance.contractLevel = lvl;
             return lvl;
         }
@@ -543,12 +622,38 @@ namespace MoreShipUpgrades.Misc
             return node;
 
         }
+        static TerminalNode CheckConfirmForSpecify(string word, ref Terminal terminal)
+        {
+            string moon = attemptSpecifyContract;
+            attemptSpecifyContract = null;
+            TerminalNode node = ScriptableObject.CreateInstance<TerminalNode>();
+            if (word.ToLower() != "confirm")
+            {
+                node.displayText = "Failed to confirm user's input. Invalidated specified moon contract request.\n\n";
+                node.clearPreviousText = true;
+                return node;
+            }
+            
+            LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits - UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE);
+            int i = Random.Range(0, contracts.Length);
+            UpgradeBus.instance.contractType = contracts[i];
+            UpgradeBus.instance.contractLevel = moon;
+            if (terminal.IsHost || terminal.IsServer) LGUStore.instance.SyncContractDetailsClientRpc(UpgradeBus.instance.contractLevel, contracts[i]);
+            else LGUStore.instance.ReqSyncContractDetailsServerRpc(UpgradeBus.instance.contractLevel, contracts[i]);
+            logger.LogInfo($"User accepted a {UpgradeBus.instance.contractType} contract on {UpgradeBus.instance.contractLevel}");
+            return DisplayTerminalMessage($"A {contracts[i]} contract has been accepted for {moon}!{contractInfos[i]}");
+        }
         public static void ParseLGUCommands(string fullText, ref Terminal terminal, ref TerminalNode outputNode)
         {
             string[] textArray = fullText.Split();
             string firstWord = textArray[0].ToLower();
             string secondWord = textArray.Length > 1 ? textArray[1].ToLower() : "";
             string thirdWord = textArray.Length > 2 ? textArray[2].ToLower() : "";
+            if (attemptSpecifyContract != null)
+            {
+                outputNode = CheckConfirmForSpecify(firstWord, ref terminal);
+                return;
+            }
             if (attemptCancelContract)
             {
                 outputNode = CheckConfirmForCancel(firstWord, ref terminal);
