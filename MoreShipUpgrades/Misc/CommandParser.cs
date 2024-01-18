@@ -584,7 +584,7 @@ namespace MoreShipUpgrades.Misc
             {
                 logger.LogInfo($"USER CORRECTLY ENTERED IP ADDRESS, user: {UpgradeBus.instance.DataMinigameUser}, pass: {UpgradeBus.instance.DataMinigamePass}");
                 txt = $"PING {ip} ({ip}): 56 data bytes\r\n64 bytes from {ip}: icmp_seq=0 ttl=64 time=1.234 ms\r\n64 bytes from {ip}: icmp_seq=1 ttl=64 time=1.345 ms\r\n64 bytes from {ip}: icmp_seq=2 ttl=64 time=1.123 ms\r\n64 bytes from {ip}: icmp_seq=3 ttl=64 time=1.456 ms\r\n\r\n--- {ip} ping statistics ---\r\n4 packets transmitted, 4 packets received, 0.0% packet loss\r\nround-trip min/avg/max/stddev = 1.123/1.289/1.456/0.123 ms\n\n";
-                txt += $"CONNECTION ESTABLISHED --- RETRIEVING CREDENTIALS...\n\nUSER: {UpgradeBus.instance.DataMinigameUser}\nPASSWORD: {UpgradeBus.instance.DataMinigamePass}\nn";
+                txt += $"CONNECTION ESTABLISHED --- RETRIEVING CREDENTIALS...\n\nUSER: {UpgradeBus.instance.DataMinigameUser}\nPASSWORD: {UpgradeBus.instance.DataMinigamePass}\n";
             }
             else
             {
