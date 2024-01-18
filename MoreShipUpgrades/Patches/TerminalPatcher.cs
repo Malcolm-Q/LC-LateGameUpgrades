@@ -17,6 +17,8 @@ namespace MoreShipUpgrades.Patches
         private const string ATK_HELP_COMMAND = ">ATK / INITATTACK \nStuns nearby enemies for a set period of time. Only applicable when Discombobulator has been purchased\n\n";
         private const string CD_HELP_COMMAND = ">CD / COOLDOWN \nShows the current cooldown of the ship stun ability. Only applicable when Discombobulator has been purchased\n\n";
         private const string SCRAP_INSURANCE_COMMAND = "> SCRAP INSURANCE \nActivates an insurance policy on scrap stored in the ship incase of a team wipe occurs.\nCan only be bought while in orbit and will only apply in the next moon land after purchase.\nConsumes {0} credits for each activation of insurance.\n\n";
+        private const string INFO_CONTRACT_HELP_COMMAND = ">CONTRACT INFO \nDisplays all information related to each contract and how to complete it.\n\n";
+
         [HarmonyPostfix]
         [HarmonyPatch("Start")]
         private static void StartPostfix(ref Terminal __instance)
@@ -62,7 +64,9 @@ namespace MoreShipUpgrades.Patches
         }
         private static void HandleHelpContract(ref TerminalNode helpNode)
         {
-            HandleHelpCommand(ref helpNode, string.Format(CONTRACT_HELP_COMMAND, UpgradeBus.instance.cfg.CONTRACT_PRICE), UpgradeBus.instance.cfg.CONTRACTS_ENABLED);
+            bool enabled = UpgradeBus.instance.cfg.CONTRACTS_ENABLED;
+            HandleHelpCommand(ref helpNode, string.Format(CONTRACT_HELP_COMMAND, UpgradeBus.instance.cfg.CONTRACT_PRICE), enabled);
+            HandleHelpCommand(ref helpNode, INFO_CONTRACT_HELP_COMMAND, enabled);
         }
         private static void HandleHelpInterns(ref TerminalNode helpNode)
         {

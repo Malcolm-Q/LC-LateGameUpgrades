@@ -144,6 +144,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
             UpgradeBus.instance.DataMinigameKey = Key;
             UpgradeBus.instance.DataMinigameUser = user;
             UpgradeBus.instance.DataMinigamePass = pass;
+            this.user = user;
+            this.pass = pass;
             if (IPText == null) IPText = transform.GetChild(2).GetChild(0).GetChild(2).GetChild(0).GetComponent<Text>();
             IPText.text = IPText.text.Replace("[IP]", Key);
         }
@@ -302,7 +304,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
 
         public void Login()
         {
-            logger.LogInfo($"Submitted user: {userField.text}\nTrue user: {user}\nSubmitted password: {passField.text}\nTrue password:{passField.text}");
+            logger.LogInfo($"Submitted user: {userField.text}\nTrue user: {user}\nSubmitted password: {passField.text}\nTrue password: {pass}");
             if (userField.text == user && passField.text == pass)
             {
                 gameField.transform.parent.gameObject.SetActive(true);

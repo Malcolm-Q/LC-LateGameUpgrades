@@ -575,13 +575,18 @@ namespace MoreShipUpgrades
             wheelbarrow.allowDroppingAheadOfPlayer = true;
             wheelbarrow.isConductiveMetal = true;
             wheelbarrow.isScrap = true;
-            wheelbarrow.weight = 1f + (cfg.SCRAP_WHEELBARROW_WEIGHT/100f);
+            wheelbarrow.weight = 0.99f + (cfg.SCRAP_WHEELBARROW_WEIGHT/100f);
+            wheelbarrow.toolTips = new string[] { "Drop all items: [MMB]" };
+            wheelbarrow.canBeGrabbedBeforeGameStart = true;
             ScrapWheelbarrow barrowScript = wheelbarrow.spawnPrefab.AddComponent<ScrapWheelbarrow>();
             barrowScript.itemProperties = wheelbarrow;
             barrowScript.wheelsClip = shoppingCartSound;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
+            LethalLib.Modules.Items.RegisterItem(wheelbarrow);
+            Utilities.FixMixerGroups(wheelbarrow.spawnPrefab);
+            int amountToSpawn = cfg.SCRAP_WHEELBARROW_ENABLED ? 1 : 0;
 
-            AnimationCurve curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(cfg.SCRAP_WHEELBARROW_RARITY, 1), new Keyframe(1, 1));
+            AnimationCurve curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe((1f - cfg.SCRAP_WHEELBARROW_RARITY), amountToSpawn), new Keyframe(1, amountToSpawn));
             SpawnableMapObjectDef mapObjDef = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
             mapObjDef.spawnableMapObject = new SpawnableMapObject();
             mapObjDef.spawnableMapObject.prefabToSpawn = wheelbarrow.spawnPrefab;
@@ -602,11 +607,14 @@ namespace MoreShipUpgrades
             wheelbarrow.positionOffset = new Vector3(0f, -0.7f, 1.4f);
             wheelbarrow.allowDroppingAheadOfPlayer = true;
             wheelbarrow.isConductiveMetal = true;
-            wheelbarrow.weight = 1f + (cfg.WHEELBARROW_WEIGHT/100f);
+            wheelbarrow.weight = 0.99f + (cfg.WHEELBARROW_WEIGHT/100f);
+            wheelbarrow.toolTips = new string[] { "Drop all items: [MMB] " };
+            wheelbarrow.canBeGrabbedBeforeGameStart = true;
             StoreWheelbarrow barrowScript = wheelbarrow.spawnPrefab.AddComponent<StoreWheelbarrow>();
             barrowScript.itemProperties = wheelbarrow;
             barrowScript.wheelsClip = wheelbarrowSound;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
+            Utilities.FixMixerGroups(wheelbarrow.spawnPrefab);
 
             UpgradeBus.instance.ItemsToSync.Add("Wheel", wheelbarrow);
 
