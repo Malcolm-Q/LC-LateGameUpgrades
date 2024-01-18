@@ -1,5 +1,6 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace MoreShipUpgrades.UpgradeComponents
         public GameObject loot;
         BoxCollider col;
         PlaceableObjectsSurface place;
+        LGULogger logger = new LGULogger(nameof(PentagramScript));
 
         string DemonName;
 
@@ -61,12 +63,37 @@ namespace MoreShipUpgrades.UpgradeComponents
         void Interact(PlayerControllerB player)
         {
             DisableGrabbableServerRpc(new NetworkBehaviourReference(player.currentlyHeldObjectServer));
-            if (currentRitual.Contains(player.currentlyHeldObjectServer.itemProperties.itemName)) currentRitual.Remove(player.currentlyHeldObjectServer.itemProperties.itemName);
+            if (currentRitual.Contains(player.currentlyHeldObjectServer.itemProperties.itemName))
+            {
+                if (IsHost || IsServer) SyncCurrentRitualClientRpc(player.currentlyHeldObjectServer.itemProperties.itemName);
+                else SyncCurrentRitualServerRpc(player.currentlyHeldObjectServer.itemProperties.itemName);
+            }
             else FailRitualServerRpc();
             place.PlaceObject(player);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        void SyncCurrentRitualServerRpc(string toRemove)
+        {
+            SyncCurrentRitualClientRpc(toRemove);
+        }
+
+        [ClientRpc]
+        void SyncCurrentRitualClientRpc(string toRemove)
+        {
+            logger.LogInfo($"Removing {toRemove} from currentRitual...");
+            if (currentRitual.Contains(toRemove)) currentRitual.Remove(toRemove);
+            else logger.LogWarning($"{toRemove} was not found in currentRitual!");
             if(currentRitual.Count <= 0)
             {
-                ReqRitualStartServerRpc();
+                logger.LogInfo("Ritual starting...");
+                placed = true;
+                col.enabled = false;
+                anim.SetTrigger("Ritual");
+                GetComponentInChildren<ParticleSystem>().Play();
+                StartCoroutine(WaitALittleToStopParticlesGaming());
+                audio.Stop();
+                audio.PlayOneShot(portal);
             }
         }
 
@@ -90,7 +117,6 @@ namespace MoreShipUpgrades.UpgradeComponents
         void FailRitualServerRpc()
         {
             FailRitualClientRpc();
-
         }
 
         [ClientRpc]
@@ -107,40 +133,32 @@ namespace MoreShipUpgrades.UpgradeComponents
         {
             yield return new WaitForSeconds(2.5f);
             Landmine.SpawnExplosion(transform.position + new Vector3(0, 0.2f, 0), true, 10, 20);
+            yield return new WaitForSeconds(0.5f);
             if (IsHost)
             {
-                for (int i = 0; i < RoundManager.Instance.currentLevel.Enemies.Count; i++)
+                if (!SpawnMob("Girl"))
                 {
-                    Debug.Log(RoundManager.Instance.currentLevel.Enemies[i].enemyType.enemyName);
-                    if (RoundManager.Instance.currentLevel.Enemies[i].enemyType.enemyName == "Girl")
-                    {
-                        for(int j = 0; j < UpgradeBus.instance.cfg.CONTRACT_GHOST_SPAWN; j++)
-                        {
-                            RoundManager.Instance.SpawnEnemyOnServer(transform.position + new Vector3(0, 0.15f, 0), 0f, i);
-                        }
-                        break;
-                    }
+                    SpawnMob("Crawler");
                 }
             }
             if(UpgradeBus.instance.cfg.CONTRACT_GHOST_SPAWN > 0) HUDManager.Instance.DisplayTip("RUN", "YOU HAVE ANGERED THE SPIRIT WORLD!");
         }
 
-        [ServerRpc(RequireOwnership = false)]
-        void ReqRitualStartServerRpc()
+        bool SpawnMob(string mob) // this could be moved to tools
         {
-            RitualStartClientRpc();
-        }
-
-        [ClientRpc]
-        void RitualStartClientRpc()
-        {
-            placed = true;
-            col.enabled = false;
-            anim.SetTrigger("Ritual");
-            GetComponentInChildren<ParticleSystem>().Play();
-            StartCoroutine(WaitALittleToStopParticlesGaming());
-            audio.Stop();
-            audio.PlayOneShot(portal);
+            for (int i = 0; i < RoundManager.Instance.currentLevel.Enemies.Count; i++)
+            {
+                Debug.Log(RoundManager.Instance.currentLevel.Enemies[i].enemyType.enemyName);
+                if (RoundManager.Instance.currentLevel.Enemies[i].enemyType.enemyName == mob)
+                {
+                    for (int j = 0; j < UpgradeBus.instance.cfg.CONTRACT_GHOST_SPAWN; j++)
+                    {
+                        RoundManager.Instance.SpawnEnemyOnServer(transform.position + new Vector3(0, 0.15f, 0), 0f, i);
+                    }
+                    return true;
+                }
+            }
+            return false;
         }
 
         private IEnumerator WaitALittleToStopParticlesGaming()

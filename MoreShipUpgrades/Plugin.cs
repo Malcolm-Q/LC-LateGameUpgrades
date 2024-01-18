@@ -20,7 +20,7 @@ using LethalLib.Modules;
 namespace MoreShipUpgrades
 {
     [BepInEx.BepInPlugin(Metadata.GUID,Metadata.NAME,Metadata.VERSION)]
-    [BepInDependency("evaisa.lethallib")]
+    [BepInDependency("evaisa.lethallib","0.13.0")]
     public class Plugin : BaseUnityPlugin
     {
         private readonly Harmony harmony = new Harmony(Metadata.GUID);
@@ -190,8 +190,6 @@ namespace MoreShipUpgrades
             mapObjDef.spawnableMapObject = new SpawnableMapObject();
             mapObjDef.spawnableMapObject.prefabToSpawn = mainItem.spawnPrefab;
             MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
-            mainItem.isScrap = false;
-            Items.RegisterShopItem(mainItem, 0);
         }
 
 
