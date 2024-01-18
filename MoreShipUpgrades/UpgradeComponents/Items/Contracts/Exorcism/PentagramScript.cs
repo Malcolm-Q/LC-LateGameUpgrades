@@ -137,30 +137,15 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exorcism
             yield return new WaitForSeconds(0.5f);
             if (IsHost)
             {
-                if (!SpawnMob("Girl"))
+                if (!Tools.SpawnMob("Girl", transform.position + new Vector3(0, 0.15f, 0),UpgradeBus.instance.cfg.CONTRACT_GHOST_SPAWN))
                 {
-                    SpawnMob("Crawler");
+                    Tools.SpawnMob("Crawler", transform.position + new Vector3(0, 0.15f, 0),UpgradeBus.instance.cfg.CONTRACT_GHOST_SPAWN);
                 }
             }
             if(UpgradeBus.instance.cfg.CONTRACT_GHOST_SPAWN > 0) HUDManager.Instance.DisplayTip("RUN", "YOU HAVE ANGERED THE SPIRIT WORLD!");
         }
 
-        bool SpawnMob(string mob) // this could be moved to tools
-        {
-            for (int i = 0; i < RoundManager.Instance.currentLevel.Enemies.Count; i++)
-            {
-                Debug.Log(RoundManager.Instance.currentLevel.Enemies[i].enemyType.enemyName);
-                if (RoundManager.Instance.currentLevel.Enemies[i].enemyType.enemyName == mob)
-                {
-                    for (int j = 0; j < UpgradeBus.instance.cfg.CONTRACT_GHOST_SPAWN; j++)
-                    {
-                        RoundManager.Instance.SpawnEnemyOnServer(transform.position + new Vector3(0, 0.15f, 0), 0f, i);
-                    }
-                    return true;
-                }
-            }
-            return false;
-        }
+
 
         private IEnumerator WaitALittleToStopParticlesGaming()
         {

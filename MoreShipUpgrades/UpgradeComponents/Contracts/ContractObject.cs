@@ -19,16 +19,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Contracts
             logger.LogInfo($"{contractType}-{name} spawned and activated.");
             if (!(contractType == "exterminator" && IsHost)) return;
 
-            for (int i = 0; i < RoundManager.Instance.currentLevel.Enemies.Count; i++)
-            {
-                if (RoundManager.Instance.currentLevel.Enemies[i].enemyType.enemyName != "Hoarding bug") continue;
-
-                for (int j = 0; j < UpgradeBus.instance.cfg.CONTRACT_BUG_SPAWNS; j++)
-                {
-                    RoundManager.Instance.SpawnEnemyOnServer(transform.position, 0f, i);
-                }
-                break;
-            }
+            Tools.SpawnMob("Hoarding bug", transform.position, UpgradeBus.instance.cfg.CONTRACT_BUG_SPAWNS);
         }
 
         public string GetContractType()
