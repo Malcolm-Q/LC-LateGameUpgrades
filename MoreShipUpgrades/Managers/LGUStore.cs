@@ -6,10 +6,11 @@ using Unity.Netcode;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.Collections;
-using MoreShipUpgrades.UpgradeComponents;
 using System.Linq;
 using GameNetcodeStuff;
 using MoreShipUpgrades.UpgradeComponents.Items;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -39,6 +40,8 @@ namespace MoreShipUpgrades.Managers
             {hunterScript.UPGRADE_NAME, SaveInfo => SaveInfo.hunter },
             {lightningRodScript.UPGRADE_NAME, SaveInfo => SaveInfo.lightningRod },
             {playerHealthScript.UPGRADE_NAME, SaveInfo => SaveInfo.playerHealth },
+            {DoorsHydraulicsBattery.UPGRADE_NAME, SaveInfo => SaveInfo.doorsHydraulicsBattery },
+            {BeatScript.UPGRADE_NAME, SaveInfo => SaveInfo.sickBeats }
         };
 
         private static Dictionary<string, Func<SaveInfo, int>> levelConditions = new Dictionary<string, Func<SaveInfo, int>>
@@ -59,6 +62,8 @@ namespace MoreShipUpgrades.Managers
             { hunterScript.UPGRADE_NAME, SaveInfo => SaveInfo.huntLevel },
             { lightningRodScript.UPGRADE_NAME, saveInfo => 0},
             { playerHealthScript.UPGRADE_NAME, saveInfo => saveInfo.playerHealthLevel },
+            { DoorsHydraulicsBattery.UPGRADE_NAME, saveInfo => saveInfo.doorsHydraulicsBatteryLevel},
+            { BeatScript.UPGRADE_NAME, saveInfo => 0 },
         };
         private bool retrievedCfg;
         private bool receivedSave;
@@ -336,6 +341,7 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.strongLegs = saveInfo.strongLegs;
             UpgradeBus.instance.runningShoes = saveInfo.runningShoes;
             UpgradeBus.instance.biggerLungs = saveInfo.biggerLungs;
+            UpgradeBus.instance.lockSmith = saveInfo.lockSmith;
             UpgradeBus.instance.proteinPowder = saveInfo.proteinPowder;
             UpgradeBus.instance.lightningRod = saveInfo.lightningRod;
             UpgradeBus.instance.pager = saveInfo.pager;
@@ -343,6 +349,7 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.playerHealth = saveInfo.playerHealth;
             UpgradeBus.instance.wearingHelmet = saveInfo.wearingHelmet;
             UpgradeBus.instance.sickBeats = saveInfo.sickBeats;
+            UpgradeBus.instance.doorsHydraulicsBattery = saveInfo.doorsHydraulicsBattery;
 
             UpgradeBus.instance.beeLevel = saveInfo.beeLevel;
             UpgradeBus.instance.huntLevel = saveInfo.huntLevel;
@@ -356,6 +363,7 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.scanLevel = saveInfo.scanLevel;
             UpgradeBus.instance.nightVisionLevel = saveInfo.nightVisionLevel;
             UpgradeBus.instance.playerHealthLevel = saveInfo.playerHealthLevel;
+            UpgradeBus.instance.doorsHydraulicsBatteryLevel = saveInfo.doorsHydraulicsBatteryLevel;
 
             UpgradeBus.instance.contractLevel = saveInfo.contractLevel;
             UpgradeBus.instance.contractType = saveInfo.contractType;
@@ -646,6 +654,7 @@ namespace MoreShipUpgrades.Managers
         public bool playerHealth = UpgradeBus.instance.playerHealth;
         public bool wearingHelmet = UpgradeBus.instance.wearingHelmet;
         public bool sickBeats = UpgradeBus.instance.sickBeats;
+        public bool doorsHydraulicsBattery = UpgradeBus.instance.doorsHydraulicsBattery;
 
         public int beeLevel = UpgradeBus.instance.beeLevel;
         public int huntLevel = UpgradeBus.instance.huntLevel;
@@ -658,6 +667,7 @@ namespace MoreShipUpgrades.Managers
         public int legLevel = UpgradeBus.instance.legLevel;
         public int nightVisionLevel = UpgradeBus.instance.nightVisionLevel;
         public int playerHealthLevel = UpgradeBus.instance.playerHealthLevel;
+        public int doorsHydraulicsBatteryLevel = UpgradeBus.instance.doorsHydraulicsBatteryLevel;
         public string contractType = UpgradeBus.instance.contractType;
         public string contractLevel = UpgradeBus.instance.contractLevel;
         public Dictionary<string, float> SaleData = UpgradeBus.instance.SaleData;

@@ -1,4 +1,5 @@
 ﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using UnityEngine.InputSystem;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items

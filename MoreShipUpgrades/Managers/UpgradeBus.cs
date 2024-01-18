@@ -1,8 +1,10 @@
 ﻿using GameNetcodeStuff;
 using LethalLib.Modules;
 using MoreShipUpgrades.Misc;
-using MoreShipUpgrades.UpgradeComponents;
+using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Items;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
@@ -37,6 +39,7 @@ namespace MoreShipUpgrades.Managers
         public bool lightningRodActive = false;
         public bool hunter = false;
         public bool playerHealth = false;
+        public bool doorsHydraulicsBattery = false;
 
         public int lungLevel = 0;
         public int helmetHits = 0;
@@ -50,6 +53,7 @@ namespace MoreShipUpgrades.Managers
         public int scanLevel = 0;
         public int nightVisionLevel = 0;
         public int playerHealthLevel = 0;
+        public int doorsHydraulicsBatteryLevel = 0;
 
         public float flashCooldown = 0f;
         public float alteredWeight = 1f;
@@ -75,6 +79,7 @@ namespace MoreShipUpgrades.Managers
         public TerminalNode modStoreInterface;
         public Terminal terminal;
         public PlayerControllerB localPlayer;
+        private HangarShipDoor hangarDoors;
 
         public List<BoomboxItem> boomBoxes = new List<BoomboxItem>();
 
@@ -92,6 +97,7 @@ namespace MoreShipUpgrades.Managers
             { proteinPowderScript.UPGRADE_NAME, level => instance.cfg.PROTEIN_UNLOCK_FORCE + 1 + (instance.cfg.PROTEIN_INCREMENT * level) },
             { beekeeperScript.UPGRADE_NAME, level => 100 * (instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (level * instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT)) },
             { playerHealthScript.UPGRADE_NAME, level => instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK + (level)*instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT },
+            { DoorsHydraulicsBattery.UPGRADE_NAME, level => instance.cfg.DOOR_HYDRAULICS_BATTERY_INITIAL + (level)*instance.cfg.DOOR_HYDRAULICS_BATTERY_INCREMENTAL },
         };
 
         public Dictionary<string, Item> ItemsToSync = new Dictionary<string, Item>();
@@ -119,6 +125,8 @@ namespace MoreShipUpgrades.Managers
         internal bool pager;
         internal pagerScript pageScript;
 
+        public bool insurance;
+
         public Dictionary<string,GameObject> samplePrefabs = new Dictionary<string,GameObject>();
         public GameObject nightVisionPrefab;
         public bool sickBeats;
@@ -128,7 +136,7 @@ namespace MoreShipUpgrades.Managers
         public GameObject BoomboxIcon;
         public bool EffectsActive;
         public GameObject helmetModel;
-        public HelmetScript helmetScript;
+        public Helmet helmetScript;
         public Dictionary<string, AudioClip> SFX = new Dictionary<string, AudioClip>();
         public bool helmetDesync;
         public List<string> bombOrder = new List<string>();
@@ -153,6 +161,11 @@ namespace MoreShipUpgrades.Managers
             if (localPlayer == null) localPlayer = GameNetworkManager.Instance.localPlayerController;
             return localPlayer;
         }
+        public HangarShipDoor GetShipDoors()
+        {
+            if (hangarDoors == null) hangarDoors = FindObjectOfType<HangarShipDoor>();
+            return hangarDoors;
+        }
         public TerminalNode ConstructNode()
         {
             modStoreInterface = ScriptableObject.CreateInstance<TerminalNode>();
@@ -176,7 +189,9 @@ namespace MoreShipUpgrades.Managers
         public void ResetAllValues(bool wipeObjRefs = true)
         {
             ResetPlayerAttributes();
+            ResetShipAttributesServerRpc();
             EffectsActive = false;
+            insurance = false;
             DestroyTraps = false;
             scannerUpgrade = false;
             nightVision = false;
@@ -227,7 +242,7 @@ namespace MoreShipUpgrades.Managers
             }
 
         }
-
+        private 
         private void ResetPlayerAttributes()
         {
             PlayerControllerB player = GameNetworkManager.Instance.localPlayerController;
@@ -239,6 +254,18 @@ namespace MoreShipUpgrades.Managers
             if (cfg.STRONG_LEGS_ENABLED && strongLegs) strongLegsScript.ResetStrongLegsBuff(ref player);
             if (cfg.PLAYER_HEALTH_ENABLED && playerHealth) playerHealthScript.ResetStimpackBuff(ref player);
         }
+        private void ResetShipAttributesClientRpc()
+        {
+            HangarShipDoor shipDoors = GetShipDoors();
+            if (shipDoors == null) return; // Very edge case
+
+            logger.LogDebug($"Resetting the ship's attributes");
+            if (cfg.DOOR_HYDRAULICS_BATTERY_ENABLED && doorsHydraulicsBattery) DoorsHydraulicsBattery.ResetDoorsHydraulicsBattery(ref shipDoors);
+        }
+        private void ResetShipAttributesServerRpc()
+        {
+            ResetShipAttributesClientRpc();
+        }
 
         internal void GenerateSales(int seed = -1) // TODO: Save sales
         {
@@ -248,7 +275,6 @@ namespace MoreShipUpgrades.Managers
             SaleData = new Dictionary<string, float>();
             foreach(CustomTerminalNode node in terminalNodes)
             {
-                if(node.Name == "Interns" || node.Name == "Contract") { continue; }
                 if(Random.value > cfg.SALE_PERC)
                 {
                     node.salePerc = Random.Range(0.60f, 0.90f);
@@ -332,6 +358,13 @@ namespace MoreShipUpgrades.Managers
                 Items.RemoveShopItem(ItemsToSync["Night"]);
             }
             else if (ItemsToSync["Night"].creditsWorth != cfg.NIGHT_VISION_PRICE) Items.UpdateShopItemPrice(ItemsToSync["Night"], cfg.NIGHT_VISION_PRICE);
+
+            if (!cfg.WHEELBARROW_ENABLED)
+            {
+                logger.LogInfo("Removing Wheelbarrow from store.");
+                Items.RemoveShopItem(ItemsToSync["Wheel"]);
+            }
+            else if (ItemsToSync["Wheel"].creditsWorth != cfg.NIGHT_VISION_PRICE) Items.UpdateShopItemPrice(ItemsToSync["Wheel"], cfg.NIGHT_VISION_PRICE);
         }
 
         internal void Reconstruct()
@@ -373,10 +406,6 @@ namespace MoreShipUpgrades.Managers
 
             SetupBackMusclesTerminalNode();
 
-            SetupInternsTerminalNode();
-
-            SetupContractTerminalNode();
-
             SetupPlayerHealthTerminalNode();
 
             SetupPagerTerminalNode();
@@ -384,8 +413,19 @@ namespace MoreShipUpgrades.Managers
             SetupLocksmithTerminalNode();
 
             SetupSickBeatsTerminalNode();
-        }
 
+            SetupShutterBatteriesTerminalNode();
+            terminalNodes.Sort();
+        }
+        private void SetupShutterBatteriesTerminalNode()
+        {
+            SetupMultiplePurchasableTerminalNode(DoorsHydraulicsBattery.UPGRADE_NAME,
+                                                true,
+                                                cfg.DOOR_HYDRAULICS_BATTERY_ENABLED,
+                                                cfg.DOOR_HYDRAULICS_BATTERY_PRICE,
+                                                ParseUpgradePrices(cfg.DOOR_HYDRAULICS_BATTERY_PRICES),
+                                                "LVL {0} - ${1} - Increases the door's hydraulic capacity to remain closed by {2} units\n");
+        }
         private void SetupSickBeatsTerminalNode()
         {
             string txt = $"Sick Beats - ${cfg.BEATS_PRICE}\nPlayers within a {cfg.BEATS_RADIUS} unit radius from an active boombox will have the following effects:\n\n";
@@ -537,31 +577,6 @@ namespace MoreShipUpgrades.Managers
                                                 cfg.BACK_MUSCLES_PRICE,
                                                 ParseUpgradePrices(cfg.BACK_MUSCLES_UPGRADE_PRICES),
                                                 AssetBundleHandler.GetInfoFromJSON(exoskeletonScript.UPGRADE_NAME));
-        }
-        private void SetupInternsTerminalNode()
-        {
-            SetupOneTimeTerminalNode("Interns",
-                                    cfg.SHARED_UPGRADES ? true : !cfg.INTERN_INDIVIDUAL,
-                                    cfg.INTERN_ENABLED,
-                                    cfg.INTERN_PRICE,
-                                    string.Format(AssetBundleHandler.GetInfoFromJSON("Interns"), cfg.INTERN_PRICE));
-        }
-        private void SetupExtendDeadlineTerminalNode()
-        {
-            SetupOneTimeTerminalNode("Extend Deadline",
-                                    true,
-                                    cfg.EXTEND_DEADLINE_ENABLED,
-                                    cfg.EXTEND_DEADLINE_PRICE,
-                                    "Extends the deadline by a specified amount of days.");
-        }
-
-        private void SetupContractTerminalNode()
-        {
-            SetupOneTimeTerminalNode("Contract",
-                                    true,
-                                    cfg.CONTRACTS_ENABLED,
-                                    cfg.CONTRACT_PRICE,
-                                    string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), cfg.CONTRACT_PRICE));
         }
         private void SetupPagerTerminalNode()
         {

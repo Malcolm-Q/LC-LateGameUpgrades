@@ -2,7 +2,9 @@
 using System;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using MoreShipUpgrades.UpgradeComponents;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.Commands;
 
 
 namespace MoreShipUpgrades.Misc
@@ -34,6 +36,8 @@ namespace MoreShipUpgrades.Misc
         public bool EXTEND_DEADLINE_ENABLED { get; set; }
         public bool WHEELBARROW_ENABLED { get; set; }
         public bool SCRAP_WHEELBARROW_ENABLED { get; set; }
+        public bool DOOR_HYDRAULICS_BATTERY_ENABLED {  get; set; }
+        public bool SCRAP_INSURANCE_ENABLED {  get; set; }
 
         // individual or shared
         public bool ADVANCED_TELE_INDIVIDUAL { get; set; }
@@ -76,7 +80,10 @@ namespace MoreShipUpgrades.Misc
         public int PLAYER_HEALTH_PRICE { get; set; }
         public int EXTEND_DEADLINE_PRICE { get; set; }
         public int CONTRACT_PRICE { get; set; }
+        public int CONTRACT_SPECIFY_PRICE { get; set; }
         public int WHEELBARROW_PRICE { get; set; }
+        public int DOOR_HYDRAULICS_BATTERY_PRICE { get; set; }
+        public int SCRAP_INSURANCE_PRICE { get; set; }
 
         // attributes
         public float BIGGER_LUNGS_STAMINA_REGEN_INCREASE { get; set; }
@@ -231,6 +238,11 @@ namespace MoreShipUpgrades.Misc
         public float SCRAP_WHEELBARROW_RARITY { get; set; }
         public bool SCRAP_WHEELBARROW_PLAY_NOISE {  get; set; }
         public float SCAV_VOLUME { get; set; }
+        public bool CONTRACT_FREE_MOONS_ONLY { get; set; }
+        public string DOOR_HYDRAULICS_BATTERY_PRICES { get; set; }
+        public float DOOR_HYDRAULICS_BATTERY_INITIAL { get; set; }
+        public float DOOR_HYDRAULICS_BATTERY_INCREMENTAL {  get; set; }
+
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -246,7 +258,9 @@ namespace MoreShipUpgrades.Misc
         {
             string topSection = "Contracts";
             CONTRACTS_ENABLED = ConfigEntry(topSection, "Enable the ability to purchase contracts / missions", true, "");
+            CONTRACT_FREE_MOONS_ONLY = ConfigEntry(topSection, "Random contracts on free moons only", true, "If true, \"contract\" command will only generate contracts on free moons.");
             CONTRACT_PRICE = ConfigEntry(topSection, "Price of a random contract", 500, "");
+            CONTRACT_SPECIFY_PRICE = ConfigEntry(topSection, "Price of a specified moon contract", 750, "");
             CONTRACT_BUG_REWARD = ConfigEntry(topSection, "Value of an exterminator contract reward", 500, "");
             CONTRACT_EXOR_REWARD = ConfigEntry(topSection, "Value of an exorcism contract reward", 500, "");
             CONTRACT_DEFUSE_REWARD = ConfigEntry(topSection, "Value of an defusal contract reward", 500, "");
@@ -479,6 +493,17 @@ namespace MoreShipUpgrades.Misc
             DIVEKIT_WEIGHT = ConfigEntry(topSection, "Item weight", 1.65f, "-1 and multiply by 100 (1.65 = 65 lbs)");
             DIVEKIT_TWO_HANDED = ConfigEntry(topSection, "Two Handed Item", true, "One or two handed item.");
 
+            topSection = DoorsHydraulicsBattery.UPGRADE_NAME;
+            DOOR_HYDRAULICS_BATTERY_ENABLED = ConfigEntry(topSection, DoorsHydraulicsBattery.ENABLED_SECTION, true, DoorsHydraulicsBattery.ENABLED_DESCRIPTION);
+            DOOR_HYDRAULICS_BATTERY_PRICE = ConfigEntry(topSection, DoorsHydraulicsBattery.PRICE_SECTION, DoorsHydraulicsBattery.PRICE_DEFAULT);
+            DOOR_HYDRAULICS_BATTERY_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, DoorsHydraulicsBattery.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            DOOR_HYDRAULICS_BATTERY_INITIAL = ConfigEntry(topSection, DoorsHydraulicsBattery.INITIAL_SECTION, DoorsHydraulicsBattery.INITIAL_DEFAULT, DoorsHydraulicsBattery.INITIAL_DESCRIPTION);
+            DOOR_HYDRAULICS_BATTERY_INCREMENTAL = ConfigEntry(topSection, DoorsHydraulicsBattery.INCREMENTAL_SECTION, DoorsHydraulicsBattery.INCREMENTAL_DEFAULT, DoorsHydraulicsBattery.INCREMENTAL_DESCRIPTION);
+          
+            topSection = ScrapInsurance.COMMAND_NAME;
+            SCRAP_INSURANCE_ENABLED = ConfigEntry(topSection, "Enable Scrap Insurance Command", true, "One time purchase which allows you to keep all your scrap upon a team wipe on a moon trip");
+            SCRAP_INSURANCE_PRICE = ConfigEntry(topSection, "Price of Scrap Insurance", ScrapInsurance.DEFAULT_PRICE);
+
             topSection = "Wheelbarrow";
             WHEELBARROW_ENABLED = ConfigEntry(topSection, "Enable the Wheelbarrow Item", true, "Allows you to buy a wheelbarrow to carry items outside of your inventory");
             WHEELBARROW_PRICE = ConfigEntry(topSection, "Price of the Wheelbarrow Item", 400, "Price of the Wheelbarrow in the store");
@@ -491,19 +516,19 @@ namespace MoreShipUpgrades.Misc
             WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK = ConfigEntry(topSection, "Look sensitivity drawback of the Wheelbarrow Item", 0.4f, "Value multiplied on the player's look sensitivity when moving with the wheelbarrow Item");
             WHEELBARROW_MOVEMENT_SLOPPY = ConfigEntry(topSection, "Sloppiness of the Wheelbarrow Item", 5f, "Value multiplied on the player's movement to give the feeling of drifting while carrying the Wheelbarrow Item");
             WHEELBARROW_PLAY_NOISE = ConfigEntry(topSection, "Plays noises for players with Wheelbarrow Item", true, "If false, it will just not play the sounds, it will still attract monsters to noise");
-            SCRAP_WHEELBARROW_ENABLED = ConfigEntry(topSection, "Enable the Wheelbarrow Scrap Item", true, "Allows you to scavenge a wheelbarrow in which you can store items on");
-            SCRAP_WHEELBARROW_RARITY = ConfigEntry(topSection, "Spawn chance of Scrap Wheelbarrow Item", 0.9f, "How likely it is to a scrap wheelbarrow item to spawn when landing on a moon.");
-            SCRAP_WHEELBARROW_WEIGHT = ConfigEntry(topSection, "Weight of the Wheelbarrow Scrap Item", 25f, "Weight of the scrap wheelbarrow's without any items in lbs");
-            SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS = ConfigEntry(topSection, "Maximum amount of items", 6, "Amount of items allowed before the scrap wheelbarrow is considered full");
-            SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER = ConfigEntry(topSection, "Weight reduction multiplier", 0.5f, "How much an item's weight will be ignored to the scrap wheelbarrow's total weight");
-            SCRAP_WHEELBARROW_MINIMUM_VALUE = ConfigEntry(topSection, "Minimum scrap value", 50, "Lower boundary of the scrap's possible value");
-            SCRAP_WHEELBARROW_MAXIMUM_VALUE = ConfigEntry(topSection, "Maximum scrap value", 100, "Higher boundary of the scrap's possible value");
-            SCRAP_WHEELBARROW_RESTRICTION_MODE = ConfigEntry(topSection, "Restrictions on the Wheelbarrow Scrap Item", "ItemCount", "Restriction applied when trying to insert an item on the scrap wheelbarrow.\nSupported values: None, ItemCount, TotalWeight, All");
-            SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED = ConfigEntry(topSection, "Maximum amount of weight", 100f, "How much weight (in lbs) a scrap wheelbarrow can carry in items before it is considered full.");
-            SCRAP_WHEELBARROW_NOISE_RANGE = ConfigEntry(topSection, "Noise range of the Wheelbarrow Scrap Item", 18f, "How far the scrap wheelbarrow sound propagates to nearby enemies when in movement");
-            SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK = ConfigEntry(topSection, "Look sensitivity drawback of the Scrap Wheelbarrow Item", 0.8f, "Value multiplied on the player's look sensitivity when moving with the Scrap wheelbarrow Item");
-            SCRAP_WHEELBARROW_MOVEMENT_SLOPPY = ConfigEntry(topSection, "Sloppiness of the Scrap Wheelbarrow Item", 2f, "Value multiplied on the player's movement to give the feeling of drifting while carrying the Scrap Wheelbarrow Item");
-            SCRAP_WHEELBARROW_PLAY_NOISE = ConfigEntry(topSection, "Plays noises for players with Scrap Wheelbarrow Item", true, "If false, it will just not play the sounds, it will still attract monsters to noise");
+            SCRAP_WHEELBARROW_ENABLED = ConfigEntry(topSection, "Enable the Shopping Cart Item", true, "Allows you to scavenge a wheelbarrow in which you can store items on");
+            SCRAP_WHEELBARROW_RARITY = ConfigEntry(topSection, "Spawn chance of Shopping Cart Item", 0.1f, "How likely it is to a scrap wheelbarrow item to spawn when landing on a moon.");
+            SCRAP_WHEELBARROW_WEIGHT = ConfigEntry(topSection, "Weight of the Shopping Cart Item", 25f, "Weight of the scrap wheelbarrow's without any items in lbs");
+            SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS = ConfigEntry(topSection, "Maximum amount of items for Shopping Cart", 6, "Amount of items allowed before the scrap wheelbarrow is considered full");
+            SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER = ConfigEntry(topSection, "Weight reduction multiplier for Shopping Cart", 0.5f, "How much an item's weight will be ignored to the scrap wheelbarrow's total weight");
+            SCRAP_WHEELBARROW_MINIMUM_VALUE = ConfigEntry(topSection, "Minimum scrap value of Shopping Cart", 50, "Lower boundary of the scrap's possible value");
+            SCRAP_WHEELBARROW_MAXIMUM_VALUE = ConfigEntry(topSection, "Maximum scrap value of Shopping Cart", 100, "Higher boundary of the scrap's possible value");
+            SCRAP_WHEELBARROW_RESTRICTION_MODE = ConfigEntry(topSection, "Restrictions on the Shopping Cart Item", "ItemCount", "Restriction applied when trying to insert an item on the scrap wheelbarrow.\nSupported values: None, ItemCount, TotalWeight, All");
+            SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED = ConfigEntry(topSection, "Maximum amount of weight for Shopping Cart", 100f, "How much weight (in lbs) a scrap wheelbarrow can carry in items before it is considered full.");
+            SCRAP_WHEELBARROW_NOISE_RANGE = ConfigEntry(topSection, "Noise range of the Shopping Cart Item", 18f, "How far the scrap wheelbarrow sound propagates to nearby enemies when in movement");
+            SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK = ConfigEntry(topSection, "Look sensitivity drawback of the Shopping Cart Item", 0.8f, "Value multiplied on the player's look sensitivity when moving with the Scrap wheelbarrow Item");
+            SCRAP_WHEELBARROW_MOVEMENT_SLOPPY = ConfigEntry(topSection, "Sloppiness of the Shopping Cart Item", 2f, "Value multiplied on the player's movement to give the feeling of drifting while carrying the Scrap Wheelbarrow Item");
+            SCRAP_WHEELBARROW_PLAY_NOISE = ConfigEntry(topSection, "Plays noises for players with Shopping Cart Item", true, "If false, it will just not play the sounds, it will still attract monsters to noise");
         }
     }
 }

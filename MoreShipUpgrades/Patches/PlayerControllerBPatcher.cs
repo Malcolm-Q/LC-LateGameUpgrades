@@ -6,10 +6,11 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Linq;
 using MoreShipUpgrades.Misc;
-using MoreShipUpgrades.UpgradeComponents;
 using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using Unity.Netcode;
 using UnityEngine;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 
 namespace MoreShipUpgrades.Patches
 {

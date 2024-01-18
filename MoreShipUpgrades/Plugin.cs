@@ -9,13 +9,21 @@ using System.IO;
 using System.Reflection;
 using MoreShipUpgrades.Misc;
 using BepInEx.Bootstrap;
-using MoreShipUpgrades.UpgradeComponents;
 using Newtonsoft.Json;
 using LethalLib.Extras;
 using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
 using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using LethalLib.Modules;
+using MoreShipUpgrades.UpgradeComponents.Contracts;
+using MoreShipUpgrades.UpgradeComponents.Items.Contracts.Extraction;
+using MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exorcism;
+using MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exterminator;
+using MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval;
+using MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.Commands;
 
 namespace MoreShipUpgrades
 {
@@ -127,8 +135,7 @@ namespace MoreShipUpgrades
             Item bomb = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "BombItem.asset");
             if (bomb == null) return;
             bomb.isConductiveMetal = false;
-            ContractObject coNest = bomb.spawnPrefab.AddComponent<ContractObject>();
-            coNest.contractType = "defusal";
+            DefusalContract coNest = bomb.spawnPrefab.AddComponent<DefusalContract>();
 
             BombDefusalScript bombScript = bomb.spawnPrefab.AddComponent<BombDefusalScript>();
             bombScript.snip = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, root + "scissors.mp3");
@@ -160,8 +167,7 @@ namespace MoreShipUpgrades
             foreach(string ritualItem in ritualItems)
             {
                 Item exorItem = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + "RitualItems/" +ritualItem);
-                ContractObject exorCo = exorItem.spawnPrefab.AddComponent<ContractObject>();
-                exorCo.contractType = "exorcism";
+                ExorcismContract exorCo = exorItem.spawnPrefab.AddComponent<ExorcismContract>();
                 Items.RegisterItem(exorItem);
                 Utilities.FixMixerGroups(exorItem.spawnPrefab);
                 NetworkPrefabs.RegisterNetworkPrefab(exorItem.spawnPrefab);
@@ -174,8 +180,7 @@ namespace MoreShipUpgrades
 
             if (mainItem == null || contractLoot == null) return;
 
-            ContractObject co = mainItem.spawnPrefab.AddComponent<ContractObject>();
-            co.contractType = "exorcism";
+            ExorcismContract co = mainItem.spawnPrefab.AddComponent<ExorcismContract>();
 
             PentagramScript pentScript = mainItem.spawnPrefab.AddComponent<PentagramScript>();
             pentScript.loot = contractLoot.spawnPrefab;
@@ -203,8 +208,7 @@ namespace MoreShipUpgrades
             Item nest = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + "HoardingEggItem.asset");
             if (nest == null || bugLoot == null) return;
 
-            ContractObject coNest = nest.spawnPrefab.AddComponent<ContractObject>();
-            coNest.contractType = "exterminator";
+            ExterminatorContract coNest = nest.spawnPrefab.AddComponent<ExterminatorContract>();
 
             BugNestScript nestScript = nest.spawnPrefab.AddComponent<BugNestScript>();
             nestScript.loot = bugLoot.spawnPrefab;
@@ -225,8 +229,7 @@ namespace MoreShipUpgrades
             if (scav == null) return;
 
             scav.weight = UpgradeBus.instance.cfg.CONTRACT_EXTRACT_WEIGHT;
-            ContractObject co = scav.spawnPrefab.AddComponent<ContractObject>();
-            co.contractType = "extraction";
+            ExtractionContract co = scav.spawnPrefab.AddComponent<ExtractionContract>();
 
             ExtractPlayerScript extractScript = scav.spawnPrefab.AddComponent<ExtractPlayerScript>();
             TextAsset scavAudioPaths = AssetBundleHandler.TryLoadOtherAsset<TextAsset>(ref bundle, root + "scavSounds/scavAudio.json");
@@ -256,8 +259,7 @@ namespace MoreShipUpgrades
             Item pc = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + "DataPCItem.asset");
             if (pc == null || dataLoot == null) return;
 
-            ContractObject coPC = pc.spawnPrefab.AddComponent<ContractObject>();
-            coPC.contractType = "data";
+            DataRetrievalContract coPC = pc.spawnPrefab.AddComponent<DataRetrievalContract>();
 
             DataPCScript dataScript = pc.spawnPrefab.AddComponent<DataPCScript>();
             dataScript.error = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, root + "winError.mp3");
@@ -366,7 +368,7 @@ namespace MoreShipUpgrades
             UpgradeBus.instance.SFX.Add("helmet",AssetBundleHandler.GetAudioClip("HelmetHit"));
             UpgradeBus.instance.SFX.Add("breakWood",AssetBundleHandler.GetAudioClip("breakWood"));
 
-            HelmetScript helmScript = helmet.spawnPrefab.AddComponent<HelmetScript>();
+            Helmet helmScript = helmet.spawnPrefab.AddComponent<Helmet>();
             helmScript.itemProperties = helmet;
             helmScript.grabbable = true;
             helmScript.grabbableToEnemies = true;
@@ -504,8 +506,7 @@ namespace MoreShipUpgrades
             Item MedKitMapItem = AssetBundleHandler.GetItemObject("MedkitMapItem");
             if (MedKitMapItem == null) return;
             Medkit medMapScript = MedKitMapItem.spawnPrefab.AddComponent<Medkit>();
-            ContractObject co = MedKitMapItem.spawnPrefab.AddComponent<ContractObject>();
-            co.contractType = "extraction";
+            ExtractionContract co = MedKitMapItem.spawnPrefab.AddComponent<ExtractionContract>();
             medMapScript.itemProperties = MedKitMapItem;
             medMapScript.grabbable = true;
             medMapScript.useCooldown = 2f;
@@ -574,13 +575,18 @@ namespace MoreShipUpgrades
             wheelbarrow.allowDroppingAheadOfPlayer = true;
             wheelbarrow.isConductiveMetal = true;
             wheelbarrow.isScrap = true;
-            wheelbarrow.weight = 1f + (cfg.SCRAP_WHEELBARROW_WEIGHT/100f);
+            wheelbarrow.weight = 0.99f + (cfg.SCRAP_WHEELBARROW_WEIGHT/100f);
+            wheelbarrow.toolTips = new string[] { "Drop all items: [MMB]" };
+            wheelbarrow.canBeGrabbedBeforeGameStart = true;
             ScrapWheelbarrow barrowScript = wheelbarrow.spawnPrefab.AddComponent<ScrapWheelbarrow>();
             barrowScript.itemProperties = wheelbarrow;
             barrowScript.wheelsClip = shoppingCartSound;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
+            LethalLib.Modules.Items.RegisterItem(wheelbarrow);
+            Utilities.FixMixerGroups(wheelbarrow.spawnPrefab);
+            int amountToSpawn = cfg.SCRAP_WHEELBARROW_ENABLED ? 1 : 0;
 
-            AnimationCurve curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(cfg.SCRAP_WHEELBARROW_RARITY, 1), new Keyframe(1, 1));
+            AnimationCurve curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe((1f - cfg.SCRAP_WHEELBARROW_RARITY), amountToSpawn), new Keyframe(1, amountToSpawn));
             SpawnableMapObjectDef mapObjDef = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
             mapObjDef.spawnableMapObject = new SpawnableMapObject();
             mapObjDef.spawnableMapObject.prefabToSpawn = wheelbarrow.spawnPrefab;
@@ -601,12 +607,16 @@ namespace MoreShipUpgrades
             wheelbarrow.positionOffset = new Vector3(0f, -0.7f, 1.4f);
             wheelbarrow.allowDroppingAheadOfPlayer = true;
             wheelbarrow.isConductiveMetal = true;
-            wheelbarrow.weight = 1f + (cfg.WHEELBARROW_WEIGHT/100f);
+            wheelbarrow.weight = 0.99f + (cfg.WHEELBARROW_WEIGHT/100f);
+            wheelbarrow.toolTips = new string[] { "Drop all items: [MMB] " };
+            wheelbarrow.canBeGrabbedBeforeGameStart = true;
             StoreWheelbarrow barrowScript = wheelbarrow.spawnPrefab.AddComponent<StoreWheelbarrow>();
             barrowScript.itemProperties = wheelbarrow;
             barrowScript.wheelsClip = wheelbarrowSound;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
+            Utilities.FixMixerGroups(wheelbarrow.spawnPrefab);
 
+            UpgradeBus.instance.ItemsToSync.Add("Wheel", wheelbarrow);
 
             TerminalNode wheelbarrowNode = ScriptableObject.CreateInstance<TerminalNode>();
             wheelbarrowNode.displayText = $"A portable container which has a maximum capacity of {cfg.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS} and reduces the effective weight of the inserted items by {cfg.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER*100} %.\nIt weighs {1f + (cfg.WHEELBARROW_WEIGHT/100f)} lbs";
@@ -634,6 +644,8 @@ namespace MoreShipUpgrades
             SetupContract();
             SetupSickBeats();
             SetupExtendDeadline();
+            SetupDoorsHydraulicsBattery();
+            SetupScrapInsurance();
         }
 
         private void SetupSickBeats()
@@ -721,6 +733,13 @@ namespace MoreShipUpgrades
         private void SetupExtendDeadline()
         {
             SetupGenericPerk<ExtendDeadlineScript>(ExtendDeadlineScript.UPGRADE_NAME);
+        }
+        private void SetupDoorsHydraulicsBattery()
+        {
+            SetupGenericPerk<DoorsHydraulicsBattery>(DoorsHydraulicsBattery.UPGRADE_NAME);
+        private void SetupScrapInsurance()
+        {
+            SetupGenericPerk<ScrapInsurance>(ScrapInsurance.COMMAND_NAME);
         }
         /// <summary>
         /// Generic function where it adds a script (specificed through the type) into an GameObject asset 

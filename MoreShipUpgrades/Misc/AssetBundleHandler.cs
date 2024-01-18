@@ -1,5 +1,7 @@
 ﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.UpgradeComponents;
+using MoreShipUpgrades.UpgradeComponents.Commands;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -46,6 +48,8 @@ namespace MoreShipUpgrades.Misc
             { lockSmithScript.UPGRADE_NAME, root+"LockSmith.prefab" },
             { playerHealthScript.UPGRADE_NAME, root+"PlayerHealth.prefab" },
             { ExtendDeadlineScript.UPGRADE_NAME, root+"ExtendDeadline.prefab" },
+            { DoorsHydraulicsBattery.UPGRADE_NAME, root+"DoorsHydraulicsBattery.prefab" },
+            { ScrapInsurance.COMMAND_NAME, root+"ScrapInsurance.prefab" },
 
             { "Advanced Portable Tele", "Assets/ShipUpgrades/TpButtonAdv.asset" },
             { "Portable Tele", "Assets/ShipUpgrades/TpButton.asset" },
