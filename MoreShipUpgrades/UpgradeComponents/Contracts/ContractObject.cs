@@ -27,9 +27,17 @@ namespace MoreShipUpgrades.UpgradeComponents.Contracts
                 // and add a networktransform or set up rpcs to do this on client
                 List<EntranceTeleport> mainDoors = FindObjectsOfType<EntranceTeleport>().Where(obj => obj.gameObject.transform.position.y <= -170).ToList();
                 EnemyVent[] vents = FindObjectsOfType<EnemyVent>();
-                EnemyVent furthestVent = vents.OrderByDescending(vent => Vector3.Distance(mainDoors[0].transform.position, vent.floorNode.position)).First();
-                Vector3 offsetVector = Quaternion.Euler(0f, furthestVent.floorNode.eulerAngles.y, 0f) * Vector3.forward;
-                Vector3 newPosition = furthestVent.floorNode.position + offsetVector;
+                EnemyVent spawnVent = null;
+                if(UpgradeBus.instance.cfg.MAIN_OBJECT_FURTHEST)
+                {
+                    spawnVent = vents.OrderByDescending(vent => Vector3.Distance(mainDoors[0].transform.position, vent.floorNode.position)).First();
+                }
+                else
+                {
+                    spawnVent = vents[Random.Range(0,vents.Length)];
+                }
+                Vector3 offsetVector = Quaternion.Euler(0f, spawnVent.floorNode.eulerAngles.y, 0f) * Vector3.forward;
+                Vector3 newPosition = spawnVent.floorNode.position + offsetVector;
                 transform.position = newPosition;
             }
             if (contractType != "exterminator") return;

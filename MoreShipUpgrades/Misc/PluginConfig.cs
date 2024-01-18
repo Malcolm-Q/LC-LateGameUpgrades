@@ -247,6 +247,7 @@ namespace MoreShipUpgrades.Misc
         public bool EXORCISM_CONTRACT {  get; set; }
         public bool EXTRACTION_CONTRACT {  get; set; }
         public bool DEFUSAL_CONTRACT {  get; set; }
+        public bool MAIN_OBJECT_FURTHEST {  get; set; }
 
 
         public PluginConfig(ConfigFile cfg)
@@ -272,9 +273,10 @@ namespace MoreShipUpgrades.Misc
             CONTRACT_EXTRACT_REWARD = ConfigEntry(topSection, "Value of an extraction contract reward", 500, "");
             CONTRACT_DATA_REWARD = ConfigEntry(topSection, "Value of a data contract reward", 500, "");
             CONTRACT_BUG_SPAWNS = ConfigEntry(topSection, "Hoarder Bug Spawn Number", 20, "How many bugs to spawn during exterminator contracts.");
-            CONTRACT_GHOST_SPAWN = ConfigEntry(topSection, "Dress Girl Spawn Number", 3, "How many ghosts to spawn when failing exorcism contracts");
+            CONTRACT_GHOST_SPAWN = ConfigEntry(topSection, "Dress Girl / Thumper Spawn Number", 3, "How many ghosts/thumpers to spawn when failing exorcism contracts");
             CONTRACT_EXTRACT_WEIGHT = ConfigEntry(topSection,"Weight of an extraction human", 2.5f, "Subtract 1 and multiply by 100 (2.5 = 150lbs).");
             SCAV_VOLUME = ConfigEntry(topSection,"Volume of the scavenger voice clips", 0.25f, "0.0 - 1.0");
+            MAIN_OBJECT_FURTHEST = ConfigEntry(topSection, "Spawn main object far away", true, "If true the main object for contracts will try spawn as far away from the main entrance as possible. If false it will spawn at a random location.");
 
             // this is kind of dumb and I'd like to just use a comma seperated string but this is much more foolproof
             DATA_CONTRACT = ConfigEntry(topSection,"Enable the data contract", true, "Make this false if you don't want the data contract");
@@ -529,7 +531,7 @@ namespace MoreShipUpgrades.Misc
             WHEELBARROW_MOVEMENT_SLOPPY = ConfigEntry(topSection, "Sloppiness of the Wheelbarrow Item", 5f, "Value multiplied on the player's movement to give the feeling of drifting while carrying the Wheelbarrow Item");
             WHEELBARROW_PLAY_NOISE = ConfigEntry(topSection, "Plays noises for players with Wheelbarrow Item", true, "If false, it will just not play the sounds, it will still attract monsters to noise");
             SCRAP_WHEELBARROW_ENABLED = ConfigEntry(topSection, "Enable the Shopping Cart Item", true, "Allows you to scavenge a wheelbarrow in which you can store items on");
-            SCRAP_WHEELBARROW_RARITY = ConfigEntry(topSection, "Spawn chance of Shopping Cart Item", 0.1f, "How likely it is to a scrap wheelbarrow item to spawn when landing on a moon.");
+            SCRAP_WHEELBARROW_RARITY = ConfigEntry(topSection, "Spawn chance of Shopping Cart Item", 0.1f, "How likely it is to a scrap wheelbarrow item to spawn when landing on a moon. (0.1 = 10%)");
             SCRAP_WHEELBARROW_WEIGHT = ConfigEntry(topSection, "Weight of the Shopping Cart Item", 25f, "Weight of the scrap wheelbarrow's without any items in lbs");
             SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS = ConfigEntry(topSection, "Maximum amount of items for Shopping Cart", 6, "Amount of items allowed before the scrap wheelbarrow is considered full");
             SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER = ConfigEntry(topSection, "Weight reduction multiplier for Shopping Cart", 0.5f, "How much an item's weight will be ignored to the scrap wheelbarrow's total weight");

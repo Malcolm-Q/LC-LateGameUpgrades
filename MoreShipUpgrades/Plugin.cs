@@ -177,11 +177,7 @@ namespace MoreShipUpgrades
                 mapObjDefRitual.spawnableMapObject = new SpawnableMapObject();
                 mapObjDefRitual.spawnableMapObject.prefabToSpawn = exorItem.spawnPrefab;
                 MapObjects.RegisterMapObject(mapObjDefRitual, Levels.LevelTypes.All, (level) => new AnimationCurve(new Keyframe(0,3),new Keyframe(1,3)));
-                exorItem.isScrap = false;
-                Items.RegisterShopItem(exorItem, 0);
             }
-            mainItem.isScrap = false;
-            Items.RegisterShopItem(mainItem, 0);
 
             if (mainItem == null || contractLoot == null) return;
 

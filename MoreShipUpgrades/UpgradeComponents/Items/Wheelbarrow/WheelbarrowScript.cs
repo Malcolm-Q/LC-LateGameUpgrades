@@ -219,7 +219,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             
             if (playSounds) wheelsNoise.PlayOneShot(wheelsClip[index], 0.2f);
             if (playSounds) WalkieTalkie.TransmitOneShotAudio(wheelsNoise, wheelsClip[index], 0.2f);
-            RoundManager.Instance.PlayAudibleNoise(transform.position, noiseRange, 0.2f, 0, isInElevator && StartOfRound.Instance.hangarDoorsClosed);
+            RoundManager.Instance.PlayAudibleNoise(transform.position, noiseRange, 0.8f, 0, isInElevator && StartOfRound.Instance.hangarDoorsClosed);
         }
         private void UpdateInteractTriggers()
         {
