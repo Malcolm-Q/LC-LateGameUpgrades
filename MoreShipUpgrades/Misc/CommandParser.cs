@@ -20,8 +20,8 @@ namespace MoreShipUpgrades.Misc
         private static TerminalKeyword routeKeyword;
 
         const string LOAD_LGU_COMMAND = "load lgu";
-        public static string[] contracts = { "data", "exterminator", "extraction","exorcism","defusal" };
-        static string[] contractInfos = {
+        public static List<string> contracts = new List<string> { "data", "exterminator", "extraction","exorcism","defusal" };
+        public static List<string> contractInfos = new List<string> {
             "\n\nOur systems have detected an active PC somewhere in the facility.\nFind it, use the bruteforce command on the ship terminal with the devices IP to get login credentials, then use the cd, ls, and mv commands to find the .db file (enter `mv survey.db` in the containing folder).\n\n",
             "\n\nIt's been reported that the population of hoarder bugs on this moon have skyrocketed and become aggressive. You must destroy their nest at all costs.\n\n",
             "\n\nCrew number 5339 have reported that one of their operatives was lost on this moon and left behind. You will have to find or bring a medkit to heal and extract the lost operative.\n\n" ,
@@ -446,12 +446,12 @@ namespace MoreShipUpgrades.Misc
                 return DisplayTerminalMessage(txt);
             }
             LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits - UpgradeBus.instance.cfg.CONTRACT_PRICE);
-            int i = Random.Range(0,contracts.Length);
-            if( contracts.Length > 1)
+            int i = Random.Range(0,contracts.Count);
+            if( contracts.Count > 1)
             {
                 while (i == ContractScript.lastContractIndex)
                 {
-                    i = Random.Range(0, contracts.Length);
+                    i = Random.Range(0, contracts.Count);
                 }
             }
             UpgradeBus.instance.contractType = contracts[i];
@@ -645,7 +645,7 @@ namespace MoreShipUpgrades.Misc
             }
             
             LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits - UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE);
-            int i = Random.Range(0, contracts.Length);
+            int i = Random.Range(0, contracts.Count);
             UpgradeBus.instance.contractType = contracts[i];
             UpgradeBus.instance.contractLevel = moon;
             if (terminal.IsHost || terminal.IsServer) LGUStore.instance.SyncContractDetailsClientRpc(UpgradeBus.instance.contractLevel, i);

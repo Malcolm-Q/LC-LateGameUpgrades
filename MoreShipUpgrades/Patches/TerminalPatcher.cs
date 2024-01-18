@@ -14,7 +14,7 @@ namespace MoreShipUpgrades.Patches
         private const string EXTEND_HELP_COMMAND = ">EXTEND DEADLINE <DAYS>\nExtends the deadline by specified amount. Consumes {0} for each day extended.\n\n";
         private const string INTERNS_HELP_COMMAND = ">INTERNS / INTERN \nRevives the selected player in radar with a new employee. Consumes {0} credits for each revive.\n\n";
 
-        private const string CONTRACT_HELP_COMMAND = ">CONTRACT \nGives you a random contract for a scrap item with considerable value and lasts til you leave from assigned planet.\nConsumes {0} credits for each contract and will be unable to get another contract til current has expired.\n\n";
+        private const string CONTRACT_HELP_COMMAND = ">CONTRACT [moon]\nGives you a random contract for a scrap item with considerable value and lasts til you leave from assigned planet.\nConsumes {0} credits for each contract and will be unable to get another contract til current has expired.\nIf a moon is specified, it will generate a contract for that moon for the cost of {1} Company credits instead.\n\n";
         private const string ATK_HELP_COMMAND = ">ATK / INITATTACK \nStuns nearby enemies for a set period of time. Only applicable when Discombobulator has been purchased\n\n";
         private const string CD_HELP_COMMAND = ">CD / COOLDOWN \nShows the current cooldown of the ship stun ability. Only applicable when Discombobulator has been purchased\n\n";
         private const string SCRAP_INSURANCE_COMMAND = "> SCRAP INSURANCE \nActivates an insurance policy on scrap stored in the ship incase of a team wipe occurs.\nCan only be bought while in orbit and will only apply in the next moon land after purchase.\nConsumes {0} credits for each activation of insurance.\n\n";

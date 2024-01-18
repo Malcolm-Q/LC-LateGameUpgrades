@@ -242,6 +242,11 @@ namespace MoreShipUpgrades.Misc
         public string DOOR_HYDRAULICS_BATTERY_PRICES { get; set; }
         public float DOOR_HYDRAULICS_BATTERY_INITIAL { get; set; }
         public float DOOR_HYDRAULICS_BATTERY_INCREMENTAL {  get; set; }
+        public bool DATA_CONTRACT {  get; set; }
+        public bool EXTERMINATOR_CONTRACT {  get; set; }
+        public bool EXORCISM_CONTRACT {  get; set; }
+        public bool EXTRACTION_CONTRACT {  get; set; }
+        public bool DEFUSAL_CONTRACT {  get; set; }
 
 
         public PluginConfig(ConfigFile cfg)
@@ -270,6 +275,13 @@ namespace MoreShipUpgrades.Misc
             CONTRACT_GHOST_SPAWN = ConfigEntry(topSection, "Dress Girl Spawn Number", 3, "How many ghosts to spawn when failing exorcism contracts");
             CONTRACT_EXTRACT_WEIGHT = ConfigEntry(topSection,"Weight of an extraction human", 2.5f, "Subtract 1 and multiply by 100 (2.5 = 150lbs).");
             SCAV_VOLUME = ConfigEntry(topSection,"Volume of the scavenger voice clips", 0.25f, "0.0 - 1.0");
+
+            // this is kind of dumb and I'd like to just use a comma seperated string but this is much more foolproof
+            DATA_CONTRACT = ConfigEntry(topSection,"Enable the data contract", true, "Make this false if you don't want the data contract");
+            EXTRACTION_CONTRACT = ConfigEntry(topSection,"Enable the extraction contract", true, "Make this false if you don't want the extraction contract");
+            EXORCISM_CONTRACT = ConfigEntry(topSection,"Enable the exorcism contract", true, "Make this false if you don't want the exorcism contract");
+            DEFUSAL_CONTRACT = ConfigEntry(topSection,"Enable the defusal contract", true, "Make this false if you don't want the defusal contract");
+            EXTERMINATOR_CONTRACT = ConfigEntry(topSection,"Enable the exterminator contract", true, "Make this false if you don't want the exterminator contract");
             
             topSection = "Misc";
             SHARED_UPGRADES = ConfigEntry(topSection, "Convert all upgrades to be shared.", true, "Mod is designed to be played with this off.");

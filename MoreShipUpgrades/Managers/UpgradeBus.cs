@@ -370,10 +370,58 @@ namespace MoreShipUpgrades.Managers
             else if (ItemsToSync["Wheel"].creditsWorth != cfg.NIGHT_VISION_PRICE) Items.UpdateShopItemPrice(ItemsToSync["Wheel"], cfg.NIGHT_VISION_PRICE);
         }
 
+        void SyncAvailableContracts()
+        {
+            if (!cfg.DATA_CONTRACT)
+            {
+                logger.LogInfo("Removing data contract");
+                int idx = CommandParser.contracts.IndexOf("data");
+                CommandParser.contractInfos.RemoveAt(idx);
+                CommandParser.contracts.RemoveAt(idx);
+            }
+            if (!cfg.EXTRACTION_CONTRACT)
+            {
+                logger.LogInfo("Removing extraction contract");
+                int idx = CommandParser.contracts.IndexOf("extraction");
+                CommandParser.contractInfos.RemoveAt(idx);
+                CommandParser.contracts.RemoveAt(idx);
+            }
+            if (!cfg.EXORCISM_CONTRACT)
+            {
+                logger.LogInfo("Removing exorcism contract");
+                int idx = CommandParser.contracts.IndexOf("exorcism");
+                CommandParser.contractInfos.RemoveAt(idx);
+                CommandParser.contracts.RemoveAt(idx);
+            }
+            if (!cfg.DEFUSAL_CONTRACT)
+            {
+                logger.LogInfo("Removing defusal contract");
+                int idx = CommandParser.contracts.IndexOf("defusal");
+                CommandParser.contractInfos.RemoveAt(idx);
+                CommandParser.contracts.RemoveAt(idx);
+            }
+            if (!cfg.EXTERMINATOR_CONTRACT)
+            {
+                if(CommandParser.contracts.Count == 1)
+                {
+                    logger.LogInfo("Why must you do the things you do");
+                    logger.LogWarning("User tried to remove all contracts! Leaving exterminator present. Did you mean to disable contracts?");
+                }
+                else
+                {
+                    logger.LogInfo("Removing exterminator contract");
+                    int idx = CommandParser.contracts.IndexOf("exterminator");
+                    CommandParser.contractInfos.RemoveAt(idx);
+                    CommandParser.contracts.RemoveAt(idx);
+                }
+            }
+        }
+
         internal void Reconstruct()
         {
             AlterStoreItems();
             BuildCustomNodes();
+            SyncAvailableContracts();
 
             logger.LogInfo("Successfully reconstructed with hosts config.");
         }
