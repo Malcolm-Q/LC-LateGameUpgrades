@@ -80,6 +80,7 @@ namespace MoreShipUpgrades.Misc
         public int PLAYER_HEALTH_PRICE { get; set; }
         public int EXTEND_DEADLINE_PRICE { get; set; }
         public int CONTRACT_PRICE { get; set; }
+        public int CONTRACT_SPECIFY_PRICE { get; set; }
         public int WHEELBARROW_PRICE { get; set; }
         public int DOOR_HYDRAULICS_BATTERY_PRICE { get; set; }
         public int SCRAP_INSURANCE_PRICE { get; set; }
@@ -237,9 +238,11 @@ namespace MoreShipUpgrades.Misc
         public float SCRAP_WHEELBARROW_RARITY { get; set; }
         public bool SCRAP_WHEELBARROW_PLAY_NOISE {  get; set; }
         public float SCAV_VOLUME { get; set; }
+        public bool CONTRACT_FREE_MOONS_ONLY { get; set; }
         public string DOOR_HYDRAULICS_BATTERY_PRICES { get; set; }
         public float DOOR_HYDRAULICS_BATTERY_INITIAL { get; set; }
         public float DOOR_HYDRAULICS_BATTERY_INCREMENTAL {  get; set; }
+
 
         public PluginConfig(ConfigFile cfg)
         {
@@ -255,7 +258,9 @@ namespace MoreShipUpgrades.Misc
         {
             string topSection = "Contracts";
             CONTRACTS_ENABLED = ConfigEntry(topSection, "Enable the ability to purchase contracts / missions", true, "");
+            CONTRACT_FREE_MOONS_ONLY = ConfigEntry(topSection, "Random contracts on free moons only", true, "If true, \"contract\" command will only generate contracts on free moons.");
             CONTRACT_PRICE = ConfigEntry(topSection, "Price of a random contract", 500, "");
+            CONTRACT_SPECIFY_PRICE = ConfigEntry(topSection, "Price of a specified moon contract", 750, "");
             CONTRACT_BUG_REWARD = ConfigEntry(topSection, "Value of an exterminator contract reward", 500, "");
             CONTRACT_EXOR_REWARD = ConfigEntry(topSection, "Value of an exorcism contract reward", 500, "");
             CONTRACT_DEFUSE_REWARD = ConfigEntry(topSection, "Value of an defusal contract reward", 500, "");
