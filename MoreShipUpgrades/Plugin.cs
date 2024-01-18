@@ -576,6 +576,8 @@ namespace MoreShipUpgrades
             wheelbarrow.isConductiveMetal = true;
             wheelbarrow.isScrap = true;
             wheelbarrow.weight = 0.99f + (cfg.SCRAP_WHEELBARROW_WEIGHT/100f);
+            wheelbarrow.toolTips = new string[] { "Drop all items: [MMB]" };
+            wheelbarrow.canBeGrabbedBeforeGameStart = true;
             ScrapWheelbarrow barrowScript = wheelbarrow.spawnPrefab.AddComponent<ScrapWheelbarrow>();
             barrowScript.itemProperties = wheelbarrow;
             barrowScript.wheelsClip = shoppingCartSound;
@@ -606,6 +608,8 @@ namespace MoreShipUpgrades
             wheelbarrow.allowDroppingAheadOfPlayer = true;
             wheelbarrow.isConductiveMetal = true;
             wheelbarrow.weight = 0.99f + (cfg.WHEELBARROW_WEIGHT/100f);
+            wheelbarrow.toolTips = new string[] { "Drop all items: [MMB] " };
+            wheelbarrow.canBeGrabbedBeforeGameStart = true;
             StoreWheelbarrow barrowScript = wheelbarrow.spawnPrefab.AddComponent<StoreWheelbarrow>();
             barrowScript.itemProperties = wheelbarrow;
             barrowScript.wheelsClip = wheelbarrowSound;
@@ -640,6 +644,8 @@ namespace MoreShipUpgrades
             SetupContract();
             SetupSickBeats();
             SetupExtendDeadline();
+            SetupDoorsHydraulicsBattery();
+            SetupScrapInsurance();
         }
 
         private void SetupSickBeats()
@@ -727,6 +733,13 @@ namespace MoreShipUpgrades
         private void SetupExtendDeadline()
         {
             SetupGenericPerk<ExtendDeadlineScript>(ExtendDeadlineScript.UPGRADE_NAME);
+        }
+        private void SetupDoorsHydraulicsBattery()
+        {
+            SetupGenericPerk<DoorsHydraulicsBattery>(DoorsHydraulicsBattery.UPGRADE_NAME);
+        private void SetupScrapInsurance()
+        {
+            SetupGenericPerk<ScrapInsurance>(ScrapInsurance.COMMAND_NAME);
         }
         /// <summary>
         /// Generic function where it adds a script (specificed through the type) into an GameObject asset 

@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using LethalLib.Modules;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exorcism;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using Newtonsoft.Json;
@@ -680,10 +681,36 @@ namespace MoreShipUpgrades.Misc
                 case "load": outputNode = ExecuteLoadCommands(secondWord, fullText, ref terminal, ref outputNode); return;
                 case "scan": outputNode = ExecuteScanCommands(secondWord, ref outputNode); return;
                 case "transmit": outputNode = ExecuteTransmitMessage(fullText.Substring(firstWord.Length+1), ref outputNode); return;
+                case "scrap": outputNode = ExecuteScrapCommands(secondWord, ref terminal, ref outputNode); return;
                 default: outputNode = ExecuteUpgradeCommand(fullText, ref terminal, ref outputNode); return;
             }
         }
+        private static TerminalNode ExecuteScrapInsuranceCommand(ref Terminal terminal, ref TerminalNode outputNode)
+        {
+            if (!UpgradeBus.instance.cfg.SCRAP_INSURANCE_ENABLED) return outputNode;
 
+            if (ScrapInsurance.ScrapInsuranceStatus())
+                return DisplayTerminalMessage($"You already purchased insurance to protect your scrap belongings.\n\n");
+
+            if (!StartOfRound.Instance.inShipPhase)
+                return DisplayTerminalMessage($"You can only acquire insurance while in orbit.\n\n");
+
+            if (terminal.groupCredits < UpgradeBus.instance.cfg.SCRAP_INSURANCE_PRICE)
+                return DisplayTerminalMessage($"Not enough credits to purchase Scrap Insurance.\nPrice: {UpgradeBus.instance.cfg.SCRAP_INSURANCE_PRICE}\nCurrent credits: {terminal.groupCredits}\n\n");
+
+            terminal.groupCredits -= UpgradeBus.instance.cfg.SCRAP_INSURANCE_PRICE;
+            LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits);
+            ScrapInsurance.TurnOnScrapInsurance();
+            return DisplayTerminalMessage($"Scrap Insurance has been activated.\nIn case of a team wipe in your next trip, your scrap will be preserved.\n\n");
+        }
+        private static TerminalNode ExecuteScrapCommands(string secondWord, ref Terminal terminal, ref TerminalNode outputNode)
+        {
+            switch(secondWord)
+            {
+                case "insurance": return ExecuteScrapInsuranceCommand(ref terminal, ref outputNode);
+                default: return outputNode;
+            }
+        }
         private static TerminalNode LookupDemon(string secondWord, string thirdWord)
         {
             string demon = secondWord.ToUpper();
