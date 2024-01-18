@@ -737,6 +737,7 @@ namespace MoreShipUpgrades
         private void SetupDoorsHydraulicsBattery()
         {
             SetupGenericPerk<DoorsHydraulicsBattery>(DoorsHydraulicsBattery.UPGRADE_NAME);
+        }
         private void SetupScrapInsurance()
         {
             SetupGenericPerk<ScrapInsurance>(ScrapInsurance.COMMAND_NAME);

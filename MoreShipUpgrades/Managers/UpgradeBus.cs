@@ -242,7 +242,6 @@ namespace MoreShipUpgrades.Managers
             }
 
         }
-        private 
         private void ResetPlayerAttributes()
         {
             PlayerControllerB player = GameNetworkManager.Instance.localPlayerController;
