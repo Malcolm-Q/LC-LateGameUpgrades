@@ -367,7 +367,7 @@ namespace MoreShipUpgrades.Managers
                 logger.LogInfo("Removing Wheelbarrow from store.");
                 Items.RemoveShopItem(ItemsToSync["Wheel"]);
             }
-            else if (ItemsToSync["Wheel"].creditsWorth != cfg.NIGHT_VISION_PRICE) Items.UpdateShopItemPrice(ItemsToSync["Wheel"], cfg.NIGHT_VISION_PRICE);
+            else if (ItemsToSync["Wheel"].creditsWorth != cfg.WHEELBARROW_PRICE) Items.UpdateShopItemPrice(ItemsToSync["Wheel"], cfg.WHEELBARROW_PRICE);
         }
 
         void SyncAvailableContracts()
