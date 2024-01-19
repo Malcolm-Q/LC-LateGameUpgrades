@@ -5,6 +5,8 @@ Source code for my [LateGameUpgrades mod.](https://thunderstore.io/c/lethal-comp
 
 #### [Read This Before Creating An Issue](https://github.com/Malcolm-Q/LC-LateGameUpgrades/issues/56)
 
+#### [Post and Discuss Suggestions Here!](https://github.com/Malcolm-Q/LC-LateGameUpgrades/discussions)
+
 Join [this modding discord](https://discord.gg/hzEcKFSSDX) and comment [on this post](https://discord.com/channels/1168655651455639582/1178407269994594435)  to discuss the mod.
 
 
