@@ -261,7 +261,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         }
         private bool CheckWheelbarrowAllRestrictions()
         {
-            bool weightCondition = itemProperties.weight - (defaultWeight - 1f) > 1f + maximumWeightAllowed / 100f;
+            bool weightCondition = totalWeight > 1f + maximumWeightAllowed / 100f;
             bool itemCountCondition = currentAmountItems >= maximumAmountItems;
             if (weightCondition || itemCountCondition)
             {
@@ -276,7 +276,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         }
         private bool CheckWheelbarrowWeightRestriction()
         {
-            if (itemProperties.weight - (defaultWeight - 1f) > 1f + maximumWeightAllowed / 100f)
+            if (totalWeight > 1f + maximumWeightAllowed / 100f)
             {
                 foreach (InteractTrigger trigger in triggers)
                 {
