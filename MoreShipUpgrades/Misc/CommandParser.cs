@@ -137,16 +137,22 @@ namespace MoreShipUpgrades.Misc
 
             PlayerControllerB[] players = UnityEngine.Object.FindObjectsOfType<PlayerControllerB>();
             List<string> playerNames = new List<string>();
-            var playerNameToSearch = text.Substring(text.IndexOf(LOAD_LGU_COMMAND) + LOAD_LGU_COMMAND.Length).Trim();
+            string playerNameToSearch = text.Substring(text.IndexOf(LOAD_LGU_COMMAND) + LOAD_LGU_COMMAND.Length).Trim();
+            logger.LogDebug($"Starting to look for players with same name as {playerNameToSearch}");
             foreach (PlayerControllerB player in players)
             {
-                playerNames.Add(player.playerUsername);
-                if (player.playerUsername.ToLower() != playerNameToSearch.ToLower()) continue;
+                if (player == null) continue;
+                string playerName = player.playerUsername;
+                ulong playerSteamID = player.playerSteamId;
+                if (playerName == null) continue;
+                playerNames.Add(playerName);
+                logger.LogDebug($"Comparing {playerName} with {playerNameToSearch} case insensitive...");
+                if (playerName.ToLower() != playerNameToSearch.ToLower()) continue;
 
                 LGUStore.instance.ShareSaveServerRpc();
-                terminal.StartCoroutine(WaitForSync(player.playerSteamId));
-                logger.LogInfo($"Attempting to overwrite local save data with {player.playerUsername}'s save data.");
-                return DisplayTerminalMessage($"Attempting to overwrite local save data with {player.playerUsername}'s save data\nYou should see a popup in 5 seconds...\n.\n");
+                terminal.StartCoroutine(WaitForSync(playerSteamID));
+                logger.LogInfo($"Attempting to overwrite local save data with {playerName}'s save data.");
+                return DisplayTerminalMessage($"Attempting to overwrite local save data with {playerName}'s save data\nYou should see a popup in 5 seconds...\n.\n");
             }
             string csvNames = string.Join(", ", playerNames);
             logger.LogInfo($"{playerNameToSearch} was not found among: {csvNames}");
