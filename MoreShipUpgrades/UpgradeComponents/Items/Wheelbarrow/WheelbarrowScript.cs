@@ -414,6 +414,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
 
         public static float CheckIfPlayerCarryingWheelbarrowLookSensitivity(float defaultValue)
         {
+            if (!UpgradeBus.instance.cfg.WHEELBARROW_ENABLED && !UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_ENABLED) return defaultValue;
             PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
             if (!player.isHoldingObject) return defaultValue;
             if (player.currentlyHeldObjectServer is not WheelbarrowScript) return defaultValue;
@@ -422,6 +423,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         }
         public static float CheckIfPlayerCarryingWheelbarrowMovement(float defaultValue)
         {
+            if (!UpgradeBus.instance.cfg.WHEELBARROW_ENABLED && !UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_ENABLED) return defaultValue;
             PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
             if (!player.isHoldingObject) return defaultValue;
             if (player.currentlyHeldObjectServer is not WheelbarrowScript) return defaultValue;
