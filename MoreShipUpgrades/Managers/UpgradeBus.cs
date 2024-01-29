@@ -376,29 +376,41 @@ namespace MoreShipUpgrades.Managers
             {
                 logger.LogInfo("Removing data contract");
                 int idx = CommandParser.contracts.IndexOf("data");
-                CommandParser.contractInfos.RemoveAt(idx);
-                CommandParser.contracts.RemoveAt(idx);
+                if (idx != -1)
+                {
+                    CommandParser.contractInfos.RemoveAt(idx);
+                    CommandParser.contracts.RemoveAt(idx);
+                }
             }
             if (!cfg.EXTRACTION_CONTRACT)
             {
                 logger.LogInfo("Removing extraction contract");
                 int idx = CommandParser.contracts.IndexOf("extraction");
-                CommandParser.contractInfos.RemoveAt(idx);
-                CommandParser.contracts.RemoveAt(idx);
+                if (idx != -1)
+                {
+                    CommandParser.contractInfos.RemoveAt(idx);
+                    CommandParser.contracts.RemoveAt(idx);
+                }
             }
             if (!cfg.EXORCISM_CONTRACT)
             {
                 logger.LogInfo("Removing exorcism contract");
                 int idx = CommandParser.contracts.IndexOf("exorcism");
-                CommandParser.contractInfos.RemoveAt(idx);
-                CommandParser.contracts.RemoveAt(idx);
+                if (idx != -1)
+                {
+                    CommandParser.contractInfos.RemoveAt(idx);
+                    CommandParser.contracts.RemoveAt(idx);
+                }
             }
             if (!cfg.DEFUSAL_CONTRACT)
             {
                 logger.LogInfo("Removing defusal contract");
                 int idx = CommandParser.contracts.IndexOf("defusal");
-                CommandParser.contractInfos.RemoveAt(idx);
-                CommandParser.contracts.RemoveAt(idx);
+                if (idx != -1)
+                {
+                    CommandParser.contractInfos.RemoveAt(idx);
+                    CommandParser.contracts.RemoveAt(idx);
+                }
             }
             if (!cfg.EXTERMINATOR_CONTRACT)
             {
