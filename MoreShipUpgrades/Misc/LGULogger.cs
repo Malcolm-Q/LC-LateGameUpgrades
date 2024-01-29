@@ -1,6 +1,8 @@
 ﻿using BepInEx.Logging;
+using HarmonyLib;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 namespace MoreShipUpgrades.Misc
@@ -13,6 +15,10 @@ namespace MoreShipUpgrades.Misc
         {
             this.moduleName = moduleName;
             logSource = Plugin.mls;
+        }
+        public void LogCodeInstruction(CodeInstruction code)
+        {
+            LogDebug(code.opcode + ", " + code.operand);
         }
         public void LogDebug(object message)
         {

@@ -434,5 +434,11 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         {
             return instance.isHoldingObject && instance.currentlyHeldObjectServer is WheelbarrowScript;
         }
+
+        public static bool CheckIfItemInWheelbarrow(GrabbableObject item)
+        {
+            if (item == null) return false;
+            return item.GetComponentInParent<WheelbarrowScript>() != null;
+        }
     }
 }
