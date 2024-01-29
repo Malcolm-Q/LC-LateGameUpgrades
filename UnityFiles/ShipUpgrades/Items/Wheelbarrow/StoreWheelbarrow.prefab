@@ -140,9 +140,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507293d35d7a13e5b9ca9bb60e082e11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverIcon: {fileID: 0}
+  hoverIcon: {fileID: 21300000, guid: dbb78271cce964d4db5884110cd267e1, type: 3}
   hoverTip: Store item [E]
-  disabledHoverIcon: {fileID: 0}
+  disabledHoverIcon: {fileID: 21300000, guid: dbb78271cce964d4db5884110cd267e1, type: 3}
   disabledHoverTip: No items to store
   interactable: 1
   oneHandedItemAllowed: 1
@@ -310,9 +310,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507293d35d7a13e5b9ca9bb60e082e11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverIcon: {fileID: 0}
+  hoverIcon: {fileID: 21300000, guid: dbb78271cce964d4db5884110cd267e1, type: 3}
   hoverTip: Store item [E]
-  disabledHoverIcon: {fileID: 0}
+  disabledHoverIcon: {fileID: 21300000, guid: dbb78271cce964d4db5884110cd267e1, type: 3}
   disabledHoverTip: No items to store
   interactable: 1
   oneHandedItemAllowed: 1
@@ -621,9 +621,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507293d35d7a13e5b9ca9bb60e082e11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverIcon: {fileID: 0}
+  hoverIcon: {fileID: 21300000, guid: dbb78271cce964d4db5884110cd267e1, type: 3}
   hoverTip: Store item [E]
-  disabledHoverIcon: {fileID: 0}
+  disabledHoverIcon: {fileID: 21300000, guid: dbb78271cce964d4db5884110cd267e1, type: 3}
   disabledHoverTip: No items to store
   interactable: 1
   oneHandedItemAllowed: 1
