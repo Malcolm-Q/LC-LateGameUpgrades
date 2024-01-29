@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 2986170419331348867}
   m_Layer: 6
   m_Name: DepositCollider
-  m_TagString: Untagged
+  m_TagString: InteractTrigger
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -101,7 +101,7 @@ Transform:
   m_GameObject: {fileID: 1833462487019367186}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7506601, y: -0, z: -0, w: 0.66068864}
-  m_LocalPosition: {x: 0.025620002, y: -0.030800004, z: 0.064299986}
+  m_LocalPosition: {x: 0.0299, y: -0.030800004, z: 0.064299986}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -140,9 +140,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507293d35d7a13e5b9ca9bb60e082e11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverIcon: {fileID: 0}
+  hoverIcon: {fileID: 21300000, guid: 5b20d4f41c52b3e4f8f3e3e848932124, type: 3}
   hoverTip: Store item [E]
-  disabledHoverIcon: {fileID: 0}
+  disabledHoverIcon: {fileID: 21300000, guid: 5b20d4f41c52b3e4f8f3e3e848932124, type: 3}
   disabledHoverTip: No items to store
   interactable: 1
   oneHandedItemAllowed: 1
@@ -204,7 +204,7 @@ GameObject:
   - component: {fileID: 8188802904044860770}
   m_Layer: 6
   m_Name: DepositCollider (1)
-  m_TagString: Untagged
+  m_TagString: InteractTrigger
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -218,7 +218,7 @@ Transform:
   m_GameObject: {fileID: 3200428993864287728}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7506601, y: -0, z: -0, w: 0.66068864}
-  m_LocalPosition: {x: -0.0296, y: -0.035759535, z: 0.063665085}
+  m_LocalPosition: {x: -0.0366, y: -0.035759535, z: 0.063665085}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -257,9 +257,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507293d35d7a13e5b9ca9bb60e082e11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverIcon: {fileID: 0}
+  hoverIcon: {fileID: 21300000, guid: 5b20d4f41c52b3e4f8f3e3e848932124, type: 3}
   hoverTip: Store item [E]
-  disabledHoverIcon: {fileID: 0}
+  disabledHoverIcon: {fileID: 21300000, guid: 5b20d4f41c52b3e4f8f3e3e848932124, type: 3}
   disabledHoverTip: No items to store
   interactable: 1
   oneHandedItemAllowed: 1
@@ -471,7 +471,7 @@ GameObject:
   - component: {fileID: 4842106363516646407}
   m_Layer: 6
   m_Name: DepositCollider (2)
-  m_TagString: Untagged
+  m_TagString: InteractTrigger
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -485,7 +485,7 @@ Transform:
   m_GameObject: {fileID: 5745160074441995331}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7506601, y: -0, z: -0, w: 0.66068864}
-  m_LocalPosition: {x: 0.0039999997, y: -0.07404712, z: 0.05876358}
+  m_LocalPosition: {x: 0.0039999997, y: -0.0782, z: 0.0582}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -524,9 +524,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507293d35d7a13e5b9ca9bb60e082e11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverIcon: {fileID: 0}
+  hoverIcon: {fileID: 21300000, guid: 5b20d4f41c52b3e4f8f3e3e848932124, type: 3}
   hoverTip: Store item [E]
-  disabledHoverIcon: {fileID: 0}
+  disabledHoverIcon: {fileID: 21300000, guid: 5b20d4f41c52b3e4f8f3e3e848932124, type: 3}
   disabledHoverTip: No items to store
   interactable: 1
   oneHandedItemAllowed: 1
