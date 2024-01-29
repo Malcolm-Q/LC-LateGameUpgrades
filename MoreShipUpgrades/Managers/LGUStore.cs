@@ -146,6 +146,10 @@ namespace MoreShipUpgrades.Managers
                 go.GetComponent<NetworkObject>().Spawn();
             }
             logger.LogInfo($"Successfully spawned {i} upgrade objects.");
+
+            GameObject intern = Instantiate(AssetBundleHandler.GetPerkGameObject(defibScript.UPGRADE_NAME));
+            intern.GetComponent<NetworkObject>().Spawn();
+
         }
 
         [ServerRpc(RequireOwnership = false)]

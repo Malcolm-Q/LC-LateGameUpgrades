@@ -121,11 +121,16 @@ namespace MoreShipUpgrades.Misc
             if (terminal.groupCredits < UpgradeBus.instance.cfg.INTERN_PRICE) return DisplayTerminalMessage($"Interns cost {UpgradeBus.instance.cfg.INTERN_PRICE} credits and you have {terminal.groupCredits} credits.\n");
 
             PlayerControllerB player = StartOfRound.Instance.mapScreen.targetedPlayer;
+            Debug.Log("A");
             if (!player.isPlayerDead) return DisplayTerminalMessage($"{player.playerUsername} is still alive, they can't be replaced with an intern.\n\n");
 
+            Debug.Log("B");
             terminal.groupCredits -= UpgradeBus.instance.cfg.INTERN_PRICE;
+            Debug.Log("C");
             LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits);
+            Debug.Log("D");
             UpgradeBus.instance.internScript.ReviveTargetedPlayerServerRpc();
+            Debug.Log("E");
             string name = UpgradeBus.instance.internNames[UnityEngine.Random.Range(0, UpgradeBus.instance.internNames.Length)];
             string interest = UpgradeBus.instance.internInterests[UnityEngine.Random.Range(0, UpgradeBus.instance.internInterests.Length)];
             logger.LogInfo($"Successfully executed intern command for {player.playerUsername}!");
