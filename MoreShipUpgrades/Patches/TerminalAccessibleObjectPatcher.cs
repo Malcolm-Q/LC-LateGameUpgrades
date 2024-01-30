@@ -9,7 +9,7 @@ namespace MoreShipUpgrades.Patches
     internal class TerminalAccessibleObjectPatcher
     {
         [HarmonyPrefix]
-        [HarmonyPatch("CallFunctionFromTerminal")]
+        [HarmonyPatch(nameof(TerminalAccessibleObject.CallFunctionFromTerminal))]
         private static bool DestroyObject(ref TerminalAccessibleObject __instance, ref float ___codeAccessCooldownTimer, ref bool ___inCooldown)
         {
             if(!UpgradeBus.instance.DestroyTraps || __instance.gameObject.layer != LayerMask.NameToLayer("MapHazards")) { return true; }

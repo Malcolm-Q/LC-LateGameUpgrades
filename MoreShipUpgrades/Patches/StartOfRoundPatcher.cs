@@ -44,10 +44,9 @@ namespace MoreShipUpgrades.Patches
         {
             if (UpgradeBus.instance.cfg.KEEP_UPGRADES_AFTER_FIRED_CUTSCENE) return;
             logger.LogDebug("Configurations do not wish to keep upgrades, erasing...");
-            if(__instance.NetworkManager.IsHost ||  __instance.NetworkManager.IsServer)
-            {
-                LGUStore.instance.PlayersFiredServerRpc();
-            }
+
+            if (!(__instance.NetworkManager.IsHost || __instance.NetworkManager.IsServer)) return;
+            LGUStore.instance.PlayersFiredServerRpc();
         }
         [HarmonyPrefix]
         [HarmonyPatch(nameof(StartOfRound.PowerSurgeShip))]
@@ -75,13 +74,10 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPostfix]
         private static void ResetContract(StartOfRound __instance)
         {
-            if (UpgradeBus.instance.contractLevel == RoundManager.Instance.currentLevel.PlanetName)
-            {
-                if (__instance.IsHost)
-                {
-                    LGUStore.instance.SyncContractDetailsClientRpc("None", -1);
-                }
-            }
+            if (UpgradeBus.instance.contractLevel != RoundManager.Instance.currentLevel.PlanetName) return;
+            if (!__instance.IsHost) return;
+
+            LGUStore.instance.SyncContractDetailsClientRpc("None", -1);
         }
     }
 }

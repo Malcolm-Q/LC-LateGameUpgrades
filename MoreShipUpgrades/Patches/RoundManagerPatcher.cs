@@ -21,7 +21,7 @@ namespace MoreShipUpgrades.Patches
         /// Shoutout to ustaalon (https://github.com/ustaalon) for pointing out the issue when increasing the amount of days before deadline affecting
         /// the enemy spawning
         /// </summary>
-        [HarmonyPatch("PlotOutEnemiesForNextHour")]
+        [HarmonyPatch(nameof(RoundManager.PlotOutEnemiesForNextHour))]
         [HarmonyPatch("AdvanceHourAndSpawnNewBatchOfEnemies")]
         [HarmonyPrefix]
         public static void ChangeDaysForEnemySpawns()
@@ -34,7 +34,7 @@ namespace MoreShipUpgrades.Patches
             savedPrevious = true;
         }
 
-        [HarmonyPatch("PlotOutEnemiesForNextHour")]
+        [HarmonyPatch(nameof(RoundManager.PlotOutEnemiesForNextHour))]
         [HarmonyPatch("AdvanceHourAndSpawnNewBatchOfEnemies")]
         [HarmonyPostfix]
         public static void UndoChangeDaysForEnemySpawns()

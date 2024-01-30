@@ -11,7 +11,7 @@ namespace MoreShipUpgrades.Patches
     internal class StormyWeatherPatcher
     {
         [HarmonyPrefix]
-        [HarmonyPatch("LightningStrike")]
+        [HarmonyPatch(nameof(StormyWeather.LightningStrike))]
         static void CheckIfLightningRodPresent(StormyWeather __instance,ref Vector3 strikePosition, bool useTargetedObject)
         {
             if (lightningRodScript.instance != null && lightningRodScript.instance.LightningIntercepted && useTargetedObject)

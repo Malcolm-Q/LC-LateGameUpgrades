@@ -14,7 +14,7 @@ namespace MoreShipUpgrades.Patches
         private static LGULogger logger = new LGULogger(nameof(EnemyAIPatcher));
         private static ulong currentEnemy = 0;
         [HarmonyPostfix]
-        [HarmonyPatch("KillEnemyServerRpc")]
+        [HarmonyPatch(nameof(EnemyAI.KillEnemy))]
         private static void SpawnSample(EnemyAI __instance)
         {
             if (currentEnemy == __instance.NetworkObject.NetworkObjectId) return;

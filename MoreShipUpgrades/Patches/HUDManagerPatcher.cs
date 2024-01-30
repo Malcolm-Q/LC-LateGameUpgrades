@@ -38,7 +38,7 @@ namespace MoreShipUpgrades.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch("UseSignalTranslatorServerRpc")]
+        [HarmonyPatch(nameof(HUDManager.UseSignalTranslatorServerRpc))]
         static bool CancelSignal(SignalTranslator __instance)
         {
             if (UpgradeBus.instance.pager) return false; // return false gaming

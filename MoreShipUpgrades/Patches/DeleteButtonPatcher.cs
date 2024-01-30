@@ -10,7 +10,7 @@ namespace MoreShipUpgrades.Patches
     {
         private static LGULogger logger = new LGULogger(nameof(DeleteButtonPatcher));
         [HarmonyPostfix]
-        [HarmonyPatch("DeleteFile")]
+        [HarmonyPatch(nameof(DeleteFileButton.DeleteFile))]
         private static void deleteLGUFile(DeleteFileButton __instance)
         {
             string filePath = Path.Combine(Application.persistentDataPath, $"LGU_{__instance.fileToDelete}.json");

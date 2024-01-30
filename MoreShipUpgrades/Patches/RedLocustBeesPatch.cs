@@ -15,10 +15,10 @@ namespace MoreShipUpgrades.Patches
     {
         private static LGULogger logger = new LGULogger(typeof(RedLocustBeesPatch).Name);
         [HarmonyTranspiler]
-        [HarmonyPatch("OnCollideWithPlayer")]
+        [HarmonyPatch(nameof(RedLocustBees.OnCollideWithPlayer))]
         public static IEnumerable<CodeInstruction> OnCollideWithPlayer_Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo beeReduceDamage = typeof(beekeeperScript).GetMethod("CalculateBeeDamage", BindingFlags.Public | BindingFlags.Static);
+            MethodInfo beeReduceDamage = typeof(beekeeperScript).GetMethod(nameof(beekeeperScript.CalculateBeeDamage));
             List<CodeInstruction> codes = instructions.ToList();
             bool found = false;
             for(int i = 0; i < codes.Count; i++)
@@ -46,10 +46,10 @@ namespace MoreShipUpgrades.Patches
         }
 
         [HarmonyTranspiler]
-        [HarmonyPatch("SpawnHiveClientRpc")]
+        [HarmonyPatch(nameof(RedLocustBees.SpawnHiveClientRpc))]
         public static IEnumerable<CodeInstruction> SpawnHiveClientRpcTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo beeIncreaseHiveValue = typeof(beekeeperScript).GetMethod("GetHiveScrapValue", BindingFlags.Public | BindingFlags.Static);
+            MethodInfo beeIncreaseHiveValue = typeof(beekeeperScript).GetMethod(nameof(beekeeperScript.GetHiveScrapValue));
 
             List<CodeInstruction> codes = instructions.ToList();
             bool found = false;

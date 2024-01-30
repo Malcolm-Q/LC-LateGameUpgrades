@@ -10,7 +10,7 @@ namespace MoreShipUpgrades.Patches
     {
         private static LGULogger logger = new LGULogger(nameof(GameNetworkManagerPatcher));
         [HarmonyPostfix]
-        [HarmonyPatch("Disconnect")]
+        [HarmonyPatch(nameof(GameNetworkManager.Disconnect))]
         private static void ResetUpgradeBus()
         {
             logger.LogDebug("Resetting the Upgrade Bus due to disconnecting...");
@@ -23,7 +23,7 @@ namespace MoreShipUpgrades.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch("SaveGame")]
+        [HarmonyPatch(nameof(GameNetworkManager.SaveGame))]
         private static void saveLGU(GameNetworkManager __instance)
         {
             if (!__instance.isHostingGame) return;
