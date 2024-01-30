@@ -58,38 +58,16 @@ namespace MoreShipUpgrades.Patches
         }
 
         [HarmonyTranspiler]
-        [HarmonyPatch("ReviveDeadPlayers")]
+        [HarmonyPatch(nameof(StartOfRound.ReviveDeadPlayers))]
         public static IEnumerable<CodeInstruction> ReviveDeadPlayers_Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             var maximumHealthMethod = typeof(playerHealthScript).GetMethod("CheckForAdditionalHealth", BindingFlags.Public | BindingFlags.Static);
             List<CodeInstruction> codes = instructions.ToList();
-            bool first = false;
-            bool second = false;
-            bool third = false;
-            bool updateHealth = false;
-            for(int i = 0; i < codes.Count; i++)
-            {
-                if (first && second && third && updateHealth) break;
-                if (!updateHealth)
-                {
-                    if (codes[i].opcode == OpCodes.Ldc_I4_S && codes[i].operand.ToString() == "100" &&
-                        codes[i + 1].opcode == OpCodes.Ldc_I4_0 &&
-                        codes[i + 2].opcode == OpCodes.Callvirt && codes[i + 2].operand.ToString() == "Void UpdateHealthUI(Int32, Boolean)")
-                    {
-                        codes.Insert(i+1, new CodeInstruction(OpCodes.Call, maximumHealthMethod));
-                        updateHealth = true;
-                    }
-                }
-                if (!(codes[i].opcode == OpCodes.Ldc_I4_S && codes[i].operand.ToString() == "100")) continue;
-                if (!(codes[i + 1].opcode == OpCodes.Stfld && codes[i + 1].operand.ToString() == "System.Int32 health")) continue;
-
-                codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, maximumHealthMethod));
-                if (!first) first = true;
-                else if (!second) second = true;
-                else third = true;
-            }
-            if (!(first && second && third && updateHealth)) 
-                logger.LogError($"Did not find the relevant code instructions to influence the player's health through {playerHealthScript.UPGRADE_NAME}");
+            int index = 0;
+            index = Tools.FindInteger(index, ref codes, 100, maximumHealthMethod, false, false, "Couldn't find maximum health on update health UI");
+            index = Tools.FindInteger(index, ref codes, 100, maximumHealthMethod, false, false, "Couldn't find first maximum health on player's health attribute");
+            index = Tools.FindInteger(index, ref codes, 100, maximumHealthMethod, false, false, "Couldn't find second maximum health on player's health attribute");
+            index = Tools.FindInteger(index, ref codes, 100, maximumHealthMethod, false, false, "Couldn't find third maximum health on player's health attribute");
             return codes.AsEnumerable();
         }
 
