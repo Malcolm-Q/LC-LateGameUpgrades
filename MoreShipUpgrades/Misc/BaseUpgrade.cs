@@ -29,7 +29,6 @@ namespace MoreShipUpgrades.Misc
 
         public virtual void Register()
         {
-            Debug.Log("SDFSD");
             if (!UpgradeBus.instance.UpgradeObjects.ContainsKey(upgradeName)) { UpgradeBus.instance.UpgradeObjects.Add(upgradeName, gameObject); }
         }
 
