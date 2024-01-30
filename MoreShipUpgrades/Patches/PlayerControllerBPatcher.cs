@@ -108,31 +108,10 @@ namespace MoreShipUpgrades.Patches
         {
             MethodInfo reduceFallDamageMethod = typeof(strongLegsScript).GetMethod("ReduceFallDamage", BindingFlags.Static | BindingFlags.Public);
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            bool instakillFall = false;
-            bool smallFall = false;
-            bool bigFall = false;
-            for(int i = 0; i < codes.Count; i++)
-            {
-                if (instakillFall && smallFall && bigFall) break;
-
-                if (codes[i].opcode == OpCodes.Ldc_I4_S)
-                {
-                    switch (codes[i].operand.ToString())
-                    {
-                        case "100":
-                        case "50":
-                        case "30":
-                            {
-                                codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, reduceFallDamageMethod));
-                                if (!instakillFall) instakillFall = true;
-                                else if( instakillFall ) smallFall = true;
-                                else bigFall = true;
-                                continue;
-                            }
-                        default: continue;
-                    }
-                }
-            }
+            int index = 0;
+            index = Tools.FindInteger(index, ref codes, 100, reduceFallDamageMethod, false, false, "Couldn't find 100 fall damage");
+            index = Tools.FindInteger(index, ref codes, 50, reduceFallDamageMethod, false, false, "Couldn't find 50 fall damage");
+            index = Tools.FindInteger(index, ref codes, 30, reduceFallDamageMethod, false, false, "Couldn't find 30 fall damage");
 
             return codes.AsEnumerable();
         }
@@ -275,7 +254,7 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("LateUpdate")]
         private static IEnumerable<CodeInstruction> LateUpdateTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo biggerLungsRegenMethod = typeof(biggerLungScript).GetMethod("ApplyPossibleIncreasedStaminaRegen", BindingFlags.Static | BindingFlags.Public);
+            MethodInfo biggerLungsRegenMethod = typeof(biggerLungScript).GetMethod(nameof(biggerLungScript.ApplyPossibleIncreasedStaminaRegen));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             bool first = false;
             bool second = false;
@@ -297,18 +276,11 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("Jump_performed")]
         private static IEnumerable<CodeInstruction> JumpPerformedTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo biggerLungsReduceJumpCost = typeof(biggerLungScript).GetMethod("ApplyPossibleReducedJumpStaminaCost", BindingFlags.Static | BindingFlags.Public);
+            MethodInfo biggerLungsReduceJumpCost = typeof(biggerLungScript).GetMethod(nameof(biggerLungScript.ApplyPossibleReducedJumpStaminaCost));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            bool found = false;
-            for (int i = 0; i < codes.Count; i++)
-            {
-                if (found) break;
-                if (!(codes[i].opcode == OpCodes.Ldc_R4 && codes[i].operand.ToString() == "0,08")) continue;
-
-                codes.Insert(i+1, new CodeInstruction(OpCodes.Call, biggerLungsReduceJumpCost));
-                found = true;
-            }
-            return codes.AsEnumerable();
+            int index = 0;
+            index = Tools.FindFloat(index, ref codes, 0.08f, biggerLungsReduceJumpCost, false, false, "Couldn't find jump stamina cost");
+            return codes;
         }
 
         [HarmonyTranspiler]
@@ -327,31 +299,11 @@ namespace MoreShipUpgrades.Patches
 
         private static IEnumerable<CodeInstruction> AddReduceNoiseRangeFunctionToPlayerFootsteps(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo runningShoesReduceNoiseRange = typeof(runningShoeScript).GetMethod("ApplyPossibleReducedNoiseRange", BindingFlags.Static | BindingFlags.Public);
+            MethodInfo runningShoesReduceNoiseRange = typeof(runningShoeScript).GetMethod(nameof(runningShoeScript.ApplyPossibleReducedNoiseRange));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            bool walking = false;
-            bool sprinting = false;
-            for (int i = 0; i < codes.Count; i++)
-            {
-                if (walking && sprinting) break;
-                if (codes[i].opcode != OpCodes.Ldc_R4) continue;
-                switch (codes[i].operand.ToString())
-                {
-                    case "22":
-                        {
-                            codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, runningShoesReduceNoiseRange));
-                            sprinting = true;
-                            break;
-                        }
-                    case "17":
-                        {
-                            codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, runningShoesReduceNoiseRange));
-                            walking = true;
-                            break;
-                        }
-                    default: break;
-                }
-            }
+            int index = 0;
+            index = Tools.FindFloat(index, ref codes, 22, runningShoesReduceNoiseRange, false, false, "Couldn't find footstep noise");
+            index = Tools.FindFloat(index, ref codes, 17, runningShoesReduceNoiseRange, false, false, "Couldn't find footstep noise");
             return codes.AsEnumerable();
         }
 
@@ -361,15 +313,8 @@ namespace MoreShipUpgrades.Patches
         {
             MethodInfo reduceLookSensitivity = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrowLookSensitivity), BindingFlags.Static | BindingFlags.Public);
             List<CodeInstruction> codes = new List<CodeInstruction> (instructions);
-            bool flag = false;
-            for (int i = 0; i < codes.Count; i++)
-            {
-                if (flag) break;
-                if (!(codes[i].opcode == OpCodes.Ldc_R4 && (float)codes[i].operand == 0.008f)) continue;
-                codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, reduceLookSensitivity));
-                flag = true;
-            }
-            if (!flag) logger.LogError("Couldn't find look sensitivity value we wanted to influence");
+            int index = 0;
+            index = Tools.FindFloat(index, ref codes, 0.008f, reduceLookSensitivity, false, false, "Couldn't find look sensitivity value we wanted to influence");
             return codes;
         }
 
@@ -378,24 +323,12 @@ namespace MoreShipUpgrades.Patches
         private static IEnumerable<CodeInstruction> UpdateTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo reduceMovement = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrowMovement), BindingFlags.Static | BindingFlags.Public);
+            FieldInfo carryWeight = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.carryWeight));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            bool flag = false;
-            bool secondFlag = false;
-            bool ignoreFirst = false;
-            for (int i = 0; i < codes.Count; i++)
-            {
-                if (flag && secondFlag) break;
-                if (!(codes[i].opcode == OpCodes.Ldfld && codes[i].operand.ToString() == "System.Single carryWeight")) continue;
-                if (!ignoreFirst)
-                {
-                    ignoreFirst = true;
-                    continue;
-                }
-                codes.Insert(i +1, new CodeInstruction(OpCodes.Call, reduceMovement));
-                if (!flag) flag = true;
-                else secondFlag = true;
-            }
-            if (!flag || !secondFlag) logger.LogError("Couldn't find acceleration function we wanted to influence");
+            int index = 0;
+            index = Tools.FindField(index, ref codes, carryWeight, reduceMovement, true, false, "Couldn't find ignore first occurence");
+            index = Tools.FindField(index, ref codes, carryWeight, reduceMovement, false, false, "Couldn't find second occurence");
+            index = Tools.FindField(index, ref codes, carryWeight, reduceMovement, false, false, "Couldn't find third occurence");
             return codes;
         }
 

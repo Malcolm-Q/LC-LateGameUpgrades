@@ -32,11 +32,11 @@ namespace MoreShipUpgrades.Misc
         {
             logSource.LogInfo($"[{moduleName}] {message}");
         }
-        public void LogWarning(string message) 
+        public void LogWarning(object message) 
         { 
             logSource.LogWarning($"[{moduleName}] {message}");
         }
-        public void LogError(string message)
+        public void LogError(object message)
         {
             logSource.LogError($"[{moduleName}] {message}");
         }
