@@ -21,7 +21,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
                 HUDManager.Instance.chatText.text += "<color=#FF0000>Night vision is already active!</color>";
                 return;
             }
-            if (!UpgradeBus.instance.IndividualUpgrades[nightVisionScript.UPGRADE_NAME])
+            if (UpgradeBus.instance.IndividualUpgrades[nightVisionScript.UPGRADE_NAME])
             {
                 LGUStore.instance.EnableNightVisionServerRpc();
             }
