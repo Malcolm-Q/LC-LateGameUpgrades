@@ -187,7 +187,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
             }
             if (succeeded)
             {
-                pcScript.trig.disabledHoverTip = "Data has been retrieved!";
+                Destroy(pcScript.trig);
+                //pcScript.trig.disabledHoverTip = "Data has been retrieved!";
             }
             else
             {
