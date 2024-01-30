@@ -10,6 +10,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
 {
     internal class BombDefusalScript : NetworkBehaviour
     {
+        static LGULogger logger = new LGULogger(nameof(BombDefusalScript));
         AudioSource audio;
         Dictionary<string, GameObject> wires = new Dictionary<string, GameObject>
         {
@@ -77,7 +78,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
             serialNumberMesh = transform.GetChild(0).GetChild(2).GetComponent<TextMesh>();
             if (serialNumberMesh == null)
             {
-                Debug.LogError("FAILED TO GET SERIAL NUMBER MESH");
+                logger.LogError("FAILED TO GET SERIAL NUMBER MESH");
             }
 
             countdown = transform.GetChild(0).GetChild(3).GetComponent<TextMesh>();

@@ -82,11 +82,12 @@ namespace MoreShipUpgrades.Patches
             if (!__instance.IsOwner || __instance.isPlayerDead || !__instance.AllowPlayerDeath()) return true;
             if(UpgradeBus.instance.wearingHelmet)
             {
+                logger.LogDebug($"Player {__instance.playerUsername} is wearing a helmet, executing helmet logic...");
                 UpgradeBus.instance.helmetHits--;
                 if(UpgradeBus.instance.helmetHits <= 0)
                 {
+                    logger.LogDebug("Helmet has ran out of durability, breaking the helmet...");
                     UpgradeBus.instance.wearingHelmet = false;
-                    UnityEngine.Debug.Log(__instance.IsHost);
                     if(__instance.IsHost || __instance.IsServer)LGUStore.instance.DestroyHelmetClientRpc(__instance.playerClientId);
                     else LGUStore.instance.ReqDestroyHelmetServerRpc(__instance.playerClientId);
                     if(__instance.IsHost || __instance.IsServer) LGUStore.instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(__instance),"breakWood");
@@ -94,6 +95,7 @@ namespace MoreShipUpgrades.Patches
                 }
                 else
                 {
+                    logger.LogDebug($"Helmet still has some durability ({UpgradeBus.instance.helmetHits}), decreasing it...");
                     if(__instance.IsHost || __instance.IsServer) LGUStore.instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(__instance),"helmet");
                     else LGUStore.instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(__instance),"helmet");
                 }
