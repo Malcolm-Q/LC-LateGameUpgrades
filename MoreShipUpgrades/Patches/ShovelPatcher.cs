@@ -24,7 +24,7 @@ namespace MoreShipUpgrades.Patches
 
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
-            index = Tools.FindField(index, ref codes, shovelHitForce, proteinHitFoce, false, false, "Couldn't find shovel hit force field");
+            index = Tools.FindField(index, ref codes, findField: shovelHitForce, addCode: proteinHitFoce, errorMessage: "Couldn't find shovel hit force field");
             return codes.AsEnumerable();
         }
     }

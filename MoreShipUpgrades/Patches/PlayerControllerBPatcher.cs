@@ -109,9 +109,9 @@ namespace MoreShipUpgrades.Patches
             MethodInfo reduceFallDamageMethod = typeof(strongLegsScript).GetMethod("ReduceFallDamage", BindingFlags.Static | BindingFlags.Public);
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
-            index = Tools.FindInteger(index, ref codes, 100, reduceFallDamageMethod, false, false, "Couldn't find 100 fall damage");
-            index = Tools.FindInteger(index, ref codes, 50, reduceFallDamageMethod, false, false, "Couldn't find 50 fall damage");
-            index = Tools.FindInteger(index, ref codes, 30, reduceFallDamageMethod, false, false, "Couldn't find 30 fall damage");
+            index = Tools.FindInteger(index, ref codes, findValue: 100, addCode: reduceFallDamageMethod, errorMessage :  "Couldn't find 100 fall damage");
+            index = Tools.FindInteger(index, ref codes, findValue: 50, addCode: reduceFallDamageMethod, errorMessage: "Couldn't find 50 fall damage");
+            index = Tools.FindInteger(index, ref codes, findValue: 30, addCode: reduceFallDamageMethod, errorMessage: "Couldn't find 30 fall damage");
 
             return codes.AsEnumerable();
         }
@@ -136,16 +136,24 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("BeginGrabObject")]
         public static IEnumerable<CodeInstruction> BeginGrabObjectTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            ReplaceClampForBackMusclesFunction(ref instructions);
-            return instructions.AsEnumerable();
+            MethodInfo affectWeight = typeof(exoskeletonScript).GetMethod(nameof(exoskeletonScript.DecreasePossibleWeight));
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            int index = 0;
+            index = Tools.FindSub(index, ref codes, addCode: affectWeight, errorMessage: "Couldn't find item weight");
+
+            return codes;
         }
 
         [HarmonyTranspiler]
         [HarmonyPatch("GrabObjectClientRpc")]
         public static IEnumerable<CodeInstruction> GrabObjectClientRpcTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            ReplaceClampForBackMusclesFunction(ref instructions);
-            return instructions.AsEnumerable();
+            MethodInfo affectWeight = typeof(exoskeletonScript).GetMethod(nameof(exoskeletonScript.DecreasePossibleWeight));
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            int index = 0;
+            index = Tools.FindSub(index, ref codes, addCode: affectWeight, errorMessage: "Couldn't find item weight");
+
+            return codes;
         }
         [HarmonyPostfix]
         [HarmonyPatch("GrabObjectClientRpc")]
@@ -165,55 +173,46 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("DestroyItemInSlot")]
         public static IEnumerable<CodeInstruction> DestroyItemInSlotTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            ReplaceClampForBackMusclesFunction(ref instructions);
-            return instructions.AsEnumerable();
+            MethodInfo affectWeight = typeof(exoskeletonScript).GetMethod(nameof(exoskeletonScript.DecreasePossibleWeight));
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            int index = 0;
+            index = Tools.FindSub(index, ref codes, addCode: affectWeight, errorMessage: "Couldn't find item weight");
+
+            return codes;
         }
 
         [HarmonyTranspiler]
         [HarmonyPatch("DespawnHeldObjectOnClient")]
         public static IEnumerable<CodeInstruction> DespawnHeldObjectOnClientTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            ReplaceClampForBackMusclesFunction(ref instructions);
-            return instructions.AsEnumerable();
+            MethodInfo affectWeight = typeof(exoskeletonScript).GetMethod(nameof(exoskeletonScript.DecreasePossibleWeight));
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            int index = 0;
+            index = Tools.FindSub(index, ref codes, addCode: affectWeight, errorMessage: "Couldn't find item weight");
+
+            return codes;
         }
         [HarmonyTranspiler]
         [HarmonyPatch("SetObjectAsNoLongerHeld")]
         public static IEnumerable<CodeInstruction> SetObjectAsNoLongerHeldTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            ReplaceClampForBackMusclesFunction(ref instructions);
-            return instructions.AsEnumerable();
+            MethodInfo affectWeight = typeof(exoskeletonScript).GetMethod(nameof(exoskeletonScript.DecreasePossibleWeight));
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            int index = 0;
+            index = Tools.FindSub(index, ref codes, addCode: affectWeight, errorMessage: "Couldn't find item weight");
+
+            return codes;
         }
         [HarmonyTranspiler]
         [HarmonyPatch("PlaceGrabbableObject")]
         public static IEnumerable<CodeInstruction> PlaceGrabbableObjectTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            ReplaceClampForBackMusclesFunction(ref instructions);
-            return instructions.AsEnumerable();
-        }
-
-        /// <summary>
-        /// Function responsible to multiply the result of the operation through vanilla code to our own multiplier.
-        /// This assumes that any other mods that do decide to transpile the function won't put an Add or Sub operations between the storing
-        /// of the "carryWeight" variable and actual sub/add associated with the vanila code
-        /// </summary>
-        /// <param name="instructions">List of IL instructions from a given function/method</param>
-        private static void ReplaceClampForBackMusclesFunction(ref IEnumerable<CodeInstruction> instructions)
-        {
-            MethodInfo affectWeight = typeof(exoskeletonScript).GetMethod("DecreasePossibleWeight");
-            bool found = false;
+            MethodInfo affectWeight = typeof(exoskeletonScript).GetMethod(nameof(exoskeletonScript.DecreasePossibleWeight));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            for (int i = codes.Count - 1; i >= 0 && !found; i--)
-            {
-                if (!(codes[i].opcode == OpCodes.Stfld && codes[i].operand.ToString() == "System.Single carryWeight")) continue;
-                for (int j = i - 2; j >= 0 && !found; j--)
-                {
-                    if (!(codes[j].opcode == OpCodes.Sub || codes[j].opcode == OpCodes.Add)) continue;
+            int index = 0;
+            index = Tools.FindSub(index, ref codes, addCode: affectWeight, errorMessage: "Couldn't find item weight");
 
-                    codes.Insert(j+1, new CodeInstruction(OpCodes.Call, affectWeight));
-                    found = true;
-                }
-            }
-            instructions = codes.AsEnumerable();
+            return codes;
         }
 
         [HarmonyPostfix]
@@ -256,20 +255,16 @@ namespace MoreShipUpgrades.Patches
         {
             MethodInfo biggerLungsRegenMethod = typeof(biggerLungScript).GetMethod(nameof(biggerLungScript.ApplyPossibleIncreasedStaminaRegen));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            bool first = false;
-            bool second = false;
-            for(int i = 0; i < codes.Count-3; i++) 
-            {
-                if (first && second) break;
-                if (!(codes[i].opcode == OpCodes.Add)) continue;
-                if (!(codes[i + 3].opcode == OpCodes.Call && codes[i + 3].operand.ToString() == "Single Clamp(Single, Single, Single)")) continue;
-
-                codes.Insert(i, new CodeInstruction(OpCodes.Call, biggerLungsRegenMethod));
-                if (!first) first = true;
-                else second = true;
-
-            }
-            return codes.AsEnumerable();
+            int index = 0;
+            index = Tools.FindMul(index, ref codes, skip: true, errorMessage: "Couldn't skip first mul instruction");
+            index = Tools.FindMul(index, ref codes, skip: true, errorMessage: "Couldn't skip second mul instruction");
+            index = Tools.FindMul(index, ref codes, skip: true, errorMessage: "Couldn't skip third mul instruction");
+            index = Tools.FindMul(index, ref codes, skip: true, errorMessage: "Couldn't skip fourth mul instruction");
+            index = Tools.FindMul(index, ref codes, skip: true, errorMessage: "Couldn't skip fifth mul instruction");
+            index = Tools.FindMul(index, ref codes, skip: true, errorMessage: "Couldn't skip sixth mul instruction");
+            index = Tools.FindMul(index, ref codes, addCode : biggerLungsRegenMethod, errorMessage: "Couldn't find first mul instruction to include our regen method from Bigger Lungs");
+            index = Tools.FindMul(index, ref codes, addCode : biggerLungsRegenMethod, errorMessage: "Couldn't find second mul instruction to include our regen method from Bigger Lungs");
+            return codes;
         }
 
         [HarmonyTranspiler]
@@ -279,7 +274,7 @@ namespace MoreShipUpgrades.Patches
             MethodInfo biggerLungsReduceJumpCost = typeof(biggerLungScript).GetMethod(nameof(biggerLungScript.ApplyPossibleReducedJumpStaminaCost));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
-            index = Tools.FindFloat(index, ref codes, 0.08f, biggerLungsReduceJumpCost, false, false, "Couldn't find jump stamina cost");
+            index = Tools.FindFloat(index, ref codes, findValue: 0.08f, addCode: biggerLungsReduceJumpCost, errorMessage: "Couldn't find jump stamina cost");
             return codes;
         }
 
@@ -302,8 +297,8 @@ namespace MoreShipUpgrades.Patches
             MethodInfo runningShoesReduceNoiseRange = typeof(runningShoeScript).GetMethod(nameof(runningShoeScript.ApplyPossibleReducedNoiseRange));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
-            index = Tools.FindFloat(index, ref codes, 22, runningShoesReduceNoiseRange, false, false, "Couldn't find footstep noise");
-            index = Tools.FindFloat(index, ref codes, 17, runningShoesReduceNoiseRange, false, false, "Couldn't find footstep noise");
+            index = Tools.FindFloat(index, ref codes, findValue : 22, addCode : runningShoesReduceNoiseRange, errorMessage: "Couldn't find footstep noise");
+            index = Tools.FindFloat(index, ref codes, findValue : 17, addCode : runningShoesReduceNoiseRange, errorMessage: "Couldn't find footstep noise");
             return codes.AsEnumerable();
         }
 
@@ -314,7 +309,7 @@ namespace MoreShipUpgrades.Patches
             MethodInfo reduceLookSensitivity = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrowLookSensitivity), BindingFlags.Static | BindingFlags.Public);
             List<CodeInstruction> codes = new List<CodeInstruction> (instructions);
             int index = 0;
-            index = Tools.FindFloat(index, ref codes, 0.008f, reduceLookSensitivity, false, false, "Couldn't find look sensitivity value we wanted to influence");
+            index = Tools.FindFloat(index, ref codes, findValue : 0.008f, addCode: reduceLookSensitivity, errorMessage: "Couldn't find look sensitivity value we wanted to influence");
             return codes;
         }
 
@@ -326,9 +321,9 @@ namespace MoreShipUpgrades.Patches
             FieldInfo carryWeight = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.carryWeight));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
-            index = Tools.FindField(index, ref codes, carryWeight, reduceMovement, true, false, "Couldn't find ignore first occurence");
-            index = Tools.FindField(index, ref codes, carryWeight, reduceMovement, false, false, "Couldn't find second occurence");
-            index = Tools.FindField(index, ref codes, carryWeight, reduceMovement, false, false, "Couldn't find third occurence");
+            index = Tools.FindField(index, ref codes, findField: carryWeight, skip: true, errorMessage: "Couldn't find ignore first occurence");
+            index = Tools.FindField(index, ref codes, findField: carryWeight, addCode: reduceMovement, errorMessage: "Couldn't find second occurence");
+            index = Tools.FindField(index, ref codes, findField: carryWeight, addCode: reduceMovement, errorMessage: "Couldn't find third occurence");
             return codes;
         }
 
@@ -336,19 +331,11 @@ namespace MoreShipUpgrades.Patches
         [HarmonyTranspiler]
         private static IEnumerable<CodeInstruction> CrouchPerformmedTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo carryingWheelbarrow = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrow), BindingFlags.Static | BindingFlags.Public);
+            MethodInfo carryingWheelbarrow = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrow));
+            FieldInfo isMenuOpen = typeof(QuickMenuManager).GetField(nameof(QuickMenuManager.isMenuOpen));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            bool flag = false;
-            for(int i =0 ; i < codes.Count; i++) 
-            {
-                if (flag) break;
-                if (!(codes[i].opcode == OpCodes.Ldfld && codes[i].operand.ToString() == "System.Boolean isMenuOpen")) continue;
-                codes.Insert(i + 1, new CodeInstruction(OpCodes.Or));
-                codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, carryingWheelbarrow));
-                codes.Insert(i + 1, new CodeInstruction(OpCodes.Ldarg_0));
-                flag = true;
-            }
-            if (!flag) logger.LogError("Couldn't find the if branch we wanted to change to include our wheelbarrow check");
+            int index = 0;
+            index = Tools.FindField(index, ref codes, findField: isMenuOpen, addCode: carryingWheelbarrow, orInstruction : true, requireInstance : true, errorMessage : "Couldn't find isMenuOpen field");
             return codes;
         }
     }

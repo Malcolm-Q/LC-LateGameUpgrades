@@ -14,7 +14,7 @@ namespace MoreShipUpgrades.Misc
     internal class Tools
     {
         static LGULogger logger = new LGULogger(nameof(Tools));
-        public static int FindCodeInstruction(int index, ref List<CodeInstruction> codes, object findValue, MethodInfo addCode, bool skip = false, bool requireInstance = false, string errorMessage = "Not found")
+        public static int FindCodeInstruction(int index, ref List<CodeInstruction> codes, object findValue, MethodInfo addCode, bool skip = false, bool requireInstance = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, string errorMessage = "Not found")
         {
             bool found = false;
             for (; index < codes.Count; index++)
@@ -22,6 +22,9 @@ namespace MoreShipUpgrades.Misc
                 if (!CheckCodeInstruction(codes[index], findValue)) continue;
                 found = true;
                 if (skip) break;
+                if (andInstruction) codes.Insert(index + 1, new CodeInstruction(OpCodes.And));
+                if (!andInstruction && orInstruction) codes.Insert(index + 1, new CodeInstruction(OpCodes.Or));
+                if (notInstruction) codes.Insert(index + 1, new CodeInstruction(OpCodes.Not));
                 codes.Insert(index + 1, new CodeInstruction(OpCodes.Call, addCode));
                 if (requireInstance) codes.Insert(index + 1, new CodeInstruction(OpCodes.Ldarg_0));
                 break;
@@ -44,25 +47,37 @@ namespace MoreShipUpgrades.Misc
             if (!found) logger.LogError(errorMessage);
             return index + 1;
         }
-        public static int FindString(int index, ref List<CodeInstruction> codes, string findValue, MethodInfo addCode, bool skip = false, bool requireInstance = false, string errorMessage = "Not found")
+        public static int FindString(int index, ref List<CodeInstruction> codes, string findValue, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
         {
-            return FindCodeInstruction(index, ref codes, findValue, addCode, skip, requireInstance, errorMessage);
+            return FindCodeInstruction(index, ref codes, findValue, addCode, skip, requireInstance, notInstruction, andInstruction, orInstruction, errorMessage);
         }
-        public static int FindField(int index, ref List<CodeInstruction> codes, FieldInfo findField, MethodInfo addCode, bool skip = false, bool requireInstance = false, string errorMessage = "Not found")
+        public static int FindField(int index, ref List<CodeInstruction> codes, FieldInfo findField, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
         {
-            return FindCodeInstruction(index, ref codes, findField, addCode, skip, requireInstance, errorMessage);
+            return FindCodeInstruction(index, ref codes, findField, addCode, skip, requireInstance, notInstruction, andInstruction, orInstruction, errorMessage);
         }
-        public static int FindMethod(int index, ref List<CodeInstruction> codes, MethodInfo findMethod, MethodInfo addCode, bool skip = false, bool requireInstance = false, string errorMessage = "Not found")
+        public static int FindMethod(int index, ref List<CodeInstruction> codes, MethodInfo findMethod, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
         {
-            return FindCodeInstruction(index, ref codes, findMethod, addCode, skip, requireInstance, errorMessage);
+            return FindCodeInstruction(index, ref codes, findMethod, addCode, skip, requireInstance, notInstruction, andInstruction, orInstruction, errorMessage);
         }
-        public static int FindFloat(int index, ref List<CodeInstruction> codes, float findValue, MethodInfo addCode, bool skip = false, bool requireInstance = false, string errorMessage = "Not found")
+        public static int FindFloat(int index, ref List<CodeInstruction> codes, float findValue, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
         {
-            return FindCodeInstruction(index, ref codes, findValue, addCode, skip, requireInstance, errorMessage);
+            return FindCodeInstruction(index, ref codes, findValue, addCode, skip, requireInstance, notInstruction, andInstruction, orInstruction, errorMessage);
         }
-        public static int FindInteger(int index, ref List<CodeInstruction> codes, sbyte findValue, MethodInfo addCode, bool skip = false, bool requireInstance = false, string errorMessage = "Not found")
+        public static int FindInteger(int index, ref List<CodeInstruction> codes, sbyte findValue, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
         {
-            return FindCodeInstruction(index, ref codes, findValue, addCode, skip, requireInstance, errorMessage);
+            return FindCodeInstruction(index, ref codes, findValue, addCode, skip, requireInstance, notInstruction, andInstruction, orInstruction, errorMessage);
+        }
+        public static int FindSub(int index, ref List<CodeInstruction> codes, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
+        {
+            return FindCodeInstruction(index, ref codes, findValue : OpCodes.Sub, addCode, skip, notInstruction, andInstruction, orInstruction, requireInstance, errorMessage);
+        }
+        public static int FindAdd(int index, ref List<CodeInstruction> codes, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
+        {
+            return FindCodeInstruction(index, ref codes, findValue: OpCodes.Add, addCode, skip, notInstruction, andInstruction, orInstruction, requireInstance, errorMessage);
+        }
+        public static int FindMul(int index, ref List<CodeInstruction> codes, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
+        {
+            return FindCodeInstruction(index, ref codes, findValue: OpCodes.Mul, addCode, skip, notInstruction, andInstruction, orInstruction, requireInstance, errorMessage);
         }
         private static bool CheckCodeInstruction(CodeInstruction code, Type localType, int localIndex, bool store = false)
         {
@@ -104,6 +119,7 @@ namespace MoreShipUpgrades.Misc
             if (findValue is string) return code.opcode == OpCodes.Ldstr && code.operand.Equals(findValue);
             if (findValue is MethodInfo) return (code.opcode == OpCodes.Call &&  code.operand == findValue);
             if (findValue is FieldInfo) return (code.opcode == OpCodes.Ldfld || code.opcode == OpCodes.Stfld) && code.operand == findValue;
+            if (findValue is OpCode) return (code.opcode == (OpCode)findValue);
             return false;
         }
         private static bool CheckIntegerCodeInstruction(CodeInstruction code, object findValue)

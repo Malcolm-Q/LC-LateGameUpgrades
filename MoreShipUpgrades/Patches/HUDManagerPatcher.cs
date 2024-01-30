@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using System.Collections;
@@ -51,14 +52,8 @@ namespace MoreShipUpgrades.Patches
             FieldInfo allPlayersDead = typeof(StartOfRound).GetField(nameof(StartOfRound.allPlayersDead));
             MethodInfo scrapInsuranceStatus = typeof(ScrapInsurance).GetMethod(nameof(ScrapInsurance.GetScrapInsuranceStatus));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            for(int i = 0; i < codes.Count; i++)
-            {
-                if (!(codes[i].opcode == OpCodes.Ldfld && codes[i].operand == (object)allPlayersDead)) continue;
-                codes.Insert(i + 1, new CodeInstruction(OpCodes.And));
-                codes.Insert(i + 1, new CodeInstruction(OpCodes.Not));
-                codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, scrapInsuranceStatus));
-                break;
-            }
+            int index = 0;
+            index = Tools.FindField(index, ref codes, findField: allPlayersDead, addCode: scrapInsuranceStatus, notInstruction : true, andInstruction : true, errorMessage : "Couldn't find all players dead field");
             return codes;
         }
     }
