@@ -7,7 +7,7 @@ namespace MoreShipUpgrades.Patches
     internal class WalkiePatcher
     {
         [HarmonyPrefix]
-        [HarmonyPatch("PocketItem")]
+        [HarmonyPatch(nameof(WalkieTalkie.PocketItem))]
         private static void DisableHUD(WalkieTalkie __instance)
         {
             if (!UpgradeBus.instance.walkies || !__instance.playerHeldBy.IsOwner){ return; }
@@ -15,7 +15,7 @@ namespace MoreShipUpgrades.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch("DiscardItem")]
+        [HarmonyPatch(nameof(WalkieTalkie.DiscardItem))]
         private static void DisableHUDDiscard(WalkieTalkie __instance)
         {
             if (!UpgradeBus.instance.walkies || !__instance.playerHeldBy.IsOwner){ return; }
@@ -24,7 +24,7 @@ namespace MoreShipUpgrades.Patches
 
 
         [HarmonyPrefix]
-        [HarmonyPatch("EquipItem")]
+        [HarmonyPatch(nameof(WalkieTalkie.EquipItem))]
         private static void EnableHUD(WalkieTalkie __instance)
         {
             if (!UpgradeBus.instance.walkies || !__instance.playerHeldBy.IsOwner){ return; }

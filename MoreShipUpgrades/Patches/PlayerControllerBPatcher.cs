@@ -20,27 +20,27 @@ namespace MoreShipUpgrades.Patches
         internal static LGULogger logger = new LGULogger(nameof(PlayerControllerBPatcher));
 
         [HarmonyPrefix]
-        [HarmonyPatch("KillPlayer")]
+        [HarmonyPatch(nameof(PlayerControllerB.KillPlayer))]
         private static void DisableUpgradesOnDeath(PlayerControllerB __instance)
         {
-            if (!UpgradeBus.instance.cfg.LOSE_NIGHT_VIS_ON_DEATH) { return; }
-            if (!__instance.IsOwner) { return; }
-            else if (__instance.isPlayerDead) { return; }
-            else if (!__instance.AllowPlayerDeath()) { return; }
-            if(UpgradeBus.instance.nightVision) 
-            {
-                UpgradeBus.instance.UpgradeObjects[nightVisionScript.UPGRADE_NAME].GetComponent<nightVisionScript>().DisableOnClient();
-                if (!UpgradeBus.instance.cfg.NIGHT_VISION_DROP_ON_DEATH) return;
-                LGUStore.instance.SpawnNightVisionItemOnDeathServerRpc(__instance.transform.position);
-            }
+            if (!UpgradeBus.instance.cfg.LOSE_NIGHT_VIS_ON_DEATH) return;
+            if (!__instance.IsOwner) return;
+            if (__instance.isPlayerDead) return;
+            if (!__instance.AllowPlayerDeath()) return;
+
+            if (!UpgradeBus.instance.nightVision) return;
+
+            UpgradeBus.instance.UpgradeObjects[nightVisionScript.UPGRADE_NAME].GetComponent<nightVisionScript>().DisableOnClient();
+            if (!UpgradeBus.instance.cfg.NIGHT_VISION_DROP_ON_DEATH) return;
+            LGUStore.instance.SpawnNightVisionItemOnDeathServerRpc(__instance.transform.position);
         }
 
-        [HarmonyPatch("DamagePlayer")]
+        [HarmonyPatch(nameof(PlayerControllerB.DamagePlayer))]
         [HarmonyTranspiler]
         public static IEnumerable<CodeInstruction> DamagePlayerTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo maximumHealthMethod = typeof(playerHealthScript).GetMethod("CheckForAdditionalHealth", BindingFlags.Public | BindingFlags.Static);
-            MethodInfo boomboxDefenseMethod = typeof(BeatScript).GetMethod("CalculateDefense", BindingFlags.Public | BindingFlags.Static);
+            MethodInfo maximumHealthMethod = typeof(playerHealthScript).GetMethod(nameof(playerHealthScript.CheckForAdditionalHealth));
+            MethodInfo boomboxDefenseMethod = typeof(BeatScript).GetMethod(nameof(BeatScript.CalculateDefense));
 
             List<CodeInstruction> codes = instructions.ToList();
             /*
@@ -76,7 +76,7 @@ namespace MoreShipUpgrades.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch("DamagePlayer")]
+        [HarmonyPatch(nameof(PlayerControllerB.DamagePlayer))]
         static bool WeDoALittleReturningFalse(PlayerControllerB __instance)
         {
             if (!__instance.IsOwner || __instance.isPlayerDead || !__instance.AllowPlayerDeath()) return true;
@@ -119,19 +119,17 @@ namespace MoreShipUpgrades.Patches
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch("DropAllHeldItems")]
+        [HarmonyPatch(nameof(PlayerControllerB.DropAllHeldItems))]
         private static bool DontDropItems(PlayerControllerB __instance)
         {
-            if (UpgradeBus.instance.TPButtonPressed)
-            {
-                UpgradeBus.instance.TPButtonPressed = false;
-                __instance.isSinking = false;
-                __instance.isUnderwater = false;
-                __instance.sinkingValue = 0;
-                __instance.statusEffectAudio.Stop();
-                return false;
-            }
-            return true;
+            if (!UpgradeBus.instance.TPButtonPressed) return true;
+
+            UpgradeBus.instance.TPButtonPressed = false;
+            __instance.isSinking = false;
+            __instance.isUnderwater = false;
+            __instance.sinkingValue = 0;
+            __instance.statusEffectAudio.Stop();
+            return false;
         }
 
         [HarmonyTranspiler]
@@ -172,7 +170,7 @@ namespace MoreShipUpgrades.Patches
         }
 
         [HarmonyTranspiler]
-        [HarmonyPatch("DestroyItemInSlot")]
+        [HarmonyPatch(nameof(PlayerControllerB.DestroyItemInSlot))]
         public static IEnumerable<CodeInstruction> DestroyItemInSlotTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo affectWeight = typeof(exoskeletonScript).GetMethod(nameof(exoskeletonScript.DecreasePossibleWeight));
@@ -195,7 +193,7 @@ namespace MoreShipUpgrades.Patches
             return codes;
         }
         [HarmonyTranspiler]
-        [HarmonyPatch("SetObjectAsNoLongerHeld")]
+        [HarmonyPatch(nameof(PlayerControllerB.SetObjectAsNoLongerHeld))]
         public static IEnumerable<CodeInstruction> SetObjectAsNoLongerHeldTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo affectWeight = typeof(exoskeletonScript).GetMethod(nameof(exoskeletonScript.DecreasePossibleWeight));
@@ -206,7 +204,7 @@ namespace MoreShipUpgrades.Patches
             return codes;
         }
         [HarmonyTranspiler]
-        [HarmonyPatch("PlaceGrabbableObject")]
+        [HarmonyPatch(nameof(PlayerControllerB.PlaceGrabbableObject))]
         public static IEnumerable<CodeInstruction> PlaceGrabbableObjectTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo affectWeight = typeof(exoskeletonScript).GetMethod(nameof(exoskeletonScript.DecreasePossibleWeight));
@@ -233,22 +231,18 @@ namespace MoreShipUpgrades.Patches
             }
             foreach(BoomboxItem boom in UpgradeBus.instance.boomBoxes)
             {
-                if (!boom.isPlayingMusic)
-                {
-                    continue;
-                }
-                else if(Vector3.Distance(boom.transform.position, __instance.transform.position) < UpgradeBus.instance.cfg.BEATS_RADIUS)
-                {
-                    result = true;
-                    break;
-                }
+                if (!boom.isPlayingMusic) continue;
+
+                if (Vector3.Distance(boom.transform.position, __instance.transform.position) >= UpgradeBus.instance.cfg.BEATS_RADIUS) continue;
+
+                result = true;
+                break;
             }
 
-            if(result != UpgradeBus.instance.EffectsActive)
-            {
-                UpgradeBus.instance.EffectsActive = result;
-                BeatScript.HandlePlayerEffects(__instance);
-            }
+            if (result == UpgradeBus.instance.EffectsActive) return;
+
+            UpgradeBus.instance.EffectsActive = result;
+            BeatScript.HandlePlayerEffects(__instance);
         }
 
         [HarmonyTranspiler]
@@ -281,14 +275,14 @@ namespace MoreShipUpgrades.Patches
         }
 
         [HarmonyTranspiler]
-        [HarmonyPatch("PlayFootstepLocal")]
+        [HarmonyPatch(nameof(PlayerControllerB.PlayFootstepLocal))]
         private static IEnumerable<CodeInstruction> PlayFootstepLocalTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             return AddReduceNoiseRangeFunctionToPlayerFootsteps(instructions);
         }
 
         [HarmonyTranspiler]
-        [HarmonyPatch("PlayFootstepServer")]
+        [HarmonyPatch(nameof(PlayerControllerB.PlayFootstepServer))]
         private static IEnumerable<CodeInstruction> PlayFootstepServerTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             return AddReduceNoiseRangeFunctionToPlayerFootsteps(instructions);

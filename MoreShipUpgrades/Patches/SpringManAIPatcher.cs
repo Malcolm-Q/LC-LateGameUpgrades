@@ -15,13 +15,13 @@ namespace MoreShipUpgrades.Patches
     {
         private static LGULogger logger = new LGULogger(nameof(SpringManAIPatcher));
         [HarmonyPrefix]
-        [HarmonyPatch("DoAIInterval")]
+        [HarmonyPatch(nameof(SpringManAI.DoAIInterval))]
         private static void DoAllIntervalPrefix(ref SpringManAI __instance)
         {
             if (Peeper.HasLineOfSightToPeepers(__instance.transform.position)) __instance.currentBehaviourStateIndex = 1;
         }
         [HarmonyTranspiler]
-        [HarmonyPatch("Update")]
+        [HarmonyPatch(nameof(SpringManAI.Update))]
         private static IEnumerable<CodeInstruction> Update_Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo peeperMethod = typeof(Peeper).GetMethod("HasLineOfSightToPeepers", BindingFlags.Public | BindingFlags.Static);
