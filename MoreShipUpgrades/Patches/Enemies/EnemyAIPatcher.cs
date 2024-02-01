@@ -6,7 +6,7 @@ using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace MoreShipUpgrades.Patches
+namespace MoreShipUpgrades.Patches.Enemies
 {
     [HarmonyPatch(typeof(EnemyAI))]
     internal class EnemyAIPatcher
@@ -31,7 +31,7 @@ namespace MoreShipUpgrades.Patches
             }
 
             logger.LogDebug($"Spawning sample for {name}");
-            GameObject go = Object.Instantiate(UpgradeBus.instance.samplePrefabs[name.ToLower()],__instance.transform.position + Vector3.up,Quaternion.identity);
+            GameObject go = Object.Instantiate(UpgradeBus.instance.samplePrefabs[name.ToLower()], __instance.transform.position + Vector3.up, Quaternion.identity);
             PhysicsProp prop = go.GetComponent<PhysicsProp>();
             int value = Random.Range(prop.itemProperties.minValue, prop.itemProperties.maxValue);
             go.GetComponent<NetworkObject>().Spawn();

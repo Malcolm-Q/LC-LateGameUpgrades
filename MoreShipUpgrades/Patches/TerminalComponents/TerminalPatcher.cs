@@ -2,7 +2,7 @@
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 
-namespace MoreShipUpgrades.Patches
+namespace MoreShipUpgrades.Patches.TerminalComponents
 {
     [HarmonyPatch(typeof(Terminal))]
     internal class TerminalPatcher
@@ -25,7 +25,7 @@ namespace MoreShipUpgrades.Patches
         private static void StartPostfix(ref Terminal __instance)
         {
             TerminalNode helpNode = __instance.terminalNodes.specialNodes[HELP_TERMINAL_NODE];
-            if (startingIndex != -1 && endingIndex != -1) helpNode.displayText = helpNode.displayText.Remove(startingIndex, endingIndex-startingIndex);
+            if (startingIndex != -1 && endingIndex != -1) helpNode.displayText = helpNode.displayText.Remove(startingIndex, endingIndex - startingIndex);
             startingIndex = helpNode.displayText.Length;
             helpNode.displayText += ">LATEGAME\nDisplays information related with Lategame-Upgrades mod\n\n";
             helpNode.displayText += ">LGU / LATEGAME STORE\nDisplays the purchaseable upgrades from Lategame store.\n\n";

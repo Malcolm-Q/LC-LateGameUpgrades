@@ -3,7 +3,7 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using UnityEngine;
 
-namespace MoreShipUpgrades.Patches
+namespace MoreShipUpgrades.Patches.NetworkManager
 {
     [HarmonyPatch(typeof(GameNetworkManager))]
     internal class GameNetworkManagerPatcher
@@ -18,7 +18,7 @@ namespace MoreShipUpgrades.Patches
             foreach (BaseUpgrade upgrade in upgradeObjects)
             {
                 Object.Destroy(upgrade.gameObject);
-            }           
+            }
             UpgradeBus.instance.ResetAllValues();
         }
 

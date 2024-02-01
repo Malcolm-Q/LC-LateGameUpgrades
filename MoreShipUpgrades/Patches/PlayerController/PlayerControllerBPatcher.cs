@@ -12,7 +12,7 @@ using UnityEngine;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 
-namespace MoreShipUpgrades.Patches
+namespace MoreShipUpgrades.Patches.PlayerController
 {
     [HarmonyPatch(typeof(PlayerControllerB))]
     internal class PlayerControllerBPatcher
@@ -80,24 +80,24 @@ namespace MoreShipUpgrades.Patches
         static bool WeDoALittleReturningFalse(PlayerControllerB __instance)
         {
             if (!__instance.IsOwner || __instance.isPlayerDead || !__instance.AllowPlayerDeath()) return true;
-            if(UpgradeBus.instance.wearingHelmet)
+            if (UpgradeBus.instance.wearingHelmet)
             {
                 logger.LogDebug($"Player {__instance.playerUsername} is wearing a helmet, executing helmet logic...");
                 UpgradeBus.instance.helmetHits--;
-                if(UpgradeBus.instance.helmetHits <= 0)
+                if (UpgradeBus.instance.helmetHits <= 0)
                 {
                     logger.LogDebug("Helmet has ran out of durability, breaking the helmet...");
                     UpgradeBus.instance.wearingHelmet = false;
-                    if(__instance.IsHost || __instance.IsServer)LGUStore.instance.DestroyHelmetClientRpc(__instance.playerClientId);
+                    if (__instance.IsHost || __instance.IsServer) LGUStore.instance.DestroyHelmetClientRpc(__instance.playerClientId);
                     else LGUStore.instance.ReqDestroyHelmetServerRpc(__instance.playerClientId);
-                    if(__instance.IsHost || __instance.IsServer) LGUStore.instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(__instance),"breakWood");
-                    else LGUStore.instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(__instance),"breakWood");
+                    if (__instance.IsHost || __instance.IsServer) LGUStore.instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(__instance), "breakWood");
+                    else LGUStore.instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(__instance), "breakWood");
                 }
                 else
                 {
                     logger.LogDebug($"Helmet still has some durability ({UpgradeBus.instance.helmetHits}), decreasing it...");
-                    if(__instance.IsHost || __instance.IsServer) LGUStore.instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(__instance),"helmet");
-                    else LGUStore.instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(__instance),"helmet");
+                    if (__instance.IsHost || __instance.IsServer) LGUStore.instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(__instance), "helmet");
+                    else LGUStore.instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(__instance), "helmet");
                 }
                 return false;
             }
@@ -111,7 +111,7 @@ namespace MoreShipUpgrades.Patches
             MethodInfo reduceFallDamageMethod = typeof(strongLegsScript).GetMethod("ReduceFallDamage", BindingFlags.Static | BindingFlags.Public);
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
-            index = Tools.FindInteger(index, ref codes, findValue: 100, addCode: reduceFallDamageMethod, errorMessage :  "Couldn't find 100 fall damage");
+            index = Tools.FindInteger(index, ref codes, findValue: 100, addCode: reduceFallDamageMethod, errorMessage: "Couldn't find 100 fall damage");
             index = Tools.FindInteger(index, ref codes, findValue: 50, addCode: reduceFallDamageMethod, errorMessage: "Couldn't find 50 fall damage");
             index = Tools.FindInteger(index, ref codes, findValue: 30, addCode: reduceFallDamageMethod, errorMessage: "Couldn't find 30 fall damage");
 
@@ -229,7 +229,7 @@ namespace MoreShipUpgrades.Patches
                 BeatScript.HandlePlayerEffects(__instance);
                 return; // Clean all effects from Sick Beats since the player's dead
             }
-            foreach(BoomboxItem boom in UpgradeBus.instance.boomBoxes)
+            foreach (BoomboxItem boom in UpgradeBus.instance.boomBoxes)
             {
                 if (!boom.isPlayingMusic) continue;
 
@@ -258,8 +258,8 @@ namespace MoreShipUpgrades.Patches
             index = Tools.FindMul(index, ref codes, skip: true, errorMessage: "Couldn't skip fourth mul instruction");
             index = Tools.FindMul(index, ref codes, skip: true, errorMessage: "Couldn't skip fifth mul instruction");
             index = Tools.FindMul(index, ref codes, skip: true, errorMessage: "Couldn't skip sixth mul instruction");
-            index = Tools.FindMul(index, ref codes, addCode : biggerLungsRegenMethod, errorMessage: "Couldn't find first mul instruction to include our regen method from Bigger Lungs");
-            index = Tools.FindMul(index, ref codes, addCode : biggerLungsRegenMethod, errorMessage: "Couldn't find second mul instruction to include our regen method from Bigger Lungs");
+            index = Tools.FindMul(index, ref codes, addCode: biggerLungsRegenMethod, errorMessage: "Couldn't find first mul instruction to include our regen method from Bigger Lungs");
+            index = Tools.FindMul(index, ref codes, addCode: biggerLungsRegenMethod, errorMessage: "Couldn't find second mul instruction to include our regen method from Bigger Lungs");
             return codes;
         }
 
@@ -293,8 +293,8 @@ namespace MoreShipUpgrades.Patches
             MethodInfo runningShoesReduceNoiseRange = typeof(runningShoeScript).GetMethod(nameof(runningShoeScript.ApplyPossibleReducedNoiseRange));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
-            index = Tools.FindFloat(index, ref codes, findValue : 22, addCode : runningShoesReduceNoiseRange, errorMessage: "Couldn't find footstep noise");
-            index = Tools.FindFloat(index, ref codes, findValue : 17, addCode : runningShoesReduceNoiseRange, errorMessage: "Couldn't find footstep noise");
+            index = Tools.FindFloat(index, ref codes, findValue: 22, addCode: runningShoesReduceNoiseRange, errorMessage: "Couldn't find footstep noise");
+            index = Tools.FindFloat(index, ref codes, findValue: 17, addCode: runningShoesReduceNoiseRange, errorMessage: "Couldn't find footstep noise");
             return codes.AsEnumerable();
         }
 
@@ -303,9 +303,9 @@ namespace MoreShipUpgrades.Patches
         private static IEnumerable<CodeInstruction> PlayerLookInputTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo reduceLookSensitivity = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrowLookSensitivity), BindingFlags.Static | BindingFlags.Public);
-            List<CodeInstruction> codes = new List<CodeInstruction> (instructions);
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
-            index = Tools.FindFloat(index, ref codes, findValue : 0.008f, addCode: reduceLookSensitivity, errorMessage: "Couldn't find look sensitivity value we wanted to influence");
+            index = Tools.FindFloat(index, ref codes, findValue: 0.008f, addCode: reduceLookSensitivity, errorMessage: "Couldn't find look sensitivity value we wanted to influence");
             return codes;
         }
 
@@ -331,7 +331,7 @@ namespace MoreShipUpgrades.Patches
             FieldInfo isMenuOpen = typeof(QuickMenuManager).GetField(nameof(QuickMenuManager.isMenuOpen));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
-            index = Tools.FindField(index, ref codes, findField: isMenuOpen, addCode: carryingWheelbarrow, orInstruction : true, requireInstance : true, errorMessage : "Couldn't find isMenuOpen field");
+            index = Tools.FindField(index, ref codes, findField: isMenuOpen, addCode: carryingWheelbarrow, orInstruction: true, requireInstance: true, errorMessage: "Couldn't find isMenuOpen field");
             return codes;
         }
     }

@@ -10,7 +10,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using UnityEngine;
 
-namespace MoreShipUpgrades.Patches
+namespace MoreShipUpgrades.Patches.HUD
 {
     [HarmonyPatch(typeof(HUDManager))]
     internal class HUDManagerPatcher
@@ -19,7 +19,7 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("MeetsScanNodeRequirements")]
         private static void alterReqs(ScanNodeProperties node, ref bool __result, PlayerControllerB playerScript)
         {
-            if (node != null && node.GetComponentInParent<WheelbarrowScript>() != null && (node.headerText != "Shopping Cart" && node.headerText != "Wheelbarrow")) { __result = false; return; }
+            if (node != null && node.GetComponentInParent<WheelbarrowScript>() != null && node.headerText != "Shopping Cart" && node.headerText != "Wheelbarrow") { __result = false; return; }
             if (!UpgradeBus.instance.scannerUpgrade) { return; }
             if (node == null) { __result = false; return; }
             bool throughWall = Physics.Linecast(playerScript.gameplayCamera.transform.position, node.transform.position, 256, QueryTriggerInteraction.Ignore);
@@ -32,9 +32,9 @@ namespace MoreShipUpgrades.Patches
                     return;
                 }
             }
-            float rangeIncrease = (node.headerText == "Main entrance" || node.headerText == "Ship") ? UpgradeBus.instance.cfg.SHIP_AND_ENTRANCE_DISTANCE_INCREASE : UpgradeBus.instance.cfg.NODE_DISTANCE_INCREASE;
+            float rangeIncrease = node.headerText == "Main entrance" || node.headerText == "Ship" ? UpgradeBus.instance.cfg.SHIP_AND_ENTRANCE_DISTANCE_INCREASE : UpgradeBus.instance.cfg.NODE_DISTANCE_INCREASE;
             float num = Vector3.Distance(playerScript.transform.position, node.transform.position);
-            __result = (num < (float)node.maxRange + rangeIncrease && num > (float)node.minRange);
+            __result = num < node.maxRange + rangeIncrease && num > node.minRange;
         }
 
         [HarmonyPrefix]
@@ -53,7 +53,7 @@ namespace MoreShipUpgrades.Patches
             MethodInfo scrapInsuranceStatus = typeof(ScrapInsurance).GetMethod(nameof(ScrapInsurance.GetScrapInsuranceStatus));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
-            index = Tools.FindField(index, ref codes, findField: allPlayersDead, addCode: scrapInsuranceStatus, notInstruction : true, andInstruction : true, errorMessage : "Couldn't find all players dead field");
+            index = Tools.FindField(index, ref codes, findField: allPlayersDead, addCode: scrapInsuranceStatus, notInstruction: true, andInstruction: true, errorMessage: "Couldn't find all players dead field");
             return codes;
         }
     }

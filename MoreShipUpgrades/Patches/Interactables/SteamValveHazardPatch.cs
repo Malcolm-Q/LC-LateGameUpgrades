@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 
-namespace MoreShipUpgrades.Patches
+namespace MoreShipUpgrades.Patches.Interactables
 {
     [HarmonyPatch(typeof(SteamValveHazard))]
     internal class SteamValveHazardPatch

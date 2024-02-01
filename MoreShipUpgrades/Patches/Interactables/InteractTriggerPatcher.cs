@@ -4,7 +4,7 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using UnityEngine;
 
-namespace MoreShipUpgrades.Patches
+namespace MoreShipUpgrades.Patches.Interactables
 {
     [HarmonyPatch(typeof(InteractTrigger))]
     internal class InteractTriggerPatcher
@@ -14,14 +14,14 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch("OnTriggerEnter")]
         private static bool pickDoor(InteractTrigger __instance, Collider other)
         {
-            if(!UpgradeBus.instance.lockSmith) { return true; }
+            if (!UpgradeBus.instance.lockSmith) { return true; }
             PlayerControllerB player = other.gameObject.GetComponent<PlayerControllerB>();
-            if(player == null) { return true; }
+            if (player == null) { return true; }
             if (!player.IsOwner) { return true; }
             DoorLock door = __instance.gameObject.GetComponent<DoorLock>();
-            if(door == null) { return true; }
-            if(!door.isLocked) { return true; }
-            if(UpgradeBus.instance.lockScript.gameObject.transform.GetChild(0).gameObject.activeInHierarchy) return true;
+            if (door == null) { return true; }
+            if (!door.isLocked) { return true; }
+            if (UpgradeBus.instance.lockScript.gameObject.transform.GetChild(0).gameObject.activeInHierarchy) return true;
 
 
             logger.LogDebug("Starting lockpicking minigame...");

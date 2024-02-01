@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using MoreShipUpgrades.Misc;
 
-namespace MoreShipUpgrades.Patches
+namespace MoreShipUpgrades.Patches.RoundComponents
 {
     [HarmonyPatch(typeof(RoundManager))]
     internal class RoundManagerTranspilerPatcher

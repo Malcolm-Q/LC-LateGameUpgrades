@@ -3,7 +3,7 @@ using MoreShipUpgrades.Misc;
 using System.IO;
 using UnityEngine;
 
-namespace MoreShipUpgrades.Patches
+namespace MoreShipUpgrades.Patches.HUD
 {
     [HarmonyPatch(typeof(DeleteFileButton))]
     internal class DeleteButtonPatcher

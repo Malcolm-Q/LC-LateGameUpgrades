@@ -3,7 +3,7 @@ using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using Unity.Netcode;
 
-namespace MoreShipUpgrades.Patches
+namespace MoreShipUpgrades.Patches.Interactables
 {
     [HarmonyPatch(typeof(StartMatchLever))]
     internal class StartMatchLevelPatcher
