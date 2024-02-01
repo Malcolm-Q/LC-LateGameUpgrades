@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 
-namespace MoreShipUpgrades.Patches
+namespace MoreShipUpgrades.Patches.Enemies
 {
     [HarmonyPatch(typeof(RedLocustBees))]
     internal class RedLocustBeesPatch
@@ -21,7 +21,7 @@ namespace MoreShipUpgrades.Patches
             MethodInfo beeReduceDamage = typeof(beekeeperScript).GetMethod(nameof(beekeeperScript.CalculateBeeDamage));
             List<CodeInstruction> codes = instructions.ToList();
             bool found = false;
-            for(int i = 0; i < codes.Count; i++)
+            for (int i = 0; i < codes.Count; i++)
             {
                 if (found) break;
                 if (!(codes[i].opcode == OpCodes.Callvirt && codes[i].operand.ToString() == "Void DamagePlayer(Int32, Boolean, Boolean, CauseOfDeath, Int32, Boolean, UnityEngine.Vector3)")) continue;

@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 
-namespace MoreShipUpgrades.Patches
+namespace MoreShipUpgrades.Patches.Enemies
 {
     [HarmonyPatch(typeof(BaboonBirdAI))]
     internal class BaboonBirdAIPatcher
@@ -34,7 +34,7 @@ namespace MoreShipUpgrades.Patches
         private static int PatchCheckItemInWheelbarrow(int index, ref List<CodeInstruction> codes)
         {
             MethodInfo checkIfInWheelbarrow = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfItemInWheelbarrow));
-            for(; index < codes.Count; index++)
+            for (; index < codes.Count; index++)
             {
                 if (!(codes[index].opcode == OpCodes.Ldloc_S && codes[index].operand.ToString() == "GrabbableObject (18)")) continue;
                 if (!(codes[index + 1].opcode == OpCodes.Ldnull)) continue;
@@ -44,7 +44,7 @@ namespace MoreShipUpgrades.Patches
                 codes.Insert(index + 3, new CodeInstruction(OpCodes.Ldloc_S, codes[index].operand));
                 break;
             }
-            return index+1;
+            return index + 1;
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using UnityEngine;
 
-namespace MoreShipUpgrades.Patches
+namespace MoreShipUpgrades.Patches.Items
 {
     [HarmonyPatch(typeof(Shovel))]
     internal class ShovelPatcher

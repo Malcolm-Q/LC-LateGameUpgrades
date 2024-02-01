@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
 
-namespace MoreShipUpgrades.Patches
+namespace MoreShipUpgrades.Patches.Enemies
 {
     [HarmonyPatch(typeof(HoarderBugAI))]
     internal class HoarderBugAIPatcher
@@ -12,7 +12,7 @@ namespace MoreShipUpgrades.Patches
         {
             if (UpgradeBus.instance.contractType != "exterminator") return;
 
-            if(UpgradeBus.instance.contractLevel == RoundManager.Instance.currentLevel.PlanetName)
+            if (UpgradeBus.instance.contractLevel == RoundManager.Instance.currentLevel.PlanetName)
             {
                 __result = true;
             }

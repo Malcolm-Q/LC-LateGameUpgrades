@@ -8,7 +8,7 @@ using System.Reflection;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Items;
 
-namespace MoreShipUpgrades.Patches
+namespace MoreShipUpgrades.Patches.Enemies
 {
     [HarmonyPatch(typeof(SpringManAI))]
     internal class SpringManAIPatcher
@@ -27,7 +27,7 @@ namespace MoreShipUpgrades.Patches
             MethodInfo peeperMethod = typeof(Peeper).GetMethod("HasLineOfSightToPeepers", BindingFlags.Public | BindingFlags.Static);
             MethodInfo transformMethod = typeof(SpringManAI).GetMethod("get_transform");
             MethodInfo positionMethod = typeof(UnityEngine.Transform).GetMethod("get_position");
-            
+
             bool foundStopMovementFlag = false;
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             for (int i = 1; i < codes.Count; i++)

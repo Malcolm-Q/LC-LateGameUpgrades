@@ -10,7 +10,7 @@ using System.Reflection.Emit;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace MoreShipUpgrades.Patches
+namespace MoreShipUpgrades.Patches.RoundComponents
 {
     [HarmonyPatch(typeof(StartOfRound))]
     internal class StartOfRoundPatcher
@@ -21,16 +21,16 @@ namespace MoreShipUpgrades.Patches
         private static void InitLGUStore(PlayerControllerB __instance)
         {
             logger.LogDebug("Initiating components...");
-            if(__instance.NetworkManager.IsHost || __instance.NetworkManager.IsServer)
+            if (__instance.NetworkManager.IsHost || __instance.NetworkManager.IsServer)
             {
-                GameObject refStore = GameObject.Instantiate(UpgradeBus.instance.modStorePrefab);
+                GameObject refStore = Object.Instantiate(UpgradeBus.instance.modStorePrefab);
                 refStore.GetComponent<NetworkObject>().Spawn();
                 logger.LogDebug("LGUStore component initiated...");
             }
-            foreach(GameObject sample in UpgradeBus.instance.samplePrefabs.Values)
+            foreach (GameObject sample in UpgradeBus.instance.samplePrefabs.Values)
             {
                 Item item = sample.GetComponent<PhysicsProp>().itemProperties;
-                if(!StartOfRound.Instance.allItemsList.itemsList.Contains(item))
+                if (!StartOfRound.Instance.allItemsList.itemsList.Contains(item))
                 {
                     StartOfRound.Instance.allItemsList.itemsList.Add(item);
                 }

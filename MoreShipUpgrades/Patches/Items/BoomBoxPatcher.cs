@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
 
-namespace MoreShipUpgrades.Patches
+namespace MoreShipUpgrades.Patches.Items
 {
     [HarmonyPatch(typeof(BoomboxItem))]
     internal class BoomBoxPatcher

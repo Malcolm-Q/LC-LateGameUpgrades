@@ -3,7 +3,7 @@ using MoreShipUpgrades.Managers;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace MoreShipUpgrades.Patches
+namespace MoreShipUpgrades.Patches.TerminalComponents
 {
     [HarmonyPatch(typeof(TerminalAccessibleObject))]
     internal class TerminalAccessibleObjectPatcher
@@ -12,7 +12,7 @@ namespace MoreShipUpgrades.Patches
         [HarmonyPatch(nameof(TerminalAccessibleObject.CallFunctionFromTerminal))]
         private static bool DestroyObject(ref TerminalAccessibleObject __instance, ref float ___codeAccessCooldownTimer, ref bool ___inCooldown)
         {
-            if(!UpgradeBus.instance.DestroyTraps || __instance.gameObject.layer != LayerMask.NameToLayer("MapHazards")) { return true; }
+            if (!UpgradeBus.instance.DestroyTraps || __instance.gameObject.layer != LayerMask.NameToLayer("MapHazards")) { return true; }
             if (UpgradeBus.instance.cfg.DESTROY_TRAP)
             {
                 UpgradeBus.instance.trapHandler.ReqDestroyObjectServerRpc(new NetworkObjectReference(__instance.gameObject.transform.parent.gameObject.GetComponent<NetworkObject>()));
