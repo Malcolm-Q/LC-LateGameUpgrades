@@ -21,14 +21,5 @@ namespace MoreShipUpgrades.Patches.NetworkManager
             }
             UpgradeBus.instance.ResetAllValues();
         }
-
-        [HarmonyPrefix]
-        [HarmonyPatch(nameof(GameNetworkManager.SaveGame))]
-        private static void saveLGU(GameNetworkManager __instance)
-        {
-            if (!__instance.isHostingGame) return;
-            logger.LogDebug("Saving the LGU upgrades unto a json file...");
-            LGUStore.instance.ServerSaveFileServerRpc();
-        }
     }
 }

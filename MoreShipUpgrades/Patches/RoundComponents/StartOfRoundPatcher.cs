@@ -79,5 +79,14 @@ namespace MoreShipUpgrades.Patches.RoundComponents
 
             LGUStore.instance.SyncContractDetailsClientRpc("None", -1);
         }
+
+        [HarmonyPatch("AutoSaveShipData")]
+        [HarmonyPostfix]
+        private static void AutoSaveShipDataPostfix()
+        {
+            if (!GameNetworkManager.Instance.isHostingGame) return;
+            logger.LogDebug("Saving the LGU upgrades unto a json file...");
+            LGUStore.instance.ServerSaveFileServerRpc();
+        }
     }
 }
