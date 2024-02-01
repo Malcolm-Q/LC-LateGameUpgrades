@@ -28,7 +28,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         public override void DiscardItem()
         {
             base.DiscardItem();
-            particles?.Play();
+            particles?.Stop();
+            particles?.Clear();
         }
 
         public override void PocketItem()
