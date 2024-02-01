@@ -22,6 +22,7 @@ namespace MoreShipUpgrades.Managers
         public LGUSave lguSave;
         private ulong playerID = 0;
         private static LGULogger logger = new LGULogger(nameof(LGUStore));
+        private string saveDataKey = "LGU_SAVE_DATA";
 
         private static Dictionary<string, Func<SaveInfo, bool>> conditions = new Dictionary<string, Func<SaveInfo, bool>>
         {
@@ -74,12 +75,12 @@ namespace MoreShipUpgrades.Managers
             instance = this;
             if (NetworkManager.IsHost)
             {
-                string saveNum = GameNetworkManager.Instance.saveFileNum.ToString();
-                string filePath = Path.Combine(Application.persistentDataPath, $"LGU_{saveNum}.json");
-                if (File.Exists(filePath))
+                string saveFile = GameNetworkManager.Instance.currentSaveFileName;
+                int saveNum = GameNetworkManager.Instance.saveFileNum;
+                string json = (string)ES3.Load(key: saveDataKey, defaultValue: null, filePath: saveFile);
+                if (json != null)
                 {
                     logger.LogInfo($"Loading save file for slot {saveNum}.");
-                    string json = File.ReadAllText(filePath);
                     lguSave = JsonConvert.DeserializeObject<LGUSave>(json);
                     UpdateUpgradeBus();
                 }
@@ -102,10 +103,9 @@ namespace MoreShipUpgrades.Managers
         [ServerRpc(RequireOwnership = false)]
         public void ServerSaveFileServerRpc()
         {
-            string saveNum = GameNetworkManager.Instance.saveFileNum.ToString();
-            string filePath = Path.Combine(Application.persistentDataPath, $"LGU_{saveNum}.json");
+            string saveFile = GameNetworkManager.Instance.currentSaveFileName;
             string json = JsonConvert.SerializeObject(lguSave);
-            File.WriteAllText(filePath, json);
+            ES3.Save(key: saveDataKey, value: json, filePath: saveFile);
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -196,11 +196,10 @@ namespace MoreShipUpgrades.Managers
         {
             ResetUpgradeBusClientRpc();
             UpgradeBus.instance.ResetAllValues(false);
-            string saveNum = GameNetworkManager.Instance.saveFileNum.ToString();
-            string filePath = Path.Combine(Application.persistentDataPath, $"LGU_{saveNum}.json");
+            string saveFile = GameNetworkManager.Instance.currentSaveFileName;
             lguSave = new LGUSave();
             string json = JsonConvert.SerializeObject(lguSave);
-            File.WriteAllText(filePath, json);
+            ES3.Save(key: saveDataKey, value: json, filePath: saveFile);
         }
 
         [ClientRpc]
