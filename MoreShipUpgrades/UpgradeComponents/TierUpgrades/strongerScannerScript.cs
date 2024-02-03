@@ -1,10 +1,11 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class strongerScannerScript : BaseUpgrade
+    internal class strongerScannerScript : BaseUpgrade, IUpgradeWorldBuilding, ITierUpgradeDisplayInfo
     {
         public const string UPGRADE_NAME = "Better Scanner";
         internal const string WORLD_BUILDING_TEXT = "\n\nA serialized Company-Issue Magazine subscription, called 'Stuff Finders'." +
@@ -79,6 +80,19 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                     }
             }
             return "";
+        }
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return string.Format(WORLD_BUILDING_TEXT, shareStatus ? "a department" : "one");
+        }
+
+        public string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
+        {
+            string info = GetBetterScannerInfo(1, initialPrice);
+            for (int i = 0; i < maxLevels; i++)
+                info += GetBetterScannerInfo(i + 2, incrementalPrices[i]);
+            return info;
         }
     }
 }

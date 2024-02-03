@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -11,7 +12,7 @@ using UnityEngine.InputSystem;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class nightVisionScript : BaseUpgrade
+    internal class nightVisionScript : BaseUpgrade, ITierUpgradeDisplayInfo
     {
         private float nightBattery;
         private Transform batteryBar;
@@ -204,6 +205,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                         return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), level, price, drainTime, regenTime);
                     }
             }
+        }
+
+        public string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
+        {
+            string info = GetNightVisionInfo(1, initialPrice);
+            for (int i = 0; i < maxLevels; i++)
+                info += GetNightVisionInfo(i + 2, incrementalPrices[i]);
+            return info;
         }
     }
 }

@@ -1,11 +1,13 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
+using System;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class runningShoeScript : BaseUpgrade
+    internal class runningShoeScript : BaseUpgrade, IUpgradeWorldBuilding, ITierUpgradeDisplayInfo 
     {
         public const string UPGRADE_NAME = "Running Shoes";
         private static LGULogger logger;
@@ -87,6 +89,18 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             if (!(UpgradeBus.instance.runningShoes && UpgradeBus.instance.runningLevel == UpgradeBus.instance.cfg.RUNNING_SHOES_UPGRADE_PRICES.Split(',').Length)) return defaultValue;
             return Mathf.Clamp(defaultValue - UpgradeBus.instance.cfg.NOISE_REDUCTION, 0f, defaultValue);
+        }
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return string.Format(WORLD_BUILDING_TEXT, shareStatus ? "could give your crew" : "can give you", shareStatus ? "y'all's" : "your");
+        }
+
+        public string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
+        {
+            Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.MOVEMENT_SPEED_UNLOCK + (level * UpgradeBus.instance.cfg.MOVEMENT_INCREMENT);
+            string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
     }
 }

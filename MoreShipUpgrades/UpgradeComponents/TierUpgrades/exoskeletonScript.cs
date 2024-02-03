@@ -1,11 +1,13 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
+using System;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class exoskeletonScript : BaseUpgrade
+    internal class exoskeletonScript : BaseUpgrade, IUpgradeWorldBuilding, ITierUpgradeDisplayInfo
     {
         public const string UPGRADE_NAME = "Back Muscles";
         public static string PRICES_DEFAULT = "600,700,800";
@@ -65,6 +67,18 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             }
             player.carryWeight = UpgradeBus.instance.alteredWeight;
             if (player.carryWeight < 1f) { player.carryWeight = 1f; }
+        }
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return string.Format(WORLD_BUILDING_TEXT, shareStatus ? "departments" : "employees");
+        }
+
+        public string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
+        {
+            Func<int, float> infoFunction = level => (UpgradeBus.instance.cfg.CARRY_WEIGHT_REDUCTION - (level * UpgradeBus.instance.cfg.CARRY_WEIGHT_INCREMENT)) * 100;
+            string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
     }
 

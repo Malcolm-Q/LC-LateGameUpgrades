@@ -1,12 +1,13 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    public class terminalFlashScript : BaseUpgrade
+    public class terminalFlashScript : BaseUpgrade, IUpgradeWorldBuilding, ITierUpgradeDisplayInfo
     {
         public const string UPGRADE_NAME = "Discombobulator";
         public static string PRICES_DEFAULT = "330,460,620";
@@ -94,5 +95,16 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             terminal.terminalAudio.maxDistance = 17f;
         }
 
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return string.Format(WORLD_BUILDING_TEXT, shareStatus ? "your crew" : "you");
+        }
+
+        public string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
+        {
+            System.Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.DISCOMBOBULATOR_STUN_DURATION + (level * UpgradeBus.instance.cfg.DISCOMBOBULATOR_INCREMENT);
+            string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+        }
     }
 }

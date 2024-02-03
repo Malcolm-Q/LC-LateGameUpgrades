@@ -24,6 +24,7 @@ using MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.Commands;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades
 {
@@ -381,11 +382,21 @@ namespace MoreShipUpgrades
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(helmet.spawnPrefab);
 
             UpgradeBus.instance.ItemsToSync.Add("Helmet", helmet);
-
-            TerminalNode node = ScriptableObject.CreateInstance<TerminalNode>();
-            node.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Helmet"), cfg.HELMET_HITS_BLOCKED);
-            Items.RegisterShopItem(helmet, null, null, node, helmet.creditsWorth);
-
+            SetupStoreItem(helmet);
+        }
+        private TerminalNode SetupInfoNode(Item storeItem)
+        {
+            TerminalNode infoNode = ScriptableObject.CreateInstance<TerminalNode>();
+            GrabbableObject grabbableObject = storeItem.spawnPrefab.GetComponent<GrabbableObject>();
+            if (grabbableObject is IDisplayInfo displayInfo) infoNode.displayText += displayInfo.GetDisplayInfo() + "\n";
+            if (grabbableObject is IItemWorldBuilding worldBuilding) infoNode.displayText += worldBuilding.GetWorldBuildingText() + "\n";
+            infoNode.clearPreviousText = true;
+            return infoNode;
+        }
+        private void SetupStoreItem(Item storeItem)
+        {
+            TerminalNode infoNode = SetupInfoNode(storeItem);
+            Items.RegisterShopItem(shopItem: storeItem, itemInfo: infoNode, price: storeItem.creditsWorth);
         }
         private void SetupRegularTeleporterButton()
         {
@@ -407,12 +418,7 @@ namespace MoreShipUpgrades
 
             UpgradeBus.instance.ItemsToSync.Add("Tele", regularPortableTeleporter);
 
-            TerminalNode PortNode = ScriptableObject.CreateInstance<TerminalNode>();
-            PortNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Portable Tele"), (int)(cfg.CHANCE_TO_BREAK * 100));
-            PortNode.displayText += RegularPortableTeleporter.WORLD_BUILDING_TEXT;
-            PortNode.clearPreviousText = true;
-
-            Items.RegisterShopItem(regularPortableTeleporter, null, null, PortNode, regularPortableTeleporter.creditsWorth);
+            SetupStoreItem(regularPortableTeleporter);
         }
         private void SetupAdvancedTeleporterButton()
         {
@@ -434,13 +440,7 @@ namespace MoreShipUpgrades
 
             UpgradeBus.instance.ItemsToSync.Add("AdvTele", advancedPortableTeleporter);
 
-            TerminalNode advNode = ScriptableObject.CreateInstance<TerminalNode>();
-            advNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Advanced Portable Tele"), (int)(cfg.ADV_CHANCE_TO_BREAK * 100));
-            advNode.displayText += AdvancedPortableTeleporter.WORLD_BUILDING_TEXT;
-            advNode.clearPreviousText = true;
-
-            Items.RegisterShopItem(advancedPortableTeleporter, null, null, advNode, advancedPortableTeleporter.creditsWorth);
-
+            SetupStoreItem(advancedPortableTeleporter);
         }
 
         private void SetupNightVision()
@@ -461,15 +461,7 @@ namespace MoreShipUpgrades
 
             UpgradeBus.instance.ItemsToSync.Add("Night", nightVisionItem);
 
-            TerminalNode nightNode = ScriptableObject.CreateInstance<TerminalNode>();
-            string grantStatus = cfg.NIGHT_VISION_INDIVIDUAL || UpgradeBus.instance.cfg.SHARED_UPGRADES ? "one" : "all";
-            string loseOnDeath = cfg.LOSE_NIGHT_VIS_ON_DEATH ? "be" : "not be";
-            nightNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Night Vision"), grantStatus, loseOnDeath);
-            nightNode.displayText += nightVisionScript.WORLD_BUILDING_TEXT;
-            nightNode.clearPreviousText = true;
-
-            Items.RegisterShopItem(nightVisionItem, null, null, nightNode, nightVisionItem.creditsWorth);
-
+            SetupStoreItem(nightVisionItem);
         }
         private void SetupDivingKit()
         {
@@ -489,11 +481,7 @@ namespace MoreShipUpgrades
 
             UpgradeBus.instance.ItemsToSync.Add("Dive",DiveItem);
 
-            TerminalNode medNode = ScriptableObject.CreateInstance<TerminalNode>();
-            string hands = cfg.DIVEKIT_TWO_HANDED ? "two" : "one";
-            medNode.displayText = $"DIVING KIT - ${cfg.DIVEKIT_PRICE}\n\nBreath underwater.\nWeights {Mathf.RoundToInt((DiveItem.weight -1 )*100)} lbs and is {hands} handed.\n\n";
-            Items.RegisterShopItem(DiveItem, null, null,medNode, DiveItem.creditsWorth);
-
+            SetupStoreItem(DiveItem);
         }
         private void SetupMedkit()
         {
@@ -512,9 +500,7 @@ namespace MoreShipUpgrades
             medScript.use = buttonPressed;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(MedKitItem.spawnPrefab);
 
-            TerminalNode medNode = ScriptableObject.CreateInstance<TerminalNode>();
-            medNode.displayText = string.Format("MEDKIT - ${0}\n\nLeft click to heal yourself for {1} health.\nCan be used {2} times.\n", cfg.MEDKIT_PRICE, cfg.MEDKIT_HEAL_VALUE, cfg.MEDKIT_USES);
-            Items.RegisterShopItem(MedKitItem, null, null,medNode, MedKitItem.creditsWorth);
+            SetupStoreItem(MedKitItem);
 
             Item MedKitMapItem = AssetBundleHandler.GetItemObject("MedkitMapItem");
             if (MedKitMapItem == null) return;
@@ -553,9 +539,7 @@ namespace MoreShipUpgrades
 
             UpgradeBus.instance.ItemsToSync.Add("Peeper", Peeper);
 
-            TerminalNode peepNode = ScriptableObject.CreateInstance<TerminalNode>();
-            peepNode.displayText = "Looks at coil heads, don't lose it\n";
-            LethalLib.Modules.Items.RegisterShopItem(Peeper, null, null, peepNode, Peeper.creditsWorth);
+            SetupStoreItem(Peeper);
         }
         private void SetupWheelbarrows()
         {
@@ -631,9 +615,7 @@ namespace MoreShipUpgrades
 
             UpgradeBus.instance.ItemsToSync.Add("Wheel", wheelbarrow);
 
-            TerminalNode wheelbarrowNode = ScriptableObject.CreateInstance<TerminalNode>();
-            wheelbarrowNode.displayText = $"A portable container which has a maximum capacity of {cfg.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS} and reduces the effective weight of the inserted items by {cfg.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER*100} %.\nIt weighs {1f + (cfg.WHEELBARROW_WEIGHT/100f)} lbs";
-            LethalLib.Modules.Items.RegisterShopItem(wheelbarrow, null, null, wheelbarrowNode, wheelbarrow.creditsWorth);
+            SetupStoreItem(wheelbarrow);
         }
         private void SetupPerks()
         {

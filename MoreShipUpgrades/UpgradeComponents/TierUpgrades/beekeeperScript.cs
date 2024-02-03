@@ -1,10 +1,11 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class beekeeperScript : BaseUpgrade
+    internal class beekeeperScript : BaseUpgrade, IUpgradeWorldBuilding, ITierUpgradeDisplayInfo
     {
         private static LGULogger logger = new LGULogger(UPGRADE_NAME);
         internal const string UPGRADE_NAME = "Beekeeper";
@@ -56,6 +57,18 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             if (!UpgradeBus.instance.increaseHivePrice) return originalValue;
             return (int)(originalValue * UpgradeBus.instance.cfg.BEEKEEPER_HIVE_VALUE_INCREASE);
+        }
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return string.Format(WORLD_BUILDING_TEXT, shareStatus ? "your crew" : "you");
+        }
+
+        public string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
+        {
+            System.Func<int, float> infoFunction = level => 100 * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (level * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT));
+            string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
     }
 }

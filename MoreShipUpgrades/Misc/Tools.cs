@@ -173,5 +173,19 @@ namespace MoreShipUpgrades.Misc
             return false;
         }
 
+        internal static string GenerateInfoForUpgrade(string infoFormat, int initialPrice, int[] incrementalPrices, Func<int, float> infoFunction)
+        {
+            string info = string.Format(infoFormat, 1, initialPrice, infoFunction(0));
+            for (int i = 0; i < incrementalPrices.Length; i++)
+            {
+                float infoResult = infoFunction(i + 1);
+                if (infoResult % 1 == 0) // It's an Integer
+                    info += string.Format(infoFormat, i + 2, incrementalPrices[i], Mathf.RoundToInt(infoResult));
+                else
+                    info += string.Format(infoFormat, i + 2, incrementalPrices[i], infoResult);
+            }
+            return info;
+        }
+
     }
 }

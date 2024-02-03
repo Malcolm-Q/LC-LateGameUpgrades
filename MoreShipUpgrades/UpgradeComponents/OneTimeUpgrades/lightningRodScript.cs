@@ -1,10 +1,11 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
-    internal class lightningRodScript : BaseUpgrade
+    internal class lightningRodScript : BaseUpgrade, IUpgradeWorldBuilding, IOneTimeUpgradeDisplayInfo
     {
         public const string UPGRADE_NAME = "Lightning Rod";
         internal const string WORLD_BUILDING_TEXT = "\n\nService key for the Ship's terminal which allows your crew to legally use the Ship's 'Static Attraction Field' module." +
@@ -133,6 +134,16 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             failNode.displayText = ACCESS_DENIED_MESSAGE;
             failNode.clearPreviousText = true;
             __result = failNode;
+        }
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
+
+        public string GetDisplayInfo(int price = -1)
+        {
+            return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), price, UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST);
         }
     }
 }
