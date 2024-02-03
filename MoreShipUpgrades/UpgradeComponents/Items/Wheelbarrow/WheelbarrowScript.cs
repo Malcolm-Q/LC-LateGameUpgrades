@@ -23,10 +23,10 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         }
         private static LGULogger logger = new LGULogger(nameof(WheelbarrowScript));
         protected Restrictions restriction;
-        private bool dropAllItemsKeySet;
-        private Key dropAllItemsKey;
-        private bool dropAllItemsMouseButtonSet;
-        private MouseButton dropAllitemsMouseButton;
+        internal bool dropAllItemsKeySet;
+        internal Key dropAllItemsKey;
+        internal bool dropAllItemsMouseButtonSet;
+        internal MouseButton dropAllitemsMouseButton;
         private System.Random randomNoise;
         /// <summary>
         /// Component responsible to emit sound when the wheelbarrow's moving
@@ -145,6 +145,12 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
                 dropAllItemsMouseButtonSet = true;
             }
             else dropAllItemsMouseButtonSet = false;
+            if (!dropAllItemsKeySet && !dropAllItemsMouseButtonSet)
+            {
+                logger.LogWarning("No configuration was found to set a control bind for dropping all items, defaulting to middle mouse button");
+                dropAllItemsMouseButtonSet = true;
+                dropAllitemsMouseButton = MouseButton.Middle;
+            }
 
             SetupItemAttributes();
         }
