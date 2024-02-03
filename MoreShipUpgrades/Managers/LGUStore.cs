@@ -77,7 +77,14 @@ namespace MoreShipUpgrades.Managers
             {
                 string saveFile = GameNetworkManager.Instance.currentSaveFileName;
                 int saveNum = GameNetworkManager.Instance.saveFileNum;
-                string json = (string)ES3.Load(key: saveDataKey, defaultValue: null, filePath: saveFile);
+                string filePath = Path.Combine(Application.persistentDataPath, $"LGU_{saveNum}.json");
+                if (File.Exists(filePath))
+                {
+                    string tempJson = File.ReadAllText(filePath);
+                    ES3.Save(key: saveDataKey, value: tempJson, filePath: saveFile);
+                    File.Delete(filePath);
+                }
+                    string json = (string)ES3.Load(key: saveDataKey, defaultValue: null, filePath: saveFile);
                 if (json != null)
                 {
                     logger.LogInfo($"Loading save file for slot {saveNum}.");
