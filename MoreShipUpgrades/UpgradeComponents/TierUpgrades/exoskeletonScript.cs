@@ -7,8 +7,12 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
     internal class exoskeletonScript : BaseUpgrade
     {
-        public static string UPGRADE_NAME = "Back Muscles";
+        public const string UPGRADE_NAME = "Back Muscles";
         public static string PRICES_DEFAULT = "600,700,800";
+        internal const string WORLD_BUILDING_TEXT = "\n\nCompany-issued hydraulic girdles which are only awarded to high-performing {0} who can afford to opt in." +
+            " Highly valued by all employees of The Company for their combination of miraculous health-preserving benefits and artificial, intentionally-implemented scarcity." +
+            " Sardonically called the 'Back Muscles Upgrade' by some. Comes with a user manual, which mostly contains minimalistic ads for girdle maintenance contractors." +
+            " Most of the phone numbers don't work anymore.\n\n";
 
         void Start()
         {

@@ -709,6 +709,19 @@ namespace MoreShipUpgrades.Managers
                 for(int i = 0; i < prices.Length; i++)
                     infoString += complexInfoFunctions[upgradeName](i+2, prices[i]);
             }
+            switch(upgradeName) // Need to refactor later for easier upgrade implementation (maybe virtual GetWorldBuildingText() function in BaseUpgrade in which each overrides it)
+            {
+                case beekeeperScript.UPGRADE_NAME: infoString += string.Format(beekeeperScript.WORLD_BUILDING_TEXT, shareStatus ? "your crew" : "you"); break;
+                case biggerLungScript.UPGRADE_NAME: infoString += string.Format(biggerLungScript.WORLD_BUILDING_TEXT, shareStatus ? "your crew's suit oxigen delivery systems" : "your suit's oxygen delivery system"); break;
+                case runningShoeScript.UPGRADE_NAME: infoString += string.Format(runningShoeScript.WORLD_BUILDING_TEXT, shareStatus ? "could give your crew" : "can give you", shareStatus ? "y'all's" : "your"); break;
+                case strongLegsScript.UPGRADE_NAME: infoString += string.Format(strongLegsScript.WORLD_BUILDING_TEXT, shareStatus ? "proprietary pressure-assisted kneebraces to your crew" : "a proprietary pressure-assisted kneebrace"); break;
+                case terminalFlashScript.UPGRADE_NAME: infoString += string.Format(terminalFlashScript.WORLD_BUILDING_TEXT, shareStatus ? "your crew" : "you"); break;
+                case exoskeletonScript.UPGRADE_NAME: infoString += string.Format(exoskeletonScript.WORLD_BUILDING_TEXT, shareStatus ? "departments" : "employees"); break;
+                case proteinPowderScript.UPGRADE_NAME: infoString += proteinPowderScript.WORLD_BUILDING_TEXT; break;
+                case strongerScannerScript.UPGRADE_NAME: infoString += string.Format(strongerScannerScript.WORLD_BUILDING_TEXT, shareStatus ? "a department" : "one"); break;
+                case playerHealthScript.UPGRADE_NAME: infoString += string.Format(playerHealthScript.WORLD_BUILDING_TEXT, shareStatus ? "your crew" : "you"); break;
+                case hunterScript.UPGRADE_NAME: infoString += hunterScript.WORLD_BUILDING_TEXT; break;
+            }
             CustomTerminalNode node = new CustomTerminalNode(upgradeName, initialPrice, infoString, multiPerk, prices, prices.Length);
             terminalNodes.Add(node);
             return node;
@@ -734,6 +747,11 @@ namespace MoreShipUpgrades.Managers
             IndividualUpgrades.Add(upgradeName, shareStatus);
             if (!enabled) return null;
 
+            switch (upgradeName) // Need to refactor later for easier upgrade implementation (maybe virtual GetWorldBuildingText() function in BaseUpgrade in which each overrides it)
+            {
+                case lockSmithScript.UPGRADE_NAME: info += string.Format(lockSmithScript.WORLD_BUILDING_TEXT, shareStatus ? "your crew" : "you", shareStatus ? "for each of your coworkers" : ""); break;
+                case lightningRodScript.UPGRADE_NAME: info += lightningRodScript.WORLD_BUILDING_TEXT; break;
+            }
             CustomTerminalNode node = new CustomTerminalNode(upgradeName, price, info, oneTimeUpgrade);
             terminalNodes.Add(node);
             return node;

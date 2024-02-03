@@ -6,7 +6,11 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
     internal class lightningRodScript : BaseUpgrade
     {
-        public static string UPGRADE_NAME = "Lightning Rod";
+        public const string UPGRADE_NAME = "Lightning Rod";
+        internal const string WORLD_BUILDING_TEXT = "\n\nService key for the Ship's terminal which allows your crew to legally use the Ship's 'Static Attraction Field' module." +
+            " Comes with a list of opt-in maintenance procedures that promise to optimize the module's function and field of influence. This Company-issued document " +
+            "is saddled with the uniquely-awkward task of having to ransom a safety feature back to the employee in text while not also admitting to the existence of" +
+            " an occupational hazard that was previously denied in court.\n\n";
         public static lightningRodScript instance;
         private static LGULogger logger;
 

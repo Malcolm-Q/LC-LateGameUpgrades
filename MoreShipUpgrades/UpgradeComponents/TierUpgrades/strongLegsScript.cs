@@ -6,11 +6,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
     internal class strongLegsScript : BaseUpgrade
     {
-        public static string UPGRADE_NAME = "Strong Legs";
+        internal const string UPGRADE_NAME = "Strong Legs";
         private static LGULogger logger;
         public static string PRICES_DEFAULT = "150,190,250";
         private int currentLevel = 0; // For "Load LGU" issues
         private static bool active = false;
+        internal const string WORLD_BUILDING_TEXT = "\n\nOne-time issuance of {0}." +
+            " Comes with a vague list of opt-in maintenance procedures offered by The Company, which includes such gems as 'actuation optimization'," +
+            " 'weight & balance personalization', and similar nigh-meaningless corpo-tech jargon. All of it is expensive.\n\n";
 
         void Start()
         {

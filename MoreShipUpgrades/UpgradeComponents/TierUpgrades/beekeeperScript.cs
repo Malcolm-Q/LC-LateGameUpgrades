@@ -7,11 +7,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
     internal class beekeeperScript : BaseUpgrade
     {
         private static LGULogger logger = new LGULogger(UPGRADE_NAME);
-        public static string UPGRADE_NAME = "Beekeeper";
+        internal const string UPGRADE_NAME = "Beekeeper";
         public static string PRICES_DEFAULT = "225,280,340";
+        internal static string WORLD_BUILDING_TEXT = "\n\nOn-the-job training package that teaches {0} proper Circuit Bee Nest handling techniques." +
+            " Also comes with a weekly issuance of alkaline pills to partially inoculate {0} against Circuit Bee Venom.\n\n";
 
         void Start()
         {
+            WORLD_BUILDING_TEXT = 
             upgradeName = UPGRADE_NAME;
             DontDestroyOnLoad(gameObject);
             Register();

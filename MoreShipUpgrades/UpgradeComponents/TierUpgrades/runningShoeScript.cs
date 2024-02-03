@@ -7,11 +7,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
     internal class runningShoeScript : BaseUpgrade
     {
-        public static string UPGRADE_NAME = "Running Shoes";
+        public const string UPGRADE_NAME = "Running Shoes";
         private static LGULogger logger;
         public static string PRICES_DEFAULT = "500,750,1000";
         private int currentLevel = 0; // For "Load LGU" issues
         private static bool active = false;
+        internal const string WORLD_BUILDING_TEXT = "\n\nA new pair of boots {0} a whole new lease on life. In this instance," +
+            " it might also result in fewer wet sock incidents and consequent trenchfoot. After all, who knows how many people have walked in {1} shoes?\n\n";
         void Start()
         {
             upgradeName = UPGRADE_NAME;

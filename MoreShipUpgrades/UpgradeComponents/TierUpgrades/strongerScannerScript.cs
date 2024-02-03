@@ -6,7 +6,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
     internal class strongerScannerScript : BaseUpgrade
     {
-        public static string UPGRADE_NAME = "Better Scanner";
+        public const string UPGRADE_NAME = "Better Scanner";
+        internal const string WORLD_BUILDING_TEXT = "\n\nA serialized Company-Issue Magazine subscription, called 'Stuff Finders'." +
+            " Uniquely, {0} must subscribe to each issue of 'Stuff Finders' individually. Each separate subscription promises and delivers a weekly issuance" +
+            " of a magazine with the exact same information in it as last time, organized in a different order and with slightly different printing qualities each time." +
+            " There are only three 'unique' issues, and each issue only has one or two pieces of actual useful information in it. The rest of the magazine is just ads" +
+            " for The Company's other offerings. There is an extra fee for cancelling a subscription of 'Stuff Finders' before terminating your employment." +
+            " The useful information always comes in the form of an unlabelled service key or Ship terminal hyperlink.\n\n";
         private static LGULogger logger;
         void Awake()
         {

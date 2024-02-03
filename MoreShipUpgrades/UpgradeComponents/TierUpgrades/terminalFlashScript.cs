@@ -8,9 +8,12 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
     public class terminalFlashScript : BaseUpgrade
     {
-        public static string UPGRADE_NAME = "Discombobulator";
+        public const string UPGRADE_NAME = "Discombobulator";
         public static string PRICES_DEFAULT = "330,460,620";
         private static LGULogger logger = new LGULogger(nameof(terminalFlashScript));
+        internal const string WORLD_BUILDING_TEXT = "\n\nService key for the Ship's terminal which allows {0} to legally use the Ship's 'Discombobulator' module." +
+            " Comes with a list of opt-in maintenance procedures that promise to optimze the discharge and refractory of the system." +
+            " Said document contains no mention of whatever it might be that it was included in the Ship's design to discombobulate.\n\n";
         void Start()
         {
             upgradeName = UPGRADE_NAME;

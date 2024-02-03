@@ -8,10 +8,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
     internal class biggerLungScript : BaseUpgrade
     {
         private static LGULogger logger;
-        public static string UPGRADE_NAME = "Bigger Lungs";
+        public const string UPGRADE_NAME = "Bigger Lungs";
         public static string PRICES_DEFAULT = "350,450,550";
         private int currentLevel = 0; // For "Load LGU" issues
         private static bool active = false;
+        internal const string WORLD_BUILDING_TEXT = "\n\nService package for {0}." +
+            " Opting into every maintenance procedure will arrange for your suit's pipes to be cleaned and repaired, filters re-issued," +
+            " and DRM removed from the integrated air conditioning system.\n\n";
 
         void Start()
         {

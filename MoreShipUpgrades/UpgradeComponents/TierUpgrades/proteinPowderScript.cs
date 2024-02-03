@@ -10,7 +10,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
     internal class proteinPowderScript : BaseUpgrade
     {
-        public static string UPGRADE_NAME = "Protein Powder";
+        public const string UPGRADE_NAME = "Protein Powder";
+        internal const string WORLD_BUILDING_TEXT = "\n\nMultivitamins, creatine, and military surplus stimulants blended together and repackaged," +
+            " then offered on subscription. Known to be habit-forming. The label includes a Company Surgeon General's warning about increased aggression.\n\n";
 
         private static int CRIT_DAMAGE_VALUE = 100;
 

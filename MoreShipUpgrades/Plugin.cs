@@ -409,6 +409,8 @@ namespace MoreShipUpgrades
 
             TerminalNode PortNode = ScriptableObject.CreateInstance<TerminalNode>();
             PortNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Portable Tele"), (int)(cfg.CHANCE_TO_BREAK * 100));
+            PortNode.displayText += RegularPortableTeleporter.WORLD_BUILDING_TEXT;
+            PortNode.clearPreviousText = true;
 
             Items.RegisterShopItem(regularPortableTeleporter, null, null, PortNode, regularPortableTeleporter.creditsWorth);
         }
@@ -434,6 +436,9 @@ namespace MoreShipUpgrades
 
             TerminalNode advNode = ScriptableObject.CreateInstance<TerminalNode>();
             advNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Advanced Portable Tele"), (int)(cfg.ADV_CHANCE_TO_BREAK * 100));
+            advNode.displayText += AdvancedPortableTeleporter.WORLD_BUILDING_TEXT;
+            advNode.clearPreviousText = true;
+
             Items.RegisterShopItem(advancedPortableTeleporter, null, null, advNode, advancedPortableTeleporter.creditsWorth);
 
         }
@@ -460,6 +465,9 @@ namespace MoreShipUpgrades
             string grantStatus = cfg.NIGHT_VISION_INDIVIDUAL || UpgradeBus.instance.cfg.SHARED_UPGRADES ? "one" : "all";
             string loseOnDeath = cfg.LOSE_NIGHT_VIS_ON_DEATH ? "be" : "not be";
             nightNode.displayText = string.Format(AssetBundleHandler.GetInfoFromJSON("Night Vision"), grantStatus, loseOnDeath);
+            nightNode.displayText += nightVisionScript.WORLD_BUILDING_TEXT;
+            nightNode.clearPreviousText = true;
+
             Items.RegisterShopItem(nightVisionItem, null, null, nightNode, nightVisionItem.creditsWorth);
 
         }

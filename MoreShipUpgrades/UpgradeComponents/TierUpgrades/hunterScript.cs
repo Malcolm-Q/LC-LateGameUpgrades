@@ -8,7 +8,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
     internal class hunterScript : BaseUpgrade
     {
-        public static string UPGRADE_NAME = "Hunter";
+        public const string UPGRADE_NAME = "Hunter";
+        internal const string WORLD_BUILDING_TEXT = "\n\nOn-the-job training program that teaches your crew how to properly collect lab-ready samples of blood," +
+            " skin, and organ tissue from entities found within the facility. These samples are valuable to The Company. Used to be a part of the standard onboarding procedure," +
+            " but was made opt-in only in 2005 to cut onboarding costs.\n\n";
         private static LGULogger logger = new LGULogger(UPGRADE_NAME);
         static Dictionary<string, string> monsterNames = new Dictionary<string, string>()
             {
