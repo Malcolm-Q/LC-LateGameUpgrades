@@ -248,6 +248,7 @@ namespace MoreShipUpgrades.Misc
         public bool EXTRACTION_CONTRACT {  get; set; }
         public bool DEFUSAL_CONTRACT {  get; set; }
         public bool MAIN_OBJECT_FURTHEST {  get; set; }
+        public string WHEELBARROW_DROP_ALL_CONTROL_BIND { get; set; }
 
 
         public PluginConfig(ConfigFile cfg)
@@ -543,6 +544,7 @@ namespace MoreShipUpgrades.Misc
             SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK = ConfigEntry(topSection, "Look sensitivity drawback of the Shopping Cart Item", 0.8f, "Value multiplied on the player's look sensitivity when moving with the Scrap wheelbarrow Item");
             SCRAP_WHEELBARROW_MOVEMENT_SLOPPY = ConfigEntry(topSection, "Sloppiness of the Shopping Cart Item", 2f, "Value multiplied on the player's movement to give the feeling of drifting while carrying the Scrap Wheelbarrow Item");
             SCRAP_WHEELBARROW_PLAY_NOISE = ConfigEntry(topSection, "Plays noises for players with Shopping Cart Item", true, "If false, it will just not play the sounds, it will still attract monsters to noise");
+            WHEELBARROW_DROP_ALL_CONTROL_BIND = ConfigEntry(topSection, "Control bind for drop all items", "Middle", "To know what to insert here, check documentation for UnityEngine.InputSystem.Key and UnityEngine.InputSystem.LowLevel.MouseButton");
         }
     }
 }
