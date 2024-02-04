@@ -1,11 +1,11 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class exoskeletonScript : BaseUpgrade
+    class BackMuscles : TierUpgrade
     {
         public static string UPGRADE_NAME = "Back Muscles";
         public static string PRICES_DEFAULT = "600,700,800";
@@ -23,9 +23,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             UpdatePlayerWeight();
         }
 
-        public override void load()
+        public override void Load()
         {
-            base.load();
+            base.Load();
             UpgradeBus.instance.exoskeleton = true;
             UpdatePlayerWeight();
         }
@@ -35,10 +35,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             UpgradeBus.instance.exoskeleton = false;
             UpgradeBus.instance.backLevel = 0;
             UpdatePlayerWeight();
-        }
-        public override void Register()
-        {
-            base.Register();
         }
 
         public static float DecreasePossibleWeight(float defaultWeight)

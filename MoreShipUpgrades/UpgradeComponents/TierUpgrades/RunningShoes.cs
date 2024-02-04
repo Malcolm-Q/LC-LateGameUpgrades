@@ -1,11 +1,12 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class runningShoeScript : BaseUpgrade
+    internal class RunningShoes : TierUpgrade
     {
         public static string UPGRADE_NAME = "Running Shoes";
         private static LGULogger logger;
@@ -39,14 +40,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             active = false;
             currentLevel = 0;
         }
-        public override void Register()
-        {
-            base.Register();
-        }
 
-        public override void load()
+        public override void Load()
         {
-            base.load();
+            base.Load();
 
             UpgradeBus.instance.runningShoes = true;
             PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();

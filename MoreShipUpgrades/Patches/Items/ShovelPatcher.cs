@@ -19,7 +19,7 @@ namespace MoreShipUpgrades.Patches.Items
         [HarmonyPatch(nameof(Shovel.HitShovel))]
         public static IEnumerable<CodeInstruction> HitShovelTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo proteinHitFoce = typeof(proteinPowderScript).GetMethod(nameof(proteinPowderScript.GetShovelHitForce));
+            MethodInfo proteinHitFoce = typeof(ProteinPowder).GetMethod(nameof(ProteinPowder.GetShovelHitForce));
             FieldInfo shovelHitForce = typeof(Shovel).GetField(nameof(Shovel.shovelHitForce));
 
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);

@@ -1,6 +1,6 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class proteinPowderScript : BaseUpgrade
+    internal class ProteinPowder : TierUpgrade
     {
         public static string UPGRADE_NAME = "Protein Powder";
 
@@ -48,18 +48,12 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             UpgradeBus.instance.proteinLevel++;
         }
 
-        public override void load()
+        public override void Load()
         {
-            base.load();
+            base.Load();
 
             UpgradeBus.instance.proteinPowder = true;
         }
-
-        public override void Register()
-        {
-            base.Register();
-        }
-
         public override void Unwind()
         {
             base.Unwind();

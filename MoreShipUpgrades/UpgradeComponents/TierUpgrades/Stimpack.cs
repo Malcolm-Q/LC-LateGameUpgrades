@@ -1,13 +1,14 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using System;
 using System.Numerics;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class playerHealthScript : BaseUpgrade
+    internal class Stimpack : TierUpgrade
     {
         public static string UPGRADE_NAME = "Stimpack";
         private static bool active;
@@ -49,7 +50,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             LGUStore.instance.PlayerHealthUpdateLevelServerRpc(player.playerSteamId, UpgradeBus.instance.playerHealthLevel);
         }
 
-        public override void load()
+        public override void Load()
         {
             PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
             if (!active)
@@ -57,7 +58,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 logger.LogDebug($"Adding {UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK} to the player's health on unlock...");
                 player.health += UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK;
             }
-            base.load();
+            base.Load();
 
             UpgradeBus.instance.playerHealth = true;
             active = true;
@@ -73,11 +74,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             player.health += amountToIncrement;
             previousLevel = UpgradeBus.instance.playerHealthLevel;
             LGUStore.instance.PlayerHealthUpdateLevelServerRpc(player.playerSteamId, UpgradeBus.instance.playerHealthLevel);
-        }
-
-        public override void Register()
-        {
-            base.Register();
         }
 
         public override void Unwind()

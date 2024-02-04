@@ -1,13 +1,14 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class DoorsHydraulicsBattery : BaseUpgrade
+    internal class DoorsHydraulicsBattery : TierUpgrade
     {
         private static LGULogger logger;
         public const string UPGRADE_NAME = "Shutter Batteries";
@@ -38,7 +39,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             DontDestroyOnLoad(gameObject);
             Register();
         }
-        public override void load()
+        public override void Load()
         {
             HangarShipDoor shipDoors = UpgradeBus.instance.GetShipDoors();
             if (!active)
@@ -48,7 +49,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             }
             UpgradeBus.instance.doorsHydraulicsBattery = true;
             active = true;
-            base.load();
+            base.Load();
 
             float amountToIncrement = 0;
             for (int i = 1; i < UpgradeBus.instance.doorsHydraulicsBatteryLevel + 1; i++)

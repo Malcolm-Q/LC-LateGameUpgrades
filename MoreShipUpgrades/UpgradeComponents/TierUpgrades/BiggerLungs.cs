@@ -1,11 +1,12 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class biggerLungScript : BaseUpgrade
+    class BiggerLungs : TierUpgrade
     {
         private static LGULogger logger;
         public static string UPGRADE_NAME = "Bigger Lungs";
@@ -30,7 +31,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             currentLevel++;
         }
 
-        public override void load()
+        public override void Load()
         {
             PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
             if (!active)
@@ -40,7 +41,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             }
             UpgradeBus.instance.biggerLungs = true;
             active = true;
-            base.load();
+            base.Load();
 
             float amountToIncrement = 0;
             for (int i = 1; i < UpgradeBus.instance.lungLevel + 1; i++)
@@ -64,10 +65,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             UpgradeBus.instance.lungLevel = 0;
             active = false;
             currentLevel = 0;
-        }
-        public override void Register()
-        {
-            base.Register();
         }
         public static void ResetBiggerLungsBuff(ref PlayerControllerB player)
         {

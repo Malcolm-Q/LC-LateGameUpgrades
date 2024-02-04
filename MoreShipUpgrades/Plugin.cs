@@ -655,89 +655,89 @@ namespace MoreShipUpgrades
 
         private void SetupSickBeats()
         {
-            SetupGenericPerk<BeatScript>(BeatScript.UPGRADE_NAME);
+            SetupGenericPerk<SickBeats>(SickBeats.UPGRADE_NAME);
         }
 
         private void SetupContract()
         {
-            SetupGenericPerk<ContractScript>(ContractScript.UPGRADE_NAME);
+            SetupGenericPerk<ContractScript>(ContractScript.NAME);
         }
 
         private void SetupBeekeeper()
         {
-            SetupGenericPerk<beekeeperScript>(beekeeperScript.UPGRADE_NAME);
+            SetupGenericPerk<Beekeeper>(Beekeeper.UPGRADE_NAME);
         }
         private void SetupHunter()
         {
-            SetupGenericPerk<hunterScript>(hunterScript.UPGRADE_NAME);
+            SetupGenericPerk<Hunter>(Hunter.UPGRADE_NAME);
         }
         private void SetupProteinPowder() 
         {
-            SetupGenericPerk<proteinPowderScript>(proteinPowderScript.UPGRADE_NAME);
+            SetupGenericPerk<ProteinPowder>(ProteinPowder.UPGRADE_NAME);
         }
         private void SetupBiggerLungs()
         {
-            SetupGenericPerk<biggerLungScript>(biggerLungScript.UPGRADE_NAME);
+            SetupGenericPerk<BiggerLungs>(BiggerLungs.UPGRADE_NAME);
         }
         private void SetupRunningShoes() 
         {
-            SetupGenericPerk<runningShoeScript>(runningShoeScript.UPGRADE_NAME);
+            SetupGenericPerk<RunningShoes>(RunningShoes.UPGRADE_NAME);
         }
         private void SetupStrongLegs() 
         {
-            SetupGenericPerk<strongLegsScript>(strongLegsScript.UPGRADE_NAME);
+            SetupGenericPerk<StrongLegs>(StrongLegs.UPGRADE_NAME);
         }
         private void SetupMalwareBroadcaster()
         {
-            SetupGenericPerk<trapDestroyerScript>(trapDestroyerScript.UPGRADE_NAME);
+            SetupGenericPerk<MalwareBroadcaster>(MalwareBroadcaster.UPGRADE_NAME);
         }
         private void SetupNightVisionBattery() 
         {
-            SetupGenericPerk<nightVisionScript>(nightVisionScript.UPGRADE_NAME);
+            SetupGenericPerk<NightVision>(NightVision.UPGRADE_NAME);
         }
         private void SetupDiscombobulator()
         {
             AudioClip flashSFX = AssetBundleHandler.GetAudioClip("Flashbang");
             if (flashSFX != null) UpgradeBus.instance.flashNoise = flashSFX;
 
-            SetupGenericPerk<terminalFlashScript>(terminalFlashScript.UPGRADE_NAME);
+            SetupGenericPerk<Discombobulator>(Discombobulator.UPGRADE_NAME);
         }
         private void SetupBetterScanner()
         {
-            SetupGenericPerk<strongerScannerScript>(strongerScannerScript.UPGRADE_NAME);
+            SetupGenericPerk<BetterScanner>(BetterScanner.UPGRADE_NAME);
         }
         private void SetupWalkieGPS()
         {
-            SetupGenericPerk<walkieScript>(walkieScript.UPGRADE_NAME);
+            SetupGenericPerk<WalkieGPS>(WalkieGPS.UPGRADE_NAME);
 
         }
         private void SetupBackMuscles()
         {
-            SetupGenericPerk<exoskeletonScript>(exoskeletonScript.UPGRADE_NAME);
+            SetupGenericPerk<BackMuscles>(BackMuscles.UPGRADE_NAME);
         }
         private void SetupInterns()
         {
-            SetupGenericPerk<defibScript>(defibScript.UPGRADE_NAME);
+            SetupGenericPerk<Interns>(Interns.UPGRADE_NAME);
         }
         private void SetupPager()
         {
-            SetupGenericPerk<pagerScript>(pagerScript.UPGRADE_NAME);
+            SetupGenericPerk<FastEncryption>(FastEncryption.UPGRADE_NAME);
         }
         private void SetupLightningRod()
         {
-            SetupGenericPerk<lightningRodScript>(lightningRodScript.UPGRADE_NAME);
+            SetupGenericPerk<LightningRod>(LightningRod.UPGRADE_NAME);
         }
         private void SetupLocksmith()
         {
-            SetupGenericPerk<lockSmithScript>(lockSmithScript.UPGRADE_NAME);
+            SetupGenericPerk<LockSmith>(LockSmith.UPGRADE_NAME);
         }
         private void SetupPlayerHealth()
         {
-            SetupGenericPerk<playerHealthScript>(playerHealthScript.UPGRADE_NAME);
+            SetupGenericPerk<Stimpack>(Stimpack.UPGRADE_NAME);
         }
         private void SetupExtendDeadline()
         {
-            SetupGenericPerk<ExtendDeadlineScript>(ExtendDeadlineScript.UPGRADE_NAME);
+            SetupGenericPerk<ExtendDeadlineScript>(ExtendDeadlineScript.NAME);
         }
         private void SetupDoorsHydraulicsBattery()
         {

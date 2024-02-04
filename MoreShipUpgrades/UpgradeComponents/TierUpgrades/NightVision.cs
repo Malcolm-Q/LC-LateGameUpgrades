@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -11,7 +12,7 @@ using UnityEngine.InputSystem;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class nightVisionScript : BaseUpgrade
+    internal class NightVision : TierUpgrade
     {
         private float nightBattery;
         private Transform batteryBar;
@@ -39,11 +40,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 logger.LogWarning("Error parsing the key for toggle night vision, defaulted to LeftAlt");
                 toggleKey = Key.LeftAlt;
             }
-        }
-
-        public override void Register()
-        {
-            base.Register();
         }
 
         void LateUpdate()
@@ -141,7 +137,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             LGUStore.instance.UpdateLGUSaveServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, JsonConvert.SerializeObject(new SaveInfo()));
         }
 
-        public override void load()
+        public override void Load()
         {
             EnableOnClient(false);
         }

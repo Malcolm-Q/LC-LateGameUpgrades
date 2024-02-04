@@ -1,16 +1,18 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    public class terminalFlashScript : BaseUpgrade
+    class Discombobulator : TierUpgrade
     {
         public static string UPGRADE_NAME = "Discombobulator";
         public static string PRICES_DEFAULT = "330,460,620";
-        private static LGULogger logger = new LGULogger(nameof(terminalFlashScript));
+        private static LGULogger logger = new LGULogger(nameof(Discombobulator));
+        public static Discombobulator instance;
         void Start()
         {
             upgradeName = UPGRADE_NAME;
@@ -25,17 +27,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 UpgradeBus.instance.flashCooldown -= Time.deltaTime;
             }
         }
-        public override void load()
+        public override void Load()
         {
+            base.Load();
             UpgradeBus.instance.terminalFlash = true;
-            UpgradeBus.instance.flashScript = this;
-
-            HUDManager.Instance.chatText.text += "\n<color=#FF0000>Discombobulator is active!\nType 'cooldown' into the terminal for info!!!</color>";
-        }
-
-        public override void Register()
-        {
-            base.Register();
+            instance = this;
         }
 
         public override void Increment()

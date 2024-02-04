@@ -1,10 +1,11 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class strongerScannerScript : BaseUpgrade
+    class BetterScanner : TierUpgrade
     {
         public static string UPGRADE_NAME = "Better Scanner";
         private static LGULogger logger;
@@ -24,9 +25,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             UpgradeBus.instance.scanLevel++;
         }
 
-        public override void load()
+        public override void Load()
         {
-            base.load();
+            base.Load();
 
             UpgradeBus.instance.scannerUpgrade = true;
         }
@@ -36,10 +37,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
             UpgradeBus.instance.scannerUpgrade = false;
             UpgradeBus.instance.scanLevel = 0;
-        }
-        public override void Register()
-        {
-            base.Register();
         }
 
         public static void AddScannerNodeToValve(ref SteamValveHazard steamValveHazard)

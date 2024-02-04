@@ -1,5 +1,5 @@
 ﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,9 +8,10 @@ using UnityEngine.UI;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
-    public class lockSmithScript : BaseUpgrade
+    class LockSmith : OneTimeUpgrade
     {
         public static string UPGRADE_NAME = "Locksmith";
+        public static LockSmith instance;
 
         private GameObject pin1, pin2, pin3, pin4, pin5;
         private List<GameObject> pins;
@@ -25,6 +26,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             upgradeName = UPGRADE_NAME;
             DontDestroyOnLoad(gameObject);
             Register();
+            instance = this;
             Transform tumbler = transform.GetChild(0).GetChild(0).GetChild(0);
             pin1 = tumbler.GetChild(0).gameObject;
             pin2 = tumbler.GetChild(1).gameObject;
@@ -41,17 +43,22 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             pins = new List<GameObject> { pin1, pin2, pin3, pin4, pin5 };
         }
 
-        public override void load()
+        public override void Load()
         {
-            base.load();
+            base.Load();
 
             UpgradeBus.instance.lockSmith = true;
-            UpgradeBus.instance.lockScript = this;
         }
 
         public override void Register()
         {
             base.Register();
+        }
+        public override void Unwind()
+        {
+            base.Unwind();
+
+            UpgradeBus.instance.lockSmith = false;
         }
 
         void Update()
@@ -78,12 +85,6 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             }
             RandomizeListOrder(order);
             StartCoroutine(CommunicateOrder(order));
-        }
-        public override void Unwind()
-        {
-            base.Unwind();
-
-            UpgradeBus.instance.lockSmith = false;
         }
         public void StrikePin(int i)
         {

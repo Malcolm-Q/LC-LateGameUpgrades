@@ -1,13 +1,14 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
-    internal class lightningRodScript : BaseUpgrade
+    class LightningRod : OneTimeUpgrade
     {
         public static string UPGRADE_NAME = "Lightning Rod";
-        public static lightningRodScript instance;
+        public static LightningRod instance;
         private static LGULogger logger;
 
         // Configuration
@@ -21,13 +22,6 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         public static string ACTIVE_SECTION = "Active on Purchase";
         public static bool ACTIVE_DEFAULT = true;
         public static string ACTIVE_DESCRIPTION = $"If true: {UPGRADE_NAME} will be active on purchase.";
-
-        // Chat Messages
-        private static string LOAD_COLOUR = "#FF0000";
-        private static string LOAD_MESSAGE = $"\n<color={LOAD_COLOUR}>{UPGRADE_NAME} is active!</color>";
-
-        private static string UNLOAD_COLOUR = LOAD_COLOUR;
-        private static string UNLOAD_MESSAGE = $"\n<color={UNLOAD_COLOUR}>{UPGRADE_NAME} has been disabled</color>";
 
         // Toggle
         public static string ACCESS_DENIED_MESSAGE = $"You don't have access to this command yet. Purchase the '{UPGRADE_NAME}'.\n";
@@ -50,32 +44,22 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
         void Start()
         {
+            upgradeName = UPGRADE_NAME;
             DontDestroyOnLoad(gameObject);
             UpgradeBus.instance.UpgradeObjects.Add(UPGRADE_NAME, gameObject);
         }
-
-        public override void Increment()
+        public override void Load()
         {
-
-        }
-
-        public override void load()
-        {
+            base.Load();
             UpgradeBus.instance.lightningRod = true;
             UpgradeBus.instance.lightningRodActive = UpgradeBus.instance.cfg.LIGHTNING_ROD_ACTIVE;
-            HUDManager.Instance.chatText.text += LOAD_MESSAGE;
-        }
-
-        public override void Register()
-        {
-            if (!UpgradeBus.instance.UpgradeObjects.ContainsKey(UPGRADE_NAME)) { UpgradeBus.instance.UpgradeObjects.Add(UPGRADE_NAME, gameObject); }
         }
 
         public override void Unwind()
         {
+            base.Unwind();
             UpgradeBus.instance.lightningRod = false;
             UpgradeBus.instance.lightningRodActive = false;
-            HUDManager.Instance.chatText.text += UNLOAD_MESSAGE;
         }
 
         public static void TryInterceptLightning(ref StormyWeather __instance, ref GrabbableObject ___targetingMetalObject)
@@ -104,7 +88,6 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
                 LGUStore.instance.CoordinateInterceptionClientRpc();
             }
         }
-
         public static void RerouteLightningBolt(ref Vector3 strikePosition, ref StormyWeather __instance)
         {
             logger.LogDebug($"Intercepted Lightning Strike...");
@@ -112,23 +95,6 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             strikePosition = terminal.transform.position;
             instance.LightningIntercepted = false;
             __instance.staticElectricityParticle.gameObject.SetActive(true);
-        }
-
-        public static void ToggleLightningRod(ref TerminalNode __result)
-        {
-            UpgradeBus.instance.lightningRodActive = !UpgradeBus.instance.lightningRodActive;
-            TerminalNode infoNode = new TerminalNode();
-            infoNode.displayText = UpgradeBus.instance.lightningRodActive ? TOGGLE_ON_MESSAGE : TOGGLE_OFF_MESSAGE;
-            infoNode.clearPreviousText = true;
-            __result = infoNode;
-        }
-
-        public static void AccessDeniedMessage(ref TerminalNode __result)
-        {
-            TerminalNode failNode = new TerminalNode();
-            failNode.displayText = ACCESS_DENIED_MESSAGE;
-            failNode.clearPreviousText = true;
-            __result = failNode;
         }
     }
 }

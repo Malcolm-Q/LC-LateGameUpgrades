@@ -1,10 +1,11 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class beekeeperScript : BaseUpgrade
+    class Beekeeper : TierUpgrade
     {
         private static LGULogger logger = new LGULogger(UPGRADE_NAME);
         public static string UPGRADE_NAME = "Beekeeper";
@@ -24,15 +25,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 LGUStore.instance.ToggleIncreaseHivePriceServerRpc();
         }
 
-        public override void load()
+        public override void Load()
         {
-            base.load();
+            base.Load();
             UpgradeBus.instance.beekeeper = true;
-        }
-
-        public override void Register()
-        {
-            base.Register();
         }
 
         public override void Unwind()

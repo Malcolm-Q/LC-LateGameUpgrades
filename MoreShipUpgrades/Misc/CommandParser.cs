@@ -1,9 +1,11 @@
 ﻿using GameNetcodeStuff;
 using LethalLib.Modules;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exorcism;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
@@ -40,9 +42,9 @@ namespace MoreShipUpgrades.Misc
 
         private static TerminalNode ExecuteToggleLightning()
         {
-            if (!UpgradeBus.instance.lightningRod) return DisplayTerminalMessage(lightningRodScript.ACCESS_DENIED_MESSAGE);
+            if (!UpgradeBus.instance.lightningRod) return DisplayTerminalMessage(LightningRod.ACCESS_DENIED_MESSAGE);
 
-            return DisplayTerminalMessage(UpgradeBus.instance.lightningRodActive ? lightningRodScript.TOGGLE_ON_MESSAGE : lightningRodScript.TOGGLE_OFF_MESSAGE);
+            return DisplayTerminalMessage(UpgradeBus.instance.lightningRodActive ? LightningRod.TOGGLE_ON_MESSAGE : LightningRod.TOGGLE_OFF_MESSAGE);
         }
         private static TerminalNode ExecuteDiscombobulatorAttack(ref Terminal terminal)
         {
@@ -51,7 +53,7 @@ namespace MoreShipUpgrades.Misc
             if (UpgradeBus.instance.flashCooldown > 0f) return DisplayTerminalMessage($"You can discombobulate again in {Mathf.Round(UpgradeBus.instance.flashCooldown)} seconds.\nType 'cooldown' or 'cd' to check discombobulation cooldown.\n\n");
 
             RoundManager.Instance.PlayAudibleNoise(terminal.transform.position, 60f, 0.8f, 0, false, 14155);
-            UpgradeBus.instance.flashScript.PlayAudioAndUpdateCooldownServerRpc();
+            Discombobulator.instance.PlayAudioAndUpdateCooldownServerRpc();
 
             Collider[] array = Physics.OverlapSphere(terminal.transform.position, UpgradeBus.instance.cfg.DISCOMBOBULATOR_RADIUS, 524288);
             if (array.Length <= 0) return DisplayTerminalMessage("No stunned enemies detected.\n\n");
@@ -125,7 +127,7 @@ namespace MoreShipUpgrades.Misc
             logger.LogDebug($"Player {player.playerUsername} is dead and we have enough credits, executing revive command...");
             terminal.groupCredits -= UpgradeBus.instance.cfg.INTERN_PRICE;
             LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits);
-            UpgradeBus.instance.internScript.ReviveTargetedPlayerServerRpc();
+            Interns.instance.ReviveTargetedPlayerServerRpc();
             string name = UpgradeBus.instance.internNames[UnityEngine.Random.Range(0, UpgradeBus.instance.internNames.Length)];
             string interest = UpgradeBus.instance.internInterests[UnityEngine.Random.Range(0, UpgradeBus.instance.internInterests.Length)];
             logger.LogInfo($"Successfully executed intern command for {player.playerUsername}!");
@@ -180,7 +182,7 @@ namespace MoreShipUpgrades.Misc
             }
 
             logger.LogInfo($"Broadcasting {message} with Pager upgrade...");
-            UpgradeBus.instance.pageScript.ReqBroadcastChatServerRpc(message);
+            FastEncryption.instance.ReqBroadcastChatServerRpc(message);
             return DisplayTerminalMessage($"Broadcasted message: '{message}'\n\n");
         }
 

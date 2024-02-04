@@ -1,12 +1,13 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class hunterScript : BaseUpgrade
+    class Hunter : TierUpgrade
     {
         public static string UPGRADE_NAME = "Hunter";
         private static LGULogger logger = new LGULogger(UPGRADE_NAME);
@@ -59,9 +60,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             UpgradeBus.instance.huntLevel++;
         }
 
-        public override void load()
+        public override void Load()
         {
-            base.load();
+            base.Load();
 
             UpgradeBus.instance.hunter = true;
         }
@@ -71,10 +72,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
             UpgradeBus.instance.hunter = false;
             UpgradeBus.instance.huntLevel = 0;
-        }
-        public override void Register()
-        {
-            base.Register();
         }
 
         public static string GetHunterInfo(int level, int price)

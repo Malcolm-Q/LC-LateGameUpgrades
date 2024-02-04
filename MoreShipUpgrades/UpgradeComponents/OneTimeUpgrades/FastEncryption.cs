@@ -1,13 +1,15 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
-    public class pagerScript : BaseUpgrade
+    class FastEncryption : OneTimeUpgrade
     {
         public static string UPGRADE_NAME = "Fast Encryption";
+        public static FastEncryption instance;
         private static LGULogger logger;
 
         void Start()
@@ -18,17 +20,18 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             Register();
         }
 
-        public override void load()
+        public override void Load()
         {
-            base.load();
+            base.Load();
 
             UpgradeBus.instance.pager = true;
-            UpgradeBus.instance.pageScript = this;
+            instance = this;
         }
 
-        public override void Register()
+        public override void Unwind()
         {
-            base.Register();
+            base.Unwind();
+            UpgradeBus.instance.pager = false;
         }
 
         [ServerRpc(RequireOwnership = false)]

@@ -14,10 +14,10 @@ namespace MoreShipUpgrades.Patches.Weather
         [HarmonyPatch(nameof(StormyWeather.LightningStrike))]
         static void CheckIfLightningRodPresent(StormyWeather __instance, ref Vector3 strikePosition, bool useTargetedObject)
         {
-            if (lightningRodScript.instance != null && lightningRodScript.instance.LightningIntercepted && useTargetedObject)
+            if (LightningRod.instance != null && LightningRod.instance.LightningIntercepted && useTargetedObject)
             {
                 // we need to check useTargetedObject so we're not rerouting random strikes to the ship.
-                lightningRodScript.RerouteLightningBolt(ref strikePosition, ref __instance);
+                LightningRod.RerouteLightningBolt(ref strikePosition, ref __instance);
             }
         }
 
@@ -28,12 +28,12 @@ namespace MoreShipUpgrades.Patches.Weather
             if (!UpgradeBus.instance.lightningRod || !LGUStore.instance.IsHost || !LGUStore.instance.IsServer) { return; }
             if (___targetingMetalObject == null)
             {
-                if (lightningRodScript.instance != null) // Lightning rod could be disabled so we wouldn't have an instance
-                    lightningRodScript.instance.CanTryInterceptLightning = true;
+                if (LightningRod.instance != null) // Lightning rod could be disabled so we wouldn't have an instance
+                    LightningRod.instance.CanTryInterceptLightning = true;
             }
             else
             {
-                lightningRodScript.TryInterceptLightning(ref __instance, ref ___targetingMetalObject);
+                LightningRod.TryInterceptLightning(ref __instance, ref ___targetingMetalObject);
             }
         }
     }

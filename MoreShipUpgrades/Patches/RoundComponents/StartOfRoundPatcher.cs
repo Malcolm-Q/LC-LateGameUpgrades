@@ -60,7 +60,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         [HarmonyPatch(nameof(StartOfRound.ReviveDeadPlayers))]
         public static IEnumerable<CodeInstruction> ReviveDeadPlayers_Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            var maximumHealthMethod = typeof(playerHealthScript).GetMethod(nameof(playerHealthScript.CheckForAdditionalHealth));
+            var maximumHealthMethod = typeof(Stimpack).GetMethod(nameof(Stimpack.CheckForAdditionalHealth));
             List<CodeInstruction> codes = instructions.ToList();
             int index = 0;
             index = Tools.FindInteger(index, ref codes, findValue: 100, addCode: maximumHealthMethod, errorMessage: "Couldn't find maximum health on update health UI");

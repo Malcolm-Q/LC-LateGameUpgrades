@@ -16,14 +16,14 @@ namespace MoreShipUpgrades.Patches.Interactables
         [HarmonyPatch("BurstValve")]
         public static void BurstValvePostFix(ref SteamValveHazard __instance)
         {
-            strongerScannerScript.AddScannerNodeToValve(ref __instance);
+            BetterScanner.AddScannerNodeToValve(ref __instance);
         }
 
         [HarmonyPostfix]
         [HarmonyPatch("FixValveLocalClient")]
         public static void FixValvePostFix(ref SteamValveHazard __instance)
         {
-            strongerScannerScript.RemoveScannerNodeFromValve(ref __instance);
+            BetterScanner.RemoveScannerNodeFromValve(ref __instance);
         }
     }
 }

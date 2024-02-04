@@ -1,5 +1,5 @@
 ﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using System;
 using System.Security.Cryptography;
 using UnityEngine;
@@ -7,9 +7,10 @@ using UnityEngine.UI;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
-    public class walkieScript : BaseUpgrade
+    class WalkieGPS : OneTimeUpgrade
     {
         public static string UPGRADE_NAME = "Walkie GPS";
+        public static WalkieGPS instance;
 
         private GameObject canvas;
         private Text x, y, z, time;
@@ -18,7 +19,6 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             upgradeName = UPGRADE_NAME;
             DontDestroyOnLoad(gameObject);
             Register();
-            UpgradeBus.instance.walkieHandler = this;
             canvas = transform.GetChild(0).gameObject;
             x = canvas.transform.GetChild(0).GetComponent<Text>();
             y = canvas.transform.GetChild(1).GetComponent<Text>();
@@ -26,16 +26,12 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             time = canvas.transform.GetChild(3).GetComponent<Text>();
         }
 
-        public override void load()
+        public override void Load()
         {
-            base.load();
+            base.Load();
 
             UpgradeBus.instance.walkies = true;
-        }
-
-        public override void Register()
-        {
-            base.Register();
+            instance = this;
         }
 
         public override void Unwind()

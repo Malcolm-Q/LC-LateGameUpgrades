@@ -1,10 +1,11 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class strongLegsScript : BaseUpgrade
+    internal class StrongLegs : TierUpgrade
     {
         public static string UPGRADE_NAME = "Strong Legs";
         private static LGULogger logger;
@@ -39,14 +40,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             active = false;
             currentLevel = 0;
         }
-        public override void Register()
+        public override void Load()
         {
-            base.Register();
-        }
-
-        public override void load()
-        {
-            base.load();
+            base.Load();
 
             UpgradeBus.instance.strongLegs = true;
             PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();

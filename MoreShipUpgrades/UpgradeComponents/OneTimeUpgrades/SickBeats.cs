@@ -1,10 +1,11 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
-    public class BeatScript : BaseUpgrade
+    class SickBeats : OneTimeUpgrade
     {
         public static string UPGRADE_NAME = "Sick Beats";
         private static LGULogger logger = new LGULogger(UPGRADE_NAME);
@@ -17,15 +18,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             UpgradeBus.instance.BoomboxIcon = transform.GetChild(0).GetChild(0).gameObject;
         }
 
-        public override void load()
+        public override void Load()
         {
-            base.load();
+            base.Load();
             UpgradeBus.instance.sickBeats = true;
-        }
-
-        public override void Register()
-        {
-            base.Register();
         }
 
         public override void Unwind()
