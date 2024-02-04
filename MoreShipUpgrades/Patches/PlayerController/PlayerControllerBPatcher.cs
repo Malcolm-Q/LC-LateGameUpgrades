@@ -108,7 +108,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         [HarmonyPatch(nameof(PlayerControllerB.PlayerHitGroundEffects))]
         private static IEnumerable<CodeInstruction> PlayerHitGroundEffectsTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo reduceFallDamageMethod = typeof(strongLegsScript).GetMethod(nameof(strongLegsScript.ReduceFallDamage));
+            MethodInfo reduceFallDamageMethod = typeof(StrongLegs).GetMethod(nameof(StrongLegs.ReduceFallDamage));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
             index = Tools.FindInteger(index, ref codes, findValue: 100, addCode: reduceFallDamageMethod, errorMessage: "Couldn't find 100 fall damage");
