@@ -111,7 +111,7 @@ namespace MoreShipUpgrades
                     catch (Exception e)
                     {
                         // ignore mod if error, removing dependency
-                        mls.LogDebug($"Failed to send info to ModSync, go yell at Minx");
+                        mls.LogDebug($"Failed to send info to ModSync, go yell at Minx for {e.StackTrace}");
                     }
                     break;
                 }

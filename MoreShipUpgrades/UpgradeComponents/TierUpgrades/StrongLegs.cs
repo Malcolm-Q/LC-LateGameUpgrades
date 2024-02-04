@@ -16,6 +16,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             logger = new LGULogger(UPGRADE_NAME);
             base.Start();
             changingAttribute = PlayerAttribute.JUMP_FORCE;
+            initialValue = UpgradeBus.instance.cfg.JUMP_FORCE_UNLOCK;
+            incrementalValue = UpgradeBus.instance.cfg.JUMP_FORCE_INCREMENT;
         }
 
         public override void Increment()
