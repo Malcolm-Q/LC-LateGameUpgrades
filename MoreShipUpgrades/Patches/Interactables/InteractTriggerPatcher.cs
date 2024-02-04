@@ -12,7 +12,7 @@ namespace MoreShipUpgrades.Patches.Interactables
     {
         private static LGULogger logger = new LGULogger(nameof(InteractTriggerPatcher));
         [HarmonyPrefix]
-        [HarmonyPatch("OnTriggerEnter")]
+        [HarmonyPatch(nameof(InteractTrigger.OnTriggerEnter))]
         private static bool pickDoor(InteractTrigger __instance, Collider other)
         {
             if (!UpgradeBus.instance.lockSmith) { return true; }

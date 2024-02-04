@@ -105,10 +105,10 @@ namespace MoreShipUpgrades.Patches.PlayerController
         }
 
         [HarmonyTranspiler]
-        [HarmonyPatch("PlayerHitGroundEffects")]
+        [HarmonyPatch(nameof(PlayerControllerB.PlayerHitGroundEffects))]
         private static IEnumerable<CodeInstruction> PlayerHitGroundEffectsTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo reduceFallDamageMethod = typeof(StrongLegs).GetMethod("ReduceFallDamage", BindingFlags.Static | BindingFlags.Public);
+            MethodInfo reduceFallDamageMethod = typeof(strongLegsScript).GetMethod(nameof(strongLegsScript.ReduceFallDamage));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
             index = Tools.FindInteger(index, ref codes, findValue: 100, addCode: reduceFallDamageMethod, errorMessage: "Couldn't find 100 fall damage");
@@ -133,7 +133,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         }
 
         [HarmonyTranspiler]
-        [HarmonyPatch("BeginGrabObject")]
+        [HarmonyPatch(nameof(PlayerControllerB.BeginGrabObject))]
         public static IEnumerable<CodeInstruction> BeginGrabObjectTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo affectWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreasePossibleWeight));
@@ -145,7 +145,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         }
 
         [HarmonyTranspiler]
-        [HarmonyPatch("GrabObjectClientRpc")]
+        [HarmonyPatch(nameof(PlayerControllerB.GrabObjectClientRpc))]
         public static IEnumerable<CodeInstruction> GrabObjectClientRpcTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo affectWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreasePossibleWeight));
@@ -156,7 +156,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             return codes;
         }
         [HarmonyPostfix]
-        [HarmonyPatch("GrabObjectClientRpc")]
+        [HarmonyPatch(nameof(PlayerControllerB.GrabObjectClientRpc))]
         public static void GrabObjectClientRpcPostfix(PlayerControllerB __instance)
         {
             if (__instance.currentlyHeldObjectServer == null) return;
@@ -182,7 +182,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         }
 
         [HarmonyTranspiler]
-        [HarmonyPatch("DespawnHeldObjectOnClient")]
+        [HarmonyPatch(nameof(PlayerControllerB.DespawnHeldObjectOnClient))]
         public static IEnumerable<CodeInstruction> DespawnHeldObjectOnClientTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo affectWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreasePossibleWeight));
@@ -216,7 +216,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         }
 
         [HarmonyPostfix]
-        [HarmonyPatch("Update")]
+        [HarmonyPatch(nameof(PlayerControllerB.Update))]
         static void CheckForBoomboxes(PlayerControllerB __instance)
         {
             if (!UpgradeBus.instance.sickBeats || __instance != GameNetworkManager.Instance.localPlayerController) return;
@@ -246,7 +246,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         }
 
         [HarmonyTranspiler]
-        [HarmonyPatch("LateUpdate")]
+        [HarmonyPatch(nameof(PlayerControllerB.LateUpdate))]
         private static IEnumerable<CodeInstruction> LateUpdateTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo biggerLungsRegenMethod = typeof(BiggerLungs).GetMethod(nameof(BiggerLungs.ApplyPossibleIncreasedStaminaRegen));
@@ -264,7 +264,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         }
 
         [HarmonyTranspiler]
-        [HarmonyPatch("Jump_performed")]
+        [HarmonyPatch(nameof(PlayerControllerB.Jump_performed))]
         private static IEnumerable<CodeInstruction> JumpPerformedTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo biggerLungsReduceJumpCost = typeof(BiggerLungs).GetMethod(nameof(BiggerLungs.ApplyPossibleReducedJumpStaminaCost));
@@ -298,22 +298,22 @@ namespace MoreShipUpgrades.Patches.PlayerController
             return codes.AsEnumerable();
         }
 
-        [HarmonyPatch("PlayerLookInput")]
+        [HarmonyPatch(nameof(PlayerControllerB.PlayerLookInput))]
         [HarmonyTranspiler]
         private static IEnumerable<CodeInstruction> PlayerLookInputTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo reduceLookSensitivity = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrowLookSensitivity), BindingFlags.Static | BindingFlags.Public);
+            MethodInfo reduceLookSensitivity = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrowLookSensitivity));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
             index = Tools.FindFloat(index, ref codes, findValue: 0.008f, addCode: reduceLookSensitivity, errorMessage: "Couldn't find look sensitivity value we wanted to influence");
             return codes;
         }
 
-        [HarmonyPatch("Update")] // We're all going to die
+        [HarmonyPatch(nameof(PlayerControllerB.Update))] // We're all going to die
         [HarmonyTranspiler] // Just kidding
         private static IEnumerable<CodeInstruction> UpdateTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo reduceMovement = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrowMovement), BindingFlags.Static | BindingFlags.Public);
+            MethodInfo reduceMovement = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrowMovement));
             FieldInfo carryWeight = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.carryWeight));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
@@ -323,7 +323,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             return codes;
         }
 
-        [HarmonyPatch("Crouch_performed")]
+        [HarmonyPatch(nameof(PlayerControllerB.Crouch_performed))]
         [HarmonyTranspiler]
         private static IEnumerable<CodeInstruction> CrouchPerformmedTranspiler(IEnumerable<CodeInstruction> instructions)
         {

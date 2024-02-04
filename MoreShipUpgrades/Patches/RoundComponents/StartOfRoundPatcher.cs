@@ -17,7 +17,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
     {
         private static LGULogger logger = new LGULogger(nameof(StartOfRoundPatcher));
         [HarmonyPrefix]
-        [HarmonyPatch("Start")]
+        [HarmonyPatch(nameof(StartOfRound.Start))]
         private static void InitLGUStore(PlayerControllerB __instance)
         {
             logger.LogDebug("Initiating components...");
@@ -39,7 +39,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             }
         }
         [HarmonyPrefix]
-        [HarmonyPatch("playersFiredGameOver")]
+        [HarmonyPatch(nameof(StartOfRound.playersFiredGameOver))]
         private static void GameOverResetUpgradeManager(StartOfRound __instance)
         {
             if (UpgradeBus.instance.cfg.KEEP_UPGRADES_AFTER_FIRED_CUTSCENE) return;
@@ -80,7 +80,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             LGUStore.instance.SyncContractDetailsClientRpc("None", -1);
         }
 
-        [HarmonyPatch("AutoSaveShipData")]
+        [HarmonyPatch(nameof(StartOfRound.AutoSaveShipData))]
         [HarmonyPostfix]
         private static void AutoSaveShipDataPostfix()
         {
