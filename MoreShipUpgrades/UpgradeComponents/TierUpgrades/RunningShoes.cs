@@ -6,9 +6,9 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class RunningShoes : PlayerAttributeUpgrade
+    internal class RunningShoes : PlayerAttributeTierUpgrade
     {
-        public static string UPGRADE_NAME = "Running Shoes";
+        public const string UPGRADE_NAME = "Running Shoes";
         public static string PRICES_DEFAULT = "500,750,1000";
         internal override void Start()
         {

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class Stimpack : PlayerAttributeUpgrade
+    internal class Stimpack : PlayerAttributeTierUpgrade
     {
         public static string UPGRADE_NAME = "Stimpack";
         // Configuration

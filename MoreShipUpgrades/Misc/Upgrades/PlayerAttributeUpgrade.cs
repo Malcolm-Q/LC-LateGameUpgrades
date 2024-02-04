@@ -7,7 +7,7 @@ using System.Text;
 
 namespace MoreShipUpgrades.Misc.Upgrades
 {
-    internal class PlayerAttributeUpgrade : TierUpgrade
+    internal class PlayerAttributeTierUpgrade : TierUpgrade
     {
         protected bool activeUpgrade;
         protected int currentUpgradeLevel;

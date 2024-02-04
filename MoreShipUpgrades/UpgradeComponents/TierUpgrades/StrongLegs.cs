@@ -5,7 +5,7 @@ using MoreShipUpgrades.Misc.Upgrades;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class StrongLegs : PlayerAttributeUpgrade
+    internal class StrongLegs : PlayerAttributeTierUpgrade
     {
         public static string UPGRADE_NAME = "Strong Legs";
         public static string PRICES_DEFAULT = "150,190,250";
