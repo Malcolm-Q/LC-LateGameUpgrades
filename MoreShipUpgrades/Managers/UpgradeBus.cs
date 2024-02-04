@@ -485,8 +485,7 @@ namespace MoreShipUpgrades.Managers
                 cfg.SHARED_UPGRADES ? true : !cfg.BEEKEEPER_INDIVIDUAL,
                 cfg.BEEKEEPER_ENABLED,
                 cfg.BEEKEEPER_PRICE,
-                ParseUpgradePrices(cfg.BEEKEEPER_UPGRADE_PRICES),
-                AssetBundleHandler.GetInfoFromJSON(beekeeperScript.UPGRADE_NAME));
+                ParseUpgradePrices(cfg.BEEKEEPER_UPGRADE_PRICES));
         }
 
         private void SetupProteinPowderTerminalNode() 
@@ -495,8 +494,7 @@ namespace MoreShipUpgrades.Managers
                                                 cfg.SHARED_UPGRADES ? true : !cfg.PROTEIN_INDIVIDUAL,
                                                 cfg.PROTEIN_ENABLED,
                                                 cfg.PROTEIN_PRICE,
-                                                ParseUpgradePrices(cfg.PROTEIN_UPGRADE_PRICES),
-                                                AssetBundleHandler.GetInfoFromJSON(proteinPowderScript.UPGRADE_NAME));
+                                                ParseUpgradePrices(cfg.PROTEIN_UPGRADE_PRICES));
         }
         private void SetupBiggerLungsTerminalNode()
         {
@@ -504,8 +502,7 @@ namespace MoreShipUpgrades.Managers
                                                 cfg.SHARED_UPGRADES ? true : !cfg.BIGGER_LUNGS_INDIVIDUAL,
                                                 cfg.BIGGER_LUNGS_ENABLED,
                                                 cfg.BIGGER_LUNGS_PRICE,
-                                                ParseUpgradePrices(cfg.BIGGER_LUNGS_UPGRADE_PRICES),
-                                                AssetBundleHandler.GetInfoFromJSON(biggerLungScript.UPGRADE_NAME));
+                                                ParseUpgradePrices(cfg.BIGGER_LUNGS_UPGRADE_PRICES));
         }
         private void SetupRunningShoesTerminalNode()
         {
@@ -513,8 +510,7 @@ namespace MoreShipUpgrades.Managers
                                                 cfg.SHARED_UPGRADES ? true : !cfg.RUNNING_SHOES_INDIVIDUAL,
                                                 cfg.RUNNING_SHOES_ENABLED,
                                                 cfg.RUNNING_SHOES_PRICE,
-                                                ParseUpgradePrices(cfg.RUNNING_SHOES_UPGRADE_PRICES),
-                                                AssetBundleHandler.GetInfoFromJSON(runningShoeScript.UPGRADE_NAME));
+                                                ParseUpgradePrices(cfg.RUNNING_SHOES_UPGRADE_PRICES));
         }
         private void SetupStrongLegsTerminalNode()
         {
@@ -522,8 +518,7 @@ namespace MoreShipUpgrades.Managers
                                                 cfg.SHARED_UPGRADES ? true : !cfg.STRONG_LEGS_INDIVIDUAL,
                                                 cfg.STRONG_LEGS_ENABLED,
                                                 cfg.STRONG_LEGS_PRICE,
-                                                ParseUpgradePrices(cfg.STRONG_LEGS_UPGRADE_PRICES),
-                                                AssetBundleHandler.GetInfoFromJSON(strongLegsScript.UPGRADE_NAME));
+                                                ParseUpgradePrices(cfg.STRONG_LEGS_UPGRADE_PRICES));
         }
         private void SetupMalwareBroadcasterTerminalNode()
         {
@@ -552,8 +547,7 @@ namespace MoreShipUpgrades.Managers
                                                 cfg.SHARED_UPGRADES ? true : !cfg.DISCOMBOBULATOR_INDIVIDUAL,
                                                 cfg.DISCOMBOBULATOR_ENABLED,
                                                 cfg.DISCOMBOBULATOR_PRICE,
-                                                ParseUpgradePrices(cfg.DISCO_UPGRADE_PRICES),
-                                                AssetBundleHandler.GetInfoFromJSON(terminalFlashScript.UPGRADE_NAME));
+                                                ParseUpgradePrices(cfg.DISCO_UPGRADE_PRICES));
         }
         private void SetupHunterTerminalNode()
         {
@@ -593,8 +587,7 @@ namespace MoreShipUpgrades.Managers
                                                 cfg.SHARED_UPGRADES ? true : !cfg.BACK_MUSCLES_INDIVIDUAL,
                                                 cfg.BACK_MUSCLES_ENABLED,
                                                 cfg.BACK_MUSCLES_PRICE,
-                                                ParseUpgradePrices(cfg.BACK_MUSCLES_UPGRADE_PRICES),
-                                                AssetBundleHandler.GetInfoFromJSON(exoskeletonScript.UPGRADE_NAME));
+                                                ParseUpgradePrices(cfg.BACK_MUSCLES_UPGRADE_PRICES));
         }
         private void SetupPagerTerminalNode()
         {
@@ -616,8 +609,7 @@ namespace MoreShipUpgrades.Managers
                                                 cfg.SHARED_UPGRADES ? true : !cfg.PLAYER_HEALTH_INDIVIDUAL,
                                                 cfg.PLAYER_HEALTH_ENABLED,
                                                 cfg.PLAYER_HEALTH_PRICE,
-                                                ParseUpgradePrices(cfg.PLAYER_HEALTH_UPGRADE_PRICES),
-                                                AssetBundleHandler.GetInfoFromJSON(playerHealthScript.UPGRADE_NAME));
+                                                ParseUpgradePrices(cfg.PLAYER_HEALTH_UPGRADE_PRICES));
         }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can be purchased multiple times
@@ -632,8 +624,7 @@ namespace MoreShipUpgrades.Managers
                                                         bool shareStatus,
                                                         bool enabled,
                                                         int initialPrice,
-                                                        int[] prices,
-                                                        string infoFormat = ""
+                                                        int[] prices
                                                         )
         {
             GameObject multiPerk = AssetBundleHandler.GetPerkGameObject(upgradeName) ;
