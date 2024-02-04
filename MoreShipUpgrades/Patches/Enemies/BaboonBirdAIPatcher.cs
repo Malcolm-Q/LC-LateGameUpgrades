@@ -13,7 +13,7 @@ namespace MoreShipUpgrades.Patches.Enemies
     internal class BaboonBirdAIPatcher
     {
         private static LGULogger logger = new LGULogger(nameof(BaboonBirdAIPatcher));
-        [HarmonyPatch("DoLOSCheck")]
+        [HarmonyPatch(nameof(BaboonBirdAI.DoLOSCheck))]
         [HarmonyTranspiler]
         private static IEnumerable<CodeInstruction> DoLOSCheckTranspiler(IEnumerable<CodeInstruction> instructions)
         {
