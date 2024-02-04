@@ -22,7 +22,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         /// the enemy spawning
         /// </summary>
         [HarmonyPatch(nameof(RoundManager.PlotOutEnemiesForNextHour))]
-        [HarmonyPatch("AdvanceHourAndSpawnNewBatchOfEnemies")]
+        [HarmonyPatch(nameof(RoundManager.AdvanceHourAndSpawnNewBatchOfEnemies))]
         [HarmonyPrefix]
         public static void ChangeDaysForEnemySpawns()
         {
@@ -35,7 +35,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         }
 
         [HarmonyPatch(nameof(RoundManager.PlotOutEnemiesForNextHour))]
-        [HarmonyPatch("AdvanceHourAndSpawnNewBatchOfEnemies")]
+        [HarmonyPatch(nameof(RoundManager.AdvanceHourAndSpawnNewBatchOfEnemies))]
         [HarmonyPostfix]
         public static void UndoChangeDaysForEnemySpawns()
         {

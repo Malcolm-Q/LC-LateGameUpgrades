@@ -7,7 +7,7 @@ namespace MoreShipUpgrades.Patches.Enemies
     internal class HoarderBugAIPatcher
     {
         [HarmonyPostfix]
-        [HarmonyPatch("IsHoarderBugAngry")]
+        [HarmonyPatch(nameof(HoarderBugAI.IsHoarderBugAngry))]
         private static void MakeHoarderBugSwarmAngry(ref bool __result)
         {
             if (UpgradeBus.instance.contractType != "exterminator") return;

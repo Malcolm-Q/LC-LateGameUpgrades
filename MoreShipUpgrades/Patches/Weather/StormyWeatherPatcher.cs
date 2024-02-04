@@ -22,7 +22,7 @@ namespace MoreShipUpgrades.Patches.Weather
         }
 
         [HarmonyPostfix]
-        [HarmonyPatch("Update")]
+        [HarmonyPatch(nameof(StormyWeather.Update))]
         static void InterceptSelectedObject(StormyWeather __instance, GrabbableObject ___targetingMetalObject)
         {
             if (!UpgradeBus.instance.lightningRod || !LGUStore.instance.IsHost || !LGUStore.instance.IsServer) { return; }

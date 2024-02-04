@@ -16,7 +16,7 @@ namespace MoreShipUpgrades.Patches.HUD
     internal class HUDManagerPatcher
     {
         [HarmonyPostfix]
-        [HarmonyPatch("MeetsScanNodeRequirements")]
+        [HarmonyPatch(nameof(HUDManager.MeetsScanNodeRequirements))]
         private static void alterReqs(ScanNodeProperties node, ref bool __result, PlayerControllerB playerScript)
         {
             if (node != null && node.GetComponentInParent<WheelbarrowScript>() != null && node.headerText != "Shopping Cart" && node.headerText != "Wheelbarrow") { __result = false; return; }
