@@ -7,6 +7,11 @@ namespace MoreShipUpgrades.Misc.Upgrades
 {
     abstract class TierUpgrade : BaseUpgrade
     {
+        internal override void Start()
+        {
+            DontDestroyOnLoad(gameObject);
+            Register();
+        }
         public abstract void Increment();
         public override void Load()
         {

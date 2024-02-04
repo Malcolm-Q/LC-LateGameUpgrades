@@ -48,11 +48,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 tiers[i] = tiers[i - 1].Concat(tiersList[i].Split(",").Select(x => x.Trim())).ToArray();
             }
         }
-        void Start()
+        internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            DontDestroyOnLoad(gameObject);
-            Register();
+            base.Start();
         }
 
         public override void Increment()

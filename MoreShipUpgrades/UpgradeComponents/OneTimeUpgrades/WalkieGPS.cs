@@ -14,11 +14,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
         private GameObject canvas;
         private Text x, y, z, time;
-        void Start()
+        internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            DontDestroyOnLoad(gameObject);
-            Register();
+            base.Start();
             canvas = transform.GetChild(0).gameObject;
             x = canvas.transform.GetChild(0).GetComponent<Text>();
             y = canvas.transform.GetChild(1).GetComponent<Text>();

@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using LethalLib.Modules;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
@@ -241,10 +242,10 @@ namespace MoreShipUpgrades.Managers
             if (player == null) return; // Disconnecting the game
 
             logger.LogDebug($"Resetting {player.playerUsername}'s attributes");
-            if (cfg.RUNNING_SHOES_ENABLED && runningShoes) RunningShoes.ResetRunningShoesBuff(ref player);
-            if (cfg.BIGGER_LUNGS_ENABLED && biggerLungs) BiggerLungs.ResetBiggerLungsBuff(ref player);
-            if (cfg.STRONG_LEGS_ENABLED && strongLegs) StrongLegs.ResetStrongLegsBuff(ref player);
-            if (cfg.PLAYER_HEALTH_ENABLED && playerHealth) Stimpack.ResetStimpackBuff(ref player);
+            if (cfg.RUNNING_SHOES_ENABLED && runningShoes) UpgradeObjects[RunningShoes.UPGRADE_NAME].GetComponent<PlayerAttributeUpgrade>().UnloadUpgradeAttribute(ref runningShoes, ref runningLevel);
+            if (cfg.BIGGER_LUNGS_ENABLED && biggerLungs) UpgradeObjects[BiggerLungs.UPGRADE_NAME].GetComponent<PlayerAttributeUpgrade>().UnloadUpgradeAttribute(ref biggerLungs, ref lungLevel);
+            if (cfg.STRONG_LEGS_ENABLED && strongLegs) UpgradeObjects[StrongLegs.UPGRADE_NAME].GetComponent<PlayerAttributeUpgrade>().UnloadUpgradeAttribute(ref strongLegs, ref legLevel);
+            if (cfg.PLAYER_HEALTH_ENABLED && playerHealth) UpgradeObjects[Stimpack.UPGRADE_NAME].GetComponent<PlayerAttributeUpgrade>().UnloadUpgradeAttribute(ref playerHealth, ref playerHealthLevel);
         }
 
         [ClientRpc]

@@ -10,11 +10,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         public static string UPGRADE_NAME = "Sick Beats";
         private static LGULogger logger = new LGULogger(UPGRADE_NAME);
 
-        void Start()
+        internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            DontDestroyOnLoad(gameObject);
-            Register();
+            base.Start();
             UpgradeBus.instance.BoomboxIcon = transform.GetChild(0).GetChild(0).gameObject;
         }
 

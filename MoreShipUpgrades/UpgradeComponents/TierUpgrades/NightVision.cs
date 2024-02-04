@@ -24,11 +24,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public static string PRICES_DEFAULT = "300,400,500";
 
         private static LGULogger logger = new LGULogger(UPGRADE_NAME);
-        void Start()
+        internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            DontDestroyOnLoad(gameObject);
-            Register();
+            base.Start();
             batteryBar = transform.GetChild(0).GetChild(0).transform;
             transform.GetChild(0).gameObject.SetActive(false);
             if (Enum.TryParse(UpgradeBus.instance.cfg.TOGGLE_NIGHT_VISION_KEY, out Key toggle))

@@ -32,12 +32,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         private static bool active;
         private int currentLevel;
 
-        void Start()
+        internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
             logger = new LGULogger(upgradeName);
-            DontDestroyOnLoad(gameObject);
-            Register();
+            base.Start();
         }
         public override void Load()
         {

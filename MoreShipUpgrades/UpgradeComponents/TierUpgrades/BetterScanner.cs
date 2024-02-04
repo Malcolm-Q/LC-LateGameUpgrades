@@ -9,15 +9,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
     {
         public static string UPGRADE_NAME = "Better Scanner";
         private static LGULogger logger;
-        void Awake()
-        {
-            logger = new LGULogger(UPGRADE_NAME);
-        }
-        void Start()
+        internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            DontDestroyOnLoad(gameObject);
-            Register();
+            logger = new LGULogger(UPGRADE_NAME);
+            base.Start();
         }
 
         public override void Increment()

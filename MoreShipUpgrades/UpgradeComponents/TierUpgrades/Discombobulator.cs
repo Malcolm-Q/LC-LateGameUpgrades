@@ -13,11 +13,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public static string PRICES_DEFAULT = "330,460,620";
         private static LGULogger logger = new LGULogger(nameof(Discombobulator));
         public static Discombobulator instance;
-        void Start()
+        internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            DontDestroyOnLoad(gameObject);
-            Register();
+            base.Start();
         }
 
         void Update()

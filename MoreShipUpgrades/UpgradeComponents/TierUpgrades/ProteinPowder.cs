@@ -36,11 +36,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public static float CRIT_CHANCE_DEFAULT = 0.01f;
         public static string CRIT_CHANCE_DESCRIPTION = $"This value is only valid when maxed out {UPGRADE_NAME}. Any previous levels will not apply crit.";
 
-        void Start()
+        internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            DontDestroyOnLoad(gameObject);
-            Register();
+            base.Start();
         }
 
         public override void Increment()

@@ -7,6 +7,11 @@ namespace MoreShipUpgrades.Misc.Upgrades
 {
     abstract class OneTimeUpgrade : BaseUpgrade
     {
+        internal override void Start()
+        {
+            DontDestroyOnLoad(gameObject);
+            Register();
+        }
         public override void Load()
         {
             string loadColour = "#FF0000";

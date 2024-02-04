@@ -21,11 +21,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         private bool canPick = false;
         public int timesStruck;
 
-        void Start()
+        internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            DontDestroyOnLoad(gameObject);
-            Register();
+            base.Start();
             instance = this;
             Transform tumbler = transform.GetChild(0).GetChild(0).GetChild(0);
             pin1 = tumbler.GetChild(0).gameObject;

@@ -36,17 +36,12 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         public bool CanTryInterceptLightning { get; internal set; }
         public bool LightningIntercepted { get; internal set; }
 
-        void Awake()
+        internal override void Start()
         {
             instance = this;
             logger = new LGULogger(UPGRADE_NAME);
-        }
-
-        void Start()
-        {
             upgradeName = UPGRADE_NAME;
-            DontDestroyOnLoad(gameObject);
-            UpgradeBus.instance.UpgradeObjects.Add(UPGRADE_NAME, gameObject);
+            base.Start();
         }
         public override void Load()
         {

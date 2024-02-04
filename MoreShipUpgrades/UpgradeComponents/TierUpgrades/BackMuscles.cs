@@ -10,11 +10,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public static string UPGRADE_NAME = "Back Muscles";
         public static string PRICES_DEFAULT = "600,700,800";
 
-        void Start()
+        internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            DontDestroyOnLoad(gameObject);
-            Register();
+            base.Start();
         }
 
         public override void Increment()

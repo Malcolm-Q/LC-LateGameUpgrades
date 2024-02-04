@@ -15,6 +15,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
         public static string PRICES_SECTION = "Price of each additional upgrade";
         public static string PRICES_DESCRIPTION = "Value must be seperated by commas EX: '123,321,222'";
 
+        internal abstract void Start();
         public abstract void Load();
 
         public abstract void Register();

@@ -11,11 +11,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public static string UPGRADE_NAME = "Beekeeper";
         public static string PRICES_DEFAULT = "225,280,340";
 
-        void Start()
+        internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            DontDestroyOnLoad(gameObject);
-            Register();
+            base.Start();
         }
 
         public override void Increment()
