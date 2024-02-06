@@ -84,7 +84,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             {
                 heal_value -= potentialHealth - maximumHealth;
             }
-            playerHeldBy.DamagePlayer(-heal_value, false, true, CauseOfDeath.Unknown, 0, false, Vector3.zero);
+            playerHeldBy.health += heal_value;
+
             if (uses >= maximumUses)
             {
                 itemUsedUp = true;
