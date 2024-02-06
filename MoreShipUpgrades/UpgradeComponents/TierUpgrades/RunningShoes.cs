@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class RunningShoes : PlayerAttributeTierUpgrade
+    internal class RunningShoes : GameAttributeTierUpgrade
     {
         public const string UPGRADE_NAME = "Running Shoes";
         public static string PRICES_DEFAULT = "500,750,1000";
@@ -15,7 +15,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             upgradeName = UPGRADE_NAME;
             logger = new LGULogger(UPGRADE_NAME);
             base.Start();
-            changingAttribute = PlayerAttribute.MOVEMENT_SPEED;
+            changingAttribute = GameAttribute.PLAYER_MOVEMENT_SPEED;
             initialValue = UpgradeBus.instance.cfg.MOVEMENT_SPEED_UNLOCK;
             incrementalValue = UpgradeBus.instance.cfg.MOVEMENT_INCREMENT;
         }

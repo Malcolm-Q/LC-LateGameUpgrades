@@ -242,10 +242,10 @@ namespace MoreShipUpgrades.Managers
             if (player == null) return; // Disconnecting the game
 
             logger.LogDebug($"Resetting {player.playerUsername}'s attributes");
-            if (cfg.RUNNING_SHOES_ENABLED && runningShoes) UpgradeObjects[RunningShoes.UPGRADE_NAME].GetComponent<PlayerAttributeTierUpgrade>().UnloadUpgradeAttribute(ref runningShoes, ref runningLevel);
-            if (cfg.BIGGER_LUNGS_ENABLED && biggerLungs) UpgradeObjects[BiggerLungs.UPGRADE_NAME].GetComponent<PlayerAttributeTierUpgrade>().UnloadUpgradeAttribute(ref biggerLungs, ref lungLevel);
-            if (cfg.STRONG_LEGS_ENABLED && strongLegs) UpgradeObjects[StrongLegs.UPGRADE_NAME].GetComponent<PlayerAttributeTierUpgrade>().UnloadUpgradeAttribute(ref strongLegs, ref legLevel);
-            if (cfg.PLAYER_HEALTH_ENABLED && playerHealth) UpgradeObjects[Stimpack.UPGRADE_NAME].GetComponent<PlayerAttributeTierUpgrade>().UnloadUpgradeAttribute(ref playerHealth, ref playerHealthLevel);
+            if (cfg.RUNNING_SHOES_ENABLED && runningShoes) UpgradeObjects[RunningShoes.UPGRADE_NAME].GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute(ref runningShoes, ref runningLevel);
+            if (cfg.BIGGER_LUNGS_ENABLED && biggerLungs) UpgradeObjects[BiggerLungs.UPGRADE_NAME].GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute(ref biggerLungs, ref lungLevel);
+            if (cfg.STRONG_LEGS_ENABLED && strongLegs) UpgradeObjects[StrongLegs.UPGRADE_NAME].GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute(ref strongLegs, ref legLevel);
+            if (cfg.PLAYER_HEALTH_ENABLED && playerHealth) UpgradeObjects[Stimpack.UPGRADE_NAME].GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute(ref playerHealth, ref playerHealthLevel);
         }
 
         [ClientRpc]
@@ -255,7 +255,7 @@ namespace MoreShipUpgrades.Managers
             if (shipDoors == null) return; // Very edge case
 
             logger.LogDebug($"Resetting the ship's attributes");
-            if (cfg.DOOR_HYDRAULICS_BATTERY_ENABLED && doorsHydraulicsBattery) DoorsHydraulicsBattery.ResetDoorsHydraulicsBattery(ref shipDoors);
+            if (cfg.DOOR_HYDRAULICS_BATTERY_ENABLED && doorsHydraulicsBattery) UpgradeObjects[Stimpack.UPGRADE_NAME].GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute(ref doorsHydraulicsBattery, ref doorsHydraulicsBatteryLevel);
         }
 
         [ServerRpc]

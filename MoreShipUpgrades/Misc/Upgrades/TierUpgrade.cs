@@ -1,10 +1,10 @@
 ﻿using MoreShipUpgrades.Managers;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MoreShipUpgrades.Misc.Upgrades
 {
+    /// <summary>
+    /// Class which represents upgrades that can be purchased more than once for additional effects
+    /// </summary>
     abstract class TierUpgrade : BaseUpgrade
     {
         internal override void Start()
@@ -12,6 +12,9 @@ namespace MoreShipUpgrades.Misc.Upgrades
             DontDestroyOnLoad(gameObject);
             Register();
         }
+        /// <summary>
+        /// Handles the upgrade being purchased past the unlock phase
+        /// </summary>
         public abstract void Increment();
         public override void Load()
         {

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class Stimpack : PlayerAttributeTierUpgrade
+    internal class Stimpack : GameAttributeTierUpgrade
     {
         public static string UPGRADE_NAME = "Stimpack";
         // Configuration
@@ -34,7 +34,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             upgradeName = UPGRADE_NAME;
             logger = new LGULogger(UPGRADE_NAME);
             base.Start();
-            changingAttribute = PlayerAttribute.HEALTH;
+            changingAttribute = GameAttribute.PLAYER_HEALTH;
             initialValue = UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK;
             incrementalValue = UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT;
         }

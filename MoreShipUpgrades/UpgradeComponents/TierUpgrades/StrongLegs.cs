@@ -5,7 +5,7 @@ using MoreShipUpgrades.Misc.Upgrades;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class StrongLegs : PlayerAttributeTierUpgrade
+    internal class StrongLegs : GameAttributeTierUpgrade
     {
         public static string UPGRADE_NAME = "Strong Legs";
         public static string PRICES_DEFAULT = "150,190,250";
@@ -15,7 +15,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             upgradeName = UPGRADE_NAME;
             logger = new LGULogger(UPGRADE_NAME);
             base.Start();
-            changingAttribute = PlayerAttribute.JUMP_FORCE;
+            changingAttribute = GameAttribute.PLAYER_JUMP_FORCE;
             initialValue = UpgradeBus.instance.cfg.JUMP_FORCE_UNLOCK;
             incrementalValue = UpgradeBus.instance.cfg.JUMP_FORCE_INCREMENT;
         }

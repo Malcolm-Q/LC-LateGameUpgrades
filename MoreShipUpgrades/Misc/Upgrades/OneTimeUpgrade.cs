@@ -1,10 +1,10 @@
 ﻿using MoreShipUpgrades.Managers;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MoreShipUpgrades.Misc.Upgrades
 {
+    /// <summary>
+    /// Class which represents upgrades that are only purchased only once to gain the full effect of it
+    /// </summary>
     abstract class OneTimeUpgrade : BaseUpgrade
     {
         internal override void Start()

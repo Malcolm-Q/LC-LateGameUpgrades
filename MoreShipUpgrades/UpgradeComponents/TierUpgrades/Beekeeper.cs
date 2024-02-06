@@ -1,5 +1,4 @@
 ﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using UnityEngine;
 
@@ -7,7 +6,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
     class Beekeeper : TierUpgrade
     {
-        private static LGULogger logger = new LGULogger(UPGRADE_NAME);
         public static string UPGRADE_NAME = "Beekeeper";
         public static string PRICES_DEFAULT = "225,280,340";
 

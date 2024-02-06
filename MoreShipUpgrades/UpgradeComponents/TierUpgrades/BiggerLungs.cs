@@ -1,12 +1,10 @@
-﻿using GameNetcodeStuff;
-using MoreShipUpgrades.Managers;
+﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
-using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    class BiggerLungs : PlayerAttributeTierUpgrade
+    class BiggerLungs : GameAttributeTierUpgrade
     {
         public static string UPGRADE_NAME = "Bigger Lungs";
         public static string PRICES_DEFAULT = "350,450,550";
@@ -16,7 +14,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             upgradeName = UPGRADE_NAME;
             logger = new LGULogger(UPGRADE_NAME);
             base.Start();
-            changingAttribute = PlayerAttribute.SPRINT_TIME;
+            changingAttribute = GameAttribute.PLAYER_SPRINT_TIME;
             initialValue = UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE_UNLOCK;
             incrementalValue = UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT;
         }
