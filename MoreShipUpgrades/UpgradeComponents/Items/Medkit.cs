@@ -1,7 +1,7 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -65,7 +65,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         /// </summary>
         private void AttemptToHealPlayer()
         {
-            int health = UpgradeBus.instance.playerHealthLevels.ContainsKey(playerHeldBy.playerSteamId) ? playerHealthScript.GetHealthFromPlayer(100, playerHeldBy.playerSteamId) : 100;
+            int health = UpgradeBus.instance.playerHealthLevels.ContainsKey(playerHeldBy.playerSteamId) ? Stimpack.GetHealthFromPlayer(100, playerHeldBy.playerSteamId) : 100;
             if (!CanUseMedkit(health)) return;
             UseMedkit(health);
         }

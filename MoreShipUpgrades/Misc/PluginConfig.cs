@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.Commands;
+using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 
 
 namespace MoreShipUpgrades.Misc
@@ -323,30 +325,30 @@ namespace MoreShipUpgrades.Misc
             CHANCE_TO_BREAK = ConfigEntry(topSection, "Chance to break on use", 0.9f, "value should be 0.00 - 1.00");
             KEEP_ITEMS_ON_TELE = ConfigEntry(topSection,"Keep Items When Using Weak Portable Teleporters", true, "If set to false you will drop your items like when using the vanilla TP.");
 
-            topSection = beekeeperScript.UPGRADE_NAME;
+            topSection = Beekeeper.UPGRADE_NAME;
             BEEKEEPER_ENABLED = ConfigEntry(topSection, "Enable Beekeeper Upgrade", true, "Take less damage from bees");
             BEEKEEPER_PRICE = ConfigEntry(topSection, "Price of Beekeeper Upgrade", 450, "");
             BEEKEEPER_DAMAGE_MULTIPLIER = ConfigEntry(topSection, "Multiplied to incoming damage (rounded to int)", 0.64f, "Incoming damage from bees is 10.");
-            BEEKEEPER_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, beekeeperScript.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            BEEKEEPER_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, Beekeeper.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             BEEKEEPER_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
             BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT = ConfigEntry(topSection, "Additional % Reduced per level", 0.15f, "Every time beekeeper is upgraded this value will be subtracted to the base multiplier above.");
             BEEKEEPER_HIVE_VALUE_INCREASE = ConfigEntry(topSection, "Hive value increase multiplier", 1.5f, "Multiplier applied to the value of beehive when reached max level");
 
-            topSection = proteinPowderScript.UPGRADE_NAME;
-            PROTEIN_ENABLED = ConfigEntry(topSection, proteinPowderScript.ENABLED_SECTION, proteinPowderScript.ENABLED_DEFAULT, proteinPowderScript.ENABLED_DESCRIPTION);
-            PROTEIN_PRICE = ConfigEntry(topSection, proteinPowderScript.PRICE_SECTION, proteinPowderScript.PRICE_DEFAULT, "");
-            PROTEIN_UNLOCK_FORCE = ConfigEntry(topSection, proteinPowderScript.UNLOCK_FORCE_SECTION, proteinPowderScript.UNLOCK_FORCE_DEFAULT, proteinPowderScript.UNLOCK_FORCE_DESCRIPTION);
-            PROTEIN_INCREMENT = ConfigEntry(topSection, proteinPowderScript.INCREMENT_FORCE_SECTION, proteinPowderScript.INCREMENT_FORCE_DEFAULT, proteinPowderScript.INCREMENT_FORCE_DESCRIPTION);
+            topSection = ProteinPowder.UPGRADE_NAME;
+            PROTEIN_ENABLED = ConfigEntry(topSection, ProteinPowder.ENABLED_SECTION, ProteinPowder.ENABLED_DEFAULT, ProteinPowder.ENABLED_DESCRIPTION);
+            PROTEIN_PRICE = ConfigEntry(topSection, ProteinPowder.PRICE_SECTION, ProteinPowder.PRICE_DEFAULT, "");
+            PROTEIN_UNLOCK_FORCE = ConfigEntry(topSection, ProteinPowder.UNLOCK_FORCE_SECTION, ProteinPowder.UNLOCK_FORCE_DEFAULT, ProteinPowder.UNLOCK_FORCE_DESCRIPTION);
+            PROTEIN_INCREMENT = ConfigEntry(topSection, ProteinPowder.INCREMENT_FORCE_SECTION, ProteinPowder.INCREMENT_FORCE_DEFAULT, ProteinPowder.INCREMENT_FORCE_DESCRIPTION);
             PROTEIN_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            PROTEIN_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, proteinPowderScript.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            PROTEIN_CRIT_CHANCE = ConfigEntry(topSection, proteinPowderScript.CRIT_CHANCE_SECTION, proteinPowderScript.CRIT_CHANCE_DEFAULT, proteinPowderScript.CRIT_CHANCE_DESCRIPTION);
+            PROTEIN_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, ProteinPowder.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            PROTEIN_CRIT_CHANCE = ConfigEntry(topSection, ProteinPowder.CRIT_CHANCE_SECTION, ProteinPowder.CRIT_CHANCE_DEFAULT, ProteinPowder.CRIT_CHANCE_DESCRIPTION);
 
-            topSection = biggerLungScript.UPGRADE_NAME;
+            topSection = BiggerLungs.UPGRADE_NAME;
             BIGGER_LUNGS_ENABLED = ConfigEntry(topSection, "Enable Bigger Lungs Upgrade", true, "More Stamina");
             BIGGER_LUNGS_PRICE = ConfigEntry(topSection, "Price of Bigger Lungs Upgrade", 600, "");
             SPRINT_TIME_INCREASE_UNLOCK = ConfigEntry(topSection, "Sprint Time Unlock", 6f, "Amount of sprint time gained when unlocking the upgrade.\nDefault vanilla value is 11f.");
             SPRINT_TIME_INCREMENT = ConfigEntry(topSection, "Sprint Time Increment", 1.25f,"Amount of sprint time gained when increasing the level of upgrade.");
-            BIGGER_LUNGS_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, biggerLungScript.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            BIGGER_LUNGS_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, BiggerLungs.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             BIGGER_LUNGS_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
             BIGGER_LUNGS_STAMINA_REGEN_INCREASE = ConfigEntry(topSection, "Stamina Regeneration Increase", 1.05f, "Increase of stamina regeneration applied past level 1");
             BIGGER_LUNGS_JUMP_STAMINA_COST_DECREASE = ConfigEntry(topSection, "Stamina cost decrease on jumps", 0.90f, "Multiplied with the vanilla cost of jumping");
@@ -355,25 +357,25 @@ namespace MoreShipUpgrades.Misc
             EXTEND_DEADLINE_ENABLED = ConfigEntry(topSection, "Enable Extend Deadline Purchase", true, "Increments the amount of days before deadline is reached.");
             EXTEND_DEADLINE_PRICE = ConfigEntry(topSection, "Extend Deadline Price", 800, "Price of each day extension requested in the terminal.");
 
-            topSection = runningShoeScript.UPGRADE_NAME;
+            topSection = RunningShoes.UPGRADE_NAME;
             RUNNING_SHOES_ENABLED = ConfigEntry(topSection, "Enable Running Shoes Upgrade", true, "Run Faster");
             RUNNING_SHOES_PRICE = ConfigEntry(topSection, "Price of Running Shoes Upgrade", 650, "");
             MOVEMENT_SPEED_UNLOCK = ConfigEntry(topSection, "Movement Speed Unlock", 1.4f, "Value added to player's movement speed when first purchased.\nDefault vanilla value is 4.6f.");
             MOVEMENT_INCREMENT = ConfigEntry(topSection, "Movement Speed Increment", 0.5f, "How much the above value is increased on upgrade.");
-            RUNNING_SHOES_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, biggerLungScript.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            RUNNING_SHOES_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, BiggerLungs.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             RUNNING_SHOES_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
             NOISE_REDUCTION = ConfigEntry(topSection, "Noise Reduction", 10f, "Distance units to subtract from footstep noise when reached final level.");
 
-            topSection = strongLegsScript.UPGRADE_NAME;
+            topSection = StrongLegs.UPGRADE_NAME;
             STRONG_LEGS_ENABLED = ConfigEntry(topSection, "Enable Strong Legs Upgrade", true, "Jump Higher");
             STRONG_LEGS_PRICE = ConfigEntry(topSection, "Price of Strong Legs Upgrade", 300, "");
             JUMP_FORCE_UNLOCK = ConfigEntry(topSection, "Jump Force Unlock", 3f, "Amount of jump force added when unlocking the upgrade.\nDefault vanilla value is 13f.");
             JUMP_FORCE_INCREMENT = ConfigEntry(topSection, "Jump Force Increment", 0.75f, "How much the above value is increased on upgrade.");
-            STRONG_LEGS_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, strongLegsScript.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            STRONG_LEGS_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, StrongLegs.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             STRONG_LEGS_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
             STRONG_LEGS_REDUCE_FALL_DAMAGE_MULTIPLIER = ConfigEntry(topSection, "Damage mitigation when falling", 0.5f, "Multiplier applied on fall damage that you wish to ignore when reached max level");
 
-            topSection = trapDestroyerScript.UPGRADE_NAME;
+            topSection = MalwareBroadcaster.UPGRADE_NAME;
             MALWARE_BROADCASTER_ENABLED = ConfigEntry(topSection, "Enable Malware Broadcaster Upgrade", true, "Explode Map Hazards");
             MALWARE_BROADCASTER_PRICE = ConfigEntry(topSection, "Price of Malware Broadcaster Upgrade", 550, "");
             DESTROY_TRAP = ConfigEntry(topSection, "Destroy Trap", true, "If false Malware Broadcaster will disable the trap for a long time instead of destroying.");
@@ -400,10 +402,10 @@ namespace MoreShipUpgrades.Misc
             NIGHT_VIS_BATTERY_INCREMENT = ConfigEntry(topSection, "Increase for night vis battery life", 2f, "Applied to the max charge for night vis battery on each upgrade.");
             LOSE_NIGHT_VIS_ON_DEATH = ConfigEntry(topSection, "Lose Night Vision On Death", true, "If true when you die the night vision will disable and will need a new pair of goggles.");
             NIGHT_VISION_DROP_ON_DEATH = ConfigEntry(topSection, "Drop Night Vision item on Death", true, "If true, when you die and lose night vision upon death, you will drop the night vision goggles on your body.");
-            NIGHT_VISION_UPGRADE_PRICES = ConfigEntry(topSection,BaseUpgrade.PRICES_SECTION, nightVisionScript.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            NIGHT_VISION_UPGRADE_PRICES = ConfigEntry(topSection,BaseUpgrade.PRICES_SECTION, NightVision.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             NIGHT_VISION_INDIVIDUAL = ConfigEntry(topSection,BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
 
-            topSection = terminalFlashScript.UPGRADE_NAME;
+            topSection = Discombobulator.UPGRADE_NAME;
             DISCOMBOBULATOR_ENABLED = ConfigEntry(topSection, "Enable Discombobulator Upgrade", true, "Stun enemies around the ship.");
             DISCOMBOBULATOR_PRICE = ConfigEntry(topSection, "Price of Discombobulator Upgrade", 450, "");
             DISCOMBOBULATOR_COOLDOWN = ConfigEntry(topSection, "Discombobulator Cooldown", 120f, "");
@@ -411,13 +413,13 @@ namespace MoreShipUpgrades.Misc
             DISCOMBOBULATOR_STUN_DURATION  = ConfigEntry(topSection, "Discombobulator Stun Duration", 7.5f, "");
             DISCOMBOBULATOR_NOTIFY_CHAT = ConfigEntry(topSection, "Notify Local Chat of Enemy Stun Duration", true, "");
             DISCOMBOBULATOR_INCREMENT  = ConfigEntry(topSection, "Discombobulator Increment", 1f, "The amount added to stun duration on upgrade.");
-            DISCO_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, terminalFlashScript.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            DISCO_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, Discombobulator.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             DISCOMBOBULATOR_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
             DISCOMBOBULATOR_DAMAGE_LEVEL = ConfigEntry(topSection, "Initial level of dealing damage", 2, "Level of Discombobulator in which it starts dealing damage on enemies it stuns");
             DISCOMBOBULATOR_INITIAL_DAMAGE = ConfigEntry(topSection, "Initial amount of damage", 2, "Amount of damage when reaching the first level that unlocks damage on stun\nTo give an idea of what's too much, Eyeless Dogs have 12 health.");
             DISCOMBOBULATOR_DAMAGE_INCREASE = ConfigEntry(topSection, "Damage Increase on Purchase", 1, "Damage increase when purchasing later levels");
 
-            topSection = strongerScannerScript.UPGRADE_NAME;
+            topSection = BetterScanner.UPGRADE_NAME;
             BETTER_SCANNER_ENABLED = ConfigEntry(topSection, "Enable Better Scanner Upgrade", true, "Further scan distance, no LOS needed.");
             BETTER_SCANNER_PRICE = ConfigEntry(topSection, "Price of Better Scanner Upgrade", 650, "");
             SHIP_AND_ENTRANCE_DISTANCE_INCREASE = ConfigEntry(topSection, "Ship and Entrance node distance boost", 150f, "How much further away you can scan the ship and entrance.");
@@ -428,12 +430,12 @@ namespace MoreShipUpgrades.Misc
             BETTER_SCANNER_ENEMIES = ConfigEntry(topSection, "Scan enemies through walls on final upgrade", false, "If true the final upgrade will scan scrap AND enemies through walls.");
             VERBOSE_ENEMIES = ConfigEntry(topSection, "Verbose `scan enemies` command", true, "If false `scan enemies` only returns a count of outside and inside enemies, else it returns the count for each enemy type.");
 
-            topSection = exoskeletonScript.UPGRADE_NAME;
+            topSection = BackMuscles.UPGRADE_NAME;
             BACK_MUSCLES_ENABLED = ConfigEntry(topSection, "Enable Back Muscles Upgrade", true, "Reduce carry weight");
             BACK_MUSCLES_PRICE = ConfigEntry(topSection, "Price of Back Muscles Upgrade", 715, "");
             CARRY_WEIGHT_REDUCTION = ConfigEntry(topSection, "Carry Weight Multiplier", 0.5f, "Your carry weight is multiplied by this.");
             CARRY_WEIGHT_INCREMENT = ConfigEntry(topSection, "Carry Weight Increment", 0.1f, "Each upgrade subtracts this from the above coefficient.");
-            BACK_MUSCLES_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, exoskeletonScript.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            BACK_MUSCLES_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, BackMuscles.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             BACK_MUSCLES_INDIVIDUAL = ConfigEntry(topSection,BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
 
             topSection = "Interns";
@@ -441,11 +443,11 @@ namespace MoreShipUpgrades.Misc
             INTERN_PRICE = ConfigEntry(topSection, "Intern Price", 1000, "Default price to hire an intern.");
             INTERN_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
 
-            topSection = pagerScript.UPGRADE_NAME;
+            topSection = FastEncryption.UPGRADE_NAME;
             PAGER_ENABLED = ConfigEntry(topSection, "Enable Fast Encryption", true, "Upgrades the transmitter.");
             PAGER_PRICE = ConfigEntry(topSection, "Fast Encryption Price", 300, "");
 
-            topSection = lockSmithScript.UPGRADE_NAME;
+            topSection = LockSmith.UPGRADE_NAME;
             LOCKSMITH_ENABLED = ConfigEntry(topSection, "Enable Locksmith upgrade", true, "Allows you to pick locked doors by completing a minigame.");
             LOCKSMITH_PRICE = ConfigEntry(topSection, "Locksmith Price", 640, "Default price of Locksmith upgrade.");
             LOCKSMITH_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
@@ -454,18 +456,18 @@ namespace MoreShipUpgrades.Misc
             PEEPER_ENABLED = ConfigEntry(topSection, "Enable Peeper item", true, "An item that will stare at coilheads for you.");
             PEEPER_PRICE = ConfigEntry(topSection, "Peeper Price", 500, "Default price to purchase a Peeper.");
 
-            topSection = lightningRodScript.UPGRADE_NAME;
-            LIGHTNING_ROD_ENABLED = ConfigEntry(topSection, lightningRodScript.ENABLED_SECTION, lightningRodScript.ENABLED_DEFAULT, lightningRodScript.ENABLED_DESCRIPTION);
-            LIGHTNING_ROD_PRICE = ConfigEntry(topSection, lightningRodScript.PRICE_SECTION, lightningRodScript.PRICE_DEFAULT, "");
-            LIGHTNING_ROD_ACTIVE = ConfigEntry(topSection, lightningRodScript.ACTIVE_SECTION, lightningRodScript.ACTIVE_DEFAULT, lightningRodScript.ACTIVE_DESCRIPTION);
-            LIGHTNING_ROD_DIST = ConfigEntry(topSection, lightningRodScript.DIST_SECTION, lightningRodScript.DIST_DEFAULT, lightningRodScript.DIST_DESCRIPTION);
+            topSection = LightningRod.UPGRADE_NAME;
+            LIGHTNING_ROD_ENABLED = ConfigEntry(topSection, LightningRod.ENABLED_SECTION, LightningRod.ENABLED_DEFAULT, LightningRod.ENABLED_DESCRIPTION);
+            LIGHTNING_ROD_PRICE = ConfigEntry(topSection, LightningRod.PRICE_SECTION, LightningRod.PRICE_DEFAULT, "");
+            LIGHTNING_ROD_ACTIVE = ConfigEntry(topSection, LightningRod.ACTIVE_SECTION, LightningRod.ACTIVE_DEFAULT, LightningRod.ACTIVE_DESCRIPTION);
+            LIGHTNING_ROD_DIST = ConfigEntry(topSection, LightningRod.DIST_SECTION, LightningRod.DIST_DEFAULT, LightningRod.DIST_DESCRIPTION);
 
             topSection = "Walkie";
             WALKIE_ENABLED = ConfigEntry(topSection, "Enable the walkie talkie gps upgrade", true, "Holding a walkie talkie displays location.");
             WALKIE_PRICE = ConfigEntry(topSection, "Walkie GPS Price", 450, "Default price for upgrade.");
             WALKIE_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
 
-            topSection = hunterScript.UPGRADE_NAME;
+            topSection = Hunter.UPGRADE_NAME;
             HUNTER_ENABLED = ConfigEntry(topSection, "Enable the Hunter upgrade", true, "Collect and sell samples from dead enemies");
             HUNTER_PRICE = ConfigEntry(topSection, "Hunter price", 700, "Default price for upgrade.");
             HUNTER_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, "500,600", BaseUpgrade.PRICES_DESCRIPTION);
@@ -488,13 +490,13 @@ namespace MoreShipUpgrades.Misc
             THUMPER_SAMPLE_MINIMUM_VALUE = ConfigEntry(topSection, "Minimum scrap value of a Half sample", 80);
             THUMPER_SAMPLE_MAXIMUM_VALUE = ConfigEntry(topSection, "Maximum scrap value of a Half sample", 125);
 
-            topSection = playerHealthScript.UPGRADE_NAME;
-            PLAYER_HEALTH_ENABLED = ConfigEntry(topSection, playerHealthScript.ENABLED_SECTION, playerHealthScript.ENABLED_DEFAULT, playerHealthScript.ENABLED_DESCRIPTION);
-            PLAYER_HEALTH_PRICE = ConfigEntry(topSection, playerHealthScript.PRICE_SECTION, playerHealthScript.PRICE_DEFAULT, "");
+            topSection = Stimpack.UPGRADE_NAME;
+            PLAYER_HEALTH_ENABLED = ConfigEntry(topSection, Stimpack.ENABLED_SECTION, Stimpack.ENABLED_DEFAULT, Stimpack.ENABLED_DESCRIPTION);
+            PLAYER_HEALTH_PRICE = ConfigEntry(topSection, Stimpack.PRICE_SECTION, Stimpack.PRICE_DEFAULT, "");
             PLAYER_HEALTH_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            PLAYER_HEALTH_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, playerHealthScript.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK = ConfigEntry(topSection, playerHealthScript.ADDITIONAL_HEALTH_UNLOCK_SECTION, playerHealthScript.ADDITIONAL_HEALTH_UNLOCK_DEFAULT, playerHealthScript.ADDITIONAL_HEALTH_UNLOCK_DESCRIPTION);
-            PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT = ConfigEntry(topSection, playerHealthScript.ADDITIONAL_HEALTH_INCREMENT_SECTION, playerHealthScript.ADDITIONAL_HEALTH_INCREMENT_DEFAULT, playerHealthScript.ADDITIONAL_HEALTH_INCREMENT_DESCRIPTION);
+            PLAYER_HEALTH_UPGRADE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, Stimpack.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK = ConfigEntry(topSection, Stimpack.ADDITIONAL_HEALTH_UNLOCK_SECTION, Stimpack.ADDITIONAL_HEALTH_UNLOCK_DEFAULT, Stimpack.ADDITIONAL_HEALTH_UNLOCK_DESCRIPTION);
+            PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT = ConfigEntry(topSection, Stimpack.ADDITIONAL_HEALTH_INCREMENT_SECTION, Stimpack.ADDITIONAL_HEALTH_INCREMENT_DEFAULT, Stimpack.ADDITIONAL_HEALTH_INCREMENT_DESCRIPTION);
 
             topSection = "Medkit";
             MEDKIT_ENABLED = ConfigEntry(topSection, "Enable the medkit item", true, "Allows you to buy a medkit to heal yourself.");

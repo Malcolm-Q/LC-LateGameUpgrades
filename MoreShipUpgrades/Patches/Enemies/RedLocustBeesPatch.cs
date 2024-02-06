@@ -18,7 +18,7 @@ namespace MoreShipUpgrades.Patches.Enemies
         [HarmonyPatch(nameof(RedLocustBees.OnCollideWithPlayer))]
         public static IEnumerable<CodeInstruction> OnCollideWithPlayer_Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo beeReduceDamage = typeof(beekeeperScript).GetMethod(nameof(beekeeperScript.CalculateBeeDamage));
+            MethodInfo beeReduceDamage = typeof(Beekeeper).GetMethod(nameof(Beekeeper.CalculateBeeDamage));
             List<CodeInstruction> codes = instructions.ToList();
             bool found = false;
             for (int i = 0; i < codes.Count; i++)
@@ -49,7 +49,7 @@ namespace MoreShipUpgrades.Patches.Enemies
         [HarmonyPatch(nameof(RedLocustBees.SpawnHiveClientRpc))]
         public static IEnumerable<CodeInstruction> SpawnHiveClientRpcTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo beeIncreaseHiveValue = typeof(beekeeperScript).GetMethod(nameof(beekeeperScript.GetHiveScrapValue));
+            MethodInfo beeIncreaseHiveValue = typeof(Beekeeper).GetMethod(nameof(Beekeeper.GetHiveScrapValue));
 
             List<CodeInstruction> codes = instructions.ToList();
             bool found = false;

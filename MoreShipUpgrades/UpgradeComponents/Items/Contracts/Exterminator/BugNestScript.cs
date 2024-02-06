@@ -11,7 +11,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exterminator
         Animator anim;
         public GameObject loot;
         InteractTrigger trig;
-        AudioSource audio;
         int cleaning = 0;
 
         void Awake()

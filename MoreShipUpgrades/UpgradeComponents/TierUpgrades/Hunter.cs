@@ -1,15 +1,13 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class hunterScript : BaseUpgrade, IUpgradeWorldBuilding, ITierUpgradeDisplayInfo
+    class Hunter : TierUpgrade, IUpgradeWorldBuilding
     {
         public const string UPGRADE_NAME = "Hunter";
         internal const string WORLD_BUILDING_TEXT = "\n\nOn-the-job training program that teaches your crew how to properly collect lab-ready samples of blood," +
@@ -53,11 +51,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 tiers[i] = tiers[i - 1].Concat(tiersList[i].Split(",").Select(x => x.Trim())).ToArray();
             }
         }
-        void Start()
+        internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            DontDestroyOnLoad(gameObject);
-            Register();
+            base.Start();
         }
 
         public override void Increment()
@@ -65,9 +62,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             UpgradeBus.instance.huntLevel++;
         }
 
-        public override void load()
+        public override void Load()
         {
-            base.load();
+            base.Load();
 
             UpgradeBus.instance.hunter = true;
         }
@@ -77,10 +74,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
             UpgradeBus.instance.hunter = false;
             UpgradeBus.instance.huntLevel = 0;
-        }
-        public override void Register()
-        {
-            base.Register();
         }
 
         public static string GetHunterInfo(int level, int price)
@@ -105,7 +98,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             return WORLD_BUILDING_TEXT;
         }
 
-        public string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
+        public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
             string info = GetHunterInfo(1, initialPrice);
             for (int i = 0; i < maxLevels; i++)

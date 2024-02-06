@@ -1,35 +1,35 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
-using MoreShipUpgrades.UpgradeComponents.Interfaces;
+using MoreShipUpgrades.Misc.Upgrades;
 using Unity.Netcode;
-using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
-    public class pagerScript : BaseUpgrade, IOneTimeUpgradeDisplayInfo
+    class FastEncryption : OneTimeUpgrade
     {
         public static string UPGRADE_NAME = "Fast Encryption";
+        public static FastEncryption instance;
         private static LGULogger logger;
 
-        void Start()
+        internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
             logger = new LGULogger(upgradeName);
-            DontDestroyOnLoad(gameObject);
-            Register();
+            base.Start();
         }
 
-        public override void load()
+        public override void Load()
         {
-            base.load();
+            base.Load();
 
             UpgradeBus.instance.pager = true;
-            UpgradeBus.instance.pageScript = this;
+            instance = this;
         }
 
-        public override void Register()
+        public override void Unwind()
         {
-            base.Register();
+            base.Unwind();
+            UpgradeBus.instance.pager = false;
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -53,7 +53,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             HUDManager.Instance.PingHUDElement(HUDManager.Instance.Chat, 4f, 1f, 0.2f);
         }
 
-        public string GetDisplayInfo(int price = -1)
+        public override string GetDisplayInfo(int price = -1)
         {
             return "Unrestrict the transmitter";
         }

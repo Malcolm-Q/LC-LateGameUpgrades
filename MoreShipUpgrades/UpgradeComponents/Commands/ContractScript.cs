@@ -1,22 +1,16 @@
-﻿using MoreShipUpgrades.Misc;
+﻿using MoreShipUpgrades.Misc.Upgrades;
+using Unity.Netcode;
 
 namespace MoreShipUpgrades.UpgradeComponents.Commands
 {
-    public class ContractScript : BaseUpgrade
+    class ContractScript : NetworkBehaviour // Understand the purpose of this class better later
     {
-        public static string UPGRADE_NAME = "Contract";
+        public static string NAME = "Contract";
         public static int lastContractIndex = -1;
 
         void Start()
         {
-            upgradeName = UPGRADE_NAME;
             DontDestroyOnLoad(gameObject);
-            Register();
-        }
-
-        public override void Register()
-        {
-            base.Register();
         }
     }
 }

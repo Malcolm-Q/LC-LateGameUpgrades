@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Patches.NetworkManager

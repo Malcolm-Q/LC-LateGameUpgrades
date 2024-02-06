@@ -11,6 +11,7 @@ using Unity.Netcode;
 using UnityEngine;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 
 namespace MoreShipUpgrades.Patches.PlayerController
 {
@@ -30,7 +31,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
             if (!UpgradeBus.instance.nightVision) return;
 
-            UpgradeBus.instance.UpgradeObjects[nightVisionScript.UPGRADE_NAME].GetComponent<nightVisionScript>().DisableOnClient();
+            UpgradeBus.instance.UpgradeObjects[NightVision.UPGRADE_NAME].GetComponent<NightVision>().DisableOnClient();
             if (!UpgradeBus.instance.cfg.NIGHT_VISION_DROP_ON_DEATH) return;
             LGUStore.instance.SpawnNightVisionItemOnDeathServerRpc(__instance.transform.position);
         }
@@ -39,8 +40,8 @@ namespace MoreShipUpgrades.Patches.PlayerController
         [HarmonyTranspiler]
         public static IEnumerable<CodeInstruction> DamagePlayerTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo maximumHealthMethod = typeof(playerHealthScript).GetMethod(nameof(playerHealthScript.CheckForAdditionalHealth));
-            MethodInfo boomboxDefenseMethod = typeof(BeatScript).GetMethod(nameof(BeatScript.CalculateDefense));
+            MethodInfo maximumHealthMethod = typeof(Stimpack).GetMethod(nameof(Stimpack.CheckForAdditionalHealth));
+            MethodInfo boomboxDefenseMethod = typeof(SickBeats).GetMethod(nameof(SickBeats.CalculateDefense));
 
             List<CodeInstruction> codes = instructions.ToList();
             /*
@@ -108,7 +109,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         [HarmonyPatch(nameof(PlayerControllerB.PlayerHitGroundEffects))]
         private static IEnumerable<CodeInstruction> PlayerHitGroundEffectsTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo reduceFallDamageMethod = typeof(strongLegsScript).GetMethod(nameof(strongLegsScript.ReduceFallDamage));
+            MethodInfo reduceFallDamageMethod = typeof(StrongLegs).GetMethod(nameof(StrongLegs.ReduceFallDamage));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
             index = Tools.FindInteger(index, ref codes, findValue: 100, addCode: reduceFallDamageMethod, errorMessage: "Couldn't find 100 fall damage");
@@ -136,7 +137,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         [HarmonyPatch(nameof(PlayerControllerB.BeginGrabObject))]
         public static IEnumerable<CodeInstruction> BeginGrabObjectTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo affectWeight = typeof(exoskeletonScript).GetMethod(nameof(exoskeletonScript.DecreasePossibleWeight));
+            MethodInfo affectWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreasePossibleWeight));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
             index = Tools.FindSub(index, ref codes, addCode: affectWeight, errorMessage: "Couldn't find item weight");
@@ -148,7 +149,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         [HarmonyPatch(nameof(PlayerControllerB.GrabObjectClientRpc))]
         public static IEnumerable<CodeInstruction> GrabObjectClientRpcTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo affectWeight = typeof(exoskeletonScript).GetMethod(nameof(exoskeletonScript.DecreasePossibleWeight));
+            MethodInfo affectWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreasePossibleWeight));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
             index = Tools.FindSub(index, ref codes, addCode: affectWeight, errorMessage: "Couldn't find item weight");
@@ -173,7 +174,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         [HarmonyPatch(nameof(PlayerControllerB.DestroyItemInSlot))]
         public static IEnumerable<CodeInstruction> DestroyItemInSlotTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo affectWeight = typeof(exoskeletonScript).GetMethod(nameof(exoskeletonScript.DecreasePossibleWeight));
+            MethodInfo affectWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreasePossibleWeight));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
             index = Tools.FindSub(index, ref codes, addCode: affectWeight, errorMessage: "Couldn't find item weight");
@@ -185,7 +186,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         [HarmonyPatch(nameof(PlayerControllerB.DespawnHeldObjectOnClient))]
         public static IEnumerable<CodeInstruction> DespawnHeldObjectOnClientTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo affectWeight = typeof(exoskeletonScript).GetMethod(nameof(exoskeletonScript.DecreasePossibleWeight));
+            MethodInfo affectWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreasePossibleWeight));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
             index = Tools.FindSub(index, ref codes, addCode: affectWeight, errorMessage: "Couldn't find item weight");
@@ -196,7 +197,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         [HarmonyPatch(nameof(PlayerControllerB.SetObjectAsNoLongerHeld))]
         public static IEnumerable<CodeInstruction> SetObjectAsNoLongerHeldTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo affectWeight = typeof(exoskeletonScript).GetMethod(nameof(exoskeletonScript.DecreasePossibleWeight));
+            MethodInfo affectWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreasePossibleWeight));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
             index = Tools.FindSub(index, ref codes, addCode: affectWeight, errorMessage: "Couldn't find item weight");
@@ -207,7 +208,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         [HarmonyPatch(nameof(PlayerControllerB.PlaceGrabbableObject))]
         public static IEnumerable<CodeInstruction> PlaceGrabbableObjectTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo affectWeight = typeof(exoskeletonScript).GetMethod(nameof(exoskeletonScript.DecreasePossibleWeight));
+            MethodInfo affectWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreasePossibleWeight));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
             index = Tools.FindSub(index, ref codes, addCode: affectWeight, errorMessage: "Couldn't find item weight");
@@ -226,7 +227,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             {
                 if (!UpgradeBus.instance.EffectsActive) return; // No need to do anything
                 UpgradeBus.instance.EffectsActive = result;
-                BeatScript.HandlePlayerEffects(__instance);
+                SickBeats.HandlePlayerEffects(__instance);
                 return; // Clean all effects from Sick Beats since the player's dead
             }
             foreach (BoomboxItem boom in UpgradeBus.instance.boomBoxes)
@@ -242,14 +243,14 @@ namespace MoreShipUpgrades.Patches.PlayerController
             if (result == UpgradeBus.instance.EffectsActive) return;
 
             UpgradeBus.instance.EffectsActive = result;
-            BeatScript.HandlePlayerEffects(__instance);
+            SickBeats.HandlePlayerEffects(__instance);
         }
 
         [HarmonyTranspiler]
         [HarmonyPatch(nameof(PlayerControllerB.LateUpdate))]
         private static IEnumerable<CodeInstruction> LateUpdateTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo biggerLungsRegenMethod = typeof(biggerLungScript).GetMethod(nameof(biggerLungScript.ApplyPossibleIncreasedStaminaRegen));
+            MethodInfo biggerLungsRegenMethod = typeof(BiggerLungs).GetMethod(nameof(BiggerLungs.ApplyPossibleIncreasedStaminaRegen));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
             index = Tools.FindMul(index, ref codes, skip: true, errorMessage: "Couldn't skip first mul instruction");
@@ -267,7 +268,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         [HarmonyPatch(nameof(PlayerControllerB.Jump_performed))]
         private static IEnumerable<CodeInstruction> JumpPerformedTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo biggerLungsReduceJumpCost = typeof(biggerLungScript).GetMethod(nameof(biggerLungScript.ApplyPossibleReducedJumpStaminaCost));
+            MethodInfo biggerLungsReduceJumpCost = typeof(BiggerLungs).GetMethod(nameof(BiggerLungs.ApplyPossibleReducedJumpStaminaCost));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
             index = Tools.FindFloat(index, ref codes, findValue: 0.08f, addCode: biggerLungsReduceJumpCost, errorMessage: "Couldn't find jump stamina cost");
@@ -290,7 +291,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
         private static IEnumerable<CodeInstruction> AddReduceNoiseRangeFunctionToPlayerFootsteps(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo runningShoesReduceNoiseRange = typeof(runningShoeScript).GetMethod(nameof(runningShoeScript.ApplyPossibleReducedNoiseRange));
+            MethodInfo runningShoesReduceNoiseRange = typeof(RunningShoes).GetMethod(nameof(RunningShoes.ApplyPossibleReducedNoiseRange));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
             index = Tools.FindFloat(index, ref codes, findValue: 22, addCode: runningShoesReduceNoiseRange, errorMessage: "Couldn't find footstep noise");

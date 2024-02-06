@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -15,7 +16,7 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
             if (!UpgradeBus.instance.DestroyTraps || __instance.gameObject.layer != LayerMask.NameToLayer("MapHazards")) { return true; }
             if (UpgradeBus.instance.cfg.DESTROY_TRAP)
             {
-                UpgradeBus.instance.trapHandler.ReqDestroyObjectServerRpc(new NetworkObjectReference(__instance.gameObject.transform.parent.gameObject.GetComponent<NetworkObject>()));
+                MalwareBroadcaster.instance.ReqDestroyObjectServerRpc(new NetworkObjectReference(__instance.gameObject.transform.parent.gameObject.GetComponent<NetworkObject>()));
                 return false;
             }
             if (!___inCooldown)

@@ -1,15 +1,12 @@
-﻿using GameNetcodeStuff;
-using MoreShipUpgrades.Managers;
+﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Numerics;
-using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class proteinPowderScript : BaseUpgrade, IUpgradeWorldBuilding, ITierUpgradeDisplayInfo
+    internal class ProteinPowder : TierUpgrade, IUpgradeWorldBuilding
     {
         public const string UPGRADE_NAME = "Protein Powder";
         internal const string WORLD_BUILDING_TEXT = "\n\nMultivitamins, creatine, and military surplus stimulants blended together and repackaged," +
@@ -39,11 +36,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public static float CRIT_CHANCE_DEFAULT = 0.01f;
         public static string CRIT_CHANCE_DESCRIPTION = $"This value is only valid when maxed out {UPGRADE_NAME}. Any previous levels will not apply crit.";
 
-        void Start()
+        internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            DontDestroyOnLoad(gameObject);
-            Register();
+            base.Start();
         }
 
         public override void Increment()
@@ -51,18 +47,12 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             UpgradeBus.instance.proteinLevel++;
         }
 
-        public override void load()
+        public override void Load()
         {
-            base.load();
+            base.Load();
 
             UpgradeBus.instance.proteinPowder = true;
         }
-
-        public override void Register()
-        {
-            base.Register();
-        }
-
         public override void Unwind()
         {
             base.Unwind();
@@ -93,7 +83,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             return WORLD_BUILDING_TEXT;
         }
 
-        public string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
+        public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
             Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.PROTEIN_UNLOCK_FORCE + 1 + (UpgradeBus.instance.cfg.PROTEIN_INCREMENT * level);
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);

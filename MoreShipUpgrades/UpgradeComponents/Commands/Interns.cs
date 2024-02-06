@@ -1,27 +1,21 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace MoreShipUpgrades.UpgradeComponents.Commands
 {
-    public class defibScript : BaseUpgrade
+    public class Interns : NetworkBehaviour
     {
         public static string UPGRADE_NAME = "Interns";
+        public static Interns instance;
         void Start()
         {
-            upgradeName = UPGRADE_NAME;
             DontDestroyOnLoad(gameObject);
-            Register();
-            UpgradeBus.instance.internScript = this;
-        }
-
-        public override void Register()
-        {
-            base.Register();
+            instance = this;
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -51,7 +45,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
         {
             PlayerControllerB player = StartOfRound.Instance.mapScreen.targetedPlayer;
             bool playerRegistered = UpgradeBus.instance.playerHealthLevels.ContainsKey(player.playerSteamId);
-            int health = playerRegistered ? playerHealthScript.GetHealthFromPlayer(100, player.playerSteamId) : 100;
+            int health = playerRegistered ? Stimpack.GetHealthFromPlayer(100, player.playerSteamId) : 100;
             player.ResetPlayerBloodObjects(player.isPlayerDead);
 
             if (player.isPlayerDead || player.isPlayerControlled)

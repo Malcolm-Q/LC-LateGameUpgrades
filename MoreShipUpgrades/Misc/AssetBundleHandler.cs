@@ -2,6 +2,7 @@
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -28,26 +29,26 @@ namespace MoreShipUpgrades.Misc
         };
         private static Dictionary<string, string> assetPaths = new Dictionary<string, string>()
         {
-            { beekeeperScript.UPGRADE_NAME, root+"beekeeper.prefab" },
-            { BeatScript.UPGRADE_NAME, root+"SickBeats.prefab" },
-            { ContractScript.UPGRADE_NAME, root+"Contract.prefab" },
-            { proteinPowderScript.UPGRADE_NAME, root+"ProteinPowder.prefab" },
-            { biggerLungScript.UPGRADE_NAME, root+"BiggerLungs.prefab" },
-            { runningShoeScript.UPGRADE_NAME, root+"runningShoes.prefab" },
-            { strongLegsScript.UPGRADE_NAME, root+"strongLegs.prefab" },
-            { trapDestroyerScript.UPGRADE_NAME, root+"destructiveCodes.prefab" },
-            { nightVisionScript.UPGRADE_NAME, root+"nightVision.prefab" },
-            { terminalFlashScript.UPGRADE_NAME, root+"terminalFlash.prefab" },
-            { hunterScript.UPGRADE_NAME, root+"Hunter.prefab" },
-            { strongerScannerScript.UPGRADE_NAME, root+"strongScanner.prefab" },
-            { lightningRodScript.UPGRADE_NAME, root+"LightningRod.prefab" },
-            { walkieScript.UPGRADE_NAME, root+"walkieUpgrade.prefab" },
-            { exoskeletonScript.UPGRADE_NAME, root+"exoskeleton.prefab" },
+            { Beekeeper.UPGRADE_NAME, root+"beekeeper.prefab" },
+            { SickBeats.UPGRADE_NAME, root+"SickBeats.prefab" },
+            { ContractScript.NAME, root+"Contract.prefab" },
+            { ProteinPowder.UPGRADE_NAME, root+"ProteinPowder.prefab" },
+            { BiggerLungs.UPGRADE_NAME, root+"BiggerLungs.prefab" },
+            { RunningShoes.UPGRADE_NAME, root+"runningShoes.prefab" },
+            { StrongLegs.UPGRADE_NAME, root+"strongLegs.prefab" },
+            { MalwareBroadcaster.UPGRADE_NAME, root+"destructiveCodes.prefab" },
+            { NightVision.UPGRADE_NAME, root+"nightVision.prefab" },
+            { Discombobulator.UPGRADE_NAME, root+"terminalFlash.prefab" },
+            { Hunter.UPGRADE_NAME, root+"Hunter.prefab" },
+            { BetterScanner.UPGRADE_NAME, root+"strongScanner.prefab" },
+            { LightningRod.UPGRADE_NAME, root+"LightningRod.prefab" },
+            { WalkieGPS.UPGRADE_NAME, root+"walkieUpgrade.prefab" },
+            { BackMuscles.UPGRADE_NAME, root+"exoskeleton.prefab" },
             { "Interns", root+"Intern.prefab" },
-            { pagerScript.UPGRADE_NAME, root+"Pager.prefab" },
-            { lockSmithScript.UPGRADE_NAME, root+"LockSmith.prefab" },
-            { playerHealthScript.UPGRADE_NAME, root+"PlayerHealth.prefab" },
-            { ExtendDeadlineScript.UPGRADE_NAME, root+"ExtendDeadline.prefab" },
+            { FastEncryption.UPGRADE_NAME, root+"Pager.prefab" },
+            { LockSmith.UPGRADE_NAME, root+"LockSmith.prefab" },
+            { Stimpack.UPGRADE_NAME, root+"PlayerHealth.prefab" },
+            { ExtendDeadlineScript.NAME, root+"ExtendDeadline.prefab" },
             { DoorsHydraulicsBattery.UPGRADE_NAME, root+"DoorsHydraulicsBattery.prefab" },
             { ScrapInsurance.COMMAND_NAME, root+"ScrapInsurance.prefab" },
 

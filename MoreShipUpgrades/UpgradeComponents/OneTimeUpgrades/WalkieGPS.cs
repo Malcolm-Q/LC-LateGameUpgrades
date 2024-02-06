@@ -1,5 +1,5 @@
 ﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System;
 using System.Security.Cryptography;
@@ -8,18 +8,17 @@ using UnityEngine.UI;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
-    public class walkieScript : BaseUpgrade, IOneTimeUpgradeDisplayInfo
+    class WalkieGPS : OneTimeUpgrade
     {
         public static string UPGRADE_NAME = "Walkie GPS";
+        public static WalkieGPS instance;
 
         private GameObject canvas;
         private Text x, y, z, time;
-        void Start()
+        internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            DontDestroyOnLoad(gameObject);
-            Register();
-            UpgradeBus.instance.walkieHandler = this;
+            base.Start();
             canvas = transform.GetChild(0).gameObject;
             x = canvas.transform.GetChild(0).GetComponent<Text>();
             y = canvas.transform.GetChild(1).GetComponent<Text>();
@@ -27,16 +26,12 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             time = canvas.transform.GetChild(3).GetComponent<Text>();
         }
 
-        public override void load()
+        public override void Load()
         {
-            base.load();
+            base.Load();
 
             UpgradeBus.instance.walkies = true;
-        }
-
-        public override void Register()
-        {
-            base.Register();
+            instance = this;
         }
 
         public override void Unwind()
@@ -90,7 +85,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             canvas.SetActive(false);
         }
 
-        public string GetDisplayInfo(int price = -1)
+        public override string GetDisplayInfo(int price = -1)
         {
             return "Displays your location and time when holding a walkie talkie.\nEspecially useful for fog.";
         }

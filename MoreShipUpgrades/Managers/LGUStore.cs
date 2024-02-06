@@ -12,6 +12,8 @@ using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.Commands;
+using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -26,46 +28,46 @@ namespace MoreShipUpgrades.Managers
 
         private static Dictionary<string, Func<SaveInfo, bool>> conditions = new Dictionary<string, Func<SaveInfo, bool>>
         {
-            {trapDestroyerScript.UPGRADE_NAME, saveInfo => saveInfo.DestroyTraps },
-            {terminalFlashScript.UPGRADE_NAME, SaveInfo => SaveInfo.terminalFlash },
-            {biggerLungScript.UPGRADE_NAME, SaveInfo => SaveInfo.biggerLungs },
-            {runningShoeScript.UPGRADE_NAME, SaveInfo => SaveInfo.runningShoes },
-            {nightVisionScript.UPGRADE_NAME, SaveInfo => SaveInfo.nightVision },
-            {strongLegsScript.UPGRADE_NAME, SaveInfo => SaveInfo.strongLegs },
-            {strongerScannerScript.UPGRADE_NAME, SaveInfo => SaveInfo.scannerUpgrade },
-            {beekeeperScript.UPGRADE_NAME, SaveInfo => SaveInfo.beekeeper },
-            {exoskeletonScript.UPGRADE_NAME, SaveInfo => SaveInfo.exoskeleton },
-            {lockSmithScript.UPGRADE_NAME, SaveInfo => SaveInfo.lockSmith },
-            {walkieScript.UPGRADE_NAME, SaveInfo => SaveInfo.walkies },
-            {proteinPowderScript.UPGRADE_NAME, SaveInfo => SaveInfo.proteinPowder },
-            {pagerScript.UPGRADE_NAME, SaveInfo => SaveInfo.pager },
-            {hunterScript.UPGRADE_NAME, SaveInfo => SaveInfo.hunter },
-            {lightningRodScript.UPGRADE_NAME, SaveInfo => SaveInfo.lightningRod },
-            {playerHealthScript.UPGRADE_NAME, SaveInfo => SaveInfo.playerHealth },
+            {MalwareBroadcaster.UPGRADE_NAME, saveInfo => saveInfo.DestroyTraps },
+            {Discombobulator.UPGRADE_NAME, SaveInfo => SaveInfo.terminalFlash },
+            {BiggerLungs.UPGRADE_NAME, SaveInfo => SaveInfo.biggerLungs },
+            {RunningShoes.UPGRADE_NAME, SaveInfo => SaveInfo.runningShoes },
+            {NightVision.UPGRADE_NAME, SaveInfo => SaveInfo.nightVision },
+            {StrongLegs.UPGRADE_NAME, SaveInfo => SaveInfo.strongLegs },
+            {BetterScanner.UPGRADE_NAME, SaveInfo => SaveInfo.scannerUpgrade },
+            {Beekeeper.UPGRADE_NAME, SaveInfo => SaveInfo.beekeeper },
+            {BackMuscles.UPGRADE_NAME, SaveInfo => SaveInfo.exoskeleton },
+            {LockSmith.UPGRADE_NAME, SaveInfo => SaveInfo.lockSmith },
+            {WalkieGPS.UPGRADE_NAME, SaveInfo => SaveInfo.walkies },
+            {ProteinPowder.UPGRADE_NAME, SaveInfo => SaveInfo.proteinPowder },
+            {FastEncryption.UPGRADE_NAME, SaveInfo => SaveInfo.pager },
+            {Hunter.UPGRADE_NAME, SaveInfo => SaveInfo.hunter },
+            {LightningRod.UPGRADE_NAME, SaveInfo => SaveInfo.lightningRod },
+            {Stimpack.UPGRADE_NAME, SaveInfo => SaveInfo.playerHealth },
             {DoorsHydraulicsBattery.UPGRADE_NAME, SaveInfo => SaveInfo.doorsHydraulicsBattery },
-            {BeatScript.UPGRADE_NAME, SaveInfo => SaveInfo.sickBeats }
+            {SickBeats.UPGRADE_NAME, SaveInfo => SaveInfo.sickBeats }
         };
 
         private static Dictionary<string, Func<SaveInfo, int>> levelConditions = new Dictionary<string, Func<SaveInfo, int>>
         {
-            { trapDestroyerScript.UPGRADE_NAME, saveInfo => 0 },
-            { terminalFlashScript.UPGRADE_NAME, saveInfo => saveInfo.discoLevel },
-            { biggerLungScript.UPGRADE_NAME, saveInfo => saveInfo.lungLevel },
-            { runningShoeScript.UPGRADE_NAME, saveInfo => saveInfo.runningLevel },
-            { nightVisionScript.UPGRADE_NAME, saveInfo => saveInfo.nightVisionLevel },
-            { strongLegsScript.UPGRADE_NAME, saveInfo => saveInfo.legLevel },
-            { strongerScannerScript.UPGRADE_NAME, saveInfo => saveInfo.scanLevel },
-            { beekeeperScript.UPGRADE_NAME, saveInfo => saveInfo.beeLevel },
-            { exoskeletonScript.UPGRADE_NAME, saveInfo => saveInfo.backLevel },
-            { lockSmithScript.UPGRADE_NAME, saveInfo => 0 },
-            { walkieScript.UPGRADE_NAME, saveInfo => 0 },
-            { proteinPowderScript.UPGRADE_NAME, SaveInfo => SaveInfo.proteinLevel },
-            { pagerScript.UPGRADE_NAME, SaveInfo => 0 },
-            { hunterScript.UPGRADE_NAME, SaveInfo => SaveInfo.huntLevel },
-            { lightningRodScript.UPGRADE_NAME, saveInfo => 0},
-            { playerHealthScript.UPGRADE_NAME, saveInfo => saveInfo.playerHealthLevel },
+            { MalwareBroadcaster.UPGRADE_NAME, saveInfo => 0 },
+            { Discombobulator.UPGRADE_NAME, saveInfo => saveInfo.discoLevel },
+            { BiggerLungs.UPGRADE_NAME, saveInfo => saveInfo.lungLevel },
+            { RunningShoes.UPGRADE_NAME, saveInfo => saveInfo.runningLevel },
+            { NightVision.UPGRADE_NAME, saveInfo => saveInfo.nightVisionLevel },
+            { StrongLegs.UPGRADE_NAME, saveInfo => saveInfo.legLevel },
+            { BetterScanner.UPGRADE_NAME, saveInfo => saveInfo.scanLevel },
+            { Beekeeper.UPGRADE_NAME, saveInfo => saveInfo.beeLevel },
+            { BackMuscles.UPGRADE_NAME, saveInfo => saveInfo.backLevel },
+            { LockSmith.UPGRADE_NAME, saveInfo => 0 },
+            { WalkieGPS.UPGRADE_NAME, saveInfo => 0 },
+            { ProteinPowder.UPGRADE_NAME, SaveInfo => SaveInfo.proteinLevel },
+            { FastEncryption.UPGRADE_NAME, SaveInfo => 0 },
+            { Hunter.UPGRADE_NAME, SaveInfo => SaveInfo.huntLevel },
+            { LightningRod.UPGRADE_NAME, saveInfo => 0},
+            { Stimpack.UPGRADE_NAME, saveInfo => saveInfo.playerHealthLevel },
             { DoorsHydraulicsBattery.UPGRADE_NAME, saveInfo => saveInfo.doorsHydraulicsBatteryLevel},
-            { BeatScript.UPGRADE_NAME, saveInfo => 0 },
+            { SickBeats.UPGRADE_NAME, saveInfo => 0 },
         };
         private bool retrievedCfg;
         private bool receivedSave;
@@ -154,7 +156,7 @@ namespace MoreShipUpgrades.Managers
             }
             logger.LogInfo($"Successfully spawned {i} upgrade objects.");
 
-            GameObject intern = Instantiate(AssetBundleHandler.GetPerkGameObject(defibScript.UPGRADE_NAME));
+            GameObject intern = Instantiate(AssetBundleHandler.GetPerkGameObject(Interns.UPGRADE_NAME));
             intern.GetComponent<NetworkObject>().Spawn();
 
         }
@@ -431,7 +433,7 @@ namespace MoreShipUpgrades.Managers
                     customNode.Unlocked = true;
                     levelConditions.TryGetValue(customNode.Name, out var level);
                     customNode.CurrentUpgrade = level.Invoke(saveInfo);
-                    UpgradeBus.instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>().load();
+                    UpgradeBus.instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>().Load();
                 }
             }
         }
@@ -457,13 +459,13 @@ namespace MoreShipUpgrades.Managers
             }
             if(!increment)
             {
-                UpgradeBus.instance.UpgradeObjects[name].GetComponent<BaseUpgrade>().load(); 
+                UpgradeBus.instance.UpgradeObjects[name].GetComponent<BaseUpgrade>().Load(); 
                 logger.LogInfo($"First purchase, executing BaseUpgrade.load()");
             }
             else 
             {
-                UpgradeBus.instance.UpgradeObjects[name].GetComponent<BaseUpgrade>().Increment(); 
-                logger.LogInfo($"upgrade already unlocked, executing BaseUpgrade.Increment()");
+                UpgradeBus.instance.UpgradeObjects[name].GetComponent<TierUpgrade>().Increment(); 
+                logger.LogInfo($"upgrade already unlocked, executing TierUpgrade.Increment()");
             }
             saveInfo = new SaveInfo();
             UpdateLGUSaveServerRpc(playerID, JsonConvert.SerializeObject(saveInfo));
@@ -480,7 +482,7 @@ namespace MoreShipUpgrades.Managers
         private void EnableNightVisionClientRpc()
         {
             logger.LogInfo("Request to enable night vision on this client received.");
-            UpgradeBus.instance.UpgradeObjects[nightVisionScript.UPGRADE_NAME].GetComponent<nightVisionScript>().EnableOnClient();
+            UpgradeBus.instance.UpgradeObjects[NightVision.UPGRADE_NAME].GetComponent<NightVision>().EnableOnClient();
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -506,13 +508,13 @@ namespace MoreShipUpgrades.Managers
             }
             if(!increment)
             {
-                UpgradeBus.instance.UpgradeObjects[name].GetComponent<BaseUpgrade>().load(); 
+                UpgradeBus.instance.UpgradeObjects[name].GetComponent<BaseUpgrade>().Load(); 
                 logger.LogInfo($"First purchase, executing BaseUpgrade.load()");
             }
             else 
             {
-                UpgradeBus.instance.UpgradeObjects[name].GetComponent<BaseUpgrade>().Increment(); 
-                logger.LogInfo($"upgrade already unlocked, executing BaseUpgrade.Increment()");
+                UpgradeBus.instance.UpgradeObjects[name].GetComponent<TierUpgrade>().Increment(); 
+                logger.LogInfo($"upgrade already unlocked, executing TierUpgrade.Increment()");
             }
             saveInfo = new SaveInfo();
             UpdateLGUSaveServerRpc(playerID, JsonConvert.SerializeObject(saveInfo));
@@ -528,7 +530,7 @@ namespace MoreShipUpgrades.Managers
         public void CoordinateInterceptionClientRpc()
         {
             logger.LogInfo("Setting lighting to intercepted on this client...");
-            lightningRodScript.instance.LightningIntercepted = true;
+            LightningRod.instance.LightningIntercepted = true;
             FindObjectOfType<StormyWeather>(true).staticElectricityParticle.gameObject.SetActive(false);
         }
 

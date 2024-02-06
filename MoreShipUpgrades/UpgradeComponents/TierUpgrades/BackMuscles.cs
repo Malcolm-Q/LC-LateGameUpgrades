@@ -1,13 +1,14 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class exoskeletonScript : BaseUpgrade, IUpgradeWorldBuilding, ITierUpgradeDisplayInfo
+    class BackMuscles : TierUpgrade, IUpgradeWorldBuilding
     {
         public const string UPGRADE_NAME = "Back Muscles";
         public static string PRICES_DEFAULT = "600,700,800";
@@ -16,11 +17,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             " Sardonically called the 'Back Muscles Upgrade' by some. Comes with a user manual, which mostly contains minimalistic ads for girdle maintenance contractors." +
             " Most of the phone numbers don't work anymore.\n\n";
 
-        void Start()
+        internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            DontDestroyOnLoad(gameObject);
-            Register();
+            base.Start();
         }
 
         public override void Increment()
@@ -29,9 +29,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             UpdatePlayerWeight();
         }
 
-        public override void load()
+        public override void Load()
         {
-            base.load();
+            base.Load();
             UpgradeBus.instance.exoskeleton = true;
             UpdatePlayerWeight();
         }
@@ -41,10 +41,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             UpgradeBus.instance.exoskeleton = false;
             UpgradeBus.instance.backLevel = 0;
             UpdatePlayerWeight();
-        }
-        public override void Register()
-        {
-            base.Register();
         }
 
         public static float DecreasePossibleWeight(float defaultWeight)
@@ -74,7 +70,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             return string.Format(WORLD_BUILDING_TEXT, shareStatus ? "departments" : "employees");
         }
 
-        public string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
+        public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
             Func<int, float> infoFunction = level => (UpgradeBus.instance.cfg.CARRY_WEIGHT_REDUCTION - (level * UpgradeBus.instance.cfg.CARRY_WEIGHT_INCREMENT)) * 100;
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);

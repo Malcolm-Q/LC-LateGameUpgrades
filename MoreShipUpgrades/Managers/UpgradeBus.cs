@@ -1,11 +1,13 @@
 ﻿using GameNetcodeStuff;
 using LethalLib.Modules;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
@@ -68,12 +70,6 @@ namespace MoreShipUpgrades.Managers
         public Dictionary<string, List<string>> fakeBombOrders = new Dictionary<string, List<string>>();
         public Dictionary<string, float> SaleData = new Dictionary<string, float>();
 
-        public trapDestroyerScript trapHandler = null;
-        public terminalFlashScript flashScript = null;
-        public lockSmithScript lockScript = null;
-        public defibScript internScript = null;
-        public walkieScript walkieHandler = null;
-
         public Color nightVisColor;
         public AudioClip flashNoise;
         public GameObject modStorePrefab;
@@ -104,7 +100,6 @@ namespace MoreShipUpgrades.Managers
 
         public AssetBundle UpgradeAssets;
         internal bool pager;
-        internal pagerScript pageScript;
 
         public bool insurance;
 
@@ -170,7 +165,7 @@ namespace MoreShipUpgrades.Managers
         public void ResetAllValues(bool wipeObjRefs = true)
         {
             ResetPlayerAttributes();
-            if(IsHost || IsServer) ResetShipAttributesServerRpc();
+            if(IsHost || IsServer) ResetShipAttributesClientRpc();
             EffectsActive = false;
             insurance = false;
             DestroyTraps = false;
@@ -211,15 +206,15 @@ namespace MoreShipUpgrades.Managers
             alteredWeight = 1f;
             if (wipeObjRefs) {
                 UpgradeObjects = new Dictionary<string, GameObject>(); 
-                trapHandler = null;
-                flashScript = null;
-                pageScript = null;
+                MalwareBroadcaster.instance = null;
+                Discombobulator.instance = null;
+                FastEncryption.instance = null;
             }
             foreach(CustomTerminalNode node in terminalNodes)
             {
                 node.Unlocked = false;
                 node.CurrentUpgrade = 0;
-                if(node.Name == nightVisionScript.UPGRADE_NAME) { node.Unlocked = true; }
+                if(node.Name == NightVision.UPGRADE_NAME) { node.Unlocked = true; }
             }
 
         }
@@ -229,10 +224,10 @@ namespace MoreShipUpgrades.Managers
             if (player == null) return; // Disconnecting the game
 
             logger.LogDebug($"Resetting {player.playerUsername}'s attributes");
-            if (cfg.RUNNING_SHOES_ENABLED && runningShoes) runningShoeScript.ResetRunningShoesBuff(ref player);
-            if (cfg.BIGGER_LUNGS_ENABLED && biggerLungs) biggerLungScript.ResetBiggerLungsBuff(ref player);
-            if (cfg.STRONG_LEGS_ENABLED && strongLegs) strongLegsScript.ResetStrongLegsBuff(ref player);
-            if (cfg.PLAYER_HEALTH_ENABLED && playerHealth) playerHealthScript.ResetStimpackBuff(ref player);
+            if (cfg.RUNNING_SHOES_ENABLED && runningShoes) UpgradeObjects[RunningShoes.UPGRADE_NAME].GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute(ref runningShoes, ref runningLevel);
+            if (cfg.BIGGER_LUNGS_ENABLED && biggerLungs) UpgradeObjects[BiggerLungs.UPGRADE_NAME].GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute(ref biggerLungs, ref lungLevel);
+            if (cfg.STRONG_LEGS_ENABLED && strongLegs) UpgradeObjects[StrongLegs.UPGRADE_NAME].GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute(ref strongLegs, ref legLevel);
+            if (cfg.PLAYER_HEALTH_ENABLED && playerHealth) UpgradeObjects[Stimpack.UPGRADE_NAME].GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute(ref playerHealth, ref playerHealthLevel);
         }
 
         [ClientRpc]
@@ -242,13 +237,7 @@ namespace MoreShipUpgrades.Managers
             if (shipDoors == null) return; // Very edge case
 
             logger.LogDebug($"Resetting the ship's attributes");
-            if (cfg.DOOR_HYDRAULICS_BATTERY_ENABLED && doorsHydraulicsBattery) DoorsHydraulicsBattery.ResetDoorsHydraulicsBattery(ref shipDoors);
-        }
-
-        [ServerRpc]
-        private void ResetShipAttributesServerRpc()
-        {
-            ResetShipAttributesClientRpc();
+            if (cfg.DOOR_HYDRAULICS_BATTERY_ENABLED && doorsHydraulicsBattery) UpgradeObjects[Stimpack.UPGRADE_NAME].GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute(ref doorsHydraulicsBattery, ref doorsHydraulicsBatteryLevel);
         }
 
         internal void GenerateSales(int seed = -1) // TODO: Save sales
@@ -472,7 +461,7 @@ namespace MoreShipUpgrades.Managers
         private void SetupSickBeatsTerminalNode()
         {
             SetupOneTimeTerminalNode(
-                BeatScript.UPGRADE_NAME,
+                SickBeats.UPGRADE_NAME,
                 cfg.SHARED_UPGRADES ? true : !cfg.BEATS_INDIVIDUAL,
                 cfg.BEATS_ENABLED,
                 cfg.BEATS_PRICE);
@@ -481,7 +470,7 @@ namespace MoreShipUpgrades.Managers
         private void SetupBeekeperTerminalNode()
         {
             SetupMultiplePurchasableTerminalNode(
-                beekeeperScript.UPGRADE_NAME,
+                Beekeeper.UPGRADE_NAME,
                 cfg.SHARED_UPGRADES ? true : !cfg.BEEKEEPER_INDIVIDUAL,
                 cfg.BEEKEEPER_ENABLED,
                 cfg.BEEKEEPER_PRICE,
@@ -490,7 +479,7 @@ namespace MoreShipUpgrades.Managers
 
         private void SetupProteinPowderTerminalNode() 
         {
-            SetupMultiplePurchasableTerminalNode(proteinPowderScript.UPGRADE_NAME,
+            SetupMultiplePurchasableTerminalNode(ProteinPowder.UPGRADE_NAME,
                                                 cfg.SHARED_UPGRADES ? true : !cfg.PROTEIN_INDIVIDUAL,
                                                 cfg.PROTEIN_ENABLED,
                                                 cfg.PROTEIN_PRICE,
@@ -498,7 +487,7 @@ namespace MoreShipUpgrades.Managers
         }
         private void SetupBiggerLungsTerminalNode()
         {
-            SetupMultiplePurchasableTerminalNode(biggerLungScript.UPGRADE_NAME,
+            SetupMultiplePurchasableTerminalNode(BiggerLungs.UPGRADE_NAME,
                                                 cfg.SHARED_UPGRADES ? true : !cfg.BIGGER_LUNGS_INDIVIDUAL,
                                                 cfg.BIGGER_LUNGS_ENABLED,
                                                 cfg.BIGGER_LUNGS_PRICE,
@@ -506,7 +495,7 @@ namespace MoreShipUpgrades.Managers
         }
         private void SetupRunningShoesTerminalNode()
         {
-            SetupMultiplePurchasableTerminalNode(runningShoeScript.UPGRADE_NAME,
+            SetupMultiplePurchasableTerminalNode(RunningShoes.UPGRADE_NAME,
                                                 cfg.SHARED_UPGRADES ? true : !cfg.RUNNING_SHOES_INDIVIDUAL,
                                                 cfg.RUNNING_SHOES_ENABLED,
                                                 cfg.RUNNING_SHOES_PRICE,
@@ -514,7 +503,7 @@ namespace MoreShipUpgrades.Managers
         }
         private void SetupStrongLegsTerminalNode()
         {
-            SetupMultiplePurchasableTerminalNode(strongLegsScript.UPGRADE_NAME,
+            SetupMultiplePurchasableTerminalNode(StrongLegs.UPGRADE_NAME,
                                                 cfg.SHARED_UPGRADES ? true : !cfg.STRONG_LEGS_INDIVIDUAL,
                                                 cfg.STRONG_LEGS_ENABLED,
                                                 cfg.STRONG_LEGS_PRICE,
@@ -523,14 +512,14 @@ namespace MoreShipUpgrades.Managers
         private void SetupMalwareBroadcasterTerminalNode()
         {
 
-            SetupOneTimeTerminalNode(trapDestroyerScript.UPGRADE_NAME,
+            SetupOneTimeTerminalNode(MalwareBroadcaster.UPGRADE_NAME,
                                     cfg.SHARED_UPGRADES ? true : !cfg.MALWARE_BROADCASTER_INDIVIDUAL,
                                     cfg.MALWARE_BROADCASTER_ENABLED,
                                     cfg.MALWARE_BROADCASTER_PRICE);
         }
         private void SetupNightVisionBatteryTerminalNode()
         {
-            CustomTerminalNode node = SetupMultiplePurchasableTerminalNode(nightVisionScript.UPGRADE_NAME,
+            CustomTerminalNode node = SetupMultiplePurchasableTerminalNode(NightVision.UPGRADE_NAME,
                                                 cfg.SHARED_UPGRADES ? true : !cfg.NIGHT_VISION_INDIVIDUAL,
                                                 cfg.NIGHT_VISION_ENABLED,
                                                 0,
@@ -543,7 +532,7 @@ namespace MoreShipUpgrades.Managers
             if (!flashSFX) return;
 
             flashNoise = flashSFX;
-            SetupMultiplePurchasableTerminalNode(terminalFlashScript.UPGRADE_NAME,
+            SetupMultiplePurchasableTerminalNode(Discombobulator.UPGRADE_NAME,
                                                 cfg.SHARED_UPGRADES ? true : !cfg.DISCOMBOBULATOR_INDIVIDUAL,
                                                 cfg.DISCOMBOBULATOR_ENABLED,
                                                 cfg.DISCOMBOBULATOR_PRICE,
@@ -551,8 +540,8 @@ namespace MoreShipUpgrades.Managers
         }
         private void SetupHunterTerminalNode()
         {
-            hunterScript.SetupTierList();
-            SetupMultiplePurchasableTerminalNode(hunterScript.UPGRADE_NAME,
+            Hunter.SetupTierList();
+            SetupMultiplePurchasableTerminalNode(Hunter.UPGRADE_NAME,
                                                 true,
                                                 cfg.HUNTER_ENABLED,
                                                 cfg.HUNTER_PRICE,
@@ -560,7 +549,7 @@ namespace MoreShipUpgrades.Managers
         }
         private void SetupBetterScannerTerminalNode()
         {
-            SetupMultiplePurchasableTerminalNode(strongerScannerScript.UPGRADE_NAME,
+            SetupMultiplePurchasableTerminalNode(BetterScanner.UPGRADE_NAME,
                                                 cfg.SHARED_UPGRADES ? true : !cfg.BETTER_SCANNER_INDIVIDUAL,
                                                 cfg.BETTER_SCANNER_ENABLED,
                                                 cfg.BETTER_SCANNER_PRICE,
@@ -569,21 +558,21 @@ namespace MoreShipUpgrades.Managers
         }
         private void SetupLightningRodTerminalNode()
         {
-            SetupOneTimeTerminalNode(lightningRodScript.UPGRADE_NAME,
+            SetupOneTimeTerminalNode(LightningRod.UPGRADE_NAME,
                                     true,
                                     cfg.LIGHTNING_ROD_ENABLED,
                                     cfg.LIGHTNING_ROD_PRICE);
         }
         private void SetupWalkieGPSTerminalNode()
         {
-            SetupOneTimeTerminalNode(walkieScript.UPGRADE_NAME,
+            SetupOneTimeTerminalNode(WalkieGPS.UPGRADE_NAME,
                                     true,
                                     cfg.WALKIE_ENABLED,
                                     cfg.WALKIE_PRICE);
         }
         private void SetupBackMusclesTerminalNode()
         {
-            SetupMultiplePurchasableTerminalNode(exoskeletonScript.UPGRADE_NAME,
+            SetupMultiplePurchasableTerminalNode(BackMuscles.UPGRADE_NAME,
                                                 cfg.SHARED_UPGRADES ? true : !cfg.BACK_MUSCLES_INDIVIDUAL,
                                                 cfg.BACK_MUSCLES_ENABLED,
                                                 cfg.BACK_MUSCLES_PRICE,
@@ -591,21 +580,21 @@ namespace MoreShipUpgrades.Managers
         }
         private void SetupPagerTerminalNode()
         {
-            SetupOneTimeTerminalNode(pagerScript.UPGRADE_NAME,
+            SetupOneTimeTerminalNode(FastEncryption.UPGRADE_NAME,
                                     true,
                                     cfg.PAGER_ENABLED,
                                     cfg.PAGER_PRICE);
         }
         private void SetupLocksmithTerminalNode()
         {
-            SetupOneTimeTerminalNode(lockSmithScript.UPGRADE_NAME,
+            SetupOneTimeTerminalNode(LockSmith.UPGRADE_NAME,
                                     cfg.SHARED_UPGRADES ? true : !cfg.LOCKSMITH_INDIVIDUAL,
                                     cfg.LOCKSMITH_ENABLED,
                                     cfg.LOCKSMITH_PRICE);
         }
         private void SetupPlayerHealthTerminalNode()
         {
-            SetupMultiplePurchasableTerminalNode(playerHealthScript.UPGRADE_NAME,
+            SetupMultiplePurchasableTerminalNode(Stimpack.UPGRADE_NAME,
                                                 cfg.SHARED_UPGRADES ? true : !cfg.PLAYER_HEALTH_INDIVIDUAL,
                                                 cfg.PLAYER_HEALTH_ENABLED,
                                                 cfg.PLAYER_HEALTH_PRICE,
