@@ -164,7 +164,7 @@ namespace MoreShipUpgrades.Managers
         public void ResetAllValues(bool wipeObjRefs = true)
         {
             ResetPlayerAttributes();
-            if(IsHost || IsServer) ResetShipAttributesServerRpc();
+            if(IsHost || IsServer) ResetShipAttributesClientRpc();
             EffectsActive = false;
             insurance = false;
             DestroyTraps = false;
@@ -570,7 +570,7 @@ namespace MoreShipUpgrades.Managers
         }
         private void SetupWalkieGPSTerminalNode()
         {
-            SetupOneTimeTerminalNode(walkieScript.UPGRADE_NAME,
+            SetupOneTimeTerminalNode(WalkieGPS.UPGRADE_NAME,
                                     true,
                                     cfg.WALKIE_ENABLED,
                                     cfg.WALKIE_PRICE);

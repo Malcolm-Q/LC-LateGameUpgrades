@@ -80,7 +80,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             return string.Format(WORLD_BUILDING_TEXT, shareStatus ? "a department" : "one");
         }
 
-        public string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
+        public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
             string info = GetBetterScannerInfo(1, initialPrice);
             for (int i = 0; i < maxLevels; i++)

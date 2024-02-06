@@ -1,7 +1,9 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
+using System;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
@@ -68,7 +70,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             return string.Format(WORLD_BUILDING_TEXT, shareStatus ? "departments" : "employees");
         }
 
-        public string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
+        public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
             Func<int, float> infoFunction = level => (UpgradeBus.instance.cfg.CARRY_WEIGHT_REDUCTION - (level * UpgradeBus.instance.cfg.CARRY_WEIGHT_INCREMENT)) * 100;
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);

@@ -142,7 +142,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             return string.Format(WORLD_BUILDING_TEXT, shareStatus ? "your crew" : "you", shareStatus ? "for each of your coworkers" : "");
         }
 
-        public string GetDisplayInfo(int price = -1)
+        public override string GetDisplayInfo(int price = -1)
         {
             return "Allows you to pick door locks by completing a minigame.";
         }

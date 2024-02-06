@@ -1,11 +1,12 @@
 ﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.Misc.Upgrades
 {
     /// <summary>
     /// Class which represents upgrades that can be purchased more than once for additional effects
     /// </summary>
-    abstract class TierUpgrade : BaseUpgrade
+    abstract class TierUpgrade : BaseUpgrade, ITierUpgradeDisplayInfo
     {
         internal override void Start()
         {
@@ -34,5 +35,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
             string unloadMessage = $"\n<color={unloadColour}>{upgradeName} has been disabled!</color>";
             HUDManager.Instance.chatText.text += unloadMessage;
         }
+
+        public abstract string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null);
     }
 }

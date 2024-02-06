@@ -1,4 +1,5 @@
 ﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
@@ -57,7 +58,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             return string.Format(WORLD_BUILDING_TEXT, shareStatus ? "your crew" : "you");
         }
 
-        public string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
+        public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
             System.Func<int, float> infoFunction = level => 100 * (UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (level * UpgradeBus.instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT));
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);

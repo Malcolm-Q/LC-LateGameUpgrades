@@ -13,7 +13,7 @@ using UnityEngine.InputSystem;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class NightVision : TierUpgrade, ITierUpgradeDisplayInfo
+    internal class NightVision : TierUpgrade
     {
         private float nightBattery;
         private Transform batteryBar;
@@ -202,7 +202,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             }
         }
 
-        public string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
+        public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
             string info = GetNightVisionInfo(1, initialPrice);
             for (int i = 0; i < maxLevels; i++)

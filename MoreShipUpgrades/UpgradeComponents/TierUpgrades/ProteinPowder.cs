@@ -1,15 +1,12 @@
-﻿using GameNetcodeStuff;
-using MoreShipUpgrades.Managers;
+﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Numerics;
-using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class ProteinPowder : TierUpgrade, IUpgradeWorldBuilding, ITierUpgradeDisplayInfo
+    internal class ProteinPowder : TierUpgrade, IUpgradeWorldBuilding
     {
         public const string UPGRADE_NAME = "Protein Powder";
         internal const string WORLD_BUILDING_TEXT = "\n\nMultivitamins, creatine, and military surplus stimulants blended together and repackaged," +
@@ -86,7 +83,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             return WORLD_BUILDING_TEXT;
         }
 
-        public string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
+        public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
             Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.PROTEIN_UNLOCK_FORCE + 1 + (UpgradeBus.instance.cfg.PROTEIN_INCREMENT * level);
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);

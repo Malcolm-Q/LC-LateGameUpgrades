@@ -102,7 +102,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             return WORLD_BUILDING_TEXT;
         }
 
-        public string GetDisplayInfo(int price = -1)
+        public override string GetDisplayInfo(int price = -1)
         {
             return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), price, UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST);
         }

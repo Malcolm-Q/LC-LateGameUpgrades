@@ -414,7 +414,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             logger.LogDebug(nameof(UpdateWheelbarrowWeightClientRpc));
             logger.LogDebug(GameNetworkManager.Instance.localPlayerController.playerUsername);
             GrabbableObject[] storedItems = GetComponentsInChildren<GrabbableObject>();
-            if (isHeld && playerHeldBy == UpgradeBus.instance.GetLocalPlayer()) playerHeldBy.carryWeight -= Mathf.Clamp(exoskeletonScript.DecreasePossibleWeight(totalWeight - 1f), 0f, 10f);
+            if (isHeld && playerHeldBy == UpgradeBus.instance.GetLocalPlayer()) playerHeldBy.carryWeight -= Mathf.Clamp(BackMuscles.DecreasePossibleWeight(totalWeight - 1f), 0f, 10f);
             totalWeight = defaultWeight;
             currentAmountItems = 0;
             for (int i = 0; i < storedItems.Length; i++)
@@ -425,7 +425,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
                 totalWeight += (storedItem.itemProperties.weight - 1f) * weightReduceMultiplier;
             }
             logger.LogDebug($"There's currently {(totalWeight - 1f)*100} lbs in the wheelcart");
-            if (isHeld && playerHeldBy == UpgradeBus.instance.GetLocalPlayer()) playerHeldBy.carryWeight += Mathf.Clamp(exoskeletonScript.DecreasePossibleWeight(totalWeight - 1f), 0f, 10f);
+            if (isHeld && playerHeldBy == UpgradeBus.instance.GetLocalPlayer()) playerHeldBy.carryWeight += Mathf.Clamp(BackMuscles.DecreasePossibleWeight(totalWeight - 1f), 0f, 10f);
         }
         /// <summary>
         /// Action when the interaction bar is completely filled on the container of the wheelbarrow.

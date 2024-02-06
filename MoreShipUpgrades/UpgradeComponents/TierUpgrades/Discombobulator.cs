@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    class Discombobulator : TierUpgrade, IUpgradeWorldBuilding, ITierUpgradeDisplayInfo
+    class Discombobulator : TierUpgrade, IUpgradeWorldBuilding
     {
         public const string UPGRADE_NAME = "Discombobulator";
         public static string PRICES_DEFAULT = "330,460,620";
@@ -95,7 +95,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             return string.Format(WORLD_BUILDING_TEXT, shareStatus ? "your crew" : "you");
         }
 
-        public string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
+        public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
             System.Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.DISCOMBOBULATOR_STUN_DURATION + (level * UpgradeBus.instance.cfg.DISCOMBOBULATOR_INCREMENT);
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);

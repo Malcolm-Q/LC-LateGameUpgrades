@@ -55,7 +55,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             HUDManager.Instance.PingHUDElement(HUDManager.Instance.Chat, 4f, 1f, 0.2f);
         }
 
-        public string GetDisplayInfo(int price = -1)
+        public override string GetDisplayInfo(int price = -1)
         {
             return "Unrestrict the transmitter";
         }

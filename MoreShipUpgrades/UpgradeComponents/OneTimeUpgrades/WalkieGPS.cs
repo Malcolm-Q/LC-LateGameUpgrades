@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
-    class WalkieGPS : OneTimeUpgrade, IOneTimeUpgradeDisplayInfo
+    class WalkieGPS : OneTimeUpgrade
     {
         public static string UPGRADE_NAME = "Walkie GPS";
         public static WalkieGPS instance;
@@ -85,7 +85,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             canvas.SetActive(false);
         }
 
-        public string GetDisplayInfo(int price = -1)
+        public override string GetDisplayInfo(int price = -1)
         {
             return "Displays your location and time when holding a walkie talkie.\nEspecially useful for fog.";
         }

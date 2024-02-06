@@ -6,6 +6,7 @@ using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
+    class SickBeats : OneTimeUpgrade, IOneTimeUpgradeDisplayInfo
     {
         public static string UPGRADE_NAME = "Sick Beats";
         private static LGULogger logger = new LGULogger(UPGRADE_NAME);
@@ -60,7 +61,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             return (int)(dmg * UpgradeBus.instance.incomingDamageCoefficient);
         }
 
-        public string GetDisplayInfo(int price = -1)
+        public override string GetDisplayInfo(int price = -1)
         {
             string txt = $"Sick Beats - ${price}\nPlayers within a {UpgradeBus.instance.cfg.BEATS_RADIUS} unit radius from an active boombox will have the following effects:\n\n";
             if (UpgradeBus.instance.cfg.BEATS_SPEED) txt += $"Movement speed increased by {UpgradeBus.instance.cfg.BEATS_SPEED_INC}\n";

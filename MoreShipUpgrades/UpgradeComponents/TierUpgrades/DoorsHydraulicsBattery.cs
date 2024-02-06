@@ -1,15 +1,12 @@
-﻿using GameNetcodeStuff;
-using MoreShipUpgrades.Managers;
+﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class DoorsHydraulicsBattery : GameAttributeTierUpgrade, ITierUpgradeDisplayInfo
+    internal class DoorsHydraulicsBattery : GameAttributeTierUpgrade
     {
         public const string UPGRADE_NAME = "Shutter Batteries";
         public const string PRICES_DEFAULT = "200,300,400";
@@ -54,6 +51,12 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             UnloadUpgradeAttribute(ref UpgradeBus.instance.doorsHydraulicsBattery, ref UpgradeBus.instance.doorsHydraulicsBatteryLevel);
             base.Unwind();
+        }
+        public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
+        {
+            Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.DOOR_HYDRAULICS_BATTERY_INITIAL + (level) * UpgradeBus.instance.cfg.DOOR_HYDRAULICS_BATTERY_INCREMENTAL;
+            string infoFormat = "LVL {0} - ${1} - Increases the door's hydraulic capacity to remain closed by {2} units\n"; // to put in the infoStrings after
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
     }
 }
