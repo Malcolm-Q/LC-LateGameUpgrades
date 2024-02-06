@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System;
 using System.Security.Cryptography;
 using UnityEngine;
@@ -7,7 +8,7 @@ using UnityEngine.UI;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
-    class WalkieGPS : OneTimeUpgrade
+    class WalkieGPS : OneTimeUpgrade, IOneTimeUpgradeDisplayInfo
     {
         public static string UPGRADE_NAME = "Walkie GPS";
         public static WalkieGPS instance;
@@ -82,6 +83,11 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             UpgradeBus.instance.walkieUIActive = false;
             canvas.SetActive(false);
+        }
+
+        public string GetDisplayInfo(int price = -1)
+        {
+            return "Displays your location and time when holding a walkie talkie.\nEspecially useful for fog.";
         }
     }
 }

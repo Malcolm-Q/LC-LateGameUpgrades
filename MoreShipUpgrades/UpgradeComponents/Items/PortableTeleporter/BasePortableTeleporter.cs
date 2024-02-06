@@ -105,7 +105,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
         {
             if (shipTeleporter != null) return shipTeleporter;
 
-            ShipTeleporter[] tele = FindObjectsOfType<ShipTeleporter>();    
+            ShipTeleporter[] tele = FindObjectsOfType<ShipTeleporter>();
             ShipTeleporter NotInverseTele = null;
             foreach (ShipTeleporter shipTeleporter in tele)
             {

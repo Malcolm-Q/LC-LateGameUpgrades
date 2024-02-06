@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,10 +8,18 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
 {
-    internal class StoreWheelbarrow : WheelbarrowScript
+    internal class StoreWheelbarrow : WheelbarrowScript, IDisplayInfo
     {
         private static LGULogger logger = new LGULogger(nameof(StoreWheelbarrow));
         private GameObject wheel;
+
+        public string GetDisplayInfo()
+        {
+            return $"A portable container which has a maximum capacity of {UpgradeBus.instance.cfg.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS}" +
+                $" and reduces the effective weight of the inserted items by {UpgradeBus.instance.cfg.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER * 100} %.\n" +
+                $"It weighs {UpgradeBus.instance.cfg.WHEELBARROW_WEIGHT} lbs";
+        }
+
         public override void Start()
         {
             base.Start();

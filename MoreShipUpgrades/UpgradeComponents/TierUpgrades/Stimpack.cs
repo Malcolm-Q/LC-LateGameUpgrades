@@ -2,15 +2,19 @@
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System;
 using System.Numerics;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class Stimpack : GameAttributeTierUpgrade
+    internal class Stimpack : GameAttributeTierUpgrade, IUpgradeWorldBuilding, ITierUpgradeDisplayInfo
     {
-        public static string UPGRADE_NAME = "Stimpack";
+        public const string UPGRADE_NAME = "Stimpack";
+        internal const string WORLD_BUILDING_TEXT = "\n\nAn experimental Company-offered 'health treatment' program advertised only on old, peeling Ship posters," +
+            " which are themselves only present in about 40% of all Company-issued Ships. Some Ships even have multiple. Nothing is known from the outside about how it works," +
+            " and in order to be eligible for the program, {0} must sign an NDA.\n\n";
         // Configuration
         public static string ENABLED_SECTION = $"Enable {UPGRADE_NAME} Upgrade";
         public static bool ENABLED_DEFAULT = true;

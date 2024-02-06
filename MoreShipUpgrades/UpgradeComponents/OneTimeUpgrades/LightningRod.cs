@@ -1,13 +1,18 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
-    class LightningRod : OneTimeUpgrade
+    class LightningRod : OneTimeUpgrade, IUpgradeWorldBuilding, IOneTimeUpgradeDisplayInfo
     {
         public static string UPGRADE_NAME = "Lightning Rod";
+        internal const string WORLD_BUILDING_TEXT = "\n\nService key for the Ship's terminal which allows your crew to legally use the Ship's 'Static Attraction Field' module." +
+            " Comes with a list of opt-in maintenance procedures that promise to optimize the module's function and field of influence. This Company-issued document " +
+            "is saddled with the uniquely-awkward task of having to ransom a safety feature back to the employee in text while not also admitting to the existence of" +
+            " an occupational hazard that was previously denied in court.\n\n";
         public static LightningRod instance;
         private static LGULogger logger;
 
@@ -90,6 +95,16 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             strikePosition = terminal.transform.position;
             instance.LightningIntercepted = false;
             __instance.staticElectricityParticle.gameObject.SetActive(true);
+        }
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
+
+        public string GetDisplayInfo(int price = -1)
+        {
+            return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), price, UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST);
         }
     }
 }

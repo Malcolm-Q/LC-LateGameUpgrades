@@ -5,10 +5,11 @@ using MoreShipUpgrades.Misc.Upgrades;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class DoorsHydraulicsBattery : GameAttributeTierUpgrade
+    internal class DoorsHydraulicsBattery : GameAttributeTierUpgrade, ITierUpgradeDisplayInfo
     {
         public const string UPGRADE_NAME = "Shutter Batteries";
         public const string PRICES_DEFAULT = "200,300,400";

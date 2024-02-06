@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,9 +9,11 @@ using UnityEngine.UI;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
-    class LockSmith : OneTimeUpgrade
+    class LockSmith : OneTimeUpgrade, IUpgradeWorldBuilding, IOneTimeUpgradeDisplayInfo
     {
         public static string UPGRADE_NAME = "Locksmith";
+        internal const string WORLD_BUILDING_TEXT = "\n\nOn-the-job training package that supplies {0} with proprietary knowledge of the 'Ram, Scan, Bump' technique" +
+            " for bypassing The Company's proprietary Low-Tech Manual Security Doors' security system. Comes with an 'all-nines-notched' key, a rubber gasket, and a plastic handle on a metal rod {1}.\n\n";
         public static LockSmith instance;
 
         private GameObject pin1, pin2, pin3, pin4, pin5;
@@ -132,6 +135,16 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
                 pins[lst[i]].GetComponent<Image>().color = Color.white;
             }
             canPick = true;
+        }
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return string.Format(WORLD_BUILDING_TEXT, shareStatus ? "your crew" : "you", shareStatus ? "for each of your coworkers" : "");
+        }
+
+        public string GetDisplayInfo(int price = -1)
+        {
+            return "Allows you to pick door locks by completing a minigame.";
         }
     }
 }

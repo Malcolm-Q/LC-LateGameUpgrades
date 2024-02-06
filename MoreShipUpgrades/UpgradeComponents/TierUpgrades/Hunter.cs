@@ -3,13 +3,18 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    class Hunter : TierUpgrade
+    class Hunter : TierUpgrade, IUpgradeWorldBuilding, ITierUpgradeDisplayInfo
     {
-        public static string UPGRADE_NAME = "Hunter";
+        public const string UPGRADE_NAME = "Hunter";
+        internal const string WORLD_BUILDING_TEXT = "\n\nOn-the-job training program that teaches your crew how to properly collect lab-ready samples of blood," +
+            " skin, and organ tissue from entities found within the facility. These samples are valuable to The Company. Used to be a part of the standard onboarding procedure," +
+            " but was made opt-in only in 2005 to cut onboarding costs.\n\n";
         private static LGULogger logger = new LGULogger(UPGRADE_NAME);
         static Dictionary<string, string> monsterNames = new Dictionary<string, string>()
             {
@@ -88,6 +93,19 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             result = result.Substring(0, result.Length - 2);
             result += "\n";
             return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), level, price, result);
+        }
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
+
+        public string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
+        {
+            string info = GetHunterInfo(1, initialPrice);
+            for (int i = 0; i < maxLevels; i++)
+                info += GetHunterInfo(i + 2, incrementalPrices[i]);
+            return info;
         }
     }
 }

@@ -1,12 +1,13 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
-    class FastEncryption : OneTimeUpgrade
+    class FastEncryption : OneTimeUpgrade, IOneTimeUpgradeDisplayInfo
     {
         public static string UPGRADE_NAME = "Fast Encryption";
         public static FastEncryption instance;
@@ -52,6 +53,11 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             logger.LogInfo("Broadcasted messaged received, printing.");
             HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Terminal</color><color=#0000FF>:</color> <color=#FF00FF>{msg}</color>";
             HUDManager.Instance.PingHUDElement(HUDManager.Instance.Chat, 4f, 1f, 0.2f);
+        }
+
+        public string GetDisplayInfo(int price = -1)
+        {
+            return "Unrestrict the transmitter";
         }
     }
 }

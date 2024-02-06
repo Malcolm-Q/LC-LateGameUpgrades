@@ -2,10 +2,10 @@
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
-    class SickBeats : OneTimeUpgrade
     {
         public static string UPGRADE_NAME = "Sick Beats";
         private static LGULogger logger = new LGULogger(UPGRADE_NAME);
@@ -58,6 +58,16 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             if (!UpgradeBus.instance.sickBeats || dmg < 0) return dmg; // < 0 check to not hinder healing
             return (int)(dmg * UpgradeBus.instance.incomingDamageCoefficient);
+        }
+
+        public string GetDisplayInfo(int price = -1)
+        {
+            string txt = $"Sick Beats - ${price}\nPlayers within a {UpgradeBus.instance.cfg.BEATS_RADIUS} unit radius from an active boombox will have the following effects:\n\n";
+            if (UpgradeBus.instance.cfg.BEATS_SPEED) txt += $"Movement speed increased by {UpgradeBus.instance.cfg.BEATS_SPEED_INC}\n";
+            if (UpgradeBus.instance.cfg.BEATS_DMG) txt += $"Damage inflicted increased by {UpgradeBus.instance.cfg.BEATS_DMG_INC}\n";
+            if (UpgradeBus.instance.cfg.BEATS_DEF) txt += $"Incoming Damage multiplied by {UpgradeBus.instance.cfg.BEATS_DEF_CO}\n";
+            if (UpgradeBus.instance.cfg.BEATS_STAMINA) txt += $"Stamina Drain multiplied by {UpgradeBus.instance.cfg.BEATS_STAMINA_CO}\n";
+            return txt;
         }
     }
 }

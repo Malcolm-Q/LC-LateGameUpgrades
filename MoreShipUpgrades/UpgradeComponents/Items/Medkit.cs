@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,7 +10,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
     /// <summary>
     /// Logical class which represents an item that can heal the player when activated
     /// </summary>
-    internal class Medkit : GrabbableObject
+    internal class Medkit : GrabbableObject, IDisplayInfo
     {
         /// <summary>
         /// Logger of the class
@@ -112,6 +113,13 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
                 return false;
             }
             return true;
+        }
+
+        public string GetDisplayInfo()
+        {
+            return $"MEDKIT - ${UpgradeBus.instance.cfg.MEDKIT_PRICE}\n\n" +
+                $"Left click to heal yourself for {UpgradeBus.instance.cfg.MEDKIT_HEAL_VALUE} health.\n" +
+                $"Can be used {UpgradeBus.instance.cfg.MEDKIT_USES} times.";
         }
     }
 }
