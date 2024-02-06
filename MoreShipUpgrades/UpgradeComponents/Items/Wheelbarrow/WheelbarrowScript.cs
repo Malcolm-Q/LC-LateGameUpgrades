@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
+using UnityEngine.InputSystem.LowLevel;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
 {
@@ -21,6 +23,10 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         }
         private static LGULogger logger = new LGULogger(nameof(WheelbarrowScript));
         protected Restrictions restriction;
+        internal bool dropAllItemsKeySet;
+        internal Key dropAllItemsKey;
+        internal bool dropAllItemsMouseButtonSet;
+        internal MouseButton dropAllitemsMouseButton;
         private System.Random randomNoise;
         /// <summary>
         /// Component responsible to emit sound when the wheelbarrow's moving
@@ -126,6 +132,25 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             checkMethods[Restrictions.ItemCount] = CheckWheelbarrowItemCountRestriction;
             checkMethods[Restrictions.TotalWeight] = CheckWheelbarrowWeightRestriction;
             checkMethods[Restrictions.All] = CheckWheelbarrowAllRestrictions;
+            string controlBind = UpgradeBus.instance.cfg.WHEELBARROW_DROP_ALL_CONTROL_BIND;
+            if (Enum.TryParse(controlBind, out Key toggle))
+            {
+                dropAllItemsKey = toggle;
+                dropAllItemsKeySet = true;
+            }
+            else dropAllItemsKeySet = false;
+            if (Enum.TryParse(controlBind, out MouseButton mouseButton))
+            {
+                dropAllitemsMouseButton = mouseButton;
+                dropAllItemsMouseButtonSet = true;
+            }
+            else dropAllItemsMouseButtonSet = false;
+            if (!dropAllItemsKeySet && !dropAllItemsMouseButtonSet)
+            {
+                logger.LogWarning("No configuration was found to set a control bind for dropping all items, defaulting to middle mouse button");
+                dropAllItemsMouseButtonSet = true;
+                dropAllitemsMouseButton = MouseButton.Middle;
+            }
 
             SetupItemAttributes();
         }
@@ -149,8 +174,24 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             if (!isHeld) return;
             if (playerHeldBy != UpgradeBus.instance.GetLocalPlayer()) return;
             if (currentAmountItems <= 0) return;
-            if (!Mouse.current.middleButton.wasPressedThisFrame) return;
+            if (!DropAllItemsControlBindPressed()) return;
             DropAllItemsInWheelbarrowServerRpc();
+        }
+        private bool DropAllItemsControlBindPressed()
+        {
+            if (dropAllItemsKeySet) return Keyboard.current[dropAllItemsKey].wasPressedThisFrame;
+            if (dropAllItemsMouseButtonSet)
+            {
+                switch(dropAllitemsMouseButton)
+                {
+                    case MouseButton.Left: return Mouse.current.leftButton.wasPressedThisFrame;
+                    case MouseButton.Right: return Mouse.current.rightButton.wasPressedThisFrame;
+                    case MouseButton.Middle: return Mouse.current.middleButton.wasPressedThisFrame;
+                    case MouseButton.Back: return Mouse.current.backButton.wasPressedThisFrame;
+                    case MouseButton.Forward: return Mouse.current.forwardButton.wasPressedThisFrame;
+                }
+            }
+            return false;
         }
         [ServerRpc(RequireOwnership = false)]
         private void DropAllItemsInWheelbarrowServerRpc()
