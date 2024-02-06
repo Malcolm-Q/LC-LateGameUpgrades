@@ -39,13 +39,6 @@ namespace MoreShipUpgrades.Misc
             node.clearPreviousText = clearPreviousText;
             return node;
         }
-
-        private static TerminalNode ExecuteToggleLightning()
-        {
-            if (!UpgradeBus.instance.lightningRod) return DisplayTerminalMessage(LightningRod.ACCESS_DENIED_MESSAGE);
-
-            return DisplayTerminalMessage(UpgradeBus.instance.lightningRodActive ? LightningRod.TOGGLE_ON_MESSAGE : LightningRod.TOGGLE_OFF_MESSAGE);
-        }
         private static TerminalNode ExecuteDiscombobulatorAttack(ref Terminal terminal)
         {
             if (!UpgradeBus.instance.terminalFlash) return DisplayTerminalMessage("You don't have access to this command yet. Purchase the 'Discombobulator'.\n\n");
@@ -611,7 +604,6 @@ namespace MoreShipUpgrades.Misc
         {
             switch (secondWord)
             {
-                case "lightning": return ExecuteToggleLightning();
                 default: return outputNode;
             }
         }
