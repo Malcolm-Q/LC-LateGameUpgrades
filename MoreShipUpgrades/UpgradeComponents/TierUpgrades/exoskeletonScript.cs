@@ -1,14 +1,20 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
+using System;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class exoskeletonScript : BaseUpgrade
+    internal class exoskeletonScript : BaseUpgrade, IUpgradeWorldBuilding, ITierUpgradeDisplayInfo
     {
-        public static string UPGRADE_NAME = "Back Muscles";
+        public const string UPGRADE_NAME = "Back Muscles";
         public static string PRICES_DEFAULT = "600,700,800";
+        internal const string WORLD_BUILDING_TEXT = "\n\nCompany-issued hydraulic girdles which are only awarded to high-performing {0} who can afford to opt in." +
+            " Highly valued by all employees of The Company for their combination of miraculous health-preserving benefits and artificial, intentionally-implemented scarcity." +
+            " Sardonically called the 'Back Muscles Upgrade' by some. Comes with a user manual, which mostly contains minimalistic ads for girdle maintenance contractors." +
+            " Most of the phone numbers don't work anymore.\n\n";
 
         void Start()
         {
@@ -61,6 +67,18 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             }
             player.carryWeight = UpgradeBus.instance.alteredWeight;
             if (player.carryWeight < 1f) { player.carryWeight = 1f; }
+        }
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return string.Format(WORLD_BUILDING_TEXT, shareStatus ? "departments" : "employees");
+        }
+
+        public string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
+        {
+            Func<int, float> infoFunction = level => (UpgradeBus.instance.cfg.CARRY_WEIGHT_REDUCTION - (level * UpgradeBus.instance.cfg.CARRY_WEIGHT_INCREMENT)) * 100;
+            string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
     }
 

@@ -1,9 +1,10 @@
 ﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items
 {
-    public class Peeper : GrabbableObject
+    public class Peeper : GrabbableObject, IDisplayInfo
     {
         /// <summary>
         /// Wether the instance of the class can stop coil-heads from moving or not
@@ -52,6 +53,11 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
                 if (peeper.HasLineOfSightToPosition(springPosition)) return true;
             }
             return false;
+        }
+
+        public string GetDisplayInfo()
+        {
+            return "Looks at coil heads, don't lose it";
         }
     }
 }

@@ -1,10 +1,12 @@
 ﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items
 {
-    public class Helmet : GrabbableObject
+    public class Helmet : GrabbableObject, IDisplayInfo
     {
         public AudioClip hit;
         private AudioSource audio;
@@ -32,6 +34,11 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
                 else LGUStore.instance.ReqSpawnAndMoveHelmetServerRpc(new NetworkObjectReference(playerHeldBy.GetComponent<NetworkObject>()), playerHeldBy.playerSteamId);
                 playerHeldBy.DespawnHeldObject();
             }
+        }
+
+        public string GetDisplayInfo()
+        {
+            return string.Format(AssetBundleHandler.GetInfoFromJSON("Helmet"), UpgradeBus.instance.cfg.HELMET_HITS_BLOCKED);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -11,7 +12,7 @@ using UnityEngine.InputSystem;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class nightVisionScript : BaseUpgrade
+    internal class nightVisionScript : BaseUpgrade, ITierUpgradeDisplayInfo
     {
         private float nightBattery;
         private Transform batteryBar;
@@ -21,6 +22,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public static string UPGRADE_NAME = "NV Headset Batteries";
         public static string PRICES_DEFAULT = "300,400,500";
+        internal static string WORLD_BUILDING_TEXT = "\n\nVery old military surplus phosphor lens modules, retrofitted for compatibility with modern Company-issued helmets" +
+            " and offered to employees of The Company on a subscription plan. The base package comes with cheap batteries, but premium subscriptions offer regular issuances" +
+            " of higher-quality energy solutions, ranging from hobby grade to industrial application power banks. The modules also come with DRM that prevents the user from improvising" +
+            " with other kinds of batteries.\n\n";
 
         private static LGULogger logger = new LGULogger(UPGRADE_NAME);
         void Start()
@@ -200,6 +205,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                         return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), level, price, drainTime, regenTime);
                     }
             }
+        }
+
+        public string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
+        {
+            string info = GetNightVisionInfo(1, initialPrice);
+            for (int i = 0; i < maxLevels; i++)
+                info += GetNightVisionInfo(i + 2, incrementalPrices[i]);
+            return info;
         }
     }
 }

@@ -2,6 +2,7 @@
 using LethalLib.Modules;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Commands;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
@@ -87,27 +88,7 @@ namespace MoreShipUpgrades.Managers
 
         public Dictionary<string, GameObject> UpgradeObjects = new Dictionary<string, GameObject>();
 
-        private Dictionary<string, System.Func<int, float>> infoFunctions = new Dictionary<string, System.Func<int, float>>()
-        {
-            { exoskeletonScript.UPGRADE_NAME, level => (instance.cfg.CARRY_WEIGHT_REDUCTION - (level * instance.cfg.CARRY_WEIGHT_INCREMENT)) * 100 },
-            { terminalFlashScript.UPGRADE_NAME, level => instance.cfg.DISCOMBOBULATOR_STUN_DURATION + (level * instance.cfg.DISCOMBOBULATOR_INCREMENT) },
-            { strongLegsScript.UPGRADE_NAME, level =>  instance.cfg.JUMP_FORCE_UNLOCK + (level * instance.cfg.JUMP_FORCE_INCREMENT) },
-            { runningShoeScript.UPGRADE_NAME, level => instance.cfg.MOVEMENT_SPEED_UNLOCK + (level * instance.cfg.MOVEMENT_INCREMENT) },
-            { biggerLungScript.UPGRADE_NAME, level => instance.cfg.SPRINT_TIME_INCREASE_UNLOCK + (level * instance.cfg.SPRINT_TIME_INCREMENT) },
-            { proteinPowderScript.UPGRADE_NAME, level => instance.cfg.PROTEIN_UNLOCK_FORCE + 1 + (instance.cfg.PROTEIN_INCREMENT * level) },
-            { beekeeperScript.UPGRADE_NAME, level => 100 * (instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER - (level * instance.cfg.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT)) },
-            { playerHealthScript.UPGRADE_NAME, level => instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK + (level)*instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT },
-            { DoorsHydraulicsBattery.UPGRADE_NAME, level => instance.cfg.DOOR_HYDRAULICS_BATTERY_INITIAL + (level)*instance.cfg.DOOR_HYDRAULICS_BATTERY_INCREMENTAL },
-        };
-
         public Dictionary<string, Item> ItemsToSync = new Dictionary<string, Item>();
-
-        private Dictionary<string, System.Func<int, int, string>> complexInfoFunctions = new Dictionary<string, System.Func<int,int, string>>()
-        {
-            { strongerScannerScript.UPGRADE_NAME, (level, price) => strongerScannerScript.GetBetterScannerInfo(level, price) },
-            { hunterScript.UPGRADE_NAME, (level, price) => hunterScript.GetHunterInfo(level, price)},
-            { nightVisionScript.UPGRADE_NAME, (level, price) => nightVisionScript.GetNightVisionInfo(level, price) },
-        };
 
         public Dictionary<ulong, int> playerHealthLevels = new Dictionary<ulong, int>();
 
@@ -486,22 +467,15 @@ namespace MoreShipUpgrades.Managers
                                                 true,
                                                 cfg.DOOR_HYDRAULICS_BATTERY_ENABLED,
                                                 cfg.DOOR_HYDRAULICS_BATTERY_PRICE,
-                                                ParseUpgradePrices(cfg.DOOR_HYDRAULICS_BATTERY_PRICES),
-                                                "LVL {0} - ${1} - Increases the door's hydraulic capacity to remain closed by {2} units\n");
+                                                ParseUpgradePrices(cfg.DOOR_HYDRAULICS_BATTERY_PRICES));
         }
         private void SetupSickBeatsTerminalNode()
         {
-            string txt = $"Sick Beats - ${cfg.BEATS_PRICE}\nPlayers within a {cfg.BEATS_RADIUS} unit radius from an active boombox will have the following effects:\n\n";
-            if (cfg.BEATS_SPEED) txt += $"Movement speed increased by {cfg.BEATS_SPEED_INC}\n";
-            if (cfg.BEATS_DMG) txt += $"Damage inflicted increased by {cfg.BEATS_DMG_INC}\n";
-            if (cfg.BEATS_DEF) txt += $"Incoming Damage multiplied by {cfg.BEATS_DEF_CO}\n";
-            if (cfg.BEATS_STAMINA) txt += $"Stamina Drain multiplied by {cfg.BEATS_STAMINA_CO}\n";
             SetupOneTimeTerminalNode(
                 BeatScript.UPGRADE_NAME,
                 cfg.SHARED_UPGRADES ? true : !cfg.BEATS_INDIVIDUAL,
                 cfg.BEATS_ENABLED,
-                cfg.BEATS_PRICE,
-                txt);
+                cfg.BEATS_PRICE);
         }
 
         private void SetupBeekeperTerminalNode()
@@ -511,8 +485,7 @@ namespace MoreShipUpgrades.Managers
                 cfg.SHARED_UPGRADES ? true : !cfg.BEEKEEPER_INDIVIDUAL,
                 cfg.BEEKEEPER_ENABLED,
                 cfg.BEEKEEPER_PRICE,
-                ParseUpgradePrices(cfg.BEEKEEPER_UPGRADE_PRICES),
-                AssetBundleHandler.GetInfoFromJSON(beekeeperScript.UPGRADE_NAME));
+                ParseUpgradePrices(cfg.BEEKEEPER_UPGRADE_PRICES));
         }
 
         private void SetupProteinPowderTerminalNode() 
@@ -521,8 +494,7 @@ namespace MoreShipUpgrades.Managers
                                                 cfg.SHARED_UPGRADES ? true : !cfg.PROTEIN_INDIVIDUAL,
                                                 cfg.PROTEIN_ENABLED,
                                                 cfg.PROTEIN_PRICE,
-                                                ParseUpgradePrices(cfg.PROTEIN_UPGRADE_PRICES),
-                                                AssetBundleHandler.GetInfoFromJSON(proteinPowderScript.UPGRADE_NAME));
+                                                ParseUpgradePrices(cfg.PROTEIN_UPGRADE_PRICES));
         }
         private void SetupBiggerLungsTerminalNode()
         {
@@ -530,8 +502,7 @@ namespace MoreShipUpgrades.Managers
                                                 cfg.SHARED_UPGRADES ? true : !cfg.BIGGER_LUNGS_INDIVIDUAL,
                                                 cfg.BIGGER_LUNGS_ENABLED,
                                                 cfg.BIGGER_LUNGS_PRICE,
-                                                ParseUpgradePrices(cfg.BIGGER_LUNGS_UPGRADE_PRICES),
-                                                AssetBundleHandler.GetInfoFromJSON(biggerLungScript.UPGRADE_NAME));
+                                                ParseUpgradePrices(cfg.BIGGER_LUNGS_UPGRADE_PRICES));
         }
         private void SetupRunningShoesTerminalNode()
         {
@@ -539,8 +510,7 @@ namespace MoreShipUpgrades.Managers
                                                 cfg.SHARED_UPGRADES ? true : !cfg.RUNNING_SHOES_INDIVIDUAL,
                                                 cfg.RUNNING_SHOES_ENABLED,
                                                 cfg.RUNNING_SHOES_PRICE,
-                                                ParseUpgradePrices(cfg.RUNNING_SHOES_UPGRADE_PRICES),
-                                                AssetBundleHandler.GetInfoFromJSON(runningShoeScript.UPGRADE_NAME));
+                                                ParseUpgradePrices(cfg.RUNNING_SHOES_UPGRADE_PRICES));
         }
         private void SetupStrongLegsTerminalNode()
         {
@@ -548,30 +518,15 @@ namespace MoreShipUpgrades.Managers
                                                 cfg.SHARED_UPGRADES ? true : !cfg.STRONG_LEGS_INDIVIDUAL,
                                                 cfg.STRONG_LEGS_ENABLED,
                                                 cfg.STRONG_LEGS_PRICE,
-                                                ParseUpgradePrices(cfg.STRONG_LEGS_UPGRADE_PRICES),
-                                                AssetBundleHandler.GetInfoFromJSON(strongLegsScript.UPGRADE_NAME));
+                                                ParseUpgradePrices(cfg.STRONG_LEGS_UPGRADE_PRICES));
         }
         private void SetupMalwareBroadcasterTerminalNode()
         {
-            string desc;
-            if (cfg.DESTROY_TRAP)
-            {
-                if (cfg.EXPLODE_TRAP)
-                {
-                    desc = "Broadcasted codes now explode map hazards.";
-                }
-                else
-                {
-                    desc = "Broadcasted codes now destroy map hazards.";
-                }
-            }
-            else { desc = $"Broadcasted codes now disable map hazards for {cfg.DISARM_TIME} seconds."; }
 
             SetupOneTimeTerminalNode(trapDestroyerScript.UPGRADE_NAME,
                                     cfg.SHARED_UPGRADES ? true : !cfg.MALWARE_BROADCASTER_INDIVIDUAL,
                                     cfg.MALWARE_BROADCASTER_ENABLED,
-                                    cfg.MALWARE_BROADCASTER_PRICE,
-                                    desc);
+                                    cfg.MALWARE_BROADCASTER_PRICE);
         }
         private void SetupNightVisionBatteryTerminalNode()
         {
@@ -592,8 +547,7 @@ namespace MoreShipUpgrades.Managers
                                                 cfg.SHARED_UPGRADES ? true : !cfg.DISCOMBOBULATOR_INDIVIDUAL,
                                                 cfg.DISCOMBOBULATOR_ENABLED,
                                                 cfg.DISCOMBOBULATOR_PRICE,
-                                                ParseUpgradePrices(cfg.DISCO_UPGRADE_PRICES),
-                                                AssetBundleHandler.GetInfoFromJSON(terminalFlashScript.UPGRADE_NAME));
+                                                ParseUpgradePrices(cfg.DISCO_UPGRADE_PRICES));
         }
         private void SetupHunterTerminalNode()
         {
@@ -618,19 +572,14 @@ namespace MoreShipUpgrades.Managers
             SetupOneTimeTerminalNode(lightningRodScript.UPGRADE_NAME,
                                     true,
                                     cfg.LIGHTNING_ROD_ENABLED,
-                                    cfg.LIGHTNING_ROD_PRICE,
-                                    string.Format(AssetBundleHandler.GetInfoFromJSON(lightningRodScript.UPGRADE_NAME), cfg.LIGHTNING_ROD_PRICE, cfg.LIGHTNING_ROD_DIST));
+                                    cfg.LIGHTNING_ROD_PRICE);
         }
         private void SetupWalkieGPSTerminalNode()
         {
-            GameObject walkie = AssetBundleHandler.TryLoadGameObjectAsset(ref UpgradeAssets, "Assets/ShipUpgrades/walkieUpgrade.prefab");
-            if (!walkie) return;
-
-            IndividualUpgrades.Add(walkieScript.UPGRADE_NAME, true);
-            if (!cfg.WALKIE_ENABLED) return;
-
-            CustomTerminalNode node = new CustomTerminalNode(walkieScript.UPGRADE_NAME, cfg.WALKIE_PRICE, "Displays your location and time when holding a walkie talkie.\nEspecially useful for fog.", walkie);
-            terminalNodes.Add(node);
+            SetupOneTimeTerminalNode(walkieScript.UPGRADE_NAME,
+                                    true,
+                                    cfg.WALKIE_ENABLED,
+                                    cfg.WALKIE_PRICE);
         }
         private void SetupBackMusclesTerminalNode()
         {
@@ -638,24 +587,21 @@ namespace MoreShipUpgrades.Managers
                                                 cfg.SHARED_UPGRADES ? true : !cfg.BACK_MUSCLES_INDIVIDUAL,
                                                 cfg.BACK_MUSCLES_ENABLED,
                                                 cfg.BACK_MUSCLES_PRICE,
-                                                ParseUpgradePrices(cfg.BACK_MUSCLES_UPGRADE_PRICES),
-                                                AssetBundleHandler.GetInfoFromJSON(exoskeletonScript.UPGRADE_NAME));
+                                                ParseUpgradePrices(cfg.BACK_MUSCLES_UPGRADE_PRICES));
         }
         private void SetupPagerTerminalNode()
         {
             SetupOneTimeTerminalNode(pagerScript.UPGRADE_NAME,
                                     true,
                                     cfg.PAGER_ENABLED,
-                                    cfg.PAGER_PRICE,
-                                    "Unrestrict the transmitter");
+                                    cfg.PAGER_PRICE);
         }
         private void SetupLocksmithTerminalNode()
         {
             SetupOneTimeTerminalNode(lockSmithScript.UPGRADE_NAME,
                                     cfg.SHARED_UPGRADES ? true : !cfg.LOCKSMITH_INDIVIDUAL,
                                     cfg.LOCKSMITH_ENABLED,
-                                    cfg.LOCKSMITH_PRICE,
-                                    "Allows you to pick door locks by completing a minigame.");
+                                    cfg.LOCKSMITH_PRICE);
         }
         private void SetupPlayerHealthTerminalNode()
         {
@@ -663,8 +609,7 @@ namespace MoreShipUpgrades.Managers
                                                 cfg.SHARED_UPGRADES ? true : !cfg.PLAYER_HEALTH_INDIVIDUAL,
                                                 cfg.PLAYER_HEALTH_ENABLED,
                                                 cfg.PLAYER_HEALTH_PRICE,
-                                                ParseUpgradePrices(cfg.PLAYER_HEALTH_UPGRADE_PRICES),
-                                                AssetBundleHandler.GetInfoFromJSON(playerHealthScript.UPGRADE_NAME));
+                                                ParseUpgradePrices(cfg.PLAYER_HEALTH_UPGRADE_PRICES));
         }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can be purchased multiple times
@@ -679,8 +624,7 @@ namespace MoreShipUpgrades.Managers
                                                         bool shareStatus,
                                                         bool enabled,
                                                         int initialPrice,
-                                                        int[] prices,
-                                                        string infoFormat = ""
+                                                        int[] prices
                                                         )
         {
             GameObject multiPerk = AssetBundleHandler.GetPerkGameObject(upgradeName) ;
@@ -690,25 +634,8 @@ namespace MoreShipUpgrades.Managers
 
             if (!enabled) return null;
 
-            string infoString = "";
-            if (infoFunctions.ContainsKey(upgradeName))
-            {
-                infoString = string.Format(infoFormat, 1, initialPrice, infoFunctions[upgradeName](0));
-                for (int i = 0; i < prices.Length; i++)
-                {
-                    float infoResult = infoFunctions[upgradeName](i);
-                    if (infoResult % 1 == 0) // It's an Integer
-                        infoString += string.Format(infoFormat, i + 2, prices[i], Mathf.RoundToInt(infoFunctions[upgradeName](i + 1)));
-                    else
-                        infoString += string.Format(infoFormat, i + 2, prices[i], infoFunctions[upgradeName](i + 1));
-                }
-            }
-            else if (complexInfoFunctions.ContainsKey(upgradeName))
-            {
-                infoString = complexInfoFunctions[upgradeName](1, initialPrice);
-                for(int i = 0; i < prices.Length; i++)
-                    infoString += complexInfoFunctions[upgradeName](i+2, prices[i]);
-            }
+            string infoString = SetupUpgradeInfo(upgrade: multiPerk.GetComponent<BaseUpgrade>(), shareStatus: shareStatus, price: initialPrice, incrementalPrices: prices);
+
             CustomTerminalNode node = new CustomTerminalNode(upgradeName, initialPrice, infoString, multiPerk, prices, prices.Length);
             terminalNodes.Add(node);
             return node;
@@ -724,8 +651,7 @@ namespace MoreShipUpgrades.Managers
         private CustomTerminalNode SetupOneTimeTerminalNode(string upgradeName,
                                               bool shareStatus,
                                               bool enabled,
-                                              int price,
-                                              string info
+                                              int price
                                               )
         {
             GameObject oneTimeUpgrade = AssetBundleHandler.GetPerkGameObject(upgradeName);
@@ -733,10 +659,19 @@ namespace MoreShipUpgrades.Managers
 
             IndividualUpgrades.Add(upgradeName, shareStatus);
             if (!enabled) return null;
+            string info = SetupUpgradeInfo(upgrade: oneTimeUpgrade.GetComponent<BaseUpgrade>(), shareStatus: shareStatus, price: price);
 
             CustomTerminalNode node = new CustomTerminalNode(upgradeName, price, info, oneTimeUpgrade);
             terminalNodes.Add(node);
             return node;
+        }
+        private string SetupUpgradeInfo(BaseUpgrade upgrade = null, bool shareStatus = false, int price = -1, int[] incrementalPrices = null)
+        {
+            string info = "";
+            if (upgrade is IOneTimeUpgradeDisplayInfo upgradeInfo) info += upgradeInfo.GetDisplayInfo(price) + "\n";
+            if (upgrade is ITierUpgradeDisplayInfo tierUpgradeInfo) info += tierUpgradeInfo.GetDisplayInfo(initialPrice: price, maxLevels: incrementalPrices.Length, incrementalPrices: incrementalPrices);
+            if (upgrade is IUpgradeWorldBuilding component) info += component.GetWorldBuildingText(shareStatus) + "\n";
+            return info;
         }
         /// <summary>
         /// Function which parses the prices present in a given string and inserts them into an array of integers
