@@ -25,6 +25,7 @@ using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
+using HarmonyLib.Tools;
 
 namespace MoreShipUpgrades
 {
@@ -573,9 +574,9 @@ namespace MoreShipUpgrades
             wheelbarrow.isConductiveMetal = true;
             wheelbarrow.isScrap = true;
             wheelbarrow.weight = 0.99f + (cfg.SCRAP_WHEELBARROW_WEIGHT/100f);
-            wheelbarrow.toolTips = new string[] { "Drop all items: [MMB]" };
             wheelbarrow.canBeGrabbedBeforeGameStart = true;
             ScrapWheelbarrow barrowScript = wheelbarrow.spawnPrefab.AddComponent<ScrapWheelbarrow>();
+            wheelbarrow.toolTips = SetupWheelbarrowTooltips();
             barrowScript.itemProperties = wheelbarrow;
             barrowScript.wheelsClip = shoppingCartSound;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
@@ -605,9 +606,9 @@ namespace MoreShipUpgrades
             wheelbarrow.allowDroppingAheadOfPlayer = true;
             wheelbarrow.isConductiveMetal = true;
             wheelbarrow.weight = 0.99f + (cfg.WHEELBARROW_WEIGHT/100f);
-            wheelbarrow.toolTips = new string[] { "Drop all items: [MMB] " };
             wheelbarrow.canBeGrabbedBeforeGameStart = true;
             StoreWheelbarrow barrowScript = wheelbarrow.spawnPrefab.AddComponent<StoreWheelbarrow>();
+            wheelbarrow.toolTips = SetupWheelbarrowTooltips();
             barrowScript.itemProperties = wheelbarrow;
             barrowScript.wheelsClip = wheelbarrowSound;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
@@ -616,6 +617,27 @@ namespace MoreShipUpgrades
             UpgradeBus.instance.ItemsToSync.Add("Wheel", wheelbarrow);
 
             SetupStoreItem(wheelbarrow);
+        }
+        private string[] SetupWheelbarrowTooltips()
+        {
+            bool dropAllItemsKeySet;
+            UnityEngine.InputSystem.Key dropAllItemsKey = UnityEngine.InputSystem.Key.None;
+            bool dropAllItemsMouseButtonSet;
+            UnityEngine.InputSystem.LowLevel.MouseButton dropAllitemsMouseButton = UnityEngine.InputSystem.LowLevel.MouseButton.Middle;
+            string controlBind = UpgradeBus.instance.cfg.WHEELBARROW_DROP_ALL_CONTROL_BIND;
+            if (Enum.TryParse(controlBind, out UnityEngine.InputSystem.Key toggle))
+            {
+                dropAllItemsKey = toggle;
+                dropAllItemsKeySet = true;
+            }
+            else dropAllItemsKeySet = false;
+            if (Enum.TryParse(controlBind, out UnityEngine.InputSystem.LowLevel.MouseButton mouseButton))
+            {
+                dropAllitemsMouseButton = mouseButton;
+                dropAllItemsMouseButtonSet = true;
+            }
+            else dropAllItemsMouseButtonSet = false;
+            return new string[] { $"Drop all items: [{(dropAllItemsKeySet ? dropAllItemsKey : dropAllItemsMouseButtonSet ? dropAllitemsMouseButton : "MMB")}]" };
         }
         private void SetupPerks()
         {
