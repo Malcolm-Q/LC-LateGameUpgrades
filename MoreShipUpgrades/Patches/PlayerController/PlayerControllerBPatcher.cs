@@ -33,7 +33,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
             UpgradeBus.instance.UpgradeObjects[NightVision.UPGRADE_NAME].GetComponent<NightVision>().DisableOnClient();
             if (!UpgradeBus.instance.cfg.NIGHT_VISION_DROP_ON_DEATH) return;
-            LGUStore.instance.SpawnNightVisionItemOnDeathServerRpc(__instance.transform.position);
+            NightVision.instance.SpawnNightVisionItemOnDeathServerRpc(__instance.transform.position);
         }
 
         [HarmonyPatch(nameof(PlayerControllerB.DamagePlayer))]

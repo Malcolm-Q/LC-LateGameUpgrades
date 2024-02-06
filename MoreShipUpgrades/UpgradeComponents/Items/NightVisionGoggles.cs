@@ -41,7 +41,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             }
             if (UpgradeBus.instance.IndividualUpgrades[NightVision.UPGRADE_NAME])
             {
-                LGUStore.instance.EnableNightVisionServerRpc();
+                NightVision.instance.EnableNightVisionServerRpc();
             }
             else
             {

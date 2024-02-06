@@ -588,7 +588,7 @@ namespace MoreShipUpgrades.Misc
 
             terminal.groupCredits -= days * UpgradeBus.instance.cfg.EXTEND_DEADLINE_PRICE;
             LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits);
-            LGUStore.instance.ExtendDeadlineServerRpc(days);
+            ExtendDeadlineScript.instance.ExtendDeadlineServerRpc(days);
 
             return DisplayTerminalMessage($"Extended the deadline by {days} day{(days == 1 ? "" : "s")}.\n\n");
         }
@@ -698,7 +698,7 @@ namespace MoreShipUpgrades.Misc
         {
             if (!UpgradeBus.instance.cfg.SCRAP_INSURANCE_ENABLED) return outputNode;
 
-            if (ScrapInsurance.ScrapInsuranceStatus())
+            if (ScrapInsurance.GetScrapInsuranceStatus())
                 return DisplayTerminalMessage($"You already purchased insurance to protect your scrap belongings.\n\n");
 
             if (!StartOfRound.Instance.inShipPhase)

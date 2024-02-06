@@ -8,6 +8,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
     /// </summary>
     abstract class GameAttributeTierUpgrade : TierUpgrade
     {
+        #region Variables
         /// <summary>
         /// Previous state of the upgrade (for the purposes of "load LGU" not providing multiple increments)
         /// </summary>
@@ -40,6 +41,8 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// Logger associated with this class for logging purposes (incase an attribute change is not occuring)
         /// </summary>
         protected LGULogger logger;
+        #endregion
+        #region Attribute Getters
         /// <summary>
         /// Enumerator used to distinguish between the player's attributes (this wouldn't be necessary if we could have reference to variables but for now, this will have to work)
         /// </summary>
@@ -80,6 +83,8 @@ namespace MoreShipUpgrades.Misc.Upgrades
             if (doorControls == null) doorControls = UpgradeBus.instance.GetShipDoors();
             return doorControls;
         }
+        #endregion
+        #region Attribute Setters
         /// <summary>
         /// Initializes the upgrade to be applying to the local player by changing its selected attribute's value<para></para>
         /// Will apply incremental values based on the delta of levels between last saved and provided
@@ -216,10 +221,13 @@ namespace MoreShipUpgrades.Misc.Upgrades
                 default: logger.LogError("No attribute was set for this upgrade to remove the incremental values"); break;
             }
         }
+        #endregion
+        #region Overriden Methods
         public override void Increment()
         {
             AddIncrementalValue();
             currentUpgradeLevel++;
         }
+        #endregion
     }
 }

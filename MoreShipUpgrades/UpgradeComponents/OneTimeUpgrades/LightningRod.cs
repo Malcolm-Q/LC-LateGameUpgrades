@@ -2,6 +2,7 @@
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
@@ -85,7 +86,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
                 logger.LogDebug("Planning interception...");
                 __instance.staticElectricityParticle.Stop();
                 instance.LightningIntercepted = true;
-                LGUStore.instance.CoordinateInterceptionClientRpc();
+                instance.CoordinateInterceptionClientRpc();
             }
         }
         public static void RerouteLightningBolt(ref Vector3 strikePosition, ref StormyWeather __instance)
@@ -95,6 +96,13 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             strikePosition = terminal.transform.position;
             instance.LightningIntercepted = false;
             __instance.staticElectricityParticle.gameObject.SetActive(true);
+        }
+        [ClientRpc]
+        public void CoordinateInterceptionClientRpc()
+        {
+            logger.LogInfo("Setting lighting to intercepted on this client...");
+            LightningIntercepted = true;
+            FindObjectOfType<StormyWeather>(true).staticElectricityParticle.gameObject.SetActive(false);
         }
 
         public string GetWorldBuildingText(bool shareStatus = false)

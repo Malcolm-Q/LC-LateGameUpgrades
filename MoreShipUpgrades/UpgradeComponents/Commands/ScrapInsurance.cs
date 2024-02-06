@@ -11,20 +11,17 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
     {
         public static string COMMAND_NAME = "Scrap Insurance";
         public static int DEFAULT_PRICE = 400;
+        static bool insurance = false;
         void Start()
         {
             DontDestroyOnLoad(gameObject);
-            UpgradeBus.instance.insurance = false;
+            insurance = false;
         }
         public static bool GetScrapInsuranceStatus()
         {
             LGULogger logger = new LGULogger(COMMAND_NAME);
             logger.LogDebug("Grabbing status of insurance...");
-            return UpgradeBus.instance.insurance;
-        }
-        public static bool ScrapInsuranceStatus()
-        {
-            return UpgradeBus.instance.insurance;
+            return insurance;
         }
         public static void TurnOnScrapInsurance()
         {
@@ -42,7 +39,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
 
         static void ToggleInsurance(bool enabled)
         {
-            UpgradeBus.instance.insurance = enabled;
+            insurance = enabled;
         }
     }
 }
