@@ -11,6 +11,7 @@ using Unity.Netcode;
 using UnityEngine;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 
 namespace MoreShipUpgrades.Patches.PlayerController
 {

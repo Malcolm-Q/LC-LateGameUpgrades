@@ -6,7 +6,7 @@ using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System;
 using UnityEngine;
 
-namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
+namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 {
     internal class RunningShoes : GameAttributeTierUpgrade, IUpgradeWorldBuilding
     {
@@ -54,7 +54,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.MOVEMENT_SPEED_UNLOCK + (level * UpgradeBus.instance.cfg.MOVEMENT_INCREMENT);
+            Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.MOVEMENT_SPEED_UNLOCK + level * UpgradeBus.instance.cfg.MOVEMENT_INCREMENT;
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }

@@ -3,7 +3,7 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
-namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
+namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 {
     class BiggerLungs : GameAttributeTierUpgrade, IUpgradeWorldBuilding
     {
@@ -58,7 +58,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE_UNLOCK + (level * UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT);
+            System.Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE_UNLOCK + level * UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT;
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
