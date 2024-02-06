@@ -6,7 +6,7 @@ using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
-    class SickBeats : OneTimeUpgrade, IOneTimeUpgradeDisplayInfo
+    class SickBeats : OneTimeUpgrade
     {
         public static string UPGRADE_NAME = "Sick Beats";
         private static LGULogger logger = new LGULogger(UPGRADE_NAME);

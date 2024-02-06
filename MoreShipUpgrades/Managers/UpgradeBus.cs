@@ -239,12 +239,6 @@ namespace MoreShipUpgrades.Managers
             if (cfg.DOOR_HYDRAULICS_BATTERY_ENABLED && doorsHydraulicsBattery) UpgradeObjects[Stimpack.UPGRADE_NAME].GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute(ref doorsHydraulicsBattery, ref doorsHydraulicsBatteryLevel);
         }
 
-        [ServerRpc]
-        private void ResetShipAttributesServerRpc()
-        {
-            ResetShipAttributesClientRpc();
-        }
-
         internal void GenerateSales(int seed = -1) // TODO: Save sales
         {
             if (seed == -1) seed = Random.Range(0, 999999);

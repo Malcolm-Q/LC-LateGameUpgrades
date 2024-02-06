@@ -1,13 +1,11 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
-using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using Unity.Netcode;
-using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
-    class FastEncryption : OneTimeUpgrade, IOneTimeUpgradeDisplayInfo
+    class FastEncryption : OneTimeUpgrade
     {
         public static string UPGRADE_NAME = "Fast Encryption";
         public static FastEncryption instance;

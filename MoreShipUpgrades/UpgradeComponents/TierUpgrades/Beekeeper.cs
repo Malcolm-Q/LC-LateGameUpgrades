@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    class Beekeeper : TierUpgrade, IUpgradeWorldBuilding, ITierUpgradeDisplayInfo
+    class Beekeeper : TierUpgrade, IUpgradeWorldBuilding
     {
         public static string UPGRADE_NAME = "Beekeeper";
         public static string PRICES_DEFAULT = "225,280,340";

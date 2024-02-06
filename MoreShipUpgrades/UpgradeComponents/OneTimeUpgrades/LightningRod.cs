@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
-    class LightningRod : OneTimeUpgrade, IUpgradeWorldBuilding, IOneTimeUpgradeDisplayInfo
+    class LightningRod : OneTimeUpgrade, IUpgradeWorldBuilding
     {
         public static string UPGRADE_NAME = "Lightning Rod";
         internal const string WORLD_BUILDING_TEXT = "\n\nService key for the Ship's terminal which allows your crew to legally use the Ship's 'Static Attraction Field' module." +

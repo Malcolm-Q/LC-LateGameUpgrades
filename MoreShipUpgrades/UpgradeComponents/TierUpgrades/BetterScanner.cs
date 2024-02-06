@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    class BetterScanner : TierUpgrade, IUpgradeWorldBuilding, ITierUpgradeDisplayInfo
+    class BetterScanner : TierUpgrade, IUpgradeWorldBuilding
     {
         public const string UPGRADE_NAME = "Better Scanner";
         internal const string WORLD_BUILDING_TEXT = "\n\nA serialized Company-Issue Magazine subscription, called 'Stuff Finders'." +

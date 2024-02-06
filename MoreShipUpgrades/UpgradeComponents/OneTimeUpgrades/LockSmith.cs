@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
-    class LockSmith : OneTimeUpgrade, IUpgradeWorldBuilding, IOneTimeUpgradeDisplayInfo
+    class LockSmith : OneTimeUpgrade, IUpgradeWorldBuilding
     {
         public static string UPGRADE_NAME = "Locksmith";
         internal const string WORLD_BUILDING_TEXT = "\n\nOn-the-job training package that supplies {0} with proprietary knowledge of the 'Ram, Scan, Bump' technique" +

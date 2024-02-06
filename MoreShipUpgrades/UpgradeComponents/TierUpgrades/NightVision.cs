@@ -23,10 +23,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public static string UPGRADE_NAME = "NV Headset Batteries";
         public static string PRICES_DEFAULT = "300,400,500";
-        internal static string WORLD_BUILDING_TEXT = "\n\nVery old military surplus phosphor lens modules, retrofitted for compatibility with modern Company-issued helmets" +
-            " and offered to employees of The Company on a subscription plan. The base package comes with cheap batteries, but premium subscriptions offer regular issuances" +
-            " of higher-quality energy solutions, ranging from hobby grade to industrial application power banks. The modules also come with DRM that prevents the user from improvising" +
-            " with other kinds of batteries.\n\n";
 
         private static LGULogger logger = new LGULogger(UPGRADE_NAME);
         internal override void Start()

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    class BackMuscles : TierUpgrade, IUpgradeWorldBuilding, ITierUpgradeDisplayInfo
+    class BackMuscles : TierUpgrade, IUpgradeWorldBuilding
     {
         public const string UPGRADE_NAME = "Back Muscles";
         public static string PRICES_DEFAULT = "600,700,800";
