@@ -1,3 +1,24 @@
+## V 3.1.2 - To be Determined
+### Additions
+- Added keybind configuration for wheelbarrow's drop all items through configuration
+- Added World Building text to some upgrades/items (thanks to Nat(discordID:twinkula))
+
+### Changes
+- Spawned scrap (monster samples and contracts) now influence the totalScrapValueInLevel which is displayed at the end of game stats
+- Spawned scrap now use a component called ScrapValueSyncer which is used to change the item's scrap value for every player in the game.
+- Refactored upgrades to be more streamlined to create an upgrade and added documentation to each abstract upgrade class
+- Removed useless code
+- Refactored RPCs to respective handlers to relieve LGUStore's responsiiblities
+- Medkit now just increases the player's health instead of using DamagePlayer with a negative value.
+- Changed the time of saving LGU's data from disconnecting to autosaving. This should solve the issue of buying an upgrade, leaving and coming back with credits back and upgrade on.
+- Changed from storing the json alongside the game's save to storing inside the game's save (this should reduce amount of issues with mods like LCBetterSaves).
+
+### Fixes
+- Fixed wheelbarrow cost using NV's cost instead of its own
+- Fixed NV being given to everyone when its considered individual instead of shared
+- Fixed TotalWeight restriction not being applied due to not being updated to new weight system
+- Fixed Baboon Hawks getting stuck in grabbing items stored in a wheelbarrow, leading to them camping the wheelbarrow
+- Fixed Shopping Cart (Scrap Wheelbarrow) scrap value not being applied on spawn due to MapObjects not having their scrap value synced.
 ## V 3.1.0 - 2024-1-19
 Additions
 - Shutter Batteries Upgrade
