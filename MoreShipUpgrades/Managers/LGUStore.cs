@@ -163,7 +163,7 @@ namespace MoreShipUpgrades.Managers
             extendDeadline.GetComponent<NetworkObject>().Spawn();
 
             GameObject insurance = Instantiate(AssetBundleHandler.GetPerkGameObject(ScrapInsurance.COMMAND_NAME));
-            instance.GetComponent<NetworkObject>().Spawn();
+            insurance.GetComponent<NetworkObject>().Spawn();
         }
 
         [ServerRpc(RequireOwnership = false)]
