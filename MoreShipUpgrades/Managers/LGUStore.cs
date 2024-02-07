@@ -159,6 +159,11 @@ namespace MoreShipUpgrades.Managers
             GameObject intern = Instantiate(AssetBundleHandler.GetPerkGameObject(Interns.UPGRADE_NAME));
             intern.GetComponent<NetworkObject>().Spawn();
 
+            GameObject extendDeadline = Instantiate(AssetBundleHandler.GetPerkGameObject(ExtendDeadlineScript.NAME));
+            extendDeadline.GetComponent<NetworkObject>().Spawn();
+
+            GameObject insurance = Instantiate(AssetBundleHandler.GetPerkGameObject(ScrapInsurance.COMMAND_NAME));
+            instance.GetComponent<NetworkObject>().Spawn();
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -472,20 +477,6 @@ namespace MoreShipUpgrades.Managers
         }
 
         [ServerRpc(RequireOwnership = false)]
-        public void EnableNightVisionServerRpc()
-        {
-            logger.LogInfo("Enabling night vision for all clients...");
-            EnableNightVisionClientRpc();
-        }
-
-        [ClientRpc]
-        private void EnableNightVisionClientRpc()
-        {
-            logger.LogInfo("Request to enable night vision on this client received.");
-            UpgradeBus.instance.UpgradeObjects[NightVision.UPGRADE_NAME].GetComponent<NightVision>().EnableOnClient();
-        }
-
-        [ServerRpc(RequireOwnership = false)]
         private void HandleUpgradeServerRpc(string name, bool increment)
         {
             logger.LogInfo($"Received server request to handle shared upgrade for: {name} increment: {increment}");
@@ -527,14 +518,6 @@ namespace MoreShipUpgrades.Managers
         }
 
         [ClientRpc]
-        public void CoordinateInterceptionClientRpc()
-        {
-            logger.LogInfo("Setting lighting to intercepted on this client...");
-            LightningRod.instance.LightningIntercepted = true;
-            FindObjectOfType<StormyWeather>(true).staticElectricityParticle.gameObject.SetActive(false);
-        }
-
-        [ClientRpc]
         public void SyncValuesClientRpc(int value, NetworkBehaviourReference netRef)
         {
             netRef.TryGet(out MonsterSample prop);
@@ -543,17 +526,10 @@ namespace MoreShipUpgrades.Managers
                 prop.scrapValue = value;
                 prop.itemProperties.creditsWorth = value;
                 prop.GetComponentInChildren<ScanNodeProperties>().subText = $"Value: ${value}";
+                RoundManager.Instance.totalScrapValueInLevel += value;
                 logger.LogInfo($"Successfully synced values of {prop.itemProperties.itemName}");
             }
             else logger.LogInfo("Unable to resolve net ref for SyncValuesClientRpc!");
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        public void SpawnNightVisionItemOnDeathServerRpc(Vector3 position)
-        {
-            GameObject go = Instantiate(UpgradeBus.instance.nightVisionPrefab, position + Vector3.up, Quaternion.identity);
-            go.GetComponent<NetworkObject>().Spawn();
-            logger.LogInfo("Request to spawn night vision goggles received.");
         }
 
         [ClientRpc]
@@ -630,22 +606,6 @@ namespace MoreShipUpgrades.Managers
         {
             logger.LogInfo($"Instructing clients to play '{clip}' SFX");
             PlayAudioOnPlayerClientRpc(netRef, clip);
-        }
-
-        [ClientRpc]
-        public void ExtendDeadlineClientRpc(int days)
-        {
-            float before = TimeOfDay.Instance.timeUntilDeadline;
-            TimeOfDay.Instance.timeUntilDeadline += TimeOfDay.Instance.totalTime * days;
-            TimeOfDay.Instance.UpdateProfitQuotaCurrentTime();
-            TimeOfDay.Instance.SyncTimeClientRpc(TimeOfDay.Instance.globalTime, (int)TimeOfDay.Instance.timeUntilDeadline);
-            logger.LogDebug($"Previous time: {before}, new time: {TimeOfDay.Instance.timeUntilDeadline}");
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        public void ExtendDeadlineServerRpc(int days)
-        {
-            ExtendDeadlineClientRpc(days);
         }
 
     }

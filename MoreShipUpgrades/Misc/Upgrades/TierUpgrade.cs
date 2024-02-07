@@ -8,6 +8,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
     /// </summary>
     abstract class TierUpgrade : BaseUpgrade, ITierUpgradeDisplayInfo
     {
+        #region Overriden Methods
         internal override void Start()
         {
             DontDestroyOnLoad(gameObject);
@@ -16,7 +17,6 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// <summary>
         /// Handles the upgrade being purchased past the unlock phase
         /// </summary>
-        public abstract void Increment();
         public override void Load()
         {
             string loadColour = "#FF0000";
@@ -35,7 +35,12 @@ namespace MoreShipUpgrades.Misc.Upgrades
             string unloadMessage = $"\n<color={unloadColour}>{upgradeName} has been disabled!</color>";
             HUDManager.Instance.chatText.text += unloadMessage;
         }
-
+        #endregion
+        #region Interface Methods
         public abstract string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null);
+        #endregion
+        #region Abstract Methods
+        public abstract void Increment();
+        #endregion
     }
 }

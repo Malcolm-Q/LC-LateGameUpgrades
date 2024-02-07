@@ -24,6 +24,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exterminator
             ScanNodeProperties node = loot.GetComponentInChildren<ScanNodeProperties>();
             node.scrapValue = UpgradeBus.instance.cfg.CONTRACT_BUG_REWARD;
             node.subText = $"VALUE: ${node.scrapValue}";
+            RoundManager.Instance.totalScrapValueInLevel += node.scrapValue;
 
             anim = GetComponentInChildren<Animator>();
         }

@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,14 +21,17 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         private PlayerControllerB client;
         private bool batteryExhaustion;
         private Key toggleKey;
+        internal static NightVision instance;
 
         public static string UPGRADE_NAME = "NV Headset Batteries";
         public static string PRICES_DEFAULT = "300,400,500";
 
-        private static LGULogger logger = new LGULogger(UPGRADE_NAME);
+        private static LGULogger logger;
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
+            logger = new LGULogger(upgradeName);
+            instance = this;
             base.Start();
             batteryBar = transform.GetChild(0).GetChild(0).transform;
             transform.GetChild(0).gameObject.SetActive(false);
@@ -148,6 +152,28 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             UpgradeBus.instance.nightVision = false;
             UpgradeBus.instance.nightVisionLevel = 0;
             DisableOnClient();
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void EnableNightVisionServerRpc()
+        {
+            logger.LogDebug("Enabling night vision for all clients...");
+            EnableNightVisionClientRpc();
+        }
+
+        [ClientRpc]
+        private void EnableNightVisionClientRpc()
+        {
+            logger.LogDebug("Request to enable night vision on this client received.");
+            EnableOnClient();
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void SpawnNightVisionItemOnDeathServerRpc(Vector3 position)
+        {
+            GameObject go = Instantiate(UpgradeBus.instance.nightVisionPrefab, position + Vector3.up, Quaternion.identity);
+            go.GetComponent<NetworkObject>().Spawn();
+            logger.LogInfo("Request to spawn night vision goggles received.");
         }
         public void EnableOnClient(bool save = true)
         {

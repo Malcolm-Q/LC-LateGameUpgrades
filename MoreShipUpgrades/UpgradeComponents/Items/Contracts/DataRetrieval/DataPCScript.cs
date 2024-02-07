@@ -93,6 +93,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
             ScanNodeProperties node = loot.GetComponentInChildren<ScanNodeProperties>();
             node.scrapValue = UpgradeBus.instance.cfg.CONTRACT_DATA_REWARD;
             node.subText = $"VALUE: ${node.scrapValue}";
+            RoundManager.Instance.totalScrapValueInLevel += node.scrapValue;
 
 
             if (IsHost || IsServer)

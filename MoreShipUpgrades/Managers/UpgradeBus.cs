@@ -101,8 +101,6 @@ namespace MoreShipUpgrades.Managers
         public AssetBundle UpgradeAssets;
         internal bool pager;
 
-        public bool insurance;
-
         public Dictionary<string,GameObject> samplePrefabs = new Dictionary<string,GameObject>();
         public GameObject nightVisionPrefab;
         public bool sickBeats;
@@ -167,7 +165,6 @@ namespace MoreShipUpgrades.Managers
             ResetPlayerAttributes();
             if(IsHost || IsServer) ResetShipAttributesClientRpc();
             EffectsActive = false;
-            insurance = false;
             DestroyTraps = false;
             scannerUpgrade = false;
             nightVision = false;

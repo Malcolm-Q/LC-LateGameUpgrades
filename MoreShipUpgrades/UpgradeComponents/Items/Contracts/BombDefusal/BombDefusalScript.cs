@@ -49,6 +49,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
             ScanNodeProperties node = GetComponentInChildren<ScanNodeProperties>();
             node.subText = $"VALUE: ${prop.scrapValue}";
             node.scrapValue = prop.scrapValue;
+            RoundManager.Instance.totalScrapValueInLevel += prop.scrapValue;
 
 
             grabBox = GetComponent<BoxCollider>();
