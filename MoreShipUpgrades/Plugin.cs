@@ -671,6 +671,7 @@ namespace MoreShipUpgrades
             SetupExtendDeadline();
             SetupDoorsHydraulicsBattery();
             SetupScrapInsurance();
+            SetupQuantumDisruptor();
         }
 
         private void SetupSickBeats()
@@ -766,6 +767,10 @@ namespace MoreShipUpgrades
         private void SetupScrapInsurance()
         {
             SetupGenericPerk<ScrapInsurance>(ScrapInsurance.COMMAND_NAME);
+        }
+        private void SetupQuantumDisruptor()
+        {
+            SetupGenericPerk<QuantumDisruptor>(QuantumDisruptor.UPGRADE_NAME);
         }
         /// <summary>
         /// Generic function where it adds a script (specificed through the type) into an GameObject asset 

@@ -17,6 +17,7 @@ namespace MoreShipUpgrades.Misc
         readonly ConfigFile configFile;
 
         // enabled disabled
+        public bool QUANTUM_DISRUPTOR_ENABLED { get; set; }
         public bool CONTRACTS_ENABLED { get; set; }
         public bool ADVANCED_TELE_ENABLED { get; set; }
         public bool WEAK_TELE_ENABLED { get; set; }
@@ -62,6 +63,7 @@ namespace MoreShipUpgrades.Misc
         public bool LOCKSMITH_INDIVIDUAL { get; set; }
 
         // prices
+        public int QUANTUM_DISRUPTOR_PRICE { get; set; }
         public int PEEPER_PRICE { get; set; }
         public int HUNTER_PRICE { get; set; }
         public int ADVANCED_TELE_PRICE { get; set; }
@@ -88,6 +90,9 @@ namespace MoreShipUpgrades.Misc
         public int SCRAP_INSURANCE_PRICE { get; set; }
 
         // attributes
+        public float QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER { get; set; }
+        public float QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER { get; set; }
+        public string QUANTUM_DISRUPTOR_PRICES { get; set; }
         public float BIGGER_LUNGS_STAMINA_REGEN_INCREASE { get; set; }
         public float BIGGER_LUNGS_JUMP_STAMINA_COST_DECREASE { get; set; }
         public int PROTEIN_INCREMENT { get; set; }
@@ -520,6 +525,13 @@ namespace MoreShipUpgrades.Misc
             topSection = ScrapInsurance.COMMAND_NAME;
             SCRAP_INSURANCE_ENABLED = ConfigEntry(topSection, "Enable Scrap Insurance Command", true, "One time purchase which allows you to keep all your scrap upon a team wipe on a moon trip");
             SCRAP_INSURANCE_PRICE = ConfigEntry(topSection, "Price of Scrap Insurance", ScrapInsurance.DEFAULT_PRICE);
+
+            topSection = QuantumDisruptor.UPGRADE_NAME;
+            QUANTUM_DISRUPTOR_ENABLED = ConfigEntry(topSection, "Enable Quantum Disruptor Upgrade", true, "Tier upgrade which increases the time you can stay in a moon landing");
+            QUANTUM_DISRUPTOR_PRICE = ConfigEntry(topSection, "Price of Quantum Disruptor Upgrade", 1000);
+            QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER = ConfigEntry(topSection, "How slower time will go by when unlocking the Quantum Disruptor upgrade", 0.2f);
+            QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER = ConfigEntry(topSection, "How slower time will go by when incrementing the Quantum Disruptor level", 0.1f);
+            QUANTUM_DISRUPTOR_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, QuantumDisruptor.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
 
             topSection = "Wheelbarrow";
             WHEELBARROW_ENABLED = ConfigEntry(topSection, "Enable the Wheelbarrow Item", true, "Allows you to buy a wheelbarrow to carry items outside of your inventory");

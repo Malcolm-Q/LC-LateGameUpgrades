@@ -43,6 +43,7 @@ namespace MoreShipUpgrades.Managers
         public bool hunter = false;
         public bool playerHealth = false;
         public bool doorsHydraulicsBattery = false;
+        internal bool quantumDisruptor = false;
 
         public int lungLevel = 0;
         public int helmetHits = 0;
@@ -57,6 +58,7 @@ namespace MoreShipUpgrades.Managers
         public int nightVisionLevel = 0;
         public int playerHealthLevel = 0;
         public int doorsHydraulicsBatteryLevel = 0;
+        internal int quantumDisruptorLevel = 0;
 
         public float flashCooldown = 0f;
         public float alteredWeight = 1f;
@@ -235,6 +237,8 @@ namespace MoreShipUpgrades.Managers
 
             logger.LogDebug($"Resetting the ship's attributes");
             if (cfg.DOOR_HYDRAULICS_BATTERY_ENABLED && doorsHydraulicsBattery) UpgradeObjects[Stimpack.UPGRADE_NAME].GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute(ref doorsHydraulicsBattery, ref doorsHydraulicsBatteryLevel);
+            if (cfg.QUANTUM_DISRUPTOR_ENABLED && quantumDisruptor) UpgradeObjects[QuantumDisruptor.UPGRADE_NAME].GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute(ref quantumDisruptor, ref quantumDisruptorLevel);
+
         }
 
         internal void GenerateSales(int seed = -1) // TODO: Save sales
@@ -445,7 +449,16 @@ namespace MoreShipUpgrades.Managers
             SetupSickBeatsTerminalNode();
 
             SetupShutterBatteriesTerminalNode();
+            SetupQuantumDisruptorTerminalNode();
             terminalNodes.Sort();
+        }
+        private void SetupQuantumDisruptorTerminalNode()
+        {
+            SetupMultiplePurchasableTerminalNode(QuantumDisruptor.UPGRADE_NAME,
+                                                true,
+                                                cfg.QUANTUM_DISRUPTOR_ENABLED,
+                                                cfg.QUANTUM_DISRUPTOR_PRICE,
+                                                ParseUpgradePrices(cfg.QUANTUM_DISRUPTOR_PRICES));
         }
         private void SetupShutterBatteriesTerminalNode()
         {
