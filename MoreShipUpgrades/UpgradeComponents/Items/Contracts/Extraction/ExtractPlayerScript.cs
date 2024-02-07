@@ -27,6 +27,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Extraction
             ScanNodeProperties node = GetComponentInChildren<ScanNodeProperties>();
             node.scrapValue = UpgradeBus.instance.cfg.CONTRACT_EXTRACT_REWARD;
             node.subText = $"VALUE: ${node.scrapValue}";
+            RoundManager.Instance.totalScrapValueInLevel += node.scrapValue;
 
             audio = GetComponent<AudioSource>();
             trig = GetComponentInChildren<InteractTrigger>();

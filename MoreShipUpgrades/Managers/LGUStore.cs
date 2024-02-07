@@ -526,6 +526,7 @@ namespace MoreShipUpgrades.Managers
                 prop.scrapValue = value;
                 prop.itemProperties.creditsWorth = value;
                 prop.GetComponentInChildren<ScanNodeProperties>().subText = $"Value: ${value}";
+                RoundManager.Instance.totalScrapValueInLevel += value;
                 logger.LogInfo($"Successfully synced values of {prop.itemProperties.itemName}");
             }
             else logger.LogInfo("Unable to resolve net ref for SyncValuesClientRpc!");

@@ -17,6 +17,7 @@ namespace MoreShipUpgrades.Misc
             ScanNodeProperties node = GetComponentInChildren<ScanNodeProperties>();
             node.scrapValue = UpgradeBus.instance.cfg.CONTRACT_EXOR_REWARD;
             node.subText = $"VALUE: ${node.scrapValue}";
+            RoundManager.Instance.totalScrapValueInLevel += node.scrapValue;
         }
     }
 }
