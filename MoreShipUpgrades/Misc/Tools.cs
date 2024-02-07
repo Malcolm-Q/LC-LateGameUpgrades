@@ -124,7 +124,7 @@ namespace MoreShipUpgrades.Misc
         }
         private static bool CheckIntegerCodeInstruction(CodeInstruction code, object findValue)
         {
-            switch(findValue)
+            switch((sbyte)findValue)
             {
                 case 0: return code.opcode == OpCodes.Ldc_I4_0;
                 case 1: return code.opcode == OpCodes.Ldc_I4_1;

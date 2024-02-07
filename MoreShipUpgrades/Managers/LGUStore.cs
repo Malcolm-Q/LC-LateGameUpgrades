@@ -45,7 +45,8 @@ namespace MoreShipUpgrades.Managers
             {LightningRod.UPGRADE_NAME, SaveInfo => SaveInfo.lightningRod },
             {Stimpack.UPGRADE_NAME, SaveInfo => SaveInfo.playerHealth },
             {DoorsHydraulicsBattery.UPGRADE_NAME, SaveInfo => SaveInfo.doorsHydraulicsBattery },
-            {SickBeats.UPGRADE_NAME, SaveInfo => SaveInfo.sickBeats }
+            {SickBeats.UPGRADE_NAME, SaveInfo => SaveInfo.sickBeats },
+            {BargainConnections.UPGRADE_NAME, SaveInfo => SaveInfo.bargainConnections },
         };
 
         private static Dictionary<string, Func<SaveInfo, int>> levelConditions = new Dictionary<string, Func<SaveInfo, int>>
@@ -68,6 +69,7 @@ namespace MoreShipUpgrades.Managers
             { Stimpack.UPGRADE_NAME, saveInfo => saveInfo.playerHealthLevel },
             { DoorsHydraulicsBattery.UPGRADE_NAME, saveInfo => saveInfo.doorsHydraulicsBatteryLevel},
             { SickBeats.UPGRADE_NAME, saveInfo => 0 },
+            { BargainConnections.UPGRADE_NAME, saveInfo => saveInfo.bargainConnectionsLevel },
         };
         private bool retrievedCfg;
         private bool receivedSave;
@@ -618,6 +620,7 @@ namespace MoreShipUpgrades.Managers
         public bool wearingHelmet = UpgradeBus.instance.wearingHelmet;
         public bool sickBeats = UpgradeBus.instance.sickBeats;
         public bool doorsHydraulicsBattery = UpgradeBus.instance.doorsHydraulicsBattery;
+        public bool bargainConnections = UpgradeBus.instance.bargainConnections;
 
         public int beeLevel = UpgradeBus.instance.beeLevel;
         public int huntLevel = UpgradeBus.instance.huntLevel;
@@ -631,6 +634,7 @@ namespace MoreShipUpgrades.Managers
         public int nightVisionLevel = UpgradeBus.instance.nightVisionLevel;
         public int playerHealthLevel = UpgradeBus.instance.playerHealthLevel;
         public int doorsHydraulicsBatteryLevel = UpgradeBus.instance.doorsHydraulicsBatteryLevel;
+        public int bargainConnectionsLevel = UpgradeBus.instance.bargainConnectionsLevel;
         public string contractType = UpgradeBus.instance.contractType;
         public string contractLevel = UpgradeBus.instance.contractLevel;
         public Dictionary<string, float> SaleData = UpgradeBus.instance.SaleData;

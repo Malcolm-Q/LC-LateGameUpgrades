@@ -1,6 +1,9 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace MoreShipUpgrades.Patches.TerminalComponents
 {
@@ -83,6 +86,18 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
         {
             string text = __instance.screenText.text.Substring(__instance.screenText.text.Length - __instance.textAdded);
             CommandParser.ParseLGUCommands(text, ref __instance, ref __result);
+        }
+
+        [HarmonyTranspiler]
+        [HarmonyPatch(nameof(Terminal.SetItemSales))]
+        static IEnumerable<CodeInstruction> SetItemSalesTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo bargainConnectionsAmount = typeof(BargainConnections).GetMethod(nameof(BargainConnections.GetBargainConnectionsAdditionalItems));
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            int index = 0;
+            index = Tools.FindInteger(index, ref codes, 5, addCode: bargainConnectionsAmount, errorMessage: "Couldn't find first maximum amount of items to go on sale");
+            index = Tools.FindInteger(index, ref codes, 5, addCode: bargainConnectionsAmount, errorMessage: "Couldn't find second maximum amount of items to go on sale");
+            return codes;
         }
     }
 }

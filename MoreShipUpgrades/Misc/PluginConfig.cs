@@ -17,6 +17,7 @@ namespace MoreShipUpgrades.Misc
         readonly ConfigFile configFile;
 
         // enabled disabled
+        public bool BARGAIN_CONNECTIONS_ENABLED { get; set; }
         public bool CONTRACTS_ENABLED { get; set; }
         public bool ADVANCED_TELE_ENABLED { get; set; }
         public bool WEAK_TELE_ENABLED { get; set; }
@@ -62,6 +63,7 @@ namespace MoreShipUpgrades.Misc
         public bool LOCKSMITH_INDIVIDUAL { get; set; }
 
         // prices
+        public int BARGAIN_CONNECTIONS_PRICE {  get; set; }
         public int PEEPER_PRICE { get; set; }
         public int HUNTER_PRICE { get; set; }
         public int ADVANCED_TELE_PRICE { get; set; }
@@ -251,8 +253,9 @@ namespace MoreShipUpgrades.Misc
         public bool DEFUSAL_CONTRACT {  get; set; }
         public bool MAIN_OBJECT_FURTHEST {  get; set; }
         public string WHEELBARROW_DROP_ALL_CONTROL_BIND { get; set; }
-
-
+        public int BARGAIN_CONNECTIONS_INITIAL_ITEM_AMOUNT { get; set; }
+        public int BARGAIN_CONNECTIONS_INCREMENTAL_ITEM_AMOUNT { get; set; }
+        public string BARGAIN_CONNECTIONS_PRICES { get; set; }
         public PluginConfig(ConfigFile cfg)
         {
             configFile = cfg;
@@ -520,6 +523,13 @@ namespace MoreShipUpgrades.Misc
             topSection = ScrapInsurance.COMMAND_NAME;
             SCRAP_INSURANCE_ENABLED = ConfigEntry(topSection, "Enable Scrap Insurance Command", true, "One time purchase which allows you to keep all your scrap upon a team wipe on a moon trip");
             SCRAP_INSURANCE_PRICE = ConfigEntry(topSection, "Price of Scrap Insurance", ScrapInsurance.DEFAULT_PRICE);
+
+            topSection = BargainConnections.UPGRADE_NAME;
+            BARGAIN_CONNECTIONS_ENABLED = ConfigEntry(topSection, "Enable Bargain Connections Upgrade", true, "Tier upgrade which increases the amount of items that can be on sale in the store");
+            BARGAIN_CONNECTIONS_PRICE = ConfigEntry(topSection, "Price of Bargain Connections", 200);
+            BARGAIN_CONNECTIONS_INITIAL_ITEM_AMOUNT = ConfigEntry(topSection, "Initial additional amount of items that can go on sale", 3);
+            BARGAIN_CONNECTIONS_INCREMENTAL_ITEM_AMOUNT = ConfigEntry(topSection, "Incremental additional amount of items that can go on sale", 2);
+            BARGAIN_CONNECTIONS_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, BargainConnections.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
 
             topSection = "Wheelbarrow";
             WHEELBARROW_ENABLED = ConfigEntry(topSection, "Enable the Wheelbarrow Item", true, "Allows you to buy a wheelbarrow to carry items outside of your inventory");

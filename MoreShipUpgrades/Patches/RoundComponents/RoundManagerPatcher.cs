@@ -2,10 +2,6 @@
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Commands;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Reflection.Emit;
 
 namespace MoreShipUpgrades.Patches.RoundComponents
 {

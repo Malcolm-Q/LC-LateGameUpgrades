@@ -43,6 +43,7 @@ namespace MoreShipUpgrades.Managers
         public bool hunter = false;
         public bool playerHealth = false;
         public bool doorsHydraulicsBattery = false;
+        public bool bargainConnections = false;
 
         public int lungLevel = 0;
         public int helmetHits = 0;
@@ -57,6 +58,7 @@ namespace MoreShipUpgrades.Managers
         public int nightVisionLevel = 0;
         public int playerHealthLevel = 0;
         public int doorsHydraulicsBatteryLevel = 0;
+        public int bargainConnectionsLevel = 0;
 
         public float flashCooldown = 0f;
         public float alteredWeight = 1f;
@@ -445,7 +447,17 @@ namespace MoreShipUpgrades.Managers
             SetupSickBeatsTerminalNode();
 
             SetupShutterBatteriesTerminalNode();
+
+            SetupBargainConnectionsTerminalNode();
             terminalNodes.Sort();
+        }
+        void SetupBargainConnectionsTerminalNode()
+        {
+            SetupMultiplePurchasableTerminalNode(BargainConnections.UPGRADE_NAME,
+                                                true,
+                                                cfg.BARGAIN_CONNECTIONS_ENABLED,
+                                                cfg.BARGAIN_CONNECTIONS_PRICE,
+                                                ParseUpgradePrices(cfg.BARGAIN_CONNECTIONS_PRICES));
         }
         private void SetupShutterBatteriesTerminalNode()
         {
