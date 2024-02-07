@@ -27,6 +27,7 @@ using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using HarmonyLib.Tools;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
+using UnityEngine.Profiling;
 
 namespace MoreShipUpgrades
 {
@@ -136,6 +137,7 @@ namespace MoreShipUpgrades
         void SetupBombContract(ref AssetBundle bundle, AnimationCurve curve)
         {
             Item bomb = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "BombItem.asset");
+            bomb.spawnPrefab.AddComponent<ScrapValueSyncer>();
             if (bomb == null) return;
             bomb.isConductiveMetal = false;
             DefusalContract coNest = bomb.spawnPrefab.AddComponent<DefusalContract>();
@@ -206,6 +208,7 @@ namespace MoreShipUpgrades
         void SetupExterminatorContract(ref AssetBundle bundle, AnimationCurve curve)
         {
             Item bugLoot = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "EggLootItem.asset");
+            bugLoot.spawnPrefab.AddComponent<ScrapValueSyncer>();
             Items.RegisterItem(bugLoot);
             Utilities.FixMixerGroups(bugLoot.spawnPrefab);
             NetworkPrefabs.RegisterNetworkPrefab(bugLoot.spawnPrefab);
@@ -239,6 +242,7 @@ namespace MoreShipUpgrades
             co.SetPosition = true;
 
             ExtractPlayerScript extractScript = scav.spawnPrefab.AddComponent<ExtractPlayerScript>();
+            scav.spawnPrefab.AddComponent<ScrapValueSyncer>();
             TextAsset scavAudioPaths = AssetBundleHandler.TryLoadOtherAsset<TextAsset>(ref bundle, root + "scavSounds/scavAudio.json");
             Dictionary<string, string[]> scavAudioDict = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(scavAudioPaths.text);
             ExtractPlayerScript.clipDict.Add("lost", CreateAudioClipArray(scavAudioDict["lost"], ref bundle));
@@ -259,6 +263,7 @@ namespace MoreShipUpgrades
         void SetupDataContract(ref AssetBundle bundle, AnimationCurve curve)
         {
             Item dataLoot = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "DiscItem.asset");
+            dataLoot.spawnPrefab.AddComponent<ScrapValueSyncer>();
             Items.RegisterItem(dataLoot);
             Utilities.FixMixerGroups(dataLoot.spawnPrefab);
             NetworkPrefabs.RegisterNetworkPrefab(dataLoot.spawnPrefab);
@@ -350,6 +355,7 @@ namespace MoreShipUpgrades
                 sampleScript.itemProperties = sample;
                 sampleScript.itemProperties.minValue = MINIMUM_VALUES[creatureName];
                 sampleScript.itemProperties.maxValue = MAXIMUM_VALUES[creatureName];
+                sample.spawnPrefab.AddComponent<ScrapValueSyncer>();
                 LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(sample.spawnPrefab);
                 UpgradeBus.instance.samplePrefabs.Add(creatureName, sample.spawnPrefab);
             }
@@ -580,6 +586,7 @@ namespace MoreShipUpgrades
             wheelbarrow.toolTips = SetupWheelbarrowTooltips();
             barrowScript.itemProperties = wheelbarrow;
             barrowScript.wheelsClip = shoppingCartSound;
+            wheelbarrow.spawnPrefab.AddComponent<ScrapValueSyncer>();
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
             LethalLib.Modules.Items.RegisterItem(wheelbarrow);
             Utilities.FixMixerGroups(wheelbarrow.spawnPrefab);

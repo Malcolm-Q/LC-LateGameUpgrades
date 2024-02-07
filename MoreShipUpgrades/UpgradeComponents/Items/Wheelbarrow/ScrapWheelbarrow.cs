@@ -1,8 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
 {
@@ -26,6 +24,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             sloppiness = UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_MOVEMENT_SLOPPY;
             lookSensitivityDrawback = UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK;
             playSounds = UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_PLAY_NOISE;
+            Random random = new Random(StartOfRound.Instance.randomMapSeed + 45);
+            GetComponent<ScrapValueSyncer>().SetScrapValue(random.Next(UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_MINIMUM_VALUE, UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_MAXIMUM_VALUE));
             logger.LogDebug("Spawned in the scene!");
         }
     }
