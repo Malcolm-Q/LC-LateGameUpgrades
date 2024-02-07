@@ -51,6 +51,7 @@ namespace MoreShipUpgrades.Misc
             { ExtendDeadlineScript.NAME, root+"ExtendDeadline.prefab" },
             { DoorsHydraulicsBattery.UPGRADE_NAME, root+"DoorsHydraulicsBattery.prefab" },
             { ScrapInsurance.COMMAND_NAME, root+"ScrapInsurance.prefab" },
+            { LethalDeals.UPGRADE_NAME, root+"LethalDeals.prefab" },
 
             { "Advanced Portable Tele", root+"TpButtonAdv.asset" },
             { "Portable Tele", root+"TpButton.asset" },

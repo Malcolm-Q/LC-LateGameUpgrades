@@ -17,6 +17,7 @@ namespace MoreShipUpgrades.Misc
         readonly ConfigFile configFile;
 
         // enabled disabled
+        public bool LETHAL_DEALS_ENABLED { get; set; }
         public bool CONTRACTS_ENABLED { get; set; }
         public bool ADVANCED_TELE_ENABLED { get; set; }
         public bool WEAK_TELE_ENABLED { get; set; }
@@ -62,6 +63,7 @@ namespace MoreShipUpgrades.Misc
         public bool LOCKSMITH_INDIVIDUAL { get; set; }
 
         // prices
+        public int LETHAL_DEALS_PRICE { get; set; }
         public int PEEPER_PRICE { get; set; }
         public int HUNTER_PRICE { get; set; }
         public int ADVANCED_TELE_PRICE { get; set; }
@@ -520,6 +522,10 @@ namespace MoreShipUpgrades.Misc
             topSection = ScrapInsurance.COMMAND_NAME;
             SCRAP_INSURANCE_ENABLED = ConfigEntry(topSection, "Enable Scrap Insurance Command", true, "One time purchase which allows you to keep all your scrap upon a team wipe on a moon trip");
             SCRAP_INSURANCE_PRICE = ConfigEntry(topSection, "Price of Scrap Insurance", ScrapInsurance.DEFAULT_PRICE);
+
+            topSection = LethalDeals.UPGRADE_NAME;
+            LETHAL_DEALS_ENABLED = ConfigEntry(topSection, "Enable Lethal Deals Upgrade", true, "One time upgrade which guarantees at least one item will be on sale in the store.");
+            LETHAL_DEALS_PRICE = ConfigEntry(topSection, "Price of Lethal Deals", 300);
 
             topSection = "Wheelbarrow";
             WHEELBARROW_ENABLED = ConfigEntry(topSection, "Enable the Wheelbarrow Item", true, "Allows you to buy a wheelbarrow to carry items outside of your inventory");

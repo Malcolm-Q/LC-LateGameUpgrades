@@ -45,7 +45,8 @@ namespace MoreShipUpgrades.Managers
             {LightningRod.UPGRADE_NAME, SaveInfo => SaveInfo.lightningRod },
             {Stimpack.UPGRADE_NAME, SaveInfo => SaveInfo.playerHealth },
             {DoorsHydraulicsBattery.UPGRADE_NAME, SaveInfo => SaveInfo.doorsHydraulicsBattery },
-            {SickBeats.UPGRADE_NAME, SaveInfo => SaveInfo.sickBeats }
+            {SickBeats.UPGRADE_NAME, SaveInfo => SaveInfo.sickBeats },
+            {LethalDeals.UPGRADE_NAME, SaveInfo => SaveInfo.lethalDeals },
         };
 
         private static Dictionary<string, Func<SaveInfo, int>> levelConditions = new Dictionary<string, Func<SaveInfo, int>>
@@ -68,6 +69,7 @@ namespace MoreShipUpgrades.Managers
             { Stimpack.UPGRADE_NAME, saveInfo => saveInfo.playerHealthLevel },
             { DoorsHydraulicsBattery.UPGRADE_NAME, saveInfo => saveInfo.doorsHydraulicsBatteryLevel},
             { SickBeats.UPGRADE_NAME, saveInfo => 0 },
+            { LethalDeals.UPGRADE_NAME, saveInfo => 0 },
         };
         private bool retrievedCfg;
         private bool receivedSave;
@@ -618,6 +620,7 @@ namespace MoreShipUpgrades.Managers
         public bool wearingHelmet = UpgradeBus.instance.wearingHelmet;
         public bool sickBeats = UpgradeBus.instance.sickBeats;
         public bool doorsHydraulicsBattery = UpgradeBus.instance.doorsHydraulicsBattery;
+        public bool lethalDeals = UpgradeBus.instance.lethalDeals;
 
         public int beeLevel = UpgradeBus.instance.beeLevel;
         public int huntLevel = UpgradeBus.instance.huntLevel;

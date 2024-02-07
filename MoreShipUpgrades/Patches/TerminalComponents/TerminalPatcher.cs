@@ -1,6 +1,10 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace MoreShipUpgrades.Patches.TerminalComponents
 {
@@ -83,6 +87,17 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
         {
             string text = __instance.screenText.text.Substring(__instance.screenText.text.Length - __instance.textAdded);
             CommandParser.ParseLGUCommands(text, ref __instance, ref __result);
+        }
+
+        [HarmonyTranspiler]
+        [HarmonyPatch(nameof(Terminal.SetItemSales))]
+        static IEnumerable<CodeInstruction> SetItemSalesTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo lethalDealsGuaranteedItems = typeof(LethalDeals).GetMethod(nameof(LethalDeals.GetLethalDealsGuaranteedItems));
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            int index = 0;
+            index = Tools.FindInteger(index, ref codes, -10, addCode: lethalDealsGuaranteedItems, errorMessage: "Couldn't find negative value representing no sales");
+            return codes;
         }
     }
 }
