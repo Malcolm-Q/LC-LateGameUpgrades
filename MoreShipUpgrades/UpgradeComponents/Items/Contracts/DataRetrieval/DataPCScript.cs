@@ -89,11 +89,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
 
             audio = GetComponent<AudioSource>();
 
-            loot.GetComponent<PhysicsProp>().scrapValue = UpgradeBus.instance.cfg.CONTRACT_DATA_REWARD;
-            ScanNodeProperties node = loot.GetComponentInChildren<ScanNodeProperties>();
-            node.scrapValue = UpgradeBus.instance.cfg.CONTRACT_DATA_REWARD;
-            node.subText = $"VALUE: ${node.scrapValue}";
-            RoundManager.Instance.totalScrapValueInLevel += node.scrapValue;
+            loot.GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.instance.cfg.CONTRACT_DATA_REWARD);
 
 
             if (IsHost || IsServer)

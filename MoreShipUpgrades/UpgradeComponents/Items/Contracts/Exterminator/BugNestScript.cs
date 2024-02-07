@@ -3,6 +3,7 @@ using UnityEngine;
 using Unity.Netcode;
 using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exterminator
 {
@@ -20,11 +21,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exterminator
             trig.onStopInteract.AddListener(StopMess);
             trig.onInteractEarly.AddListener(PlayMess);
 
-            loot.GetComponent<PhysicsProp>().scrapValue = UpgradeBus.instance.cfg.CONTRACT_BUG_REWARD;
-            ScanNodeProperties node = loot.GetComponentInChildren<ScanNodeProperties>();
-            node.scrapValue = UpgradeBus.instance.cfg.CONTRACT_BUG_REWARD;
-            node.subText = $"VALUE: ${node.scrapValue}";
-            RoundManager.Instance.totalScrapValueInLevel += node.scrapValue;
+            loot.GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.instance.cfg.CONTRACT_BUG_REWARD);
 
             anim = GetComponentInChildren<Animator>();
         }

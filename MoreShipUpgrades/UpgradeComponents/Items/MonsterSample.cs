@@ -1,5 +1,7 @@
-﻿using MoreShipUpgrades.Misc;
+﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using UnityEngine;
+using System;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items
 {
@@ -13,9 +15,17 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         /// Logger of the class
         /// </summary>
         private static LGULogger logger = new LGULogger(nameof(MonsterSample));
+        private static int usedMapSeed = -1;
+        private static System.Random random = null;
         public override void Start()
         {
             base.Start();
+            if (usedMapSeed < 0 || random == null || usedMapSeed != StartOfRound.Instance.randomMapSeed)
+            {
+                usedMapSeed = StartOfRound.Instance.randomMapSeed;
+                random = new System.Random(usedMapSeed + 105);
+            }
+            GetComponent<ScrapValueSyncer>().SetScrapValue(random.Next(minValue: itemProperties.minValue, maxValue: itemProperties.maxValue));
             particles = GetComponentInChildren<ParticleSystem>();
             if (particles == null) logger.LogError($"Couldn't find {nameof(ParticleSystem)} component in the sample...");
         }

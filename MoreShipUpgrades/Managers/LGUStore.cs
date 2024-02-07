@@ -518,21 +518,6 @@ namespace MoreShipUpgrades.Managers
         }
 
         [ClientRpc]
-        public void SyncValuesClientRpc(int value, NetworkBehaviourReference netRef)
-        {
-            netRef.TryGet(out MonsterSample prop);
-            if (prop != null)
-            {
-                prop.scrapValue = value;
-                prop.itemProperties.creditsWorth = value;
-                prop.GetComponentInChildren<ScanNodeProperties>().subText = $"Value: ${value}";
-                RoundManager.Instance.totalScrapValueInLevel += value;
-                logger.LogInfo($"Successfully synced values of {prop.itemProperties.itemName}");
-            }
-            else logger.LogInfo("Unable to resolve net ref for SyncValuesClientRpc!");
-        }
-
-        [ClientRpc]
         public void DestroyHelmetClientRpc(ulong id)
         {
             if(StartOfRound.Instance.allPlayerObjects.Length <= (int)id)

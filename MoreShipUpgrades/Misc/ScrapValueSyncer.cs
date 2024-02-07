@@ -1,21 +1,34 @@
 ﻿using MoreShipUpgrades.Managers;
+using System.Collections;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Misc
 {
-    /*
-     * This should be set up to be more modular in the future with an itemName dictionary
-     * but for this hotfix this will work. also nothing else needs this at the moment.
-     */
     internal class ScrapValueSyncer : MonoBehaviour
     {
+        int scrapValue = -1;
         void Start()
         {
-            PhysicsProp prop = GetComponent<PhysicsProp>();
-            prop.scrapValue = UpgradeBus.instance.cfg.CONTRACT_EXOR_REWARD;
+            StartCoroutine(waitTilDefinedScrapValue());
+        }
+        internal void SetScrapValue(int scrapValue)
+        {
+            this.scrapValue = scrapValue;
+        }
+        bool IsScrapValueNotSet()
+        {
+            return scrapValue < 0;
+        }
+        IEnumerator waitTilDefinedScrapValue()
+        {
+            yield return new WaitWhile(IsScrapValueNotSet); // This should not get stuck if we always set the value right after instantianting the gameObject
+            
+            GrabbableObject prop = GetComponent<GrabbableObject>();
+            if (prop.scrapValue > 0) yield break; // Already defined
+            prop.scrapValue = scrapValue;
 
             ScanNodeProperties node = GetComponentInChildren<ScanNodeProperties>();
-            node.scrapValue = UpgradeBus.instance.cfg.CONTRACT_EXOR_REWARD;
+            node.scrapValue = scrapValue;
             node.subText = $"VALUE: ${node.scrapValue}";
             RoundManager.Instance.totalScrapValueInLevel += node.scrapValue;
         }
