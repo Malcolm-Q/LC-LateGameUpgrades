@@ -1,6 +1,12 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Emit;
+using Unity.Profiling.LowLevel;
 
 namespace MoreShipUpgrades.Patches.TerminalComponents
 {
@@ -83,6 +89,20 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
         {
             string text = __instance.screenText.text.Substring(__instance.screenText.text.Length - __instance.textAdded);
             CommandParser.ParseLGUCommands(text, ref __instance, ref __result);
+        }
+
+        [HarmonyTranspiler]
+        [HarmonyPatch(nameof(Terminal.SetItemSales))]
+        static IEnumerable<CodeInstruction> SetItemSalesTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo guaranteedMinimumSale = typeof(MarketInfluence).GetMethod(nameof(MarketInfluence.GetGuaranteedPercentageSale));
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            int index = 0;
+            index = Tools.FindInteger(index, ref codes, 90, skip: true, errorMessage: "Couldn't find first skip 90");
+            index = Tools.FindInteger(index, ref codes, 90, skip: true, errorMessage: "Couldn't find second skip 90");
+            index = Tools.FindInteger(index, ref codes, 0, addCode: guaranteedMinimumSale, errorMessage: "Couldn't find minimum sale percentage");
+            codes.Insert(index, new CodeInstruction(OpCodes.Ldloc_S, 4));
+            return codes;
         }
     }
 }

@@ -43,6 +43,7 @@ namespace MoreShipUpgrades.Managers
         public bool hunter = false;
         public bool playerHealth = false;
         public bool doorsHydraulicsBattery = false;
+        public bool marketInfluence = false;
 
         public int lungLevel = 0;
         public int helmetHits = 0;
@@ -57,6 +58,7 @@ namespace MoreShipUpgrades.Managers
         public int nightVisionLevel = 0;
         public int playerHealthLevel = 0;
         public int doorsHydraulicsBatteryLevel = 0;
+        public int marketInfluenceLevel = 0;
 
         public float flashCooldown = 0f;
         public float alteredWeight = 1f;
@@ -184,6 +186,7 @@ namespace MoreShipUpgrades.Managers
             hunter = false;
             playerHealth = false;
             sickBeats = false;
+            marketInfluence = false;
 
             contractType = "None";
             contractLevel = "None";
@@ -199,6 +202,7 @@ namespace MoreShipUpgrades.Managers
             legLevel = 0;
             nightVisionLevel = 0;
             playerHealthLevel = 0;
+            marketInfluenceLevel = 0;
             flashCooldown = 0f;
             alteredWeight = 1f;
             if (wipeObjRefs) {
@@ -445,7 +449,17 @@ namespace MoreShipUpgrades.Managers
             SetupSickBeatsTerminalNode();
 
             SetupShutterBatteriesTerminalNode();
+
+            SetupMarketInfluenceTerminalNode();
             terminalNodes.Sort();
+        }
+        void SetupMarketInfluenceTerminalNode()
+        {
+            SetupMultiplePurchasableTerminalNode(MarketInfluence.UPGRADE_NAME,
+                                                true,
+                                                cfg.MARKET_INFLUENCE_ENABLED,
+                                                cfg.MARKET_INFLUENCE_PRICE,
+                                                ParseUpgradePrices(cfg.MARKET_INFLUENCE_PRICES));
         }
         private void SetupShutterBatteriesTerminalNode()
         {

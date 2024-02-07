@@ -17,6 +17,7 @@ namespace MoreShipUpgrades.Misc
         readonly ConfigFile configFile;
 
         // enabled disabled
+        public bool MARKET_INFLUENCE_ENABLED { get; set; }
         public bool CONTRACTS_ENABLED { get; set; }
         public bool ADVANCED_TELE_ENABLED { get; set; }
         public bool WEAK_TELE_ENABLED { get; set; }
@@ -62,6 +63,7 @@ namespace MoreShipUpgrades.Misc
         public bool LOCKSMITH_INDIVIDUAL { get; set; }
 
         // prices
+        public int MARKET_INFLUENCE_PRICE { get; set; }
         public int PEEPER_PRICE { get; set; }
         public int HUNTER_PRICE { get; set; }
         public int ADVANCED_TELE_PRICE { get; set; }
@@ -251,6 +253,9 @@ namespace MoreShipUpgrades.Misc
         public bool DEFUSAL_CONTRACT {  get; set; }
         public bool MAIN_OBJECT_FURTHEST {  get; set; }
         public string WHEELBARROW_DROP_ALL_CONTROL_BIND { get; set; }
+        public string MARKET_INFLUENCE_PRICES { get; set; }
+        public int MARKET_INFLUENCE_INITIAL_PERCENTAGE { get; set; }
+        public int MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE { get; set; }
 
 
         public PluginConfig(ConfigFile cfg)
@@ -520,6 +525,13 @@ namespace MoreShipUpgrades.Misc
             topSection = ScrapInsurance.COMMAND_NAME;
             SCRAP_INSURANCE_ENABLED = ConfigEntry(topSection, "Enable Scrap Insurance Command", true, "One time purchase which allows you to keep all your scrap upon a team wipe on a moon trip");
             SCRAP_INSURANCE_PRICE = ConfigEntry(topSection, "Price of Scrap Insurance", ScrapInsurance.DEFAULT_PRICE);
+
+            topSection = MarketInfluence.UPGRADE_NAME;
+            MARKET_INFLUENCE_ENABLED = ConfigEntry(topSection, "Enable Market Influence Upgrade", true, "Tier upgrade which guarantees a minimum percentage sale on the selected item in the store.");
+            MARKET_INFLUENCE_PRICE = ConfigEntry(topSection, "Price of Market Influence", 250);
+            MARKET_INFLUENCE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, MarketInfluence.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            MARKET_INFLUENCE_INITIAL_PERCENTAGE = ConfigEntry(topSection, "Initial percentage guarantee on the items on sale", 10);
+            MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE = ConfigEntry(topSection, "Incremental percentage guarantee on the items on sale", 5);
 
             topSection = "Wheelbarrow";
             WHEELBARROW_ENABLED = ConfigEntry(topSection, "Enable the Wheelbarrow Item", true, "Allows you to buy a wheelbarrow to carry items outside of your inventory");
