@@ -186,6 +186,7 @@ namespace MoreShipUpgrades.Managers
             hunter = false;
             playerHealth = false;
             sickBeats = false;
+            bargainConnections = false;
 
             contractType = "None";
             contractLevel = "None";
@@ -201,6 +202,7 @@ namespace MoreShipUpgrades.Managers
             legLevel = 0;
             nightVisionLevel = 0;
             playerHealthLevel = 0;
+            bargainConnectionsLevel = 0;
             flashCooldown = 0f;
             alteredWeight = 1f;
             if (wipeObjRefs) {
