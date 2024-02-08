@@ -4,6 +4,7 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -37,14 +38,6 @@ namespace MoreShipUpgrades.Patches.HUD
             __result = num < node.maxRange + rangeIncrease && num > node.minRange;
         }
 
-        [HarmonyPrefix]
-        [HarmonyPatch(nameof(HUDManager.UseSignalTranslatorServerRpc))]
-        static bool CancelSignal(SignalTranslator __instance)
-        {
-            if (UpgradeBus.instance.pager) return false; // return false gaming
-            else return true;
-        }
-
         [HarmonyPatch(nameof(HUDManager.FillEndGameStats))]
         [HarmonyTranspiler]
         private static IEnumerable<CodeInstruction> FillEndGameStatsTranspiler(IEnumerable<CodeInstruction> instructions)
@@ -54,6 +47,42 @@ namespace MoreShipUpgrades.Patches.HUD
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
             index = Tools.FindField(index, ref codes, findField: allPlayersDead, addCode: scrapInsuranceStatus, notInstruction: true, andInstruction: true, errorMessage: "Couldn't find all players dead field");
+            return codes;
+        }
+        [HarmonyPatch(nameof(HUDManager.UseSignalTranslatorServerRpc))]
+        [HarmonyTranspiler]
+        static IEnumerable<CodeInstruction> UseSignalTranslatorServerRpcTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo newLimitCharactersTransmit = typeof(FastEncryption).GetMethod(nameof(FastEncryption.GetLimitOfCharactersTransmit));
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            int index = 0;
+            index = Tools.FindInteger(index, ref codes, findValue: 12, skip: true, errorMessage: "Couldn't find the 12 value which is used as character limit");
+            codes.Insert(index, new CodeInstruction(OpCodes.Call, newLimitCharactersTransmit));
+            codes.Insert(index, new CodeInstruction(OpCodes.Ldarg_1));
+            return codes;
+        }
+        [HarmonyPatch(nameof(HUDManager.UseSignalTranslatorClientRpc))]
+        [HarmonyTranspiler]
+        static IEnumerable<CodeInstruction> UseSignalTranslatorClientRpcTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo newLimitCharactersTransmit = typeof(FastEncryption).GetMethod(nameof(FastEncryption.GetLimitOfCharactersTransmit));
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            int index = 0;
+            index = Tools.FindInteger(index, ref codes, findValue: 10, skip: true, errorMessage: "Couldn't find the 10 value which is used as character limit");
+            codes.Insert(index, new CodeInstruction(OpCodes.Call, newLimitCharactersTransmit));
+            codes.Insert(index, new CodeInstruction(OpCodes.Ldarg_1));
+            return codes;
+        }
+
+        [HarmonyPatch(nameof(HUDManager.DisplaySignalTranslatorMessage), MethodType.Enumerator)]
+        [HarmonyTranspiler]
+        static IEnumerable<CodeInstruction> DisplaySignalTranslatorMessageTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo multiplierSignalTimer = typeof(FastEncryption).GetMethod(nameof(FastEncryption.GetMultiplierOnSignalTextTimer));
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            int index = 0;
+            index = Tools.FindFloat(index, ref codes, findValue: 0.5f, addCode: multiplierSignalTimer, errorMessage: "Couldn't find the 0.5f value which is used in enumerator wait timer");
+            index = Tools.FindFloat(index, ref codes, findValue: 0.7f, addCode: multiplierSignalTimer, errorMessage: "Couldn't find the 0.5f value which is used in enumerator wait timer");
             return codes;
         }
     }

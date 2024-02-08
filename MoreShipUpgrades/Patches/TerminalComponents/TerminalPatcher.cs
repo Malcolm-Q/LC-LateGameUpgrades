@@ -1,6 +1,11 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Emit;
 
 namespace MoreShipUpgrades.Patches.TerminalComponents
 {
@@ -83,6 +88,19 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
         {
             string text = __instance.screenText.text.Substring(__instance.screenText.text.Length - __instance.textAdded);
             CommandParser.ParseLGUCommands(text, ref __instance, ref __result);
+        }
+
+        [HarmonyTranspiler]
+        [HarmonyPatch(nameof(Terminal.ParsePlayerSentence))]
+        static IEnumerable<CodeInstruction> ParsePlayerSenteceTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo newLimitCharactersTransmit = typeof(FastEncryption).GetMethod(nameof(FastEncryption.GetLimitOfCharactersTransmit));
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            int index = 0;
+            index = Tools.FindInteger(index, ref codes, findValue: 10, skip: true, errorMessage: "Couldn't find the 10 value which is used as character limit");
+            codes.Insert(index, new CodeInstruction(OpCodes.Call, newLimitCharactersTransmit));
+            codes.Insert(index, new CodeInstruction(OpCodes.Ldloc_S, 12));
+            return codes;
         }
     }
 }
