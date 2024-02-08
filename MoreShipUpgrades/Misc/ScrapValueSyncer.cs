@@ -29,8 +29,8 @@ namespace MoreShipUpgrades.Misc
 
             ScanNodeProperties node = GetComponentInChildren<ScanNodeProperties>();
             node.scrapValue = scrapValue;
-            node.subText = $"VALUE: ${node.scrapValue}";
-            RoundManager.Instance.totalScrapValueInLevel += node.scrapValue;
+            node.subText = $"VALUE: ${scrapValue}";
+            RoundManager.Instance.totalScrapValueInLevel += scrapValue;
         }
     }
 }
