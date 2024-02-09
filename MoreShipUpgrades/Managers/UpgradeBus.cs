@@ -455,9 +455,9 @@ namespace MoreShipUpgrades.Managers
         {
             SetupMultiplePurchasableTerminalNode(BargainConnections.UPGRADE_NAME,
                                                 true,
-                                                cfg.BARGAIN_CONNECTIONS_ENABLED,
-                                                cfg.BARGAIN_CONNECTIONS_PRICE,
-                                                ParseUpgradePrices(cfg.BARGAIN_CONNECTIONS_PRICES));
+                                                cfg.BARGAIN_CONNECTIONS_ENABLED.Value,
+                                                cfg.BARGAIN_CONNECTIONS_PRICE.Value,
+                                                ParseUpgradePrices(cfg.BARGAIN_CONNECTIONS_PRICES.Value));
         }
         private void SetupShutterBatteriesTerminalNode()
         {
