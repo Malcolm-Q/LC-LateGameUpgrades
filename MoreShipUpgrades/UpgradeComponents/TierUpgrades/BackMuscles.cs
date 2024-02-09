@@ -46,7 +46,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public static float DecreasePossibleWeight(float defaultWeight)
         {
             if (!UpgradeBus.instance.exoskeleton) return defaultWeight;
-            return defaultWeight * (UpgradeBus.instance.cfg.CARRY_WEIGHT_REDUCTION - UpgradeBus.instance.backLevel * UpgradeBus.instance.cfg.CARRY_WEIGHT_INCREMENT);
+            return defaultWeight * (UpgradeBus.instance.cfg.CARRY_WEIGHT_REDUCTION.Value - UpgradeBus.instance.backLevel * UpgradeBus.instance.cfg.CARRY_WEIGHT_INCREMENT.Value);
         }
         public static void UpdatePlayerWeight()
         {
@@ -72,7 +72,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            Func<int, float> infoFunction = level => (UpgradeBus.instance.cfg.CARRY_WEIGHT_REDUCTION - (level * UpgradeBus.instance.cfg.CARRY_WEIGHT_INCREMENT)) * 100;
+            Func<int, float> infoFunction = level => (UpgradeBus.instance.cfg.CARRY_WEIGHT_REDUCTION.Value - (level * UpgradeBus.instance.cfg.CARRY_WEIGHT_INCREMENT.Value)) * 100;
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }

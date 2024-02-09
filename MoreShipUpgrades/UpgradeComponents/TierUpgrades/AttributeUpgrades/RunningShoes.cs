@@ -20,8 +20,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             logger = new LGULogger(UPGRADE_NAME);
             base.Start();
             changingAttribute = GameAttribute.PLAYER_MOVEMENT_SPEED;
-            initialValue = UpgradeBus.instance.cfg.MOVEMENT_SPEED_UNLOCK;
-            incrementalValue = UpgradeBus.instance.cfg.MOVEMENT_INCREMENT;
+            initialValue = UpgradeBus.instance.cfg.MOVEMENT_SPEED_UNLOCK.Value;
+            incrementalValue = UpgradeBus.instance.cfg.MOVEMENT_INCREMENT.Value;
         }
 
         public override void Increment()
@@ -43,8 +43,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         }
         public static float ApplyPossibleReducedNoiseRange(float defaultValue)
         {
-            if (!(UpgradeBus.instance.runningShoes && UpgradeBus.instance.runningLevel == UpgradeBus.instance.cfg.RUNNING_SHOES_UPGRADE_PRICES.Split(',').Length)) return defaultValue;
-            return Mathf.Clamp(defaultValue - UpgradeBus.instance.cfg.NOISE_REDUCTION, 0f, defaultValue);
+            if (!(UpgradeBus.instance.runningShoes && UpgradeBus.instance.runningLevel == UpgradeBus.instance.cfg.RUNNING_SHOES_UPGRADE_PRICES.Value.Split(',').Length)) return defaultValue;
+            return Mathf.Clamp(defaultValue - UpgradeBus.instance.cfg.NOISE_REDUCTION.Value, 0f, defaultValue);
         }
 
         public string GetWorldBuildingText(bool shareStatus = false)
@@ -54,7 +54,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.MOVEMENT_SPEED_UNLOCK + level * UpgradeBus.instance.cfg.MOVEMENT_INCREMENT;
+            Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.MOVEMENT_SPEED_UNLOCK.Value + level * UpgradeBus.instance.cfg.MOVEMENT_INCREMENT.Value;
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
