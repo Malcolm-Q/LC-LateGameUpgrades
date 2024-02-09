@@ -44,7 +44,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
 
         void Start()
         {
-            GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.instance.cfg.CONTRACT_DEFUSE_REWARD);
+            GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.instance.cfg.CONTRACT_DEFUSE_REWARD.Value);
             grabBox = GetComponent<BoxCollider>();
 
             Transform intactWires = transform.GetChild(0).GetChild(0);

@@ -44,7 +44,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             logger = new LGULogger(UPGRADE_NAME);
             tiers = new Dictionary<int, string[]>();
-            string[] tiersList = UpgradeBus.instance.cfg.HUNTER_SAMPLE_TIERS.ToLower().Split('-');
+            string[] tiersList = UpgradeBus.instance.cfg.HUNTER_SAMPLE_TIERS.Value.ToLower().Split('-');
             tiers[0] = tiersList[0].Split(",").Select(x => x.Trim()).ToArray();
             for (int i = 1; i < tiersList.Length; i++)
             {

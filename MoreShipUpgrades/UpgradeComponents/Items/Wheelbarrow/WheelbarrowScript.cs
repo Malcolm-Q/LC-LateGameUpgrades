@@ -12,7 +12,7 @@ using UnityEngine.InputSystem.LowLevel;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
 {
-    internal class WheelbarrowScript : GrabbableObject
+    abstract class WheelbarrowScript : GrabbableObject
     {
         protected enum Restrictions
         {
@@ -84,9 +84,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         protected bool playSounds;
         private Dictionary<Restrictions, Func<bool>> checkMethods;
 
-        private const string ITEM_NAME = "Wheelbarrow";
-        private const string SCRAP_ITEM_NAME = "Shopping Cart";
-        private const string ITEM_DESCRIPTION = "Allows carrying multiple items";
         private const string NO_ITEMS_TEXT = "No items to deposit...";
         private const string FULL_TEXT = "Too many items in the wheelbarrow";
         private const string TOO_MUCH_WEIGHT_TEXT = "Too much weight in the wheelbarrow...";
@@ -103,8 +100,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         {
             base.Start();
             randomNoise = new System.Random(StartOfRound.Instance.randomMapSeed + 80);
-            maximumAmountItems = UpgradeBus.instance.cfg.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS;
-            weightReduceMultiplier = UpgradeBus.instance.cfg.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER;
+            maximumAmountItems = UpgradeBus.instance.cfg.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS.Value;
+            weightReduceMultiplier = UpgradeBus.instance.cfg.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER.Value;
             defaultWeight = itemProperties.weight;
             totalWeight = defaultWeight;
             soundCounter = 0f;
@@ -132,7 +129,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             checkMethods[Restrictions.ItemCount] = CheckWheelbarrowItemCountRestriction;
             checkMethods[Restrictions.TotalWeight] = CheckWheelbarrowWeightRestriction;
             checkMethods[Restrictions.All] = CheckWheelbarrowAllRestrictions;
-            string controlBind = UpgradeBus.instance.cfg.WHEELBARROW_DROP_ALL_CONTROL_BIND;
+            string controlBind = UpgradeBus.instance.cfg.WHEELBARROW_DROP_ALL_CONTROL_BIND.Value;
             if (Enum.TryParse(controlBind, out Key toggle))
             {
                 dropAllItemsKey = toggle;
@@ -386,19 +383,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         /// <summary>
         /// Prepares the Scan Node associated with the Wheelbarrow for user display
         /// </summary>
-        private void SetupScanNodeProperties()
-        {
-            ScanNodeProperties scanNode = GetComponentInChildren<ScanNodeProperties>();
-            if (scanNode == null)
-            {
-                logger.LogError($"Couldn't find {nameof(ScanNodeProperties)} component in the prefab,");
-                return;
-            }
-            scanNode.creatureScanID = -1;
-            scanNode.headerText = this is StoreWheelbarrow ? ITEM_NAME : SCRAP_ITEM_NAME;
-            scanNode.nodeType = this is StoreWheelbarrow ? 0 : scanNode.nodeType;
-            scanNode.subText = this is StoreWheelbarrow ? ITEM_DESCRIPTION : $"Value: {scrapValue}";
-        }
+        protected abstract void SetupScanNodeProperties();
+
         public void DecrementStoredItems()
         {
             UpdateWheelbarrowWeightServerRpc();
@@ -455,7 +441,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
 
         public static float CheckIfPlayerCarryingWheelbarrowLookSensitivity(float defaultValue)
         {
-            if (!UpgradeBus.instance.cfg.WHEELBARROW_ENABLED && !UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_ENABLED) return defaultValue;
+            if (!UpgradeBus.instance.cfg.WHEELBARROW_ENABLED.Value && !UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_ENABLED.Value) return defaultValue;
             PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
             if (!player.isHoldingObject) return defaultValue;
             if (player.currentlyHeldObjectServer is not WheelbarrowScript) return defaultValue;
@@ -464,7 +450,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         }
         public static float CheckIfPlayerCarryingWheelbarrowMovement(float defaultValue)
         {
-            if (!UpgradeBus.instance.cfg.WHEELBARROW_ENABLED && !UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_ENABLED) return defaultValue;
+            if (!UpgradeBus.instance.cfg.WHEELBARROW_ENABLED.Value && !UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_ENABLED.Value) return defaultValue;
             PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
             if (!player.isHoldingObject) return defaultValue;
             if (player.currentlyHeldObjectServer is not WheelbarrowScript) return defaultValue;
