@@ -21,10 +21,10 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
 
         public string GetDisplayInfo()
         {
-            string hands = UpgradeBus.instance.cfg.DIVEKIT_TWO_HANDED ? "two" : "one";
-            return $"DIVING KIT - ${UpgradeBus.instance.cfg.DIVEKIT_PRICE}\n\n" +
+            string hands = UpgradeBus.instance.cfg.DIVEKIT_TWO_HANDED.Value ? "two" : "one";
+            return $"DIVING KIT - ${UpgradeBus.instance.cfg.DIVEKIT_PRICE.Value}\n\n" +
                 $"Breath underwater.\n" +
-                $"Weights {Mathf.RoundToInt((UpgradeBus.instance.cfg.DIVEKIT_WEIGHT - 1) * 100)} lbs and is {hands} handed.";
+                $"Weights {Mathf.RoundToInt((UpgradeBus.instance.cfg.DIVEKIT_WEIGHT.Value - 1) * 100)} lbs and is {hands} handed.";
         }
 
         public override void Start()

@@ -188,9 +188,9 @@ namespace MoreShipUpgrades.Managers
             if( cfg != null && !IsHost && !IsServer)
             {
                 logger.LogInfo("Config received, deserializing and constructing...");
-                Color col = UpgradeBus.instance.cfg.NIGHT_VIS_COLOR;
+                Color col = UpgradeBus.instance.cfg.NIGHT_VIS_COLOR.Value;
                 UpgradeBus.instance.cfg = cfg;
-                UpgradeBus.instance.cfg.NIGHT_VIS_COLOR = col; //
+                UpgradeBus.instance.cfg.NIGHT_VIS_COLOR.Value = col; //
                 UpgradeBus.instance.Reconstruct();
                 retrievedCfg = true;
             }
@@ -250,7 +250,7 @@ namespace MoreShipUpgrades.Managers
             }
             lguSave = JsonConvert.DeserializeObject<LGUSave>(json);
             List<ulong> saves = lguSave.playerSaves.Keys.ToList();
-            if(UpgradeBus.instance.cfg.SHARED_UPGRADES && saves.Count > 0)
+            if(UpgradeBus.instance.cfg.SHARED_UPGRADES.Value && saves.Count > 0)
             {
                 ulong steamID = lguSave.playerSaves.Keys.ToList<ulong>()[0];
                 logger.LogInfo($"SHARED SAVE FILE: Loading index 0 save under steam ID: {steamID}");
