@@ -1,9 +1,14 @@
-## V 3.1.2 - To be Determined
+## V 3.2.0 - To be Determined
 ### Additions
 - Added keybind configuration for wheelbarrow's drop all items through configuration
 - Added World Building text to some upgrades/items (thanks to Nat(discordID:twinkula))
+- Added upgrade "Lethal Deals" which guarantees at least one item will be on sale while browsing the item store
+- Added upgrade "Market Influence" which gives a guaranteed sale percentage applied on the item that goes on sale while browsing the item store. Increasing its level increases the guaranteed sale percentage and will only go up to the maximum allowed sale percentage of the item.
+- Added upgrade "Bargain Connections" which increases the amount of items that can go on sale while browsing the item stores which can be further increased on level up.
+- Added upgrade "Quantum Disruptor" which increases the amount of time you can stay on a moon which can be further increased on level up.
 
 ### Changes
+- Changed "Fast Encryption" behaviour to allow vanilla transmit with faster typing and character amount being only limited by how many characters the terminal lets you type.
 - Spawned scrap (monster samples and contracts) now influence the totalScrapValueInLevel which is displayed at the end of game stats
 - Medkit now just increases the player's health instead of using DamagePlayer with a negative value.
 - Changed the time of saving LGU's data from disconnecting to autosaving. This should solve the issue of buying an upgrade, leaving and coming back with credits back and upgrade on.
