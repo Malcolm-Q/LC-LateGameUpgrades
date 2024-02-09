@@ -23,7 +23,7 @@ namespace MoreShipUpgrades.Patches.HUD
             if (!UpgradeBus.instance.scannerUpgrade) { return; }
             if (node == null) { __result = false; return; }
             bool throughWall = Physics.Linecast(playerScript.gameplayCamera.transform.position, node.transform.position, 256, QueryTriggerInteraction.Ignore);
-            bool cannotSeeEnemiesThroughWalls = node.nodeType == 1 && !UpgradeBus.instance.cfg.BETTER_SCANNER_ENEMIES;
+            bool cannotSeeEnemiesThroughWalls = node.nodeType == 1 && !UpgradeBus.instance.cfg.BETTER_SCANNER_ENEMIES.Value;
             if (throughWall)
             {
                 if (UpgradeBus.instance.scanLevel < 2 || UpgradeBus.instance.scanLevel == 2 && cannotSeeEnemiesThroughWalls)
@@ -32,7 +32,7 @@ namespace MoreShipUpgrades.Patches.HUD
                     return;
                 }
             }
-            float rangeIncrease = node.headerText == "Main entrance" || node.headerText == "Ship" ? UpgradeBus.instance.cfg.SHIP_AND_ENTRANCE_DISTANCE_INCREASE : UpgradeBus.instance.cfg.NODE_DISTANCE_INCREASE;
+            float rangeIncrease = node.headerText == "Main entrance" || node.headerText == "Ship" ? UpgradeBus.instance.cfg.SHIP_AND_ENTRANCE_DISTANCE_INCREASE.Value : UpgradeBus.instance.cfg.NODE_DISTANCE_INCREASE.Value;
             float num = Vector3.Distance(playerScript.transform.position, node.transform.position);
             __result = num < node.maxRange + rangeIncrease && num > node.minRange;
         }

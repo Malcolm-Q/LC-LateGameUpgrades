@@ -2,6 +2,7 @@
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -46,8 +47,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         {
             audio = GetComponent<AudioSource>();
             hudManager = HUDManager.Instance;
-            maximumUses = UpgradeBus.instance.cfg.MEDKIT_USES;
-            healAmount = UpgradeBus.instance.cfg.MEDKIT_HEAL_VALUE;
+            maximumUses = UpgradeBus.instance.cfg.MEDKIT_USES.Value;
+            healAmount = UpgradeBus.instance.cfg.MEDKIT_HEAL_VALUE.Value;
             base.Start();
         }
         public override void DiscardItem()
@@ -77,7 +78,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         private void UseMedkit(int maximumHealth)
         {
             audio.PlayOneShot(use);
-            uses++;
             int heal_value = healAmount;
             int potentialHealth = playerHeldBy.health + heal_value;
             if (potentialHealth > maximumHealth)
@@ -86,11 +86,9 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             }
             playerHeldBy.health += heal_value;
 
-            if (uses >= maximumUses)
-            {
-                itemUsedUp = true;
-                hudManager.DisplayTip("NO MORE USES!", "This medkit doesn't have anymore supplies!", true, false, "LC_Tip1");
-            }
+            if (IsHost || IsServer) UpdateMedkitUsesClientRpc();
+            else UpdateMedkitUsesServerRpc();
+
             if (playerHeldBy.health >= 20) playerHeldBy.MakeCriticallyInjured(false);
         }
         /// <summary>
@@ -115,7 +113,20 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             }
             return true;
         }
+        [ServerRpc]
+        void UpdateMedkitUsesServerRpc()
+        {
+            UpdateMedkitUsesClientRpc();
+        }
+        [ClientRpc]
+        void UpdateMedkitUsesClientRpc()
+        {
+            uses++;
+            if (uses < maximumUses) return;
 
+            itemUsedUp = true;
+            if (playerHeldBy == UpgradeBus.instance.GetLocalPlayer()) hudManager.DisplayTip("NO MORE USES!", "This medkit doesn't have anymore supplies!", true, false, "LC_Tip1");
+        }
         public string GetDisplayInfo()
         {
             return $"MEDKIT - ${UpgradeBus.instance.cfg.MEDKIT_PRICE}\n\n" +

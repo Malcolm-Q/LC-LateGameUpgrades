@@ -137,12 +137,12 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exorcism
             yield return new WaitForSeconds(0.5f);
             if (IsHost)
             {
-                if (!Tools.SpawnMob("Girl", transform.position + new Vector3(0, 0.15f, 0),UpgradeBus.instance.cfg.CONTRACT_GHOST_SPAWN))
-                {
-                    Tools.SpawnMob("Crawler", transform.position + new Vector3(0, 0.15f, 0),UpgradeBus.instance.cfg.CONTRACT_GHOST_SPAWN);
+                if (!Tools.SpawnMob("Girl", transform.position + new Vector3(0, 0.15f, 0),UpgradeBus.instance.cfg.CONTRACT_GHOST_SPAWN.Value))
+                {   
+                    Tools.SpawnMob("Crawler", transform.position + new Vector3(0, 0.15f, 0),UpgradeBus.instance.cfg.CONTRACT_GHOST_SPAWN.Value);
                 }
             }
-            if(UpgradeBus.instance.cfg.CONTRACT_GHOST_SPAWN > 0) HUDManager.Instance.DisplayTip("RUN", "YOU HAVE ANGERED THE SPIRIT WORLD!");
+            if(UpgradeBus.instance.cfg.CONTRACT_GHOST_SPAWN.Value > 0) HUDManager.Instance.DisplayTip("RUN", "YOU HAVE ANGERED THE SPIRIT WORLD!");
         }
 
 
@@ -155,7 +155,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exorcism
             if (IsHost || IsServer)
             {
                 GameObject go = Instantiate(loot, transform.position + new Vector3(0, 0.1f, 0), Quaternion.identity);
-                go.GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.instance.cfg.CONTRACT_EXOR_REWARD);
+                go.GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.instance.cfg.CONTRACT_EXOR_REWARD.Value);
                 go.GetComponent<NetworkObject>().Spawn();
             }
         }

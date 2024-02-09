@@ -237,7 +237,7 @@ namespace MoreShipUpgrades
             Item scav = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "ScavItem.asset");
             if (scav == null) return;
 
-            scav.weight = UpgradeBus.instance.cfg.CONTRACT_EXTRACT_WEIGHT;
+            scav.weight = UpgradeBus.instance.cfg.CONTRACT_EXTRACT_WEIGHT.Value;
             ExtractionContract co = scav.spawnPrefab.AddComponent<ExtractionContract>();
             co.SetPosition = true;
 
@@ -328,23 +328,23 @@ namespace MoreShipUpgrades
         {
             Dictionary<string, int> MINIMUM_VALUES = new Dictionary<string, int>()
             {
-                { "centipede", cfg.SNARE_FLEA_SAMPLE_MINIMUM_VALUE },
-                { "bunker spider", cfg.BUNKER_SPIDER_SAMPLE_MINIMUM_VALUE },
-                { "hoarding bug", cfg.HOARDING_BUG_SAMPLE_MINIMUM_VALUE },
-                { "flowerman", cfg.BRACKEN_SAMPLE_MINIMUM_VALUE },
-                { "mouthdog", cfg.EYELESS_DOG_SAMPLE_MINIMUM_VALUE },
-                { "baboon hawk", cfg.BABOON_HAWK_SAMPLE_MINIMUM_VALUE },
-                { "crawler", cfg.THUMPER_SAMPLE_MINIMUM_VALUE },
+                { "centipede", cfg.SNARE_FLEA_SAMPLE_MINIMUM_VALUE.Value },
+                { "bunker spider", cfg.BUNKER_SPIDER_SAMPLE_MINIMUM_VALUE.Value },
+                { "hoarding bug", cfg.HOARDING_BUG_SAMPLE_MINIMUM_VALUE.Value },
+                { "flowerman", cfg.BRACKEN_SAMPLE_MINIMUM_VALUE.Value },
+                { "mouthdog", cfg.EYELESS_DOG_SAMPLE_MINIMUM_VALUE.Value },
+                { "baboon hawk", cfg.BABOON_HAWK_SAMPLE_MINIMUM_VALUE.Value },
+                { "crawler", cfg.THUMPER_SAMPLE_MINIMUM_VALUE.Value },
             };
             Dictionary<string, int> MAXIMUM_VALUES = new Dictionary<string, int>()
             {
-                { "centipede", cfg.SNARE_FLEA_SAMPLE_MAXIMUM_VALUE },
-                { "bunker spider", cfg.BUNKER_SPIDER_SAMPLE_MAXIMUM_VALUE },
-                { "hoarding bug", cfg.HOARDING_BUG_SAMPLE_MAXIMUM_VALUE },
-                { "flowerman", cfg.BRACKEN_SAMPLE_MAXIMUM_VALUE },
-                { "mouthdog", cfg.EYELESS_DOG_SAMPLE_MAXIMUM_VALUE },
-                { "baboon hawk", cfg.BABOON_HAWK_SAMPLE_MAXIMUM_VALUE },
-                { "crawler", cfg.THUMPER_SAMPLE_MAXIMUM_VALUE },
+                { "centipede", cfg.SNARE_FLEA_SAMPLE_MAXIMUM_VALUE.Value },
+                { "bunker spider", cfg.BUNKER_SPIDER_SAMPLE_MAXIMUM_VALUE.Value },
+                { "hoarding bug", cfg.HOARDING_BUG_SAMPLE_MAXIMUM_VALUE.Value },
+                { "flowerman", cfg.BRACKEN_SAMPLE_MAXIMUM_VALUE.Value },
+                { "mouthdog", cfg.EYELESS_DOG_SAMPLE_MAXIMUM_VALUE.Value },
+                { "baboon hawk", cfg.BABOON_HAWK_SAMPLE_MAXIMUM_VALUE.Value },
+                { "crawler", cfg.THUMPER_SAMPLE_MAXIMUM_VALUE.Value },
             };
             foreach (string creatureName in AssetBundleHandler.samplePaths.Keys)
             {
@@ -386,7 +386,7 @@ namespace MoreShipUpgrades
             helmScript.itemProperties = helmet;
             helmScript.grabbable = true;
             helmScript.grabbableToEnemies = true;
-            helmet.creditsWorth = cfg.HELMET_PRICE;
+            helmet.creditsWorth = cfg.HELMET_PRICE.Value;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(helmet.spawnPrefab);
 
             UpgradeBus.instance.ItemsToSync.Add("Helmet", helmet);
@@ -421,7 +421,7 @@ namespace MoreShipUpgrades
             regularTeleportScript.useCooldown = 2f;
             regularTeleportScript.error = error;
             regularTeleportScript.buttonPress = buttonPressed;
-            regularPortableTeleporter.creditsWorth = cfg.WEAK_TELE_PRICE;
+            regularPortableTeleporter.creditsWorth = cfg.WEAK_TELE_PRICE.Value;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(regularPortableTeleporter.spawnPrefab);
 
             UpgradeBus.instance.ItemsToSync.Add("Tele", regularPortableTeleporter);
@@ -433,7 +433,7 @@ namespace MoreShipUpgrades
             Item advancedPortableTeleporter = AssetBundleHandler.GetItemObject("Advanced Portable Tele");
             if (advancedPortableTeleporter == null) return;
 
-            advancedPortableTeleporter.creditsWorth = cfg.ADVANCED_TELE_PRICE;
+            advancedPortableTeleporter.creditsWorth = cfg.ADVANCED_TELE_PRICE.Value;
             advancedPortableTeleporter.itemName = "Advanced Portable Tele";
             advancedPortableTeleporter.itemId = 492013;
             AdvancedPortableTeleporter advancedTeleportScript = advancedPortableTeleporter.spawnPrefab.AddComponent<AdvancedPortableTeleporter>();
@@ -456,7 +456,7 @@ namespace MoreShipUpgrades
             Item nightVisionItem = AssetBundleHandler.GetItemObject("Night Vision");
             if (nightVisionItem == null) return;
 
-            nightVisionItem.creditsWorth = cfg.NIGHT_VISION_PRICE;
+            nightVisionItem.creditsWorth = cfg.NIGHT_VISION_PRICE.Value;
             nightVisionItem.spawnPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             nightVisionItem.itemId = 492014;
             NightVisionGoggles visScript = nightVisionItem.spawnPrefab.AddComponent<NightVisionGoggles>();
@@ -476,10 +476,10 @@ namespace MoreShipUpgrades
             Item DiveItem = AssetBundleHandler.GetItemObject("Diving Kit");
             if (DiveItem == null) return;
 
-            DiveItem.creditsWorth = cfg.DIVEKIT_PRICE;
+            DiveItem.creditsWorth = cfg.DIVEKIT_PRICE.Value;
             DiveItem.itemId = 492015;
-            DiveItem.twoHanded = cfg.DIVEKIT_TWO_HANDED;
-            DiveItem.weight = cfg.DIVEKIT_WEIGHT;
+            DiveItem.twoHanded = cfg.DIVEKIT_TWO_HANDED.Value;
+            DiveItem.weight = cfg.DIVEKIT_WEIGHT.Value;
             DiveItem.itemSpawnsOnGround = true;
             DivingKit diveScript = DiveItem.spawnPrefab.AddComponent<DivingKit>();
             diveScript.itemProperties = DiveItem;
@@ -497,7 +497,7 @@ namespace MoreShipUpgrades
             if (MedKitItem == null) return;
             AnimationCurve curve = new AnimationCurve(new Keyframe(0f, 3), new Keyframe(1f, 3));
 
-            MedKitItem.creditsWorth = cfg.MEDKIT_PRICE;
+            MedKitItem.creditsWorth = cfg.MEDKIT_PRICE.Value;
             MedKitItem.itemId = 492016;
             Medkit medScript = MedKitItem.spawnPrefab.AddComponent<Medkit>();
             medScript.itemProperties = MedKitItem;
@@ -534,7 +534,7 @@ namespace MoreShipUpgrades
             Item Peeper = AssetBundleHandler.GetItemObject("Peeper");
             if (Peeper == null) return;
 
-            Peeper.creditsWorth = cfg.PEEPER_PRICE;
+            Peeper.creditsWorth = cfg.PEEPER_PRICE.Value;
             Peeper.twoHanded = false;
             Peeper.itemId = 492017;
             Peeper.twoHandedAnimation = false;
@@ -570,8 +570,8 @@ namespace MoreShipUpgrades
             Item wheelbarrow = AssetBundleHandler.GetItemObject("Scrap Wheelbarrow");
             if (wheelbarrow == null) return;
             wheelbarrow.itemId = 492018;
-            wheelbarrow.minValue = cfg.SCRAP_WHEELBARROW_MINIMUM_VALUE;
-            wheelbarrow.maxValue = cfg.SCRAP_WHEELBARROW_MAXIMUM_VALUE;
+            wheelbarrow.minValue = cfg.SCRAP_WHEELBARROW_MINIMUM_VALUE.Value;
+            wheelbarrow.maxValue = cfg.SCRAP_WHEELBARROW_MAXIMUM_VALUE.Value;
             wheelbarrow.twoHanded = true;
             wheelbarrow.twoHandedAnimation = true;
             wheelbarrow.grabAnim = "HoldJetpack";
@@ -580,7 +580,7 @@ namespace MoreShipUpgrades
             wheelbarrow.allowDroppingAheadOfPlayer = true;
             wheelbarrow.isConductiveMetal = true;
             wheelbarrow.isScrap = true;
-            wheelbarrow.weight = 0.99f + (cfg.SCRAP_WHEELBARROW_WEIGHT/100f);
+            wheelbarrow.weight = 0.99f + (cfg.SCRAP_WHEELBARROW_WEIGHT.Value /100f);
             wheelbarrow.canBeGrabbedBeforeGameStart = true;
             ScrapWheelbarrow barrowScript = wheelbarrow.spawnPrefab.AddComponent<ScrapWheelbarrow>();
             wheelbarrow.toolTips = SetupWheelbarrowTooltips();
@@ -590,9 +590,9 @@ namespace MoreShipUpgrades
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
             LethalLib.Modules.Items.RegisterItem(wheelbarrow);
             Utilities.FixMixerGroups(wheelbarrow.spawnPrefab);
-            int amountToSpawn = cfg.SCRAP_WHEELBARROW_ENABLED ? 1 : 0;
+            int amountToSpawn = cfg.SCRAP_WHEELBARROW_ENABLED.Value ? 1 : 0;
 
-            AnimationCurve curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe((1f - cfg.SCRAP_WHEELBARROW_RARITY), amountToSpawn), new Keyframe(1, amountToSpawn));
+            AnimationCurve curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe((1f - cfg.SCRAP_WHEELBARROW_RARITY.Value), amountToSpawn), new Keyframe(1, amountToSpawn));
             SpawnableMapObjectDef mapObjDef = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
             mapObjDef.spawnableMapObject = new SpawnableMapObject();
             mapObjDef.spawnableMapObject.prefabToSpawn = wheelbarrow.spawnPrefab;
@@ -604,7 +604,7 @@ namespace MoreShipUpgrades
             if (wheelbarrow == null) return;
 
             wheelbarrow.itemId = 492019;
-            wheelbarrow.creditsWorth = cfg.WHEELBARROW_PRICE;
+            wheelbarrow.creditsWorth = cfg.WHEELBARROW_PRICE.Value;
             wheelbarrow.twoHanded = true;
             wheelbarrow.twoHandedAnimation = true;
             wheelbarrow.grabAnim = "HoldJetpack";
@@ -613,7 +613,7 @@ namespace MoreShipUpgrades
             wheelbarrow.positionOffset = new Vector3(0f, -0.7f, 1.4f);
             wheelbarrow.allowDroppingAheadOfPlayer = true;
             wheelbarrow.isConductiveMetal = true;
-            wheelbarrow.weight = 0.99f + (cfg.WHEELBARROW_WEIGHT/100f);
+            wheelbarrow.weight = 0.99f + (cfg.WHEELBARROW_WEIGHT.Value/100f);
             wheelbarrow.canBeGrabbedBeforeGameStart = true;
             StoreWheelbarrow barrowScript = wheelbarrow.spawnPrefab.AddComponent<StoreWheelbarrow>();
             wheelbarrow.toolTips = SetupWheelbarrowTooltips();
@@ -632,7 +632,7 @@ namespace MoreShipUpgrades
             UnityEngine.InputSystem.Key dropAllItemsKey = UnityEngine.InputSystem.Key.None;
             bool dropAllItemsMouseButtonSet;
             UnityEngine.InputSystem.LowLevel.MouseButton dropAllitemsMouseButton = UnityEngine.InputSystem.LowLevel.MouseButton.Middle;
-            string controlBind = UpgradeBus.instance.cfg.WHEELBARROW_DROP_ALL_CONTROL_BIND;
+            string controlBind = UpgradeBus.instance.cfg.WHEELBARROW_DROP_ALL_CONTROL_BIND.Value;
             if (Enum.TryParse(controlBind, out UnityEngine.InputSystem.Key toggle))
             {
                 dropAllItemsKey = toggle;

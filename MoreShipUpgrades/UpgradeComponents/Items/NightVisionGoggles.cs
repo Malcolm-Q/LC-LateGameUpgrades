@@ -15,8 +15,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             " with other kinds of batteries.";
         public string GetDisplayInfo()
         {
-            string grantStatus = UpgradeBus.instance.cfg.NIGHT_VISION_INDIVIDUAL || !UpgradeBus.instance.cfg.SHARED_UPGRADES ? "one" : "all";
-            string loseOnDeath = UpgradeBus.instance.cfg.LOSE_NIGHT_VIS_ON_DEATH ? "be" : "not be";
+            string grantStatus = UpgradeBus.instance.cfg.NIGHT_VISION_INDIVIDUAL.Value || !UpgradeBus.instance.cfg.SHARED_UPGRADES.Value ? "one" : "all";
+            string loseOnDeath = UpgradeBus.instance.cfg.LOSE_NIGHT_VIS_ON_DEATH.Value ? "be" : "not be";
             return string.Format(AssetBundleHandler.GetInfoFromJSON("Night Vision"), grantStatus, loseOnDeath);
         }
 

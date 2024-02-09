@@ -59,27 +59,27 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
         }
         private static void HandleHelpScrapInsurance(ref TerminalNode helpNode)
         {
-            HandleHelpCommand(ref helpNode, string.Format(SCRAP_INSURANCE_COMMAND, UpgradeBus.instance.cfg.SCRAP_INSURANCE_PRICE), UpgradeBus.instance.cfg.SCRAP_INSURANCE_ENABLED);
+            HandleHelpCommand(ref helpNode, string.Format(SCRAP_INSURANCE_COMMAND, UpgradeBus.instance.cfg.SCRAP_INSURANCE_PRICE.Value), UpgradeBus.instance.cfg.SCRAP_INSURANCE_ENABLED.Value);
         }
         private static void HandleHelpDiscombobulator(ref TerminalNode helpNode)
         {
-            bool enabled = UpgradeBus.instance.cfg.DISCOMBOBULATOR_ENABLED;
+            bool enabled = UpgradeBus.instance.cfg.DISCOMBOBULATOR_ENABLED.Value;
             HandleHelpCommand(ref helpNode, ATK_HELP_COMMAND, enabled);
             HandleHelpCommand(ref helpNode, CD_HELP_COMMAND, enabled);
         }
         private static void HandleHelpContract(ref TerminalNode helpNode)
         {
-            bool enabled = UpgradeBus.instance.cfg.CONTRACTS_ENABLED;
-            HandleHelpCommand(ref helpNode, string.Format(CONTRACT_HELP_COMMAND, UpgradeBus.instance.cfg.CONTRACT_PRICE, UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE), enabled);
+            bool enabled = UpgradeBus.instance.cfg.CONTRACTS_ENABLED.Value;
+            HandleHelpCommand(ref helpNode, string.Format(CONTRACT_HELP_COMMAND, UpgradeBus.instance.cfg.CONTRACT_PRICE.Value, UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE.Value), enabled);
             HandleHelpCommand(ref helpNode, INFO_CONTRACT_HELP_COMMAND, enabled);
         }
         private static void HandleHelpInterns(ref TerminalNode helpNode)
         {
-            HandleHelpCommand(ref helpNode, string.Format(INTERNS_HELP_COMMAND, UpgradeBus.instance.cfg.INTERN_PRICE), UpgradeBus.instance.cfg.INTERN_ENABLED);
+            HandleHelpCommand(ref helpNode, string.Format(INTERNS_HELP_COMMAND, UpgradeBus.instance.cfg.INTERN_PRICE.Value), UpgradeBus.instance.cfg.INTERN_ENABLED.Value);
         }
         private static void HandleHelpExtendDeadline(ref TerminalNode helpNode)
         {
-            HandleHelpCommand(ref helpNode, string.Format(EXTEND_HELP_COMMAND, UpgradeBus.instance.cfg.EXTEND_DEADLINE_PRICE), UpgradeBus.instance.cfg.EXTEND_DEADLINE_ENABLED);
+            HandleHelpCommand(ref helpNode, string.Format(EXTEND_HELP_COMMAND, UpgradeBus.instance.cfg.EXTEND_DEADLINE_PRICE.Value), UpgradeBus.instance.cfg.EXTEND_DEADLINE_ENABLED.Value);
         }
         [HarmonyPostfix]
         [HarmonyPatch(nameof(Terminal.ParsePlayerSentence))]
