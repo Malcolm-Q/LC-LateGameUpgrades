@@ -42,6 +42,7 @@ namespace MoreShipUpgrades.Managers
         public bool hunter = false;
         public bool playerHealth = false;
         public bool doorsHydraulicsBattery = false;
+        public bool marketInfluence = false;
         public bool bargainConnections = false;
         public bool lethalDeals = false;
         internal bool quantumDisruptor = false;
@@ -59,6 +60,7 @@ namespace MoreShipUpgrades.Managers
         public int nightVisionLevel = 0;
         public int playerHealthLevel = 0;
         public int doorsHydraulicsBatteryLevel = 0;
+        public int marketInfluenceLevel = 0;
         public int bargainConnectionsLevel = 0;
         internal int quantumDisruptorLevel = 0;
 
@@ -187,6 +189,7 @@ namespace MoreShipUpgrades.Managers
             hunter = false;
             playerHealth = false;
             sickBeats = false;
+            marketInfluence = false;
             bargainConnections = false;
             lethalDeals = false;
 
@@ -204,6 +207,7 @@ namespace MoreShipUpgrades.Managers
             legLevel = 0;
             nightVisionLevel = 0;
             playerHealthLevel = 0;
+            marketInfluenceLevel = 0;
             bargainConnectionsLevel = 0;
             flashCooldown = 0f;
             alteredWeight = 1f;
@@ -452,10 +456,19 @@ namespace MoreShipUpgrades.Managers
             SetupSickBeatsTerminalNode();
 
             SetupShutterBatteriesTerminalNode();
+            SetupMarketInfluenceTerminalNode();
             SetupBargainConnectionsTerminalNode();
             SetupQuantumDisruptorTerminalNode();
             SetupLethalDealsTerminalNode();
             terminalNodes.Sort();
+        }
+        void SetupMarketInfluenceTerminalNode()
+        {
+            SetupMultiplePurchasableTerminalNode(MarketInfluence.UPGRADE_NAME,
+                                                true,
+                                                cfg.MARKET_INFLUENCE_ENABLED.Value,
+                                                cfg.MARKET_INFLUENCE_PRICE.Value,
+                                                ParseUpgradePrices(cfg.MARKET_INFLUENCE_PRICES.Value));
         }
         void SetupBargainConnectionsTerminalNode()
         {
