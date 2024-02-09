@@ -6,7 +6,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
 {
     internal class ScrapWheelbarrow : WheelbarrowScript
     {
-        private static LGULogger logger = new LGULogger(nameof(ScrapWheelbarrow));
+        static LGULogger logger = new LGULogger(nameof(ScrapWheelbarrow));
+        const string ITEM_NAME = "Shopping Cart";
         public override void Start()
         {
             base.Start();
@@ -27,6 +28,12 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             Random random = new Random(StartOfRound.Instance.randomMapSeed + 45);
             GetComponent<ScrapValueSyncer>().SetScrapValue(random.Next(UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_MINIMUM_VALUE.Value, UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_MAXIMUM_VALUE.Value));
             logger.LogDebug("Spawned in the scene!");
+        }
+        protected override void SetupScanNodeProperties()
+        {
+            ScanNodeProperties scanNodeProperties = GetComponentInChildren<ScanNodeProperties>();
+            if (scanNodeProperties != null) LGUScanNodeProperties.ChangeScanNode(ref scanNodeProperties, (LGUScanNodeProperties.NodeType)scanNodeProperties.nodeType, header: ITEM_NAME);
+            else LGUScanNodeProperties.AddScrapScanNode(objectToAddScanNode: gameObject, header: ITEM_NAME);
         }
     }
 }
