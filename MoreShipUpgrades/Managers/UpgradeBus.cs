@@ -453,8 +453,8 @@ namespace MoreShipUpgrades.Managers
         {
             SetupOneTimeTerminalNode(LethalDeals.UPGRADE_NAME,
                                     true,
-                                    cfg.LETHAL_DEALS_ENABLED,
-                                    cfg.LETHAL_DEALS_PRICE);
+                                    cfg.LETHAL_DEALS_ENABLED.Value,
+                                    cfg.LETHAL_DEALS_PRICE.Value);
         }
         private void SetupShutterBatteriesTerminalNode()
         {
