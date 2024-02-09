@@ -5,13 +5,9 @@
 
 ### Changes
 - Spawned scrap (monster samples and contracts) now influence the totalScrapValueInLevel which is displayed at the end of game stats
-- Spawned scrap now use a component called ScrapValueSyncer which is used to change the item's scrap value for every player in the game.
-- Refactored upgrades to be more streamlined to create an upgrade and added documentation to each abstract upgrade class
-- Removed useless code
-- Refactored RPCs to respective handlers to relieve LGUStore's responsiiblities
 - Medkit now just increases the player's health instead of using DamagePlayer with a negative value.
 - Changed the time of saving LGU's data from disconnecting to autosaving. This should solve the issue of buying an upgrade, leaving and coming back with credits back and upgrade on.
-- Changed from storing the json alongside the game's save to storing inside the game's save (this should reduce amount of issues with mods like LCBetterSaves).
+- Changed config values to ConfigEntry to allow in-game configuration mods to change the values (Note: LGU is not responsible for any breaking bugs that arise from changing configuration while in-game.)
 
 ### Fixes
 - Fixed wheelbarrow cost using NV's cost instead of its own
@@ -19,6 +15,16 @@
 - Fixed TotalWeight restriction not being applied due to not being updated to new weight system
 - Fixed Baboon Hawks getting stuck in grabbing items stored in a wheelbarrow, leading to them camping the wheelbarrow
 - Fixed Shopping Cart (Scrap Wheelbarrow) scrap value not being applied on spawn due to MapObjects not having their scrap value synced.
+- Fixed Medkit's current amount of uses not being synced between players, leading to each player have three uses out of one medkit with maximum of three uses.
+- Fixed "scan enemies" showing "Unkown" instead of "Unknown" for enemies without a scan node associated (e.g Ghost Girl)
+
+### Code Changes (developer level)
+- Spawned scrap now use a component called ScrapValueSyncer which is used to change the item's scrap value for every player in the game.
+- Refactored upgrades to be more streamlined to create an upgrade and added documentation to each abstract upgrade class
+- Refactored RPCs to respective handlers to relieve LGUStore's responsiblities
+- Removed useless code
+- Changed from storing the json alongside the game's save to storing inside the game's save (this should reduce amount of issues with mods like LCBetterSaves).
+
 ## V 3.1.0 - 2024-1-19
 Additions
 - Shutter Batteries Upgrade

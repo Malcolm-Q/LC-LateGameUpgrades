@@ -43,6 +43,8 @@ namespace MoreShipUpgrades.Managers
         public bool playerHealth = false;
         public bool doorsHydraulicsBattery = false;
         public bool bargainConnections = false;
+        public bool lethalDeals = false;
+        internal bool quantumDisruptor = false;
 
         public int lungLevel = 0;
         public int helmetHits = 0;
@@ -58,6 +60,7 @@ namespace MoreShipUpgrades.Managers
         public int playerHealthLevel = 0;
         public int doorsHydraulicsBatteryLevel = 0;
         public int bargainConnectionsLevel = 0;
+        internal int quantumDisruptorLevel = 0;
 
         public float flashCooldown = 0f;
         public float alteredWeight = 1f;
@@ -185,6 +188,7 @@ namespace MoreShipUpgrades.Managers
             playerHealth = false;
             sickBeats = false;
             bargainConnections = false;
+            lethalDeals = false;
 
             contractType = "None";
             contractLevel = "None";
@@ -237,6 +241,7 @@ namespace MoreShipUpgrades.Managers
 
             logger.LogDebug($"Resetting the ship's attributes");
             if (cfg.DOOR_HYDRAULICS_BATTERY_ENABLED.Value && doorsHydraulicsBattery) UpgradeObjects[Stimpack.UPGRADE_NAME].GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute(ref doorsHydraulicsBattery, ref doorsHydraulicsBatteryLevel);
+            if (cfg.QUANTUM_DISRUPTOR_ENABLED.Value && quantumDisruptor) UpgradeObjects[QuantumDisruptor.UPGRADE_NAME].GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute(ref quantumDisruptor, ref quantumDisruptorLevel);
         }
 
         internal void GenerateSales(int seed = -1) // TODO: Save sales
@@ -447,8 +452,9 @@ namespace MoreShipUpgrades.Managers
             SetupSickBeatsTerminalNode();
 
             SetupShutterBatteriesTerminalNode();
-
             SetupBargainConnectionsTerminalNode();
+            SetupQuantumDisruptorTerminalNode();
+            SetupLethalDealsTerminalNode();
             terminalNodes.Sort();
         }
         void SetupBargainConnectionsTerminalNode()
@@ -458,6 +464,21 @@ namespace MoreShipUpgrades.Managers
                                                 cfg.BARGAIN_CONNECTIONS_ENABLED.Value,
                                                 cfg.BARGAIN_CONNECTIONS_PRICE.Value,
                                                 ParseUpgradePrices(cfg.BARGAIN_CONNECTIONS_PRICES.Value));
+        }
+        void SetupLethalDealsTerminalNode()
+        {
+            SetupOneTimeTerminalNode(LethalDeals.UPGRADE_NAME,
+                                    true,
+                                    cfg.LETHAL_DEALS_ENABLED.Value,
+                                    cfg.LETHAL_DEALS_PRICE.Value);
+        }
+        private void SetupQuantumDisruptorTerminalNode()
+        {
+            SetupMultiplePurchasableTerminalNode(QuantumDisruptor.UPGRADE_NAME,
+                                                true,
+                                                cfg.QUANTUM_DISRUPTOR_ENABLED.Value,
+                                                cfg.QUANTUM_DISRUPTOR_PRICE.Value,
+                                                ParseUpgradePrices(cfg.QUANTUM_DISRUPTOR_PRICES.Value));
         }
         private void SetupShutterBatteriesTerminalNode()
         {
