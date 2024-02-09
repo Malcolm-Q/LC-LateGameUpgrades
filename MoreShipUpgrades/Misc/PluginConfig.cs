@@ -18,6 +18,7 @@ namespace MoreShipUpgrades.Misc
 
         // enabled disabled
         public ConfigEntry<bool> LETHAL_DEALS_ENABLED { get; set; }
+        public ConfigEntry<bool> QUANTUM_DISRUPTOR_ENABLED { get; set; }
         public ConfigEntry<bool> CONTRACTS_ENABLED { get; set; }
         public ConfigEntry<bool> ADVANCED_TELE_ENABLED { get; set; }
         public ConfigEntry<bool> WEAK_TELE_ENABLED { get; set; }
@@ -64,6 +65,10 @@ namespace MoreShipUpgrades.Misc
 
         // prices
         public ConfigEntry<int> LETHAL_DEALS_PRICE { get; set; }
+        public ConfigEntry<float> QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER { get; set; }
+        public ConfigEntry<float> QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER { get; set; }
+        public ConfigEntry<string> QUANTUM_DISRUPTOR_PRICES { get; set; }
+        public ConfigEntry<int> QUANTUM_DISRUPTOR_PRICE { get; set; }
         public ConfigEntry<int> PEEPER_PRICE { get; set; }
         public ConfigEntry<int> HUNTER_PRICE { get; set; }
         public ConfigEntry<int> ADVANCED_TELE_PRICE { get; set; }
@@ -526,6 +531,13 @@ namespace MoreShipUpgrades.Misc
             topSection = LethalDeals.UPGRADE_NAME;
             LETHAL_DEALS_ENABLED = ConfigEntry(topSection, "Enable Lethal Deals Upgrade", true, "One time upgrade which guarantees at least one item will be on sale in the store.");
             LETHAL_DEALS_PRICE = ConfigEntry(topSection, "Price of Lethal Deals", 300);
+            
+            topSection = QuantumDisruptor.UPGRADE_NAME;
+            QUANTUM_DISRUPTOR_ENABLED = ConfigEntry(topSection, "Enable Quantum Disruptor Upgrade", true, "Tier upgrade which increases the time you can stay in a moon landing");
+            QUANTUM_DISRUPTOR_PRICE = ConfigEntry(topSection, "Price of Quantum Disruptor Upgrade", 1000);
+            QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER = ConfigEntry(topSection, "How slower time will go by when unlocking the Quantum Disruptor upgrade", 0.2f);
+            QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER = ConfigEntry(topSection, "How slower time will go by when incrementing the Quantum Disruptor level", 0.1f);
+            QUANTUM_DISRUPTOR_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, QuantumDisruptor.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
 
             topSection = "Wheelbarrow";
             WHEELBARROW_ENABLED = ConfigEntry(topSection, "Enable the Wheelbarrow Item", true, "Allows you to buy a wheelbarrow to carry items outside of your inventory");
