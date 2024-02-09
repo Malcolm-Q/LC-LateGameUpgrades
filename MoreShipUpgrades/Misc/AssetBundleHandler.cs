@@ -1,4 +1,4 @@
-﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
@@ -52,6 +52,9 @@ namespace MoreShipUpgrades.Misc
             { DoorsHydraulicsBattery.UPGRADE_NAME, root+"DoorsHydraulicsBattery.prefab" },
             { ScrapInsurance.COMMAND_NAME, root+"ScrapInsurance.prefab" },
             { MarketInfluence.UPGRADE_NAME, root+"MarketInfluence.prefab" },
+            { BargainConnections.UPGRADE_NAME, root+"BargainConnections.prefab" },
+            { LethalDeals.UPGRADE_NAME, root+"LethalDeals.prefab" },
+            { QuantumDisruptor.UPGRADE_NAME, root+"QuantumDisruptor.prefab" },
 
             { "Advanced Portable Tele", root+"TpButtonAdv.asset" },
             { "Portable Tele", root+"TpButton.asset" },

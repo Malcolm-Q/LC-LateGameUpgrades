@@ -15,7 +15,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         internal override void Start()
         {
-            WORLD_BUILDING_TEXT = 
             upgradeName = UPGRADE_NAME;
             base.Start();
         }

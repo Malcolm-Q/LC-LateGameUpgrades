@@ -18,6 +18,9 @@ namespace MoreShipUpgrades.Misc
 
         // enabled disabled
         public ConfigEntry<bool> MARKET_INFLUENCE_ENABLED { get; set; }
+        public ConfigEntry<bool> BARGAIN_CONNECTIONS_ENABLED { get; set; }
+        public ConfigEntry<bool> LETHAL_DEALS_ENABLED { get; set; }
+        public ConfigEntry<bool> QUANTUM_DISRUPTOR_ENABLED { get; set; }
         public ConfigEntry<bool> CONTRACTS_ENABLED { get; set; }
         public ConfigEntry<bool> ADVANCED_TELE_ENABLED { get; set; }
         public ConfigEntry<bool> WEAK_TELE_ENABLED { get; set; }
@@ -63,7 +66,12 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<bool> LOCKSMITH_INDIVIDUAL { get; set; }
 
         // prices
-        public ConfigEntry<int> MARKET_INFLUENCE_PRICE { get; set; }
+        public ConfigEntry<int> BARGAIN_CONNECTIONS_PRICE {  get; set; }
+        public ConfigEntry<int> LETHAL_DEALS_PRICE { get; set; }
+        public ConfigEntry<float> QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER { get; set; }
+        public ConfigEntry<float> QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER { get; set; }
+        public ConfigEntry<string> QUANTUM_DISRUPTOR_PRICES { get; set; }
+        public ConfigEntry<int> QUANTUM_DISRUPTOR_PRICE { get; set; }
         public ConfigEntry<int> PEEPER_PRICE { get; set; }
         public ConfigEntry<int> HUNTER_PRICE { get; set; }
         public ConfigEntry<int> ADVANCED_TELE_PRICE { get; set; }
@@ -256,6 +264,9 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<string> MARKET_INFLUENCE_PRICES { get; set; }
         public ConfigEntry<int> MARKET_INFLUENCE_INITIAL_PERCENTAGE { get; set; }
         public ConfigEntry<int> MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE { get; set; }
+        public ConfigEntry<int> BARGAIN_CONNECTIONS_INITIAL_ITEM_AMOUNT { get; set; }
+        public ConfigEntry<int> BARGAIN_CONNECTIONS_INCREMENTAL_ITEM_AMOUNT { get; set; }
+        public ConfigEntry<string> BARGAIN_CONNECTIONS_PRICES { get; set; }
 
 
         public PluginConfig(ConfigFile cfg)
@@ -532,6 +543,24 @@ namespace MoreShipUpgrades.Misc
             MARKET_INFLUENCE_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, MarketInfluence.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             MARKET_INFLUENCE_INITIAL_PERCENTAGE = ConfigEntry(topSection, "Initial percentage guarantee on the items on sale", 10);
             MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE = ConfigEntry(topSection, "Incremental percentage guarantee on the items on sale", 5);
+            
+            topSection = BargainConnections.UPGRADE_NAME;
+            BARGAIN_CONNECTIONS_ENABLED = ConfigEntry(topSection, "Enable Bargain Connections Upgrade", true, "Tier upgrade which increases the amount of items that can be on sale in the store");
+            BARGAIN_CONNECTIONS_PRICE = ConfigEntry(topSection, "Price of Bargain Connections", 200);
+            BARGAIN_CONNECTIONS_INITIAL_ITEM_AMOUNT = ConfigEntry(topSection, "Initial additional amount of items that can go on sale", 3);
+            BARGAIN_CONNECTIONS_INCREMENTAL_ITEM_AMOUNT = ConfigEntry(topSection, "Incremental additional amount of items that can go on sale", 2);
+            BARGAIN_CONNECTIONS_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, BargainConnections.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            
+            topSection = LethalDeals.UPGRADE_NAME;
+            LETHAL_DEALS_ENABLED = ConfigEntry(topSection, "Enable Lethal Deals Upgrade", true, "One time upgrade which guarantees at least one item will be on sale in the store.");
+            LETHAL_DEALS_PRICE = ConfigEntry(topSection, "Price of Lethal Deals", 300);
+            
+            topSection = QuantumDisruptor.UPGRADE_NAME;
+            QUANTUM_DISRUPTOR_ENABLED = ConfigEntry(topSection, "Enable Quantum Disruptor Upgrade", true, "Tier upgrade which increases the time you can stay in a moon landing");
+            QUANTUM_DISRUPTOR_PRICE = ConfigEntry(topSection, "Price of Quantum Disruptor Upgrade", 1000);
+            QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER = ConfigEntry(topSection, "How slower time will go by when unlocking the Quantum Disruptor upgrade", 0.2f);
+            QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER = ConfigEntry(topSection, "How slower time will go by when incrementing the Quantum Disruptor level", 0.1f);
+            QUANTUM_DISRUPTOR_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, QuantumDisruptor.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
 
             topSection = "Wheelbarrow";
             WHEELBARROW_ENABLED = ConfigEntry(topSection, "Enable the Wheelbarrow Item", true, "Allows you to buy a wheelbarrow to carry items outside of your inventory");

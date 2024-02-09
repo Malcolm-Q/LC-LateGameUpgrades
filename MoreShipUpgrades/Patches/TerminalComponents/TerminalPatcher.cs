@@ -1,12 +1,12 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
-using Unity.Profiling.LowLevel;
 
 namespace MoreShipUpgrades.Patches.TerminalComponents
 {
@@ -95,13 +95,29 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
         [HarmonyPatch(nameof(Terminal.SetItemSales))]
         static IEnumerable<CodeInstruction> SetItemSalesTranspiler(IEnumerable<CodeInstruction> instructions)
         {
+            MethodInfo bargainConnectionsAmount = typeof(BargainConnections).GetMethod(nameof(BargainConnections.GetBargainConnectionsAdditionalItems));
+            MethodInfo lethalDealsGuaranteedItems = typeof(LethalDeals).GetMethod(nameof(LethalDeals.GetLethalDealsGuaranteedItems));
             MethodInfo guaranteedMinimumSale = typeof(MarketInfluence).GetMethod(nameof(MarketInfluence.GetGuaranteedPercentageSale));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
-            index = Tools.FindInteger(index, ref codes, 90, skip: true, errorMessage: "Couldn't find first skip 90");
-            index = Tools.FindInteger(index, ref codes, 90, skip: true, errorMessage: "Couldn't find second skip 90");
+            index = Tools.FindInteger(index, ref codes, -10, addCode: lethalDealsGuaranteedItems, errorMessage: "Couldn't find negative value representing no sales");
+            index = Tools.FindInteger(index, ref codes, 5, addCode: bargainConnectionsAmount, errorMessage: "Couldn't find first maximum amount of items to go on sale");
+            index = Tools.FindInteger(index, ref codes, 5, addCode: bargainConnectionsAmount, errorMessage: "Couldn't find second maximum amount of items to go on sale");
             index = Tools.FindInteger(index, ref codes, 0, addCode: guaranteedMinimumSale, errorMessage: "Couldn't find minimum sale percentage");
             codes.Insert(index, new CodeInstruction(OpCodes.Ldloc_S, 4));
+        }
+        [HarmonyTranspiler]
+        [HarmonyPatch(nameof(Terminal.ParsePlayerSentence))]
+        static IEnumerable<CodeInstruction> ParsePlayerSenteceTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo newLimitCharactersTransmit = typeof(FastEncryption).GetMethod(nameof(FastEncryption.GetLimitOfCharactersTransmit));
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            int index = 0;
+            index = Tools.FindInteger(index, ref codes, findValue: 10, skip: true, errorMessage: "Couldn't find the 10 value which is used as character limit");
+            codes.Insert(index, new CodeInstruction(OpCodes.Call, newLimitCharactersTransmit));
+            codes.Insert(index, new CodeInstruction(OpCodes.Ldloc_S, 12));
+            return codes;
+        }
             return codes;
         }
     }

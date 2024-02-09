@@ -672,6 +672,9 @@ namespace MoreShipUpgrades
             SetupDoorsHydraulicsBattery();
             SetupScrapInsurance();
             SetupMarketInfluence();
+            SetupBargainConnections();
+            SetupLethalDeals();
+            SetupQuantumDisruptor();
         }
 
         private void SetupSickBeats()
@@ -771,6 +774,18 @@ namespace MoreShipUpgrades
         void SetupMarketInfluence()
         {
             SetupGenericPerk<MarketInfluence>(MarketInfluence.UPGRADE_NAME);
+        }
+        void SetupBargainConnections()
+        {
+            SetupGenericPerk<BargainConnections>(BargainConnections.UPGRADE_NAME);
+        }
+        void SetupLethalDeals()
+        {
+            SetupGenericPerk<LethalDeals>(LethalDeals.UPGRADE_NAME);
+        }
+        private void SetupQuantumDisruptor()
+        {
+            SetupGenericPerk<QuantumDisruptor>(QuantumDisruptor.UPGRADE_NAME);
         }
         /// <summary>
         /// Generic function where it adds a script (specificed through the type) into an GameObject asset 

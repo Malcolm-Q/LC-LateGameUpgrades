@@ -154,31 +154,6 @@ namespace MoreShipUpgrades.Misc
             return DisplayTerminalMessage($"The name {playerNameToSearch} was not found. The following names were found:\n{csvNames}\n");
         }
 
-        private static TerminalNode ExecuteTransmitMessage(string message, ref TerminalNode __result)
-        {
-            if (UnityEngine.Object.FindObjectOfType<SignalTranslator>() == null)
-            {
-                logger.LogInfo("User tried to use signar translator without owning one.");
-                return DisplayTerminalMessage("You have to buy a Signal Translator to use this command\n\n");
-            }
-
-            if (!UpgradeBus.instance.pager)
-            {
-                logger.LogInfo("User used signal translator successfully without Pager upgrade");
-                return __result;
-            }
-
-            if (message == "")
-            {
-                logger.LogInfo("User entered an invalid message for pager");
-                return DisplayTerminalMessage("You have to enter a message to broadcast\nEX: `page get back to the ship!`\n\n");
-            }
-
-            logger.LogInfo($"Broadcasting {message} with Pager upgrade...");
-            FastEncryption.instance.ReqBroadcastChatServerRpc(message);
-            return DisplayTerminalMessage($"Broadcasted message: '{message}'\n\n");
-        }
-
         private static TerminalNode ExecuteUpgradeCommand(string text, ref Terminal terminal, ref TerminalNode outputNode)
         {
             foreach (CustomTerminalNode customNode in UpgradeBus.instance.terminalNodes)
@@ -689,7 +664,6 @@ namespace MoreShipUpgrades.Misc
                 case "extend": outputNode = ExecuteExtendCommands(secondWord, thirdWord, ref terminal, ref outputNode); return;
                 case "load": outputNode = ExecuteLoadCommands(secondWord, fullText, ref terminal, ref outputNode); return;
                 case "scan": outputNode = ExecuteScanCommands(secondWord, ref outputNode); return;
-                case "transmit": outputNode = ExecuteTransmitMessage(fullText.Substring(firstWord.Length+1), ref outputNode); return;
                 case "scrap": outputNode = ExecuteScrapCommands(secondWord, ref terminal, ref outputNode); return;
                 default: outputNode = ExecuteUpgradeCommand(fullText, ref terminal, ref outputNode); return;
             }

@@ -1,4 +1,4 @@
-﻿using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -47,6 +47,9 @@ namespace MoreShipUpgrades.Managers
             {DoorsHydraulicsBattery.UPGRADE_NAME, SaveInfo => SaveInfo.doorsHydraulicsBattery },
             {SickBeats.UPGRADE_NAME, SaveInfo => SaveInfo.sickBeats },
             { MarketInfluence.UPGRADE_NAME, SaveInfo => SaveInfo.marketInfluence },
+            {BargainConnections.UPGRADE_NAME, SaveInfo => SaveInfo.bargainConnections },
+            {LethalDeals.UPGRADE_NAME, SaveInfo => SaveInfo.lethalDeals },
+            {QuantumDisruptor.UPGRADE_NAME, SaveInfo => SaveInfo.quantumDisruptor },
         };
 
         private static Dictionary<string, Func<SaveInfo, int>> levelConditions = new Dictionary<string, Func<SaveInfo, int>>
@@ -70,6 +73,9 @@ namespace MoreShipUpgrades.Managers
             { DoorsHydraulicsBattery.UPGRADE_NAME, saveInfo => saveInfo.doorsHydraulicsBatteryLevel},
             { SickBeats.UPGRADE_NAME, saveInfo => 0 },
             { MarketInfluence.UPGRADE_NAME, SaveInfo => SaveInfo.marketInfluenceLevel },
+            { BargainConnections.UPGRADE_NAME, saveInfo => saveInfo.bargainConnectionsLevel },
+            { LethalDeals.UPGRADE_NAME, saveInfo => 0 },
+            { QuantumDisruptor.UPGRADE_NAME, saveInfo => saveInfo.quantumDisruptorLevel },
         };
         private bool retrievedCfg;
         private bool receivedSave;
@@ -621,6 +627,9 @@ namespace MoreShipUpgrades.Managers
         public bool sickBeats = UpgradeBus.instance.sickBeats;
         public bool doorsHydraulicsBattery = UpgradeBus.instance.doorsHydraulicsBattery;
         public bool marketInfluence = UpgradeBus.instance.marketInfluence;
+        public bool bargainConnections = UpgradeBus.instance.bargainConnections;
+        public bool lethalDeals = UpgradeBus.instance.lethalDeals;
+        public bool quantumDisruptor = UpgradeBus.instance.quantumDisruptor;
 
         public int beeLevel = UpgradeBus.instance.beeLevel;
         public int huntLevel = UpgradeBus.instance.huntLevel;
@@ -635,6 +644,8 @@ namespace MoreShipUpgrades.Managers
         public int playerHealthLevel = UpgradeBus.instance.playerHealthLevel;
         public int doorsHydraulicsBatteryLevel = UpgradeBus.instance.doorsHydraulicsBatteryLevel;
         public int marketInfluenceLevel = UpgradeBus.instance.marketInfluenceLevel;
+        public int bargainConnectionsLevel = UpgradeBus.instance.bargainConnectionsLevel;
+        public int quantumDisruptorLevel = UpgradeBus.instance.quantumDisruptorLevel;
         public string contractType = UpgradeBus.instance.contractType;
         public string contractLevel = UpgradeBus.instance.contractLevel;
         public Dictionary<string, float> SaleData = UpgradeBus.instance.SaleData;
