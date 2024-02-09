@@ -66,6 +66,7 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<bool> LOCKSMITH_INDIVIDUAL { get; set; }
 
         // prices
+        public ConfigEntry<int> MARKET_INFLUENCE_PRICE { get; set; }
         public ConfigEntry<int> BARGAIN_CONNECTIONS_PRICE {  get; set; }
         public ConfigEntry<int> LETHAL_DEALS_PRICE { get; set; }
         public ConfigEntry<float> QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER { get; set; }

@@ -105,6 +105,7 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
             index = Tools.FindInteger(index, ref codes, 5, addCode: bargainConnectionsAmount, errorMessage: "Couldn't find second maximum amount of items to go on sale");
             index = Tools.FindInteger(index, ref codes, 0, addCode: guaranteedMinimumSale, errorMessage: "Couldn't find minimum sale percentage");
             codes.Insert(index, new CodeInstruction(OpCodes.Ldloc_S, 4));
+            return codes;
         }
         [HarmonyTranspiler]
         [HarmonyPatch(nameof(Terminal.ParsePlayerSentence))]
@@ -116,8 +117,6 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
             index = Tools.FindInteger(index, ref codes, findValue: 10, skip: true, errorMessage: "Couldn't find the 10 value which is used as character limit");
             codes.Insert(index, new CodeInstruction(OpCodes.Call, newLimitCharactersTransmit));
             codes.Insert(index, new CodeInstruction(OpCodes.Ldloc_S, 12));
-            return codes;
-        }
             return codes;
         }
     }
