@@ -1,6 +1,4 @@
-﻿using MoreShipUpgrades.Managers;
-using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreShipUpgrades.Misc
 {
@@ -11,9 +9,7 @@ namespace MoreShipUpgrades.Misc
             GrabbableObject prop = GetComponent<GrabbableObject>();
             prop.scrapValue = scrapValue;
 
-            ScanNodeProperties node = GetComponentInChildren<ScanNodeProperties>();
-            node.scrapValue = scrapValue;
-            node.subText = $"VALUE: ${scrapValue}";
+            LGUScanNodeProperties.UpdateScrapValue(ref prop, scrapValue);
             RoundManager.Instance.totalScrapValueInLevel += scrapValue;
         }
     }

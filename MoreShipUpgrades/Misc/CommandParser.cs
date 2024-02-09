@@ -322,7 +322,7 @@ namespace MoreShipUpgrades.Misc
                     ScanNodeProperties scanNode = enemy.GetComponentInChildren<ScanNodeProperties>();
                     string realName = "";
                     if (scanNode != null) realName = scanNode.headerText; // this should resolve the issue with this command
-                    else realName = "Unkown";
+                    else realName = "Unknown";
                     if (enemyCount.ContainsKey(realName)) { enemyCount[realName]++; }
                     else { enemyCount.Add(realName, 1); }
                 }

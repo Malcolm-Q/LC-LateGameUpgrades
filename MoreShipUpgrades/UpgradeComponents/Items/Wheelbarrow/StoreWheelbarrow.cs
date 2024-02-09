@@ -12,6 +12,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
     {
         private static LGULogger logger = new LGULogger(nameof(StoreWheelbarrow));
         private GameObject wheel;
+        private const string ITEM_NAME = "Wheelbarrow";
+        private const string ITEM_DESCRIPTION = "Allows carrying multiple items";
 
         public string GetDisplayInfo()
         {
@@ -48,6 +50,13 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
 
             wheel.transform.Rotate(Time.deltaTime, 0f, 0f, Space.Self);
             wheel.transform.rotation.Set(wheel.transform.rotation.x % 360, wheel.transform.rotation.y, wheel.transform.rotation.z, wheel.transform.rotation.w);
+        }
+
+        protected override void SetupScanNodeProperties()
+        {
+            ScanNodeProperties scanNodeProperties = GetComponentInChildren<ScanNodeProperties>();
+            if (scanNodeProperties != null) LGUScanNodeProperties.ChangeScanNode(ref scanNodeProperties, (LGUScanNodeProperties.NodeType)scanNodeProperties.nodeType, header: ITEM_NAME, subText: ITEM_DESCRIPTION);
+            else LGUScanNodeProperties.AddGeneralScanNode(objectToAddScanNode: gameObject, header: ITEM_NAME, subText: ITEM_DESCRIPTION);
         }
     }
 }
