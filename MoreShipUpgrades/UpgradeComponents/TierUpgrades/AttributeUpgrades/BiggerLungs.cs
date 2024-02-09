@@ -19,8 +19,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             logger = new LGULogger(UPGRADE_NAME);
             base.Start();
             changingAttribute = GameAttribute.PLAYER_SPRINT_TIME;
-            initialValue = UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE_UNLOCK;
-            incrementalValue = UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT;
+            initialValue = UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE_UNLOCK.Value;
+            incrementalValue = UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT.Value;
         }
 
         public override void Increment()
@@ -43,13 +43,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         public static float ApplyPossibleIncreasedStaminaRegen(float regenValue)
         {
             if (!UpgradeBus.instance.biggerLungs || UpgradeBus.instance.lungLevel < 0) return regenValue * UpgradeBus.instance.staminaDrainCoefficient;
-            return regenValue * UpgradeBus.instance.cfg.BIGGER_LUNGS_STAMINA_REGEN_INCREASE * UpgradeBus.instance.staminaDrainCoefficient;
+            return regenValue * UpgradeBus.instance.cfg.BIGGER_LUNGS_STAMINA_REGEN_INCREASE.Value * UpgradeBus.instance.staminaDrainCoefficient;
         }
 
         public static float ApplyPossibleReducedJumpStaminaCost(float jumpCost)
         {
             if (!UpgradeBus.instance.biggerLungs || UpgradeBus.instance.lungLevel < 1) return jumpCost;
-            return jumpCost * UpgradeBus.instance.cfg.BIGGER_LUNGS_JUMP_STAMINA_COST_DECREASE;
+            return jumpCost * UpgradeBus.instance.cfg.BIGGER_LUNGS_JUMP_STAMINA_COST_DECREASE.Value;
         }
         public string GetWorldBuildingText(bool shareStatus = false)
         {
@@ -58,7 +58,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE_UNLOCK + level * UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT;
+            System.Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE_UNLOCK.Value + level * UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT.Value;
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }

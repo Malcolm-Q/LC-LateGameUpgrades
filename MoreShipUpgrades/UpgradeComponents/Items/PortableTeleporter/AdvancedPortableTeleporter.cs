@@ -18,12 +18,12 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
         public override void Start()
         {
             base.Start();
-            breakChance = UpgradeBus.instance.cfg.ADV_CHANCE_TO_BREAK;
-            keepItems = UpgradeBus.instance.cfg.ADV_KEEP_ITEMS_ON_TELE;
+            breakChance = UpgradeBus.instance.cfg.ADV_CHANCE_TO_BREAK.Value;
+            keepItems = UpgradeBus.instance.cfg.ADV_KEEP_ITEMS_ON_TELE.Value;
         }
         public string GetDisplayInfo()
         {
-            return string.Format(AssetBundleHandler.GetInfoFromJSON("Advanced Portable Tele"), (int)(UpgradeBus.instance.cfg.ADV_CHANCE_TO_BREAK * 100));
+            return string.Format(AssetBundleHandler.GetInfoFromJSON("Advanced Portable Tele"), (int)(UpgradeBus.instance.cfg.ADV_CHANCE_TO_BREAK.Value * 100));
         }
 
         public string GetWorldBuildingText()

@@ -103,8 +103,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         {
             base.Start();
             randomNoise = new System.Random(StartOfRound.Instance.randomMapSeed + 80);
-            maximumAmountItems = UpgradeBus.instance.cfg.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS;
-            weightReduceMultiplier = UpgradeBus.instance.cfg.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER;
+            maximumAmountItems = UpgradeBus.instance.cfg.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS.Value;
+            weightReduceMultiplier = UpgradeBus.instance.cfg.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER.Value;
             defaultWeight = itemProperties.weight;
             totalWeight = defaultWeight;
             soundCounter = 0f;
@@ -132,7 +132,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             checkMethods[Restrictions.ItemCount] = CheckWheelbarrowItemCountRestriction;
             checkMethods[Restrictions.TotalWeight] = CheckWheelbarrowWeightRestriction;
             checkMethods[Restrictions.All] = CheckWheelbarrowAllRestrictions;
-            string controlBind = UpgradeBus.instance.cfg.WHEELBARROW_DROP_ALL_CONTROL_BIND;
+            string controlBind = UpgradeBus.instance.cfg.WHEELBARROW_DROP_ALL_CONTROL_BIND.Value;
             if (Enum.TryParse(controlBind, out Key toggle))
             {
                 dropAllItemsKey = toggle;
@@ -455,7 +455,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
 
         public static float CheckIfPlayerCarryingWheelbarrowLookSensitivity(float defaultValue)
         {
-            if (!UpgradeBus.instance.cfg.WHEELBARROW_ENABLED && !UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_ENABLED) return defaultValue;
+            if (!UpgradeBus.instance.cfg.WHEELBARROW_ENABLED.Value && !UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_ENABLED.Value) return defaultValue;
             PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
             if (!player.isHoldingObject) return defaultValue;
             if (player.currentlyHeldObjectServer is not WheelbarrowScript) return defaultValue;
@@ -464,7 +464,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         }
         public static float CheckIfPlayerCarryingWheelbarrowMovement(float defaultValue)
         {
-            if (!UpgradeBus.instance.cfg.WHEELBARROW_ENABLED && !UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_ENABLED) return defaultValue;
+            if (!UpgradeBus.instance.cfg.WHEELBARROW_ENABLED.Value && !UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_ENABLED.Value) return defaultValue;
             PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
             if (!player.isHoldingObject) return defaultValue;
             if (player.currentlyHeldObjectServer is not WheelbarrowScript) return defaultValue;

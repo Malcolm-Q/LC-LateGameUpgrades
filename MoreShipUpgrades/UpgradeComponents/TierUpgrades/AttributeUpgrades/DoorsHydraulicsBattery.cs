@@ -31,8 +31,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             logger = new LGULogger(upgradeName);
             base.Start();
             changingAttribute = GameAttribute.SHIP_DOOR_BATTERY;
-            initialValue = UpgradeBus.instance.cfg.DOOR_HYDRAULICS_BATTERY_INITIAL;
-            incrementalValue = UpgradeBus.instance.cfg.DOOR_HYDRAULICS_BATTERY_INCREMENTAL;
+            initialValue = UpgradeBus.instance.cfg.DOOR_HYDRAULICS_BATTERY_INITIAL.Value;
+            incrementalValue = UpgradeBus.instance.cfg.DOOR_HYDRAULICS_BATTERY_INCREMENTAL.Value;
         }
         public override void Load()
         {
@@ -54,7 +54,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.DOOR_HYDRAULICS_BATTERY_INITIAL + level * UpgradeBus.instance.cfg.DOOR_HYDRAULICS_BATTERY_INCREMENTAL;
+            Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.DOOR_HYDRAULICS_BATTERY_INITIAL.Value + level * UpgradeBus.instance.cfg.DOOR_HYDRAULICS_BATTERY_INCREMENTAL.Value;
             string infoFormat = "LVL {0} - ${1} - Increases the door's hydraulic capacity to remain closed by {2} units\n"; // to put in the infoStrings after
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }

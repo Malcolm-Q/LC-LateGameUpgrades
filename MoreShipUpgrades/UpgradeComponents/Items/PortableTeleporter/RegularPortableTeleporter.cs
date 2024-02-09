@@ -19,7 +19,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
 
         public string GetDisplayInfo()
         {
-            return string.Format(AssetBundleHandler.GetInfoFromJSON("Portable Tele"), (int)(UpgradeBus.instance.cfg.CHANCE_TO_BREAK * 100));
+            return string.Format(AssetBundleHandler.GetInfoFromJSON("Portable Tele"), (int)(UpgradeBus.instance.cfg.CHANCE_TO_BREAK.Value * 100));
         }
 
         public string GetWorldBuildingText()
@@ -30,8 +30,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
         public override void Start()
         {
             base.Start();
-            breakChance = UpgradeBus.instance.cfg.CHANCE_TO_BREAK;
-            keepItems = UpgradeBus.instance.cfg.KEEP_ITEMS_ON_TELE;
+            breakChance = UpgradeBus.instance.cfg.CHANCE_TO_BREAK.Value;
+            keepItems = UpgradeBus.instance.cfg.KEEP_ITEMS_ON_TELE.Value;
         }
     }
 }
