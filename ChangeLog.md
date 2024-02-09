@@ -18,7 +18,7 @@
 - Fixed Medkit's current amount of uses not being synced between players, leading to each player have three uses out of one medkit with maximum of three uses.
 - Fixed "scan enemies" showing "Unkown" instead of "Unknown" for enemies without a scan node associated (e.g Ghost Girl)
 
-## Code Changes (developer level)
+### Code Changes (developer level)
 - Spawned scrap now use a component called ScrapValueSyncer which is used to change the item's scrap value for every player in the game.
 - Refactored upgrades to be more streamlined to create an upgrade and added documentation to each abstract upgrade class
 - Refactored RPCs to respective handlers to relieve LGUStore's responsiblities
