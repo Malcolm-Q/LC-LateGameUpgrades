@@ -1,4 +1,4 @@
-﻿using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -46,6 +46,7 @@ namespace MoreShipUpgrades.Managers
             {Stimpack.UPGRADE_NAME, SaveInfo => SaveInfo.playerHealth },
             {DoorsHydraulicsBattery.UPGRADE_NAME, SaveInfo => SaveInfo.doorsHydraulicsBattery },
             {SickBeats.UPGRADE_NAME, SaveInfo => SaveInfo.sickBeats },
+            {LethalDeals.UPGRADE_NAME, SaveInfo => SaveInfo.lethalDeals },
             {QuantumDisruptor.UPGRADE_NAME, SaveInfo => SaveInfo.quantumDisruptor },
         };
 
@@ -69,6 +70,7 @@ namespace MoreShipUpgrades.Managers
             { Stimpack.UPGRADE_NAME, saveInfo => saveInfo.playerHealthLevel },
             { DoorsHydraulicsBattery.UPGRADE_NAME, saveInfo => saveInfo.doorsHydraulicsBatteryLevel},
             { SickBeats.UPGRADE_NAME, saveInfo => 0 },
+            { LethalDeals.UPGRADE_NAME, saveInfo => 0 },
             { QuantumDisruptor.UPGRADE_NAME, saveInfo => saveInfo.quantumDisruptorLevel },
         };
         private bool retrievedCfg;
@@ -620,6 +622,7 @@ namespace MoreShipUpgrades.Managers
         public bool wearingHelmet = UpgradeBus.instance.wearingHelmet;
         public bool sickBeats = UpgradeBus.instance.sickBeats;
         public bool doorsHydraulicsBattery = UpgradeBus.instance.doorsHydraulicsBattery;
+        public bool lethalDeals = UpgradeBus.instance.lethalDeals;
         public bool quantumDisruptor = UpgradeBus.instance.quantumDisruptor;
 
         public int beeLevel = UpgradeBus.instance.beeLevel;

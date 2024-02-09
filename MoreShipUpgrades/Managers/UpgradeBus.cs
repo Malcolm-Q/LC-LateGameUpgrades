@@ -42,6 +42,7 @@ namespace MoreShipUpgrades.Managers
         public bool hunter = false;
         public bool playerHealth = false;
         public bool doorsHydraulicsBattery = false;
+        public bool lethalDeals = false;
         internal bool quantumDisruptor = false;
 
         public int lungLevel = 0;
@@ -184,6 +185,7 @@ namespace MoreShipUpgrades.Managers
             hunter = false;
             playerHealth = false;
             sickBeats = false;
+            lethalDeals = false;
 
             contractType = "None";
             contractLevel = "None";
@@ -447,7 +449,15 @@ namespace MoreShipUpgrades.Managers
 
             SetupShutterBatteriesTerminalNode();
             SetupQuantumDisruptorTerminalNode();
+            SetupLethalDealsTerminalNode();
             terminalNodes.Sort();
+        }
+        void SetupLethalDealsTerminalNode()
+        {
+            SetupOneTimeTerminalNode(LethalDeals.UPGRADE_NAME,
+                                    true,
+                                    cfg.LETHAL_DEALS_ENABLED.Value,
+                                    cfg.LETHAL_DEALS_PRICE.Value);
         }
         private void SetupQuantumDisruptorTerminalNode()
         {

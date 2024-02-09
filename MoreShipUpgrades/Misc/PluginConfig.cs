@@ -17,6 +17,7 @@ namespace MoreShipUpgrades.Misc
         readonly ConfigFile configFile;
 
         // enabled disabled
+        public ConfigEntry<bool> LETHAL_DEALS_ENABLED { get; set; }
         public ConfigEntry<bool> QUANTUM_DISRUPTOR_ENABLED { get; set; }
         public ConfigEntry<bool> CONTRACTS_ENABLED { get; set; }
         public ConfigEntry<bool> ADVANCED_TELE_ENABLED { get; set; }
@@ -63,6 +64,7 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<bool> LOCKSMITH_INDIVIDUAL { get; set; }
 
         // prices
+        public ConfigEntry<int> LETHAL_DEALS_PRICE { get; set; }
         public ConfigEntry<float> QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER { get; set; }
         public ConfigEntry<float> QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER { get; set; }
         public ConfigEntry<string> QUANTUM_DISRUPTOR_PRICES { get; set; }
@@ -526,6 +528,10 @@ namespace MoreShipUpgrades.Misc
             SCRAP_INSURANCE_ENABLED = ConfigEntry(topSection, "Enable Scrap Insurance Command", true, "One time purchase which allows you to keep all your scrap upon a team wipe on a moon trip");
             SCRAP_INSURANCE_PRICE = ConfigEntry(topSection, "Price of Scrap Insurance", ScrapInsurance.DEFAULT_PRICE);
 
+            topSection = LethalDeals.UPGRADE_NAME;
+            LETHAL_DEALS_ENABLED = ConfigEntry(topSection, "Enable Lethal Deals Upgrade", true, "One time upgrade which guarantees at least one item will be on sale in the store.");
+            LETHAL_DEALS_PRICE = ConfigEntry(topSection, "Price of Lethal Deals", 300);
+            
             topSection = QuantumDisruptor.UPGRADE_NAME;
             QUANTUM_DISRUPTOR_ENABLED = ConfigEntry(topSection, "Enable Quantum Disruptor Upgrade", true, "Tier upgrade which increases the time you can stay in a moon landing");
             QUANTUM_DISRUPTOR_PRICE = ConfigEntry(topSection, "Price of Quantum Disruptor Upgrade", 1000);
