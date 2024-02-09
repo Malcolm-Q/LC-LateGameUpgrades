@@ -53,14 +53,12 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             base.Load();
             UpgradeBus.instance.lightningRod = true;
-            UpgradeBus.instance.lightningRodActive = UpgradeBus.instance.cfg.LIGHTNING_ROD_ACTIVE;
         }
 
         public override void Unwind()
         {
             base.Unwind();
             UpgradeBus.instance.lightningRod = false;
-            UpgradeBus.instance.lightningRodActive = false;
         }
 
         public static void TryInterceptLightning(ref StormyWeather __instance, ref GrabbableObject ___targetingMetalObject)
@@ -73,9 +71,9 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             logger.LogDebug($"Distance from ship: {dist}");
             logger.LogDebug($"Effective distance of the lightning rod: {UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST}");
 
-            if (dist > UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST) return;
+            if (dist > UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST.Value) return;
 
-            dist /= UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST;
+            dist /= UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST.Value;
             float prob = 1 - dist;
             float rand = Random.value;
 
@@ -112,7 +110,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
         public override string GetDisplayInfo(int price = -1)
         {
-            return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), price, UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST);
+            return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), price, UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST.Value);
         }
     }
 }

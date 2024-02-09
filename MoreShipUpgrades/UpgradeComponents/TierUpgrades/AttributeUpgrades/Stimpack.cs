@@ -39,8 +39,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             logger = new LGULogger(UPGRADE_NAME);
             base.Start();
             changingAttribute = GameAttribute.PLAYER_HEALTH;
-            initialValue = UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK;
-            incrementalValue = UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT;
+            initialValue = UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK.Value;
+            incrementalValue = UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT.Value;
         }
 
         public override void Increment()
@@ -70,7 +70,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             if (!UpgradeBus.instance.playerHealthLevels.ContainsKey(player.playerSteamId)) return health;
             int currentLevel = UpgradeBus.instance.playerHealthLevels[player.playerSteamId];
 
-            return health + UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK + currentLevel * UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT;
+            return health + UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK.Value + currentLevel * UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT.Value;
         }
         /// <summary>
         /// Returns the maximum health possible for the player with given steam identifier
@@ -83,7 +83,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         public static int GetHealthFromPlayer(int health, ulong steamId)
         {
             int currentLevel = UpgradeBus.instance.playerHealthLevels[steamId];
-            return health + UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK + currentLevel * UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT;
+            return health + UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK.Value + currentLevel * UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT.Value;
         }
         public string GetWorldBuildingText(bool shareStatus = false)
         {
@@ -92,7 +92,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK + level * UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT;
+            Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK.Value + level * UpgradeBus.instance.cfg.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT.Value;
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }

@@ -63,8 +63,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             terminal.terminalAudio.maxDistance = 100f;
             terminal.terminalAudio.PlayOneShot(UpgradeBus.instance.flashNoise);
             StartCoroutine(ResetRange(terminal));
-            UpgradeBus.instance.flashCooldown = UpgradeBus.instance.cfg.DISCOMBOBULATOR_COOLDOWN;
-            Collider[] array = Physics.OverlapSphere(terminal.transform.position, UpgradeBus.instance.cfg.DISCOMBOBULATOR_RADIUS, 524288);
+            UpgradeBus.instance.flashCooldown = UpgradeBus.instance.cfg.DISCOMBOBULATOR_COOLDOWN.Value;
+            Collider[] array = Physics.OverlapSphere(terminal.transform.position, UpgradeBus.instance.cfg.DISCOMBOBULATOR_RADIUS.Value, 524288);
             if (array.Length <= 0) return;
             for (int i = 0; i < array.Length; i++)
             {
@@ -73,16 +73,16 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 EnemyAI enemy = component.mainScript;
                 if (CanDealDamage())
                 {
-                    int forceValue = UpgradeBus.instance.cfg.DISCOMBOBULATOR_INITIAL_DAMAGE + UpgradeBus.instance.cfg.DISCOMBOBULATOR_DAMAGE_INCREASE * (UpgradeBus.instance.discoLevel - UpgradeBus.instance.cfg.DISCOMBOBULATOR_DAMAGE_LEVEL);
+                    int forceValue = UpgradeBus.instance.cfg.DISCOMBOBULATOR_INITIAL_DAMAGE.Value + UpgradeBus.instance.cfg.DISCOMBOBULATOR_DAMAGE_INCREASE.Value * (UpgradeBus.instance.discoLevel - UpgradeBus.instance.cfg.DISCOMBOBULATOR_DAMAGE_LEVEL.Value);
                     enemy.HitEnemy(forceValue);
                 }
-                if (!enemy.isEnemyDead) enemy.SetEnemyStunned(true, UpgradeBus.instance.cfg.DISCOMBOBULATOR_STUN_DURATION + UpgradeBus.instance.cfg.DISCOMBOBULATOR_INCREMENT * UpgradeBus.instance.discoLevel, null);
+                if (!enemy.isEnemyDead) enemy.SetEnemyStunned(true, UpgradeBus.instance.cfg.DISCOMBOBULATOR_STUN_DURATION.Value + UpgradeBus.instance.cfg.DISCOMBOBULATOR_INCREMENT.Value * UpgradeBus.instance.discoLevel, null);
             }
         }
 
         private bool CanDealDamage()
         {
-            return UpgradeBus.instance.cfg.DISCOMBOBULATOR_DAMAGE_LEVEL > 0 && UpgradeBus.instance.discoLevel + 1 >= UpgradeBus.instance.cfg.DISCOMBOBULATOR_DAMAGE_LEVEL;
+            return UpgradeBus.instance.cfg.DISCOMBOBULATOR_DAMAGE_LEVEL.Value > 0 && UpgradeBus.instance.discoLevel + 1 >= UpgradeBus.instance.cfg.DISCOMBOBULATOR_DAMAGE_LEVEL.Value;
         }
         private IEnumerator ResetRange(Terminal terminal)
         {
@@ -97,7 +97,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.DISCOMBOBULATOR_STUN_DURATION + (level * UpgradeBus.instance.cfg.DISCOMBOBULATOR_INCREMENT);
+            System.Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.DISCOMBOBULATOR_STUN_DURATION.Value + (level * UpgradeBus.instance.cfg.DISCOMBOBULATOR_INCREMENT.Value);
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }

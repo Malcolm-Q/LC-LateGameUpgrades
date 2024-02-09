@@ -25,9 +25,10 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
                 usedMapSeed = StartOfRound.Instance.randomMapSeed;
                 random = new System.Random(usedMapSeed + 105);
             }
-            GetComponent<ScrapValueSyncer>().SetScrapValue(random.Next(minValue: itemProperties.minValue, maxValue: itemProperties.maxValue));
             particles = GetComponentInChildren<ParticleSystem>();
             if (particles == null) logger.LogError($"Couldn't find {nameof(ParticleSystem)} component in the sample...");
+            if (scrapValue > 0) return;
+            GetComponent<ScrapValueSyncer>().SetScrapValue(random.Next(minValue: itemProperties.minValue, maxValue: itemProperties.maxValue));
         }
         public override void EquipItem()
         {

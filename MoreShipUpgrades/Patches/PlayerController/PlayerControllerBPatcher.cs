@@ -24,7 +24,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         [HarmonyPatch(nameof(PlayerControllerB.KillPlayer))]
         private static void DisableUpgradesOnDeath(PlayerControllerB __instance)
         {
-            if (!UpgradeBus.instance.cfg.LOSE_NIGHT_VIS_ON_DEATH) return;
+            if (!UpgradeBus.instance.cfg.LOSE_NIGHT_VIS_ON_DEATH.Value) return;
             if (!__instance.IsOwner) return;
             if (__instance.isPlayerDead) return;
             if (!__instance.AllowPlayerDeath()) return;
@@ -32,7 +32,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             if (!UpgradeBus.instance.nightVision) return;
 
             UpgradeBus.instance.UpgradeObjects[NightVision.UPGRADE_NAME].GetComponent<NightVision>().DisableOnClient();
-            if (!UpgradeBus.instance.cfg.NIGHT_VISION_DROP_ON_DEATH) return;
+            if (!UpgradeBus.instance.cfg.NIGHT_VISION_DROP_ON_DEATH.Value) return;
             NightVision.instance.SpawnNightVisionItemOnDeathServerRpc(__instance.transform.position);
         }
 
@@ -234,7 +234,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             {
                 if (!boom.isPlayingMusic) continue;
 
-                if (Vector3.Distance(boom.transform.position, __instance.transform.position) >= UpgradeBus.instance.cfg.BEATS_RADIUS) continue;
+                if (Vector3.Distance(boom.transform.position, __instance.transform.position) >= UpgradeBus.instance.cfg.BEATS_RADIUS.Value) continue;
 
                 result = true;
                 break;

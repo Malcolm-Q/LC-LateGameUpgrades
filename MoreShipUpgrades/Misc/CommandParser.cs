@@ -48,12 +48,12 @@ namespace MoreShipUpgrades.Misc
             RoundManager.Instance.PlayAudibleNoise(terminal.transform.position, 60f, 0.8f, 0, false, 14155);
             Discombobulator.instance.PlayAudioAndUpdateCooldownServerRpc();
 
-            Collider[] array = Physics.OverlapSphere(terminal.transform.position, UpgradeBus.instance.cfg.DISCOMBOBULATOR_RADIUS, 524288);
+            Collider[] array = Physics.OverlapSphere(terminal.transform.position, UpgradeBus.instance.cfg.DISCOMBOBULATOR_RADIUS.Value, 524288);
             if (array.Length <= 0) return DisplayTerminalMessage("No stunned enemies detected.\n\n");
 
-            if (UpgradeBus.instance.cfg.DISCOMBOBULATOR_NOTIFY_CHAT)
+            if (UpgradeBus.instance.cfg.DISCOMBOBULATOR_NOTIFY_CHAT.Value)
             {
-                terminal.StartCoroutine(CountDownChat(UpgradeBus.instance.cfg.DISCOMBOBULATOR_STUN_DURATION + (UpgradeBus.instance.cfg.DISCOMBOBULATOR_INCREMENT * UpgradeBus.instance.discoLevel)));
+                terminal.StartCoroutine(CountDownChat(UpgradeBus.instance.cfg.DISCOMBOBULATOR_STUN_DURATION.Value + (UpgradeBus.instance.cfg.DISCOMBOBULATOR_INCREMENT.Value * UpgradeBus.instance.discoLevel)));
             }
             return DisplayTerminalMessage($"Discombobulator hit {array.Length} enemies.\n\n");
         }
@@ -113,12 +113,12 @@ namespace MoreShipUpgrades.Misc
 
         private static TerminalNode ExecuteInternsCommand(ref Terminal terminal)
         {
-            if (terminal.groupCredits < UpgradeBus.instance.cfg.INTERN_PRICE) return DisplayTerminalMessage($"Interns cost {UpgradeBus.instance.cfg.INTERN_PRICE} credits and you have {terminal.groupCredits} credits.\n");
+            if (terminal.groupCredits < UpgradeBus.instance.cfg.INTERN_PRICE.Value) return DisplayTerminalMessage($"Interns cost {UpgradeBus.instance.cfg.INTERN_PRICE.Value} credits and you have {terminal.groupCredits} credits.\n");
 
             PlayerControllerB player = StartOfRound.Instance.mapScreen.targetedPlayer;
             if (!player.isPlayerDead) return DisplayTerminalMessage($"{player.playerUsername} is still alive, they can't be replaced with an intern.\n\n");
             logger.LogDebug($"Player {player.playerUsername} is dead and we have enough credits, executing revive command...");
-            terminal.groupCredits -= UpgradeBus.instance.cfg.INTERN_PRICE;
+            terminal.groupCredits -= UpgradeBus.instance.cfg.INTERN_PRICE.Value;
             LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits);
             Interns.instance.ReviveTargetedPlayerServerRpc();
             string name = UpgradeBus.instance.internNames[UnityEngine.Random.Range(0, UpgradeBus.instance.internNames.Length)];
@@ -278,7 +278,7 @@ namespace MoreShipUpgrades.Misc
             if (enemies.Length <= 0) return DisplayTerminalMessage("0 enemies detected\n\n");
 
             Dictionary<string, int> enemyCount = new Dictionary<string, int>();
-            if (!UpgradeBus.instance.cfg.VERBOSE_ENEMIES)
+            if (!UpgradeBus.instance.cfg.VERBOSE_ENEMIES.Value)
             {
                 logger.LogInfo("Scan Enemies: Verbose mode = true");
                 enemyCount.Add("Outside Enemies", 0);
@@ -297,7 +297,7 @@ namespace MoreShipUpgrades.Misc
                     ScanNodeProperties scanNode = enemy.GetComponentInChildren<ScanNodeProperties>();
                     string realName = "";
                     if (scanNode != null) realName = scanNode.headerText; // this should resolve the issue with this command
-                    else realName = "Unkown";
+                    else realName = "Unknown";
                     if (enemyCount.ContainsKey(realName)) { enemyCount[realName]++; }
                     else { enemyCount.Add(realName, 1); }
                 }
@@ -361,7 +361,7 @@ namespace MoreShipUpgrades.Misc
             switch(secondWord)
             {
                 case "cancel": return ExecuteContractCancelCommand(ref terminal);
-                case "info": return DisplayTerminalMessage(string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), UpgradeBus.instance.cfg.CONTRACT_PRICE));
+                case "info": return DisplayTerminalMessage(string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), UpgradeBus.instance.cfg.CONTRACT_PRICE.Value));
                 default: return TryGetContract(secondWord, ref terminal);
             }
         }
@@ -386,13 +386,13 @@ namespace MoreShipUpgrades.Misc
             if (UpgradeBus.instance.contractLevel != "None")
             {
                 txt = $"You currently have a {UpgradeBus.instance.contractType} contract on {UpgradeBus.instance.contractLevel}!\n\n";
-                txt += string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE);
+                txt += string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE.Value);
                 logger.LogInfo($"User tried starting a new specified moon contract while they still have a {UpgradeBus.instance.contractType} contract on {UpgradeBus.instance.contractLevel}!");
                 return DisplayTerminalMessage(txt);
             }
-            if (terminal.groupCredits < UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE)
+            if (terminal.groupCredits < UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE.Value)
             {
-                txt = $"Specified Moon contracts cost ${UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE} and you have ${terminal.groupCredits}\n\n";
+                txt = $"Specified Moon contracts cost ${UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE.Value} and you have ${terminal.groupCredits}\n\n";
                 return DisplayTerminalMessage(txt);
             }
             string moon = GetSpecifiedLevel(possibleMoon);
@@ -402,7 +402,7 @@ namespace MoreShipUpgrades.Misc
                 return DisplayTerminalMessage(txt);
             }
             attemptSpecifyContract = moon;
-            txt = $"Type CONFIRM if you wish to have a contract on {moon} for the cost of {UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE} Company credits.\n\n";
+            txt = $"Type CONFIRM if you wish to have a contract on {moon} for the cost of {UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE.Value} Company credits.\n\n";
             return DisplayTerminalMessage(txt);
         }
         static TerminalNode TryGetContract(string possibleMoon, ref Terminal terminal)
@@ -412,16 +412,16 @@ namespace MoreShipUpgrades.Misc
             if(UpgradeBus.instance.contractLevel != "None")
             {
                 txt = $"You currently have a {UpgradeBus.instance.contractType} contract on {UpgradeBus.instance.contractLevel}!\n\n";
-                txt += string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), UpgradeBus.instance.cfg.CONTRACT_PRICE);
+                txt += string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), UpgradeBus.instance.cfg.CONTRACT_PRICE.Value);
                 logger.LogInfo($"User tried starting a new contract while they still have a {UpgradeBus.instance.contractType} contract on {UpgradeBus.instance.contractLevel}!");
                 return DisplayTerminalMessage(txt);
             }
-            if(terminal.groupCredits < UpgradeBus.instance.cfg.CONTRACT_PRICE)
+            if(terminal.groupCredits < UpgradeBus.instance.cfg.CONTRACT_PRICE.Value)
             {
-                txt = $"Contracts costs ${UpgradeBus.instance.cfg.CONTRACT_PRICE} and you have ${terminal.groupCredits}\n\n";
+                txt = $"Contracts costs ${UpgradeBus.instance.cfg.CONTRACT_PRICE.Value} and you have ${terminal.groupCredits}\n\n";
                 return DisplayTerminalMessage(txt);
             }
-            LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits - UpgradeBus.instance.cfg.CONTRACT_PRICE);
+            LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits - UpgradeBus.instance.cfg.CONTRACT_PRICE.Value);
             int i = Random.Range(0,contracts.Count);
             if( contracts.Count > 1)
             {
@@ -478,7 +478,7 @@ namespace MoreShipUpgrades.Misc
                 {
                     TerminalNode routeMoon = routeKeyword.compatibleNouns[i].result;
                     int itemCost = routeMoon.itemCost;
-                    if (UpgradeBus.instance.cfg.CONTRACT_FREE_MOONS_ONLY && itemCost != 0)
+                    if (UpgradeBus.instance.cfg.CONTRACT_FREE_MOONS_ONLY.Value && itemCost != 0)
                     {
                         logger.LogDebug($"Criteria algorithm skipped a choice due to configuration only allowing free moons (Choice: {level.PlanetName})");
                         break;
@@ -550,7 +550,7 @@ namespace MoreShipUpgrades.Misc
         }
         private static TerminalNode ExecuteExtendDeadlineCommand(string daysString, ref Terminal terminal, ref TerminalNode outputNode)
         {
-            if (!UpgradeBus.instance.cfg.EXTEND_DEADLINE_ENABLED) return outputNode;
+            if (!UpgradeBus.instance.cfg.EXTEND_DEADLINE_ENABLED.Value) return outputNode;
 
             if (daysString == "")
                 return DisplayTerminalMessage($"You need to specify how many days you wish to extend the deadline for: \"extend deadline <days>\"\n\n");
@@ -558,10 +558,10 @@ namespace MoreShipUpgrades.Misc
             if (!(int.TryParse(daysString, out int days) && days > 0)) 
                 return DisplayTerminalMessage($"Invalid value ({daysString}) inserted to extend the deadline.\n\n");
 
-            if (terminal.groupCredits < days * UpgradeBus.instance.cfg.EXTEND_DEADLINE_PRICE) 
-                return DisplayTerminalMessage($"Not enough credits to purchase the proposed deadline extension.\n Total price: {days * UpgradeBus.instance.cfg.EXTEND_DEADLINE_PRICE}\n Current credits: {terminal.groupCredits}\n\n");
+            if (terminal.groupCredits < days * UpgradeBus.instance.cfg.EXTEND_DEADLINE_PRICE.Value) 
+                return DisplayTerminalMessage($"Not enough credits to purchase the proposed deadline extension.\n Total price: {days * UpgradeBus.instance.cfg.EXTEND_DEADLINE_PRICE.Value}\n Current credits: {terminal.groupCredits}\n\n");
 
-            terminal.groupCredits -= days * UpgradeBus.instance.cfg.EXTEND_DEADLINE_PRICE;
+            terminal.groupCredits -= days * UpgradeBus.instance.cfg.EXTEND_DEADLINE_PRICE.Value;
             LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits);
             ExtendDeadlineScript.instance.ExtendDeadlineServerRpc(days);
 
@@ -619,7 +619,7 @@ namespace MoreShipUpgrades.Misc
                 return node;
             }
             
-            LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits - UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE);
+            LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits - UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE.Value);
             int i = Random.Range(0, contracts.Count);
             UpgradeBus.instance.contractType = contracts[i];
             UpgradeBus.instance.contractLevel = moon;
@@ -670,7 +670,7 @@ namespace MoreShipUpgrades.Misc
         }
         private static TerminalNode ExecuteScrapInsuranceCommand(ref Terminal terminal, ref TerminalNode outputNode)
         {
-            if (!UpgradeBus.instance.cfg.SCRAP_INSURANCE_ENABLED) return outputNode;
+            if (!UpgradeBus.instance.cfg.SCRAP_INSURANCE_ENABLED.Value) return outputNode;
 
             if (ScrapInsurance.GetScrapInsuranceStatus())
                 return DisplayTerminalMessage($"You already purchased insurance to protect your scrap belongings.\n\n");
@@ -678,10 +678,10 @@ namespace MoreShipUpgrades.Misc
             if (!StartOfRound.Instance.inShipPhase)
                 return DisplayTerminalMessage($"You can only acquire insurance while in orbit.\n\n");
 
-            if (terminal.groupCredits < UpgradeBus.instance.cfg.SCRAP_INSURANCE_PRICE)
-                return DisplayTerminalMessage($"Not enough credits to purchase Scrap Insurance.\nPrice: {UpgradeBus.instance.cfg.SCRAP_INSURANCE_PRICE}\nCurrent credits: {terminal.groupCredits}\n\n");
+            if (terminal.groupCredits < UpgradeBus.instance.cfg.SCRAP_INSURANCE_PRICE.Value)
+                return DisplayTerminalMessage($"Not enough credits to purchase Scrap Insurance.\nPrice: {UpgradeBus.instance.cfg.SCRAP_INSURANCE_PRICE.Value}\nCurrent credits: {terminal.groupCredits}\n\n");
 
-            terminal.groupCredits -= UpgradeBus.instance.cfg.SCRAP_INSURANCE_PRICE;
+            terminal.groupCredits -= UpgradeBus.instance.cfg.SCRAP_INSURANCE_PRICE.Value;
             LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits);
             ScrapInsurance.TurnOnScrapInsurance();
             return DisplayTerminalMessage($"Scrap Insurance has been activated.\nIn case of a team wipe in your next trip, your scrap will be preserved.\n\n");
