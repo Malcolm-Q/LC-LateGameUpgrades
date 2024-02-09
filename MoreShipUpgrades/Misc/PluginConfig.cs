@@ -66,6 +66,7 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<float> QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER { get; set; }
         public ConfigEntry<float> QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER { get; set; }
         public ConfigEntry<string> QUANTUM_DISRUPTOR_PRICES { get; set; }
+        public ConfigEntry<int> QUANTUM_DISRUPTOR_PRICE { get; set; }
         public ConfigEntry<int> PEEPER_PRICE { get; set; }
         public ConfigEntry<int> HUNTER_PRICE { get; set; }
         public ConfigEntry<int> ADVANCED_TELE_PRICE { get; set; }

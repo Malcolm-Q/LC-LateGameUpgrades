@@ -17,8 +17,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             logger = new LGULogger(UPGRADE_NAME);
             base.Start();
             changingAttribute = GameAttribute.TIME_GLOBAL_TIME_MULTIPLIER;
-            initialValue = UpgradeBus.instance.cfg.QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER;
-            incrementalValue = UpgradeBus.instance.cfg.QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER;
+            initialValue = UpgradeBus.instance.cfg.QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER.Value;
+            incrementalValue = UpgradeBus.instance.cfg.QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER.Value;
         }
         public override void Increment()
         {
@@ -38,7 +38,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            Func<int, float> infoFunction = level => (1f - (UpgradeBus.instance.cfg.QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER + level * UpgradeBus.instance.cfg.QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER)) * 100f;
+            Func<int, float> infoFunction = level => (1f - (UpgradeBus.instance.cfg.QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER.Value + level * UpgradeBus.instance.cfg.QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER.Value)) * 100f;
             string infoFormat = "LVL {0} - ${1} - Decreases the landed moon's rotation force (time passing) by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }

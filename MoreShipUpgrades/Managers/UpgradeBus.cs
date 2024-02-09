@@ -455,7 +455,7 @@ namespace MoreShipUpgrades.Managers
                                                 true,
                                                 cfg.QUANTUM_DISRUPTOR_ENABLED,
                                                 cfg.QUANTUM_DISRUPTOR_PRICE,
-                                                ParseUpgradePrices(cfg.QUANTUM_DISRUPTOR_PRICES));
+                                                ParseUpgradePrices(cfg.QUANTUM_DISRUPTOR_PRICES.Value));
         }
         private void SetupShutterBatteriesTerminalNode()
         {
