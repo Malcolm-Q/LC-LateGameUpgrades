@@ -453,8 +453,8 @@ namespace MoreShipUpgrades.Managers
         {
             SetupMultiplePurchasableTerminalNode(QuantumDisruptor.UPGRADE_NAME,
                                                 true,
-                                                cfg.QUANTUM_DISRUPTOR_ENABLED,
-                                                cfg.QUANTUM_DISRUPTOR_PRICE,
+                                                cfg.QUANTUM_DISRUPTOR_ENABLED.Value,
+                                                cfg.QUANTUM_DISRUPTOR_PRICE.Value,
                                                 ParseUpgradePrices(cfg.QUANTUM_DISRUPTOR_PRICES.Value));
         }
         private void SetupShutterBatteriesTerminalNode()
