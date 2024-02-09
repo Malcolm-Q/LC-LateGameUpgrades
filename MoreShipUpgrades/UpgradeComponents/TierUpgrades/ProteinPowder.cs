@@ -64,18 +64,18 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public static int GetShovelHitForce(int force)
         {
             // Truly one of THE ternary operators
-            return (UpgradeBus.instance.proteinPowder ? TryToCritEnemy() ? CRIT_DAMAGE_VALUE : UpgradeBus.instance.cfg.PROTEIN_INCREMENT * UpgradeBus.instance.proteinLevel + UpgradeBus.instance.cfg.PROTEIN_UNLOCK_FORCE + force : force) + UpgradeBus.instance.damageBoost;
+            return (UpgradeBus.instance.proteinPowder ? TryToCritEnemy() ? CRIT_DAMAGE_VALUE : UpgradeBus.instance.cfg.PROTEIN_INCREMENT.Value * UpgradeBus.instance.proteinLevel + UpgradeBus.instance.cfg.PROTEIN_UNLOCK_FORCE.Value + force : force) + UpgradeBus.instance.damageBoost;
             // .damageBoost is tied to boombox upgrade, it will always be 0 when inactive or x when active.
         }
 
         private static bool TryToCritEnemy()
         {
-            int maximumLevel = UpgradeBus.instance.cfg.PROTEIN_UPGRADE_PRICES.Split(',').Length;
+            int maximumLevel = UpgradeBus.instance.cfg.PROTEIN_UPGRADE_PRICES.Value.Split(',').Length;
             int currentLevel = UpgradeBus.instance.proteinLevel;
 
             if (currentLevel != maximumLevel) return false;
 
-            return UnityEngine.Random.value < UpgradeBus.instance.cfg.PROTEIN_CRIT_CHANCE;
+            return UnityEngine.Random.value < UpgradeBus.instance.cfg.PROTEIN_CRIT_CHANCE.Value;
         }
 
         public string GetWorldBuildingText(bool shareStatus = false)
@@ -85,7 +85,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.PROTEIN_UNLOCK_FORCE + 1 + (UpgradeBus.instance.cfg.PROTEIN_INCREMENT * level);
+            Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.PROTEIN_UNLOCK_FORCE.Value + 1 + (UpgradeBus.instance.cfg.PROTEIN_INCREMENT.Value * level);
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }

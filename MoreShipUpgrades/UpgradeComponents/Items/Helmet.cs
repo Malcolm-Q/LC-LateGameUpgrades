@@ -29,7 +29,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
                 if (UpgradeBus.instance.wearingHelmet) return;
                 UpgradeBus.instance.helmetScript = this;
                 UpgradeBus.instance.wearingHelmet = true;
-                UpgradeBus.instance.helmetHits = UpgradeBus.instance.cfg.HELMET_HITS_BLOCKED;
+                UpgradeBus.instance.helmetHits = UpgradeBus.instance.cfg.HELMET_HITS_BLOCKED.Value;
                 if (IsHost) LGUStore.instance.SpawnAndMoveHelmetClientRpc(new NetworkObjectReference(playerHeldBy.GetComponent<NetworkObject>()), playerHeldBy.playerSteamId);
                 else LGUStore.instance.ReqSpawnAndMoveHelmetServerRpc(new NetworkObjectReference(playerHeldBy.GetComponent<NetworkObject>()), playerHeldBy.playerSteamId);
                 playerHeldBy.DespawnHeldObject();

@@ -47,8 +47,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         {
             audio = GetComponent<AudioSource>();
             hudManager = HUDManager.Instance;
-            maximumUses = UpgradeBus.instance.cfg.MEDKIT_USES;
-            healAmount = UpgradeBus.instance.cfg.MEDKIT_HEAL_VALUE;
+            maximumUses = UpgradeBus.instance.cfg.MEDKIT_USES.Value;
+            healAmount = UpgradeBus.instance.cfg.MEDKIT_HEAL_VALUE.Value;
             base.Start();
         }
         public override void DiscardItem()

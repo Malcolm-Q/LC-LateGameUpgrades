@@ -16,7 +16,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         public string GetDisplayInfo()
         {
             return $"A portable container which has a maximum capacity of {UpgradeBus.instance.cfg.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS}" +
-                $" and reduces the effective weight of the inserted items by {UpgradeBus.instance.cfg.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER * 100} %.\n" +
+                $" and reduces the effective weight of the inserted items by {UpgradeBus.instance.cfg.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER.Value * 100} %.\n" +
                 $"It weighs {UpgradeBus.instance.cfg.WHEELBARROW_WEIGHT} lbs";
         }
 
@@ -25,20 +25,20 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             base.Start();
             wheel = GameObject.Find("lgu_wheelbarrow_wheel");
             if (wheel == null) logger.LogError($"Couldn't find the wheel's {nameof(GameObject)} to perform rotations");
-            maximumAmountItems = UpgradeBus.instance.cfg.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS;
-            weightReduceMultiplier = UpgradeBus.instance.cfg.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER;
-            Enum.TryParse(typeof(Restrictions), UpgradeBus.instance.cfg.WHEELBARROW_RESTRICTION_MODE, out object parsedRestriction);
+            maximumAmountItems = UpgradeBus.instance.cfg.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS.Value;
+            weightReduceMultiplier = UpgradeBus.instance.cfg.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER.Value;
+            Enum.TryParse(typeof(Restrictions), UpgradeBus.instance.cfg.WHEELBARROW_RESTRICTION_MODE.Value, out object parsedRestriction);
             if (parsedRestriction == null)
             {
                 logger.LogError($"An error occured parsing the restriction mode ({UpgradeBus.instance.cfg.WHEELBARROW_RESTRICTION_MODE}), defaulting to ItemCount");
                 restriction = Restrictions.ItemCount;
             }
             else restriction = (Restrictions)parsedRestriction;
-            maximumWeightAllowed = UpgradeBus.instance.cfg.WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED;
-            noiseRange = UpgradeBus.instance.cfg.WHEELBARROW_NOISE_RANGE;
-            sloppiness = UpgradeBus.instance.cfg.WHEELBARROW_MOVEMENT_SLOPPY;
-            lookSensitivityDrawback = UpgradeBus.instance.cfg.WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK;
-            playSounds = UpgradeBus.instance.cfg.WHEELBARROW_PLAY_NOISE;
+            maximumWeightAllowed = UpgradeBus.instance.cfg.WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED.Value;
+            noiseRange = UpgradeBus.instance.cfg.WHEELBARROW_NOISE_RANGE.Value;
+            sloppiness = UpgradeBus.instance.cfg.WHEELBARROW_MOVEMENT_SLOPPY.Value;
+            lookSensitivityDrawback = UpgradeBus.instance.cfg.WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK.Value;
+            playSounds = UpgradeBus.instance.cfg.WHEELBARROW_PLAY_NOISE.Value;
         }
 
         public override void Update()
