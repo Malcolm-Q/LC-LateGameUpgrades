@@ -455,9 +455,9 @@ namespace MoreShipUpgrades.Managers
         {
             SetupMultiplePurchasableTerminalNode(MarketInfluence.UPGRADE_NAME,
                                                 true,
-                                                cfg.MARKET_INFLUENCE_ENABLED,
-                                                cfg.MARKET_INFLUENCE_PRICE,
-                                                ParseUpgradePrices(cfg.MARKET_INFLUENCE_PRICES));
+                                                cfg.MARKET_INFLUENCE_ENABLED.Value,
+                                                cfg.MARKET_INFLUENCE_PRICE.Value,
+                                                ParseUpgradePrices(cfg.MARKET_INFLUENCE_PRICES.Value));
         }
         private void SetupShutterBatteriesTerminalNode()
         {

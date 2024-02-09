@@ -37,11 +37,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public static int GetGuaranteedPercentageSale(int defaultPercentage, int maxValue)
         {
             if (!UpgradeBus.instance.marketInfluence) return defaultPercentage;
-            return Mathf.Clamp(defaultPercentage + UpgradeBus.instance.cfg.MARKET_INFLUENCE_INITIAL_PERCENTAGE + UpgradeBus.instance.marketInfluenceLevel * UpgradeBus.instance.cfg.MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE, 0, maxValue);
+            return Mathf.Clamp(defaultPercentage + UpgradeBus.instance.cfg.MARKET_INFLUENCE_INITIAL_PERCENTAGE.Value + UpgradeBus.instance.marketInfluenceLevel * UpgradeBus.instance.cfg.MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE.Value, 0, maxValue);
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.MARKET_INFLUENCE_INITIAL_PERCENTAGE + (level * UpgradeBus.instance.cfg.MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE);
+            System.Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.MARKET_INFLUENCE_INITIAL_PERCENTAGE.Value + (level * UpgradeBus.instance.cfg.MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE.Value);
             string infoFormat = "LVL {0} - ${1} - Guarantees the item sales' percentage to be at least {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
