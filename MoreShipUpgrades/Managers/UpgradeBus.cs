@@ -42,6 +42,7 @@ namespace MoreShipUpgrades.Managers
         public bool hunter = false;
         public bool playerHealth = false;
         public bool doorsHydraulicsBattery = false;
+        public bool bargainConnections = false;
         public bool lethalDeals = false;
         internal bool quantumDisruptor = false;
 
@@ -58,6 +59,7 @@ namespace MoreShipUpgrades.Managers
         public int nightVisionLevel = 0;
         public int playerHealthLevel = 0;
         public int doorsHydraulicsBatteryLevel = 0;
+        public int bargainConnectionsLevel = 0;
         internal int quantumDisruptorLevel = 0;
 
         public float flashCooldown = 0f;
@@ -185,6 +187,7 @@ namespace MoreShipUpgrades.Managers
             hunter = false;
             playerHealth = false;
             sickBeats = false;
+            bargainConnections = false;
             lethalDeals = false;
 
             contractType = "None";
@@ -201,6 +204,7 @@ namespace MoreShipUpgrades.Managers
             legLevel = 0;
             nightVisionLevel = 0;
             playerHealthLevel = 0;
+            bargainConnectionsLevel = 0;
             flashCooldown = 0f;
             alteredWeight = 1f;
             if (wipeObjRefs) {
@@ -448,9 +452,18 @@ namespace MoreShipUpgrades.Managers
             SetupSickBeatsTerminalNode();
 
             SetupShutterBatteriesTerminalNode();
+            SetupBargainConnectionsTerminalNode();
             SetupQuantumDisruptorTerminalNode();
             SetupLethalDealsTerminalNode();
             terminalNodes.Sort();
+        }
+        void SetupBargainConnectionsTerminalNode()
+        {
+            SetupMultiplePurchasableTerminalNode(BargainConnections.UPGRADE_NAME,
+                                                true,
+                                                cfg.BARGAIN_CONNECTIONS_ENABLED.Value,
+                                                cfg.BARGAIN_CONNECTIONS_PRICE.Value,
+                                                ParseUpgradePrices(cfg.BARGAIN_CONNECTIONS_PRICES.Value));
         }
         void SetupLethalDealsTerminalNode()
         {

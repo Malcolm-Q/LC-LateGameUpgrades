@@ -671,6 +671,7 @@ namespace MoreShipUpgrades
             SetupExtendDeadline();
             SetupDoorsHydraulicsBattery();
             SetupScrapInsurance();
+            SetupBargainConnections();
             SetupLethalDeals();
             SetupQuantumDisruptor();
         }
@@ -768,6 +769,10 @@ namespace MoreShipUpgrades
         private void SetupScrapInsurance()
         {
             SetupGenericPerk<ScrapInsurance>(ScrapInsurance.COMMAND_NAME);
+        }
+        void SetupBargainConnections()
+        {
+            SetupGenericPerk<BargainConnections>(BargainConnections.UPGRADE_NAME);
         }
         void SetupLethalDeals()
         {
