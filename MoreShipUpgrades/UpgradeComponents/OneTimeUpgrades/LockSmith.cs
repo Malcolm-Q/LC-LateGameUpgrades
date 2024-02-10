@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,9 +9,12 @@ using UnityEngine.UI;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
-    public class lockSmithScript : BaseUpgrade
+    class LockSmith : OneTimeUpgrade, IUpgradeWorldBuilding
     {
         public static string UPGRADE_NAME = "Locksmith";
+        internal const string WORLD_BUILDING_TEXT = "\n\nOn-the-job training package that supplies {0} with proprietary knowledge of the 'Ram, Scan, Bump' technique" +
+            " for bypassing The Company's proprietary Low-Tech Manual Security Doors' security system. Comes with an 'all-nines-notched' key, a rubber gasket, and a plastic handle on a metal rod {1}.\n\n";
+        public static LockSmith instance;
 
         private GameObject pin1, pin2, pin3, pin4, pin5;
         private List<GameObject> pins;
@@ -20,11 +24,11 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         private bool canPick = false;
         public int timesStruck;
 
-        void Start()
+        internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            DontDestroyOnLoad(gameObject);
-            Register();
+            base.Start();
+            instance = this;
             Transform tumbler = transform.GetChild(0).GetChild(0).GetChild(0);
             pin1 = tumbler.GetChild(0).gameObject;
             pin2 = tumbler.GetChild(1).gameObject;
@@ -41,17 +45,22 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             pins = new List<GameObject> { pin1, pin2, pin3, pin4, pin5 };
         }
 
-        public override void load()
+        public override void Load()
         {
-            base.load();
+            base.Load();
 
             UpgradeBus.instance.lockSmith = true;
-            UpgradeBus.instance.lockScript = this;
         }
 
         public override void Register()
         {
             base.Register();
+        }
+        public override void Unwind()
+        {
+            base.Unwind();
+
+            UpgradeBus.instance.lockSmith = false;
         }
 
         void Update()
@@ -78,12 +87,6 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             }
             RandomizeListOrder(order);
             StartCoroutine(CommunicateOrder(order));
-        }
-        public override void Unwind()
-        {
-            base.Unwind();
-
-            UpgradeBus.instance.lockSmith = false;
         }
         public void StrikePin(int i)
         {
@@ -132,6 +135,16 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
                 pins[lst[i]].GetComponent<Image>().color = Color.white;
             }
             canPick = true;
+        }
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return string.Format(WORLD_BUILDING_TEXT, shareStatus ? "your crew" : "you", shareStatus ? "for each of your coworkers" : "");
+        }
+
+        public override string GetDisplayInfo(int price = -1)
+        {
+            return "Allows you to pick door locks by completing a minigame.";
         }
     }
 }

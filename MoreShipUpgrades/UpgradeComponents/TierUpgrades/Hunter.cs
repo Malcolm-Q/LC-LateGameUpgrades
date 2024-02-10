@@ -1,14 +1,18 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
-using System;
+using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class hunterScript : BaseUpgrade
+    class Hunter : TierUpgrade, IUpgradeWorldBuilding
     {
-        public static string UPGRADE_NAME = "Hunter";
+        public const string UPGRADE_NAME = "Hunter";
+        internal const string WORLD_BUILDING_TEXT = "\n\nOn-the-job training program that teaches your crew how to properly collect lab-ready samples of blood," +
+            " skin, and organ tissue from entities found within the facility. These samples are valuable to The Company. Used to be a part of the standard onboarding procedure," +
+            " but was made opt-in only in 2005 to cut onboarding costs.\n\n";
         private static LGULogger logger = new LGULogger(UPGRADE_NAME);
         static Dictionary<string, string> monsterNames = new Dictionary<string, string>()
             {
@@ -40,18 +44,17 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             logger = new LGULogger(UPGRADE_NAME);
             tiers = new Dictionary<int, string[]>();
-            string[] tiersList = UpgradeBus.instance.cfg.HUNTER_SAMPLE_TIERS.ToLower().Split('-');
+            string[] tiersList = UpgradeBus.instance.cfg.HUNTER_SAMPLE_TIERS.Value.ToLower().Split('-');
             tiers[0] = tiersList[0].Split(",").Select(x => x.Trim()).ToArray();
             for (int i = 1; i < tiersList.Length; i++)
             {
                 tiers[i] = tiers[i - 1].Concat(tiersList[i].Split(",").Select(x => x.Trim())).ToArray();
             }
         }
-        void Start()
+        internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            DontDestroyOnLoad(gameObject);
-            Register();
+            base.Start();
         }
 
         public override void Increment()
@@ -59,9 +62,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             UpgradeBus.instance.huntLevel++;
         }
 
-        public override void load()
+        public override void Load()
         {
-            base.load();
+            base.Load();
 
             UpgradeBus.instance.hunter = true;
         }
@@ -71,10 +74,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
             UpgradeBus.instance.hunter = false;
             UpgradeBus.instance.huntLevel = 0;
-        }
-        public override void Register()
-        {
-            base.Register();
         }
 
         public static string GetHunterInfo(int level, int price)
@@ -92,6 +91,19 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             result = result.Substring(0, result.Length - 2);
             result += "\n";
             return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), level, price, result);
+        }
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
+
+        public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
+        {
+            string info = GetHunterInfo(1, initialPrice);
+            for (int i = 0; i < maxLevels; i++)
+                info += GetHunterInfo(i + 2, incrementalPrices[i]);
+            return info;
         }
     }
 }

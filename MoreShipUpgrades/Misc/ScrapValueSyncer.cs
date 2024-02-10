@@ -1,22 +1,16 @@
-﻿using MoreShipUpgrades.Managers;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreShipUpgrades.Misc
 {
-    /*
-     * This should be set up to be more modular in the future with an itemName dictionary
-     * but for this hotfix this will work. also nothing else needs this at the moment.
-     */
     internal class ScrapValueSyncer : MonoBehaviour
     {
-        void Start()
+        internal void SetScrapValue(int scrapValue)
         {
-            PhysicsProp prop = GetComponent<PhysicsProp>();
-            prop.scrapValue = UpgradeBus.instance.cfg.CONTRACT_EXOR_REWARD;
+            GrabbableObject prop = GetComponent<GrabbableObject>();
+            prop.scrapValue = scrapValue;
 
-            ScanNodeProperties node = GetComponentInChildren<ScanNodeProperties>();
-            node.scrapValue = UpgradeBus.instance.cfg.CONTRACT_EXOR_REWARD;
-            node.subText = $"VALUE: ${node.scrapValue}";
+            LGUScanNodeProperties.UpdateScrapValue(ref prop, scrapValue);
+            RoundManager.Instance.totalScrapValueInLevel += scrapValue;
         }
     }
 }

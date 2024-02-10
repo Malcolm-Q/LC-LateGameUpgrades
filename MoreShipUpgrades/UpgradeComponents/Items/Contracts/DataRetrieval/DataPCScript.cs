@@ -89,10 +89,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
 
             audio = GetComponent<AudioSource>();
 
-            loot.GetComponent<PhysicsProp>().scrapValue = UpgradeBus.instance.cfg.CONTRACT_DATA_REWARD;
-            ScanNodeProperties node = loot.GetComponentInChildren<ScanNodeProperties>();
-            node.scrapValue = UpgradeBus.instance.cfg.CONTRACT_DATA_REWARD;
-            node.subText = $"VALUE: ${node.scrapValue}";
 
 
             if (IsHost || IsServer)
@@ -175,6 +171,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
             if ((IsHost || IsServer) && succeeded)
             {
                 GameObject go = Instantiate(loot, transform.position + Vector3.up, Quaternion.identity);
+                go.GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.instance.cfg.CONTRACT_DATA_REWARD.Value);
                 go.GetComponent<NetworkObject>().Spawn();
                 logger.LogInfo("Loot successfully spawned");
             }

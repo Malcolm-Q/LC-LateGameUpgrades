@@ -1,6 +1,12 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Emit;
 
 namespace MoreShipUpgrades.Patches.TerminalComponents
 {
@@ -21,7 +27,7 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
         private const string INFO_CONTRACT_HELP_COMMAND = ">CONTRACT INFO \nDisplays all information related to each contract and how to complete it.\n\n";
 
         [HarmonyPostfix]
-        [HarmonyPatch("Start")]
+        [HarmonyPatch(nameof(Terminal.Start))]
         private static void StartPostfix(ref Terminal __instance)
         {
             TerminalNode helpNode = __instance.terminalNodes.specialNodes[HELP_TERMINAL_NODE];
@@ -55,34 +61,63 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
         }
         private static void HandleHelpScrapInsurance(ref TerminalNode helpNode)
         {
-            HandleHelpCommand(ref helpNode, string.Format(SCRAP_INSURANCE_COMMAND, UpgradeBus.instance.cfg.SCRAP_INSURANCE_PRICE), UpgradeBus.instance.cfg.SCRAP_INSURANCE_ENABLED);
+            HandleHelpCommand(ref helpNode, string.Format(SCRAP_INSURANCE_COMMAND, UpgradeBus.instance.cfg.SCRAP_INSURANCE_PRICE.Value), UpgradeBus.instance.cfg.SCRAP_INSURANCE_ENABLED.Value);
         }
         private static void HandleHelpDiscombobulator(ref TerminalNode helpNode)
         {
-            bool enabled = UpgradeBus.instance.cfg.DISCOMBOBULATOR_ENABLED;
+            bool enabled = UpgradeBus.instance.cfg.DISCOMBOBULATOR_ENABLED.Value;
             HandleHelpCommand(ref helpNode, ATK_HELP_COMMAND, enabled);
             HandleHelpCommand(ref helpNode, CD_HELP_COMMAND, enabled);
         }
         private static void HandleHelpContract(ref TerminalNode helpNode)
         {
-            bool enabled = UpgradeBus.instance.cfg.CONTRACTS_ENABLED;
-            HandleHelpCommand(ref helpNode, string.Format(CONTRACT_HELP_COMMAND, UpgradeBus.instance.cfg.CONTRACT_PRICE, UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE), enabled);
+            bool enabled = UpgradeBus.instance.cfg.CONTRACTS_ENABLED.Value;
+            HandleHelpCommand(ref helpNode, string.Format(CONTRACT_HELP_COMMAND, UpgradeBus.instance.cfg.CONTRACT_PRICE.Value, UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE.Value), enabled);
             HandleHelpCommand(ref helpNode, INFO_CONTRACT_HELP_COMMAND, enabled);
         }
         private static void HandleHelpInterns(ref TerminalNode helpNode)
         {
-            HandleHelpCommand(ref helpNode, string.Format(INTERNS_HELP_COMMAND, UpgradeBus.instance.cfg.INTERN_PRICE), UpgradeBus.instance.cfg.INTERN_ENABLED);
+            HandleHelpCommand(ref helpNode, string.Format(INTERNS_HELP_COMMAND, UpgradeBus.instance.cfg.INTERN_PRICE.Value), UpgradeBus.instance.cfg.INTERN_ENABLED.Value);
         }
         private static void HandleHelpExtendDeadline(ref TerminalNode helpNode)
         {
-            HandleHelpCommand(ref helpNode, string.Format(EXTEND_HELP_COMMAND, UpgradeBus.instance.cfg.EXTEND_DEADLINE_PRICE), UpgradeBus.instance.cfg.EXTEND_DEADLINE_ENABLED);
+            HandleHelpCommand(ref helpNode, string.Format(EXTEND_HELP_COMMAND, UpgradeBus.instance.cfg.EXTEND_DEADLINE_PRICE.Value), UpgradeBus.instance.cfg.EXTEND_DEADLINE_ENABLED.Value);
         }
         [HarmonyPostfix]
-        [HarmonyPatch("ParsePlayerSentence")]
+        [HarmonyPatch(nameof(Terminal.ParsePlayerSentence))]
         private static void CustomParser(ref Terminal __instance, ref TerminalNode __result)
         {
             string text = __instance.screenText.text.Substring(__instance.screenText.text.Length - __instance.textAdded);
             CommandParser.ParseLGUCommands(text, ref __instance, ref __result);
+        }
+
+        [HarmonyTranspiler]
+        [HarmonyPatch(nameof(Terminal.SetItemSales))]
+        static IEnumerable<CodeInstruction> SetItemSalesTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo bargainConnectionsAmount = typeof(BargainConnections).GetMethod(nameof(BargainConnections.GetBargainConnectionsAdditionalItems));
+            MethodInfo lethalDealsGuaranteedItems = typeof(LethalDeals).GetMethod(nameof(LethalDeals.GetLethalDealsGuaranteedItems));
+            MethodInfo guaranteedMinimumSale = typeof(MarketInfluence).GetMethod(nameof(MarketInfluence.GetGuaranteedPercentageSale));
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            int index = 0;
+            index = Tools.FindInteger(index, ref codes, -10, addCode: lethalDealsGuaranteedItems, errorMessage: "Couldn't find negative value representing no sales");
+            index = Tools.FindInteger(index, ref codes, 5, addCode: bargainConnectionsAmount, errorMessage: "Couldn't find first maximum amount of items to go on sale");
+            index = Tools.FindInteger(index, ref codes, 5, addCode: bargainConnectionsAmount, errorMessage: "Couldn't find second maximum amount of items to go on sale");
+            index = Tools.FindInteger(index, ref codes, 0, addCode: guaranteedMinimumSale, errorMessage: "Couldn't find minimum sale percentage");
+            codes.Insert(index, new CodeInstruction(OpCodes.Ldloc_S, 4));
+            return codes;
+        }
+        [HarmonyTranspiler]
+        [HarmonyPatch(nameof(Terminal.ParsePlayerSentence))]
+        static IEnumerable<CodeInstruction> ParsePlayerSenteceTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo newLimitCharactersTransmit = typeof(FastEncryption).GetMethod(nameof(FastEncryption.GetLimitOfCharactersTransmit));
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            int index = 0;
+            index = Tools.FindInteger(index, ref codes, findValue: 10, skip: true, errorMessage: "Couldn't find the 10 value which is used as character limit");
+            codes.Insert(index, new CodeInstruction(OpCodes.Call, newLimitCharactersTransmit));
+            codes.Insert(index, new CodeInstruction(OpCodes.Ldloc_S, 12));
+            return codes;
         }
     }
 }

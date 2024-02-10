@@ -1,6 +1,8 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,7 +11,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
     /// <summary>
     /// Logical class which represents an item that can heal the player when activated
     /// </summary>
-    internal class Medkit : GrabbableObject
+    internal class Medkit : GrabbableObject, IDisplayInfo
     {
         /// <summary>
         /// Logger of the class
@@ -45,8 +47,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         {
             audio = GetComponent<AudioSource>();
             hudManager = HUDManager.Instance;
-            maximumUses = UpgradeBus.instance.cfg.MEDKIT_USES;
-            healAmount = UpgradeBus.instance.cfg.MEDKIT_HEAL_VALUE;
+            maximumUses = UpgradeBus.instance.cfg.MEDKIT_USES.Value;
+            healAmount = UpgradeBus.instance.cfg.MEDKIT_HEAL_VALUE.Value;
             base.Start();
         }
         public override void DiscardItem()
@@ -64,7 +66,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         /// </summary>
         private void AttemptToHealPlayer()
         {
-            int health = UpgradeBus.instance.playerHealthLevels.ContainsKey(playerHeldBy.playerSteamId) ? playerHealthScript.GetHealthFromPlayer(100, playerHeldBy.playerSteamId) : 100;
+            int health = UpgradeBus.instance.playerHealthLevels.ContainsKey(playerHeldBy.playerSteamId) ? Stimpack.GetHealthFromPlayer(100, playerHeldBy.playerSteamId) : 100;
             if (!CanUseMedkit(health)) return;
             UseMedkit(health);
         }
@@ -76,19 +78,17 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         private void UseMedkit(int maximumHealth)
         {
             audio.PlayOneShot(use);
-            uses++;
             int heal_value = healAmount;
             int potentialHealth = playerHeldBy.health + heal_value;
             if (potentialHealth > maximumHealth)
             {
                 heal_value -= potentialHealth - maximumHealth;
             }
-            playerHeldBy.DamagePlayer(-heal_value, false, true, CauseOfDeath.Unknown, 0, false, Vector3.zero);
-            if (uses >= maximumUses)
-            {
-                itemUsedUp = true;
-                hudManager.DisplayTip("NO MORE USES!", "This medkit doesn't have anymore supplies!", true, false, "LC_Tip1");
-            }
+            playerHeldBy.health += heal_value;
+
+            if (IsHost || IsServer) UpdateMedkitUsesClientRpc();
+            else UpdateMedkitUsesServerRpc();
+
             if (playerHeldBy.health >= 20) playerHeldBy.MakeCriticallyInjured(false);
         }
         /// <summary>
@@ -112,6 +112,26 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
                 return false;
             }
             return true;
+        }
+        [ServerRpc]
+        void UpdateMedkitUsesServerRpc()
+        {
+            UpdateMedkitUsesClientRpc();
+        }
+        [ClientRpc]
+        void UpdateMedkitUsesClientRpc()
+        {
+            uses++;
+            if (uses < maximumUses) return;
+
+            itemUsedUp = true;
+            if (playerHeldBy == UpgradeBus.instance.GetLocalPlayer()) hudManager.DisplayTip("NO MORE USES!", "This medkit doesn't have anymore supplies!", true, false, "LC_Tip1");
+        }
+        public string GetDisplayInfo()
+        {
+            return $"MEDKIT - ${UpgradeBus.instance.cfg.MEDKIT_PRICE}\n\n" +
+                $"Left click to heal yourself for {UpgradeBus.instance.cfg.MEDKIT_HEAL_VALUE} health.\n" +
+                $"Can be used {UpgradeBus.instance.cfg.MEDKIT_USES} times.";
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using BepInEx.Logging;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using Unity.Netcode;
 
 namespace MoreShipUpgrades.UpgradeComponents.Commands
@@ -8,22 +9,33 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
     /// <summary>
     /// Currently this isn't working, I will have to figure out why
     /// </summary>
-    public class ExtendDeadlineScript : BaseUpgrade
+    public class ExtendDeadlineScript : NetworkBehaviour
     {
-        public static string UPGRADE_NAME = "Extend Deadline";
-        public static string ENABLED_SECTION = $"Enable {UPGRADE_NAME}";
+        public static string NAME = "Extend Deadline";
+        public static string ENABLED_SECTION = $"Enable {NAME}";
         private static LGULogger logger;
+        internal static ExtendDeadlineScript instance;
         void Start()
         {
-            upgradeName = UPGRADE_NAME;
-            logger = new LGULogger(upgradeName);
+            logger = new LGULogger(NAME);
+            instance = this;
             DontDestroyOnLoad(gameObject);
-            Register();
-            logger.LogDebug(upgradeName);
         }
-        public override void Register()
+
+        [ClientRpc]
+        public void ExtendDeadlineClientRpc(int days)
         {
-            base.Register();
+            float before = TimeOfDay.Instance.timeUntilDeadline;
+            TimeOfDay.Instance.timeUntilDeadline += TimeOfDay.Instance.totalTime * days;
+            TimeOfDay.Instance.UpdateProfitQuotaCurrentTime();
+            TimeOfDay.Instance.SyncTimeClientRpc(TimeOfDay.Instance.globalTime, (int)TimeOfDay.Instance.timeUntilDeadline);
+            logger.LogDebug($"Previous time: {before}, new time: {TimeOfDay.Instance.timeUntilDeadline}");
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void ExtendDeadlineServerRpc(int days)
+        {
+            ExtendDeadlineClientRpc(days);
         }
     }
 }

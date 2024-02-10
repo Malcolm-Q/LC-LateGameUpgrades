@@ -2,7 +2,7 @@
 using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -17,7 +17,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
     {
         private static LGULogger logger = new LGULogger(nameof(StartOfRoundPatcher));
         [HarmonyPrefix]
-        [HarmonyPatch("Start")]
+        [HarmonyPatch(nameof(StartOfRound.Start))]
         private static void InitLGUStore(PlayerControllerB __instance)
         {
             logger.LogDebug("Initiating components...");
@@ -39,10 +39,10 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             }
         }
         [HarmonyPrefix]
-        [HarmonyPatch("playersFiredGameOver")]
+        [HarmonyPatch(nameof(StartOfRound.playersFiredGameOver))]
         private static void GameOverResetUpgradeManager(StartOfRound __instance)
         {
-            if (UpgradeBus.instance.cfg.KEEP_UPGRADES_AFTER_FIRED_CUTSCENE) return;
+            if (UpgradeBus.instance.cfg.KEEP_UPGRADES_AFTER_FIRED_CUTSCENE.Value) return;
             logger.LogDebug("Configurations do not wish to keep upgrades, erasing...");
 
             if (!(__instance.NetworkManager.IsHost || __instance.NetworkManager.IsServer)) return;
@@ -60,7 +60,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         [HarmonyPatch(nameof(StartOfRound.ReviveDeadPlayers))]
         public static IEnumerable<CodeInstruction> ReviveDeadPlayers_Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            var maximumHealthMethod = typeof(playerHealthScript).GetMethod(nameof(playerHealthScript.CheckForAdditionalHealth));
+            var maximumHealthMethod = typeof(Stimpack).GetMethod(nameof(Stimpack.CheckForAdditionalHealth));
             List<CodeInstruction> codes = instructions.ToList();
             int index = 0;
             index = Tools.FindInteger(index, ref codes, findValue: 100, addCode: maximumHealthMethod, errorMessage: "Couldn't find maximum health on update health UI");
@@ -80,7 +80,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             LGUStore.instance.SyncContractDetailsClientRpc("None", -1);
         }
 
-        [HarmonyPatch("AutoSaveShipData")]
+        [HarmonyPatch(nameof(StartOfRound.AutoSaveShipData))]
         [HarmonyPostfix]
         private static void AutoSaveShipDataPostfix()
         {

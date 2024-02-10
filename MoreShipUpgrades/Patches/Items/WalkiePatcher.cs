@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 
 namespace MoreShipUpgrades.Patches.Items
 {
@@ -11,7 +12,7 @@ namespace MoreShipUpgrades.Patches.Items
         private static void DisableHUD(WalkieTalkie __instance)
         {
             if (!UpgradeBus.instance.walkies || !__instance.playerHeldBy.IsOwner) { return; }
-            UpgradeBus.instance.walkieHandler.WalkieDeactivate();
+            WalkieGPS.instance.WalkieDeactivate();
         }
 
         [HarmonyPrefix]
@@ -19,7 +20,7 @@ namespace MoreShipUpgrades.Patches.Items
         private static void DisableHUDDiscard(WalkieTalkie __instance)
         {
             if (!UpgradeBus.instance.walkies || !__instance.playerHeldBy.IsOwner) { return; }
-            UpgradeBus.instance.walkieHandler.WalkieDeactivate();
+            WalkieGPS.instance.WalkieDeactivate();
         }
 
 
@@ -28,7 +29,7 @@ namespace MoreShipUpgrades.Patches.Items
         private static void EnableHUD(WalkieTalkie __instance)
         {
             if (!UpgradeBus.instance.walkies || !__instance.playerHeldBy.IsOwner) { return; }
-            UpgradeBus.instance.walkieHandler.WalkieActive();
+            WalkieGPS.instance.WalkieActive();
         }
     }
 

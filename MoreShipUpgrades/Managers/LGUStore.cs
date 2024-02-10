@@ -1,4 +1,4 @@
-﻿using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,6 +12,8 @@ using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.Commands;
+using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -26,46 +28,54 @@ namespace MoreShipUpgrades.Managers
 
         private static Dictionary<string, Func<SaveInfo, bool>> conditions = new Dictionary<string, Func<SaveInfo, bool>>
         {
-            {trapDestroyerScript.UPGRADE_NAME, saveInfo => saveInfo.DestroyTraps },
-            {terminalFlashScript.UPGRADE_NAME, SaveInfo => SaveInfo.terminalFlash },
-            {biggerLungScript.UPGRADE_NAME, SaveInfo => SaveInfo.biggerLungs },
-            {runningShoeScript.UPGRADE_NAME, SaveInfo => SaveInfo.runningShoes },
-            {nightVisionScript.UPGRADE_NAME, SaveInfo => SaveInfo.nightVision },
-            {strongLegsScript.UPGRADE_NAME, SaveInfo => SaveInfo.strongLegs },
-            {strongerScannerScript.UPGRADE_NAME, SaveInfo => SaveInfo.scannerUpgrade },
-            {beekeeperScript.UPGRADE_NAME, SaveInfo => SaveInfo.beekeeper },
-            {exoskeletonScript.UPGRADE_NAME, SaveInfo => SaveInfo.exoskeleton },
-            {lockSmithScript.UPGRADE_NAME, SaveInfo => SaveInfo.lockSmith },
-            {walkieScript.UPGRADE_NAME, SaveInfo => SaveInfo.walkies },
-            {proteinPowderScript.UPGRADE_NAME, SaveInfo => SaveInfo.proteinPowder },
-            {pagerScript.UPGRADE_NAME, SaveInfo => SaveInfo.pager },
-            {hunterScript.UPGRADE_NAME, SaveInfo => SaveInfo.hunter },
-            {lightningRodScript.UPGRADE_NAME, SaveInfo => SaveInfo.lightningRod },
-            {playerHealthScript.UPGRADE_NAME, SaveInfo => SaveInfo.playerHealth },
+            {MalwareBroadcaster.UPGRADE_NAME, saveInfo => saveInfo.DestroyTraps },
+            {Discombobulator.UPGRADE_NAME, SaveInfo => SaveInfo.terminalFlash },
+            {BiggerLungs.UPGRADE_NAME, SaveInfo => SaveInfo.biggerLungs },
+            {RunningShoes.UPGRADE_NAME, SaveInfo => SaveInfo.runningShoes },
+            {NightVision.UPGRADE_NAME, SaveInfo => SaveInfo.nightVision },
+            {StrongLegs.UPGRADE_NAME, SaveInfo => SaveInfo.strongLegs },
+            {BetterScanner.UPGRADE_NAME, SaveInfo => SaveInfo.scannerUpgrade },
+            {Beekeeper.UPGRADE_NAME, SaveInfo => SaveInfo.beekeeper },
+            {BackMuscles.UPGRADE_NAME, SaveInfo => SaveInfo.exoskeleton },
+            {LockSmith.UPGRADE_NAME, SaveInfo => SaveInfo.lockSmith },
+            {WalkieGPS.UPGRADE_NAME, SaveInfo => SaveInfo.walkies },
+            {ProteinPowder.UPGRADE_NAME, SaveInfo => SaveInfo.proteinPowder },
+            {FastEncryption.UPGRADE_NAME, SaveInfo => SaveInfo.pager },
+            {Hunter.UPGRADE_NAME, SaveInfo => SaveInfo.hunter },
+            {LightningRod.UPGRADE_NAME, SaveInfo => SaveInfo.lightningRod },
+            {Stimpack.UPGRADE_NAME, SaveInfo => SaveInfo.playerHealth },
             {DoorsHydraulicsBattery.UPGRADE_NAME, SaveInfo => SaveInfo.doorsHydraulicsBattery },
-            {BeatScript.UPGRADE_NAME, SaveInfo => SaveInfo.sickBeats }
+            {SickBeats.UPGRADE_NAME, SaveInfo => SaveInfo.sickBeats },
+            { MarketInfluence.UPGRADE_NAME, SaveInfo => SaveInfo.marketInfluence },
+            {BargainConnections.UPGRADE_NAME, SaveInfo => SaveInfo.bargainConnections },
+            {LethalDeals.UPGRADE_NAME, SaveInfo => SaveInfo.lethalDeals },
+            {QuantumDisruptor.UPGRADE_NAME, SaveInfo => SaveInfo.quantumDisruptor },
         };
 
         private static Dictionary<string, Func<SaveInfo, int>> levelConditions = new Dictionary<string, Func<SaveInfo, int>>
         {
-            { trapDestroyerScript.UPGRADE_NAME, saveInfo => 0 },
-            { terminalFlashScript.UPGRADE_NAME, saveInfo => saveInfo.discoLevel },
-            { biggerLungScript.UPGRADE_NAME, saveInfo => saveInfo.lungLevel },
-            { runningShoeScript.UPGRADE_NAME, saveInfo => saveInfo.runningLevel },
-            { nightVisionScript.UPGRADE_NAME, saveInfo => saveInfo.nightVisionLevel },
-            { strongLegsScript.UPGRADE_NAME, saveInfo => saveInfo.legLevel },
-            { strongerScannerScript.UPGRADE_NAME, saveInfo => saveInfo.scanLevel },
-            { beekeeperScript.UPGRADE_NAME, saveInfo => saveInfo.beeLevel },
-            { exoskeletonScript.UPGRADE_NAME, saveInfo => saveInfo.backLevel },
-            { lockSmithScript.UPGRADE_NAME, saveInfo => 0 },
-            { walkieScript.UPGRADE_NAME, saveInfo => 0 },
-            { proteinPowderScript.UPGRADE_NAME, SaveInfo => SaveInfo.proteinLevel },
-            { pagerScript.UPGRADE_NAME, SaveInfo => 0 },
-            { hunterScript.UPGRADE_NAME, SaveInfo => SaveInfo.huntLevel },
-            { lightningRodScript.UPGRADE_NAME, saveInfo => 0},
-            { playerHealthScript.UPGRADE_NAME, saveInfo => saveInfo.playerHealthLevel },
+            { MalwareBroadcaster.UPGRADE_NAME, saveInfo => 0 },
+            { Discombobulator.UPGRADE_NAME, saveInfo => saveInfo.discoLevel },
+            { BiggerLungs.UPGRADE_NAME, saveInfo => saveInfo.lungLevel },
+            { RunningShoes.UPGRADE_NAME, saveInfo => saveInfo.runningLevel },
+            { NightVision.UPGRADE_NAME, saveInfo => saveInfo.nightVisionLevel },
+            { StrongLegs.UPGRADE_NAME, saveInfo => saveInfo.legLevel },
+            { BetterScanner.UPGRADE_NAME, saveInfo => saveInfo.scanLevel },
+            { Beekeeper.UPGRADE_NAME, saveInfo => saveInfo.beeLevel },
+            { BackMuscles.UPGRADE_NAME, saveInfo => saveInfo.backLevel },
+            { LockSmith.UPGRADE_NAME, saveInfo => 0 },
+            { WalkieGPS.UPGRADE_NAME, saveInfo => 0 },
+            { ProteinPowder.UPGRADE_NAME, SaveInfo => SaveInfo.proteinLevel },
+            { FastEncryption.UPGRADE_NAME, SaveInfo => 0 },
+            { Hunter.UPGRADE_NAME, SaveInfo => SaveInfo.huntLevel },
+            { LightningRod.UPGRADE_NAME, saveInfo => 0},
+            { Stimpack.UPGRADE_NAME, saveInfo => saveInfo.playerHealthLevel },
             { DoorsHydraulicsBattery.UPGRADE_NAME, saveInfo => saveInfo.doorsHydraulicsBatteryLevel},
-            { BeatScript.UPGRADE_NAME, saveInfo => 0 },
+            { SickBeats.UPGRADE_NAME, saveInfo => 0 },
+            { MarketInfluence.UPGRADE_NAME, SaveInfo => SaveInfo.marketInfluenceLevel },
+            { BargainConnections.UPGRADE_NAME, saveInfo => saveInfo.bargainConnectionsLevel },
+            { LethalDeals.UPGRADE_NAME, saveInfo => 0 },
+            { QuantumDisruptor.UPGRADE_NAME, saveInfo => saveInfo.quantumDisruptorLevel },
         };
         private bool retrievedCfg;
         private bool receivedSave;
@@ -154,9 +164,14 @@ namespace MoreShipUpgrades.Managers
             }
             logger.LogInfo($"Successfully spawned {i} upgrade objects.");
 
-            GameObject intern = Instantiate(AssetBundleHandler.GetPerkGameObject(defibScript.UPGRADE_NAME));
+            GameObject intern = Instantiate(AssetBundleHandler.GetPerkGameObject(Interns.UPGRADE_NAME));
             intern.GetComponent<NetworkObject>().Spawn();
 
+            GameObject extendDeadline = Instantiate(AssetBundleHandler.GetPerkGameObject(ExtendDeadlineScript.NAME));
+            extendDeadline.GetComponent<NetworkObject>().Spawn();
+
+            GameObject insurance = Instantiate(AssetBundleHandler.GetPerkGameObject(ScrapInsurance.COMMAND_NAME));
+            insurance.GetComponent<NetworkObject>().Spawn();
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -179,9 +194,9 @@ namespace MoreShipUpgrades.Managers
             if( cfg != null && !IsHost && !IsServer)
             {
                 logger.LogInfo("Config received, deserializing and constructing...");
-                Color col = UpgradeBus.instance.cfg.NIGHT_VIS_COLOR;
+                Color col = UpgradeBus.instance.cfg.NIGHT_VIS_COLOR.Value;
                 UpgradeBus.instance.cfg = cfg;
-                UpgradeBus.instance.cfg.NIGHT_VIS_COLOR = col; //
+                UpgradeBus.instance.cfg.NIGHT_VIS_COLOR.Value = col; //
                 UpgradeBus.instance.Reconstruct();
                 retrievedCfg = true;
             }
@@ -241,7 +256,7 @@ namespace MoreShipUpgrades.Managers
             }
             lguSave = JsonConvert.DeserializeObject<LGUSave>(json);
             List<ulong> saves = lguSave.playerSaves.Keys.ToList();
-            if(UpgradeBus.instance.cfg.SHARED_UPGRADES && saves.Count > 0)
+            if(UpgradeBus.instance.cfg.SHARED_UPGRADES.Value && saves.Count > 0)
             {
                 ulong steamID = lguSave.playerSaves.Keys.ToList<ulong>()[0];
                 logger.LogInfo($"SHARED SAVE FILE: Loading index 0 save under steam ID: {steamID}");
@@ -431,7 +446,7 @@ namespace MoreShipUpgrades.Managers
                     customNode.Unlocked = true;
                     levelConditions.TryGetValue(customNode.Name, out var level);
                     customNode.CurrentUpgrade = level.Invoke(saveInfo);
-                    UpgradeBus.instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>().load();
+                    UpgradeBus.instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>().Load();
                 }
             }
         }
@@ -457,30 +472,16 @@ namespace MoreShipUpgrades.Managers
             }
             if(!increment)
             {
-                UpgradeBus.instance.UpgradeObjects[name].GetComponent<BaseUpgrade>().load(); 
+                UpgradeBus.instance.UpgradeObjects[name].GetComponent<BaseUpgrade>().Load(); 
                 logger.LogInfo($"First purchase, executing BaseUpgrade.load()");
             }
             else 
             {
-                UpgradeBus.instance.UpgradeObjects[name].GetComponent<BaseUpgrade>().Increment(); 
-                logger.LogInfo($"upgrade already unlocked, executing BaseUpgrade.Increment()");
+                UpgradeBus.instance.UpgradeObjects[name].GetComponent<TierUpgrade>().Increment(); 
+                logger.LogInfo($"upgrade already unlocked, executing TierUpgrade.Increment()");
             }
             saveInfo = new SaveInfo();
             UpdateLGUSaveServerRpc(playerID, JsonConvert.SerializeObject(saveInfo));
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        public void EnableNightVisionServerRpc()
-        {
-            logger.LogInfo("Enabling night vision for all clients...");
-            EnableNightVisionClientRpc();
-        }
-
-        [ClientRpc]
-        private void EnableNightVisionClientRpc()
-        {
-            logger.LogInfo("Request to enable night vision on this client received.");
-            UpgradeBus.instance.UpgradeObjects[nightVisionScript.UPGRADE_NAME].GetComponent<nightVisionScript>().EnableOnClient();
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -506,13 +507,13 @@ namespace MoreShipUpgrades.Managers
             }
             if(!increment)
             {
-                UpgradeBus.instance.UpgradeObjects[name].GetComponent<BaseUpgrade>().load(); 
+                UpgradeBus.instance.UpgradeObjects[name].GetComponent<BaseUpgrade>().Load(); 
                 logger.LogInfo($"First purchase, executing BaseUpgrade.load()");
             }
             else 
             {
-                UpgradeBus.instance.UpgradeObjects[name].GetComponent<BaseUpgrade>().Increment(); 
-                logger.LogInfo($"upgrade already unlocked, executing BaseUpgrade.Increment()");
+                UpgradeBus.instance.UpgradeObjects[name].GetComponent<TierUpgrade>().Increment(); 
+                logger.LogInfo($"upgrade already unlocked, executing TierUpgrade.Increment()");
             }
             saveInfo = new SaveInfo();
             UpdateLGUSaveServerRpc(playerID, JsonConvert.SerializeObject(saveInfo));
@@ -522,36 +523,6 @@ namespace MoreShipUpgrades.Managers
         public void GenerateSalesClientRpc(int seed)
         {
             UpgradeBus.instance.GenerateSales(seed);
-        }
-
-        [ClientRpc]
-        public void CoordinateInterceptionClientRpc()
-        {
-            logger.LogInfo("Setting lighting to intercepted on this client...");
-            lightningRodScript.instance.LightningIntercepted = true;
-            FindObjectOfType<StormyWeather>(true).staticElectricityParticle.gameObject.SetActive(false);
-        }
-
-        [ClientRpc]
-        public void SyncValuesClientRpc(int value, NetworkBehaviourReference netRef)
-        {
-            netRef.TryGet(out MonsterSample prop);
-            if (prop != null)
-            {
-                prop.scrapValue = value;
-                prop.itemProperties.creditsWorth = value;
-                prop.GetComponentInChildren<ScanNodeProperties>().subText = $"Value: ${value}";
-                logger.LogInfo($"Successfully synced values of {prop.itemProperties.itemName}");
-            }
-            else logger.LogInfo("Unable to resolve net ref for SyncValuesClientRpc!");
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        public void SpawnNightVisionItemOnDeathServerRpc(Vector3 position)
-        {
-            GameObject go = Instantiate(UpgradeBus.instance.nightVisionPrefab, position + Vector3.up, Quaternion.identity);
-            go.GetComponent<NetworkObject>().Spawn();
-            logger.LogInfo("Request to spawn night vision goggles received.");
         }
 
         [ClientRpc]
@@ -630,22 +601,6 @@ namespace MoreShipUpgrades.Managers
             PlayAudioOnPlayerClientRpc(netRef, clip);
         }
 
-        [ClientRpc]
-        public void ExtendDeadlineClientRpc(int days)
-        {
-            float before = TimeOfDay.Instance.timeUntilDeadline;
-            TimeOfDay.Instance.timeUntilDeadline += TimeOfDay.Instance.totalTime * days;
-            TimeOfDay.Instance.UpdateProfitQuotaCurrentTime();
-            TimeOfDay.Instance.SyncTimeClientRpc(TimeOfDay.Instance.globalTime, (int)TimeOfDay.Instance.timeUntilDeadline);
-            logger.LogDebug($"Previous time: {before}, new time: {TimeOfDay.Instance.timeUntilDeadline}");
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        public void ExtendDeadlineServerRpc(int days)
-        {
-            ExtendDeadlineClientRpc(days);
-        }
-
     }
 
     [Serializable]
@@ -671,6 +626,10 @@ namespace MoreShipUpgrades.Managers
         public bool wearingHelmet = UpgradeBus.instance.wearingHelmet;
         public bool sickBeats = UpgradeBus.instance.sickBeats;
         public bool doorsHydraulicsBattery = UpgradeBus.instance.doorsHydraulicsBattery;
+        public bool marketInfluence = UpgradeBus.instance.marketInfluence;
+        public bool bargainConnections = UpgradeBus.instance.bargainConnections;
+        public bool lethalDeals = UpgradeBus.instance.lethalDeals;
+        public bool quantumDisruptor = UpgradeBus.instance.quantumDisruptor;
 
         public int beeLevel = UpgradeBus.instance.beeLevel;
         public int huntLevel = UpgradeBus.instance.huntLevel;
@@ -684,6 +643,9 @@ namespace MoreShipUpgrades.Managers
         public int nightVisionLevel = UpgradeBus.instance.nightVisionLevel;
         public int playerHealthLevel = UpgradeBus.instance.playerHealthLevel;
         public int doorsHydraulicsBatteryLevel = UpgradeBus.instance.doorsHydraulicsBatteryLevel;
+        public int marketInfluenceLevel = UpgradeBus.instance.marketInfluenceLevel;
+        public int bargainConnectionsLevel = UpgradeBus.instance.bargainConnectionsLevel;
+        public int quantumDisruptorLevel = UpgradeBus.instance.quantumDisruptorLevel;
         public string contractType = UpgradeBus.instance.contractType;
         public string contractLevel = UpgradeBus.instance.contractLevel;
         public Dictionary<string, float> SaleData = UpgradeBus.instance.SaleData;

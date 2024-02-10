@@ -13,17 +13,17 @@ namespace MoreShipUpgrades.Patches.Interactables
     internal class SteamValveHazardPatch
     {
         [HarmonyPostfix]
-        [HarmonyPatch("BurstValve")]
+        [HarmonyPatch(nameof(SteamValveHazard.BurstValve))]
         public static void BurstValvePostFix(ref SteamValveHazard __instance)
         {
-            strongerScannerScript.AddScannerNodeToValve(ref __instance);
+            BetterScanner.AddScannerNodeToValve(ref __instance);
         }
 
         [HarmonyPostfix]
-        [HarmonyPatch("FixValveLocalClient")]
+        [HarmonyPatch(nameof(SteamValveHazard.FixValveLocalClient))]
         public static void FixValvePostFix(ref SteamValveHazard __instance)
         {
-            strongerScannerScript.RemoveScannerNodeFromValve(ref __instance);
+            BetterScanner.RemoveScannerNodeFromValve(ref __instance);
         }
     }
 }

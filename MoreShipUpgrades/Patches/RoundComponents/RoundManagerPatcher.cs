@@ -2,10 +2,6 @@
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Commands;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Reflection.Emit;
 
 namespace MoreShipUpgrades.Patches.RoundComponents
 {
@@ -22,11 +18,11 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         /// the enemy spawning
         /// </summary>
         [HarmonyPatch(nameof(RoundManager.PlotOutEnemiesForNextHour))]
-        [HarmonyPatch("AdvanceHourAndSpawnNewBatchOfEnemies")]
+        [HarmonyPatch(nameof(RoundManager.AdvanceHourAndSpawnNewBatchOfEnemies))]
         [HarmonyPrefix]
         public static void ChangeDaysForEnemySpawns()
         {
-            if (!UpgradeBus.instance.cfg.EXTEND_DEADLINE_ENABLED) return; //  Don't bother changing something if we never touch it
+            if (!UpgradeBus.instance.cfg.EXTEND_DEADLINE_ENABLED.Value) return; //  Don't bother changing something if we never touch it
             if (TimeOfDay.Instance.daysUntilDeadline < DEFAULT_DAYS_DEADLINE) return; // Either it's already fine or some other mod already changed the value to be acceptable
             logger.LogDebug("Changing deadline to allow spawning enemies.");
             previousDaysDeadline = TimeOfDay.Instance.daysUntilDeadline;
@@ -35,11 +31,11 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         }
 
         [HarmonyPatch(nameof(RoundManager.PlotOutEnemiesForNextHour))]
-        [HarmonyPatch("AdvanceHourAndSpawnNewBatchOfEnemies")]
+        [HarmonyPatch(nameof(RoundManager.AdvanceHourAndSpawnNewBatchOfEnemies))]
         [HarmonyPostfix]
         public static void UndoChangeDaysForEnemySpawns()
         {
-            if (!UpgradeBus.instance.cfg.EXTEND_DEADLINE_ENABLED) return; //  Don't bother changing something if we never touch it
+            if (!UpgradeBus.instance.cfg.EXTEND_DEADLINE_ENABLED.Value) return; //  Don't bother changing something if we never touch it
             if (!savedPrevious) return;
             logger.LogDebug("Changing back the deadline...");
             TimeOfDay.Instance.daysUntilDeadline = previousDaysDeadline;
@@ -50,7 +46,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         [HarmonyPostfix]
         public static void DespawnPropsAtEndOfRoundPostfix()
         {
-            if (!UpgradeBus.instance.cfg.SCRAP_INSURANCE_ENABLED) return;
+            if (!UpgradeBus.instance.cfg.SCRAP_INSURANCE_ENABLED.Value) return;
             ScrapInsurance.TurnOffScrapInsurance();
         }
     }

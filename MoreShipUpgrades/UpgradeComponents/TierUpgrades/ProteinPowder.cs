@@ -1,16 +1,16 @@
-﻿using GameNetcodeStuff;
-using MoreShipUpgrades.Managers;
+﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Numerics;
-using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class proteinPowderScript : BaseUpgrade
+    internal class ProteinPowder : TierUpgrade, IUpgradeWorldBuilding
     {
-        public static string UPGRADE_NAME = "Protein Powder";
+        public const string UPGRADE_NAME = "Protein Powder";
+        internal const string WORLD_BUILDING_TEXT = "\n\nMultivitamins, creatine, and military surplus stimulants blended together and repackaged," +
+            " then offered on subscription. Known to be habit-forming. The label includes a Company Surgeon General's warning about increased aggression.\n\n";
 
         private static int CRIT_DAMAGE_VALUE = 100;
 
@@ -36,11 +36,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public static float CRIT_CHANCE_DEFAULT = 0.01f;
         public static string CRIT_CHANCE_DESCRIPTION = $"This value is only valid when maxed out {UPGRADE_NAME}. Any previous levels will not apply crit.";
 
-        void Start()
+        internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            DontDestroyOnLoad(gameObject);
-            Register();
+            base.Start();
         }
 
         public override void Increment()
@@ -48,18 +47,12 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             UpgradeBus.instance.proteinLevel++;
         }
 
-        public override void load()
+        public override void Load()
         {
-            base.load();
+            base.Load();
 
             UpgradeBus.instance.proteinPowder = true;
         }
-
-        public override void Register()
-        {
-            base.Register();
-        }
-
         public override void Unwind()
         {
             base.Unwind();
@@ -71,18 +64,30 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public static int GetShovelHitForce(int force)
         {
             // Truly one of THE ternary operators
-            return (UpgradeBus.instance.proteinPowder ? TryToCritEnemy() ? CRIT_DAMAGE_VALUE : UpgradeBus.instance.cfg.PROTEIN_INCREMENT * UpgradeBus.instance.proteinLevel + UpgradeBus.instance.cfg.PROTEIN_UNLOCK_FORCE + force : force) + UpgradeBus.instance.damageBoost;
+            return (UpgradeBus.instance.proteinPowder ? TryToCritEnemy() ? CRIT_DAMAGE_VALUE : UpgradeBus.instance.cfg.PROTEIN_INCREMENT.Value * UpgradeBus.instance.proteinLevel + UpgradeBus.instance.cfg.PROTEIN_UNLOCK_FORCE.Value + force : force) + UpgradeBus.instance.damageBoost;
             // .damageBoost is tied to boombox upgrade, it will always be 0 when inactive or x when active.
         }
 
         private static bool TryToCritEnemy()
         {
-            int maximumLevel = UpgradeBus.instance.cfg.PROTEIN_UPGRADE_PRICES.Split(',').Length;
+            int maximumLevel = UpgradeBus.instance.cfg.PROTEIN_UPGRADE_PRICES.Value.Split(',').Length;
             int currentLevel = UpgradeBus.instance.proteinLevel;
 
             if (currentLevel != maximumLevel) return false;
 
-            return UnityEngine.Random.value < UpgradeBus.instance.cfg.PROTEIN_CRIT_CHANCE;
+            return UnityEngine.Random.value < UpgradeBus.instance.cfg.PROTEIN_CRIT_CHANCE.Value;
+        }
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
+
+        public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
+        {
+            Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.PROTEIN_UNLOCK_FORCE.Value + 1 + (UpgradeBus.instance.cfg.PROTEIN_INCREMENT.Value * level);
+            string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
     }
 }

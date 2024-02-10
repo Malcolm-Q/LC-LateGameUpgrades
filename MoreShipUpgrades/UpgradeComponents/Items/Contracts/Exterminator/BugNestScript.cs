@@ -3,6 +3,7 @@ using UnityEngine;
 using Unity.Netcode;
 using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exterminator
 {
@@ -11,7 +12,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exterminator
         Animator anim;
         public GameObject loot;
         InteractTrigger trig;
-        AudioSource audio;
         int cleaning = 0;
 
         void Awake()
@@ -20,11 +20,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exterminator
             trig.onInteract.AddListener(CleanMess);
             trig.onStopInteract.AddListener(StopMess);
             trig.onInteractEarly.AddListener(PlayMess);
-
-            loot.GetComponent<PhysicsProp>().scrapValue = UpgradeBus.instance.cfg.CONTRACT_BUG_REWARD;
-            ScanNodeProperties node = loot.GetComponentInChildren<ScanNodeProperties>();
-            node.scrapValue = UpgradeBus.instance.cfg.CONTRACT_BUG_REWARD;
-            node.subText = $"VALUE: ${node.scrapValue}";
 
             anim = GetComponentInChildren<Animator>();
         }
@@ -38,6 +33,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exterminator
         void SpawnLootServerRpc(Vector3 pos)
         {
             GameObject go = Instantiate(loot, pos + Vector3.up, Quaternion.identity);
+            go.GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.instance.cfg.CONTRACT_BUG_REWARD.Value);
             go.GetComponent<NetworkObject>().Spawn();
             DisableNestClientRpc(new NetworkObjectReference(gameObject));
         }

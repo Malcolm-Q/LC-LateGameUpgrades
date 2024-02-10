@@ -1,13 +1,20 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
-    internal class lightningRodScript : BaseUpgrade
+    class LightningRod : OneTimeUpgrade, IUpgradeWorldBuilding
     {
         public static string UPGRADE_NAME = "Lightning Rod";
-        public static lightningRodScript instance;
+        internal const string WORLD_BUILDING_TEXT = "\n\nService key for the Ship's terminal which allows your crew to legally use the Ship's 'Static Attraction Field' module." +
+            " Comes with a list of opt-in maintenance procedures that promise to optimize the module's function and field of influence. This Company-issued document " +
+            "is saddled with the uniquely-awkward task of having to ransom a safety feature back to the employee in text while not also admitting to the existence of" +
+            " an occupational hazard that was previously denied in court.\n\n";
+        public static LightningRod instance;
         private static LGULogger logger;
 
         // Configuration
@@ -22,13 +29,6 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         public static bool ACTIVE_DEFAULT = true;
         public static string ACTIVE_DESCRIPTION = $"If true: {UPGRADE_NAME} will be active on purchase.";
 
-        // Chat Messages
-        private static string LOAD_COLOUR = "#FF0000";
-        private static string LOAD_MESSAGE = $"\n<color={LOAD_COLOUR}>{UPGRADE_NAME} is active!</color>";
-
-        private static string UNLOAD_COLOUR = LOAD_COLOUR;
-        private static string UNLOAD_MESSAGE = $"\n<color={UNLOAD_COLOUR}>{UPGRADE_NAME} has been disabled</color>";
-
         // Toggle
         public static string ACCESS_DENIED_MESSAGE = $"You don't have access to this command yet. Purchase the '{UPGRADE_NAME}'.\n";
         public static string TOGGLE_ON_MESSAGE = $"{UPGRADE_NAME} has been enabled. Lightning bolts will now be redirected to the ship.\n";
@@ -42,40 +42,23 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         public bool CanTryInterceptLightning { get; internal set; }
         public bool LightningIntercepted { get; internal set; }
 
-        void Awake()
+        internal override void Start()
         {
             instance = this;
             logger = new LGULogger(UPGRADE_NAME);
+            upgradeName = UPGRADE_NAME;
+            base.Start();
         }
-
-        void Start()
+        public override void Load()
         {
-            DontDestroyOnLoad(gameObject);
-            UpgradeBus.instance.UpgradeObjects.Add(UPGRADE_NAME, gameObject);
-        }
-
-        public override void Increment()
-        {
-
-        }
-
-        public override void load()
-        {
+            base.Load();
             UpgradeBus.instance.lightningRod = true;
-            UpgradeBus.instance.lightningRodActive = UpgradeBus.instance.cfg.LIGHTNING_ROD_ACTIVE;
-            HUDManager.Instance.chatText.text += LOAD_MESSAGE;
-        }
-
-        public override void Register()
-        {
-            if (!UpgradeBus.instance.UpgradeObjects.ContainsKey(UPGRADE_NAME)) { UpgradeBus.instance.UpgradeObjects.Add(UPGRADE_NAME, gameObject); }
         }
 
         public override void Unwind()
         {
+            base.Unwind();
             UpgradeBus.instance.lightningRod = false;
-            UpgradeBus.instance.lightningRodActive = false;
-            HUDManager.Instance.chatText.text += UNLOAD_MESSAGE;
         }
 
         public static void TryInterceptLightning(ref StormyWeather __instance, ref GrabbableObject ___targetingMetalObject)
@@ -88,9 +71,9 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             logger.LogDebug($"Distance from ship: {dist}");
             logger.LogDebug($"Effective distance of the lightning rod: {UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST}");
 
-            if (dist > UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST) return;
+            if (dist > UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST.Value) return;
 
-            dist /= UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST;
+            dist /= UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST.Value;
             float prob = 1 - dist;
             float rand = Random.value;
 
@@ -101,10 +84,9 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
                 logger.LogDebug("Planning interception...");
                 __instance.staticElectricityParticle.Stop();
                 instance.LightningIntercepted = true;
-                LGUStore.instance.CoordinateInterceptionClientRpc();
+                instance.CoordinateInterceptionClientRpc();
             }
         }
-
         public static void RerouteLightningBolt(ref Vector3 strikePosition, ref StormyWeather __instance)
         {
             logger.LogDebug($"Intercepted Lightning Strike...");
@@ -113,22 +95,22 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             instance.LightningIntercepted = false;
             __instance.staticElectricityParticle.gameObject.SetActive(true);
         }
-
-        public static void ToggleLightningRod(ref TerminalNode __result)
+        [ClientRpc]
+        public void CoordinateInterceptionClientRpc()
         {
-            UpgradeBus.instance.lightningRodActive = !UpgradeBus.instance.lightningRodActive;
-            TerminalNode infoNode = new TerminalNode();
-            infoNode.displayText = UpgradeBus.instance.lightningRodActive ? TOGGLE_ON_MESSAGE : TOGGLE_OFF_MESSAGE;
-            infoNode.clearPreviousText = true;
-            __result = infoNode;
+            logger.LogInfo("Setting lighting to intercepted on this client...");
+            LightningIntercepted = true;
+            FindObjectOfType<StormyWeather>(true).staticElectricityParticle.gameObject.SetActive(false);
         }
 
-        public static void AccessDeniedMessage(ref TerminalNode __result)
+        public string GetWorldBuildingText(bool shareStatus = false)
         {
-            TerminalNode failNode = new TerminalNode();
-            failNode.displayText = ACCESS_DENIED_MESSAGE;
-            failNode.clearPreviousText = true;
-            __result = failNode;
+            return WORLD_BUILDING_TEXT;
+        }
+
+        public override string GetDisplayInfo(int price = -1)
+        {
+            return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), price, UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST.Value);
         }
     }
 }

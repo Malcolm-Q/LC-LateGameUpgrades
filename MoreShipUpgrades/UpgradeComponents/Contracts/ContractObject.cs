@@ -28,7 +28,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Contracts
                 List<EntranceTeleport> mainDoors = FindObjectsOfType<EntranceTeleport>().Where(obj => obj.gameObject.transform.position.y <= -170).ToList();
                 EnemyVent[] vents = FindObjectsOfType<EnemyVent>();
                 EnemyVent spawnVent = null;
-                if(UpgradeBus.instance.cfg.MAIN_OBJECT_FURTHEST)
+                if(UpgradeBus.instance.cfg.MAIN_OBJECT_FURTHEST.Value)
                 {
                     spawnVent = vents.OrderByDescending(vent => Vector3.Distance(mainDoors[0].transform.position, vent.floorNode.position)).First();
                 }
@@ -42,7 +42,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Contracts
             }
             if (contractType != "exterminator") return;
 
-            Tools.SpawnMob("Hoarding bug", transform.position, UpgradeBus.instance.cfg.CONTRACT_BUG_SPAWNS);
+            Tools.SpawnMob("Hoarding bug", transform.position, UpgradeBus.instance.cfg.CONTRACT_BUG_SPAWNS.Value);
         }
 
         public string GetContractType()

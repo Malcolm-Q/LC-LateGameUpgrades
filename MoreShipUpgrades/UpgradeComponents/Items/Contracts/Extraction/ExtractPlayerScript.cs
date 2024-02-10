@@ -1,5 +1,6 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -22,11 +23,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Extraction
         void Start()
         {
             prop = GetComponent<PhysicsProp>();
-            prop.scrapValue = UpgradeBus.instance.cfg.CONTRACT_EXTRACT_REWARD;
+            GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.instance.cfg.CONTRACT_EXTRACT_REWARD.Value);
 
-            ScanNodeProperties node = GetComponentInChildren<ScanNodeProperties>();
-            node.scrapValue = UpgradeBus.instance.cfg.CONTRACT_EXTRACT_REWARD;
-            node.subText = $"VALUE: ${node.scrapValue}";
 
             audio = GetComponent<AudioSource>();
             trig = GetComponentInChildren<InteractTrigger>();
@@ -77,7 +75,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Extraction
         void HealScavClientRpc()
         {
             trig.GetComponent<BoxCollider>().enabled = false;
-            audio.PlayOneShot(clipDict["heal"][0], UpgradeBus.instance.cfg.SCAV_VOLUME);
+            audio.PlayOneShot(clipDict["heal"][0], UpgradeBus.instance.cfg.SCAV_VOLUME.Value);
             anim.SetTrigger("heal");
             hurtState = false;
             StartCoroutine(WaitForHealAnim());
@@ -113,7 +111,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Extraction
         [ClientRpc]
         void PlayAudioClientRpc(int index, string soundType)
         {
-            audio.PlayOneShot(clipDict[soundType][index], UpgradeBus.instance.cfg.SCAV_VOLUME);
+            audio.PlayOneShot(clipDict[soundType][index], UpgradeBus.instance.cfg.SCAV_VOLUME.Value);
             RoundManager.Instance.PlayAudibleNoise(transform.position, 30f, 0.9f, 0, prop.isInShipRoom, 5);
         }
     }
