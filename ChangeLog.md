@@ -21,7 +21,8 @@
 - Fixed Baboon Hawks getting stuck in grabbing items stored in a wheelbarrow, leading to them camping the wheelbarrow
 - Fixed Shopping Cart (Scrap Wheelbarrow) scrap value not being applied on spawn due to MapObjects not having their scrap value synced.
 - Fixed Medkit's current amount of uses not being synced between players, leading to each player have three uses out of one medkit with maximum of three uses.
-- Fixed "scan enemies" showing "Unkown" instead of "Unknown" for enemies without a scan node associated (e.g Ghost Girl)
+- Fixed "scan enemies" showing "Unkown" instead of "Unknown" for enemies without a scan node associated (e.g Ghost Girl).
+- Fixed (for like second or third time) Data Disk's "grabbable" area being blocked by the PC when it spawns.
 
 ### Code Changes (developer level)
 - Spawned scrap now use a component called ScrapValueSyncer which is used to change the item's scrap value for every player in the game.
