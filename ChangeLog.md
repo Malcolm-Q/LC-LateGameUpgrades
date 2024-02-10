@@ -13,6 +13,7 @@
 - Medkit now just increases the player's health instead of using DamagePlayer with a negative value.
 - Changed the time of saving LGU's data from disconnecting to autosaving. This should solve the issue of buying an upgrade, leaving and coming back with credits back and upgrade on.
 - Changed config values to ConfigEntry to allow in-game configuration mods to change the values (Note: LGU is not responsible for any breaking bugs that arise from changing configuration while in-game.)
+- Changed samples' particles not being played when dropped due to FPS issues when in high quantity.
 
 ### Fixes
 - Fixed wheelbarrow cost using NV's cost instead of its own
@@ -30,6 +31,9 @@
 - Refactored RPCs to respective handlers to relieve LGUStore's responsiblities
 - Removed useless code
 - Changed from storing the json alongside the game's save to storing inside the game's save (this should reduce amount of issues with mods like LCBetterSaves).
+    - Any previous saves in which they have the first case will be stored in the game's save when detected and delete the outside json file so resets should not happen when updating.
+- Implemented handler for ScanNodeProperties when creating or changing its attributes for easier maintenance.
+- Abstracted WheelbarrowScript's SetupScanNodeProperties() to not force the base class to know which derived class it is.
 
 ## V 3.1.0 - 2024-1-19
 Additions
