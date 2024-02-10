@@ -1,21 +1,22 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
 using MoreShipUpgrades.Managers;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Linq;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Reflection.Emit;
 using Unity.Netcode;
 using UnityEngine;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 
-namespace MoreShipUpgrades.Patches.PlayerController
-{
-    [HarmonyPatch(typeof(PlayerControllerB))]
+namespace MoreShipUpgrades.Patches.PlayerController {
+	[HarmonyPatch(typeof(PlayerControllerB))]
     internal class PlayerControllerBPatcher
     {
         internal static LGULogger logger = new LGULogger(nameof(PlayerControllerBPatcher));
@@ -123,10 +124,17 @@ namespace MoreShipUpgrades.Patches.PlayerController
         [HarmonyPatch(nameof(PlayerControllerB.DropAllHeldItems))]
         private static bool DontDropItems(PlayerControllerB __instance)
         {
-            if (!UpgradeBus.instance.TPButtonPressed) return true;
+            logger.LogDebug($"Paid upgrade level: {UpgradeBus.instance.teleporterUpgradeLevel}");
+			logger.LogDebug($"Most recent ship TP button pressed: {UpgradeBus.instance.mostRecentShipTPButtonPressed}");
+			if (!UpgradeBus.instance.TPButtonPressed && UpgradeBus.instance.mostRecentShipTPButtonPressed == 0) return true;
+
+            // If the upgrade level we've paid for is less than the level of tp we pressed, perform regular dropItems() function
+            if (UpgradeBus.instance.teleporterUpgradeLevel < UpgradeBus.instance.mostRecentShipTPButtonPressed) return true;
 
             UpgradeBus.instance.TPButtonPressed = false;
-            __instance.isSinking = false;
+            UpgradeBus.instance.mostRecentShipTPButtonPressed = 0;
+
+			__instance.isSinking = false;
             __instance.isUnderwater = false;
             __instance.sinkingValue = 0;
             __instance.statusEffectAudio.Stop();

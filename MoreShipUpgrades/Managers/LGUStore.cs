@@ -50,6 +50,7 @@ namespace MoreShipUpgrades.Managers
             {BargainConnections.UPGRADE_NAME, SaveInfo => SaveInfo.bargainConnections },
             {LethalDeals.UPGRADE_NAME, SaveInfo => SaveInfo.lethalDeals },
             {QuantumDisruptor.UPGRADE_NAME, SaveInfo => SaveInfo.quantumDisruptor },
+            {UpgradeTeleportersScript.UPGRADE_NAME, SaveInfo => SaveInfo.teleporterUpgrade }
         };
 
         private static Dictionary<string, Func<SaveInfo, int>> levelConditions = new Dictionary<string, Func<SaveInfo, int>>
@@ -76,6 +77,7 @@ namespace MoreShipUpgrades.Managers
             { BargainConnections.UPGRADE_NAME, saveInfo => saveInfo.bargainConnectionsLevel },
             { LethalDeals.UPGRADE_NAME, saveInfo => 0 },
             { QuantumDisruptor.UPGRADE_NAME, saveInfo => saveInfo.quantumDisruptorLevel },
+            { UpgradeTeleportersScript.UPGRADE_NAME, saveInfo => saveInfo.teleporterUpgradeLevel },
         };
         private bool retrievedCfg;
         private bool receivedSave;
@@ -381,8 +383,9 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.wearingHelmet = saveInfo.wearingHelmet;
             UpgradeBus.instance.sickBeats = saveInfo.sickBeats;
             UpgradeBus.instance.doorsHydraulicsBattery = saveInfo.doorsHydraulicsBattery;
+			UpgradeBus.instance.teleporterUpgrade = saveInfo.teleporterUpgrade;
 
-            UpgradeBus.instance.beeLevel = saveInfo.beeLevel;
+			UpgradeBus.instance.beeLevel = saveInfo.beeLevel;
             UpgradeBus.instance.huntLevel = saveInfo.huntLevel;
             UpgradeBus.instance.proteinLevel = saveInfo.proteinLevel;
             UpgradeBus.instance.lungLevel = saveInfo.lungLevel;
@@ -395,8 +398,9 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.instance.nightVisionLevel = saveInfo.nightVisionLevel;
             UpgradeBus.instance.playerHealthLevel = saveInfo.playerHealthLevel;
             UpgradeBus.instance.doorsHydraulicsBatteryLevel = saveInfo.doorsHydraulicsBatteryLevel;
+			UpgradeBus.instance.teleporterUpgradeLevel = saveInfo.teleporterUpgradeLevel;
 
-            UpgradeBus.instance.contractLevel = saveInfo.contractLevel;
+			UpgradeBus.instance.contractLevel = saveInfo.contractLevel;
             UpgradeBus.instance.contractType = saveInfo.contractType;
 
             UpgradeBus.instance.SaleData = saveInfo.SaleData;
@@ -630,8 +634,9 @@ namespace MoreShipUpgrades.Managers
         public bool bargainConnections = UpgradeBus.instance.bargainConnections;
         public bool lethalDeals = UpgradeBus.instance.lethalDeals;
         public bool quantumDisruptor = UpgradeBus.instance.quantumDisruptor;
+		public bool teleporterUpgrade = UpgradeBus.instance.teleporterUpgrade;
 
-        public int beeLevel = UpgradeBus.instance.beeLevel;
+		public int beeLevel = UpgradeBus.instance.beeLevel;
         public int huntLevel = UpgradeBus.instance.huntLevel;
         public int proteinLevel = UpgradeBus.instance.proteinLevel;
         public int lungLevel = UpgradeBus.instance.lungLevel;
@@ -646,6 +651,7 @@ namespace MoreShipUpgrades.Managers
         public int marketInfluenceLevel = UpgradeBus.instance.marketInfluenceLevel;
         public int bargainConnectionsLevel = UpgradeBus.instance.bargainConnectionsLevel;
         public int quantumDisruptorLevel = UpgradeBus.instance.quantumDisruptorLevel;
+        public int teleporterUpgradeLevel = UpgradeBus.instance.teleporterUpgradeLevel;
         public string contractType = UpgradeBus.instance.contractType;
         public string contractLevel = UpgradeBus.instance.contractLevel;
         public Dictionary<string, float> SaleData = UpgradeBus.instance.SaleData;
