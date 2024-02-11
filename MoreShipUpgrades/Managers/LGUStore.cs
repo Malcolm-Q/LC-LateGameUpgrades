@@ -47,7 +47,6 @@ namespace MoreShipUpgrades.Managers
                 if (json != null)
                 {
                     logger.LogInfo($"Loading save file for slot {saveNum}.");
-                    File.WriteAllText(filePath, json);
                     lguSave = JsonConvert.DeserializeObject<LGUSave>(json);
                     UpdateUpgradeBus();
                 }
