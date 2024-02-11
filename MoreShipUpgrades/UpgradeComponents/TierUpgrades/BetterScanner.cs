@@ -23,28 +23,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             base.Start();
         }
 
-        public override void Increment()
-        {
-            UpgradeBus.instance.scanLevel++;
-        }
-
-        public override void Load()
-        {
-            base.Load();
-
-            UpgradeBus.instance.scannerUpgrade = true;
-        }
-        public override void Unwind()
-        {
-            base.Unwind();
-
-            UpgradeBus.instance.scannerUpgrade = false;
-            UpgradeBus.instance.scanLevel = 0;
-        }
-
         public static void AddScannerNodeToValve(ref SteamValveHazard steamValveHazard)
         {
-            if (!UpgradeBus.instance.scannerUpgrade) return;
+            if (!GetActiveUpgrade(UPGRADE_NAME)) return;
             logger.LogDebug("Inserting a Scan Node on a broken steam valve...");
             LGUScanNodeProperties.AddGeneralScanNode(objectToAddScanNode: steamValveHazard.gameObject, header: "Bursted Steam Valve", subText: "Fix it to get rid of the steam", minRange: 3);
         }

@@ -18,29 +18,20 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             logger = new LGULogger(upgradeName);
             base.Start();
         }
-
         public override void Load()
         {
             base.Load();
-
-            UpgradeBus.instance.pager = true;
             instance = this;
         }
 
-        public override void Unwind()
-        {
-            base.Unwind();
-            UpgradeBus.instance.pager = false;
-        }
         public static int GetLimitOfCharactersTransmit(int defaultLimit, string message)
         {
-            logger.LogDebug("Being called");
-            if (!UpgradeBus.instance.pager) return defaultLimit;
+            if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultLimit;
             return message.Length;
         }
         public static float GetMultiplierOnSignalTextTimer(float defaultMultiplier)
         {
-            if (!UpgradeBus.instance.pager) return defaultMultiplier;
+            if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultMultiplier;
             return defaultMultiplier* TRANSMIT_MULTIPLIER;
         }
 

@@ -2,6 +2,7 @@
 using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using UnityEngine;
 
@@ -15,7 +16,7 @@ namespace MoreShipUpgrades.Patches.Interactables
         [HarmonyPatch(nameof(InteractTrigger.OnTriggerEnter))]
         private static bool pickDoor(InteractTrigger __instance, Collider other)
         {
-            if (!UpgradeBus.instance.lockSmith) { return true; }
+            if (!BaseUpgrade.GetActiveUpgrade(LockSmith.UPGRADE_NAME)) { return true; }
             PlayerControllerB player = other.gameObject.GetComponent<PlayerControllerB>();
             if (player == null) { return true; }
             if (!player.IsOwner) { return true; }

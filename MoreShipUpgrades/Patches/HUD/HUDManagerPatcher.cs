@@ -2,9 +2,11 @@
 using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -21,13 +23,13 @@ namespace MoreShipUpgrades.Patches.HUD
         private static void alterReqs(ScanNodeProperties node, ref bool __result, PlayerControllerB playerScript)
         {
             if (node != null && node.GetComponentInParent<WheelbarrowScript>() != null && node.headerText != "Shopping Cart" && node.headerText != "Wheelbarrow") { __result = false; return; }
-            if (!UpgradeBus.instance.scannerUpgrade) { return; }
+            if (!BaseUpgrade.GetActiveUpgrade(BetterScanner.UPGRADE_NAME)) { return; }
             if (node == null) { __result = false; return; }
             bool throughWall = Physics.Linecast(playerScript.gameplayCamera.transform.position, node.transform.position, 256, QueryTriggerInteraction.Ignore);
             bool cannotSeeEnemiesThroughWalls = node.nodeType == 1 && !UpgradeBus.instance.cfg.BETTER_SCANNER_ENEMIES.Value;
             if (throughWall)
             {
-                if (UpgradeBus.instance.scanLevel < 2 || UpgradeBus.instance.scanLevel == 2 && cannotSeeEnemiesThroughWalls)
+                if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 2 || BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) == 2 && cannotSeeEnemiesThroughWalls)
                 {
                     __result = false;
                     return;
