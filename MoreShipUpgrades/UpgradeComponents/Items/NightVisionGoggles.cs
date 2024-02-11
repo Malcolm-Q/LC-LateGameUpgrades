@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using UnityEngine.Experimental.GlobalIllumination;
@@ -34,7 +35,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         {
             base.ItemActivate(used, buttonDown);
             if (!buttonDown) return;
-            if (UpgradeBus.instance.activeUpgrades[NightVision.UPGRADE_NAME])
+            if (BaseUpgrade.GetActiveUpgrade(NightVision.UPGRADE_NAME))
             {
                 HUDManager.Instance.chatText.text += "<color=#FF0000>Night vision is already active!</color>";
                 return;

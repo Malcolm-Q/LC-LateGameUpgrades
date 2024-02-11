@@ -30,7 +30,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             if (__instance.isPlayerDead) return;
             if (!__instance.AllowPlayerDeath()) return;
 
-            if (!UpgradeBus.instance.activeUpgrades[NightVision.UPGRADE_NAME]) return;
+            if (!BaseUpgrade.GetActiveUpgrade(NightVision.UPGRADE_NAME)) return;
 
             UpgradeBus.instance.UpgradeObjects[NightVision.UPGRADE_NAME].GetComponent<NightVision>().DisableOnClient();
             if (!UpgradeBus.instance.cfg.NIGHT_VISION_DROP_ON_DEATH.Value) return;
