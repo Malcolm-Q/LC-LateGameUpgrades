@@ -29,7 +29,7 @@ namespace MoreShipUpgrades.Patches.HUD
             bool cannotSeeEnemiesThroughWalls = node.nodeType == 1 && !UpgradeBus.instance.cfg.BETTER_SCANNER_ENEMIES.Value;
             if (throughWall)
             {
-                if (BaseUpgrade.GetActiveLevel(BetterScanner.UPGRADE_NAME) < 2 || BaseUpgrade.GetActiveLevel(BetterScanner.UPGRADE_NAME) == 2 && cannotSeeEnemiesThroughWalls)
+                if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 2 || BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) == 2 && cannotSeeEnemiesThroughWalls)
                 {
                     __result = false;
                     return;
