@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using UnityEngine;
 
@@ -25,7 +26,7 @@ namespace MoreShipUpgrades.Patches.Weather
         [HarmonyPatch(nameof(StormyWeather.Update))]
         static void InterceptSelectedObject(StormyWeather __instance, GrabbableObject ___targetingMetalObject)
         {
-            if (!UpgradeBus.instance.lightningRod || !LGUStore.instance.IsHost || !LGUStore.instance.IsServer) { return; }
+            if (!BaseUpgrade.GetActiveUpgrade(LightningRod.UPGRADE_NAME) || !LGUStore.instance.IsHost || !LGUStore.instance.IsServer) { return; }
             if (___targetingMetalObject == null)
             {
                 if (LightningRod.instance != null) // Lightning rod could be disabled so we wouldn't have an instance

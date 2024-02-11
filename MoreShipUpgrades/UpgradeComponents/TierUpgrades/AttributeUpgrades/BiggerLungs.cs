@@ -2,10 +2,11 @@
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
+using System.Collections.Generic;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 {
-    class BiggerLungs : GameAttributeTierUpgrade, IUpgradeWorldBuilding
+    class BiggerLungs : GameAttributeTierUpgrade, IUpgradeWorldBuilding, IPlayerSync
     {
         public const string UPGRADE_NAME = "Bigger Lungs";
         public static string PRICES_DEFAULT = "350,450,550";
@@ -22,33 +23,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             initialValue = UpgradeBus.instance.cfg.SPRINT_TIME_INCREASE_UNLOCK.Value;
             incrementalValue = UpgradeBus.instance.cfg.SPRINT_TIME_INCREMENT.Value;
         }
-
-        public override void Increment()
-        {
-            base.Increment();
-            UpgradeBus.instance.lungLevel++;
-        }
-
-        public override void Load()
-        {
-            LoadUpgradeAttribute(ref UpgradeBus.instance.biggerLungs, UpgradeBus.instance.lungLevel);
-            base.Load();
-        }
-
-        public override void Unwind()
-        {
-            UnloadUpgradeAttribute(ref UpgradeBus.instance.biggerLungs, ref UpgradeBus.instance.lungLevel);
-            base.Unwind();
-        }
         public static float ApplyPossibleIncreasedStaminaRegen(float regenValue)
         {
-            if (!UpgradeBus.instance.biggerLungs || UpgradeBus.instance.lungLevel < 0) return regenValue * UpgradeBus.instance.staminaDrainCoefficient;
+            if (!GetActiveUpgrade(UPGRADE_NAME) || GetUpgradeLevel(UPGRADE_NAME) < 0) return regenValue * UpgradeBus.instance.staminaDrainCoefficient;
             return regenValue * UpgradeBus.instance.cfg.BIGGER_LUNGS_STAMINA_REGEN_INCREASE.Value * UpgradeBus.instance.staminaDrainCoefficient;
         }
 
         public static float ApplyPossibleReducedJumpStaminaCost(float jumpCost)
         {
-            if (!UpgradeBus.instance.biggerLungs || UpgradeBus.instance.lungLevel < 1) return jumpCost;
+            if (!GetActiveUpgrade(UPGRADE_NAME) || GetUpgradeLevel(UPGRADE_NAME) < 1) return jumpCost;
             return jumpCost * UpgradeBus.instance.cfg.BIGGER_LUNGS_JUMP_STAMINA_COST_DECREASE.Value;
         }
         public string GetWorldBuildingText(bool shareStatus = false)

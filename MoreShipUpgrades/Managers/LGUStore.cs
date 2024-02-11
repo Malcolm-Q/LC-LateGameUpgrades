@@ -26,58 +26,6 @@ namespace MoreShipUpgrades.Managers
         private ulong playerID = 0;
         private static LGULogger logger = new LGULogger(nameof(LGUStore));
         private string saveDataKey = "LGU_SAVE_DATA";
-
-        private static Dictionary<string, Func<SaveInfo, bool>> conditions = new Dictionary<string, Func<SaveInfo, bool>>
-        {
-            {MalwareBroadcaster.UPGRADE_NAME, saveInfo => saveInfo.DestroyTraps },
-            {Discombobulator.UPGRADE_NAME, SaveInfo => SaveInfo.terminalFlash },
-            {BiggerLungs.UPGRADE_NAME, SaveInfo => SaveInfo.biggerLungs },
-            {RunningShoes.UPGRADE_NAME, SaveInfo => SaveInfo.runningShoes },
-            {NightVision.UPGRADE_NAME, SaveInfo => SaveInfo.nightVision },
-            {StrongLegs.UPGRADE_NAME, SaveInfo => SaveInfo.strongLegs },
-            {BetterScanner.UPGRADE_NAME, SaveInfo => SaveInfo.scannerUpgrade },
-            {Beekeeper.UPGRADE_NAME, SaveInfo => SaveInfo.beekeeper },
-            {BackMuscles.UPGRADE_NAME, SaveInfo => SaveInfo.exoskeleton },
-            {LockSmith.UPGRADE_NAME, SaveInfo => SaveInfo.lockSmith },
-            {WalkieGPS.UPGRADE_NAME, SaveInfo => SaveInfo.walkies },
-            {ProteinPowder.UPGRADE_NAME, SaveInfo => SaveInfo.proteinPowder },
-            {FastEncryption.UPGRADE_NAME, SaveInfo => SaveInfo.pager },
-            {Hunter.UPGRADE_NAME, SaveInfo => SaveInfo.hunter },
-            {LightningRod.UPGRADE_NAME, SaveInfo => SaveInfo.lightningRod },
-            {Stimpack.UPGRADE_NAME, SaveInfo => SaveInfo.playerHealth },
-            {DoorsHydraulicsBattery.UPGRADE_NAME, SaveInfo => SaveInfo.doorsHydraulicsBattery },
-            {SickBeats.UPGRADE_NAME, SaveInfo => SaveInfo.sickBeats },
-            { MarketInfluence.UPGRADE_NAME, SaveInfo => SaveInfo.marketInfluence },
-            {BargainConnections.UPGRADE_NAME, SaveInfo => SaveInfo.bargainConnections },
-            {LethalDeals.UPGRADE_NAME, SaveInfo => SaveInfo.lethalDeals },
-            {QuantumDisruptor.UPGRADE_NAME, SaveInfo => SaveInfo.quantumDisruptor },
-        };
-
-        private static Dictionary<string, Func<SaveInfo, int>> levelConditions = new Dictionary<string, Func<SaveInfo, int>>
-        {
-            { MalwareBroadcaster.UPGRADE_NAME, saveInfo => 0 },
-            { Discombobulator.UPGRADE_NAME, saveInfo => saveInfo.discoLevel },
-            { BiggerLungs.UPGRADE_NAME, saveInfo => saveInfo.lungLevel },
-            { RunningShoes.UPGRADE_NAME, saveInfo => saveInfo.runningLevel },
-            { NightVision.UPGRADE_NAME, saveInfo => saveInfo.nightVisionLevel },
-            { StrongLegs.UPGRADE_NAME, saveInfo => saveInfo.legLevel },
-            { BetterScanner.UPGRADE_NAME, saveInfo => saveInfo.scanLevel },
-            { Beekeeper.UPGRADE_NAME, saveInfo => saveInfo.beeLevel },
-            { BackMuscles.UPGRADE_NAME, saveInfo => saveInfo.backLevel },
-            { LockSmith.UPGRADE_NAME, saveInfo => 0 },
-            { WalkieGPS.UPGRADE_NAME, saveInfo => 0 },
-            { ProteinPowder.UPGRADE_NAME, SaveInfo => SaveInfo.proteinLevel },
-            { FastEncryption.UPGRADE_NAME, SaveInfo => 0 },
-            { Hunter.UPGRADE_NAME, SaveInfo => SaveInfo.huntLevel },
-            { LightningRod.UPGRADE_NAME, saveInfo => 0},
-            { Stimpack.UPGRADE_NAME, saveInfo => saveInfo.playerHealthLevel },
-            { DoorsHydraulicsBattery.UPGRADE_NAME, saveInfo => saveInfo.doorsHydraulicsBatteryLevel},
-            { SickBeats.UPGRADE_NAME, saveInfo => 0 },
-            { MarketInfluence.UPGRADE_NAME, SaveInfo => SaveInfo.marketInfluenceLevel },
-            { BargainConnections.UPGRADE_NAME, saveInfo => saveInfo.bargainConnectionsLevel },
-            { LethalDeals.UPGRADE_NAME, saveInfo => 0 },
-            { QuantumDisruptor.UPGRADE_NAME, saveInfo => saveInfo.quantumDisruptorLevel },
-        };
         private bool retrievedCfg;
         private bool receivedSave;
 
@@ -307,20 +255,6 @@ namespace MoreShipUpgrades.Managers
         }
 
         [ServerRpc(RequireOwnership = false)]
-        public void DeleteUpgradesServerRpc()
-        {
-            logger.LogInfo($"Deleting Upgrades...");
-            int i = 0;
-            BaseUpgrade[] upgradeObjects = GameObject.FindObjectsOfType<BaseUpgrade>();
-            foreach (BaseUpgrade upgrade in upgradeObjects)
-            {
-                i++;
-                GameNetworkManager.Destroy(upgrade.gameObject);
-            }
-            logger.LogInfo($"Deleted {i} Upgrade Objects.");
-        }
-
-        [ServerRpc(RequireOwnership = false)]
         public void SyncCreditsServerRpc(int credits)
         {
             logger.LogInfo($"Request to sync credits to ${credits} received, calling ClientRpc...");
@@ -341,7 +275,80 @@ namespace MoreShipUpgrades.Managers
         {
             lguSave.playerSaves.Add(id,JsonConvert.DeserializeObject<SaveInfo>(json));
         }
+        /// <summary>
+        /// Method to get old data from json and store in the new dictionaries
+        /// </summary>
+        /// <param name="saveInfo">Save that might contain old data</param>
+        void CheckForOldData(SaveInfo saveInfo)
+        {
+            if (saveInfo.exoskeleton)
+            {
+                UpgradeBus.instance.activeUpgrades[BackMuscles.UPGRADE_NAME] = saveInfo.exoskeleton;
+                UpgradeBus.instance.upgradeLevels[BackMuscles.UPGRADE_NAME] = saveInfo.backLevel;
+            }
+            if (saveInfo.beekeeper)
+            {
+                UpgradeBus.instance.activeUpgrades[Beekeeper.UPGRADE_NAME] = saveInfo.beekeeper;
+                UpgradeBus.instance.upgradeLevels[Beekeeper.UPGRADE_NAME] = saveInfo.beeLevel;
+            }
+            if (saveInfo.biggerLungs)
+            {
+                UpgradeBus.instance.activeUpgrades[BiggerLungs.UPGRADE_NAME] = saveInfo.biggerLungs;
+                UpgradeBus.instance.upgradeLevels[BiggerLungs.UPGRADE_NAME] = saveInfo.lungLevel;
+            }
+            if (saveInfo.doorsHydraulicsBattery)
+            {
+                UpgradeBus.instance.activeUpgrades[DoorsHydraulicsBattery.UPGRADE_NAME] = saveInfo.doorsHydraulicsBattery;
+                UpgradeBus.instance.upgradeLevels[DoorsHydraulicsBattery.UPGRADE_NAME] = saveInfo.doorsHydraulicsBatteryLevel;
+            }
+            if (saveInfo.hunter)
+            {
+                UpgradeBus.instance.activeUpgrades[Hunter.UPGRADE_NAME] = saveInfo.hunter;
+                UpgradeBus.instance.upgradeLevels[Hunter.UPGRADE_NAME] = saveInfo.huntLevel;
+            }
+            if (saveInfo.nightVision)
+            {
+                UpgradeBus.instance.activeUpgrades[NightVision.UPGRADE_NAME] = saveInfo.nightVision;
+                UpgradeBus.instance.upgradeLevels[NightVision.UPGRADE_NAME] = saveInfo.nightVisionLevel;
+            }
+            if (saveInfo.playerHealth)
+            {
+                UpgradeBus.instance.activeUpgrades[Stimpack.UPGRADE_NAME] = saveInfo.playerHealth;
+                UpgradeBus.instance.upgradeLevels[Stimpack.UPGRADE_NAME] = saveInfo.playerHealthLevel;
+            }
+            if (saveInfo.proteinPowder) 
+            {
+                UpgradeBus.instance.activeUpgrades[ProteinPowder.UPGRADE_NAME] = saveInfo.proteinPowder;
+                UpgradeBus.instance.upgradeLevels[ProteinPowder.UPGRADE_NAME] = saveInfo.proteinLevel;
+            }
+            if (saveInfo.runningShoes)
+            {
+                UpgradeBus.instance.activeUpgrades[RunningShoes.UPGRADE_NAME] = saveInfo.runningShoes;
+                UpgradeBus.instance.upgradeLevels[RunningShoes.UPGRADE_NAME] = saveInfo.runningLevel;
+            }
+            if (saveInfo.scannerUpgrade)
+            {
+                UpgradeBus.instance.activeUpgrades[BetterScanner.UPGRADE_NAME] = saveInfo.scannerUpgrade;
+                UpgradeBus.instance.upgradeLevels[BetterScanner.UPGRADE_NAME] = saveInfo.scanLevel;
+            }
+            if (saveInfo.strongLegs)
+            {
+                UpgradeBus.instance.activeUpgrades[StrongLegs.UPGRADE_NAME] = saveInfo.strongLegs;
+                UpgradeBus.instance.upgradeLevels[StrongLegs.UPGRADE_NAME] = saveInfo.legLevel;
+            }
+            if (saveInfo.terminalFlash)
+            {
+                UpgradeBus.instance.activeUpgrades[StrongLegs.UPGRADE_NAME] = saveInfo.terminalFlash;
+                UpgradeBus.instance.upgradeLevels[StrongLegs.UPGRADE_NAME] = saveInfo.discoLevel;
+            }
+            if (saveInfo.walkies) UpgradeBus.instance.activeUpgrades[WalkieGPS.UPGRADE_NAME] = saveInfo.walkies;
+            if (saveInfo.lockSmith) UpgradeBus.instance.activeUpgrades[LockSmith.UPGRADE_NAME] = saveInfo.lockSmith;
+            if (saveInfo.sickBeats) UpgradeBus.instance.activeUpgrades[SickBeats.UPGRADE_NAME] = saveInfo.sickBeats;
+            if (saveInfo.pager) UpgradeBus.instance.activeUpgrades[FastEncryption.UPGRADE_NAME] = saveInfo.pager;
+            if (saveInfo.DestroyTraps) UpgradeBus.instance.activeUpgrades[MalwareBroadcaster.UPGRADE_NAME] = saveInfo.DestroyTraps;
+            if (saveInfo.lightningRod) UpgradeBus.instance.activeUpgrades[LightningRod.UPGRADE_NAME] = saveInfo.lightningRod;
 
+        }
         public void UpdateUpgradeBus(bool UseLocalSteamID = true, bool checkID = true)
         {
             if(UseLocalSteamID)
@@ -363,42 +370,14 @@ namespace MoreShipUpgrades.Managers
                 logger.LogInfo($"Successfully loaded save data for ID: {playerID}");
             }
             bool oldHelmet = UpgradeBus.instance.wearingHelmet;
-            UpgradeBus.instance.DestroyTraps = saveInfo.DestroyTraps;
-            UpgradeBus.instance.scannerUpgrade = saveInfo.scannerUpgrade;
-            UpgradeBus.instance.nightVision = saveInfo.nightVision;
-            UpgradeBus.instance.exoskeleton = saveInfo.exoskeleton;
-            UpgradeBus.instance.TPButtonPressed = saveInfo.TPButtonPressed;
-            UpgradeBus.instance.beekeeper = saveInfo.beekeeper;
-            UpgradeBus.instance.terminalFlash = saveInfo.terminalFlash;
-            UpgradeBus.instance.strongLegs = saveInfo.strongLegs;
-            UpgradeBus.instance.runningShoes = saveInfo.runningShoes;
-            UpgradeBus.instance.biggerLungs = saveInfo.biggerLungs;
-            UpgradeBus.instance.lockSmith = saveInfo.lockSmith;
-            UpgradeBus.instance.proteinPowder = saveInfo.proteinPowder;
-            UpgradeBus.instance.lightningRod = saveInfo.lightningRod;
-            UpgradeBus.instance.pager = saveInfo.pager;
-            UpgradeBus.instance.hunter = saveInfo.hunter;
-            UpgradeBus.instance.playerHealth = saveInfo.playerHealth;
-            UpgradeBus.instance.wearingHelmet = saveInfo.wearingHelmet;
-            UpgradeBus.instance.sickBeats = saveInfo.sickBeats;
-            UpgradeBus.instance.doorsHydraulicsBattery = saveInfo.doorsHydraulicsBattery;
+            UpgradeBus.instance.activeUpgrades = saveInfo.activeUpgrades;
+            UpgradeBus.instance.upgradeLevels = saveInfo.upgradeLevels;
 
-            UpgradeBus.instance.beeLevel = saveInfo.beeLevel;
-            UpgradeBus.instance.huntLevel = saveInfo.huntLevel;
-            UpgradeBus.instance.proteinLevel = saveInfo.proteinLevel;
-            UpgradeBus.instance.lungLevel = saveInfo.lungLevel;
-            UpgradeBus.instance.walkies = saveInfo.walkies;
-            UpgradeBus.instance.backLevel = saveInfo.backLevel;
-            UpgradeBus.instance.runningLevel = saveInfo.runningLevel;
-            UpgradeBus.instance.discoLevel = saveInfo.discoLevel;
-            UpgradeBus.instance.legLevel = saveInfo.legLevel;
-            UpgradeBus.instance.scanLevel = saveInfo.scanLevel;
-            UpgradeBus.instance.nightVisionLevel = saveInfo.nightVisionLevel;
-            UpgradeBus.instance.playerHealthLevel = saveInfo.playerHealthLevel;
-            UpgradeBus.instance.doorsHydraulicsBatteryLevel = saveInfo.doorsHydraulicsBatteryLevel;
+            CheckForOldData(saveInfo);
 
             UpgradeBus.instance.contractLevel = saveInfo.contractLevel;
             UpgradeBus.instance.contractType = saveInfo.contractType;
+            UpgradeBus.instance.wearingHelmet = saveInfo.wearingHelmet;
 
             UpgradeBus.instance.SaleData = saveInfo.SaleData;
 
@@ -441,14 +420,13 @@ namespace MoreShipUpgrades.Managers
             logger.LogInfo("Applying loaded upgrades...");
             foreach (CustomTerminalNode customNode in UpgradeBus.instance.terminalNodes)
             {
-                if (conditions.TryGetValue(customNode.Name, out var condition) && condition(saveInfo))
-                {
-                    logger.LogInfo($"Activated {customNode.Name}!");
-                    customNode.Unlocked = true;
-                    levelConditions.TryGetValue(customNode.Name, out var level);
-                    customNode.CurrentUpgrade = level.Invoke(saveInfo);
-                    UpgradeBus.instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>().Load();
-                }
+                bool activeUpgrade = UpgradeBus.instance.activeUpgrades.GetValueOrDefault(customNode.Name, false);
+                if (!activeUpgrade) continue;
+                int upgradeLevel = UpgradeBus.instance.upgradeLevels.GetValueOrDefault(customNode.Name, 0);
+                customNode.Unlocked = true;
+                customNode.CurrentUpgrade = upgradeLevel + 1;
+                UpgradeBus.instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>().Load();
+
             }
         }
 
@@ -607,49 +585,52 @@ namespace MoreShipUpgrades.Managers
     [Serializable]
     public class SaveInfo
     {
-        public bool DestroyTraps = UpgradeBus.instance.DestroyTraps;
-        public bool scannerUpgrade = UpgradeBus.instance.scannerUpgrade;
-        public bool nightVision = UpgradeBus.instance.nightVision;
-        public bool exoskeleton = UpgradeBus.instance.exoskeleton;
-        public bool TPButtonPressed = UpgradeBus.instance.TPButtonPressed;
-        public bool beekeeper = UpgradeBus.instance.beekeeper;
-        public bool terminalFlash = UpgradeBus.instance.terminalFlash;
-        public bool strongLegs = UpgradeBus.instance.strongLegs;
-        public bool proteinPowder = UpgradeBus.instance.proteinPowder;
-        public bool runningShoes = UpgradeBus.instance.runningShoes;
-        public bool biggerLungs = UpgradeBus.instance.biggerLungs;
-        public bool lockSmith = UpgradeBus.instance.lockSmith;
-        public bool walkies = UpgradeBus.instance.walkies;
-        public bool lightningRod = UpgradeBus.instance.lightningRod;
-        public bool pager = UpgradeBus.instance.pager;
-        public bool hunter = UpgradeBus.instance.hunter;
-        public bool playerHealth = UpgradeBus.instance.playerHealth;
-        public bool wearingHelmet = UpgradeBus.instance.wearingHelmet;
-        public bool sickBeats = UpgradeBus.instance.sickBeats;
-        public bool doorsHydraulicsBattery = UpgradeBus.instance.doorsHydraulicsBattery;
-        public bool marketInfluence = UpgradeBus.instance.marketInfluence;
-        public bool bargainConnections = UpgradeBus.instance.bargainConnections;
-        public bool lethalDeals = UpgradeBus.instance.lethalDeals;
-        public bool quantumDisruptor = UpgradeBus.instance.quantumDisruptor;
+        public Dictionary<string, bool> activeUpgrades = UpgradeBus.instance.activeUpgrades;
+        public Dictionary<string, int> upgradeLevels = UpgradeBus.instance.upgradeLevels;
+        public bool DestroyTraps;
+        public bool scannerUpgrade;
+        public bool nightVision;
+        public bool exoskeleton;
+        public bool beekeeper;
+        public bool terminalFlash;
+        public bool strongLegs;
+        public bool proteinPowder;
+        public bool runningShoes;
+        public bool biggerLungs;
+        public bool lockSmith;
+        public bool walkies;
+        public bool lightningRod;
+        public bool pager;
+        public bool hunter;
+        public bool playerHealth;
+        public bool sickBeats;
+        public bool doorsHydraulicsBattery;
+        public bool marketInfluence;
+        public bool bargainConnections;
+        public bool lethalDeals;
+        public bool quantumDisruptor;
 
-        public int beeLevel = UpgradeBus.instance.beeLevel;
-        public int huntLevel = UpgradeBus.instance.huntLevel;
-        public int proteinLevel = UpgradeBus.instance.proteinLevel;
-        public int lungLevel = UpgradeBus.instance.lungLevel;
-        public int backLevel = UpgradeBus.instance.backLevel;
-        public int runningLevel = UpgradeBus.instance.runningLevel;
-        public int scanLevel = UpgradeBus.instance.scanLevel;
-        public int discoLevel = UpgradeBus.instance.discoLevel;
-        public int legLevel = UpgradeBus.instance.legLevel;
-        public int nightVisionLevel = UpgradeBus.instance.nightVisionLevel;
-        public int playerHealthLevel = UpgradeBus.instance.playerHealthLevel;
-        public int doorsHydraulicsBatteryLevel = UpgradeBus.instance.doorsHydraulicsBatteryLevel;
-        public int marketInfluenceLevel = UpgradeBus.instance.marketInfluenceLevel;
-        public int bargainConnectionsLevel = UpgradeBus.instance.bargainConnectionsLevel;
-        public int quantumDisruptorLevel = UpgradeBus.instance.quantumDisruptorLevel;
+        public int beeLevel;
+        public int huntLevel;
+        public int proteinLevel;
+        public int lungLevel;
+        public int backLevel;
+        public int runningLevel;
+        public int scanLevel;
+        public int discoLevel;
+        public int legLevel;
+        public int nightVisionLevel;
+        public int playerHealthLevel;
+        public int doorsHydraulicsBatteryLevel;
+        public int marketInfluenceLevel;
+        public int bargainConnectionsLevel;
+        public int quantumDisruptorLevel;
+
+        public bool TPButtonPressed = UpgradeBus.instance.TPButtonPressed;
         public string contractType = UpgradeBus.instance.contractType;
         public string contractLevel = UpgradeBus.instance.contractLevel;
         public Dictionary<string, float> SaleData = UpgradeBus.instance.SaleData;
+        public bool wearingHelmet = UpgradeBus.instance.wearingHelmet;
     }
 
     [Serializable]

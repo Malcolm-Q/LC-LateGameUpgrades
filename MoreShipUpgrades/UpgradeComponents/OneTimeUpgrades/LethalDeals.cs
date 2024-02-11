@@ -15,22 +15,9 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             upgradeName = UPGRADE_NAME;
             base.Start();
         }
-
-        public override void Load()
-        {
-            base.Load();
-
-            UpgradeBus.instance.lethalDeals = true;
-        }
-
-        public override void Unwind()
-        {
-            base.Unwind();
-            UpgradeBus.instance.lethalDeals = false;
-        }
         public static int GetLethalDealsGuaranteedItems(int amount)
         {
-            if (!UpgradeBus.instance.lethalDeals) return amount;
+            if (!GetActiveUpgrade(UPGRADE_NAME)) return amount;
             return GUARANTEED_ITEMS_AMOUNT;
         }
         public override string GetDisplayInfo(int price = -1)

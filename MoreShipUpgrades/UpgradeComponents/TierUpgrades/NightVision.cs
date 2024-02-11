@@ -55,11 +55,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 Toggle();
             }
 
-            float maxBattery = UpgradeBus.instance.cfg.NIGHT_BATTERY_MAX.Value + UpgradeBus.instance.nightVisionLevel * UpgradeBus.instance.cfg.NIGHT_VIS_BATTERY_INCREMENT.Value;
+            float maxBattery = UpgradeBus.instance.cfg.NIGHT_BATTERY_MAX.Value + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.instance.cfg.NIGHT_VIS_BATTERY_INCREMENT.Value;
 
             if (UpgradeBus.instance.nightVisionActive)
             {
-                nightBattery -= Time.deltaTime * (UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_SPEED.Value - UpgradeBus.instance.nightVisionLevel * UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_INCREMENT.Value);
+                nightBattery -= Time.deltaTime * (UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_SPEED.Value - GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.instance.cfg.NIGHT_VIS_DRAIN_INCREMENT.Value);
                 nightBattery = Mathf.Clamp(nightBattery, 0f, maxBattery);
                 batteryBar.parent.gameObject.SetActive(true);
 
@@ -70,7 +70,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             }
             else if (!batteryExhaustion)
             {
-                nightBattery += Time.deltaTime * (UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_SPEED.Value + UpgradeBus.instance.nightVisionLevel * UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_INCREMENT.Value);
+                nightBattery += Time.deltaTime * (UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_SPEED.Value + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.instance.cfg.NIGHT_VIS_REGEN_INCREMENT.Value);
                 nightBattery = Mathf.Clamp(nightBattery, 0f, maxBattery);
 
                 if (nightBattery >= maxBattery)
@@ -124,8 +124,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             UpgradeBus.instance.nightVisIntensity = client.nightVision.intensity;
 
             client.nightVision.color = UpgradeBus.instance.cfg.NIGHT_VIS_COLOR.Value;
-            client.nightVision.range = UpgradeBus.instance.cfg.NIGHT_VIS_RANGE.Value + UpgradeBus.instance.nightVisionLevel * UpgradeBus.instance.cfg.NIGHT_VIS_RANGE_INCREMENT.Value;
-            client.nightVision.intensity = UpgradeBus.instance.cfg.NIGHT_VIS_INTENSITY.Value + UpgradeBus.instance.nightVisionLevel * UpgradeBus.instance.cfg.NIGHT_VIS_INTENSITY_INCREMENT.Value;
+            client.nightVision.range = UpgradeBus.instance.cfg.NIGHT_VIS_RANGE.Value + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.instance.cfg.NIGHT_VIS_RANGE_INCREMENT.Value;
+            client.nightVision.intensity = UpgradeBus.instance.cfg.NIGHT_VIS_INTENSITY.Value + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.instance.cfg.NIGHT_VIS_INTENSITY_INCREMENT.Value;
             nightBattery -= UpgradeBus.instance.cfg.NIGHT_VIS_STARTUP.Value; // 0.1f
         }
 
@@ -137,20 +137,18 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public override void Increment()
         {
-            UpgradeBus.instance.nightVisionLevel++;
+            base.Increment();
             LGUStore.instance.UpdateLGUSaveServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, JsonConvert.SerializeObject(new SaveInfo()));
         }
 
         public override void Load()
         {
+            base.Load();
             EnableOnClient(false);
         }
         public override void Unwind()
         {
             base.Unwind();
-
-            UpgradeBus.instance.nightVision = false;
-            UpgradeBus.instance.nightVisionLevel = 0;
             DisableOnClient();
         }
 
@@ -179,7 +177,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             if (client == null) { client = GameNetworkManager.Instance.localPlayerController; }
             transform.GetChild(0).gameObject.SetActive(true);
-            UpgradeBus.instance.nightVision = true;
+            UpgradeBus.instance.activeUpgrades[UPGRADE_NAME] = true;
             if (save) { LGUStore.instance.UpdateLGUSaveServerRpc(client.playerSteamId, JsonConvert.SerializeObject(new SaveInfo())); }
             HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Press {UpgradeBus.instance.cfg.TOGGLE_NIGHT_VISION_KEY.Value} to toggle Night Vision!!!</color>";
         }
@@ -192,7 +190,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             client.nightVision.intensity = UpgradeBus.instance.nightVisIntensity;
 
             transform.GetChild(0).gameObject.SetActive(false);
-            UpgradeBus.instance.nightVision = false;
+            UpgradeBus.instance.activeUpgrades[UPGRADE_NAME] = false;
             LGUStore.instance.UpdateLGUSaveServerRpc(client.playerSteamId, JsonConvert.SerializeObject(new SaveInfo()));
             client = null;
         }

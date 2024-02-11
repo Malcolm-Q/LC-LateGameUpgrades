@@ -42,36 +42,17 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             base.Start();
         }
 
-        public override void Increment()
-        {
-            UpgradeBus.instance.proteinLevel++;
-        }
-
-        public override void Load()
-        {
-            base.Load();
-
-            UpgradeBus.instance.proteinPowder = true;
-        }
-        public override void Unwind()
-        {
-            base.Unwind();
-
-            UpgradeBus.instance.proteinLevel = 0;
-            UpgradeBus.instance.proteinPowder = false;
-        }
-
         public static int GetShovelHitForce(int force)
         {
             // Truly one of THE ternary operators
-            return (UpgradeBus.instance.proteinPowder ? TryToCritEnemy() ? CRIT_DAMAGE_VALUE : UpgradeBus.instance.cfg.PROTEIN_INCREMENT.Value * UpgradeBus.instance.proteinLevel + UpgradeBus.instance.cfg.PROTEIN_UNLOCK_FORCE.Value + force : force) + UpgradeBus.instance.damageBoost;
+            return (GetActiveUpgrade(UPGRADE_NAME) ? TryToCritEnemy() ? CRIT_DAMAGE_VALUE : UpgradeBus.instance.cfg.PROTEIN_INCREMENT.Value * GetUpgradeLevel(UPGRADE_NAME) + UpgradeBus.instance.cfg.PROTEIN_UNLOCK_FORCE.Value + force : force) + UpgradeBus.instance.damageBoost;
             // .damageBoost is tied to boombox upgrade, it will always be 0 when inactive or x when active.
         }
 
         private static bool TryToCritEnemy()
         {
             int maximumLevel = UpgradeBus.instance.cfg.PROTEIN_UPGRADE_PRICES.Value.Split(',').Length;
-            int currentLevel = UpgradeBus.instance.proteinLevel;
+            int currentLevel = GetUpgradeLevel(UPGRADE_NAME);
 
             if (currentLevel != maximumLevel) return false;
 
