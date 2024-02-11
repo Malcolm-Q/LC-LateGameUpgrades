@@ -184,7 +184,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
             }
             if (succeeded)
             {
-                Destroy(pcScript.trig);
+                Destroy(pcScript.GetComponent<BoxCollider>());
                 //pcScript.trig.disabledHoverTip = "Data has been retrieved!";
             }
             else

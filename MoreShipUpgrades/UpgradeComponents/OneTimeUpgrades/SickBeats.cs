@@ -18,18 +18,6 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             UpgradeBus.instance.BoomboxIcon = transform.GetChild(0).GetChild(0).gameObject;
         }
 
-        public override void Load()
-        {
-            base.Load();
-            UpgradeBus.instance.sickBeats = true;
-        }
-
-        public override void Unwind()
-        {
-            base.Unwind();
-            UpgradeBus.instance.sickBeats = false;
-        }
-
         public static void HandlePlayerEffects(PlayerControllerB player)
         {
             UpgradeBus.instance.BoomboxIcon.SetActive(UpgradeBus.instance.EffectsActive);
@@ -57,7 +45,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
         public static int CalculateDefense(int dmg)
         {
-            if (!UpgradeBus.instance.sickBeats || dmg < 0) return dmg; // < 0 check to not hinder healing
+            if (!GetActiveUpgrade(UPGRADE_NAME) || dmg < 0) return dmg; // < 0 check to not hinder healing
             return (int)(dmg * UpgradeBus.instance.incomingDamageCoefficient);
         }
 

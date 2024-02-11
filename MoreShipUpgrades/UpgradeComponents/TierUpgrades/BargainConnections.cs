@@ -14,29 +14,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             upgradeName = UPGRADE_NAME;
             base.Start();
         }
-
-        public override void Increment()
-        {
-            UpgradeBus.instance.bargainConnectionsLevel++;
-        }
-
-        public override void Load()
-        {
-            base.Load();
-            UpgradeBus.instance.bargainConnections = true;
-        }
-
-        public override void Unwind()
-        {
-            base.Unwind();
-
-            UpgradeBus.instance.bargainConnectionsLevel = 0;
-            UpgradeBus.instance.bargainConnections = false;
-        }
         public static int GetBargainConnectionsAdditionalItems(int defaultAmountItems)
         {
-            if (!UpgradeBus.instance.bargainConnections) return defaultAmountItems;
-            return defaultAmountItems + UpgradeBus.instance.cfg.BARGAIN_CONNECTIONS_INITIAL_ITEM_AMOUNT.Value + (UpgradeBus.instance.bargainConnectionsLevel * UpgradeBus.instance.cfg.BARGAIN_CONNECTIONS_INCREMENTAL_ITEM_AMOUNT.Value);
+            if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultAmountItems;
+            return defaultAmountItems + UpgradeBus.instance.cfg.BARGAIN_CONNECTIONS_INITIAL_ITEM_AMOUNT.Value + (UpgradeBus.instance.upgradeLevels[UPGRADE_NAME] * UpgradeBus.instance.cfg.BARGAIN_CONNECTIONS_INCREMENTAL_ITEM_AMOUNT.Value);
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {

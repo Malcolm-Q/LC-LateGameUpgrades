@@ -13,6 +13,7 @@
 - Medkit now just increases the player's health instead of using DamagePlayer with a negative value.
 - Changed the time of saving LGU's data from disconnecting to autosaving. This should solve the issue of buying an upgrade, leaving and coming back with credits back and upgrade on.
 - Changed config values to ConfigEntry to allow in-game configuration mods to change the values (Note: LGU is not responsible for any breaking bugs that arise from changing configuration while in-game.)
+- Changed samples' particles not being played when dropped due to FPS issues when in high quantity.
 
 ### Fixes
 - Fixed wheelbarrow cost using NV's cost instead of its own
@@ -21,14 +22,21 @@
 - Fixed Baboon Hawks getting stuck in grabbing items stored in a wheelbarrow, leading to them camping the wheelbarrow
 - Fixed Shopping Cart (Scrap Wheelbarrow) scrap value not being applied on spawn due to MapObjects not having their scrap value synced.
 - Fixed Medkit's current amount of uses not being synced between players, leading to each player have three uses out of one medkit with maximum of three uses.
-- Fixed "scan enemies" showing "Unkown" instead of "Unknown" for enemies without a scan node associated (e.g Ghost Girl)
+- Fixed "scan enemies" showing "Unkown" instead of "Unknown" for enemies without a scan node associated (e.g Ghost Girl).
+- Fixed (for like second or third time) Data Disk's "grabbable" area being blocked by the PC when it spawns.
 
 ### Code Changes (developer level)
-- Spawned scrap now use a component called ScrapValueSyncer which is used to change the item's scrap value for every player in the game.
+- Spawned scrap now use a component called ``ScrapValueSyncer`` which is used to change the item's scrap value for every player in the game.
 - Refactored upgrades to be more streamlined to create an upgrade and added documentation to each abstract upgrade class
-- Refactored RPCs to respective handlers to relieve LGUStore's responsiblities
+- Refactored RPCs to respective handlers to relieve ``LGUStore``'s responsiblities
 - Removed useless code
 - Changed from storing the json alongside the game's save to storing inside the game's save (this should reduce amount of issues with mods like LCBetterSaves).
+    - Any previous saves in which they have the first case will be stored in the game's save when detected and delete the outside json file so resets should not happen when updating.
+- Implemented handler for ``ScanNodeProperties`` when creating or changing its attributes for easier maintenance.
+- Abstracted ``WheelbarrowScript``'s ``SetupScanNodeProperties()`` to not force the base class to know which derived class it is.
+- Created handler for ``TerminalNodeList`` manipulation and for "help"'s ``TerminalNode`` manipulation to add information related to LGU's commands to not clutter ``TerminalPatcher``
+- Changed from each bool and int variable stored in ``UpgradeBus`` representing active and level respectively into dictionaries which allows more streamlining in upgrade implementation as they no longer need to know what variable they are referring to for manipulation.
+    - Any previous saves will be attempted to gather the data from them to store into the new dictionaries to not lose upgrades.
 
 ## V 3.1.0 - 2024-1-19
 Additions

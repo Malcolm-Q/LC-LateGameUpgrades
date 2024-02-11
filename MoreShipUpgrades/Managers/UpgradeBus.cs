@@ -1,6 +1,8 @@
 ﻿using GameNetcodeStuff;
+using HarmonyLib;
 using LethalLib.Modules;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
@@ -22,51 +24,16 @@ namespace MoreShipUpgrades.Managers
         public GameObject introScreen;
         private static LGULogger logger = new LGULogger(nameof(UpgradeBus));
 
-        public bool DestroyTraps = false;
-        public bool scannerUpgrade = false;
-        public bool wearingHelmet = false;
-        public bool nightVision = false;
+        internal Dictionary<string, bool> activeUpgrades = new Dictionary<string, bool>();
+        internal Dictionary<string, int> upgradeLevels = new Dictionary<string, int>();
+
+        internal bool TPButtonPressed;
+
+        public GameObject nightVisionPrefab;
         public bool nightVisionActive = false;
         public float nightVisRange;
         public float nightVisIntensity;
-        public bool exoskeleton = false;
-        public bool TPButtonPressed = false;
-        public bool beekeeper = false;
-        public bool terminalFlash = false;
-        public bool strongLegs = false;
-        public bool runningShoes = false;
-        public bool lockSmith = false;
-        public bool biggerLungs = false;
-        public bool proteinPowder = false;
-        public bool lightningRod = false;
-        public bool hunter = false;
-        public bool playerHealth = false;
-        public bool doorsHydraulicsBattery = false;
-        public bool marketInfluence = false;
-        public bool bargainConnections = false;
-        public bool lethalDeals = false;
-        internal bool quantumDisruptor = false;
-		public bool teleporterUpgrade = false;
-
-		public int lungLevel = 0;
-        public int helmetHits = 0;
-        public int huntLevel = 0;
-        public int proteinLevel = 0;
-        public int beeLevel = 0;
-        public int backLevel = 0;
-        public int runningLevel = 0;
-        public int discoLevel = 0;
-        public int legLevel = 0;
-        public int scanLevel = 0;
-        public int nightVisionLevel = 0;
-        public int playerHealthLevel = 0;
-        public int doorsHydraulicsBatteryLevel = 0;
-        public int marketInfluenceLevel = 0;
-        public int bargainConnectionsLevel = 0;
-        internal int quantumDisruptorLevel = 0;
-		public int teleporterUpgradeLevel = 0;
         public int mostRecentShipTPButtonPressed = 0;
-
 		public float flashCooldown = 0f;
         public float alteredWeight = 1f;
 
@@ -103,23 +70,27 @@ namespace MoreShipUpgrades.Managers
         public string[] internNames, internInterests;
 
         public List<Peeper> coilHeadItems = new List<Peeper>();
-        internal bool walkies;
+
         internal bool walkieUIActive;
         internal string version;
 
         public AssetBundle UpgradeAssets;
-        internal bool pager;
 
         public Dictionary<string,GameObject> samplePrefabs = new Dictionary<string,GameObject>();
-        public GameObject nightVisionPrefab;
-        public bool sickBeats;
+
         public float staminaDrainCoefficient = 1f;
         public float incomingDamageCoefficient = 1f;
         public int damageBoost;
         public GameObject BoomboxIcon;
         public bool EffectsActive;
+
         public GameObject helmetModel;
         public Helmet helmetScript;
+        public bool wearingHelmet = false;
+        public int helmetHits = 0;
+
+        public int mostRecentShipTPButtonPressed = 0;
+
         public Dictionary<string, AudioClip> SFX = new Dictionary<string, AudioClip>();
         public bool helmetDesync;
         public List<string> bombOrder = new List<string>();
@@ -173,49 +144,14 @@ namespace MoreShipUpgrades.Managers
         {
             ResetPlayerAttributes();
             if(IsHost || IsServer) ResetShipAttributesClientRpc();
-            EffectsActive = false;
-            DestroyTraps = false;
-            scannerUpgrade = false;
-            nightVision = false;
-            walkies = false;
-            nightVisionActive = false;
-            exoskeleton = false;
-            TPButtonPressed = false;
-            beekeeper = false;
-            terminalFlash = false;
-            strongLegs = false;
-            runningShoes = false;
-            lockSmith = false;
-            biggerLungs = false;
-            lightningRod = false;
-            pager = false;
-            hunter = false;
-            playerHealth = false;
-            sickBeats = false;
-            marketInfluence = false;
-            bargainConnections = false;
-            lethalDeals = false;
-			teleporterUpgrade = false;
 
-			contractType = "None";
+            EffectsActive = false;
+            nightVisionActive = false;
+            contractType = "None";
             contractLevel = "None";
 
-            huntLevel = 0;
-            proteinLevel = 0;
-            lungLevel = 0;
-            backLevel = 0;
-            scanLevel = 0;
-            beeLevel = 0;
-            runningLevel = 0;
-            discoLevel = 0;
-            legLevel = 0;
-            nightVisionLevel = 0;
-            playerHealthLevel = 0;
-            marketInfluenceLevel = 0;
-            bargainConnectionsLevel = 0;
             flashCooldown = 0f;
             alteredWeight = 1f;
-			teleporterUpgradeLevel = 0;
             mostRecentShipTPButtonPressed = 0;
 			if (wipeObjRefs) {
                 UpgradeObjects = new Dictionary<string, GameObject>(); 
@@ -230,6 +166,11 @@ namespace MoreShipUpgrades.Managers
                 if(node.Name == NightVision.UPGRADE_NAME) { node.Unlocked = true; }
             }
 
+            foreach (string key in activeUpgrades.Keys.ToList())
+                activeUpgrades[key] = false;
+
+            foreach (string key in upgradeLevels.Keys.ToList())
+                upgradeLevels[key] = 0;
         }
         private void ResetPlayerAttributes()
         {
@@ -237,21 +178,15 @@ namespace MoreShipUpgrades.Managers
             if (player == null) return; // Disconnecting the game
 
             logger.LogDebug($"Resetting {player.playerUsername}'s attributes");
-            if (cfg.RUNNING_SHOES_ENABLED.Value && runningShoes) UpgradeObjects[RunningShoes.UPGRADE_NAME].GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute(ref runningShoes, ref runningLevel);
-            if (cfg.BIGGER_LUNGS_ENABLED.Value && biggerLungs) UpgradeObjects[BiggerLungs.UPGRADE_NAME].GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute(ref biggerLungs, ref lungLevel);
-            if (cfg.STRONG_LEGS_ENABLED.Value && strongLegs) UpgradeObjects[StrongLegs.UPGRADE_NAME].GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute(ref strongLegs, ref legLevel);
-            if (cfg.PLAYER_HEALTH_ENABLED.Value && playerHealth) UpgradeObjects[Stimpack.UPGRADE_NAME].GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute(ref playerHealth, ref playerHealthLevel);
+            UpgradeObjects.Values.Where(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>() is IPlayerSync).Do(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute());
         }
 
         [ClientRpc]
         private void ResetShipAttributesClientRpc()
         {
-            HangarShipDoor shipDoors = GetShipDoors();
-            if (shipDoors == null) return; // Very edge case
-
+            mostRecentShipTPButtonPressed = 0;
             logger.LogDebug($"Resetting the ship's attributes");
-            if (cfg.DOOR_HYDRAULICS_BATTERY_ENABLED.Value && doorsHydraulicsBattery) UpgradeObjects[Stimpack.UPGRADE_NAME].GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute(ref doorsHydraulicsBattery, ref doorsHydraulicsBatteryLevel);
-            if (cfg.QUANTUM_DISRUPTOR_ENABLED.Value && quantumDisruptor) UpgradeObjects[QuantumDisruptor.UPGRADE_NAME].GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute(ref quantumDisruptor, ref quantumDisruptorLevel);
+            UpgradeObjects.Values.Where(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>() is IServerSync).Do(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute());
         }
 
         internal void GenerateSales(int seed = -1) // TODO: Save sales

@@ -25,28 +25,25 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public override void Increment()
         {
-            UpgradeBus.instance.backLevel++;
+            base.Increment();
             UpdatePlayerWeight();
         }
 
         public override void Load()
         {
             base.Load();
-            UpgradeBus.instance.exoskeleton = true;
             UpdatePlayerWeight();
         }
         public override void Unwind()
         {
             base.Unwind();
-            UpgradeBus.instance.exoskeleton = false;
-            UpgradeBus.instance.backLevel = 0;
             UpdatePlayerWeight();
         }
 
         public static float DecreasePossibleWeight(float defaultWeight)
         {
-            if (!UpgradeBus.instance.exoskeleton) return defaultWeight;
-            return defaultWeight * (UpgradeBus.instance.cfg.CARRY_WEIGHT_REDUCTION.Value - UpgradeBus.instance.backLevel * UpgradeBus.instance.cfg.CARRY_WEIGHT_INCREMENT.Value);
+            if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultWeight;
+            return defaultWeight * (UpgradeBus.instance.cfg.CARRY_WEIGHT_REDUCTION.Value - GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.instance.cfg.CARRY_WEIGHT_INCREMENT.Value);
         }
         public static void UpdatePlayerWeight()
         {

@@ -7,10 +7,9 @@ namespace MoreShipUpgrades.Patches.ShipTP {
 	internal class ShipTeleporterPatcher {
 		[HarmonyPrefix]
 		[HarmonyPatch(nameof(ShipTeleporter.PressTeleportButtonClientRpc))]
-		private static bool getActivatedTeleporterType(ShipTeleporter __instance) {
+		private static void getActivatedTeleporterType(ShipTeleporter __instance) {
 			UpgradeBus.instance.mostRecentShipTPButtonPressed = __instance.isInverseTeleporter ? 2 : 1;
 			UpgradeTeleportersScript.logger.LogDebug($"Setting most recently pressed teleporter button: {UpgradeBus.instance.mostRecentShipTPButtonPressed}");
-			return true;
 		}
 	}
 }

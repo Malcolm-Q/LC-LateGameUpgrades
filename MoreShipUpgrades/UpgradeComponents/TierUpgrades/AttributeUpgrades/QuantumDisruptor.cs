@@ -1,13 +1,14 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 {
-    internal class QuantumDisruptor : GameAttributeTierUpgrade
+    internal class QuantumDisruptor : GameAttributeTierUpgrade, IServerSync
     {
         internal const string UPGRADE_NAME = "Quantum Disruptor";
         internal const string PRICES_DEFAULT = "1200,1500,1800";
@@ -19,22 +20,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             changingAttribute = GameAttribute.TIME_GLOBAL_TIME_MULTIPLIER;
             initialValue = UpgradeBus.instance.cfg.QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER.Value;
             incrementalValue = UpgradeBus.instance.cfg.QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER.Value;
-        }
-        public override void Increment()
-        {
-            base.Increment();
-            UpgradeBus.instance.quantumDisruptorLevel++;
-        }
-        public override void Unwind()
-        {
-            UnloadUpgradeAttribute(ref UpgradeBus.instance.quantumDisruptor, ref UpgradeBus.instance.quantumDisruptorLevel);
-            base.Unwind();
-        }
-
-        public override void Load()
-        {
-            LoadUpgradeAttribute(ref UpgradeBus.instance.quantumDisruptor, UpgradeBus.instance.quantumDisruptorLevel);
-            base.Load();
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {

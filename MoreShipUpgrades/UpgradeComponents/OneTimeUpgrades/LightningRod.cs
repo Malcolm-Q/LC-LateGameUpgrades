@@ -49,17 +49,6 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             upgradeName = UPGRADE_NAME;
             base.Start();
         }
-        public override void Load()
-        {
-            base.Load();
-            UpgradeBus.instance.lightningRod = true;
-        }
-
-        public override void Unwind()
-        {
-            base.Unwind();
-            UpgradeBus.instance.lightningRod = false;
-        }
 
         public static void TryInterceptLightning(ref StormyWeather __instance, ref GrabbableObject ___targetingMetalObject)
         {

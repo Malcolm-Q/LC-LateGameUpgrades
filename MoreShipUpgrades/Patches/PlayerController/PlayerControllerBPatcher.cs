@@ -13,9 +13,17 @@ using Unity.Netcode;
 using UnityEngine;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Reflection.Emit;
+using Unity.Netcode;
+using UnityEngine;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
+using MoreShipUpgrades.Misc.Upgrades;
 
-namespace MoreShipUpgrades.Patches.PlayerController {
+namespace MoreShipUpgrades.Patches.PlayerController
+{
 	[HarmonyPatch(typeof(PlayerControllerB))]
     internal class PlayerControllerBPatcher
     {
@@ -30,7 +38,7 @@ namespace MoreShipUpgrades.Patches.PlayerController {
             if (__instance.isPlayerDead) return;
             if (!__instance.AllowPlayerDeath()) return;
 
-            if (!UpgradeBus.instance.nightVision) return;
+            if (!BaseUpgrade.GetActiveUpgrade(NightVision.UPGRADE_NAME)) return;
 
             UpgradeBus.instance.UpgradeObjects[NightVision.UPGRADE_NAME].GetComponent<NightVision>().DisableOnClient();
             if (!UpgradeBus.instance.cfg.NIGHT_VISION_DROP_ON_DEATH.Value) return;
@@ -124,12 +132,13 @@ namespace MoreShipUpgrades.Patches.PlayerController {
         [HarmonyPatch(nameof(PlayerControllerB.DropAllHeldItems))]
         private static bool DontDropItems(PlayerControllerB __instance)
         {
-            logger.LogDebug($"Paid upgrade level: {UpgradeBus.instance.teleporterUpgradeLevel}");
+            logger.LogDebug($"Paid upgrade level: {UpgradeTeleportersScript.GetTPUpgradeLevel()}");
 			logger.LogDebug($"Most recent ship TP button pressed: {UpgradeBus.instance.mostRecentShipTPButtonPressed}");
 			if (!UpgradeBus.instance.TPButtonPressed && UpgradeBus.instance.mostRecentShipTPButtonPressed == 0) return true;
 
+            if (__instance != GameNetworkManager.Instance.localPlayerController) return true;
             // If the upgrade level we've paid for is less than the level of tp we pressed, perform regular dropItems() function
-            if (UpgradeBus.instance.teleporterUpgradeLevel < UpgradeBus.instance.mostRecentShipTPButtonPressed) return true;
+            if (UpgradeTeleportersScript.GetTPUpgradeLevel() < UpgradeBus.instance.mostRecentShipTPButtonPressed) return true;
 
             UpgradeBus.instance.TPButtonPressed = false;
             UpgradeBus.instance.mostRecentShipTPButtonPressed = 0;
@@ -228,7 +237,7 @@ namespace MoreShipUpgrades.Patches.PlayerController {
         [HarmonyPatch(nameof(PlayerControllerB.Update))]
         static void CheckForBoomboxes(PlayerControllerB __instance)
         {
-            if (!UpgradeBus.instance.sickBeats || __instance != GameNetworkManager.Instance.localPlayerController) return;
+            if (!BaseUpgrade.GetActiveUpgrade(SickBeats.UPGRADE_NAME) || __instance != GameNetworkManager.Instance.localPlayerController) return;
             UpgradeBus.instance.boomBoxes.RemoveAll(b => b == null);
             bool result = false;
             if (__instance.isPlayerDead)

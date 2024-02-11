@@ -23,40 +23,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades {
 
 
 		// Called when initializing the upgrade at runtime
-		void Start() {
+		internal override void Start() {
 			upgradeName = UPGRADE_NAME;
 			logger = new LGULogger(UPGRADE_NAME);
-			DontDestroyOnLoad(gameObject);
-			Register();
-		}
-
-		// Called when upgrade is first purchased or loaded from save
-		public override void Load() {
-			base.Load();
-
-			logger.LogInfo("Running UpgradeTeleporters load function");
-
-			logger.LogInfo($"UpgradeBus level: {UpgradeBus.instance.teleporterUpgradeLevel}");
-
-			if (!UpgradeBus.instance.teleporterUpgrade || UpgradeBus.instance.teleporterUpgradeLevel == 0) {
-				UpgradeBus.instance.teleporterUpgradeLevel = 1;
-				logger.LogInfo($"Upgrading teleporter to level {UpgradeBus.instance.teleporterUpgradeLevel}");
-			}
-			UpgradeBus.instance.teleporterUpgrade = true;
-		}
-
-		// Called when purchasing subsequent levels
-		// No need to be fancy here since there's only 2 levels
-		public override void Increment() {
-			UpgradeBus.instance.teleporterUpgradeLevel = 2;
-			logger.LogInfo($"Upgrading teleporter level to {UpgradeBus.instance.teleporterUpgradeLevel}");
-		}
-
-		public override void Unwind() {
-			base.Unwind();
-
-			UpgradeBus.instance.teleporterUpgrade = false;
-			UpgradeBus.instance.teleporterUpgradeLevel = 0;
+			base.Start();
 		}
 
 		public string GetWorldBuildingText(bool shareStatus = false) {
@@ -64,9 +34,12 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades {
 		}
 
 		public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null) {
-			Func<int, float> infoFunction = level => UpgradeBus.instance.teleporterUpgradeLevel;
-			string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
-			return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+			return AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
+		}
+
+		public static int GetTPUpgradeLevel() {
+			int enabled = GetActiveUpgrade(UPGRADE_NAME) ? 1 : 0;
+			return enabled + GetUpgradeLevel(UPGRADE_NAME);
 		}
 	}
 }
