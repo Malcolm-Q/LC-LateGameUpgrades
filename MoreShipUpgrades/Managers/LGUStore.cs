@@ -422,15 +422,11 @@ namespace MoreShipUpgrades.Managers
             foreach (CustomTerminalNode customNode in UpgradeBus.instance.terminalNodes)
             {
                 bool activeUpgrade = UpgradeBus.instance.activeUpgrades.GetValueOrDefault(customNode.Name, false);
+                if (!activeUpgrade) continue;
                 int upgradeLevel = UpgradeBus.instance.upgradeLevels.GetValueOrDefault(customNode.Name, 0);
-
-
-                if (activeUpgrade)
-                {
-                    customNode.Unlocked = true;
-                    customNode.CurrentUpgrade = upgradeLevel + 1;
-                    UpgradeBus.instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>().Load();
-                }
+                customNode.Unlocked = true;
+                customNode.CurrentUpgrade = upgradeLevel + 1;
+                UpgradeBus.instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>().Load();
 
             }
         }
