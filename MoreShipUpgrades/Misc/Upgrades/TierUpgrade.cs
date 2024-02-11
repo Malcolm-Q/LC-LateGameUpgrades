@@ -23,7 +23,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
         #region Abstract Methods
         public virtual void Increment()
         {
-            UpgradeBus.instance.upgradeLevels[upgradeName]++;
+            UpgradeBus.instance.upgradeLevels[upgradeName] = GetUpgradeLevel(upgradeName) + 1;
         }
         #endregion
     }
