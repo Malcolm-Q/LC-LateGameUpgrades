@@ -26,14 +26,15 @@
 - Fixed (for like second or third time) Data Disk's "grabbable" area being blocked by the PC when it spawns.
 
 ### Code Changes (developer level)
-- Spawned scrap now use a component called ScrapValueSyncer which is used to change the item's scrap value for every player in the game.
+- Spawned scrap now use a component called ``ScrapValueSyncer`` which is used to change the item's scrap value for every player in the game.
 - Refactored upgrades to be more streamlined to create an upgrade and added documentation to each abstract upgrade class
-- Refactored RPCs to respective handlers to relieve LGUStore's responsiblities
+- Refactored RPCs to respective handlers to relieve ``LGUStore``'s responsiblities
 - Removed useless code
 - Changed from storing the json alongside the game's save to storing inside the game's save (this should reduce amount of issues with mods like LCBetterSaves).
     - Any previous saves in which they have the first case will be stored in the game's save when detected and delete the outside json file so resets should not happen when updating.
-- Implemented handler for ScanNodeProperties when creating or changing its attributes for easier maintenance.
-- Abstracted WheelbarrowScript's SetupScanNodeProperties() to not force the base class to know which derived class it is.
+- Implemented handler for ``ScanNodeProperties`` when creating or changing its attributes for easier maintenance.
+- Abstracted ``WheelbarrowScript``'s ``SetupScanNodeProperties()`` to not force the base class to know which derived class it is.
+- Created handler for ``TerminalNodeList`` manipulation and for "help"'s ``TerminalNode`` manipulation to add information related to LGU's commands to not clutter ``TerminalPatcher``
 
 ## V 3.1.0 - 2024-1-19
 Additions
