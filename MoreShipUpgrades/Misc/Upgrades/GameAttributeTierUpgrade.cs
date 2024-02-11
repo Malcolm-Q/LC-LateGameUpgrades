@@ -95,12 +95,12 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// </summary>
         /// <param name="upgradeActive">Represents the state of the upgrade being applied on the player</param>
         /// <param name="upgradeLevel">Current level of the upgrade when loading the upgrade</param>
-        protected void LoadUpgradeAttribute(ref bool upgradeActive, int upgradeLevel = 0)
+        protected void LoadUpgradeAttribute()
         {
             if (!activeUpgrade) AddInitialValue();
-            upgradeActive = true;
             activeUpgrade = true;
 
+            int upgradeLevel = GetUpgradeLevel(upgradeName);
             AddPossibleIncrementalValues(upgradeLevel);
             currentUpgradeLevel = upgradeLevel;
         }
@@ -178,14 +178,14 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// </summary>
         /// <param name="upgradeActive">Current status of the upgrade</param>
         /// <param name="upgradeLevel">Current level of the upgrade</param>
-        internal void UnloadUpgradeAttribute(ref bool upgradeActive, ref int upgradeLevel)
+        internal void UnloadUpgradeAttribute()
         {
+            bool upgradeActive = GetActiveUpgrade(upgradeName);
+            int upgradeLevel = GetUpgradeLevel(upgradeName);
             if (upgradeActive) RemoveInitialValue();
             RemovePossibleIncrementalValues(upgradeLevel);
-            upgradeActive = false;
-            upgradeLevel = 0;
-            activeUpgrade = upgradeActive;
-            currentUpgradeLevel = upgradeLevel;
+            activeUpgrade = false;
+            currentUpgradeLevel = 0;
         }
         /// <summary>
         /// Removes the initial value introduced into the selected attribute
@@ -234,8 +234,19 @@ namespace MoreShipUpgrades.Misc.Upgrades
         #region Overriden Methods
         public override void Increment()
         {
+            base.Increment();
             AddIncrementalValue();
             currentUpgradeLevel++;
+        }
+        public override void Load()
+        {
+            LoadUpgradeAttribute();
+            base.Load();
+        }
+        public override void Unwind()
+        {
+            UnloadUpgradeAttribute();
+            base.Unwind();
         }
         #endregion
     }

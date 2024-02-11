@@ -34,7 +34,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         {
             base.ItemActivate(used, buttonDown);
             if (!buttonDown) return;
-            if (UpgradeBus.instance.nightVision)
+            if (UpgradeBus.instance.activeUpgrades[NightVision.UPGRADE_NAME])
             {
                 HUDManager.Instance.chatText.text += "<color=#FF0000>Night vision is already active!</color>";
                 return;

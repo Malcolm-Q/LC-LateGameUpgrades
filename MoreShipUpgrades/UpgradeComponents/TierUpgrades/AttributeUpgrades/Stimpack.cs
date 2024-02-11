@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 {
-    internal class Stimpack : GameAttributeTierUpgrade, IUpgradeWorldBuilding
+    internal class Stimpack : GameAttributeTierUpgrade, IUpgradeWorldBuilding, IPlayerSync
     {
         public const string UPGRADE_NAME = "Stimpack";
         internal const string WORLD_BUILDING_TEXT = "\n\nAn experimental Company-offered 'health treatment' program advertised only on old, peeling Ship posters," +
@@ -46,20 +46,12 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         public override void Increment()
         {
             base.Increment();
-            UpgradeBus.instance.playerHealthLevel++;
             PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
-            LGUStore.instance.PlayerHealthUpdateLevelServerRpc(player.playerSteamId, UpgradeBus.instance.playerHealthLevel);
-        }
-
-        public override void Load()
-        {
-            LoadUpgradeAttribute(ref UpgradeBus.instance.playerHealth, UpgradeBus.instance.playerHealthLevel);
-            base.Load();
+            LGUStore.instance.PlayerHealthUpdateLevelServerRpc(player.playerSteamId, GetUpgradeLevel(UPGRADE_NAME));
         }
 
         public override void Unwind()
         {
-            UnloadUpgradeAttribute(ref UpgradeBus.instance.playerHealth, ref UpgradeBus.instance.playerHealthLevel);
             base.Unwind();
             PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
             LGUStore.instance.PlayerHealthUpdateLevelServerRpc(player.playerSteamId, -1);

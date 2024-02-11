@@ -25,7 +25,7 @@ namespace MoreShipUpgrades.Patches.Weather
         [HarmonyPatch(nameof(StormyWeather.Update))]
         static void InterceptSelectedObject(StormyWeather __instance, GrabbableObject ___targetingMetalObject)
         {
-            if (!UpgradeBus.instance.lightningRod || !LGUStore.instance.IsHost || !LGUStore.instance.IsServer) { return; }
+            if (!UpgradeBus.instance.activeUpgrades[LightningRod.UPGRADE_NAME] || !LGUStore.instance.IsHost || !LGUStore.instance.IsServer) { return; }
             if (___targetingMetalObject == null)
             {
                 if (LightningRod.instance != null) // Lightning rod could be disabled so we wouldn't have an instance

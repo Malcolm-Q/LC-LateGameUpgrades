@@ -6,7 +6,7 @@ using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 {
-    internal class StrongLegs : GameAttributeTierUpgrade, IUpgradeWorldBuilding
+    internal class StrongLegs : GameAttributeTierUpgrade, IUpgradeWorldBuilding, IPlayerSync
     {
         public const string UPGRADE_NAME = "Strong Legs";
         public static string PRICES_DEFAULT = "150,190,250";
@@ -23,26 +23,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             initialValue = UpgradeBus.instance.cfg.JUMP_FORCE_UNLOCK.Value;
             incrementalValue = UpgradeBus.instance.cfg.JUMP_FORCE_INCREMENT.Value;
         }
-
-        public override void Increment()
-        {
-            base.Increment();
-            UpgradeBus.instance.legLevel++;
-        }
-
-        public override void Unwind()
-        {
-            UnloadUpgradeAttribute(ref UpgradeBus.instance.strongLegs, ref UpgradeBus.instance.legLevel);
-            base.Unwind();
-        }
-        public override void Load()
-        {
-            LoadUpgradeAttribute(ref UpgradeBus.instance.strongLegs, UpgradeBus.instance.legLevel);
-            base.Load();
-        }
         public static int ReduceFallDamage(int defaultValue)
         {
-            if (!(UpgradeBus.instance.strongLegs && UpgradeBus.instance.legLevel == UpgradeBus.instance.cfg.STRONG_LEGS_UPGRADE_PRICES.Value.Split(',').Length)) return defaultValue;
+            if (!(GetActiveUpgrade(UPGRADE_NAME) && GetUpgradeLevel(UPGRADE_NAME) == UpgradeBus.instance.cfg.STRONG_LEGS_UPGRADE_PRICES.Value.Split(',').Length)) return defaultValue;
             return (int)(defaultValue * (1.0f - UpgradeBus.instance.cfg.STRONG_LEGS_REDUCE_FALL_DAMAGE_MULTIPLIER.Value));
         }
         public string GetWorldBuildingText(bool shareStatus = false)

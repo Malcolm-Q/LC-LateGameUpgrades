@@ -12,6 +12,7 @@ using UnityEngine;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
+using MoreShipUpgrades.Misc.Upgrades;
 
 namespace MoreShipUpgrades.Patches.PlayerController
 {
@@ -29,7 +30,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             if (__instance.isPlayerDead) return;
             if (!__instance.AllowPlayerDeath()) return;
 
-            if (!UpgradeBus.instance.nightVision) return;
+            if (!UpgradeBus.instance.activeUpgrades[NightVision.UPGRADE_NAME]) return;
 
             UpgradeBus.instance.UpgradeObjects[NightVision.UPGRADE_NAME].GetComponent<NightVision>().DisableOnClient();
             if (!UpgradeBus.instance.cfg.NIGHT_VISION_DROP_ON_DEATH.Value) return;
@@ -220,7 +221,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         [HarmonyPatch(nameof(PlayerControllerB.Update))]
         static void CheckForBoomboxes(PlayerControllerB __instance)
         {
-            if (!UpgradeBus.instance.sickBeats || __instance != GameNetworkManager.Instance.localPlayerController) return;
+            if (!BaseUpgrade.GetActiveUpgrade(SickBeats.UPGRADE_NAME) || __instance != GameNetworkManager.Instance.localPlayerController) return;
             UpgradeBus.instance.boomBoxes.RemoveAll(b => b == null);
             bool result = false;
             if (__instance.isPlayerDead)

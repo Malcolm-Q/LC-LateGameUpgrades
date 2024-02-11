@@ -15,29 +15,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             upgradeName = UPGRADE_NAME;
             base.Start();
         }
-
-        public override void Increment()
-        {
-            UpgradeBus.instance.marketInfluenceLevel++;
-        }
-
-        public override void Load()
-        {
-            base.Load();
-            UpgradeBus.instance.marketInfluence = true;
-        }
-
-        public override void Unwind()
-        {
-            base.Unwind();
-
-            UpgradeBus.instance.marketInfluenceLevel = 0;
-            UpgradeBus.instance.marketInfluence = false;
-        }
         public static int GetGuaranteedPercentageSale(int defaultPercentage, int maxValue)
         {
-            if (!UpgradeBus.instance.marketInfluence) return defaultPercentage;
-            return Mathf.Clamp(defaultPercentage + UpgradeBus.instance.cfg.MARKET_INFLUENCE_INITIAL_PERCENTAGE.Value + UpgradeBus.instance.marketInfluenceLevel * UpgradeBus.instance.cfg.MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE.Value, 0, maxValue);
+            if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultPercentage;
+            return Mathf.Clamp(defaultPercentage + UpgradeBus.instance.cfg.MARKET_INFLUENCE_INITIAL_PERCENTAGE.Value + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.instance.cfg.MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE.Value, 0, maxValue);
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {

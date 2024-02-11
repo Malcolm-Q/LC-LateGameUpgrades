@@ -57,25 +57,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             base.Start();
         }
 
-        public override void Increment()
-        {
-            UpgradeBus.instance.huntLevel++;
-        }
-
-        public override void Load()
-        {
-            base.Load();
-
-            UpgradeBus.instance.hunter = true;
-        }
-        public override void Unwind()
-        {
-            base.Unwind();
-
-            UpgradeBus.instance.hunter = false;
-            UpgradeBus.instance.huntLevel = 0;
-        }
-
         public static string GetHunterInfo(int level, int price)
         {
             string enems;

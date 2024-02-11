@@ -2,11 +2,10 @@
 using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Reflection.Emit;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -52,7 +51,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         [HarmonyPatch(nameof(StartOfRound.PowerSurgeShip))]
         private static bool PowerSurgeShip()
         {
-            if (UpgradeBus.instance.lightningRod) return false;
+            if (UpgradeBus.instance.activeUpgrades[LightningRod.UPGRADE_NAME]) return false;
             return true;
         }
 

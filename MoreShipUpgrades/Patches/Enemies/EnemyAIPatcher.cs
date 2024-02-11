@@ -21,11 +21,11 @@ namespace MoreShipUpgrades.Patches.Enemies
             currentEnemy = __instance.NetworkObject.NetworkObjectId;
             string name = __instance.enemyType.enemyName;
 
-            if (!(UpgradeBus.instance.hunter && Hunter.tiers[UpgradeBus.instance.huntLevel].Contains(name.ToLower())))
+            if (!(UpgradeBus.instance.activeUpgrades[Hunter.UPGRADE_NAME] && Hunter.tiers[UpgradeBus.instance.upgradeLevels[Hunter.UPGRADE_NAME]].Contains(name.ToLower())))
             {
                 logger.LogDebug($"No sample was found to spawn for {name.ToLower()}");
                 logger.LogDebug("Enemies in the Hunter list");
-                foreach (string monsterName in Hunter.tiers[UpgradeBus.instance.huntLevel])
+                foreach (string monsterName in Hunter.tiers[UpgradeBus.instance.upgradeLevels[Hunter.UPGRADE_NAME]])
                     logger.LogDebug($"{monsterName}");
                 return;
             }

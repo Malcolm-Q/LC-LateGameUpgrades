@@ -45,24 +45,6 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             pins = new List<GameObject> { pin1, pin2, pin3, pin4, pin5 };
         }
 
-        public override void Load()
-        {
-            base.Load();
-
-            UpgradeBus.instance.lockSmith = true;
-        }
-
-        public override void Register()
-        {
-            base.Register();
-        }
-        public override void Unwind()
-        {
-            base.Unwind();
-
-            UpgradeBus.instance.lockSmith = false;
-        }
-
         void Update()
         {
             if (!Keyboard.current[Key.Escape].wasPressedThisFrame) return;

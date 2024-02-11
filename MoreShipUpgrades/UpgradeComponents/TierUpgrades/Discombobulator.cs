@@ -33,21 +33,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public override void Load()
         {
             base.Load();
-            UpgradeBus.instance.terminalFlash = true;
             instance = this;
-        }
-
-        public override void Increment()
-        {
-            UpgradeBus.instance.discoLevel++;
-        }
-
-        public override void Unwind()
-        {
-            base.Unwind();
-
-            UpgradeBus.instance.terminalFlash = false;
-            UpgradeBus.instance.discoLevel = 0;
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -73,16 +59,16 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 EnemyAI enemy = component.mainScript;
                 if (CanDealDamage())
                 {
-                    int forceValue = UpgradeBus.instance.cfg.DISCOMBOBULATOR_INITIAL_DAMAGE.Value + UpgradeBus.instance.cfg.DISCOMBOBULATOR_DAMAGE_INCREASE.Value * (UpgradeBus.instance.discoLevel - UpgradeBus.instance.cfg.DISCOMBOBULATOR_DAMAGE_LEVEL.Value);
+                    int forceValue = UpgradeBus.instance.cfg.DISCOMBOBULATOR_INITIAL_DAMAGE.Value + UpgradeBus.instance.cfg.DISCOMBOBULATOR_DAMAGE_INCREASE.Value * (GetUpgradeLevel(UPGRADE_NAME) - UpgradeBus.instance.cfg.DISCOMBOBULATOR_DAMAGE_LEVEL.Value);
                     enemy.HitEnemy(forceValue);
                 }
-                if (!enemy.isEnemyDead) enemy.SetEnemyStunned(true, UpgradeBus.instance.cfg.DISCOMBOBULATOR_STUN_DURATION.Value + UpgradeBus.instance.cfg.DISCOMBOBULATOR_INCREMENT.Value * UpgradeBus.instance.discoLevel, null);
+                if (!enemy.isEnemyDead) enemy.SetEnemyStunned(true, UpgradeBus.instance.cfg.DISCOMBOBULATOR_STUN_DURATION.Value + UpgradeBus.instance.cfg.DISCOMBOBULATOR_INCREMENT.Value * GetUpgradeLevel(UPGRADE_NAME), null);
             }
         }
 
         private bool CanDealDamage()
         {
-            return UpgradeBus.instance.cfg.DISCOMBOBULATOR_DAMAGE_LEVEL.Value > 0 && UpgradeBus.instance.discoLevel + 1 >= UpgradeBus.instance.cfg.DISCOMBOBULATOR_DAMAGE_LEVEL.Value;
+            return UpgradeBus.instance.cfg.DISCOMBOBULATOR_DAMAGE_LEVEL.Value > 0 && GetUpgradeLevel(UPGRADE_NAME) + 1 >= UpgradeBus.instance.cfg.DISCOMBOBULATOR_DAMAGE_LEVEL.Value;
         }
         private IEnumerator ResetRange(Terminal terminal)
         {

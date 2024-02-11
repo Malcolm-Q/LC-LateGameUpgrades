@@ -6,7 +6,7 @@ using System;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 {
-    internal class DoorsHydraulicsBattery : GameAttributeTierUpgrade
+    internal class DoorsHydraulicsBattery : GameAttributeTierUpgrade, IServerSync
     {
         public const string UPGRADE_NAME = "Shutter Batteries";
         public const string PRICES_DEFAULT = "200,300,400";
@@ -33,24 +33,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             changingAttribute = GameAttribute.SHIP_DOOR_BATTERY;
             initialValue = UpgradeBus.instance.cfg.DOOR_HYDRAULICS_BATTERY_INITIAL.Value;
             incrementalValue = UpgradeBus.instance.cfg.DOOR_HYDRAULICS_BATTERY_INCREMENTAL.Value;
-        }
-        public override void Load()
-        {
-            LoadUpgradeAttribute(ref UpgradeBus.instance.doorsHydraulicsBattery, UpgradeBus.instance.doorsHydraulicsBatteryLevel);
-            base.Load();
-        }
-
-
-        public override void Increment()
-        {
-            base.Increment();
-            UpgradeBus.instance.doorsHydraulicsBatteryLevel++;
-        }
-
-        public override void Unwind()
-        {
-            UnloadUpgradeAttribute(ref UpgradeBus.instance.doorsHydraulicsBattery, ref UpgradeBus.instance.doorsHydraulicsBatteryLevel);
-            base.Unwind();
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {

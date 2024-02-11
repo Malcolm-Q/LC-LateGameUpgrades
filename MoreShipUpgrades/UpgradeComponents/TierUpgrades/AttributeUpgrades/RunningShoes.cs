@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 {
-    internal class RunningShoes : GameAttributeTierUpgrade, IUpgradeWorldBuilding
+    internal class RunningShoes : GameAttributeTierUpgrade, IUpgradeWorldBuilding, IPlayerSync
     {
         public const string UPGRADE_NAME = "Running Shoes";
         public static string PRICES_DEFAULT = "500,750,1000";
@@ -23,27 +23,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             initialValue = UpgradeBus.instance.cfg.MOVEMENT_SPEED_UNLOCK.Value;
             incrementalValue = UpgradeBus.instance.cfg.MOVEMENT_INCREMENT.Value;
         }
-
-        public override void Increment()
-        {
-            base.Increment();
-            UpgradeBus.instance.runningLevel++;
-        }
-
-        public override void Unwind()
-        {
-            UnloadUpgradeAttribute(ref UpgradeBus.instance.runningShoes, ref UpgradeBus.instance.runningLevel);
-            base.Unwind();
-        }
-
-        public override void Load()
-        {
-            LoadUpgradeAttribute(ref UpgradeBus.instance.runningShoes, UpgradeBus.instance.runningLevel);
-            base.Load();
-        }
         public static float ApplyPossibleReducedNoiseRange(float defaultValue)
         {
-            if (!(UpgradeBus.instance.runningShoes && UpgradeBus.instance.runningLevel == UpgradeBus.instance.cfg.RUNNING_SHOES_UPGRADE_PRICES.Value.Split(',').Length)) return defaultValue;
+            if (!(GetActiveUpgrade(UPGRADE_NAME) && GetUpgradeLevel(UPGRADE_NAME) == UpgradeBus.instance.cfg.RUNNING_SHOES_UPGRADE_PRICES.Value.Split(',').Length)) return defaultValue;
             return Mathf.Clamp(defaultValue - UpgradeBus.instance.cfg.NOISE_REDUCTION.Value, 0f, defaultValue);
         }
 

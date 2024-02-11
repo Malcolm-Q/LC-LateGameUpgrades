@@ -29,16 +29,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         public override void Load()
         {
             base.Load();
-
-            UpgradeBus.instance.walkies = true;
             instance = this;
-        }
-
-        public override void Unwind()
-        {
-            base.Unwind();
-
-            UpgradeBus.instance.walkies = false;
         }
 
         public void Update()
