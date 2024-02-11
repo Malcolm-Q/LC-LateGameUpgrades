@@ -35,6 +35,8 @@
 - Implemented handler for ``ScanNodeProperties`` when creating or changing its attributes for easier maintenance.
 - Abstracted ``WheelbarrowScript``'s ``SetupScanNodeProperties()`` to not force the base class to know which derived class it is.
 - Created handler for ``TerminalNodeList`` manipulation and for "help"'s ``TerminalNode`` manipulation to add information related to LGU's commands to not clutter ``TerminalPatcher``
+- Changed from each bool and int variable stored in ``UpgradeBus`` representing active and level respectively into dictionaries which allows more streamlining in upgrade implementation as they no longer need to know what variable they are referring to for manipulation.
+    - Any previous saves will be attempted to gather the data from them to store into the new dictionaries to not lose upgrades.
 
 ## V 3.1.0 - 2024-1-19
 Additions
