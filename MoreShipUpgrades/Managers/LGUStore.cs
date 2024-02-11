@@ -375,7 +375,7 @@ namespace MoreShipUpgrades.Managers
 
             CheckForOldData(saveInfo);
 
-            UpgradeBus.instance.contractLevel = saveInfo.contractLevel;
+			UpgradeBus.instance.contractLevel = saveInfo.contractLevel;
             UpgradeBus.instance.contractType = saveInfo.contractType;
             UpgradeBus.instance.wearingHelmet = saveInfo.wearingHelmet;
 
@@ -609,6 +609,7 @@ namespace MoreShipUpgrades.Managers
         public bool bargainConnections;
         public bool lethalDeals;
         public bool quantumDisruptor;
+        public bool teleporterUpgrade;
 
         public int beeLevel;
         public int huntLevel;
@@ -625,6 +626,7 @@ namespace MoreShipUpgrades.Managers
         public int marketInfluenceLevel;
         public int bargainConnectionsLevel;
         public int quantumDisruptorLevel;
+        public int teleporterUpgradeLevel;
 
         public bool TPButtonPressed = UpgradeBus.instance.TPButtonPressed;
         public string contractType = UpgradeBus.instance.contractType;

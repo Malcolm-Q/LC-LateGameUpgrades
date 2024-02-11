@@ -675,7 +675,8 @@ namespace MoreShipUpgrades
             SetupBargainConnections();
             SetupLethalDeals();
             SetupQuantumDisruptor();
-        }
+			SetupUpgradeTeleporters();
+		}
 
         private void SetupSickBeats()
         {
@@ -787,6 +788,9 @@ namespace MoreShipUpgrades
         {
             SetupGenericPerk<QuantumDisruptor>(QuantumDisruptor.UPGRADE_NAME);
         }
+        private void SetupUpgradeTeleporters() {
+			SetupGenericPerk<UpgradeTeleportersScript>(UpgradeTeleportersScript.UPGRADE_NAME);
+		}
         /// <summary>
         /// Generic function where it adds a script (specificed through the type) into an GameObject asset 
         /// which is present in a provided asset bundle in a given path and registers it as a network prefab.

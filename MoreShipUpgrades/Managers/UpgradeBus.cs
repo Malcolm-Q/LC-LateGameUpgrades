@@ -34,7 +34,7 @@ namespace MoreShipUpgrades.Managers
         public float nightVisRange;
         public float nightVisIntensity;
 
-        public float flashCooldown = 0f;
+		public float flashCooldown = 0f;
         public float alteredWeight = 1f;
 
         public string contractLevel = "None";
@@ -88,6 +88,8 @@ namespace MoreShipUpgrades.Managers
         public Helmet helmetScript;
         public bool wearingHelmet = false;
         public int helmetHits = 0;
+
+        public int mostRecentShipTPButtonPressed = 0;
 
         public Dictionary<string, AudioClip> SFX = new Dictionary<string, AudioClip>();
         public bool helmetDesync;
@@ -150,7 +152,7 @@ namespace MoreShipUpgrades.Managers
 
             flashCooldown = 0f;
             alteredWeight = 1f;
-            if (wipeObjRefs) {
+			if (wipeObjRefs) {
                 UpgradeObjects = new Dictionary<string, GameObject>(); 
                 MalwareBroadcaster.instance = null;
                 Discombobulator.instance = null;
@@ -181,6 +183,7 @@ namespace MoreShipUpgrades.Managers
         [ClientRpc]
         private void ResetShipAttributesClientRpc()
         {
+            mostRecentShipTPButtonPressed = 0;
             logger.LogDebug($"Resetting the ship's attributes");
             UpgradeObjects.Values.Where(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>() is IServerSync).Do(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute());
         }
@@ -397,6 +400,7 @@ namespace MoreShipUpgrades.Managers
             SetupBargainConnectionsTerminalNode();
             SetupQuantumDisruptorTerminalNode();
             SetupLethalDealsTerminalNode();
+            SetupUpgradeTeleportersTerminalNode();
             terminalNodes.Sort();
         }
         void SetupMarketInfluenceTerminalNode()
@@ -580,16 +584,24 @@ namespace MoreShipUpgrades.Managers
                                                 cfg.PLAYER_HEALTH_PRICE.Value,
                                                 ParseUpgradePrices(cfg.PLAYER_HEALTH_UPGRADE_PRICES.Value));
         }
-        /// <summary>
-        /// Generic function where it adds a terminal node for an upgrade that can be purchased multiple times
-        /// </summary>
-        /// <param name="upgradeName"> Name of the upgrade </param>
-        /// <param name="shareStatus"> Wether the upgrade is shared through all players or only for the player who purchased it</param>
-        /// <param name="enabled"> Wether the upgrade is enabled for gameplay or not</param>
-        /// <param name="initialPrice"> The initial price when purchasing the upgrade for the first time</param>
-        /// <param name="prices"> Prices for any subsequent purchases of the upgrade</param>
-        /// <param name="infoFormat"> The format of the information displayed when checking the upgrade's info</param>
-        private CustomTerminalNode SetupMultiplePurchasableTerminalNode(string upgradeName,
+		private void SetupUpgradeTeleportersTerminalNode() {
+            SetupMultiplePurchasableTerminalNode(upgradeName: UpgradeTeleportersScript.UPGRADE_NAME,
+                                                shareStatus: true,
+                                                enabled: cfg.TELEPORTER_UPGRADES_ENABLED.Value,
+                                                initialPrice: cfg.REGULAR_TP_UPGRADE_PRICE.Value,
+                                                prices: ParseUpgradePrices(cfg.INVERSE_TP_UPGRADE_PRICE.Value));
+		}
+
+		/// <summary>
+		/// Generic function where it adds a terminal node for an upgrade that can be purchased multiple times
+		/// </summary>
+		/// <param name="upgradeName"> Name of the upgrade </param>
+		/// <param name="shareStatus"> Wether the upgrade is shared through all players or only for the player who purchased it</param>
+		/// <param name="enabled"> Wether the upgrade is enabled for gameplay or not</param>
+		/// <param name="initialPrice"> The initial price when purchasing the upgrade for the first time</param>
+		/// <param name="prices"> Prices for any subsequent purchases of the upgrade</param>
+		/// <param name="infoFormat"> The format of the information displayed when checking the upgrade's info</param>
+		private CustomTerminalNode SetupMultiplePurchasableTerminalNode(string upgradeName,
                                                         bool shareStatus,
                                                         bool enabled,
                                                         int initialPrice,

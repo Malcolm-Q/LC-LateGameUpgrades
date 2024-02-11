@@ -44,6 +44,7 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<bool> SCRAP_WHEELBARROW_ENABLED { get; set; }
         public ConfigEntry<bool> DOOR_HYDRAULICS_BATTERY_ENABLED {  get; set; }
         public ConfigEntry<bool> SCRAP_INSURANCE_ENABLED {  get; set; }
+        public ConfigEntry<bool> TELEPORTER_UPGRADES_ENABLED { get; set; }
 
         // individual or shared
         public ConfigEntry<bool> ADVANCED_TELE_INDIVIDUAL { get; set; }
@@ -97,6 +98,7 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<int> WHEELBARROW_PRICE { get; set; }
         public ConfigEntry<int> DOOR_HYDRAULICS_BATTERY_PRICE { get; set; }
         public ConfigEntry<int> SCRAP_INSURANCE_PRICE { get; set; }
+        public ConfigEntry<int> REGULAR_TP_UPGRADE_PRICE { get; set; }
 
         // attributes
         public ConfigEntry<float> BIGGER_LUNGS_STAMINA_REGEN_INCREASE { get; set; }
@@ -268,8 +270,7 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<int> BARGAIN_CONNECTIONS_INITIAL_ITEM_AMOUNT { get; set; }
         public ConfigEntry<int> BARGAIN_CONNECTIONS_INCREMENTAL_ITEM_AMOUNT { get; set; }
         public ConfigEntry<string> BARGAIN_CONNECTIONS_PRICES { get; set; }
-
-
+        public ConfigEntry<string> INVERSE_TP_UPGRADE_PRICE { get; set; }
         public PluginConfig(ConfigFile cfg)
         {
             configFile = cfg;
@@ -589,6 +590,11 @@ namespace MoreShipUpgrades.Misc
             SCRAP_WHEELBARROW_MOVEMENT_SLOPPY = ConfigEntry(topSection, "Sloppiness of the Shopping Cart Item", 2f, "Value multiplied on the player's movement to give the feeling of drifting while carrying the Scrap Wheelbarrow Item");
             SCRAP_WHEELBARROW_PLAY_NOISE = ConfigEntry(topSection, "Plays noises for players with Shopping Cart Item", true, "If false, it will just not play the sounds, it will still attract monsters to noise");
             WHEELBARROW_DROP_ALL_CONTROL_BIND = ConfigEntry(topSection, "Control bind for drop all items", "Middle", "To know what to insert here, check documentation for UnityEngine.InputSystem.Key and UnityEngine.InputSystem.LowLevel.MouseButton");
-        }
+
+			topSection = UpgradeTeleportersScript.UPGRADE_NAME;
+			TELEPORTER_UPGRADES_ENABLED = ConfigEntry(topSection, UpgradeTeleportersScript.ENABLED_SECTION, true, UpgradeTeleportersScript.ENABLED_DESCRIPTION);
+			REGULAR_TP_UPGRADE_PRICE = ConfigEntry(topSection, UpgradeTeleportersScript.REGULAR_UPGRADE_DESCRIPTION, UpgradeTeleportersScript.REGULAR_TP_UPGRADE_PRICE);
+			INVERSE_TP_UPGRADE_PRICE = ConfigEntry(topSection, UpgradeTeleportersScript.INVERSE_UPGRADE_DESCRIPTION, UpgradeTeleportersScript.INVERSE_TP_UPGRADE_PRICE);
+		}
     }
 }

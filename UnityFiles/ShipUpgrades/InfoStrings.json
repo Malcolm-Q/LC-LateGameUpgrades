@@ -23,5 +23,6 @@
     "Stimpack" :"LVL {0} - ${1}: Increases max health by {2}.\n",
     "Hunter" :"LVL {0} - ${1}: Collect samples from:\n{2}\n",
     "Contract" : "Type `contract` into the terminal to start a contract on a random moon.\n\nEXTRACTION CONTRACT: An injured NPC scavenger will spawn in the facility. You must find or bring them a medkit then carry them out of the facility and back to the ship.\n\nEXTERMINATOR CONTRACT: A hoarder bug nest and many angry hoarder bugs will spawn in the facility. You must find and destroy the next bringing an egg back to the ship as proof.\n\nDATA CONTRACT: You must find a PC in the facility, enter its IP address into the ship terminal to get login credentials, then find the `survey.db` file to get a valuable floppy disc. EX: `cd Documents` `ls` `mv survey.db`\n\nEXORCISM CONTRACT: You must find a ritual site in the facility, determine the ghost type, enter `demon ghostType` into the terminal, then conduct the correct ritual.\n\nBOMB DEFUSAL CONTRACT: You must find a bomb in the facility, enter `lookup SerialCode` into the terminal, then cut the correct wires in time.\n\n",
-    "Helmet" : "Blocks all incoming damage, has {0} durability.\n\n"
+    "Helmet" : "Blocks all incoming damage, has {0} durability.\n\n",
+    "Upgrade Teleporters" : "Allows you to take items with you through the ship teleporters. LVL 1 allows regular teleporter, and LVL 2 allows both regular and inverse teleporters."
 }
