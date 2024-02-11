@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace MoreShipUpgrades.Misc
+namespace MoreShipUpgrades.Misc.TerminalNodes
 {
+    /// <summary>
+    /// Terminal node used to display the lgu upgrade store
+    /// </summary>
     public class CustomTerminalNode : IComparable
     {
         public string Name;
@@ -21,7 +24,7 @@ namespace MoreShipUpgrades.Misc
 
         public CustomTerminalNode(string name, int unlockPrice, string description, GameObject prefab, int[] prices = null, int maxUpgrade = 0)
         {
-            if(prices == null) {  prices = new int[0]; }
+            if (prices == null) { prices = new int[0]; }
             Name = name;
             Prices = prices;
             Description = description;
