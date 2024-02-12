@@ -4,8 +4,6 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System;
-using System.Numerics;
-using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 {

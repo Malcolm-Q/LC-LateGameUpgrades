@@ -1,5 +1,4 @@
-﻿using BepInEx.Logging;
-using MoreShipUpgrades.Managers;
+﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 

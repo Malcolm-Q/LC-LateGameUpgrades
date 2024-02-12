@@ -1,7 +1,5 @@
-﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
+﻿using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
-using Unity.Netcode;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {

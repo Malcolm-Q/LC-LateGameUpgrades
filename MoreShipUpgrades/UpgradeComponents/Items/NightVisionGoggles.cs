@@ -3,8 +3,6 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
-using UnityEngine.Experimental.GlobalIllumination;
-using UnityEngine.InputSystem;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items
 {

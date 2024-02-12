@@ -17,6 +17,7 @@ namespace MoreShipUpgrades.Misc
         readonly ConfigFile configFile;
 
         // enabled disabled
+
         public ConfigEntry<bool> MARKET_INFLUENCE_ENABLED { get; set; }
         public ConfigEntry<bool> BARGAIN_CONNECTIONS_ENABLED { get; set; }
         public ConfigEntry<bool> LETHAL_DEALS_ENABLED { get; set; }

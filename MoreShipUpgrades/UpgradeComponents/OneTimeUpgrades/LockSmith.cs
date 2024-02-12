@@ -1,5 +1,4 @@
-﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc.Upgrades;
+﻿using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Collections;
 using System.Collections.Generic;

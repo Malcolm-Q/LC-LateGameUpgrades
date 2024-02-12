@@ -1,8 +1,4 @@
-﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc.Upgrades;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MoreShipUpgrades.Misc.Upgrades;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {

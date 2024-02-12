@@ -1,7 +1,5 @@
-﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
+﻿using MoreShipUpgrades.Misc;
 using UnityEngine;
-using System;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items
 {

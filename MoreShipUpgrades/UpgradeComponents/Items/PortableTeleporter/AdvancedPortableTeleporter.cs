@@ -1,12 +1,6 @@
-﻿using GameNetcodeStuff;
-using MoreShipUpgrades.Managers;
+﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
-using System.Collections;
-using System.Linq;
-using Unity.Netcode;
-using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
 {
