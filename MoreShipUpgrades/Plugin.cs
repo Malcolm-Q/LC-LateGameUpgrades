@@ -25,9 +25,7 @@ using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
-using HarmonyLib.Tools;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
-using UnityEngine.Profiling;
 
 namespace MoreShipUpgrades
 {

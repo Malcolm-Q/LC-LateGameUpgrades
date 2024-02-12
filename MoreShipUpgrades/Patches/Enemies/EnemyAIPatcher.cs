@@ -30,7 +30,6 @@ namespace MoreShipUpgrades.Patches.Enemies
                     logger.LogDebug($"{monsterName}");
                 return;
             }
-
             logger.LogDebug($"Spawning sample for {name}");
             GameObject go = Object.Instantiate(UpgradeBus.instance.samplePrefabs[name.ToLower()], __instance.transform.position + Vector3.up, Quaternion.identity);
             go.GetComponent<NetworkObject>().Spawn();

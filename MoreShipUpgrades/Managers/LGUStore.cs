@@ -8,7 +8,6 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Linq;
 using GameNetcodeStuff;
-using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.Commands;
