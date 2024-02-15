@@ -25,7 +25,7 @@ namespace MoreShipUpgrades.Managers
         private ulong playerID = 0;
         private static LGULogger logger = new LGULogger(nameof(LGUStore));
         private string saveDataKey = "LGU_SAVE_DATA";
-        private bool retrievedCfg;
+        bool retrievedCfg;
         private bool receivedSave;
 
         private void Start()
@@ -126,7 +126,9 @@ namespace MoreShipUpgrades.Managers
         public void SendConfigServerRpc()
         {
             logger.LogInfo("Client has requested hosts client");
-            string json = JsonConvert.SerializeObject(UpgradeBus.instance.cfg);
+            ConfigSynchronization cfg = new ConfigSynchronization();
+            cfg.SetupSynchronization();
+            string json = JsonConvert.SerializeObject(cfg);
             SendConfigClientRpc(json);
         }
 
@@ -138,12 +140,12 @@ namespace MoreShipUpgrades.Managers
                 logger.LogInfo("Config has already been received from host on this client, disregarding.");
                 return;
             }
-            PluginConfig cfg = JsonConvert.DeserializeObject<PluginConfig>(json);
-            if( cfg != null && !IsHost && !IsServer)
+            if (!IsHost && !IsServer)
             {
+                ConfigSynchronization cfg = JsonConvert.DeserializeObject<ConfigSynchronization>(json);
                 logger.LogInfo("Config received, deserializing and constructing...");
                 Color col = UpgradeBus.instance.cfg.NIGHT_VIS_COLOR.Value;
-                UpgradeBus.instance.cfg = cfg;
+                cfg.SynchronizeConfiguration();
                 UpgradeBus.instance.cfg.NIGHT_VIS_COLOR.Value = col; //
                 UpgradeBus.instance.Reconstruct();
                 retrievedCfg = true;
