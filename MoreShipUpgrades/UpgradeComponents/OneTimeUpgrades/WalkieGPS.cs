@@ -31,7 +31,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
         public void Update()
         {
-            if (!UpgradeBus.instance.walkieUIActive) return;
+            if (!UpgradeBus.Instance.walkieUIActive) return;
 
             Vector3 pos = GameNetworkManager.Instance.localPlayerController.transform.position;
             x.text = $"X: {pos.x.ToString("F1")}";
@@ -63,13 +63,13 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             if (canvas.activeInHierarchy) return;
 
-            UpgradeBus.instance.walkieUIActive = true;
+            UpgradeBus.Instance.walkieUIActive = true;
             canvas.SetActive(true);
         }
 
         public void WalkieDeactivate()
         {
-            UpgradeBus.instance.walkieUIActive = false;
+            UpgradeBus.Instance.walkieUIActive = false;
             canvas.SetActive(false);
         }
 

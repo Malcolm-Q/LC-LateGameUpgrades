@@ -5,7 +5,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
     /// <summary>
     /// Handler that changes the contents of the "help" terminal node
     /// </summary>
-    internal class HelpTerminalNode
+    internal static class HelpTerminalNode
     {
         private static int startingIndex = -1;
         private static int endingIndex = -1;
@@ -23,7 +23,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         /// </summary>
         internal static void SetupLGUHelpCommand()
         {
-            TerminalNode helpNode = LGUTerminalNode.GetHelpTerminalNode();
+            TerminalNode helpNode = LguTerminalNode.GetHelpTerminalNode();
             if (startingIndex != -1 && endingIndex != -1) helpNode.displayText = helpNode.displayText.Remove(startingIndex, endingIndex - startingIndex);
             startingIndex = helpNode.displayText.Length;
             helpNode.displayText += ">LATEGAME\nDisplays information related with Lategame-Upgrades mod\n\n";
@@ -41,7 +41,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         /// <param name="helpNode">Terminal node we wish to add the information on</param>
         static void HandleHelpScrapInsurance(ref TerminalNode helpNode)
         {
-            LGUTerminalNode.AddTextToNode(ref helpNode, string.Format(SCRAP_INSURANCE_COMMAND, UpgradeBus.instance.cfg.SCRAP_INSURANCE_PRICE.Value), UpgradeBus.instance.cfg.SCRAP_INSURANCE_ENABLED.Value);
+            LguTerminalNode.AddTextToNode(ref helpNode, string.Format(SCRAP_INSURANCE_COMMAND, UpgradeBus.Instance.PluginConfiguration.SCRAP_INSURANCE_PRICE.Value), UpgradeBus.Instance.PluginConfiguration.SCRAP_INSURANCE_ENABLED.Value);
         }
         /// <summary>
         /// Adds information related to the Discombobulator's commands to the given terminal node
@@ -49,9 +49,9 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         /// <param name="helpNode">Terminal node we wish to add the information on</param>
         static void HandleHelpDiscombobulator(ref TerminalNode helpNode)
         {
-            bool enabled = UpgradeBus.instance.cfg.DISCOMBOBULATOR_ENABLED.Value;
-            LGUTerminalNode.AddTextToNode(ref helpNode, ATK_HELP_COMMAND, enabled);
-            LGUTerminalNode.AddTextToNode(ref helpNode, CD_HELP_COMMAND, enabled);
+            bool enabled = UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_ENABLED.Value;
+            LguTerminalNode.AddTextToNode(ref helpNode, ATK_HELP_COMMAND, enabled);
+            LguTerminalNode.AddTextToNode(ref helpNode, CD_HELP_COMMAND, enabled);
         }
         /// <summary>
         /// Adds information related to the contract's commands to the given terminal node
@@ -59,9 +59,9 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         /// <param name="helpNode">Terminal node we wish to add the information on</param>
         static void HandleHelpContract(ref TerminalNode helpNode)
         {
-            bool enabled = UpgradeBus.instance.cfg.CONTRACTS_ENABLED.Value;
-            LGUTerminalNode.AddTextToNode(ref helpNode, string.Format(CONTRACT_HELP_COMMAND, UpgradeBus.instance.cfg.CONTRACT_PRICE.Value, UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE.Value), enabled);
-            LGUTerminalNode.AddTextToNode(ref helpNode, INFO_CONTRACT_HELP_COMMAND, enabled);
+            bool enabled = UpgradeBus.Instance.PluginConfiguration.CONTRACTS_ENABLED.Value;
+            LguTerminalNode.AddTextToNode(ref helpNode, string.Format(CONTRACT_HELP_COMMAND, UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value, UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value), enabled);
+            LguTerminalNode.AddTextToNode(ref helpNode, INFO_CONTRACT_HELP_COMMAND, enabled);
         }
         /// <summary>
         /// Adds information related to the intern's command to the given terminal node
@@ -69,7 +69,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         /// <param name="helpNode">Terminal node we wish to add the information on</param>
         static void HandleHelpInterns(ref TerminalNode helpNode)
         {
-            LGUTerminalNode.AddTextToNode(ref helpNode, string.Format(INTERNS_HELP_COMMAND, UpgradeBus.instance.cfg.INTERN_PRICE.Value), UpgradeBus.instance.cfg.INTERN_ENABLED.Value);
+            LguTerminalNode.AddTextToNode(ref helpNode, string.Format(INTERNS_HELP_COMMAND, UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value), UpgradeBus.Instance.PluginConfiguration.INTERN_ENABLED.Value);
         }
         /// <summary>
         /// Adds information related to the Extend Deadline's command to the given terminal node
@@ -77,7 +77,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         /// <param name="helpNode">Terminal node we wish to add the information on</param>
         static void HandleHelpExtendDeadline(ref TerminalNode helpNode)
         {
-            LGUTerminalNode.AddTextToNode(ref helpNode, string.Format(EXTEND_HELP_COMMAND, UpgradeBus.instance.cfg.EXTEND_DEADLINE_PRICE.Value), UpgradeBus.instance.cfg.EXTEND_DEADLINE_ENABLED.Value);
+            LguTerminalNode.AddTextToNode(ref helpNode, string.Format(EXTEND_HELP_COMMAND, UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_PRICE.Value), UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_ENABLED.Value);
         }
     }
 }

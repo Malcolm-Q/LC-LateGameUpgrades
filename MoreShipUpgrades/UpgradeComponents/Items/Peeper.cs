@@ -19,7 +19,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         {
             base.Start();
             anim = GetComponent<Animator>();
-            UpgradeBus.instance.coilHeadItems.Add(this);
+            UpgradeBus.Instance.coilHeadItems.Add(this);
         }
         public override void Update()
         {
@@ -43,11 +43,11 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
 
         public static bool HasLineOfSightToPeepers(Vector3 springPosition)
         {
-            foreach (Peeper peeper in UpgradeBus.instance.coilHeadItems)
+            foreach (Peeper peeper in UpgradeBus.Instance.coilHeadItems)
             {
                 if (peeper == null)
                 {
-                    UpgradeBus.instance.coilHeadItems.Remove(peeper);
+                    UpgradeBus.Instance.coilHeadItems.Remove(peeper);
                     continue;
                 }
                 if (peeper.HasLineOfSightToPosition(springPosition)) return true;

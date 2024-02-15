@@ -40,7 +40,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// <summary>
         /// Logger associated with this class for logging purposes (incase an attribute change is not occuring)
         /// </summary>
-        protected LGULogger logger;
+        protected LguLogger logger;
         #endregion
         #region Attribute Getters
         /// <summary>
@@ -79,12 +79,12 @@ namespace MoreShipUpgrades.Misc.Upgrades
         }
         PlayerControllerB GetLocalPlayer()
         {
-            if (localPlayer == null) localPlayer = UpgradeBus.instance.GetLocalPlayer();
+            if (localPlayer == null) localPlayer = UpgradeBus.Instance.GetLocalPlayer();
             return localPlayer;
         }
         HangarShipDoor GetShipDoors()
         {
-            if (doorControls == null) doorControls = UpgradeBus.instance.GetShipDoors();
+            if (doorControls == null) doorControls = UpgradeBus.Instance.GetShipDoors();
             return doorControls;
         }
         #endregion

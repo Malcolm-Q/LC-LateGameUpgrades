@@ -271,9 +271,9 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<string> BARGAIN_CONNECTIONS_PRICES { get; set; }
 
 
-        public PluginConfig(ConfigFile cfg)
+        public PluginConfig(ConfigFile PluginConfiguration)
         {
-            configFile = cfg;
+            configFile = PluginConfiguration;
         }
 
         private ConfigEntry<T> ConfigEntry<T>(string section, string key, T defaultVal, string description = "")

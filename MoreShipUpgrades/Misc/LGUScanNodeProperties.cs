@@ -5,7 +5,7 @@ namespace MoreShipUpgrades.Misc
     /// <summary>
     /// Handler that's responsible to manipulate the game's scan node properties (which are displayed when right-clicking which displays several nodes with information such as scrap value or description of the items)
     /// </summary>
-    internal class LGUScanNodeProperties
+    internal class LguScanNodeProperties
     {
         /// <summary>
         /// Enumerator used to describe each node type used by the game
@@ -86,7 +86,7 @@ namespace MoreShipUpgrades.Misc
         {
             GameObject scanNodeObject = CreateCanvasScanNode(ref objectToAddScanNode);
             ScanNodeProperties scanNodeProperties = scanNodeObject.AddComponent<ScanNodeProperties>();
-            ChangeScanNode(ref scanNodeProperties, nodeType, header, subText, creatureScanID, minRange, maxRange);
+            ChangeScanNode(scanNodeProperties: ref scanNodeProperties, nodeType: nodeType, header: header, subText: subText, creatureScanID: creatureScanID, minRange: minRange, maxRange: maxRange);
         }
         /// <summary>
         /// Adds a general scan node to the provided gameObject and set its attributes to the provided ones

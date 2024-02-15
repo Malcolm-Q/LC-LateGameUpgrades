@@ -14,7 +14,7 @@ namespace MoreShipUpgrades.Patches.Items
     [HarmonyPatch(typeof(Shovel))]
     internal class ShovelPatcher
     {
-        private static LGULogger logger = new LGULogger(nameof(ShovelPatcher));
+        private static LguLogger logger = new LguLogger(nameof(ShovelPatcher));
         [HarmonyTranspiler]
         [HarmonyPatch(nameof(Shovel.HitShovel))]
         public static IEnumerable<CodeInstruction> HitShovelTranspiler(IEnumerable<CodeInstruction> instructions)

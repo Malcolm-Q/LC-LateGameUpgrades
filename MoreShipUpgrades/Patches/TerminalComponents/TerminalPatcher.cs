@@ -13,7 +13,7 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
     [HarmonyPatch(typeof(Terminal))]
     internal class TerminalPatcher
     {
-        private static LGULogger logger = new LGULogger(nameof(TerminalPatcher));
+        private static LguLogger logger = new LguLogger(nameof(TerminalPatcher));
 
         [HarmonyPostfix]
         [HarmonyPatch(nameof(Terminal.Start))]

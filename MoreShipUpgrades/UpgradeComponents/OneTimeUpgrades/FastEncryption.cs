@@ -7,13 +7,13 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
     {
         public static string UPGRADE_NAME = "Fast Encryption";
         public static FastEncryption instance;
-        private static LGULogger logger;
+        private static LguLogger logger;
 
         const float TRANSMIT_MULTIPLIER = 0.2f;
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            logger = new LGULogger(upgradeName);
+            logger = new LguLogger(upgradeName);
             base.Start();
         }
         public override void Load()

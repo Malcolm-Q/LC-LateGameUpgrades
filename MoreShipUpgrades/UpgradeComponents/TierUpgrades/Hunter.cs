@@ -13,7 +13,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         internal const string WORLD_BUILDING_TEXT = "\n\nOn-the-job training program that teaches your crew how to properly collect lab-ready samples of blood," +
             " skin, and organ tissue from entities found within the facility. These samples are valuable to The Company. Used to be a part of the standard onboarding procedure," +
             " but was made opt-in only in 2005 to cut onboarding costs.\n\n";
-        private static LGULogger logger = new LGULogger(UPGRADE_NAME);
+        private static LguLogger logger = new LguLogger(UPGRADE_NAME);
         static Dictionary<string, string> monsterNames = new Dictionary<string, string>()
             {
             { "hoarding", "Hoarding Bug" },
@@ -42,9 +42,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         static public Dictionary<int, string[]> tiers;
         public static void SetupTierList()
         {
-            logger = new LGULogger(UPGRADE_NAME);
+            logger = new LguLogger(UPGRADE_NAME);
             tiers = new Dictionary<int, string[]>();
-            string[] tiersList = UpgradeBus.instance.cfg.HUNTER_SAMPLE_TIERS.Value.ToLower().Split('-');
+            string[] tiersList = UpgradeBus.Instance.PluginConfiguration.HUNTER_SAMPLE_TIERS.Value.ToLower().Split('-');
             tiers[0] = tiersList[0].Split(",").Select(x => x.Trim()).ToArray();
             for (int i = 1; i < tiersList.Length; i++)
             {

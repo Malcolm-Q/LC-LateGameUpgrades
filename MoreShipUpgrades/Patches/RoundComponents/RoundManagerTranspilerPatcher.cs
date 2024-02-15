@@ -10,9 +10,8 @@ using MoreShipUpgrades.Misc;
 namespace MoreShipUpgrades.Patches.RoundComponents
 {
     [HarmonyPatch(typeof(RoundManager))]
-    internal class RoundManagerTranspilerPatcher
+    internal static class RoundManagerTranspilerPatcher
     {
-        private static LGULogger logger = new LGULogger(nameof(RoundManagerPatcher));
         [HarmonyPatch(nameof(RoundManager.DespawnPropsAtEndOfRound))]
         [HarmonyTranspiler]
         public static IEnumerable<CodeInstruction> DespawnPropsAtEndOfRoundTranspiler(IEnumerable<CodeInstruction> instructions)

@@ -17,24 +17,24 @@ using MoreShipUpgrades.Misc.Upgrades;
 namespace MoreShipUpgrades.Patches.PlayerController
 {
     [HarmonyPatch(typeof(PlayerControllerB))]
-    internal class PlayerControllerBPatcher
+    internal static class PlayerControllerBPatcher
     {
-        internal static LGULogger logger = new LGULogger(nameof(PlayerControllerBPatcher));
+        internal static readonly LguLogger logger = new LguLogger(nameof(PlayerControllerBPatcher));
 
         [HarmonyPrefix]
         [HarmonyPatch(nameof(PlayerControllerB.KillPlayer))]
         private static void DisableUpgradesOnDeath(PlayerControllerB __instance)
         {
-            if (!UpgradeBus.instance.cfg.LOSE_NIGHT_VIS_ON_DEATH.Value) return;
+            if (!UpgradeBus.Instance.PluginConfiguration.LOSE_NIGHT_VIS_ON_DEATH.Value) return;
             if (!__instance.IsOwner) return;
             if (__instance.isPlayerDead) return;
             if (!__instance.AllowPlayerDeath()) return;
 
             if (!BaseUpgrade.GetActiveUpgrade(NightVision.UPGRADE_NAME)) return;
 
-            UpgradeBus.instance.UpgradeObjects[NightVision.UPGRADE_NAME].GetComponent<NightVision>().DisableOnClient();
-            if (!UpgradeBus.instance.cfg.NIGHT_VISION_DROP_ON_DEATH.Value) return;
-            NightVision.instance.SpawnNightVisionItemOnDeathServerRpc(__instance.transform.position);
+            UpgradeBus.Instance.UpgradeObjects[NightVision.UPGRADE_NAME].GetComponent<NightVision>().DisableOnClient();
+            if (!UpgradeBus.Instance.PluginConfiguration.NIGHT_VISION_DROP_ON_DEATH.Value) return;
+            NightVision.Instance.SpawnNightVisionItemOnDeathServerRpc(__instance.transform.position);
         }
 
         [HarmonyPatch(nameof(PlayerControllerB.DamagePlayer))]
@@ -57,7 +57,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
              * We want change 100 to the maximum possible value the player's health can be due to Stimpack upgrade
              */
             bool foundHealthMaximum = false;
-            for (int i = 0; i < codes.Count; i++)
+            for (int i = 0; i < codes.Count && !foundHealthMaximum; i++)
             {
                 if (codes[i].opcode == OpCodes.Ldarg_1)
                 {
@@ -70,8 +70,6 @@ namespace MoreShipUpgrades.Patches.PlayerController
                 //Mathf.Clamp(health - damageNumber, 0, playerHealthScript.CheckForAdditionalHealth(100))
                 codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, maximumHealthMethod));
                 foundHealthMaximum = true;
-
-                if (foundHealthMaximum) break;
             }
             if (!foundHealthMaximum) Plugin.mls.LogError("Could not find the maximum of Mathf.Clamp that changes the health value");
             return codes.AsEnumerable();
@@ -82,24 +80,24 @@ namespace MoreShipUpgrades.Patches.PlayerController
         static bool WeDoALittleReturningFalse(PlayerControllerB __instance)
         {
             if (!__instance.IsOwner || __instance.isPlayerDead || !__instance.AllowPlayerDeath()) return true;
-            if (UpgradeBus.instance.wearingHelmet)
+            if (UpgradeBus.Instance.wearingHelmet)
             {
                 logger.LogDebug($"Player {__instance.playerUsername} is wearing a helmet, executing helmet logic...");
-                UpgradeBus.instance.helmetHits--;
-                if (UpgradeBus.instance.helmetHits <= 0)
+                UpgradeBus.Instance.helmetHits--;
+                if (UpgradeBus.Instance.helmetHits <= 0)
                 {
                     logger.LogDebug("Helmet has ran out of durability, breaking the helmet...");
-                    UpgradeBus.instance.wearingHelmet = false;
-                    if (__instance.IsHost || __instance.IsServer) LGUStore.instance.DestroyHelmetClientRpc(__instance.playerClientId);
-                    else LGUStore.instance.ReqDestroyHelmetServerRpc(__instance.playerClientId);
-                    if (__instance.IsHost || __instance.IsServer) LGUStore.instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(__instance), "breakWood");
-                    else LGUStore.instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(__instance), "breakWood");
+                    UpgradeBus.Instance.wearingHelmet = false;
+                    if (__instance.IsHost || __instance.IsServer) LguStore.Instance.DestroyHelmetClientRpc(__instance.playerClientId);
+                    else LguStore.Instance.ReqDestroyHelmetServerRpc(__instance.playerClientId);
+                    if (__instance.IsHost || __instance.IsServer) LguStore.Instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(__instance), "breakWood");
+                    else LguStore.Instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(__instance), "breakWood");
                 }
                 else
                 {
-                    logger.LogDebug($"Helmet still has some durability ({UpgradeBus.instance.helmetHits}), decreasing it...");
-                    if (__instance.IsHost || __instance.IsServer) LGUStore.instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(__instance), "helmet");
-                    else LGUStore.instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(__instance), "helmet");
+                    logger.LogDebug($"Helmet still has some durability ({UpgradeBus.Instance.helmetHits}), decreasing it...");
+                    if (__instance.IsHost || __instance.IsServer) LguStore.Instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(__instance), "helmet");
+                    else LguStore.Instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(__instance), "helmet");
                 }
                 return false;
             }
@@ -124,38 +122,14 @@ namespace MoreShipUpgrades.Patches.PlayerController
         [HarmonyPatch(nameof(PlayerControllerB.DropAllHeldItems))]
         private static bool DontDropItems(PlayerControllerB __instance)
         {
-            if (!UpgradeBus.instance.TPButtonPressed) return true;
+            if (!UpgradeBus.Instance.TPButtonPressed) return true;
 
-            UpgradeBus.instance.TPButtonPressed = false;
+            UpgradeBus.Instance.TPButtonPressed = false;
             __instance.isSinking = false;
             __instance.isUnderwater = false;
             __instance.sinkingValue = 0;
             __instance.statusEffectAudio.Stop();
             return false;
-        }
-
-        [HarmonyTranspiler]
-        [HarmonyPatch(nameof(PlayerControllerB.BeginGrabObject))]
-        public static IEnumerable<CodeInstruction> BeginGrabObjectTranspiler(IEnumerable<CodeInstruction> instructions)
-        {
-            MethodInfo affectWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreasePossibleWeight));
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            int index = 0;
-            index = Tools.FindSub(index, ref codes, addCode: affectWeight, errorMessage: "Couldn't find item weight");
-
-            return codes;
-        }
-
-        [HarmonyTranspiler]
-        [HarmonyPatch(nameof(PlayerControllerB.GrabObjectClientRpc))]
-        public static IEnumerable<CodeInstruction> GrabObjectClientRpcTranspiler(IEnumerable<CodeInstruction> instructions)
-        {
-            MethodInfo affectWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreasePossibleWeight));
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            int index = 0;
-            index = Tools.FindSub(index, ref codes, addCode: affectWeight, errorMessage: "Couldn't find item weight");
-
-            return codes;
         }
         [HarmonyPostfix]
         [HarmonyPatch(nameof(PlayerControllerB.GrabObjectClientRpc))]
@@ -172,49 +146,24 @@ namespace MoreShipUpgrades.Patches.PlayerController
         }
 
         [HarmonyTranspiler]
+        [HarmonyPatch(nameof(PlayerControllerB.BeginGrabObject))]
+        [HarmonyPatch(nameof(PlayerControllerB.GrabObjectClientRpc))]
         [HarmonyPatch(nameof(PlayerControllerB.DestroyItemInSlot))]
-        public static IEnumerable<CodeInstruction> DestroyItemInSlotTranspiler(IEnumerable<CodeInstruction> instructions)
-        {
-            MethodInfo affectWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreasePossibleWeight));
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            int index = 0;
-            index = Tools.FindSub(index, ref codes, addCode: affectWeight, errorMessage: "Couldn't find item weight");
-
-            return codes;
-        }
-
-        [HarmonyTranspiler]
         [HarmonyPatch(nameof(PlayerControllerB.DespawnHeldObjectOnClient))]
-        public static IEnumerable<CodeInstruction> DespawnHeldObjectOnClientTranspiler(IEnumerable<CodeInstruction> instructions)
-        {
-            MethodInfo affectWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreasePossibleWeight));
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            int index = 0;
-            index = Tools.FindSub(index, ref codes, addCode: affectWeight, errorMessage: "Couldn't find item weight");
-
-            return codes;
-        }
-        [HarmonyTranspiler]
         [HarmonyPatch(nameof(PlayerControllerB.SetObjectAsNoLongerHeld))]
-        public static IEnumerable<CodeInstruction> SetObjectAsNoLongerHeldTranspiler(IEnumerable<CodeInstruction> instructions)
+        [HarmonyPatch(nameof(PlayerControllerB.PlaceGrabbableObject))]
+        public static IEnumerable<CodeInstruction> ItemWeightTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo affectWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreasePossibleWeight));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
-            index = Tools.FindSub(index, ref codes, addCode: affectWeight, errorMessage: "Couldn't find item weight");
+            AddBackMusclesCodeInstruction(ref index, ref codes);
 
             return codes;
         }
-        [HarmonyTranspiler]
-        [HarmonyPatch(nameof(PlayerControllerB.PlaceGrabbableObject))]
-        public static IEnumerable<CodeInstruction> PlaceGrabbableObjectTranspiler(IEnumerable<CodeInstruction> instructions)
+        static void AddBackMusclesCodeInstruction(ref int index, ref List<CodeInstruction> codes)
         {
             MethodInfo affectWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreasePossibleWeight));
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            int index = 0;
             index = Tools.FindSub(index, ref codes, addCode: affectWeight, errorMessage: "Couldn't find item weight");
-
-            return codes;
         }
 
         [HarmonyPostfix]
@@ -222,28 +171,28 @@ namespace MoreShipUpgrades.Patches.PlayerController
         static void CheckForBoomboxes(PlayerControllerB __instance)
         {
             if (!BaseUpgrade.GetActiveUpgrade(SickBeats.UPGRADE_NAME) || __instance != GameNetworkManager.Instance.localPlayerController) return;
-            UpgradeBus.instance.boomBoxes.RemoveAll(b => b == null);
+            UpgradeBus.Instance.boomBoxes.RemoveAll(b => b == null);
             bool result = false;
             if (__instance.isPlayerDead)
             {
-                if (!UpgradeBus.instance.EffectsActive) return; // No need to do anything
-                UpgradeBus.instance.EffectsActive = result;
+                if (!UpgradeBus.Instance.EffectsActive) return; // No need to do anything
+                UpgradeBus.Instance.EffectsActive = result;
                 SickBeats.HandlePlayerEffects(__instance);
                 return; // Clean all effects from Sick Beats since the player's dead
             }
-            foreach (BoomboxItem boom in UpgradeBus.instance.boomBoxes)
+            foreach (BoomboxItem boom in UpgradeBus.Instance.boomBoxes)
             {
                 if (!boom.isPlayingMusic) continue;
 
-                if (Vector3.Distance(boom.transform.position, __instance.transform.position) >= UpgradeBus.instance.cfg.BEATS_RADIUS.Value) continue;
+                if (Vector3.Distance(boom.transform.position, __instance.transform.position) >= UpgradeBus.Instance.PluginConfiguration.BEATS_RADIUS.Value) continue;
 
                 result = true;
                 break;
             }
 
-            if (result == UpgradeBus.instance.EffectsActive) return;
+            if (result == UpgradeBus.Instance.EffectsActive) return;
 
-            UpgradeBus.instance.EffectsActive = result;
+            UpgradeBus.Instance.EffectsActive = result;
             SickBeats.HandlePlayerEffects(__instance);
         }
 

@@ -12,7 +12,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
     {
         public const string UPGRADE_NAME = "Discombobulator";
         public static string PRICES_DEFAULT = "330,460,620";
-        private static LGULogger logger = new LGULogger(nameof(Discombobulator));
+        private static LguLogger logger = new LguLogger(nameof(Discombobulator));
         public static Discombobulator instance;
         internal const string WORLD_BUILDING_TEXT = "\n\nService key for the Ship's terminal which allows {0} to legally use the Ship's 'Discombobulator' module." +
             " Comes with a list of opt-in maintenance procedures that promise to optimze the discharge and refractory of the system." +
@@ -25,9 +25,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         void Update()
         {
-            if (UpgradeBus.instance.flashCooldown > 0f)
+            if (UpgradeBus.Instance.flashCooldown > 0f)
             {
-                UpgradeBus.instance.flashCooldown -= Time.deltaTime;
+                UpgradeBus.Instance.flashCooldown -= Time.deltaTime;
             }
         }
         public override void Load()
@@ -45,12 +45,12 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         [ClientRpc]
         private void PlayAudioAndUpdateCooldownClientRpc()
         {
-            Terminal terminal = UpgradeBus.instance.GetTerminal();
+            Terminal terminal = UpgradeBus.Instance.GetTerminal();
             terminal.terminalAudio.maxDistance = 100f;
-            terminal.terminalAudio.PlayOneShot(UpgradeBus.instance.flashNoise);
+            terminal.terminalAudio.PlayOneShot(UpgradeBus.Instance.flashNoise);
             StartCoroutine(ResetRange(terminal));
-            UpgradeBus.instance.flashCooldown = UpgradeBus.instance.cfg.DISCOMBOBULATOR_COOLDOWN.Value;
-            Collider[] array = Physics.OverlapSphere(terminal.transform.position, UpgradeBus.instance.cfg.DISCOMBOBULATOR_RADIUS.Value, 524288);
+            UpgradeBus.Instance.flashCooldown = UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_COOLDOWN.Value;
+            Collider[] array = Physics.OverlapSphere(terminal.transform.position, UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_RADIUS.Value, 524288);
             if (array.Length <= 0) return;
             for (int i = 0; i < array.Length; i++)
             {
@@ -59,16 +59,16 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 EnemyAI enemy = component.mainScript;
                 if (CanDealDamage())
                 {
-                    int forceValue = UpgradeBus.instance.cfg.DISCOMBOBULATOR_INITIAL_DAMAGE.Value + UpgradeBus.instance.cfg.DISCOMBOBULATOR_DAMAGE_INCREASE.Value * (GetUpgradeLevel(UPGRADE_NAME) - UpgradeBus.instance.cfg.DISCOMBOBULATOR_DAMAGE_LEVEL.Value);
+                    int forceValue = UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_INITIAL_DAMAGE.Value + UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_DAMAGE_INCREASE.Value * (GetUpgradeLevel(UPGRADE_NAME) - UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_DAMAGE_LEVEL.Value);
                     enemy.HitEnemy(forceValue);
                 }
-                if (!enemy.isEnemyDead) enemy.SetEnemyStunned(true, UpgradeBus.instance.cfg.DISCOMBOBULATOR_STUN_DURATION.Value + UpgradeBus.instance.cfg.DISCOMBOBULATOR_INCREMENT.Value * GetUpgradeLevel(UPGRADE_NAME), null);
+                if (!enemy.isEnemyDead) enemy.SetEnemyStunned(true, UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_STUN_DURATION.Value + UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_INCREMENT.Value * GetUpgradeLevel(UPGRADE_NAME), null);
             }
         }
 
         private bool CanDealDamage()
         {
-            return UpgradeBus.instance.cfg.DISCOMBOBULATOR_DAMAGE_LEVEL.Value > 0 && GetUpgradeLevel(UPGRADE_NAME) + 1 >= UpgradeBus.instance.cfg.DISCOMBOBULATOR_DAMAGE_LEVEL.Value;
+            return UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_DAMAGE_LEVEL.Value > 0 && GetUpgradeLevel(UPGRADE_NAME) + 1 >= UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_DAMAGE_LEVEL.Value;
         }
         private IEnumerator ResetRange(Terminal terminal)
         {
@@ -83,7 +83,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.DISCOMBOBULATOR_STUN_DURATION.Value + (level * UpgradeBus.instance.cfg.DISCOMBOBULATOR_INCREMENT.Value);
+            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_STUN_DURATION.Value + (level * UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_INCREMENT.Value);
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }

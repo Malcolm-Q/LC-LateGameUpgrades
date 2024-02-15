@@ -13,7 +13,7 @@ namespace MoreShipUpgrades.Patches.Enemies
     [HarmonyPatch(typeof(SpringManAI))]
     internal class SpringManAIPatcher
     {
-        private static LGULogger logger = new LGULogger(nameof(SpringManAIPatcher));
+        private static LguLogger logger = new LguLogger(nameof(SpringManAIPatcher));
         [HarmonyPrefix]
         [HarmonyPatch(nameof(SpringManAI.DoAIInterval))]
         private static void DoAllIntervalPrefix(ref SpringManAI __instance)

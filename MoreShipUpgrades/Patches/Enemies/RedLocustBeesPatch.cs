@@ -13,7 +13,7 @@ namespace MoreShipUpgrades.Patches.Enemies
     [HarmonyPatch(typeof(RedLocustBees))]
     internal class RedLocustBeesPatch
     {
-        private static LGULogger logger = new LGULogger(typeof(RedLocustBeesPatch).Name);
+        private static LguLogger logger = new LguLogger(typeof(RedLocustBeesPatch).Name);
         [HarmonyTranspiler]
         [HarmonyPatch(nameof(RedLocustBees.OnCollideWithPlayer))]
         public static IEnumerable<CodeInstruction> OnCollideWithPlayer_Transpiler(IEnumerable<CodeInstruction> instructions)

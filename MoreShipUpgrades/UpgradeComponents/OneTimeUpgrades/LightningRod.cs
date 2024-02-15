@@ -15,7 +15,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             "is saddled with the uniquely-awkward task of having to ransom a safety feature back to the employee in text while not also admitting to the existence of" +
             " an occupational hazard that was previously denied in court.\n\n";
         public static LightningRod instance;
-        private static LGULogger logger;
+        private static LguLogger logger;
 
         // Configuration
         public static string ENABLED_SECTION = $"Enable {UPGRADE_NAME} Upgrade";
@@ -45,7 +45,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         internal override void Start()
         {
             instance = this;
-            logger = new LGULogger(UPGRADE_NAME);
+            logger = new LguLogger(UPGRADE_NAME);
             upgradeName = UPGRADE_NAME;
             base.Start();
         }
@@ -55,14 +55,14 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             if (!instance.CanTryInterceptLightning) return;
             instance.CanTryInterceptLightning = false;
 
-            Terminal terminal = UpgradeBus.instance.GetTerminal();
+            Terminal terminal = UpgradeBus.Instance.GetTerminal();
             float dist = Vector3.Distance(___targetingMetalObject.transform.position, terminal.transform.position);
             logger.LogDebug($"Distance from ship: {dist}");
-            logger.LogDebug($"Effective distance of the lightning rod: {UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST}");
+            logger.LogDebug($"Effective distance of the lightning rod: {UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_DIST}");
 
-            if (dist > UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST.Value) return;
+            if (dist > UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_DIST.Value) return;
 
-            dist /= UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST.Value;
+            dist /= UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_DIST.Value;
             float prob = 1 - dist;
             float rand = Random.value;
 
@@ -79,7 +79,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         public static void RerouteLightningBolt(ref Vector3 strikePosition, ref StormyWeather __instance)
         {
             logger.LogDebug($"Intercepted Lightning Strike...");
-            Terminal terminal = UpgradeBus.instance.GetTerminal();
+            Terminal terminal = UpgradeBus.Instance.GetTerminal();
             strikePosition = terminal.transform.position;
             instance.LightningIntercepted = false;
             __instance.staticElectricityParticle.gameObject.SetActive(true);
@@ -99,7 +99,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
         public override string GetDisplayInfo(int price = -1)
         {
-            return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), price, UpgradeBus.instance.cfg.LIGHTNING_ROD_DIST.Value);
+            return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), price, UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_DIST.Value);
         }
     }
 }
