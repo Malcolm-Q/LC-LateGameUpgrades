@@ -10,7 +10,7 @@ using UnityEngine;
 namespace MoreShipUpgrades.Patches.Enemies
 {
     [HarmonyPatch(typeof(EnemyAI))]
-    internal class EnemyAIPatcher
+    internal static class EnemyAIPatcher
     {
         private static LguLogger logger = new LguLogger(nameof(EnemyAIPatcher));
         private static ulong currentEnemy = 0;

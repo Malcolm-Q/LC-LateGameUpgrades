@@ -4,7 +4,7 @@ using MoreShipUpgrades.Managers;
 namespace MoreShipUpgrades.Patches.Enemies
 {
     [HarmonyPatch(typeof(HoarderBugAI))]
-    internal class HoarderBugAIPatcher
+    internal static class HoarderBugAIPatcher
     {
         [HarmonyPostfix]
         [HarmonyPatch(nameof(HoarderBugAI.IsHoarderBugAngry))]

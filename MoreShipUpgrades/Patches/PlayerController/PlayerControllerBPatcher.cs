@@ -19,11 +19,11 @@ namespace MoreShipUpgrades.Patches.PlayerController
     [HarmonyPatch(typeof(PlayerControllerB))]
     internal static class PlayerControllerBPatcher
     {
-        internal static readonly LguLogger logger = new LguLogger(nameof(PlayerControllerBPatcher));
+        static readonly LguLogger logger = new LguLogger(nameof(PlayerControllerBPatcher));
 
         [HarmonyPrefix]
         [HarmonyPatch(nameof(PlayerControllerB.KillPlayer))]
-        private static void DisableUpgradesOnDeath(PlayerControllerB __instance)
+        static void DisableUpgradesOnDeath(PlayerControllerB __instance)
         {
             if (!UpgradeBus.Instance.PluginConfiguration.LOSE_NIGHT_VIS_ON_DEATH.Value) return;
             if (!__instance.IsOwner) return;
@@ -39,7 +39,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
         [HarmonyPatch(nameof(PlayerControllerB.DamagePlayer))]
         [HarmonyTranspiler]
-        public static IEnumerable<CodeInstruction> DamagePlayerTranspiler(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> DamagePlayerTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo maximumHealthMethod = typeof(Stimpack).GetMethod(nameof(Stimpack.CheckForAdditionalHealth));
             MethodInfo boomboxDefenseMethod = typeof(SickBeats).GetMethod(nameof(SickBeats.CalculateDefense));
@@ -106,7 +106,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
         [HarmonyTranspiler]
         [HarmonyPatch(nameof(PlayerControllerB.PlayerHitGroundEffects))]
-        private static IEnumerable<CodeInstruction> PlayerHitGroundEffectsTranspiler(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> PlayerHitGroundEffectsTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo reduceFallDamageMethod = typeof(StrongLegs).GetMethod(nameof(StrongLegs.ReduceFallDamage));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
@@ -120,7 +120,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
         [HarmonyPrefix]
         [HarmonyPatch(nameof(PlayerControllerB.DropAllHeldItems))]
-        private static bool DontDropItems(PlayerControllerB __instance)
+        static bool DontDropItems(PlayerControllerB __instance)
         {
             if (!UpgradeBus.Instance.TPButtonPressed) return true;
 
@@ -133,7 +133,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         }
         [HarmonyPostfix]
         [HarmonyPatch(nameof(PlayerControllerB.GrabObjectClientRpc))]
-        public static void GrabObjectClientRpcPostfix(PlayerControllerB __instance)
+        static void GrabObjectClientRpcPostfix(PlayerControllerB __instance)
         {
             if (__instance.currentlyHeldObjectServer == null) return;
 
@@ -152,7 +152,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         [HarmonyPatch(nameof(PlayerControllerB.DespawnHeldObjectOnClient))]
         [HarmonyPatch(nameof(PlayerControllerB.SetObjectAsNoLongerHeld))]
         [HarmonyPatch(nameof(PlayerControllerB.PlaceGrabbableObject))]
-        public static IEnumerable<CodeInstruction> ItemWeightTranspiler(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> ItemWeightTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
@@ -198,7 +198,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
         [HarmonyTranspiler]
         [HarmonyPatch(nameof(PlayerControllerB.LateUpdate))]
-        private static IEnumerable<CodeInstruction> LateUpdateTranspiler(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> LateUpdateTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo biggerLungsRegenMethod = typeof(BiggerLungs).GetMethod(nameof(BiggerLungs.ApplyPossibleIncreasedStaminaRegen));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
@@ -216,7 +216,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
         [HarmonyTranspiler]
         [HarmonyPatch(nameof(PlayerControllerB.Jump_performed))]
-        private static IEnumerable<CodeInstruction> JumpPerformedTranspiler(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> JumpPerformedTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo biggerLungsReduceJumpCost = typeof(BiggerLungs).GetMethod(nameof(BiggerLungs.ApplyPossibleReducedJumpStaminaCost));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
@@ -227,19 +227,19 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
         [HarmonyTranspiler]
         [HarmonyPatch(nameof(PlayerControllerB.PlayFootstepLocal))]
-        private static IEnumerable<CodeInstruction> PlayFootstepLocalTranspiler(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> PlayFootstepLocalTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             return AddReduceNoiseRangeFunctionToPlayerFootsteps(instructions);
         }
 
         [HarmonyTranspiler]
         [HarmonyPatch(nameof(PlayerControllerB.PlayFootstepServer))]
-        private static IEnumerable<CodeInstruction> PlayFootstepServerTranspiler(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> PlayFootstepServerTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             return AddReduceNoiseRangeFunctionToPlayerFootsteps(instructions);
         }
 
-        private static IEnumerable<CodeInstruction> AddReduceNoiseRangeFunctionToPlayerFootsteps(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> AddReduceNoiseRangeFunctionToPlayerFootsteps(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo runningShoesReduceNoiseRange = typeof(RunningShoes).GetMethod(nameof(RunningShoes.ApplyPossibleReducedNoiseRange));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
@@ -251,7 +251,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
         [HarmonyPatch(nameof(PlayerControllerB.PlayerLookInput))]
         [HarmonyTranspiler]
-        private static IEnumerable<CodeInstruction> PlayerLookInputTranspiler(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> PlayerLookInputTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo reduceLookSensitivity = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrowLookSensitivity));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
@@ -262,7 +262,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
         [HarmonyPatch(nameof(PlayerControllerB.Update))] // We're all going to die
         [HarmonyTranspiler] // Just kidding
-        private static IEnumerable<CodeInstruction> UpdateTranspiler(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> UpdateTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo reduceMovement = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrowMovement));
             FieldInfo carryWeight = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.carryWeight));
@@ -276,7 +276,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
         [HarmonyPatch(nameof(PlayerControllerB.Crouch_performed))]
         [HarmonyTranspiler]
-        private static IEnumerable<CodeInstruction> CrouchPerformmedTranspiler(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> CrouchPerformmedTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo carryingWheelbarrow = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrow));
             FieldInfo isMenuOpen = typeof(QuickMenuManager).GetField(nameof(QuickMenuManager.isMenuOpen));

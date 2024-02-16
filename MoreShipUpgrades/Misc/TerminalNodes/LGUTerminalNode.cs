@@ -77,21 +77,19 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         /// <param name="node">Terminal node which we want to change the text of</param>
         /// <param name="insertText">The additional text we wish to add to the node</param>
         /// <param name="enabled">Feature associated with the additional text is enabled or not</param>
-        internal static void AddTextToNode(ref TerminalNode node, string insertText, bool enabled = true)
+        internal static void UpdateTextToNode(ref TerminalNode node, string insertText, bool enabled = true)
         {
             string text = node.displayText;
             int index = text.IndexOf(insertText);
             if (index != -1 && !enabled)
             {
-                text.Remove(index, insertText.Length);
-                node.displayText = text;
+                node.displayText = text.Remove(index, insertText.Length);
                 return;
             }
             if (index == -1 && enabled)
             {
                 text += insertText;
                 node.displayText = text;
-                return;
             }
         }
         /// <summary>

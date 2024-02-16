@@ -9,7 +9,7 @@ using UnityEngine;
 namespace MoreShipUpgrades.Patches.Interactables
 {
     [HarmonyPatch(typeof(InteractTrigger))]
-    internal class InteractTriggerPatcher
+    internal static class InteractTriggerPatcher
     {
         private static LguLogger logger = new LguLogger(nameof(InteractTriggerPatcher));
         [HarmonyPrefix]

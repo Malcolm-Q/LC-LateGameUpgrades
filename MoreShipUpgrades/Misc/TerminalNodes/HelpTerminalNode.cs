@@ -41,7 +41,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         /// <param name="helpNode">Terminal node we wish to add the information on</param>
         static void HandleHelpScrapInsurance(ref TerminalNode helpNode)
         {
-            LguTerminalNode.AddTextToNode(ref helpNode, string.Format(SCRAP_INSURANCE_COMMAND, UpgradeBus.Instance.PluginConfiguration.SCRAP_INSURANCE_PRICE.Value), UpgradeBus.Instance.PluginConfiguration.SCRAP_INSURANCE_ENABLED.Value);
+            LguTerminalNode.UpdateTextToNode(ref helpNode, string.Format(SCRAP_INSURANCE_COMMAND, UpgradeBus.Instance.PluginConfiguration.SCRAP_INSURANCE_PRICE.Value), UpgradeBus.Instance.PluginConfiguration.SCRAP_INSURANCE_ENABLED.Value);
         }
         /// <summary>
         /// Adds information related to the Discombobulator's commands to the given terminal node
@@ -50,8 +50,8 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         static void HandleHelpDiscombobulator(ref TerminalNode helpNode)
         {
             bool enabled = UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_ENABLED.Value;
-            LguTerminalNode.AddTextToNode(ref helpNode, ATK_HELP_COMMAND, enabled);
-            LguTerminalNode.AddTextToNode(ref helpNode, CD_HELP_COMMAND, enabled);
+            LguTerminalNode.UpdateTextToNode(ref helpNode, ATK_HELP_COMMAND, enabled);
+            LguTerminalNode.UpdateTextToNode(ref helpNode, CD_HELP_COMMAND, enabled);
         }
         /// <summary>
         /// Adds information related to the contract's commands to the given terminal node
@@ -60,8 +60,8 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         static void HandleHelpContract(ref TerminalNode helpNode)
         {
             bool enabled = UpgradeBus.Instance.PluginConfiguration.CONTRACTS_ENABLED.Value;
-            LguTerminalNode.AddTextToNode(ref helpNode, string.Format(CONTRACT_HELP_COMMAND, UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value, UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value), enabled);
-            LguTerminalNode.AddTextToNode(ref helpNode, INFO_CONTRACT_HELP_COMMAND, enabled);
+            LguTerminalNode.UpdateTextToNode(ref helpNode, string.Format(CONTRACT_HELP_COMMAND, UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value, UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value), enabled);
+            LguTerminalNode.UpdateTextToNode(ref helpNode, INFO_CONTRACT_HELP_COMMAND, enabled);
         }
         /// <summary>
         /// Adds information related to the intern's command to the given terminal node
@@ -69,7 +69,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         /// <param name="helpNode">Terminal node we wish to add the information on</param>
         static void HandleHelpInterns(ref TerminalNode helpNode)
         {
-            LguTerminalNode.AddTextToNode(ref helpNode, string.Format(INTERNS_HELP_COMMAND, UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value), UpgradeBus.Instance.PluginConfiguration.INTERN_ENABLED.Value);
+            LguTerminalNode.UpdateTextToNode(ref helpNode, string.Format(INTERNS_HELP_COMMAND, UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value), UpgradeBus.Instance.PluginConfiguration.INTERN_ENABLED.Value);
         }
         /// <summary>
         /// Adds information related to the Extend Deadline's command to the given terminal node
@@ -77,7 +77,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         /// <param name="helpNode">Terminal node we wish to add the information on</param>
         static void HandleHelpExtendDeadline(ref TerminalNode helpNode)
         {
-            LguTerminalNode.AddTextToNode(ref helpNode, string.Format(EXTEND_HELP_COMMAND, UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_PRICE.Value), UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_ENABLED.Value);
+            LguTerminalNode.UpdateTextToNode(ref helpNode, string.Format(EXTEND_HELP_COMMAND, UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_PRICE.Value), UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_ENABLED.Value);
         }
     }
 }
