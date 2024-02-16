@@ -10,10 +10,12 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
     class Discombobulator : TierUpgrade, IUpgradeWorldBuilding
     {
-        public const string UPGRADE_NAME = "Discombobulator";
-        public static string PRICES_DEFAULT = "330,460,620";
+        internal float flashCooldown = 0f;
         private static LguLogger logger = new LguLogger(nameof(Discombobulator));
         public static Discombobulator instance;
+
+        public const string UPGRADE_NAME = "Discombobulator";
+        public const string PRICES_DEFAULT = "330,460,620";
         internal const string WORLD_BUILDING_TEXT = "\n\nService key for the Ship's terminal which allows {0} to legally use the Ship's 'Discombobulator' module." +
             " Comes with a list of opt-in maintenance procedures that promise to optimze the discharge and refractory of the system." +
             " Said document contains no mention of whatever it might be that it was included in the Ship's design to discombobulate.\n\n";
@@ -25,9 +27,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         void Update()
         {
-            if (UpgradeBus.Instance.flashCooldown > 0f)
+            if (flashCooldown > 0f)
             {
-                UpgradeBus.Instance.flashCooldown -= Time.deltaTime;
+                flashCooldown -= Time.deltaTime;
             }
         }
         public override void Load()
@@ -49,7 +51,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             terminal.terminalAudio.maxDistance = 100f;
             terminal.terminalAudio.PlayOneShot(UpgradeBus.Instance.flashNoise);
             StartCoroutine(ResetRange(terminal));
-            UpgradeBus.Instance.flashCooldown = UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_COOLDOWN.Value;
+            flashCooldown = UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_COOLDOWN.Value;
             Collider[] array = Physics.OverlapSphere(terminal.transform.position, UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_RADIUS.Value, 524288);
             if (array.Length <= 0) return;
             for (int i = 0; i < array.Length; i++)

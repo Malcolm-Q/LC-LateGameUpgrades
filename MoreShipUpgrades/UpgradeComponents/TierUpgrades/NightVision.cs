@@ -15,11 +15,16 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
     internal class NightVision : TierUpgrade
     {
-        private float nightBattery;
-        private Transform batteryBar;
-        private PlayerControllerB client;
-        private bool batteryExhaustion;
-        private Key toggleKey;
+        float nightBattery;
+        Transform batteryBar;
+        PlayerControllerB client;
+        bool batteryExhaustion;
+        Key toggleKey;
+        internal GameObject nightVisionPrefab;
+        internal bool nightVisionActive = false;
+        internal float nightVisRange;
+        internal float nightVisIntensity;
+        internal Color nightVisColor;
         public static NightVision Instance { get; internal set; }
 
         public const string UPGRADE_NAME = "NV Headset Batteries";
@@ -31,6 +36,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             Instance = this;
             upgradeName = UPGRADE_NAME;
             base.Start();
+            nightVisionPrefab = AssetBundleHandler.GetItemObject("Night Vision").spawnPrefab;
             batteryBar = transform.GetChild(0).GetChild(0).transform;
             transform.GetChild(0).gameObject.SetActive(false);
             if (Enum.TryParse(UpgradeBus.Instance.PluginConfiguration.TOGGLE_NIGHT_VISION_KEY.Value, out Key toggle))
@@ -55,7 +61,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
             float maxBattery = UpgradeBus.Instance.PluginConfiguration.NIGHT_BATTERY_MAX.Value + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_BATTERY_INCREMENT.Value;
 
-            if (UpgradeBus.Instance.nightVisionActive)
+            if (nightVisionActive)
             {
                 nightBattery -= Time.deltaTime * (UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_DRAIN_SPEED.Value - GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_DRAIN_INCREMENT.Value);
                 nightBattery = Mathf.Clamp(nightBattery, 0f, maxBattery);
@@ -81,7 +87,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 }
             }
             // this ensures the vanilla behaviour for the night vision light remains
-            if (client.isInsideFactory || UpgradeBus.Instance.nightVisionActive) client.nightVision.enabled = true;
+            if (client.isInsideFactory || nightVisionActive) client.nightVision.enabled = true;
             else client.nightVision.enabled = false;
 
             float scale = nightBattery / maxBattery;
@@ -90,9 +96,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         private void Toggle()
         {
-            UpgradeBus.Instance.nightVisionActive = !UpgradeBus.Instance.nightVisionActive;
+            nightVisionActive = !nightVisionActive;
 
-            if (UpgradeBus.Instance.nightVisionActive)
+            if (nightVisionActive)
             {
                 TurnOn();
             }
@@ -104,10 +110,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         private void TurnOff(bool exhaust = false)
         {
-            UpgradeBus.Instance.nightVisionActive = false;
-            client.nightVision.color = UpgradeBus.Instance.nightVisColor;
-            client.nightVision.range = UpgradeBus.Instance.nightVisRange;
-            client.nightVision.intensity = UpgradeBus.Instance.nightVisIntensity;
+            nightVisionActive = false;
+            client.nightVision.color = nightVisColor;
+            client.nightVision.range = nightVisRange;
+            client.nightVision.intensity = nightVisIntensity;
             if (exhaust)
             {
                 batteryExhaustion = true;
@@ -117,9 +123,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         private void TurnOn()
         {
-            UpgradeBus.Instance.nightVisColor = client.nightVision.color;
-            UpgradeBus.Instance.nightVisRange = client.nightVision.range;
-            UpgradeBus.Instance.nightVisIntensity = client.nightVision.intensity;
+            nightVisColor = client.nightVision.color;
+            nightVisRange = client.nightVision.range;
+            nightVisIntensity = client.nightVision.intensity;
 
             client.nightVision.color = UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_COLOR.Value;
             client.nightVision.range = UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_RANGE.Value + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_RANGE_INCREMENT.Value;
@@ -167,7 +173,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         [ServerRpc(RequireOwnership = false)]
         public void SpawnNightVisionItemOnDeathServerRpc(Vector3 position)
         {
-            GameObject go = Instantiate(UpgradeBus.Instance.NightVisionPrefab, position + Vector3.up, Quaternion.identity);
+            GameObject go = Instantiate(nightVisionPrefab, position + Vector3.up, Quaternion.identity);
             go.GetComponent<NetworkObject>().Spawn();
             logger.LogInfo("Request to spawn night vision goggles received.");
         }
@@ -182,10 +188,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public void DisableOnClient()
         {
-            UpgradeBus.Instance.nightVisionActive = false;
-            client.nightVision.color = UpgradeBus.Instance.nightVisColor;
-            client.nightVision.range = UpgradeBus.Instance.nightVisRange;
-            client.nightVision.intensity = UpgradeBus.Instance.nightVisIntensity;
+            nightVisionActive = false;
+            client.nightVision.color = nightVisColor;
+            client.nightVision.range = nightVisRange;
+            client.nightVision.intensity = nightVisIntensity;
 
             transform.GetChild(0).gameObject.SetActive(false);
             UpgradeBus.Instance.activeUpgrades[UPGRADE_NAME] = false;

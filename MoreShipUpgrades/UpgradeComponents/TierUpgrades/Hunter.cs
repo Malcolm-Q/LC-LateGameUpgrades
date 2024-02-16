@@ -4,16 +4,20 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
     class Hunter : TierUpgrade, IUpgradeWorldBuilding
     {
+        private static LguLogger logger = new LguLogger(UPGRADE_NAME);
+        internal static Hunter Instance;
+        internal Dictionary<string, GameObject> samplePrefabs = new Dictionary<string, GameObject>();
+
         public const string UPGRADE_NAME = "Hunter";
         internal const string WORLD_BUILDING_TEXT = "\n\nOn-the-job training program that teaches your crew how to properly collect lab-ready samples of blood," +
             " skin, and organ tissue from entities found within the facility. These samples are valuable to The Company. Used to be a part of the standard onboarding procedure," +
             " but was made opt-in only in 2005 to cut onboarding costs.\n\n";
-        private static LguLogger logger = new LguLogger(UPGRADE_NAME);
         static Dictionary<string, string> monsterNames = new Dictionary<string, string>()
             {
             { "hoarding", "Hoarding Bug" },
@@ -55,6 +59,12 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             upgradeName = UPGRADE_NAME;
             base.Start();
+            Instance = this;
+            foreach (string creatureName in AssetBundleHandler.samplePaths.Keys)
+            {
+                Item sample = AssetBundleHandler.GetItemObject(creatureName);
+                samplePrefabs.Add(creatureName, sample.spawnPrefab);
+            }
         }
 
         public static string GetHunterInfo(int level, int price)

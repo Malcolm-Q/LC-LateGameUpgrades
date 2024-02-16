@@ -2,12 +2,16 @@
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
     class Beekeeper : TierUpgrade, IUpgradeWorldBuilding
     {
+        internal bool increaseHivePrice = false;
+        internal static Beekeeper Instance;
+
         public const string UPGRADE_NAME = "Beekeeper";
         public const string PRICES_DEFAULT = "225,280,340";
         internal const string WORLD_BUILDING_TEXT = "\n\nOn-the-job training package that teaches {0} proper Circuit Bee Nest handling techniques." +
@@ -17,13 +21,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             upgradeName = UPGRADE_NAME;
             base.Start();
+            Instance = this;
         }
 
         public override void Increment()
         {
             base.Increment();
             if (GetUpgradeLevel(UPGRADE_NAME) == UpgradeBus.Instance.PluginConfiguration.BEEKEEPER_UPGRADE_PRICES.Value.Split(',').Length)
-                LguStore.Instance.ToggleIncreaseHivePriceServerRpc();
+                ToggleIncreaseHivePriceServerRpc();
         }
 
         public static int CalculateBeeDamage(int damageNumber)
@@ -34,7 +39,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public static int GetHiveScrapValue(int originalValue)
         {
-            if (!UpgradeBus.Instance.increaseHivePrice) return originalValue;
+            if (!Instance.increaseHivePrice) return originalValue;
             return (int)(originalValue * UpgradeBus.Instance.PluginConfiguration.BEEKEEPER_HIVE_VALUE_INCREASE.Value);
         }
 
@@ -48,6 +53,17 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             System.Func<int, float> infoFunction = level => 100 * (UpgradeBus.Instance.PluginConfiguration.BEEKEEPER_DAMAGE_MULTIPLIER.Value - (level * UpgradeBus.Instance.PluginConfiguration.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT.Value));
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+        }
+        [ServerRpc(RequireOwnership = false)]
+        public void ToggleIncreaseHivePriceServerRpc()
+        {
+            ToggleIncreaseHivePriceClientRpc();
+        }
+
+        [ClientRpc]
+        public void ToggleIncreaseHivePriceClientRpc()
+        {
+            increaseHivePrice = true;
         }
     }
 }

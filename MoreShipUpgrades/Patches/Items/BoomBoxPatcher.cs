@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 
 namespace MoreShipUpgrades.Patches.Items
 {
@@ -10,7 +11,7 @@ namespace MoreShipUpgrades.Patches.Items
         [HarmonyPatch(nameof(BoomboxItem.Start))]
         static void AddToList(BoomboxItem __instance)
         {
-            UpgradeBus.Instance.boomBoxes.Add(__instance);
+            SickBeats.Instance.boomBoxes.Add(__instance);
         }
     }
 }

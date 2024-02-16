@@ -11,10 +11,8 @@ using System.Reflection.Emit;
 namespace MoreShipUpgrades.Patches.TerminalComponents
 {
     [HarmonyPatch(typeof(Terminal))]
-    internal class TerminalPatcher
+    internal static class TerminalPatcher
     {
-        private static LguLogger logger = new LguLogger(nameof(TerminalPatcher));
-
         [HarmonyPostfix]
         [HarmonyPatch(nameof(Terminal.Start))]
         static void StartPostfix()

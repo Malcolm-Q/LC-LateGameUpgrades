@@ -8,7 +8,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
     {
         [HarmonyPostfix]
         [HarmonyPatch(nameof(TimeOfDay.SyncNewProfitQuotaClientRpc))]
-        private static void GenerateNewSales(TimeOfDay __instance)
+        static void GenerateNewSales(TimeOfDay __instance)
         {
             if (UpgradeBus.Instance.PluginConfiguration.SHARED_UPGRADES.Value && (__instance.IsHost || __instance.IsServer))
             {

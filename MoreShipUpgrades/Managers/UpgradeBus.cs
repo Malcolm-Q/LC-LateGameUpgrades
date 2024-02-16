@@ -28,13 +28,6 @@ namespace MoreShipUpgrades.Managers
 
         internal bool TPButtonPressed;
 
-        internal GameObject NightVisionPrefab { get; set; }
-        internal bool nightVisionActive = false;
-        internal float nightVisRange;
-        internal float nightVisIntensity;
-
-        internal float flashCooldown = 0f;
-        internal float alteredWeight = 1f;
 
         internal string contractLevel = "None";
         internal string contractType = "None";
@@ -45,43 +38,20 @@ namespace MoreShipUpgrades.Managers
         internal Dictionary<string, List<string>> fakeBombOrders = new Dictionary<string, List<string>>();
         internal Dictionary<string, float> SaleData = new Dictionary<string, float>();
 
-        internal Color nightVisColor;
         internal AudioClip flashNoise;
         internal GameObject modStorePrefab;
         internal TerminalNode modStoreInterface;
-        internal Terminal terminal;
-        internal PlayerControllerB localPlayer;
-        private HangarShipDoor hangarDoors;
-
-        internal List<BoomboxItem> boomBoxes = new List<BoomboxItem>();
+        Terminal terminal;
+        PlayerControllerB localPlayer;
+        HangarShipDoor hangarDoors;
 
         internal List<CustomTerminalNode> terminalNodes = new List<CustomTerminalNode>();
-
         internal Dictionary<string, GameObject> UpgradeObjects = new Dictionary<string, GameObject>();
-
         internal Dictionary<string, Item> ItemsToSync = new Dictionary<string, Item>();
-
-        internal Dictionary<ulong, int> playerHealthLevels = new Dictionary<ulong, int>();
-
-        internal bool increaseHivePrice = false;
-
         internal Dictionary<string,bool> IndividualUpgrades = new Dictionary<string,bool>();
-        internal string[] internNames, internInterests;
-
         internal List<Peeper> coilHeadItems = new List<Peeper>();
-
-        internal bool walkieUIActive;
-        internal string version;
-
         internal AssetBundle UpgradeAssets;
-
-        internal Dictionary<string,GameObject> samplePrefabs = new Dictionary<string,GameObject>();
-
-        internal float staminaDrainCoefficient = 1f;
-        internal float incomingDamageCoefficient = 1f;
-        internal int damageBoost;
-        internal GameObject BoomboxIcon;
-        internal bool EffectsActive;
+        internal string version;
 
         internal GameObject helmetModel;
         internal Helmet helmetScript;
@@ -141,13 +111,13 @@ namespace MoreShipUpgrades.Managers
             ResetPlayerAttributes();
             if(IsHost || IsServer) ResetShipAttributesClientRpc();
 
-            EffectsActive = false;
-            nightVisionActive = false;
+            SickBeats.Instance.EffectsActive = false;
+            NightVision.Instance.nightVisionActive = false;
             contractType = "None";
             contractLevel = "None";
 
-            flashCooldown = 0f;
-            alteredWeight = 1f;
+            Discombobulator.instance.flashCooldown = 0f;
+            BackMuscles.Instance.alteredWeight = 1f;
             if (wipeObjRefs) {
                 UpgradeObjects = new Dictionary<string, GameObject>();
             }

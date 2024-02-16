@@ -14,7 +14,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
     {
         [HarmonyPatch(nameof(RoundManager.DespawnPropsAtEndOfRound))]
         [HarmonyTranspiler]
-        public static IEnumerable<CodeInstruction> DespawnPropsAtEndOfRoundTranspiler(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> DespawnPropsAtEndOfRoundTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             FieldInfo allPlayersDead = typeof(StartOfRound).GetField(nameof(StartOfRound.allPlayersDead));
             MethodInfo scrapInsuranceStatus = typeof(ScrapInsurance).GetMethod(nameof(ScrapInsurance.GetScrapInsuranceStatus));

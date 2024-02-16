@@ -171,16 +171,16 @@ namespace MoreShipUpgrades.Patches.PlayerController
         static void CheckForBoomboxes(PlayerControllerB __instance)
         {
             if (!BaseUpgrade.GetActiveUpgrade(SickBeats.UPGRADE_NAME) || __instance != GameNetworkManager.Instance.localPlayerController) return;
-            UpgradeBus.Instance.boomBoxes.RemoveAll(b => b == null);
+            SickBeats.Instance.boomBoxes.RemoveAll(b => b == null);
             bool result = false;
             if (__instance.isPlayerDead)
             {
-                if (!UpgradeBus.Instance.EffectsActive) return; // No need to do anything
-                UpgradeBus.Instance.EffectsActive = result;
+                if (!SickBeats.Instance.EffectsActive) return; // No need to do anything
+                SickBeats.Instance.EffectsActive = result;
                 SickBeats.HandlePlayerEffects(__instance);
                 return; // Clean all effects from Sick Beats since the player's dead
             }
-            foreach (BoomboxItem boom in UpgradeBus.Instance.boomBoxes)
+            foreach (BoomboxItem boom in SickBeats.Instance.boomBoxes)
             {
                 if (!boom.isPlayingMusic) continue;
 
@@ -190,9 +190,9 @@ namespace MoreShipUpgrades.Patches.PlayerController
                 break;
             }
 
-            if (result == UpgradeBus.Instance.EffectsActive) return;
+            if (result == SickBeats.Instance.EffectsActive) return;
 
-            UpgradeBus.Instance.EffectsActive = result;
+            SickBeats.Instance.EffectsActive = result;
             SickBeats.HandlePlayerEffects(__instance);
         }
 

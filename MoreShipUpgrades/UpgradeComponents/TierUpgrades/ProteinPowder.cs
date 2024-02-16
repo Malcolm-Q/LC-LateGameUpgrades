@@ -2,6 +2,7 @@
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using System;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
@@ -15,26 +16,26 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         private static int CRIT_DAMAGE_VALUE = 100;
 
         // Configuration
-        public static string ENABLED_SECTION = $"Enable {UPGRADE_NAME} Upgrade";
-        public static bool ENABLED_DEFAULT = true;
-        public static string ENABLED_DESCRIPTION = "Do more damage with shovels";
+        public const string ENABLED_SECTION = $"Enable {UPGRADE_NAME} Upgrade";
+        public const bool ENABLED_DEFAULT = true;
+        public const string ENABLED_DESCRIPTION = "Do more damage with shovels";
 
-        public static string PRICE_SECTION = $"Price of {UPGRADE_NAME} Upgrade";
-        public static int PRICE_DEFAULT = 1000;
+        public const string PRICE_SECTION = $"Price of {UPGRADE_NAME} Upgrade";
+        public const int PRICE_DEFAULT = 1000;
 
-        public static string UNLOCK_FORCE_SECTION = "Initial additional hit force";
-        public static int UNLOCK_FORCE_DEFAULT = 1;
-        public static string UNLOCK_FORCE_DESCRIPTION = "The value added to hit force on initial unlock.";
+        public const string UNLOCK_FORCE_SECTION = "Initial additional hit force";
+        public const int UNLOCK_FORCE_DEFAULT = 1;
+        public const string UNLOCK_FORCE_DESCRIPTION = "The value added to hit force on initial unlock.";
 
-        public static string INCREMENT_FORCE_SECTION = "Additional hit force per level";
-        public static int INCREMENT_FORCE_DEFAULT = 1;
-        public static string INCREMENT_FORCE_DESCRIPTION = $"Every time {UPGRADE_NAME} is upgraded this value will be added to the value above.";
+        public const string INCREMENT_FORCE_SECTION = "Additional hit force per level";
+        public const int INCREMENT_FORCE_DEFAULT = 1;
+        public const string INCREMENT_FORCE_DESCRIPTION = $"Every time {UPGRADE_NAME} is upgraded this value will be added to the value above.";
 
-        public static string PRICES_DEFAULT = "700";
+        public const string PRICES_DEFAULT = "700";
 
-        public static string CRIT_CHANCE_SECTION = "Chance of dealing a crit which will instakill the enemy.";
-        public static float CRIT_CHANCE_DEFAULT = 0.01f;
-        public static string CRIT_CHANCE_DESCRIPTION = $"This value is only valid when maxed out {UPGRADE_NAME}. Any previous levels will not apply crit.";
+        public const string CRIT_CHANCE_SECTION = "Chance of dealing a crit which will instakill the enemy.";
+        public const float CRIT_CHANCE_DEFAULT = 0.01f;
+        public const string CRIT_CHANCE_DESCRIPTION = $"This value is only valid when maxed out {UPGRADE_NAME}. Any previous levels will not apply crit.";
 
         internal override void Start()
         {
@@ -45,7 +46,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public static int GetShovelHitForce(int force)
         {
             // Truly one of THE ternary operators
-            return (GetActiveUpgrade(UPGRADE_NAME) ? TryToCritEnemy() ? CRIT_DAMAGE_VALUE : UpgradeBus.Instance.PluginConfiguration.PROTEIN_INCREMENT.Value * GetUpgradeLevel(UPGRADE_NAME) + UpgradeBus.Instance.PluginConfiguration.PROTEIN_UNLOCK_FORCE.Value + force : force) + UpgradeBus.Instance.damageBoost;
+            return (GetActiveUpgrade(UPGRADE_NAME) ? TryToCritEnemy() ? CRIT_DAMAGE_VALUE : UpgradeBus.Instance.PluginConfiguration.PROTEIN_INCREMENT.Value * GetUpgradeLevel(UPGRADE_NAME) + UpgradeBus.Instance.PluginConfiguration.PROTEIN_UNLOCK_FORCE.Value + force : force) + SickBeats.Instance.damageBoost;
             // .damageBoost is tied to boombox upgrade, it will always be 0 when inactive or x when active.
         }
 

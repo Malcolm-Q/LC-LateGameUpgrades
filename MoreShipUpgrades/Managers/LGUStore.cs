@@ -144,11 +144,11 @@ namespace MoreShipUpgrades.Managers
             {
                 ConfigSynchronization cfg = JsonConvert.DeserializeObject<ConfigSynchronization>(json);
                 logger.LogInfo("Config received, deserializing and constructing...");
-                Color col = UpgradeBus.instance.cfg.NIGHT_VIS_COLOR.Value;
+                Color col = UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_COLOR.Value;
                 cfg.SynchronizeConfiguration();
-                UpgradeBus.instance.cfg.NIGHT_VIS_COLOR.Value = col; //
-                UpgradeBus.instance.Reconstruct();
-                retrievedCfg = true;
+                UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_COLOR.Value = col;
+                UpgradeBus.Instance.Reconstruct();
+                retrievedPluginConfiguration = true;
             }
             if(IsHost || IsServer)
             {
@@ -220,42 +220,6 @@ namespace MoreShipUpgrades.Managers
         }
 
         [ServerRpc(RequireOwnership = false)]
-        public void PlayerHealthUpdateLevelServerRpc(ulong id, int level) 
-        {
-            logger.LogInfo("Request to update player max healths received. Calling ClientRpc...");
-            PlayerHealthUpdateLevelClientRpc(id, level);
-        }
-
-        [ClientRpc]
-        private void PlayerHealthUpdateLevelClientRpc(ulong id, int level)
-        {
-            logger.LogInfo($"Setting max health level for player {id} to {level}");
-            if (level == -1)
-            {
-                UpgradeBus.Instance.playerHealthLevels.Remove(id);
-                return;
-            }
-
-            if (UpgradeBus.Instance.playerHealthLevels.ContainsKey(id))
-                UpgradeBus.Instance.playerHealthLevels[id] = level;
-            else UpgradeBus.Instance.playerHealthLevels.Add(id, level);
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        public void ToggleIncreaseHivePriceServerRpc()
-        {
-            logger.LogInfo($"Request to increase hive price received, calling client RPC.");
-            ToggleIncreaseHivePriceClientRpc();
-        }
-
-        [ClientRpc]
-        public void ToggleIncreaseHivePriceClientRpc()
-        {
-            logger.LogInfo($"Increasing hive price...");
-            UpgradeBus.Instance.increaseHivePrice = true;
-        }
-
-        [ServerRpc(RequireOwnership = false)]
         public void SyncCreditsServerRpc(int credits)
         {
             logger.LogInfo($"Request to sync credits to ${credits} received, calling ClientRpc...");
@@ -267,7 +231,7 @@ namespace MoreShipUpgrades.Managers
         public void SyncCreditsClientRpc(int newCredits)
         {
             logger.LogInfo($"Credits have been synced to ${newCredits}");
-            Terminal terminal = GameObject.Find("TerminalScript").GetComponent<Terminal>();
+            Terminal terminal = UpgradeBus.Instance.GetTerminal();
             terminal.groupCredits = newCredits;
         }
 

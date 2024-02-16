@@ -43,7 +43,7 @@ namespace MoreShipUpgrades.Misc
         {
             if (!BaseUpgrade.GetActiveUpgrade(Discombobulator.UPGRADE_NAME)) return DisplayTerminalMessage("You don't have access to this command yet. Purchase the 'Discombobulator'.\n\n");
 
-            if (UpgradeBus.Instance.flashCooldown > 0f) return DisplayTerminalMessage($"You can discombobulate again in {Mathf.Round(UpgradeBus.Instance.flashCooldown)} seconds.\nType 'cooldown' or 'cd' to check discombobulation cooldown.\n\n");
+            if (Discombobulator.instance.flashCooldown > 0f) return DisplayTerminalMessage($"You can discombobulate again in {Mathf.Round(Discombobulator.instance.flashCooldown)} seconds.\nType 'cooldown' or 'cd' to check discombobulation cooldown.\n\n");
 
             RoundManager.Instance.PlayAudibleNoise(terminal.transform.position, 60f, 0.8f, 0, false, 14155);
             Discombobulator.instance.PlayAudioAndUpdateCooldownServerRpc();
@@ -62,7 +62,7 @@ namespace MoreShipUpgrades.Misc
         {
             if (!BaseUpgrade.GetActiveUpgrade(Discombobulator.UPGRADE_NAME)) return DisplayTerminalMessage("You don't have access to this command yet. Purchase the 'Discombobulator'.\n\n");
 
-            if (UpgradeBus.Instance.flashCooldown > 0f) return DisplayTerminalMessage($"You can discombobulate again in {Mathf.Round(UpgradeBus.Instance.flashCooldown)} seconds.\n\n");
+            if (Discombobulator.instance.flashCooldown > 0f) return DisplayTerminalMessage($"You can discombobulate again in {Mathf.Round(Discombobulator.instance.flashCooldown)} seconds.\n\n");
 
             return DisplayTerminalMessage("Discombobulate is ready, Type 'initattack' or 'atk' to execute.\n\n");
         }
@@ -121,8 +121,8 @@ namespace MoreShipUpgrades.Misc
             terminal.groupCredits -= UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value;
             LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits);
             Interns.instance.ReviveTargetedPlayerServerRpc();
-            string name = UpgradeBus.Instance.internNames[UnityEngine.Random.Range(0, UpgradeBus.Instance.internNames.Length)];
-            string interest = UpgradeBus.Instance.internInterests[UnityEngine.Random.Range(0, UpgradeBus.Instance.internInterests.Length)];
+            string name = Interns.instance.internNames[UnityEngine.Random.Range(0, Interns.instance.internNames.Length)];
+            string interest = Interns.instance.internInterests[UnityEngine.Random.Range(0, Interns.instance.internInterests.Length)];
             logger.LogInfo($"Successfully executed intern command for {player.playerUsername}!");
             return DisplayTerminalMessage($"{player.playerUsername} has been replaced with:\n\nNAME: {name}\nAGE: {UnityEngine.Random.Range(19, 76)}\nIQ: {UnityEngine.Random.Range(2, 160)}\nINTERESTS: {interest}\n\n{name} HAS BEEN TELEPORTED INSIDE THE FACILITY, PLEASE ACQUAINTANCE YOURSELF ACCORDINGLY");
         }

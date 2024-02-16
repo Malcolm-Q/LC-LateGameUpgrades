@@ -2,6 +2,7 @@
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 {
@@ -24,8 +25,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         }
         public static float ApplyPossibleIncreasedStaminaRegen(float regenValue)
         {
-            if (!GetActiveUpgrade(UPGRADE_NAME) || GetUpgradeLevel(UPGRADE_NAME) < 0) return regenValue * UpgradeBus.Instance.staminaDrainCoefficient;
-            return regenValue * UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_STAMINA_REGEN_INCREASE.Value * UpgradeBus.Instance.staminaDrainCoefficient;
+            if (!GetActiveUpgrade(UPGRADE_NAME) || GetUpgradeLevel(UPGRADE_NAME) < 0) return regenValue * SickBeats.Instance.staminaDrainCoefficient;
+            return regenValue * UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_STAMINA_REGEN_INCREASE.Value * SickBeats.Instance.staminaDrainCoefficient;
         }
 
         public static float ApplyPossibleReducedJumpStaminaCost(float jumpCost)

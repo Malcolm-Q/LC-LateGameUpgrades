@@ -4,11 +4,17 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System;
+using System.Collections.Generic;
+using Unity.Netcode;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 {
     internal class Stimpack : GameAttributeTierUpgrade, IUpgradeWorldBuilding, IPlayerSync
     {
+
+        internal Dictionary<ulong, int> playerHealthLevels = new Dictionary<ulong, int>();
+        internal static Stimpack Instance;
+
         public const string UPGRADE_NAME = "Stimpack";
         internal const string WORLD_BUILDING_TEXT = "\n\nAn experimental Company-offered 'health treatment' program advertised only on old, peeling Ship posters," +
             " which are themselves only present in about 40% of all Company-issued Ships. Some Ships even have multiple. Nothing is known from the outside about how it works," +
@@ -36,6 +42,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             upgradeName = UPGRADE_NAME;
             logger = new LguLogger(UPGRADE_NAME);
             base.Start();
+            Instance = this;
             changingAttribute = GameAttribute.PLAYER_HEALTH;
             initialValue = UpgradeBus.Instance.PluginConfiguration.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK.Value;
             incrementalValue = UpgradeBus.Instance.PluginConfiguration.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT.Value;
@@ -45,20 +52,20 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         {
             base.Increment();
             PlayerControllerB player = UpgradeBus.Instance.GetLocalPlayer();
-            LguStore.Instance.PlayerHealthUpdateLevelServerRpc(player.playerSteamId, GetUpgradeLevel(UPGRADE_NAME));
+            PlayerHealthUpdateLevelServerRpc(player.playerSteamId, GetUpgradeLevel(UPGRADE_NAME));
         }
 
         public override void Unwind()
         {
             base.Unwind();
             PlayerControllerB player = UpgradeBus.Instance.GetLocalPlayer();
-            LguStore.Instance.PlayerHealthUpdateLevelServerRpc(player.playerSteamId, -1);
+            PlayerHealthUpdateLevelServerRpc(player.playerSteamId, -1);
         }
         public static int CheckForAdditionalHealth(int health)
         {
             PlayerControllerB player = UpgradeBus.Instance.GetLocalPlayer();
-            if (!UpgradeBus.Instance.playerHealthLevels.ContainsKey(player.playerSteamId)) return health;
-            int currentLevel = UpgradeBus.Instance.playerHealthLevels[player.playerSteamId];
+            if (!Instance.playerHealthLevels.ContainsKey(player.playerSteamId)) return health;
+            int currentLevel = Instance.playerHealthLevels[player.playerSteamId];
 
             return health + UpgradeBus.Instance.PluginConfiguration.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK.Value + currentLevel * UpgradeBus.Instance.PluginConfiguration.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT.Value;
         }
@@ -72,7 +79,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         /// <returns>Health of the player after applying the Stimpack effects</returns>
         public static int GetHealthFromPlayer(int health, ulong steamId)
         {
-            int currentLevel = UpgradeBus.Instance.playerHealthLevels[steamId];
+            int currentLevel = Instance.playerHealthLevels[steamId];
             return health + UpgradeBus.Instance.PluginConfiguration.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK.Value + currentLevel * UpgradeBus.Instance.PluginConfiguration.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT.Value;
         }
         public string GetWorldBuildingText(bool shareStatus = false)
@@ -86,5 +93,28 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void PlayerHealthUpdateLevelServerRpc(ulong id, int level)
+        {
+            logger.LogInfo("Request to update player max healths received. Calling ClientRpc...");
+            PlayerHealthUpdateLevelClientRpc(id, level);
+        }
+
+        [ClientRpc]
+        private void PlayerHealthUpdateLevelClientRpc(ulong id, int level)
+        {
+            logger.LogInfo($"Setting max health level for player {id} to {level}");
+            if (level == -1)
+            {
+                Stimpack.Instance.playerHealthLevels.Remove(id);
+                return;
+            }
+
+            if (Stimpack.Instance.playerHealthLevels.ContainsKey(id))
+                Stimpack.Instance.playerHealthLevels[id] = level;
+            else Stimpack.Instance.playerHealthLevels.Add(id, level);
+        }
+
     }
 }

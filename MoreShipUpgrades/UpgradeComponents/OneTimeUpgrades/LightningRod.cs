@@ -9,7 +9,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
     class LightningRod : OneTimeUpgrade, IUpgradeWorldBuilding
     {
-        public static string UPGRADE_NAME = "Lightning Rod";
+        public const string UPGRADE_NAME = "Lightning Rod";
         internal const string WORLD_BUILDING_TEXT = "\n\nService key for the Ship's terminal which allows your crew to legally use the Ship's 'Static Attraction Field' module." +
             " Comes with a list of opt-in maintenance procedures that promise to optimize the module's function and field of influence. This Company-issued document " +
             "is saddled with the uniquely-awkward task of having to ransom a safety feature back to the employee in text while not also admitting to the existence of" +
@@ -18,26 +18,26 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         private static LguLogger logger;
 
         // Configuration
-        public static string ENABLED_SECTION = $"Enable {UPGRADE_NAME} Upgrade";
-        public static bool ENABLED_DEFAULT = true;
-        public static string ENABLED_DESCRIPTION = "A device which redirects lightning bolts to the ship.";
+        public const string ENABLED_SECTION = $"Enable {UPGRADE_NAME} Upgrade";
+        public const bool ENABLED_DEFAULT = true;
+        public const string ENABLED_DESCRIPTION = "A device which redirects lightning bolts to the ship.";
 
-        public static string PRICE_SECTION = $"{UPGRADE_NAME} Price";
-        public static int PRICE_DEFAULT = 1000;
+        public const string PRICE_SECTION = $"{UPGRADE_NAME} Price";
+        public const int PRICE_DEFAULT = 1000;
 
-        public static string ACTIVE_SECTION = "Active on Purchase";
-        public static bool ACTIVE_DEFAULT = true;
-        public static string ACTIVE_DESCRIPTION = $"If true: {UPGRADE_NAME} will be active on purchase.";
+        public const string ACTIVE_SECTION = "Active on Purchase";
+        public const bool ACTIVE_DEFAULT = true;
+        public const string ACTIVE_DESCRIPTION = $"If true: {UPGRADE_NAME} will be active on purchase.";
 
         // Toggle
-        public static string ACCESS_DENIED_MESSAGE = $"You don't have access to this command yet. Purchase the '{UPGRADE_NAME}'.\n";
-        public static string TOGGLE_ON_MESSAGE = $"{UPGRADE_NAME} has been enabled. Lightning bolts will now be redirected to the ship.\n";
-        public static string TOGGLE_OFF_MESSAGE = $"{UPGRADE_NAME} has been disabled. Lightning bolts will no longer be redirected to the ship.\n";
+        public const string ACCESS_DENIED_MESSAGE = $"You don't have access to this command yet. Purchase the '{UPGRADE_NAME}'.\n";
+        public const string TOGGLE_ON_MESSAGE = $"{UPGRADE_NAME} has been enabled. Lightning bolts will now be redirected to the ship.\n";
+        public const string TOGGLE_OFF_MESSAGE = $"{UPGRADE_NAME} has been disabled. Lightning bolts will no longer be redirected to the ship.\n";
 
         // distance
-        public static string DIST_SECTION = $"Effective Distance of {UPGRADE_NAME}.";
-        public static float DIST_DEFAULT = 175f;
-        public static string DIST_DESCRIPTION = $"The closer you are the more likely the rod will reroute lightning.";
+        public const string DIST_SECTION = $"Effective Distance of {UPGRADE_NAME}.";
+        public const float DIST_DEFAULT = 175f;
+        public const string DIST_DESCRIPTION = $"The closer you are the more likely the rod will reroute lightning.";
 
         public bool CanTryInterceptLightning { get; internal set; }
         public bool LightningIntercepted { get; internal set; }

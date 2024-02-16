@@ -71,9 +71,6 @@ namespace MoreShipUpgrades
 
             UpgradeBus.Instance.version = Metadata.VERSION;
             UpgradeBus.Instance.UpgradeAssets = UpgradeAssets;
-
-            UpgradeBus.Instance.internNames = AssetBundleHandler.GetInfoFromJSON("InternNames").Split(",");
-            UpgradeBus.Instance.internInterests = AssetBundleHandler.GetInfoFromJSON("InternInterests").Split(",");
             
             SetupModStore(ref UpgradeAssets);
 
@@ -343,7 +340,6 @@ namespace MoreShipUpgrades
                 sampleScript.itemProperties.maxValue = MAXIMUM_VALUES[creatureName];
                 sample.spawnPrefab.AddComponent<ScrapValueSyncer>();
                 LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(sample.spawnPrefab);
-                UpgradeBus.Instance.samplePrefabs.Add(creatureName, sample.spawnPrefab);
             }
         }
         private void SetupTeleporterButtons()
@@ -451,7 +447,6 @@ namespace MoreShipUpgrades
             visScript.useCooldown = 2f;
             visScript.grabbableToEnemies = true;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(nightVisionItem.spawnPrefab);
-            UpgradeBus.Instance.NightVisionPrefab = nightVisionItem.spawnPrefab;
 
             UpgradeBus.Instance.ItemsToSync.Add("Night", nightVisionItem);
 
