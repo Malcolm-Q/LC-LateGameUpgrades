@@ -340,6 +340,7 @@ namespace MoreShipUpgrades
                 sampleScript.itemProperties.maxValue = MAXIMUM_VALUES[creatureName];
                 sample.spawnPrefab.AddComponent<ScrapValueSyncer>();
                 LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(sample.spawnPrefab);
+                UpgradeBus.Instance.samplePrefabs.Add(creatureName, sample.spawnPrefab);
             }
         }
         private void SetupTeleporterButtons()

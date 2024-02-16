@@ -12,7 +12,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
     {
         private static LguLogger logger = new LguLogger(UPGRADE_NAME);
         internal static Hunter Instance;
-        internal Dictionary<string, GameObject> samplePrefabs = new Dictionary<string, GameObject>();
 
         public const string UPGRADE_NAME = "Hunter";
         internal const string WORLD_BUILDING_TEXT = "\n\nOn-the-job training program that teaches your crew how to properly collect lab-ready samples of blood," +
@@ -60,11 +59,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             upgradeName = UPGRADE_NAME;
             base.Start();
             Instance = this;
-            foreach (string creatureName in AssetBundleHandler.samplePaths.Keys)
-            {
-                Item sample = AssetBundleHandler.GetItemObject(creatureName);
-                samplePrefabs.Add(creatureName, sample.spawnPrefab);
-            }
         }
 
         public static string GetHunterInfo(int level, int price)

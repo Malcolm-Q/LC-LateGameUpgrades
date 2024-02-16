@@ -28,7 +28,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
                 refStore.GetComponent<NetworkObject>().Spawn();
                 logger.LogDebug("LguStore component initiated...");
             }
-            foreach (GameObject sample in Hunter.Instance.samplePrefabs.Values)
+            foreach (GameObject sample in UpgradeBus.Instance.samplePrefabs.Values)
             {
                 Item item = sample.GetComponent<PhysicsProp>().itemProperties;
                 if (!StartOfRound.Instance.allItemsList.itemsList.Contains(item))

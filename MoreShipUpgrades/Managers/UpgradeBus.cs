@@ -37,6 +37,7 @@ namespace MoreShipUpgrades.Managers
 
         internal Dictionary<string, List<string>> fakeBombOrders = new Dictionary<string, List<string>>();
         internal Dictionary<string, float> SaleData = new Dictionary<string, float>();
+        internal Dictionary<string, GameObject> samplePrefabs = new Dictionary<string, GameObject>();
 
         internal AudioClip flashNoise;
         internal GameObject modStorePrefab;
