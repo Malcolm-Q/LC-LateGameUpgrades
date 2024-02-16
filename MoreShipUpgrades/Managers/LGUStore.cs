@@ -23,9 +23,9 @@ namespace MoreShipUpgrades.Managers
         public SaveInfo SaveInfo { get; internal set; }
         public LguSave LguSave { get; internal set; }
         private ulong playerID = 0;
-        private static LguLogger logger = new LguLogger(nameof(LguStore));
+        static LguLogger logger = new LguLogger(nameof(LguStore));
         const string saveDataKey = "LGU_SAVE_DATA";
-        private bool retrievedPluginConfiguration;
+        bool retrievedPluginConfiguration;
         private bool receivedSave;
 
         private void Start()
@@ -126,7 +126,9 @@ namespace MoreShipUpgrades.Managers
         public void SendConfigServerRpc()
         {
             logger.LogInfo("Client has requested hosts client");
-            string json = JsonConvert.SerializeObject(UpgradeBus.Instance.PluginConfiguration);
+            ConfigSynchronization cfg = new ConfigSynchronization();
+            cfg.SetupSynchronization();
+            string json = JsonConvert.SerializeObject(cfg);
             SendConfigClientRpc(json);
         }
 
@@ -138,15 +140,15 @@ namespace MoreShipUpgrades.Managers
                 logger.LogInfo("Config has already been received from host on this client, disregarding.");
                 return;
             }
-            PluginConfig PluginConfiguration = JsonConvert.DeserializeObject<PluginConfig>(json);
-            if( PluginConfiguration != null && !IsHost && !IsServer)
+            if (!IsHost && !IsServer)
             {
+                ConfigSynchronization cfg = JsonConvert.DeserializeObject<ConfigSynchronization>(json);
                 logger.LogInfo("Config received, deserializing and constructing...");
-                Color col = UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_COLOR.Value;
-                UpgradeBus.Instance.PluginConfiguration = PluginConfiguration;
-                UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_COLOR.Value = col;
-                UpgradeBus.Instance.Reconstruct();
-                retrievedPluginConfiguration = true;
+                Color col = UpgradeBus.instance.cfg.NIGHT_VIS_COLOR.Value;
+                cfg.SynchronizeConfiguration();
+                UpgradeBus.instance.cfg.NIGHT_VIS_COLOR.Value = col; //
+                UpgradeBus.instance.Reconstruct();
+                retrievedCfg = true;
             }
             if(IsHost || IsServer)
             {

@@ -7,11 +7,48 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
+using System.Reflection;
+using MoreShipUpgrades.Managers;
 
 
 namespace MoreShipUpgrades.Misc
 {
     [Serializable]
+    class ConfigSynchronization
+    {
+        public ConfigSynchronization() { }
+        internal void SetupSynchronization()
+        {
+            booleanProperties = new Dictionary<string, bool>();
+            integerProperties = new Dictionary<string, int>();
+            floatProperties = new Dictionary<string, float>();
+            stringProperties = new Dictionary<string, string>();
+            PropertyInfo[] propertyInfos = typeof(PluginConfig).GetProperties();
+            foreach (PropertyInfo info in propertyInfos)
+            {
+                if (info.PropertyType == typeof(ConfigEntry<bool>)) booleanProperties[info.Name] = ((ConfigEntry<bool>)info.GetValue(UpgradeBus.instance.cfg)).Value;
+                if (info.PropertyType == typeof(ConfigEntry<int>)) integerProperties[info.Name] = ((ConfigEntry<int>)info.GetValue(UpgradeBus.instance.cfg)).Value;
+                if (info.PropertyType == typeof(ConfigEntry<float>)) floatProperties[info.Name] = ((ConfigEntry<float>)info.GetValue(UpgradeBus.instance.cfg)).Value;
+                if (info.PropertyType == typeof(ConfigEntry<string>)) stringProperties[info.Name] = ((ConfigEntry<string>)info.GetValue(UpgradeBus.instance.cfg)).Value;
+            }
+        }
+        internal void SynchronizeConfiguration()
+        {
+            PropertyInfo[] propertyInfos = typeof(PluginConfig).GetProperties();
+            foreach (PropertyInfo info in propertyInfos)
+            {
+                if (info.PropertyType == typeof(ConfigEntry<bool>)) ((ConfigEntry<bool>)info.GetValue(UpgradeBus.instance.cfg)).Value = booleanProperties[info.Name];
+                if (info.PropertyType == typeof(ConfigEntry<int>)) ((ConfigEntry<int>)info.GetValue(UpgradeBus.instance.cfg)).Value = integerProperties[info.Name];
+                if (info.PropertyType == typeof(ConfigEntry<float>)) ((ConfigEntry<float>)info.GetValue(UpgradeBus.instance.cfg)).Value = floatProperties[info.Name];
+                if (info.PropertyType == typeof(ConfigEntry<string>)) ((ConfigEntry<string>)info.GetValue(UpgradeBus.instance.cfg)).Value = stringProperties[info.Name];
+            }
+                
+        }
+        public Dictionary<string, bool> booleanProperties;
+        public Dictionary<string, int> integerProperties;
+        public Dictionary<string, float> floatProperties;
+        public Dictionary<string, string> stringProperties;
+    }
     public class PluginConfig
     {
         readonly ConfigFile configFile;
@@ -29,7 +66,6 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<bool> PROTEIN_ENABLED { get; set; }
         public ConfigEntry<bool> BIGGER_LUNGS_ENABLED { get; set; }
         public ConfigEntry<bool> BACK_MUSCLES_ENABLED { get; set; }
-        public ConfigEntry<bool> LIGHT_FOOTED_ENABLED { get; set; }
         public ConfigEntry<bool> NIGHT_VISION_ENABLED { get; set; }
         public ConfigEntry<bool> RUNNING_SHOES_ENABLED { get; set; }
         public ConfigEntry<bool> BETTER_SCANNER_ENABLED { get; set; }
@@ -47,15 +83,11 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<bool> SCRAP_INSURANCE_ENABLED {  get; set; }
 
         // individual or shared
-        public ConfigEntry<bool> ADVANCED_TELE_INDIVIDUAL { get; set; }
-        public ConfigEntry<bool> WEAK_TELE_INDIVIDUAL { get; set; }
         public ConfigEntry<bool> BEEKEEPER_INDIVIDUAL { get; set; }
         public ConfigEntry<bool> PROTEIN_INDIVIDUAL { get; set; }
         public ConfigEntry<bool> BIGGER_LUNGS_INDIVIDUAL { get; set; }
         public ConfigEntry<bool> BACK_MUSCLES_INDIVIDUAL { get; set; }
-        public ConfigEntry<bool> LIGHT_FOOTED_INDIVIDUAL { get; set; }
         public ConfigEntry<bool> NIGHT_VISION_INDIVIDUAL { get; set; }
-        public ConfigEntry<bool> HUNTER_INDIVIDUAL { get; set; }
         public ConfigEntry<bool> PLAYER_HEALTH_INDIVIDUAL { get; set; }
 
         public ConfigEntry<bool> RUNNING_SHOES_INDIVIDUAL { get; set; }
@@ -82,7 +114,6 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<int> PROTEIN_PRICE { get; set; }
         public ConfigEntry<int> BIGGER_LUNGS_PRICE { get; set; }
         public ConfigEntry<int> BACK_MUSCLES_PRICE { get; set; }
-        public ConfigEntry<int> LIGHT_FOOTED_PRICE { get; set; }
         public ConfigEntry<int> NIGHT_VISION_PRICE { get; set; }
         public ConfigEntry<int> RUNNING_SHOES_PRICE { get; set; }
         public ConfigEntry<int> BETTER_SCANNER_PRICE { get; set; }
@@ -110,7 +141,6 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<bool> DESTROY_TRAP { get; set; }
         public ConfigEntry<float> DISARM_TIME { get; set; }
         public ConfigEntry<bool> EXPLODE_TRAP { get; set; }
-        public ConfigEntry<bool> REQUIRE_LINE_OF_SIGHT { get; set; }
         public ConfigEntry<float> CARRY_WEIGHT_REDUCTION { get; set; }
         public ConfigEntry<float> NODE_DISTANCE_INCREASE { get; set; }
         public ConfigEntry<float> SHIP_AND_ENTRANCE_DISTANCE_INCREASE { get; set; }
@@ -124,7 +154,6 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<float> DISCOMBOBULATOR_RADIUS { get; set; }
         public ConfigEntry<float> DISCOMBOBULATOR_STUN_DURATION { get; set; }
         public ConfigEntry<bool> DISCOMBOBULATOR_NOTIFY_CHAT { get; set; }
-        [JsonIgnore]
         public ConfigEntry<UnityEngine.Color> NIGHT_VIS_COLOR { get; set; }
         public ConfigEntry<float> NIGHT_VIS_DRAIN_SPEED { get; set; }
         public ConfigEntry<float> NIGHT_VIS_REGEN_SPEED { get; set; }
@@ -155,7 +184,6 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<float> BEEKEEPER_HIVE_VALUE_INCREASE { get; set; }
         public ConfigEntry<string> BACK_MUSCLES_UPGRADE_PRICES { get; set; }
         public ConfigEntry<string> BIGGER_LUNGS_UPGRADE_PRICES { get; set; }
-        public ConfigEntry<string> LIGHT_FOOTED_UPGRADE_PRICES { get; set; }
         public ConfigEntry<string> NIGHT_VISION_UPGRADE_PRICES { get; set; }
         public ConfigEntry<string> RUNNING_SHOES_UPGRADE_PRICES { get; set; }
         public ConfigEntry<string> STRONG_LEGS_UPGRADE_PRICES { get; set; }
