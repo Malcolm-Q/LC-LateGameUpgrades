@@ -31,8 +31,7 @@ namespace MoreShipUpgrades.Patches.Enemies
                 return;
             }
             logger.LogDebug($"Spawning sample for {name}");
-            GameObject go = Object.Instantiate(UpgradeBus.Instance.samplePrefabs[name.ToLower()], __instance.transform.position + Vector3.up, Quaternion.identity);
-            go.GetComponent<NetworkObject>().Spawn();
+            SpawnItemManager.Instance.SpawnSample(name.ToLower(), __instance.transform.position);
         }
     }
 

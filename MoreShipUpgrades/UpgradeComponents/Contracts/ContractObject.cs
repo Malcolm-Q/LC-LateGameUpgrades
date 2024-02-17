@@ -15,7 +15,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Contracts
         public virtual void Start()
         {
             if (contractType == null) { logger.LogWarning($"contractType was not set on {gameObject.name}!"); }
-            if (UpgradeBus.Instance.contractType != contractType || StartOfRound.Instance.currentLevel.PlanetName != UpgradeBus.Instance.contractLevel)
+            if (ContractManager.Instance.contractType != contractType || StartOfRound.Instance.currentLevel.PlanetName != ContractManager.Instance.contractLevel)
             {
                 gameObject.SetActive(false);
                 return;

@@ -28,16 +28,7 @@ namespace MoreShipUpgrades.Managers
 
         internal bool TPButtonPressed;
 
-
-        internal string contractLevel = "None";
-        internal string contractType = "None";
-        internal string DataMinigameKey = "";
-        internal string DataMinigameUser = "";
-        internal string DataMinigamePass = "";
-
-        internal Dictionary<string, List<string>> fakeBombOrders = new Dictionary<string, List<string>>();
         internal Dictionary<string, float> SaleData = new Dictionary<string, float>();
-        internal Dictionary<string, GameObject> samplePrefabs = new Dictionary<string, GameObject>();
 
         internal AudioClip flashNoise;
         internal GameObject modStorePrefab;
@@ -61,8 +52,6 @@ namespace MoreShipUpgrades.Managers
 
         internal Dictionary<string, AudioClip> SFX = new Dictionary<string, AudioClip>();
         internal bool helmetDesync;
-        internal List<string> bombOrder = new List<string>();
-        internal string SerialNumber;
 
         void Awake()
         {
@@ -114,8 +103,8 @@ namespace MoreShipUpgrades.Managers
 
             SickBeats.Instance.EffectsActive = false;
             NightVision.Instance.nightVisionActive = false;
-            contractType = "None";
-            contractLevel = "None";
+            ContractManager.Instance.contractType = "None";
+            ContractManager.Instance.contractLevel = "None";
 
             Discombobulator.instance.flashCooldown = 0f;
             BackMuscles.Instance.alteredWeight = 1f;

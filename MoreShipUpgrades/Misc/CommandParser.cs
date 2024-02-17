@@ -19,7 +19,6 @@ namespace MoreShipUpgrades.Misc
         private static LguLogger logger = new LguLogger(nameof(CommandParser));
         private static bool attemptCancelContract = false;
         private static string attemptSpecifyContract = null;
-        private static TerminalKeyword routeKeyword;
 
         const string LOAD_LGU_COMMAND = "load lgu";
         public static readonly List<string> contracts = new List<string> { "data", "exterminator", "extraction","exorcism","defusal" };
@@ -384,7 +383,7 @@ namespace MoreShipUpgrades.Misc
         private static TerminalNode ExecuteContractCancelCommand()
         {
             TerminalNode node = ScriptableObject.CreateInstance<TerminalNode>();
-            if (UpgradeBus.Instance.contractLevel == "None")
+            if (ContractManager.Instance.contractLevel == "None")
             {
                 node.displayText = "You must have accepted a contract to execute this command...\n\n";
                 node.clearPreviousText = true;
@@ -399,11 +398,11 @@ namespace MoreShipUpgrades.Misc
         {
             logger.LogDebug($"Trying to assign a contract on moon called {possibleMoon}");
             string txt = null;
-            if (UpgradeBus.Instance.contractLevel != "None")
+            if (ContractManager.Instance.contractLevel != "None")
             {
-                txt = $"You currently have a {UpgradeBus.Instance.contractType} contract on {UpgradeBus.Instance.contractLevel}!\n\n";
+                txt = $"You currently have a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}!\n\n";
                 txt += string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value);
-                logger.LogInfo($"User tried starting a new specified moon contract while they still have a {UpgradeBus.Instance.contractType} contract on {UpgradeBus.Instance.contractLevel}!");
+                logger.LogInfo($"User tried starting a new specified moon contract while they still have a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}!");
                 return DisplayTerminalMessage(txt);
             }
             if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value)
@@ -411,7 +410,7 @@ namespace MoreShipUpgrades.Misc
                 txt = $"Specified Moon contracts cost ${UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value} and you have ${terminal.groupCredits}\n\n";
                 return DisplayTerminalMessage(txt);
             }
-            string moon = GetSpecifiedLevel(possibleMoon);
+            string moon = ContractManager.GetSpecifiedLevel(possibleMoon);
             if (moon == "None")
             {
                 txt = $"Wasn't possible to find any moons whose name contains {possibleMoon} to provide a contract on it...\n\n";
@@ -425,11 +424,11 @@ namespace MoreShipUpgrades.Misc
         {
             if (possibleMoon != "") return TryGetMoonContract(possibleMoon, ref terminal);
             string txt = null;
-            if(UpgradeBus.Instance.contractLevel != "None")
+            if(ContractManager.Instance.contractLevel != "None")
             {
-                txt = $"You currently have a {UpgradeBus.Instance.contractType} contract on {UpgradeBus.Instance.contractLevel}!\n\n";
+                txt = $"You currently have a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}!\n\n";
                 txt += string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value);
-                logger.LogInfo($"User tried starting a new contract while they still have a {UpgradeBus.Instance.contractType} contract on {UpgradeBus.Instance.contractLevel}!");
+                logger.LogInfo($"User tried starting a new contract while they still have a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}!");
                 return DisplayTerminalMessage(txt);
             }
             if(terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value)
@@ -441,91 +440,20 @@ namespace MoreShipUpgrades.Misc
             int i = Random.Range(0,contracts.Count);
             if( contracts.Count > 1)
             {
-                while (i == ContractScript.lastContractIndex)
+                while (i == ContractManager.Instance.lastContractIndex)
                 {
                     i = Random.Range(0, contracts.Count);
                 }
             }
-            UpgradeBus.Instance.contractType = contracts[i];
-            txt = $"A {contracts[i]} contract has been accepted for {RandomLevel()}!{contractInfos[i]}";
+            ContractManager.Instance.contractType = contracts[i];
+            txt = $"A {contracts[i]} contract has been accepted for {ContractManager.RandomLevel()}!{contractInfos[i]}";
 
-            if (terminal.IsHost || terminal.IsServer) LguStore.Instance.SyncContractDetailsClientRpc(UpgradeBus.Instance.contractLevel, i);
-            else LguStore.Instance.ReqSyncContractDetailsServerRpc(UpgradeBus.Instance.contractLevel, i);
+            if (terminal.IsHost || terminal.IsServer) ContractManager.Instance.SyncContractDetailsClientRpc(ContractManager.Instance.contractLevel, i);
+            else ContractManager.Instance.ReqSyncContractDetailsServerRpc(ContractManager.Instance.contractLevel, i);
 
-            logger.LogInfo($"User accepted a {UpgradeBus.Instance.contractType} contract on {UpgradeBus.Instance.contractLevel}");
+            logger.LogInfo($"User accepted a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}");
 
             return DisplayTerminalMessage(txt);
-        }
-        static string GetSpecifiedLevel(string moon)
-        {
-            string lvl = UpgradeBus.Instance.contractLevel;
-            SelectableLevel[] availableLevels = StartOfRound.Instance.levels;
-            for (int i = 0; i < availableLevels.Length; i++) 
-            {
-                logger.LogDebug(availableLevels[i].PlanetName.ToLower());
-                if (!availableLevels[i].PlanetName.ToLower().Contains(moon)) continue;
-                lvl = availableLevels[i].PlanetName;
-                break;
-            }
-            return lvl;
-        }
-        static string RandomLevel()
-        {
-            string lvl = UpgradeBus.Instance.contractLevel;
-            string lastLevel = null;
-            SelectableLevel[] availableLevels = StartOfRound.Instance.levels;
-            bool[] usedLevels = new bool[availableLevels.Length];
-            for(int i = 0; i < usedLevels.Length; i++)
-            {
-                usedLevels[i] = false;
-            }
-            bool allUsed = true;
-            while (lvl == UpgradeBus.Instance.contractLevel)
-            {
-                int levelIndex = UnityEngine.Random.Range(0, availableLevels.Length);
-                if (usedLevels[levelIndex]) continue;
-                usedLevels[levelIndex] = true;
-                SelectableLevel level = availableLevels[levelIndex];
-                lastLevel = level.PlanetName;
-                if (level.PlanetName.Contains("Gordion")) continue;
-                logger.LogDebug($"Picked {level.PlanetName} as possible moon for contract...");
-                if (routeKeyword == null) routeKeyword = UpgradeBus.Instance.GetTerminal().terminalNodes.allKeywords.First(k => k.word == "route");
-                for(int i = 0; i < routeKeyword.compatibleNouns.Length && lvl == UpgradeBus.Instance.contractLevel; i++)
-                {
-                    TerminalNode routeMoon = routeKeyword.compatibleNouns[i].result;
-                    int itemCost = routeMoon.itemCost;
-                    if (UpgradeBus.Instance.PluginConfiguration.CONTRACT_FREE_MOONS_ONLY.Value && itemCost != 0)
-                    {
-                        logger.LogDebug($"Criteria algorithm skipped a choice due to configuration only allowing free moons (Choice: {level.PlanetName})");
-                        break;
-                    }
-                    CompatibleNoun[] additionalNodes = routeMoon.terminalOptions;
-                    for(int j = 0; j < additionalNodes.Length && lvl == UpgradeBus.Instance.contractLevel; j++)
-                    {
-                        TerminalNode confirmNode = additionalNodes[j].result;
-                        if (confirmNode == null) continue;
-                        if (confirmNode.buyRerouteToMoon != levelIndex) continue;
-
-                        logger.LogDebug($"Criteria algorithm made a choice and decided to assign contract on {level.PlanetName}");
-                        lvl = level.PlanetName;
-                    }
-                }
-                if (lvl != UpgradeBus.Instance.contractLevel) break;
-                allUsed = true;
-                for (int i = 0; i < usedLevels.Length; i++)
-                {
-                    allUsed &= usedLevels[i];
-                }
-                if (allUsed) break;
-            }
-            if (lvl == UpgradeBus.Instance.contractLevel && allUsed)
-            {
-                logger.LogDebug($"Criteria algorithm did not make a choice, we will use the last selected moon ({lastLevel})");
-                lvl = lastLevel;
-            }
-            logger.LogDebug($"{lvl} will be the moon for the random contract...");
-            UpgradeBus.Instance.contractLevel = lvl;
-            return lvl;
         }
 
         private static TerminalNode ExecuteLategameCommands(string secondWord)
@@ -616,8 +544,8 @@ namespace MoreShipUpgrades.Misc
                 node.clearPreviousText = true;
                 return node;
             }
-            if (terminal.IsHost || terminal.IsServer) LguStore.Instance.SyncContractDetailsClientRpc("None", -1);
-            else LguStore.Instance.ReqSyncContractDetailsServerRpc("None", -1);
+            if (terminal.IsHost || terminal.IsServer) ContractManager.Instance.SyncContractDetailsClientRpc("None", -1);
+            else ContractManager.Instance.ReqSyncContractDetailsServerRpc("None", -1);
             node.displayText = "Cancelling contract...\n\n";
             node.clearPreviousText = true;
             return node;
@@ -637,11 +565,11 @@ namespace MoreShipUpgrades.Misc
             
             LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits - UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value);
             int i = Random.Range(0, contracts.Count);
-            UpgradeBus.Instance.contractType = contracts[i];
-            UpgradeBus.Instance.contractLevel = moon;
-            if (terminal.IsHost || terminal.IsServer) LguStore.Instance.SyncContractDetailsClientRpc(UpgradeBus.Instance.contractLevel, i);
-            else LguStore.Instance.ReqSyncContractDetailsServerRpc(UpgradeBus.Instance.contractLevel, i);
-            logger.LogInfo($"User accepted a {UpgradeBus.Instance.contractType} contract on {UpgradeBus.Instance.contractLevel}");
+            ContractManager.Instance.contractType = contracts[i];
+            ContractManager.Instance.contractLevel = moon;
+            if (terminal.IsHost || terminal.IsServer) ContractManager.Instance.SyncContractDetailsClientRpc(ContractManager.Instance.contractLevel, i);
+            else ContractManager.Instance.ReqSyncContractDetailsServerRpc(ContractManager.Instance.contractLevel, i);
+            logger.LogInfo($"User accepted a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}");
             return DisplayTerminalMessage($"A {contracts[i]} contract has been accepted for {moon}!{contractInfos[i]}");
         }
         public static void ParseLGUCommands(string fullText, ref Terminal terminal, ref TerminalNode outputNode)
@@ -725,28 +653,28 @@ namespace MoreShipUpgrades.Misc
 
         private static TerminalNode DefuseBombCommand(string secondWord)
         {
-            if(UpgradeBus.Instance.contractLevel != StartOfRound.Instance.currentLevel.PlanetName || UpgradeBus.Instance.contractType != "defusal")
+            if(ContractManager.Instance.contractLevel != StartOfRound.Instance.currentLevel.PlanetName || ContractManager.Instance.contractType != "defusal")
             {
                 return DisplayTerminalMessage("YOU MUST BE IN A DEFUSAL CONTRACT TO USE THIS COMMAND!\n\n");
             }
             if (secondWord == "") return DisplayTerminalMessage("YOU MUST ENTER A SERIAL NUMBER TO LOOK UP!\n\n");
-            if (secondWord.ToLower() == UpgradeBus.Instance.SerialNumber.ToLower() || secondWord.ToLower() == UpgradeBus.Instance.SerialNumber.Replace("-","").ToLower())
+            if (secondWord.ToLower() == ContractManager.Instance.SerialNumber.ToLower() || secondWord.ToLower() == ContractManager.Instance.SerialNumber.Replace("-","").ToLower())
             {
                 logger.LogInfo("DEFUSAL: user entered correct serial number!");
-                return DisplayTerminalMessage("CUT THE WIRES IN THE FOLLOWING ORDER:\n\n" + string.Join("\n\n", UpgradeBus.Instance.bombOrder) +"\n\n");
+                return DisplayTerminalMessage("CUT THE WIRES IN THE FOLLOWING ORDER:\n\n" + string.Join("\n\n", ContractManager.Instance.bombOrder) +"\n\n");
             }
             else
             {
-                logger.LogInfo($"DEFUSAL: user entered incorrect serial number! Entered: {secondWord}, Expected: {UpgradeBus.Instance.SerialNumber} (case and hyphen insensitive)");
-                if (UpgradeBus.Instance.fakeBombOrders.ContainsKey(secondWord))
+                logger.LogInfo($"DEFUSAL: user entered incorrect serial number! Entered: {secondWord}, Expected: {ContractManager.Instance.SerialNumber} (case and hyphen insensitive)");
+                if (ContractManager.Instance.fakeBombOrders.ContainsKey(secondWord))
                 {
                     logger.LogInfo("DEFUSAL: Reusing previously generated fake defusal under this key.");
-                    return DisplayTerminalMessage("CUT THE WIRES IN THE FOLLOWING ORDER:\n\n" + string.Join("\n\n", UpgradeBus.Instance.fakeBombOrders[secondWord]) +"\n\n");
+                    return DisplayTerminalMessage("CUT THE WIRES IN THE FOLLOWING ORDER:\n\n" + string.Join("\n\n", ContractManager.Instance.fakeBombOrders[secondWord]) +"\n\n");
                 }
                 logger.LogInfo("DEFUSAL: Generating new fake defusal under this key.");
                 List<string> falseOrder = new List<string> { "red","green","blue" };
                 Tools.ShuffleList(falseOrder);
-                UpgradeBus.Instance.fakeBombOrders.Add(secondWord, falseOrder);
+                ContractManager.Instance.fakeBombOrders.Add(secondWord, falseOrder);
                 return DisplayTerminalMessage("CUT THE WIRES IN THE FOLLOWING ORDER:\n\n" + string.Join("\n\n", falseOrder) +"\n\n");
             }
         }
@@ -754,12 +682,12 @@ namespace MoreShipUpgrades.Misc
         private static TerminalNode HandleBruteForce(string secondWord)
         {
             string txt = null;
-            string ip = UpgradeBus.Instance.DataMinigameKey;
+            string ip = ContractManager.Instance.DataMinigameKey;
             if(secondWord == ip)
             {
-                logger.LogInfo($"USER CORRECTLY ENTERED IP ADDRESS, user: {UpgradeBus.Instance.DataMinigameUser}, pass: {UpgradeBus.Instance.DataMinigamePass}");
+                logger.LogInfo($"USER CORRECTLY ENTERED IP ADDRESS, user: {ContractManager.Instance.DataMinigameUser}, pass: {ContractManager.Instance.DataMinigamePass}");
                 txt = $"PING {ip} ({ip}): 56 data bytes\r\n64 bytes from {ip}: icmp_seq=0 ttl=64 time=1.234 ms\r\n64 bytes from {ip}: icmp_seq=1 ttl=64 time=1.345 ms\r\n64 bytes from {ip}: icmp_seq=2 ttl=64 time=1.123 ms\r\n64 bytes from {ip}: icmp_seq=3 ttl=64 time=1.456 ms\r\n\r\n--- {ip} ping statistics ---\r\n4 packets transmitted, 4 packets received, 0.0% packet loss\r\nround-trip min/avg/max/stddev = 1.123/1.289/1.456/0.123 ms\n\n";
-                txt += $"CONNECTION ESTABLISHED --- RETRIEVING CREDENTIALS...\n\nUSER: {UpgradeBus.Instance.DataMinigameUser}\nPASSWORD: {UpgradeBus.Instance.DataMinigamePass}\n";
+                txt += $"CONNECTION ESTABLISHED --- RETRIEVING CREDENTIALS...\n\nUSER: {ContractManager.Instance.DataMinigameUser}\nPASSWORD: {ContractManager.Instance.DataMinigamePass}\n";
             }
             else
             {

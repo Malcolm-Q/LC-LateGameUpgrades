@@ -86,9 +86,9 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
                 lets[3] = allowedNums[Random.Range(0, allowedNums.Length)];
                 lets[4] = allowedNums[Random.Range(0, allowedNums.Length)];
                 lets[5] = allowedNums[Random.Range(0, allowedNums.Length)];
-                UpgradeBus.Instance.bombOrder = new List<string> { "red", "green", "blue" };
-                Tools.ShuffleList(UpgradeBus.Instance.bombOrder);
-                string orderString = string.Join(",", UpgradeBus.Instance.bombOrder);
+                ContractManager.Instance.bombOrder = new List<string> { "red", "green", "blue" };
+                Tools.ShuffleList(ContractManager.Instance.bombOrder);
+                string orderString = string.Join(",", ContractManager.Instance.bombOrder);
                 SyncBombDetailsClientRpc(new string(lets), orderString);
             }
         }
@@ -120,15 +120,15 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
         void BombStateChangeClientRpc(string wire)
         {
             audio.PlayOneShot(snip);
-            if (UpgradeBus.Instance.bombOrder[0] == wire)
+            if (ContractManager.Instance.bombOrder[0] == wire)
             {
-                UpgradeBus.Instance.bombOrder.Remove(wire);
+                ContractManager.Instance.bombOrder.Remove(wire);
                 audio.PlayOneShot(snip);
                 wires[wire].SetActive(false);
                 cutWires[wire].SetActive(true);
                 trigs[wire].enabled = false;
                 trigs[wire].GetComponent<BoxCollider>().enabled = false;
-                if (UpgradeBus.Instance.bombOrder.Count == 0)
+                if (ContractManager.Instance.bombOrder.Count == 0)
                 {
                     // win
                     armed = false;
@@ -190,8 +190,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
                 // I have no clue why or how this can happen but it can and does for remote clients.
                 serialNumberMesh = transform.GetChild(0).GetChild(2).GetComponent<TextMesh>();
             }
-            UpgradeBus.Instance.SerialNumber = serial;
-            UpgradeBus.Instance.bombOrder = newOrder.Split(",").ToList();
+            ContractManager.Instance.SerialNumber = serial;
+            ContractManager.Instance.bombOrder = newOrder.Split(",").ToList();
             serialNumberMesh.text = serial;
         }
 

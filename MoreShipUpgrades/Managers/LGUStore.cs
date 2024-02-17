@@ -80,27 +80,6 @@ namespace MoreShipUpgrades.Managers
             logger.LogInfo($"Received and updated save info for client: {id}");
         }
 
-        [ServerRpc(RequireOwnership = false)]
-        public void ReqSyncContractDetailsServerRpc(string contractLvl, int contractType)
-        {
-            SyncContractDetailsClientRpc(contractLvl, contractType);
-            logger.LogInfo("Syncing contract details on all clients...");
-        }
-
-        [ClientRpc]
-        public void SyncContractDetailsClientRpc(string contractLvl = "None", int contractType = -1)
-        {
-            UpgradeBus.Instance.contractLevel = contractLvl;
-            if (contractType == -1) UpgradeBus.Instance.contractType = "None";
-            else
-            {
-                UpgradeBus.Instance.contractType = CommandParser.contracts[contractType];
-                ContractScript.lastContractIndex = contractType;
-            }
-            UpgradeBus.Instance.fakeBombOrders = new Dictionary<string, List<string>>();
-            logger.LogInfo($"New contract details received. level: {contractLvl}, type: {contractType}");
-        }
-
         public void HandleSpawns()
         {
             int i = 0;
@@ -340,8 +319,8 @@ namespace MoreShipUpgrades.Managers
 
             CheckForOldData(SaveInfo);
 
-            UpgradeBus.Instance.contractLevel = SaveInfo.contractLevel;
-            UpgradeBus.Instance.contractType = SaveInfo.contractType;
+            ContractManager.Instance.contractLevel = SaveInfo.contractLevel;
+            ContractManager.Instance.contractType = SaveInfo.contractType;
             UpgradeBus.Instance.wearingHelmet = SaveInfo.wearingHelmet;
 
             UpgradeBus.Instance.SaleData = SaveInfo.SaleData;
@@ -576,8 +555,8 @@ namespace MoreShipUpgrades.Managers
         public int quantumDisruptorLevel;
 
         public bool TPButtonPressed = UpgradeBus.Instance.TPButtonPressed;
-        public string contractType = UpgradeBus.Instance.contractType;
-        public string contractLevel = UpgradeBus.Instance.contractLevel;
+        public string contractType = ContractManager.Instance.contractType;
+        public string contractLevel = ContractManager.Instance.contractLevel;
         public Dictionary<string, float> SaleData = UpgradeBus.Instance.SaleData;
         public bool wearingHelmet = UpgradeBus.Instance.wearingHelmet;
     }

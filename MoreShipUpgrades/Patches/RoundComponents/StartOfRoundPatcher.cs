@@ -19,7 +19,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         static LguLogger logger = new LguLogger(nameof(StartOfRoundPatcher));
         [HarmonyPrefix]
         [HarmonyPatch(nameof(StartOfRound.Start))]
-        static void InitLguStore(PlayerControllerB __instance)
+        static void InitLguStore(StartOfRound __instance)
         {
             logger.LogDebug("Initiating components...");
             if (__instance.NetworkManager.IsHost || __instance.NetworkManager.IsServer)
@@ -28,16 +28,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
                 refStore.GetComponent<NetworkObject>().Spawn();
                 logger.LogDebug("LguStore component initiated...");
             }
-            foreach (GameObject sample in UpgradeBus.Instance.samplePrefabs.Values)
-            {
-                Item item = sample.GetComponent<PhysicsProp>().itemProperties;
-                if (!StartOfRound.Instance.allItemsList.itemsList.Contains(item))
-                {
-                    StartOfRound.Instance.allItemsList.itemsList.Add(item);
-                }
-
-                logger.LogDebug($"{item.itemName} component initiated...");
-            }
+            SpawnItemManager.Instance.SetupSpawnableItems();
         }
         [HarmonyPrefix]
         [HarmonyPatch(nameof(StartOfRound.playersFiredGameOver))]
@@ -75,10 +66,10 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         [HarmonyPostfix]
         static void ResetContract(StartOfRound __instance)
         {
-            if (UpgradeBus.Instance.contractLevel != RoundManager.Instance.currentLevel.PlanetName) return;
+            if (ContractManager.Instance.contractLevel != RoundManager.Instance.currentLevel.PlanetName) return;
             if (!__instance.IsHost) return;
 
-            LguStore.Instance.SyncContractDetailsClientRpc("None", -1);
+            ContractManager.Instance.SyncContractDetailsClientRpc("None", -1);
         }
 
         [HarmonyPatch(nameof(StartOfRound.AutoSaveShipData))]

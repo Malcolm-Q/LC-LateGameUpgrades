@@ -137,9 +137,9 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
         void SyncGameDetailsClientRpc(string Key, string user, string pass)
         {
             logger.LogInfo($"Received Broadcasted minigame info!\nKey: {Key}\nuser: {user}\npassword: {pass}");
-            UpgradeBus.Instance.DataMinigameKey = Key;
-            UpgradeBus.Instance.DataMinigameUser = user;
-            UpgradeBus.Instance.DataMinigamePass = pass;
+            ContractManager.Instance.DataMinigameKey = Key;
+            ContractManager.Instance.DataMinigameUser = user;
+            ContractManager.Instance.DataMinigamePass = pass;
             this.user = user;
             this.pass = pass;
             if (IPText == null) IPText = transform.GetChild(2).GetChild(0).GetChild(2).GetChild(0).GetComponent<Text>();

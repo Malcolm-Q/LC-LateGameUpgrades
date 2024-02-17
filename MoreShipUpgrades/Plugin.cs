@@ -66,8 +66,10 @@ namespace MoreShipUpgrades
             string assetDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "shipupgrades");
             AssetBundle UpgradeAssets = AssetBundle.LoadFromFile(assetDir);
 
-            GameObject busGO = new GameObject("UpgradeBus");
-            busGO.AddComponent<UpgradeBus>();
+            GameObject gameObject = new GameObject("UpgradeBus");
+            gameObject.AddComponent<UpgradeBus>();
+            gameObject = new GameObject("SpawnItemManager");
+            gameObject.AddComponent<SpawnItemManager>();
 
             UpgradeBus.Instance.version = Metadata.VERSION;
             UpgradeBus.Instance.UpgradeAssets = UpgradeAssets;
@@ -287,6 +289,7 @@ namespace MoreShipUpgrades
             GameObject modStore = AssetBundleHandler.TryLoadGameObjectAsset(ref bundle, "Assets/ShipUpgrades/LguStore.prefab");
             if (modStore == null) return;
 
+            modStore.AddComponent<ContractManager>();
             modStore.AddComponent<LguStore>();
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(modStore);
             UpgradeBus.Instance.modStorePrefab = modStore;
@@ -340,7 +343,7 @@ namespace MoreShipUpgrades
                 sampleScript.itemProperties.maxValue = MAXIMUM_VALUES[creatureName];
                 sample.spawnPrefab.AddComponent<ScrapValueSyncer>();
                 LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(sample.spawnPrefab);
-                UpgradeBus.Instance.samplePrefabs.Add(creatureName, sample.spawnPrefab);
+                SpawnItemManager.Instance.samplePrefabs.Add(creatureName, sample.spawnPrefab);
             }
         }
         private void SetupTeleporterButtons()
