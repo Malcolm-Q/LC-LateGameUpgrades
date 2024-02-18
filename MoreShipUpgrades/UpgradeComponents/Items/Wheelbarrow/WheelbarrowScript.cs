@@ -1,5 +1,6 @@
 ﻿using GameNetcodeStuff;
 using LethalCompanyInputUtils.Api;
+using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
@@ -8,16 +9,12 @@ using System.Collections.Generic;
 using System.Xml.Linq;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
 {
-    public class WheelbarrowButton : LcInputActions
-    {
-        [InputAction("<Mouse>/middleButton", Name = "Drop all items from wheelbarrow")]
-        public InputAction WheelbarrowKey { get; set; }
-    }
     abstract class WheelbarrowScript : GrabbableObject
     {
         protected enum Restrictions
@@ -94,7 +91,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         private const string DEPOSIT_TEXT = "Depositing item...";
         private const string START_DEPOSIT_TEXT = "Deposit item: [LMB]";
         private const string WITHDRAW_ITEM_TEXT = "Withdraw item: [LMB]";
-        internal static WheelbarrowButton InputActionInstance = new();
+
+        public static WheelbarrowScript Instance;
 
         /// <summary>
         /// When the item spawns in-game, store the necessary variables for correct behaviours from the prefab asset
@@ -132,10 +130,12 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             checkMethods[Restrictions.ItemCount] = CheckWheelbarrowItemCountRestriction;
             checkMethods[Restrictions.TotalWeight] = CheckWheelbarrowWeightRestriction;
             checkMethods[Restrictions.All] = CheckWheelbarrowAllRestrictions;
-            string controlBind = UpgradeBus.instance.cfg.WHEELBARROW_DROP_ALL_CONTROL_BIND.Value;
 
             SetupItemAttributes();
+
+            Instance = this;
         }
+
         public float GetSloppiness()
         {
             return sloppiness;
@@ -148,20 +148,15 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         {
             base.Update();
             UpdateWheelbarrowSounds();
-            UpdateWheelbarrowDrop();
+            //UpdateWheelbarrowDrop();
             UpdateInteractTriggers();
         }
-        private void UpdateWheelbarrowDrop()
+        public void UpdateWheelbarrowDrop()
         {
             if (!isHeld) return;
             if (playerHeldBy != UpgradeBus.instance.GetLocalPlayer()) return;
             if (currentAmountItems <= 0) return;
-            if (!DropAllItemsControlBindPressed()) return;
             DropAllItemsInWheelbarrowServerRpc();
-        }
-        private bool DropAllItemsControlBindPressed()
-        {
-            return InputActionInstance.WheelbarrowKey.WasPressedThisFrame();
         }
         [ServerRpc(RequireOwnership = false)]
         private void DropAllItemsInWheelbarrowServerRpc()

@@ -1,8 +1,10 @@
 ﻿using GameNetcodeStuff;
 using LethalCompanyInputUtils.Api;
+using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -14,22 +16,16 @@ using UnityEngine.InputSystem;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    public class NvgButton : LcInputActions
-    {
-        [InputAction("<Keyboard>/q", Name = "Toggle NVG")]
-        public InputAction NvgKey { get; set; }
-    }
     internal class NightVision : TierUpgrade
     {
         private float nightBattery;
         private Transform batteryBar;
         private PlayerControllerB client;
-        private bool batteryExhaustion;
+        public bool batteryExhaustion;
         internal static NightVision instance;
 
         public static string UPGRADE_NAME = "NV Headset Batteries";
         public static string PRICES_DEFAULT = "300,400,500";
-        internal static NvgButton InputActionInstance = new();
 
         private static LGULogger logger;
         internal override void Start()
@@ -45,11 +41,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         void LateUpdate()
         {
             if (client == null) { return; }
-
-            if (InputActionInstance.NvgKey.WasPressedThisFrame() && !batteryExhaustion)
-            {
-                Toggle();
-            }
 
             float maxBattery = UpgradeBus.instance.cfg.NIGHT_BATTERY_MAX.Value + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.instance.cfg.NIGHT_VIS_BATTERY_INCREMENT.Value;
 
@@ -86,7 +77,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             batteryBar.localScale = new Vector3(scale, 1, 1);
         }
 
-        private void Toggle()
+        public void Toggle()
         {
             UpgradeBus.instance.nightVisionActive = !UpgradeBus.instance.nightVisionActive;
 
