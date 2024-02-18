@@ -1,9 +1,11 @@
 ﻿using GameNetcodeStuff;
+using LethalCompanyInputUtils.Api;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,6 +13,11 @@ using UnityEngine.InputSystem.LowLevel;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
 {
+    public class WheelbarrowButton : LcInputActions
+    {
+        [InputAction("<Mouse>/middleButton", Name = "Drop all items from wheelbarrow")]
+        public InputAction WheelbarrowKey { get; set; }
+    }
     abstract class WheelbarrowScript : GrabbableObject
     {
         protected enum Restrictions
@@ -22,10 +29,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         }
         private static LGULogger logger = new LGULogger(nameof(WheelbarrowScript));
         protected Restrictions restriction;
-        internal bool dropAllItemsKeySet;
-        internal Key dropAllItemsKey;
-        internal bool dropAllItemsMouseButtonSet;
-        internal MouseButton dropAllitemsMouseButton;
         private System.Random randomNoise;
         /// <summary>
         /// Component responsible to emit sound when the wheelbarrow's moving
@@ -91,6 +94,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         private const string DEPOSIT_TEXT = "Depositing item...";
         private const string START_DEPOSIT_TEXT = "Deposit item: [LMB]";
         private const string WITHDRAW_ITEM_TEXT = "Withdraw item: [LMB]";
+        internal static WheelbarrowButton InputActionInstance = new();
 
         /// <summary>
         /// When the item spawns in-game, store the necessary variables for correct behaviours from the prefab asset
@@ -129,24 +133,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             checkMethods[Restrictions.TotalWeight] = CheckWheelbarrowWeightRestriction;
             checkMethods[Restrictions.All] = CheckWheelbarrowAllRestrictions;
             string controlBind = UpgradeBus.instance.cfg.WHEELBARROW_DROP_ALL_CONTROL_BIND.Value;
-            if (Enum.TryParse(controlBind, out Key toggle))
-            {
-                dropAllItemsKey = toggle;
-                dropAllItemsKeySet = true;
-            }
-            else dropAllItemsKeySet = false;
-            if (Enum.TryParse(controlBind, out MouseButton mouseButton))
-            {
-                dropAllitemsMouseButton = mouseButton;
-                dropAllItemsMouseButtonSet = true;
-            }
-            else dropAllItemsMouseButtonSet = false;
-            if (!dropAllItemsKeySet && !dropAllItemsMouseButtonSet)
-            {
-                logger.LogWarning("No configuration was found to set a control bind for dropping all items, defaulting to middle mouse button");
-                dropAllItemsMouseButtonSet = true;
-                dropAllitemsMouseButton = MouseButton.Middle;
-            }
 
             SetupItemAttributes();
         }
@@ -175,19 +161,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         }
         private bool DropAllItemsControlBindPressed()
         {
-            if (dropAllItemsKeySet) return Keyboard.current[dropAllItemsKey].wasPressedThisFrame;
-            if (dropAllItemsMouseButtonSet)
-            {
-                switch(dropAllitemsMouseButton)
-                {
-                    case MouseButton.Left: return Mouse.current.leftButton.wasPressedThisFrame;
-                    case MouseButton.Right: return Mouse.current.rightButton.wasPressedThisFrame;
-                    case MouseButton.Middle: return Mouse.current.middleButton.wasPressedThisFrame;
-                    case MouseButton.Back: return Mouse.current.backButton.wasPressedThisFrame;
-                    case MouseButton.Forward: return Mouse.current.forwardButton.wasPressedThisFrame;
-                }
-            }
-            return false;
+            return InputActionInstance.WheelbarrowKey.WasPressedThisFrame();
         }
         [ServerRpc(RequireOwnership = false)]
         private void DropAllItemsInWheelbarrowServerRpc()

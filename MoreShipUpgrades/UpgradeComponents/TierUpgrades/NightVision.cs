@@ -1,10 +1,12 @@
 ﻿using GameNetcodeStuff;
+using LethalCompanyInputUtils.Api;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
+using System.Xml.Linq;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -12,17 +14,22 @@ using UnityEngine.InputSystem;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
+    public class NvgButton : LcInputActions
+    {
+        [InputAction("<Keyboard>/q", Name = "Toggle NVG")]
+        public InputAction NvgKey { get; set; }
+    }
     internal class NightVision : TierUpgrade
     {
         private float nightBattery;
         private Transform batteryBar;
         private PlayerControllerB client;
         private bool batteryExhaustion;
-        private Key toggleKey;
         internal static NightVision instance;
 
         public static string UPGRADE_NAME = "NV Headset Batteries";
         public static string PRICES_DEFAULT = "300,400,500";
+        internal static NvgButton InputActionInstance = new();
 
         private static LGULogger logger;
         internal override void Start()
@@ -33,22 +40,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             base.Start();
             batteryBar = transform.GetChild(0).GetChild(0).transform;
             transform.GetChild(0).gameObject.SetActive(false);
-            if (Enum.TryParse(UpgradeBus.instance.cfg.TOGGLE_NIGHT_VISION_KEY.Value, out Key toggle))
-            {
-                toggleKey = toggle;
-            }
-            else
-            {
-                logger.LogWarning("Error parsing the key for toggle night vision, defaulted to LeftAlt");
-                toggleKey = Key.LeftAlt;
-            }
         }
 
         void LateUpdate()
         {
             if (client == null) { return; }
 
-            if (Keyboard.current[toggleKey].wasPressedThisFrame && !batteryExhaustion)
+            if (InputActionInstance.NvgKey.WasPressedThisFrame() && !batteryExhaustion)
             {
                 Toggle();
             }
