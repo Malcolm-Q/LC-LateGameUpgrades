@@ -1,17 +1,13 @@
 ﻿using BepInEx.Logging;
 using HarmonyLib;
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
 
 namespace MoreShipUpgrades.Misc
 {
-    public class LGULogger
+    public class LguLogger
     {
-        private string moduleName;
-        private ManualLogSource logSource;
-        public LGULogger(string moduleName)
+        readonly string moduleName;
+        readonly ManualLogSource logSource;
+        public LguLogger(string moduleName)
         {
             this.moduleName = moduleName;
             logSource = Plugin.mls;

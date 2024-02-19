@@ -8,6 +8,10 @@ using UnityEngine.InputSystem;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
 {
+    /// <summary>
+    /// Base class which represents an item with the ability of teleporting the player back to the ship through vanila teleport
+    /// when activated
+    /// </summary>
     internal class BasePortableTeleporter : GrabbableObject
     {
         /// <summary>
@@ -36,14 +40,14 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
             audio = GetComponent<AudioSource>();
             
         }
-        public override void DiscardItem()
-        {
-            playerHeldBy.activatingItem = false;
-            base.DiscardItem();
-        }
+
+        /// <summary>
+        /// Function called when the player activates the item in their hand through left-click
+        /// </summary>
+        /// <param name="used">Status of the item in terms being used or not</param>
+        /// <param name="buttonDown">Pressed down the button or lifted up the press</param>
         public override void ItemActivate(bool used, bool buttonDown = true)
         {
-            base.ItemActivate(used, buttonDown);
             if (!CanUsePortableTeleporter()) return;
 
             int playerRadarIndex = SearchForPlayerInRadar();
@@ -51,13 +55,18 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
 
             TeleportPlayer(playerRadarIndex, ref teleporter);
         }
+        /// <summary>
+        /// Triggers the vanila teleport on the player holding the portable teleporter
+        /// </summary>
+        /// <param name="playerRadarIndex">Index of the player holding the portable teleporter</param>
+        /// <param name="teleporter">Teleporter that allows to teleport players back to the ship</param>
         private void TeleportPlayer(int playerRadarIndex, ref ShipTeleporter teleporter)
         {
             if (playerRadarIndex == -1)
             {
                 //this shouldn't occur but if it does, this will teleport this client and the server targeted player.
                 StartOfRound.Instance.mapScreen.targetedPlayer = playerHeldBy;
-                UpgradeBus.instance.TPButtonPressed = true;
+                UpgradeBus.Instance.TPButtonPressed = true;
                 teleporter.PressTeleportButtonOnLocalClient();
                 if (Random.Range(0f, 1f) > breakChance)
                 {
@@ -72,6 +81,10 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
                 StartCoroutine(WaitToTP(teleporter));
             }
         }
+        /// <summary>
+        /// Search for the player holding the portable teleporter's radar index used to select in the radar screen of the ship
+        /// </summary>
+        /// <returns>Radar index of the player holding the portable teleporter</returns>
         private int SearchForPlayerInRadar()
         {
             int thisPlayersIndex = -1;
@@ -84,6 +97,10 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
             }
             return thisPlayersIndex;
         }
+        /// <summary>
+        /// Checks if the player holding the portable teleporter can use it to teleport back to the ship
+        /// </summary>
+        /// <returns>Wether the player can use the item or not</returns>
         private bool CanUsePortableTeleporter()
         {
             if (!Mouse.current.leftButton.isPressed) return false;
@@ -101,6 +118,10 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
             }
             return true;
         }
+        /// <summary>
+        /// Searches for the vanila teleporter that allows teleporting players back to the ship
+        /// </summary>
+        /// <returns>Reference to the vanila teleporter if it exists, false if otherwise</returns>
         private ShipTeleporter GetShipTeleporter()
         {
             if (shipTeleporter != null) return shipTeleporter;
@@ -117,6 +138,11 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
             shipTeleporter = NotInverseTele;
             return shipTeleporter;
         }
+        /// <summary>
+        /// Starts the teleporting process of the player holding the portable teleporter and checks if it should break the item due to random chance
+        /// </summary>
+        /// <param name="tele">Vanila teleporter that allows to teleport players back to the ship</param>
+        /// <returns></returns>
         private IEnumerator WaitToTP(ShipTeleporter tele)
         {
             // if we don't do a little wait we'll tp the previously seleccted player.
@@ -132,16 +158,22 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
             }
         }
 
+        /// <summary>
+        /// Sets the status of player using the portable teleporter to true
+        /// </summary>
         [ServerRpc(RequireOwnership = false)]
         public void ReqUpdateTpDropStatusServerRpc()
         {
             ChangeTPButtonPressedClientRpc();
         }
 
+        /// <summary>
+        /// Sets the status of player using the portable teleporter to true
+        /// </summary>
         [ClientRpc]
         private void ChangeTPButtonPressedClientRpc()
         {
-            UpgradeBus.instance.TPButtonPressed = true;
+            UpgradeBus.Instance.TPButtonPressed = true;
         }
     }
 }

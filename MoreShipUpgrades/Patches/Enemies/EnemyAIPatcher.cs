@@ -10,9 +10,9 @@ using UnityEngine;
 namespace MoreShipUpgrades.Patches.Enemies
 {
     [HarmonyPatch(typeof(EnemyAI))]
-    internal class EnemyAIPatcher
+    internal static class EnemyAIPatcher
     {
-        private static LGULogger logger = new LGULogger(nameof(EnemyAIPatcher));
+        private static LguLogger logger = new LguLogger(nameof(EnemyAIPatcher));
         private static ulong currentEnemy = 0;
         [HarmonyPostfix]
         [HarmonyPatch(nameof(EnemyAI.KillEnemy))]
@@ -30,10 +30,8 @@ namespace MoreShipUpgrades.Patches.Enemies
                     logger.LogDebug($"{monsterName}");
                 return;
             }
-
             logger.LogDebug($"Spawning sample for {name}");
-            GameObject go = Object.Instantiate(UpgradeBus.instance.samplePrefabs[name.ToLower()], __instance.transform.position + Vector3.up, Quaternion.identity);
-            go.GetComponent<NetworkObject>().Spawn();
+            SpawnItemManager.Instance.SpawnSample(name.ToLower(), __instance.transform.position);
         }
     }
 

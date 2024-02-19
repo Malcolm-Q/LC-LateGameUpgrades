@@ -3,8 +3,6 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
-using UnityEngine.Experimental.GlobalIllumination;
-using UnityEngine.InputSystem;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items
 {
@@ -16,8 +14,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             " with other kinds of batteries.";
         public string GetDisplayInfo()
         {
-            string grantStatus = UpgradeBus.instance.cfg.NIGHT_VISION_INDIVIDUAL.Value || !UpgradeBus.instance.cfg.SHARED_UPGRADES.Value ? "one" : "all";
-            string loseOnDeath = UpgradeBus.instance.cfg.LOSE_NIGHT_VIS_ON_DEATH.Value ? "be" : "not be";
+            string grantStatus = UpgradeBus.Instance.PluginConfiguration.NIGHT_VISION_INDIVIDUAL.Value || !UpgradeBus.Instance.PluginConfiguration.SHARED_UPGRADES.Value ? "one" : "all";
+            string loseOnDeath = UpgradeBus.Instance.PluginConfiguration.LOSE_NIGHT_VIS_ON_DEATH.Value ? "be" : "not be";
             return string.Format(AssetBundleHandler.GetInfoFromJSON("Night Vision"), grantStatus, loseOnDeath);
         }
 
@@ -40,13 +38,13 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
                 HUDManager.Instance.chatText.text += "<color=#FF0000>Night vision is already active!</color>";
                 return;
             }
-            if (UpgradeBus.instance.IndividualUpgrades[NightVision.UPGRADE_NAME])
+            if (UpgradeBus.Instance.IndividualUpgrades[NightVision.UPGRADE_NAME])
             {
-                NightVision.instance.EnableNightVisionServerRpc();
+                NightVision.Instance.EnableNightVisionServerRpc();
             }
             else
             {
-                UpgradeBus.instance.UpgradeObjects[NightVision.UPGRADE_NAME].GetComponent<NightVision>().EnableOnClient();
+                UpgradeBus.Instance.UpgradeObjects[NightVision.UPGRADE_NAME].GetComponent<NightVision>().EnableOnClient();
             }
             playerHeldBy.DespawnHeldObject();
         }

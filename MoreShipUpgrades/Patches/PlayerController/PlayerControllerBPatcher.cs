@@ -24,30 +24,30 @@ using MoreShipUpgrades.Misc.Upgrades;
 
 namespace MoreShipUpgrades.Patches.PlayerController
 {
-	[HarmonyPatch(typeof(PlayerControllerB))]
-    internal class PlayerControllerBPatcher
+    [HarmonyPatch(typeof(PlayerControllerB))]
+    internal static class PlayerControllerBPatcher
     {
-        internal static LGULogger logger = new LGULogger(nameof(PlayerControllerBPatcher));
+        static readonly LguLogger logger = new LguLogger(nameof(PlayerControllerBPatcher));
 
         [HarmonyPrefix]
         [HarmonyPatch(nameof(PlayerControllerB.KillPlayer))]
-        private static void DisableUpgradesOnDeath(PlayerControllerB __instance)
+        static void DisableUpgradesOnDeath(PlayerControllerB __instance)
         {
-            if (!UpgradeBus.instance.cfg.LOSE_NIGHT_VIS_ON_DEATH.Value) return;
+            if (!UpgradeBus.Instance.PluginConfiguration.LOSE_NIGHT_VIS_ON_DEATH.Value) return;
             if (!__instance.IsOwner) return;
             if (__instance.isPlayerDead) return;
             if (!__instance.AllowPlayerDeath()) return;
 
             if (!BaseUpgrade.GetActiveUpgrade(NightVision.UPGRADE_NAME)) return;
 
-            UpgradeBus.instance.UpgradeObjects[NightVision.UPGRADE_NAME].GetComponent<NightVision>().DisableOnClient();
-            if (!UpgradeBus.instance.cfg.NIGHT_VISION_DROP_ON_DEATH.Value) return;
-            NightVision.instance.SpawnNightVisionItemOnDeathServerRpc(__instance.transform.position);
+            UpgradeBus.Instance.UpgradeObjects[NightVision.UPGRADE_NAME].GetComponent<NightVision>().DisableOnClient();
+            if (!UpgradeBus.Instance.PluginConfiguration.NIGHT_VISION_DROP_ON_DEATH.Value) return;
+            NightVision.Instance.SpawnNightVisionItemOnDeathServerRpc(__instance.transform.position);
         }
 
         [HarmonyPatch(nameof(PlayerControllerB.DamagePlayer))]
         [HarmonyTranspiler]
-        public static IEnumerable<CodeInstruction> DamagePlayerTranspiler(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> DamagePlayerTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo maximumHealthMethod = typeof(Stimpack).GetMethod(nameof(Stimpack.CheckForAdditionalHealth));
             MethodInfo boomboxDefenseMethod = typeof(SickBeats).GetMethod(nameof(SickBeats.CalculateDefense));
@@ -65,7 +65,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
              * We want change 100 to the maximum possible value the player's health can be due to Stimpack upgrade
              */
             bool foundHealthMaximum = false;
-            for (int i = 0; i < codes.Count; i++)
+            for (int i = 0; i < codes.Count && !foundHealthMaximum; i++)
             {
                 if (codes[i].opcode == OpCodes.Ldarg_1)
                 {
@@ -78,8 +78,6 @@ namespace MoreShipUpgrades.Patches.PlayerController
                 //Mathf.Clamp(health - damageNumber, 0, playerHealthScript.CheckForAdditionalHealth(100))
                 codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, maximumHealthMethod));
                 foundHealthMaximum = true;
-
-                if (foundHealthMaximum) break;
             }
             if (!foundHealthMaximum) Plugin.mls.LogError("Could not find the maximum of Mathf.Clamp that changes the health value");
             return codes.AsEnumerable();
@@ -90,24 +88,24 @@ namespace MoreShipUpgrades.Patches.PlayerController
         static bool WeDoALittleReturningFalse(PlayerControllerB __instance)
         {
             if (!__instance.IsOwner || __instance.isPlayerDead || !__instance.AllowPlayerDeath()) return true;
-            if (UpgradeBus.instance.wearingHelmet)
+            if (UpgradeBus.Instance.wearingHelmet)
             {
                 logger.LogDebug($"Player {__instance.playerUsername} is wearing a helmet, executing helmet logic...");
-                UpgradeBus.instance.helmetHits--;
-                if (UpgradeBus.instance.helmetHits <= 0)
+                UpgradeBus.Instance.helmetHits--;
+                if (UpgradeBus.Instance.helmetHits <= 0)
                 {
                     logger.LogDebug("Helmet has ran out of durability, breaking the helmet...");
-                    UpgradeBus.instance.wearingHelmet = false;
-                    if (__instance.IsHost || __instance.IsServer) LGUStore.instance.DestroyHelmetClientRpc(__instance.playerClientId);
-                    else LGUStore.instance.ReqDestroyHelmetServerRpc(__instance.playerClientId);
-                    if (__instance.IsHost || __instance.IsServer) LGUStore.instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(__instance), "breakWood");
-                    else LGUStore.instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(__instance), "breakWood");
+                    UpgradeBus.Instance.wearingHelmet = false;
+                    if (__instance.IsHost || __instance.IsServer) LguStore.Instance.DestroyHelmetClientRpc(__instance.playerClientId);
+                    else LguStore.Instance.ReqDestroyHelmetServerRpc(__instance.playerClientId);
+                    if (__instance.IsHost || __instance.IsServer) LguStore.Instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(__instance), "breakWood");
+                    else LguStore.Instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(__instance), "breakWood");
                 }
                 else
                 {
-                    logger.LogDebug($"Helmet still has some durability ({UpgradeBus.instance.helmetHits}), decreasing it...");
-                    if (__instance.IsHost || __instance.IsServer) LGUStore.instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(__instance), "helmet");
-                    else LGUStore.instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(__instance), "helmet");
+                    logger.LogDebug($"Helmet still has some durability ({UpgradeBus.Instance.helmetHits}), decreasing it...");
+                    if (__instance.IsHost || __instance.IsServer) LguStore.Instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(__instance), "helmet");
+                    else LguStore.Instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(__instance), "helmet");
                 }
                 return false;
             }
@@ -116,7 +114,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
         [HarmonyTranspiler]
         [HarmonyPatch(nameof(PlayerControllerB.PlayerHitGroundEffects))]
-        private static IEnumerable<CodeInstruction> PlayerHitGroundEffectsTranspiler(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> PlayerHitGroundEffectsTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo reduceFallDamageMethod = typeof(StrongLegs).GetMethod(nameof(StrongLegs.ReduceFallDamage));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
@@ -130,52 +128,28 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
         [HarmonyPrefix]
         [HarmonyPatch(nameof(PlayerControllerB.DropAllHeldItems))]
-        private static bool DontDropItems(PlayerControllerB __instance)
+        static bool DontDropItems(PlayerControllerB __instance)
         {
             logger.LogDebug($"Paid upgrade level: {UpgradeTeleportersScript.GetTPUpgradeLevel()}");
-			logger.LogDebug($"Most recent ship TP button pressed: {UpgradeBus.instance.mostRecentShipTPButtonPressed}");
-			if (!UpgradeBus.instance.TPButtonPressed && UpgradeBus.instance.mostRecentShipTPButtonPressed == 0) return true;
+            logger.LogDebug($"Most recent ship TP button pressed: {UpgradeBus.instance.mostRecentShipTPButtonPressed}");
+            if (!UpgradeBus.instance.TPButtonPressed && UpgradeBus.Instance.mostRecentShipTPButtonPressed == 0) return true;
 
             if (__instance != GameNetworkManager.Instance.localPlayerController) return true;
             // If the upgrade level we've paid for is less than the level of tp we pressed, perform regular dropItems() function
-            if (UpgradeTeleportersScript.GetTPUpgradeLevel() < UpgradeBus.instance.mostRecentShipTPButtonPressed) return true;
+            if (UpgradeTeleportersScript.GetTPUpgradeLevel() < UpgradeBus.Instance.mostRecentShipTPButtonPressed) return true;
 
-            UpgradeBus.instance.TPButtonPressed = false;
-            UpgradeBus.instance.mostRecentShipTPButtonPressed = 0;
+            UpgradeBus.Instance.TPButtonPressed = false;
+            UpgradeBus.Instance.mostRecentShipTPButtonPressed = 0;
 
-			__instance.isSinking = false;
+            __instance.isSinking = false;
             __instance.isUnderwater = false;
             __instance.sinkingValue = 0;
             __instance.statusEffectAudio.Stop();
             return false;
         }
-
-        [HarmonyTranspiler]
-        [HarmonyPatch(nameof(PlayerControllerB.BeginGrabObject))]
-        public static IEnumerable<CodeInstruction> BeginGrabObjectTranspiler(IEnumerable<CodeInstruction> instructions)
-        {
-            MethodInfo affectWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreasePossibleWeight));
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            int index = 0;
-            index = Tools.FindSub(index, ref codes, addCode: affectWeight, errorMessage: "Couldn't find item weight");
-
-            return codes;
-        }
-
-        [HarmonyTranspiler]
-        [HarmonyPatch(nameof(PlayerControllerB.GrabObjectClientRpc))]
-        public static IEnumerable<CodeInstruction> GrabObjectClientRpcTranspiler(IEnumerable<CodeInstruction> instructions)
-        {
-            MethodInfo affectWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreasePossibleWeight));
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            int index = 0;
-            index = Tools.FindSub(index, ref codes, addCode: affectWeight, errorMessage: "Couldn't find item weight");
-
-            return codes;
-        }
         [HarmonyPostfix]
         [HarmonyPatch(nameof(PlayerControllerB.GrabObjectClientRpc))]
-        public static void GrabObjectClientRpcPostfix(PlayerControllerB __instance)
+        static void GrabObjectClientRpcPostfix(PlayerControllerB __instance)
         {
             if (__instance.currentlyHeldObjectServer == null) return;
 
@@ -188,49 +162,24 @@ namespace MoreShipUpgrades.Patches.PlayerController
         }
 
         [HarmonyTranspiler]
+        [HarmonyPatch(nameof(PlayerControllerB.BeginGrabObject))]
+        [HarmonyPatch(nameof(PlayerControllerB.GrabObjectClientRpc))]
         [HarmonyPatch(nameof(PlayerControllerB.DestroyItemInSlot))]
-        public static IEnumerable<CodeInstruction> DestroyItemInSlotTranspiler(IEnumerable<CodeInstruction> instructions)
-        {
-            MethodInfo affectWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreasePossibleWeight));
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            int index = 0;
-            index = Tools.FindSub(index, ref codes, addCode: affectWeight, errorMessage: "Couldn't find item weight");
-
-            return codes;
-        }
-
-        [HarmonyTranspiler]
         [HarmonyPatch(nameof(PlayerControllerB.DespawnHeldObjectOnClient))]
-        public static IEnumerable<CodeInstruction> DespawnHeldObjectOnClientTranspiler(IEnumerable<CodeInstruction> instructions)
-        {
-            MethodInfo affectWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreasePossibleWeight));
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            int index = 0;
-            index = Tools.FindSub(index, ref codes, addCode: affectWeight, errorMessage: "Couldn't find item weight");
-
-            return codes;
-        }
-        [HarmonyTranspiler]
         [HarmonyPatch(nameof(PlayerControllerB.SetObjectAsNoLongerHeld))]
-        public static IEnumerable<CodeInstruction> SetObjectAsNoLongerHeldTranspiler(IEnumerable<CodeInstruction> instructions)
+        [HarmonyPatch(nameof(PlayerControllerB.PlaceGrabbableObject))]
+        static IEnumerable<CodeInstruction> ItemWeightTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo affectWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreasePossibleWeight));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
-            index = Tools.FindSub(index, ref codes, addCode: affectWeight, errorMessage: "Couldn't find item weight");
+            AddBackMusclesCodeInstruction(ref index, ref codes);
 
             return codes;
         }
-        [HarmonyTranspiler]
-        [HarmonyPatch(nameof(PlayerControllerB.PlaceGrabbableObject))]
-        public static IEnumerable<CodeInstruction> PlaceGrabbableObjectTranspiler(IEnumerable<CodeInstruction> instructions)
+        static void AddBackMusclesCodeInstruction(ref int index, ref List<CodeInstruction> codes)
         {
             MethodInfo affectWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreasePossibleWeight));
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            int index = 0;
             index = Tools.FindSub(index, ref codes, addCode: affectWeight, errorMessage: "Couldn't find item weight");
-
-            return codes;
         }
 
         [HarmonyPostfix]
@@ -238,34 +187,34 @@ namespace MoreShipUpgrades.Patches.PlayerController
         static void CheckForBoomboxes(PlayerControllerB __instance)
         {
             if (!BaseUpgrade.GetActiveUpgrade(SickBeats.UPGRADE_NAME) || __instance != GameNetworkManager.Instance.localPlayerController) return;
-            UpgradeBus.instance.boomBoxes.RemoveAll(b => b == null);
+            SickBeats.Instance.boomBoxes.RemoveAll(b => b == null);
             bool result = false;
             if (__instance.isPlayerDead)
             {
-                if (!UpgradeBus.instance.EffectsActive) return; // No need to do anything
-                UpgradeBus.instance.EffectsActive = result;
+                if (!SickBeats.Instance.EffectsActive) return; // No need to do anything
+                SickBeats.Instance.EffectsActive = result;
                 SickBeats.HandlePlayerEffects(__instance);
                 return; // Clean all effects from Sick Beats since the player's dead
             }
-            foreach (BoomboxItem boom in UpgradeBus.instance.boomBoxes)
+            foreach (BoomboxItem boom in SickBeats.Instance.boomBoxes)
             {
                 if (!boom.isPlayingMusic) continue;
 
-                if (Vector3.Distance(boom.transform.position, __instance.transform.position) >= UpgradeBus.instance.cfg.BEATS_RADIUS.Value) continue;
+                if (Vector3.Distance(boom.transform.position, __instance.transform.position) >= UpgradeBus.Instance.PluginConfiguration.BEATS_RADIUS.Value) continue;
 
                 result = true;
                 break;
             }
 
-            if (result == UpgradeBus.instance.EffectsActive) return;
+            if (result == SickBeats.Instance.EffectsActive) return;
 
-            UpgradeBus.instance.EffectsActive = result;
+            SickBeats.Instance.EffectsActive = result;
             SickBeats.HandlePlayerEffects(__instance);
         }
 
         [HarmonyTranspiler]
         [HarmonyPatch(nameof(PlayerControllerB.LateUpdate))]
-        private static IEnumerable<CodeInstruction> LateUpdateTranspiler(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> LateUpdateTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo biggerLungsRegenMethod = typeof(BiggerLungs).GetMethod(nameof(BiggerLungs.ApplyPossibleIncreasedStaminaRegen));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
@@ -283,7 +232,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
         [HarmonyTranspiler]
         [HarmonyPatch(nameof(PlayerControllerB.Jump_performed))]
-        private static IEnumerable<CodeInstruction> JumpPerformedTranspiler(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> JumpPerformedTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo biggerLungsReduceJumpCost = typeof(BiggerLungs).GetMethod(nameof(BiggerLungs.ApplyPossibleReducedJumpStaminaCost));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
@@ -294,19 +243,19 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
         [HarmonyTranspiler]
         [HarmonyPatch(nameof(PlayerControllerB.PlayFootstepLocal))]
-        private static IEnumerable<CodeInstruction> PlayFootstepLocalTranspiler(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> PlayFootstepLocalTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             return AddReduceNoiseRangeFunctionToPlayerFootsteps(instructions);
         }
 
         [HarmonyTranspiler]
         [HarmonyPatch(nameof(PlayerControllerB.PlayFootstepServer))]
-        private static IEnumerable<CodeInstruction> PlayFootstepServerTranspiler(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> PlayFootstepServerTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             return AddReduceNoiseRangeFunctionToPlayerFootsteps(instructions);
         }
 
-        private static IEnumerable<CodeInstruction> AddReduceNoiseRangeFunctionToPlayerFootsteps(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> AddReduceNoiseRangeFunctionToPlayerFootsteps(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo runningShoesReduceNoiseRange = typeof(RunningShoes).GetMethod(nameof(RunningShoes.ApplyPossibleReducedNoiseRange));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
@@ -318,7 +267,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
         [HarmonyPatch(nameof(PlayerControllerB.PlayerLookInput))]
         [HarmonyTranspiler]
-        private static IEnumerable<CodeInstruction> PlayerLookInputTranspiler(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> PlayerLookInputTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo reduceLookSensitivity = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrowLookSensitivity));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
@@ -329,7 +278,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
         [HarmonyPatch(nameof(PlayerControllerB.Update))] // We're all going to die
         [HarmonyTranspiler] // Just kidding
-        private static IEnumerable<CodeInstruction> UpdateTranspiler(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> UpdateTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo reduceMovement = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrowMovement));
             FieldInfo carryWeight = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.carryWeight));
@@ -343,7 +292,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
         [HarmonyPatch(nameof(PlayerControllerB.Crouch_performed))]
         [HarmonyTranspiler]
-        private static IEnumerable<CodeInstruction> CrouchPerformmedTranspiler(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> CrouchPerformmedTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo carryingWheelbarrow = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrow));
             FieldInfo isMenuOpen = typeof(QuickMenuManager).GetField(nameof(QuickMenuManager.isMenuOpen));

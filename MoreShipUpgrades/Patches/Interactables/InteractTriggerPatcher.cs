@@ -9,9 +9,9 @@ using UnityEngine;
 namespace MoreShipUpgrades.Patches.Interactables
 {
     [HarmonyPatch(typeof(InteractTrigger))]
-    internal class InteractTriggerPatcher
+    internal static class InteractTriggerPatcher
     {
-        private static LGULogger logger = new LGULogger(nameof(InteractTriggerPatcher));
+        private static LguLogger logger = new LguLogger(nameof(InteractTriggerPatcher));
         [HarmonyPrefix]
         [HarmonyPatch(nameof(InteractTrigger.OnTriggerEnter))]
         private static bool pickDoor(InteractTrigger __instance, Collider other)

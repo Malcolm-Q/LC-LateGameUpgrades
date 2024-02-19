@@ -21,16 +21,16 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
 
         public string GetDisplayInfo()
         {
-            string hands = UpgradeBus.instance.cfg.DIVEKIT_TWO_HANDED.Value ? "two" : "one";
-            return $"DIVING KIT - ${UpgradeBus.instance.cfg.DIVEKIT_PRICE.Value}\n\n" +
+            string hands = UpgradeBus.Instance.PluginConfiguration.DIVEKIT_TWO_HANDED.Value ? "two" : "one";
+            return $"DIVING KIT - ${UpgradeBus.Instance.PluginConfiguration.DIVEKIT_PRICE.Value}\n\n" +
                 $"Breath underwater.\n" +
-                $"Weights {Mathf.RoundToInt((UpgradeBus.instance.cfg.DIVEKIT_WEIGHT.Value - 1) * 100)} lbs and is {hands} handed.";
+                $"Weights {Mathf.RoundToInt((UpgradeBus.Instance.PluginConfiguration.DIVEKIT_WEIGHT.Value - 1) * 100)} lbs and is {hands} handed.";
         }
 
         public override void Start()
         {
             base.Start();
-            localPlayer = UpgradeBus.instance.GetLocalPlayer();
+            localPlayer = UpgradeBus.Instance.GetLocalPlayer();
             roundInstance = StartOfRound.Instance;
         }
         /// <summary>

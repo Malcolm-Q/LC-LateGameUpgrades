@@ -10,7 +10,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
 {
     internal class BombDefusalScript : NetworkBehaviour
     {
-        static LGULogger logger = new LGULogger(nameof(BombDefusalScript));
+        static LguLogger logger = new LguLogger(nameof(BombDefusalScript));
         AudioSource audio;
         Dictionary<string, GameObject> wires = new Dictionary<string, GameObject>
         {
@@ -44,7 +44,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
 
         void Start()
         {
-            GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.instance.cfg.CONTRACT_DEFUSE_REWARD.Value);
+            GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.Instance.PluginConfiguration.CONTRACT_DEFUSE_REWARD.Value);
             grabBox = GetComponent<BoxCollider>();
 
             Transform intactWires = transform.GetChild(0).GetChild(0);
@@ -86,9 +86,9 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
                 lets[3] = allowedNums[Random.Range(0, allowedNums.Length)];
                 lets[4] = allowedNums[Random.Range(0, allowedNums.Length)];
                 lets[5] = allowedNums[Random.Range(0, allowedNums.Length)];
-                UpgradeBus.instance.bombOrder = new List<string> { "red", "green", "blue" };
-                Tools.ShuffleList(UpgradeBus.instance.bombOrder);
-                string orderString = string.Join(",", UpgradeBus.instance.bombOrder);
+                ContractManager.Instance.bombOrder = new List<string> { "red", "green", "blue" };
+                Tools.ShuffleList(ContractManager.Instance.bombOrder);
+                string orderString = string.Join(",", ContractManager.Instance.bombOrder);
                 SyncBombDetailsClientRpc(new string(lets), orderString);
             }
         }
@@ -120,15 +120,15 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
         void BombStateChangeClientRpc(string wire)
         {
             audio.PlayOneShot(snip);
-            if (UpgradeBus.instance.bombOrder[0] == wire)
+            if (ContractManager.Instance.bombOrder[0] == wire)
             {
-                UpgradeBus.instance.bombOrder.Remove(wire);
+                ContractManager.Instance.bombOrder.Remove(wire);
                 audio.PlayOneShot(snip);
                 wires[wire].SetActive(false);
                 cutWires[wire].SetActive(true);
                 trigs[wire].enabled = false;
                 trigs[wire].GetComponent<BoxCollider>().enabled = false;
-                if (UpgradeBus.instance.bombOrder.Count == 0)
+                if (ContractManager.Instance.bombOrder.Count == 0)
                 {
                     // win
                     armed = false;
@@ -190,8 +190,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
                 // I have no clue why or how this can happen but it can and does for remote clients.
                 serialNumberMesh = transform.GetChild(0).GetChild(2).GetComponent<TextMesh>();
             }
-            UpgradeBus.instance.SerialNumber = serial;
-            UpgradeBus.instance.bombOrder = newOrder.Split(",").ToList();
+            ContractManager.Instance.SerialNumber = serial;
+            ContractManager.Instance.bombOrder = newOrder.Split(",").ToList();
             serialNumberMesh.text = serial;
         }
 

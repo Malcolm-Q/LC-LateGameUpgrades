@@ -1,7 +1,5 @@
-﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
+﻿using MoreShipUpgrades.Misc;
 using UnityEngine;
-using System;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items
 {
@@ -14,7 +12,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         /// <summary>
         /// Logger of the class
         /// </summary>
-        private static LGULogger logger = new LGULogger(nameof(MonsterSample));
+        private static LguLogger logger = new LguLogger(nameof(MonsterSample));
         private static int usedMapSeed = -1;
         private static System.Random random = null;
         public override void Start()

@@ -14,7 +14,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
         public override void Unwind()
         {
             base.Unwind();
-            UpgradeBus.instance.upgradeLevels[upgradeName] = 0;
+            UpgradeBus.Instance.upgradeLevels[upgradeName] = 0;
         }
         #endregion
         #region Interface Methods
@@ -23,7 +23,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
         #region Abstract Methods
         public virtual void Increment()
         {
-            UpgradeBus.instance.upgradeLevels[upgradeName]++;
+            UpgradeBus.Instance.upgradeLevels[upgradeName] = GetUpgradeLevel(upgradeName) + 1;
         }
         #endregion
     }

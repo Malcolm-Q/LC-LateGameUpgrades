@@ -2,7 +2,7 @@
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
-using UnityEngine;
+using System.Text;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
@@ -15,11 +15,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             " There are only three 'unique' issues, and each issue only has one or two pieces of actual useful information in it. The rest of the magazine is just ads" +
             " for The Company's other offerings. There is an extra fee for cancelling a subscription of 'Stuff Finders' before terminating your employment." +
             " The useful information always comes in the form of an unlabelled service key or Ship terminal hyperlink.\n\n";
-        private static LGULogger logger;
+        private static LguLogger logger = new LguLogger(UPGRADE_NAME);
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            logger = new LGULogger(UPGRADE_NAME);
             base.Start();
         }
 
@@ -27,23 +26,23 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             if (!GetActiveUpgrade(UPGRADE_NAME)) return;
             logger.LogDebug("Inserting a Scan Node on a broken steam valve...");
-            LGUScanNodeProperties.AddGeneralScanNode(objectToAddScanNode: steamValveHazard.gameObject, header: "Bursted Steam Valve", subText: "Fix it to get rid of the steam", minRange: 3);
+            LguScanNodeProperties.AddGeneralScanNode(objectToAddScanNode: steamValveHazard.gameObject, header: "Bursted Steam Valve", subText: "Fix it to get rid of the steam", minRange: 3);
         }
 
         public static void RemoveScannerNodeFromValve(ref SteamValveHazard steamValveHazard)
         {
             logger.LogDebug("Removing the Scan Node from a fixed steam valve...");
-            LGUScanNodeProperties.RemoveScanNode(steamValveHazard.gameObject);
+            LguScanNodeProperties.RemoveScanNode(steamValveHazard.gameObject);
         }
         public static string GetBetterScannerInfo(int level, int price)
         {
             switch (level)
             {
-                case 1: return string.Format(AssetBundleHandler.GetInfoFromJSON("Better Scanner1"), level, price, UpgradeBus.instance.cfg.NODE_DISTANCE_INCREASE.Value, UpgradeBus.instance.cfg.SHIP_AND_ENTRANCE_DISTANCE_INCREASE.Value);
+                case 1: return string.Format(AssetBundleHandler.GetInfoFromJSON("Better Scanner1"), level, price, UpgradeBus.Instance.PluginConfiguration.NODE_DISTANCE_INCREASE.Value, UpgradeBus.Instance.PluginConfiguration.SHIP_AND_ENTRANCE_DISTANCE_INCREASE.Value);
                 case 2: return string.Format(AssetBundleHandler.GetInfoFromJSON("Better Scanner2"), level, price);
                 case 3:
                     {
-                        string result = string.Format(AssetBundleHandler.GetInfoFromJSON("Better Scanner3"), level, price, UpgradeBus.instance.cfg.BETTER_SCANNER_ENEMIES.Value ? " and enemies" : "");
+                        string result = string.Format(AssetBundleHandler.GetInfoFromJSON("Better Scanner3"), level, price, UpgradeBus.Instance.PluginConfiguration.BETTER_SCANNER_ENEMIES.Value ? " and enemies" : "");
                         result += "hives and scrap command display the location of the most valuable hives and scrap on the map.\n";
                         return result;
                     }
@@ -58,10 +57,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            string info = GetBetterScannerInfo(1, initialPrice);
+            StringBuilder stringBuilder = new();
+            stringBuilder.Append(GetBetterScannerInfo(1, initialPrice));
             for (int i = 0; i < maxLevels; i++)
-                info += GetBetterScannerInfo(i + 2, incrementalPrices[i]);
-            return info;
+                stringBuilder.Append(GetBetterScannerInfo(i + 2, incrementalPrices[i]));
+            return stringBuilder.ToString();
         }
     }
 }

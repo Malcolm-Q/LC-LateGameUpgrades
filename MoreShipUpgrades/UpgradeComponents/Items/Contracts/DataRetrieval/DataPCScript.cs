@@ -13,7 +13,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
 {
     internal class DataPCScript : NetworkBehaviour
     {
-        static LGULogger logger = new LGULogger(nameof(DataPCScript));
+        static LguLogger logger = new LguLogger(nameof(DataPCScript));
 
         GameObject root;
         public GameObject loot;
@@ -137,9 +137,9 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
         void SyncGameDetailsClientRpc(string Key, string user, string pass)
         {
             logger.LogInfo($"Received Broadcasted minigame info!\nKey: {Key}\nuser: {user}\npassword: {pass}");
-            UpgradeBus.instance.DataMinigameKey = Key;
-            UpgradeBus.instance.DataMinigameUser = user;
-            UpgradeBus.instance.DataMinigamePass = pass;
+            ContractManager.Instance.DataMinigameKey = Key;
+            ContractManager.Instance.DataMinigameUser = user;
+            ContractManager.Instance.DataMinigamePass = pass;
             this.user = user;
             this.pass = pass;
             if (IPText == null) IPText = transform.GetChild(2).GetChild(0).GetChild(2).GetChild(0).GetComponent<Text>();
@@ -171,7 +171,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
             if ((IsHost || IsServer) && succeeded)
             {
                 GameObject go = Instantiate(loot, transform.position + Vector3.up, Quaternion.identity);
-                go.GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.instance.cfg.CONTRACT_DATA_REWARD.Value);
+                go.GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.Instance.PluginConfiguration.CONTRACT_DATA_REWARD.Value);
                 go.GetComponent<NetworkObject>().Spawn();
                 logger.LogInfo("Loot successfully spawned");
             }

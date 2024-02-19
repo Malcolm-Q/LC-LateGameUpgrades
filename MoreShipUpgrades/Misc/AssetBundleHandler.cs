@@ -12,12 +12,12 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.Misc
 {
-    internal class AssetBundleHandler
+    internal static class AssetBundleHandler
     {
-        private static readonly LGULogger logger = new LGULogger(typeof(AssetBundleHandler).Name);
-        private static Dictionary<string, string> infoJSON;
+        static readonly LguLogger logger = new LguLogger(typeof(AssetBundleHandler).Name);
+        static Dictionary<string, string> infoJSON;
         static string root = "Assets/ShipUpgrades/";
-        public static Dictionary<string, string> samplePaths = new Dictionary<string, string>()
+        internal static readonly Dictionary<string, string> samplePaths = new Dictionary<string, string>()
         {
             { "centipede", root+"Samples/SnareFleaSample.asset" },
             { "bunker spider", root+"Samples/BunkerSpiderSample.asset" },
@@ -27,7 +27,7 @@ namespace MoreShipUpgrades.Misc
             { "baboon hawk", root+"Samples/BaboonHawkSample.asset" },
             { "crawler", root+"Samples/ThumperSample.asset" },
         };
-        private static Dictionary<string, string> assetPaths = new Dictionary<string, string>()
+        static Dictionary<string, string> assetPaths = new Dictionary<string, string>()
         {
             { Beekeeper.UPGRADE_NAME, root+"beekeeper.prefab" },
             { SickBeats.UPGRADE_NAME, root+"SickBeats.prefab" },
@@ -162,7 +162,7 @@ namespace MoreShipUpgrades.Misc
             if (!infoStringAsset)
             {
                 logger.LogError("An error has occurred trying to load info strings from the bundle");
-                return null;
+                return new();
             }
 
             infoJSON = JsonConvert.DeserializeObject<Dictionary<string, string>>(infoStringAsset.text);
@@ -175,16 +175,16 @@ namespace MoreShipUpgrades.Misc
 
         public static string GetInfoFromJSON(string key)
         {
-            Dictionary<string, string> infoJSON = GetInfoJSON(ref UpgradeBus.instance.UpgradeAssets);
+            Dictionary<string, string> infoFormat = GetInfoJSON(ref UpgradeBus.Instance.UpgradeAssets);
 
-            if (infoJSON == null) return "";
+            if (infoFormat == null) return "";
 
-            if (!infoJSON.ContainsKey(key))
+            if (!infoFormat.ContainsKey(key))
             {
                 logger.LogError("The key was not present in the info JSON file!");
                 return "";
             }
-            return infoJSON[key];
+            return infoFormat[key];
         }
 
         public static GameObject GetPerkGameObject(string upgradeName)
@@ -194,13 +194,13 @@ namespace MoreShipUpgrades.Misc
                 logger.LogError($"{upgradeName} was not present in the asset dictionary!");
                 return null;
             }
-            return TryLoadGameObjectAsset(ref UpgradeBus.instance.UpgradeAssets, assetPaths[upgradeName]);
+            return TryLoadGameObjectAsset(ref UpgradeBus.Instance.UpgradeAssets, assetPaths[upgradeName]);
         }
 
         public static Item GetItemObject(string itemName)
         {
-            if (assetPaths.ContainsKey(itemName)) return TryLoadItemAsset(ref UpgradeBus.instance.UpgradeAssets, assetPaths[itemName]);
-            if (samplePaths.ContainsKey(itemName)) return TryLoadItemAsset(ref UpgradeBus.instance.UpgradeAssets, samplePaths[itemName]);
+            if (assetPaths.ContainsKey(itemName)) return TryLoadItemAsset(ref UpgradeBus.Instance.UpgradeAssets, assetPaths[itemName]);
+            if (samplePaths.ContainsKey(itemName)) return TryLoadItemAsset(ref UpgradeBus.Instance.UpgradeAssets, samplePaths[itemName]);
 
             logger.LogError($"{itemName} was not present in the asset or sample dictionary!");
             return null;
@@ -213,7 +213,7 @@ namespace MoreShipUpgrades.Misc
                 logger.LogError($"{audioName} was not present in the asset dictionary!");
                 return null;
             }
-            return TryLoadAudioClipAsset(ref UpgradeBus.instance.UpgradeAssets, assetPaths[audioName]);
+            return TryLoadAudioClipAsset(ref UpgradeBus.Instance.UpgradeAssets, assetPaths[audioName]);
         }
     }
 }

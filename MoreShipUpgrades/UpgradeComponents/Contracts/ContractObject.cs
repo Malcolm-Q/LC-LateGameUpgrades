@@ -10,12 +10,12 @@ namespace MoreShipUpgrades.UpgradeComponents.Contracts
     internal class ContractObject : NetworkBehaviour
     {
         protected string contractType = null;
-        static LGULogger logger = new LGULogger(nameof(ContractObject));
+        static LguLogger logger = new LguLogger(nameof(ContractObject));
         public bool SetPosition = false;
         public virtual void Start()
         {
             if (contractType == null) { logger.LogWarning($"contractType was not set on {gameObject.name}!"); }
-            if (UpgradeBus.instance.contractType != contractType || StartOfRound.Instance.currentLevel.PlanetName != UpgradeBus.instance.contractLevel)
+            if (ContractManager.Instance.contractType != contractType || StartOfRound.Instance.currentLevel.PlanetName != ContractManager.Instance.contractLevel)
             {
                 gameObject.SetActive(false);
                 return;
@@ -28,7 +28,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Contracts
                 List<EntranceTeleport> mainDoors = FindObjectsOfType<EntranceTeleport>().Where(obj => obj.gameObject.transform.position.y <= -170).ToList();
                 EnemyVent[] vents = FindObjectsOfType<EnemyVent>();
                 EnemyVent spawnVent = null;
-                if(UpgradeBus.instance.cfg.MAIN_OBJECT_FURTHEST.Value)
+                if(UpgradeBus.Instance.PluginConfiguration.MAIN_OBJECT_FURTHEST.Value)
                 {
                     spawnVent = vents.OrderByDescending(vent => Vector3.Distance(mainDoors[0].transform.position, vent.floorNode.position)).First();
                 }
@@ -42,7 +42,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Contracts
             }
             if (contractType != "exterminator") return;
 
-            Tools.SpawnMob("Hoarding bug", transform.position, UpgradeBus.instance.cfg.CONTRACT_BUG_SPAWNS.Value);
+            Tools.SpawnMob("Hoarding bug", transform.position, UpgradeBus.Instance.PluginConfiguration.CONTRACT_BUG_SPAWNS.Value);
         }
 
         public string GetContractType()
