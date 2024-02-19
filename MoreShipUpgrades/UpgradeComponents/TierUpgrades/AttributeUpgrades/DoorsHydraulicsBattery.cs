@@ -11,19 +11,19 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         public const string UPGRADE_NAME = "Shutter Batteries";
         public const string PRICES_DEFAULT = "200,300,400";
 
-        public static string ENABLED_SECTION = $"Enable {UPGRADE_NAME}";
-        public static string ENABLED_DESCRIPTION = "Increases the amount of time the doors can remain shut";
+        public const string ENABLED_SECTION = $"Enable {UPGRADE_NAME}";
+        public const string ENABLED_DESCRIPTION = "Increases the amount of time the doors can remain shut";
 
-        public static string PRICE_SECTION = $"Price of {UPGRADE_NAME}";
-        public static int PRICE_DEFAULT = 300;
+        public const string PRICE_SECTION = $"Price of {UPGRADE_NAME}";
+        public const int PRICE_DEFAULT = 300;
 
-        public static string INITIAL_SECTION = $"Initial battery boost";
-        public static float INITIAL_DEFAULT = 5f;
-        public static string INITIAL_DESCRIPTION = $"Initial battery boost for the doors' lock on first purchase";
+        public const string INITIAL_SECTION = $"Initial battery boost";
+        public const float INITIAL_DEFAULT = 5f;
+        public const string INITIAL_DESCRIPTION = $"Initial battery boost for the doors' lock on first purchase";
 
-        public static string INCREMENTAL_SECTION = $"Incremental battery boost";
-        public static float INCREMENTAL_DEFAULT = 5f;
-        public static string INCREMENTAL_DESCRIPTION = $"Incremental battery boost for the doors' lock after purchase";
+        public const string INCREMENTAL_SECTION = $"Incremental battery boost";
+        public const float INCREMENTAL_DEFAULT = 5f;
+        public const string INCREMENTAL_DESCRIPTION = $"Incremental battery boost for the doors' lock after purchase";
 
         internal override void Start()
         {

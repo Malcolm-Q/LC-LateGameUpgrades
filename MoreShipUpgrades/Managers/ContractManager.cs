@@ -118,5 +118,10 @@ namespace MoreShipUpgrades.Managers
             Instance.contractLevel = lvl;
             return lvl;
         }
+        internal void ResetAllValues()
+        {
+            contractType = "None";
+            contractLevel = "None";
+        }
     }
 }

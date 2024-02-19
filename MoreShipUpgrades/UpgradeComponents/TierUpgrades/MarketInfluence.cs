@@ -7,8 +7,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
     internal class MarketInfluence : TierUpgrade
     {
-        public static string UPGRADE_NAME = "Market Influence";
-        public static string PRICES_DEFAULT = "200,350,500";
+        internal const string UPGRADE_NAME = "Market Influence";
+        internal const string PRICES_DEFAULT = "200,350,500";
 
         internal override void Start()
         {

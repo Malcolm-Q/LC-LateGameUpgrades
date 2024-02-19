@@ -6,8 +6,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
     class BargainConnections : TierUpgrade
     {
-        public static string UPGRADE_NAME = "Bargain Connections";
-        public static string PRICES_DEFAULT = "225,300,375";
+        internal const string UPGRADE_NAME = "Bargain Connections";
+        internal const string PRICES_DEFAULT = "225,300,375";
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;

@@ -23,6 +23,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             upgradeName = UPGRADE_NAME;
             base.Start();
+            instance = this;
         }
 
         void Update()
@@ -31,11 +32,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             {
                 flashCooldown -= Time.deltaTime;
             }
-        }
-        public override void Load()
-        {
-            base.Load();
-            instance = this;
         }
 
         [ServerRpc(RequireOwnership = false)]

@@ -66,7 +66,7 @@ namespace MoreShipUpgrades.Managers
 
             return terminal;
         }
-        public PlayerControllerB GetLocalPlayer() // I keep forgetting we have this
+        public PlayerControllerB GetLocalPlayer()
         {
             if (localPlayer == null) localPlayer = GameNetworkManager.Instance.localPlayerController;
             return localPlayer;
@@ -103,8 +103,7 @@ namespace MoreShipUpgrades.Managers
 
             SickBeats.Instance.EffectsActive = false;
             NightVision.Instance.nightVisionActive = false;
-            ContractManager.Instance.contractType = "None";
-            ContractManager.Instance.contractLevel = "None";
+            ContractManager.Instance.ResetAllValues();
 
             Discombobulator.instance.flashCooldown = 0f;
             BackMuscles.Instance.alteredWeight = 1f;
