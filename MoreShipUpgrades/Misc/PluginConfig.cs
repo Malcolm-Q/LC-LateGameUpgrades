@@ -26,10 +26,10 @@ namespace MoreShipUpgrades.Misc
             PropertyInfo[] propertyInfos = typeof(PluginConfig).GetProperties();
             foreach (PropertyInfo info in propertyInfos)
             {
-                if (info.PropertyType == typeof(ConfigEntry<bool>)) booleanProperties[info.Name] = ((ConfigEntry<bool>)info.GetValue(UpgradeBus.instance.cfg)).Value;
-                if (info.PropertyType == typeof(ConfigEntry<int>)) integerProperties[info.Name] = ((ConfigEntry<int>)info.GetValue(UpgradeBus.instance.cfg)).Value;
-                if (info.PropertyType == typeof(ConfigEntry<float>)) floatProperties[info.Name] = ((ConfigEntry<float>)info.GetValue(UpgradeBus.instance.cfg)).Value;
-                if (info.PropertyType == typeof(ConfigEntry<string>)) stringProperties[info.Name] = ((ConfigEntry<string>)info.GetValue(UpgradeBus.instance.cfg)).Value;
+                if (info.PropertyType == typeof(ConfigEntry<bool>)) booleanProperties[info.Name] = ((ConfigEntry<bool>)info.GetValue(UpgradeBus.Instance.PluginConfiguration)).Value;
+                if (info.PropertyType == typeof(ConfigEntry<int>)) integerProperties[info.Name] = ((ConfigEntry<int>)info.GetValue(UpgradeBus.Instance.PluginConfiguration)).Value;
+                if (info.PropertyType == typeof(ConfigEntry<float>)) floatProperties[info.Name] = ((ConfigEntry<float>)info.GetValue(UpgradeBus.Instance.PluginConfiguration)).Value;
+                if (info.PropertyType == typeof(ConfigEntry<string>)) stringProperties[info.Name] = ((ConfigEntry<string>)info.GetValue(UpgradeBus.Instance.PluginConfiguration)).Value;
             }
         }
         internal void SynchronizeConfiguration()
@@ -37,10 +37,10 @@ namespace MoreShipUpgrades.Misc
             PropertyInfo[] propertyInfos = typeof(PluginConfig).GetProperties();
             foreach (PropertyInfo info in propertyInfos)
             {
-                if (info.PropertyType == typeof(ConfigEntry<bool>)) ((ConfigEntry<bool>)info.GetValue(UpgradeBus.instance.cfg)).Value = booleanProperties[info.Name];
-                if (info.PropertyType == typeof(ConfigEntry<int>)) ((ConfigEntry<int>)info.GetValue(UpgradeBus.instance.cfg)).Value = integerProperties[info.Name];
-                if (info.PropertyType == typeof(ConfigEntry<float>)) ((ConfigEntry<float>)info.GetValue(UpgradeBus.instance.cfg)).Value = floatProperties[info.Name];
-                if (info.PropertyType == typeof(ConfigEntry<string>)) ((ConfigEntry<string>)info.GetValue(UpgradeBus.instance.cfg)).Value = stringProperties[info.Name];
+                if (info.PropertyType == typeof(ConfigEntry<bool>)) ((ConfigEntry<bool>)info.GetValue(UpgradeBus.Instance.PluginConfiguration)).Value = booleanProperties[info.Name];
+                if (info.PropertyType == typeof(ConfigEntry<int>)) ((ConfigEntry<int>)info.GetValue(UpgradeBus.Instance.PluginConfiguration)).Value = integerProperties[info.Name];
+                if (info.PropertyType == typeof(ConfigEntry<float>)) ((ConfigEntry<float>)info.GetValue(UpgradeBus.Instance.PluginConfiguration)).Value = floatProperties[info.Name];
+                if (info.PropertyType == typeof(ConfigEntry<string>)) ((ConfigEntry<string>)info.GetValue(UpgradeBus.Instance.PluginConfiguration)).Value = stringProperties[info.Name];
             }
                 
         }
@@ -299,9 +299,9 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<string> BARGAIN_CONNECTIONS_PRICES { get; set; }
 
 
-        public PluginConfig(ConfigFile cfg)
+        public PluginConfig(ConfigFile PluginConfiguration)
         {
-            configFile = cfg;
+            configFile = PluginConfiguration;
         }
 
         private ConfigEntry<T> ConfigEntry<T>(string section, string key, T defaultVal, string description = "")

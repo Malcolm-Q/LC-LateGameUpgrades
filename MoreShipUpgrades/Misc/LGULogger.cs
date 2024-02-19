@@ -3,11 +3,11 @@ using HarmonyLib;
 
 namespace MoreShipUpgrades.Misc
 {
-    public class LGULogger
+    public class LguLogger
     {
-        private string moduleName;
-        private ManualLogSource logSource;
-        public LGULogger(string moduleName)
+        readonly string moduleName;
+        readonly ManualLogSource logSource;
+        public LguLogger(string moduleName)
         {
             this.moduleName = moduleName;
             logSource = Plugin.mls;

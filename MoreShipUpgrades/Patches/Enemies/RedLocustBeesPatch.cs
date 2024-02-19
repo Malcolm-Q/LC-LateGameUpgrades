@@ -11,9 +11,9 @@ using System.Text;
 namespace MoreShipUpgrades.Patches.Enemies
 {
     [HarmonyPatch(typeof(RedLocustBees))]
-    internal class RedLocustBeesPatch
+    internal static class RedLocustBeesPatch
     {
-        private static LGULogger logger = new LGULogger(typeof(RedLocustBeesPatch).Name);
+        private static LguLogger logger = new LguLogger(typeof(RedLocustBeesPatch).Name);
         [HarmonyTranspiler]
         [HarmonyPatch(nameof(RedLocustBees.OnCollideWithPlayer))]
         public static IEnumerable<CodeInstruction> OnCollideWithPlayer_Transpiler(IEnumerable<CodeInstruction> instructions)
@@ -56,7 +56,7 @@ namespace MoreShipUpgrades.Patches.Enemies
             for (int i = 0; i < codes.Count; i++)
             {
                 if (found) break;
-                if (!(codes[i].opcode == OpCodes.Ldarg_2)) continue;
+                if (codes[i].opcode != OpCodes.Ldarg_2) continue;
                 if (!(codes[i + 1].opcode == OpCodes.Stfld && codes[i + 1].operand.ToString() == "System.Int32 scrapValue")) continue;
 
                 codes.Insert(i + 1, new CodeInstruction(OpCodes.Ldarg_2));

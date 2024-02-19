@@ -1,20 +1,15 @@
 ﻿using HarmonyLib;
-using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Reflection.Emit;
-using UnityEngine;
 
 namespace MoreShipUpgrades.Patches.Items
 {
     [HarmonyPatch(typeof(Shovel))]
-    internal class ShovelPatcher
+    internal static class ShovelPatcher
     {
-        private static LGULogger logger = new LGULogger(nameof(ShovelPatcher));
         [HarmonyTranspiler]
         [HarmonyPatch(nameof(Shovel.HitShovel))]
         public static IEnumerable<CodeInstruction> HitShovelTranspiler(IEnumerable<CodeInstruction> instructions)

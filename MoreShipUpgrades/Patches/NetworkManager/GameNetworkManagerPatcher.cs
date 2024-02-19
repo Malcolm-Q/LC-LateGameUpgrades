@@ -7,12 +7,12 @@ using UnityEngine;
 namespace MoreShipUpgrades.Patches.NetworkManager
 {
     [HarmonyPatch(typeof(GameNetworkManager))]
-    internal class GameNetworkManagerPatcher
+    internal static class GameNetworkManagerPatcher
     {
-        private static LGULogger logger = new LGULogger(nameof(GameNetworkManagerPatcher));
+        static LguLogger logger = new LguLogger(nameof(GameNetworkManagerPatcher));
         [HarmonyPostfix]
         [HarmonyPatch(nameof(GameNetworkManager.Disconnect))]
-        private static void ResetUpgradeBus()
+        static void ResetUpgradeBus()
         {
             logger.LogDebug("Resetting the Upgrade Bus due to disconnecting...");
             BaseUpgrade[] upgradeObjects = Object.FindObjectsOfType<BaseUpgrade>();
@@ -20,7 +20,7 @@ namespace MoreShipUpgrades.Patches.NetworkManager
             {
                 Object.Destroy(upgrade.gameObject);
             }
-            UpgradeBus.instance.ResetAllValues();
+            UpgradeBus.Instance.ResetAllValues();
         }
     }
 }

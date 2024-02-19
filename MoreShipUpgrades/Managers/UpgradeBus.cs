@@ -18,87 +18,46 @@ namespace MoreShipUpgrades.Managers
 {
     public class UpgradeBus : NetworkBehaviour
     {
-        public static UpgradeBus instance;
-        public PluginConfig cfg;
-        public GameObject introScreen;
-        private static LGULogger logger = new LGULogger(nameof(UpgradeBus));
+        internal static UpgradeBus Instance { get; set; }
+        internal PluginConfig PluginConfiguration { get; set; }
+        internal GameObject IntroScreen { get; set; }
+        private static LguLogger logger = new LguLogger(nameof(UpgradeBus));
 
         internal Dictionary<string, bool> activeUpgrades = new Dictionary<string, bool>();
         internal Dictionary<string, int> upgradeLevels = new Dictionary<string, int>();
 
         internal bool TPButtonPressed;
 
-        public GameObject nightVisionPrefab;
-        public bool nightVisionActive = false;
-        public float nightVisRange;
-        public float nightVisIntensity;
+        internal Dictionary<string, float> SaleData = new Dictionary<string, float>();
 
-        public float flashCooldown = 0f;
-        public float alteredWeight = 1f;
+        internal AudioClip flashNoise;
+        internal GameObject modStorePrefab;
+        internal TerminalNode modStoreInterface;
+        Terminal terminal;
+        PlayerControllerB localPlayer;
+        HangarShipDoor hangarDoors;
 
-        public string contractLevel = "None";
-        public string contractType = "None";
-        public string DataMinigameKey = "";
-        public string DataMinigameUser = "";
-        public string DataMinigamePass = "";
-
-        public Dictionary<string, List<string>> fakeBombOrders = new Dictionary<string, List<string>>();
-        public Dictionary<string, float> SaleData = new Dictionary<string, float>();
-
-        public Color nightVisColor;
-        public AudioClip flashNoise;
-        public GameObject modStorePrefab;
-        public TerminalNode modStoreInterface;
-        public Terminal terminal;
-        public PlayerControllerB localPlayer;
-        private HangarShipDoor hangarDoors;
-
-        public List<BoomboxItem> boomBoxes = new List<BoomboxItem>();
-
-        public List<CustomTerminalNode> terminalNodes = new List<CustomTerminalNode>();
-
-        public Dictionary<string, GameObject> UpgradeObjects = new Dictionary<string, GameObject>();
-
-        public Dictionary<string, Item> ItemsToSync = new Dictionary<string, Item>();
-
-        public Dictionary<ulong, int> playerHealthLevels = new Dictionary<ulong, int>();
-
-        public bool increaseHivePrice = false;
-
-        public Dictionary<string,bool> IndividualUpgrades = new Dictionary<string,bool>();
-        public string[] internNames, internInterests;
-
-        public List<Peeper> coilHeadItems = new List<Peeper>();
-
-        internal bool walkieUIActive;
+        internal List<CustomTerminalNode> terminalNodes = new List<CustomTerminalNode>();
+        internal Dictionary<string, GameObject> UpgradeObjects = new Dictionary<string, GameObject>();
+        internal Dictionary<string, Item> ItemsToSync = new Dictionary<string, Item>();
+        internal Dictionary<string,bool> IndividualUpgrades = new Dictionary<string,bool>();
+        internal List<Peeper> coilHeadItems = new List<Peeper>();
+        internal AssetBundle UpgradeAssets;
         internal string version;
 
-        public AssetBundle UpgradeAssets;
+        internal GameObject helmetModel;
+        internal Helmet helmetScript;
+        internal bool wearingHelmet = false;
+        internal int helmetHits = 0;
 
-        public Dictionary<string,GameObject> samplePrefabs = new Dictionary<string,GameObject>();
-
-        public float staminaDrainCoefficient = 1f;
-        public float incomingDamageCoefficient = 1f;
-        public int damageBoost;
-        public GameObject BoomboxIcon;
-        public bool EffectsActive;
-
-        public GameObject helmetModel;
-        public Helmet helmetScript;
-        public bool wearingHelmet = false;
-        public int helmetHits = 0;
-
-        public Dictionary<string, AudioClip> SFX = new Dictionary<string, AudioClip>();
-        public bool helmetDesync;
-        public List<string> bombOrder = new List<string>();
-        public string SerialNumber;
+        internal Dictionary<string, AudioClip> SFX = new Dictionary<string, AudioClip>();
+        internal bool helmetDesync;
 
         void Awake()
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
-            cfg = Plugin.cfg;
-            logger = new LGULogger(typeof(UpgradeBus).Name);
+            PluginConfiguration = Plugin.PluginConfiguration;
         }
 
         public Terminal GetTerminal()
@@ -107,7 +66,7 @@ namespace MoreShipUpgrades.Managers
 
             return terminal;
         }
-        public PlayerControllerB GetLocalPlayer() // I keep forgetting we have this
+        public PlayerControllerB GetLocalPlayer()
         {
             if (localPlayer == null) localPlayer = GameNetworkManager.Instance.localPlayerController;
             return localPlayer;
@@ -142,18 +101,14 @@ namespace MoreShipUpgrades.Managers
             ResetPlayerAttributes();
             if(IsHost || IsServer) ResetShipAttributesClientRpc();
 
-            EffectsActive = false;
-            nightVisionActive = false;
-            contractType = "None";
-            contractLevel = "None";
+            SickBeats.Instance.EffectsActive = false;
+            NightVision.Instance.nightVisionActive = false;
+            ContractManager.Instance.ResetAllValues();
 
-            flashCooldown = 0f;
-            alteredWeight = 1f;
+            Discombobulator.instance.flashCooldown = 0f;
+            BackMuscles.Instance.alteredWeight = 1f;
             if (wipeObjRefs) {
-                UpgradeObjects = new Dictionary<string, GameObject>(); 
-                MalwareBroadcaster.instance = null;
-                Discombobulator.instance = null;
-                FastEncryption.instance = null;
+                UpgradeObjects = new Dictionary<string, GameObject>();
             }
             foreach(CustomTerminalNode node in terminalNodes)
             {
@@ -184,7 +139,7 @@ namespace MoreShipUpgrades.Managers
             UpgradeObjects.Values.Where(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>() is IServerSync).Do(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute());
         }
 
-        internal void GenerateSales(int seed = -1) // TODO: Save sales
+        internal void GenerateSales(int seed = -1)
         {
             if (seed == -1) seed = Random.Range(0, 999999);
             logger.LogInfo($"Generating sales with seed: {seed} on this client...");
@@ -192,7 +147,7 @@ namespace MoreShipUpgrades.Managers
             SaleData = new Dictionary<string, float>();
             foreach(CustomTerminalNode node in terminalNodes)
             {
-                if(Random.value > cfg.SALE_PERC.Value)
+                if(Random.value > PluginConfiguration.SALE_PERC.Value)
                 {
                     node.salePerc = Random.Range(0.60f, 0.90f);
                     logger.LogInfo($"Set sale percentage to: {node.salePerc} for {node.Name}.");
@@ -227,66 +182,66 @@ namespace MoreShipUpgrades.Managers
 
         internal void AlterStoreItems()
         {
-            if (!cfg.PEEPER_ENABLED.Value)
+            if (!PluginConfiguration.PEEPER_ENABLED.Value)
             {
                 Items.RemoveShopItem(ItemsToSync["Peeper"]);
                 logger.LogInfo("Removing Peeper from store.");
             }
-            else if (ItemsToSync["Peeper"].creditsWorth != cfg.PEEPER_PRICE.Value) Items.UpdateShopItemPrice(ItemsToSync["Peeper"], cfg.PEEPER_PRICE.Value);
+            else if (ItemsToSync["Peeper"].creditsWorth != PluginConfiguration.PEEPER_PRICE.Value) Items.UpdateShopItemPrice(ItemsToSync["Peeper"], PluginConfiguration.PEEPER_PRICE.Value);
 
-            if (!cfg.HELMET_ENABLED.Value)
+            if (!PluginConfiguration.HELMET_ENABLED.Value)
             {
                 logger.LogInfo("Removing helmet from store.");
                 Items.RemoveShopItem(ItemsToSync["Helmet"]);
             }
-            else if (ItemsToSync["Helmet"].creditsWorth != cfg.HELMET_PRICE.Value) Items.UpdateShopItemPrice(ItemsToSync["Helmet"], cfg.HELMET_PRICE.Value);
+            else if (ItemsToSync["Helmet"].creditsWorth != PluginConfiguration.HELMET_PRICE.Value) Items.UpdateShopItemPrice(ItemsToSync["Helmet"], PluginConfiguration.HELMET_PRICE.Value);
 
-            if (!cfg.DIVEKIT_ENABLED.Value)
+            if (!PluginConfiguration.DIVEKIT_ENABLED.Value)
             {
                 logger.LogInfo("Removing divekit from store.");
                 Items.RemoveShopItem(ItemsToSync["Dive"]);
             }
-            else if (ItemsToSync["Dive"].creditsWorth != cfg.DIVEKIT_PRICE.Value) Items.UpdateShopItemPrice(ItemsToSync["Dive"], cfg.DIVEKIT_PRICE.Value);
+            else if (ItemsToSync["Dive"].creditsWorth != PluginConfiguration.DIVEKIT_PRICE.Value) Items.UpdateShopItemPrice(ItemsToSync["Dive"], PluginConfiguration.DIVEKIT_PRICE.Value);
 
-            if (!cfg.ADVANCED_TELE_ENABLED.Value)
+            if (!PluginConfiguration.ADVANCED_TELE_ENABLED.Value)
             {
                 logger.LogInfo("Removing AdvTele from store.");
                 Items.RemoveShopItem(ItemsToSync["AdvTele"]);
             }
-            else if (ItemsToSync["AdvTele"].creditsWorth != cfg.ADVANCED_TELE_PRICE.Value) Items.UpdateShopItemPrice(ItemsToSync["AdvTele"], cfg.ADVANCED_TELE_PRICE.Value);
+            else if (ItemsToSync["AdvTele"].creditsWorth != PluginConfiguration.ADVANCED_TELE_PRICE.Value) Items.UpdateShopItemPrice(ItemsToSync["AdvTele"], PluginConfiguration.ADVANCED_TELE_PRICE.Value);
 
-            if (!cfg.WEAK_TELE_ENABLED.Value)
+            if (!PluginConfiguration.WEAK_TELE_ENABLED.Value)
             {
                 logger.LogInfo("Removing Tele from store.");
                 Items.RemoveShopItem(ItemsToSync["Tele"]);
             }
-            else if (ItemsToSync["Tele"].creditsWorth != cfg.WEAK_TELE_PRICE.Value) Items.UpdateShopItemPrice(ItemsToSync["Tele"], cfg.WEAK_TELE_PRICE.Value);
+            else if (ItemsToSync["Tele"].creditsWorth != PluginConfiguration.WEAK_TELE_PRICE.Value) Items.UpdateShopItemPrice(ItemsToSync["Tele"], PluginConfiguration.WEAK_TELE_PRICE.Value);
 
-            if (!cfg.MEDKIT_ENABLED.Value)
+            if (!PluginConfiguration.MEDKIT_ENABLED.Value)
             {
                 logger.LogInfo("Removing Medkit from store.");
                 Items.RemoveShopItem(ItemsToSync["Medkit"]);
             }
-            else if (ItemsToSync["Medkit"].creditsWorth != cfg.MEDKIT_PRICE.Value) Items.UpdateShopItemPrice(ItemsToSync["Medkit"], cfg.MEDKIT_PRICE.Value);
+            else if (ItemsToSync["Medkit"].creditsWorth != PluginConfiguration.MEDKIT_PRICE.Value) Items.UpdateShopItemPrice(ItemsToSync["Medkit"], PluginConfiguration.MEDKIT_PRICE.Value);
 
-            if (!cfg.NIGHT_VISION_ENABLED.Value)
+            if (!PluginConfiguration.NIGHT_VISION_ENABLED.Value)
             {
                 logger.LogInfo("Removing Night Vision from store.");
                 Items.RemoveShopItem(ItemsToSync["Night"]);
             }
-            else if (ItemsToSync["Night"].creditsWorth != cfg.NIGHT_VISION_PRICE.Value) Items.UpdateShopItemPrice(ItemsToSync["Night"], cfg.NIGHT_VISION_PRICE.Value);
+            else if (ItemsToSync["Night"].creditsWorth != PluginConfiguration.NIGHT_VISION_PRICE.Value) Items.UpdateShopItemPrice(ItemsToSync["Night"], PluginConfiguration.NIGHT_VISION_PRICE.Value);
 
-            if (!cfg.WHEELBARROW_ENABLED.Value)
+            if (!PluginConfiguration.WHEELBARROW_ENABLED.Value)
             {
                 logger.LogInfo("Removing Wheelbarrow from store.");
                 Items.RemoveShopItem(ItemsToSync["Wheel"]);
             }
-            else if (ItemsToSync["Wheel"].creditsWorth != cfg.WHEELBARROW_PRICE.Value) Items.UpdateShopItemPrice(ItemsToSync["Wheel"], cfg.WHEELBARROW_PRICE.Value);
+            else if (ItemsToSync["Wheel"].creditsWorth != PluginConfiguration.WHEELBARROW_PRICE.Value) Items.UpdateShopItemPrice(ItemsToSync["Wheel"], PluginConfiguration.WHEELBARROW_PRICE.Value);
         }
 
         void SyncAvailableContracts()
         {
-            if (!cfg.DATA_CONTRACT.Value)
+            if (!PluginConfiguration.DATA_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
                 logger.LogInfo("Removing data contract");
                 int idx = CommandParser.contracts.IndexOf("data");
@@ -296,7 +251,7 @@ namespace MoreShipUpgrades.Managers
                     CommandParser.contracts.RemoveAt(idx);
                 }
             }
-            if (!cfg.EXTRACTION_CONTRACT.Value)
+            if (!PluginConfiguration.EXTRACTION_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
                 logger.LogInfo("Removing extraction contract");
                 int idx = CommandParser.contracts.IndexOf("extraction");
@@ -306,7 +261,7 @@ namespace MoreShipUpgrades.Managers
                     CommandParser.contracts.RemoveAt(idx);
                 }
             }
-            if (!cfg.EXORCISM_CONTRACT.Value)
+            if (!PluginConfiguration.EXORCISM_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
                 logger.LogInfo("Removing exorcism contract");
                 int idx = CommandParser.contracts.IndexOf("exorcism");
@@ -316,7 +271,7 @@ namespace MoreShipUpgrades.Managers
                     CommandParser.contracts.RemoveAt(idx);
                 }
             }
-            if (!cfg.DEFUSAL_CONTRACT.Value)
+            if (!PluginConfiguration.DEFUSAL_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
                 logger.LogInfo("Removing defusal contract");
                 int idx = CommandParser.contracts.IndexOf("defusal");
@@ -326,9 +281,9 @@ namespace MoreShipUpgrades.Managers
                     CommandParser.contracts.RemoveAt(idx);
                 }
             }
-            if (!cfg.EXTERMINATOR_CONTRACT.Value)
+            if (!PluginConfiguration.EXTERMINATOR_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
-                if(CommandParser.contracts.Count == 1)
+                if(CommandParser.contracts.Count == 1 && PluginConfiguration.CONTRACTS_ENABLED.Value)
                 {
                     logger.LogInfo("Why must you do the things you do");
                     logger.LogWarning("User tried to remove all contracts! Leaving exterminator present. Did you mean to disable contracts?");
@@ -402,107 +357,107 @@ namespace MoreShipUpgrades.Managers
         {
             SetupMultiplePurchasableTerminalNode(MarketInfluence.UPGRADE_NAME,
                                                 true,
-                                                cfg.MARKET_INFLUENCE_ENABLED.Value,
-                                                cfg.MARKET_INFLUENCE_PRICE.Value,
-                                                ParseUpgradePrices(cfg.MARKET_INFLUENCE_PRICES.Value));
+                                                PluginConfiguration.MARKET_INFLUENCE_ENABLED.Value,
+                                                PluginConfiguration.MARKET_INFLUENCE_PRICE.Value,
+                                                ParseUpgradePrices(PluginConfiguration.MARKET_INFLUENCE_PRICES.Value));
         }
         void SetupBargainConnectionsTerminalNode()
         {
             SetupMultiplePurchasableTerminalNode(BargainConnections.UPGRADE_NAME,
                                                 true,
-                                                cfg.BARGAIN_CONNECTIONS_ENABLED.Value,
-                                                cfg.BARGAIN_CONNECTIONS_PRICE.Value,
-                                                ParseUpgradePrices(cfg.BARGAIN_CONNECTIONS_PRICES.Value));
+                                                PluginConfiguration.BARGAIN_CONNECTIONS_ENABLED.Value,
+                                                PluginConfiguration.BARGAIN_CONNECTIONS_PRICE.Value,
+                                                ParseUpgradePrices(PluginConfiguration.BARGAIN_CONNECTIONS_PRICES.Value));
         }
         void SetupLethalDealsTerminalNode()
         {
             SetupOneTimeTerminalNode(LethalDeals.UPGRADE_NAME,
                                     true,
-                                    cfg.LETHAL_DEALS_ENABLED.Value,
-                                    cfg.LETHAL_DEALS_PRICE.Value);
+                                    PluginConfiguration.LETHAL_DEALS_ENABLED.Value,
+                                    PluginConfiguration.LETHAL_DEALS_PRICE.Value);
         }
         private void SetupQuantumDisruptorTerminalNode()
         {
             SetupMultiplePurchasableTerminalNode(QuantumDisruptor.UPGRADE_NAME,
                                                 true,
-                                                cfg.QUANTUM_DISRUPTOR_ENABLED.Value,
-                                                cfg.QUANTUM_DISRUPTOR_PRICE.Value,
-                                                ParseUpgradePrices(cfg.QUANTUM_DISRUPTOR_PRICES.Value));
+                                                PluginConfiguration.QUANTUM_DISRUPTOR_ENABLED.Value,
+                                                PluginConfiguration.QUANTUM_DISRUPTOR_PRICE.Value,
+                                                ParseUpgradePrices(PluginConfiguration.QUANTUM_DISRUPTOR_PRICES.Value));
         }
         private void SetupShutterBatteriesTerminalNode()
         {
             SetupMultiplePurchasableTerminalNode(DoorsHydraulicsBattery.UPGRADE_NAME,
                                                 true,
-                                                cfg.DOOR_HYDRAULICS_BATTERY_ENABLED.Value,
-                                                cfg.DOOR_HYDRAULICS_BATTERY_PRICE.Value,
-                                                ParseUpgradePrices(cfg.DOOR_HYDRAULICS_BATTERY_PRICES.Value));
+                                                PluginConfiguration.DOOR_HYDRAULICS_BATTERY_ENABLED.Value,
+                                                PluginConfiguration.DOOR_HYDRAULICS_BATTERY_PRICE.Value,
+                                                ParseUpgradePrices(PluginConfiguration.DOOR_HYDRAULICS_BATTERY_PRICES.Value));
         }
         private void SetupSickBeatsTerminalNode()
         {
             SetupOneTimeTerminalNode(
                 SickBeats.UPGRADE_NAME,
-                cfg.SHARED_UPGRADES.Value ? true : !cfg.BEATS_INDIVIDUAL.Value,
-                cfg.BEATS_ENABLED.Value,
-                cfg.BEATS_PRICE.Value);
+                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.BEATS_INDIVIDUAL.Value,
+                PluginConfiguration.BEATS_ENABLED.Value,
+                PluginConfiguration.BEATS_PRICE.Value);
         }
 
         private void SetupBeekeperTerminalNode()
         {
             SetupMultiplePurchasableTerminalNode(
                 Beekeeper.UPGRADE_NAME,
-                cfg.SHARED_UPGRADES.Value ? true : !cfg.BEEKEEPER_INDIVIDUAL.Value,
-                cfg.BEEKEEPER_ENABLED.Value,
-                cfg.BEEKEEPER_PRICE.Value,
-                ParseUpgradePrices(cfg.BEEKEEPER_UPGRADE_PRICES.Value));
+                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.BEEKEEPER_INDIVIDUAL.Value,
+                PluginConfiguration.BEEKEEPER_ENABLED.Value,
+                PluginConfiguration.BEEKEEPER_PRICE.Value,
+                ParseUpgradePrices(PluginConfiguration.BEEKEEPER_UPGRADE_PRICES.Value));
         }
 
         private void SetupProteinPowderTerminalNode() 
         {
             SetupMultiplePurchasableTerminalNode(ProteinPowder.UPGRADE_NAME,
-                                                cfg.SHARED_UPGRADES.Value ? true : !cfg.PROTEIN_INDIVIDUAL.Value,
-                                                cfg.PROTEIN_ENABLED.Value,
-                                                cfg.PROTEIN_PRICE.Value,
-                                                ParseUpgradePrices(cfg.PROTEIN_UPGRADE_PRICES.Value));
+                                                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.PROTEIN_INDIVIDUAL.Value,
+                                                PluginConfiguration.PROTEIN_ENABLED.Value,
+                                                PluginConfiguration.PROTEIN_PRICE.Value,
+                                                ParseUpgradePrices(PluginConfiguration.PROTEIN_UPGRADE_PRICES.Value));
         }
         private void SetupBiggerLungsTerminalNode()
         {
             SetupMultiplePurchasableTerminalNode(BiggerLungs.UPGRADE_NAME,
-                                                cfg.SHARED_UPGRADES.Value ? true : !cfg.BIGGER_LUNGS_INDIVIDUAL.Value,
-                                                cfg.BIGGER_LUNGS_ENABLED.Value,
-                                                cfg.BIGGER_LUNGS_PRICE.Value,
-                                                ParseUpgradePrices(cfg.BIGGER_LUNGS_UPGRADE_PRICES.Value));
+                                                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.BIGGER_LUNGS_INDIVIDUAL.Value,
+                                                PluginConfiguration.BIGGER_LUNGS_ENABLED.Value,
+                                                PluginConfiguration.BIGGER_LUNGS_PRICE.Value,
+                                                ParseUpgradePrices(PluginConfiguration.BIGGER_LUNGS_UPGRADE_PRICES.Value));
         }
         private void SetupRunningShoesTerminalNode()
         {
             SetupMultiplePurchasableTerminalNode(RunningShoes.UPGRADE_NAME,
-                                                cfg.SHARED_UPGRADES.Value ? true : !cfg.RUNNING_SHOES_INDIVIDUAL.Value,
-                                                cfg.RUNNING_SHOES_ENABLED.Value,
-                                                cfg.RUNNING_SHOES_PRICE.Value,
-                                                ParseUpgradePrices(cfg.RUNNING_SHOES_UPGRADE_PRICES.Value));
+                                                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.RUNNING_SHOES_INDIVIDUAL.Value,
+                                                PluginConfiguration.RUNNING_SHOES_ENABLED.Value,
+                                                PluginConfiguration.RUNNING_SHOES_PRICE.Value,
+                                                ParseUpgradePrices(PluginConfiguration.RUNNING_SHOES_UPGRADE_PRICES.Value));
         }
         private void SetupStrongLegsTerminalNode()
         {
             SetupMultiplePurchasableTerminalNode(StrongLegs.UPGRADE_NAME,
-                                                cfg.SHARED_UPGRADES.Value ? true : !cfg.STRONG_LEGS_INDIVIDUAL.Value,
-                                                cfg.STRONG_LEGS_ENABLED.Value,
-                                                cfg.STRONG_LEGS_PRICE.Value,
-                                                ParseUpgradePrices(cfg.STRONG_LEGS_UPGRADE_PRICES.Value));
+                                                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.STRONG_LEGS_INDIVIDUAL.Value,
+                                                PluginConfiguration.STRONG_LEGS_ENABLED.Value,
+                                                PluginConfiguration.STRONG_LEGS_PRICE.Value,
+                                                ParseUpgradePrices(PluginConfiguration.STRONG_LEGS_UPGRADE_PRICES.Value));
         }
         private void SetupMalwareBroadcasterTerminalNode()
         {
 
             SetupOneTimeTerminalNode(MalwareBroadcaster.UPGRADE_NAME,
-                                    cfg.SHARED_UPGRADES.Value ? true : !cfg.MALWARE_BROADCASTER_INDIVIDUAL.Value,
-                                    cfg.MALWARE_BROADCASTER_ENABLED.Value,
-                                    cfg.MALWARE_BROADCASTER_PRICE.Value);
+                                    PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.MALWARE_BROADCASTER_INDIVIDUAL.Value,
+                                    PluginConfiguration.MALWARE_BROADCASTER_ENABLED.Value,
+                                    PluginConfiguration.MALWARE_BROADCASTER_PRICE.Value);
         }
         private void SetupNightVisionBatteryTerminalNode()
         {
             CustomTerminalNode node = SetupMultiplePurchasableTerminalNode(NightVision.UPGRADE_NAME,
-                                                cfg.SHARED_UPGRADES.Value ? true : !cfg.NIGHT_VISION_INDIVIDUAL.Value,
-                                                cfg.NIGHT_VISION_ENABLED.Value,
+                                                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.NIGHT_VISION_INDIVIDUAL.Value,
+                                                PluginConfiguration.NIGHT_VISION_ENABLED.Value,
                                                 0,
-                                                ParseUpgradePrices(cfg.NIGHT_VISION_UPGRADE_PRICES.Value));
+                                                ParseUpgradePrices(PluginConfiguration.NIGHT_VISION_UPGRADE_PRICES.Value));
             if(node != null) node.Unlocked = true;
         }
         private void SetupDiscombobulatorTerminalNode()
@@ -512,72 +467,72 @@ namespace MoreShipUpgrades.Managers
 
             flashNoise = flashSFX;
             SetupMultiplePurchasableTerminalNode(Discombobulator.UPGRADE_NAME,
-                                                cfg.SHARED_UPGRADES.Value ? true : !cfg.DISCOMBOBULATOR_INDIVIDUAL.Value,
-                                                cfg.DISCOMBOBULATOR_ENABLED.Value,
-                                                cfg.DISCOMBOBULATOR_PRICE.Value,
-                                                ParseUpgradePrices(cfg.DISCO_UPGRADE_PRICES.Value));
+                                                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.DISCOMBOBULATOR_INDIVIDUAL.Value,
+                                                PluginConfiguration.DISCOMBOBULATOR_ENABLED.Value,
+                                                PluginConfiguration.DISCOMBOBULATOR_PRICE.Value,
+                                                ParseUpgradePrices(PluginConfiguration.DISCO_UPGRADE_PRICES.Value));
         }
         private void SetupHunterTerminalNode()
         {
             Hunter.SetupTierList();
             SetupMultiplePurchasableTerminalNode(Hunter.UPGRADE_NAME,
                                                 true,
-                                                cfg.HUNTER_ENABLED.Value,
-                                                cfg.HUNTER_PRICE.Value,
-                                                ParseUpgradePrices(cfg.HUNTER_UPGRADE_PRICES.Value));
+                                                PluginConfiguration.HUNTER_ENABLED.Value,
+                                                PluginConfiguration.HUNTER_PRICE.Value,
+                                                ParseUpgradePrices(PluginConfiguration.HUNTER_UPGRADE_PRICES.Value));
         }
         private void SetupBetterScannerTerminalNode()
         {
             SetupMultiplePurchasableTerminalNode(BetterScanner.UPGRADE_NAME,
-                                                cfg.SHARED_UPGRADES.Value ? true : !cfg.BETTER_SCANNER_INDIVIDUAL.Value,
-                                                cfg.BETTER_SCANNER_ENABLED.Value,
-                                                cfg.BETTER_SCANNER_PRICE.Value,
-                                                new int[] { cfg.BETTER_SCANNER_PRICE2.Value, cfg.BETTER_SCANNER_PRICE3.Value }
+                                                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.BETTER_SCANNER_INDIVIDUAL.Value,
+                                                PluginConfiguration.BETTER_SCANNER_ENABLED.Value,
+                                                PluginConfiguration.BETTER_SCANNER_PRICE.Value,
+                                                new int[] { PluginConfiguration.BETTER_SCANNER_PRICE2.Value, PluginConfiguration.BETTER_SCANNER_PRICE3.Value }
                                                 );
         }
         private void SetupLightningRodTerminalNode()
         {
             SetupOneTimeTerminalNode(LightningRod.UPGRADE_NAME,
                                     true,
-                                    cfg.LIGHTNING_ROD_ENABLED.Value,
-                                    cfg.LIGHTNING_ROD_PRICE.Value);
+                                    PluginConfiguration.LIGHTNING_ROD_ENABLED.Value,
+                                    PluginConfiguration.LIGHTNING_ROD_PRICE.Value);
         }
         private void SetupWalkieGPSTerminalNode()
         {
             SetupOneTimeTerminalNode(WalkieGPS.UPGRADE_NAME,
                                     true,
-                                    cfg.WALKIE_ENABLED.Value,
-                                    cfg.WALKIE_PRICE.Value);
+                                    PluginConfiguration.WALKIE_ENABLED.Value,
+                                    PluginConfiguration.WALKIE_PRICE.Value);
         }
         private void SetupBackMusclesTerminalNode()
         {
             SetupMultiplePurchasableTerminalNode(BackMuscles.UPGRADE_NAME,
-                                                cfg.SHARED_UPGRADES.Value ? true : !cfg.BACK_MUSCLES_INDIVIDUAL.Value,
-                                                cfg.BACK_MUSCLES_ENABLED.Value,
-                                                cfg.BACK_MUSCLES_PRICE.Value,
-                                                ParseUpgradePrices(cfg.BACK_MUSCLES_UPGRADE_PRICES.Value));
+                                                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.BACK_MUSCLES_INDIVIDUAL.Value,
+                                                PluginConfiguration.BACK_MUSCLES_ENABLED.Value,
+                                                PluginConfiguration.BACK_MUSCLES_PRICE.Value,
+                                                ParseUpgradePrices(PluginConfiguration.BACK_MUSCLES_UPGRADE_PRICES.Value));
         }
         private void SetupPagerTerminalNode()
         {
             SetupOneTimeTerminalNode(FastEncryption.UPGRADE_NAME,
                                     true,
-                                    cfg.PAGER_ENABLED.Value,
-                                    cfg.PAGER_PRICE.Value);
+                                    PluginConfiguration.PAGER_ENABLED.Value,
+                                    PluginConfiguration.PAGER_PRICE.Value);
         }
         private void SetupLocksmithTerminalNode()
         {
             SetupOneTimeTerminalNode(LockSmith.UPGRADE_NAME,
-                                    cfg.SHARED_UPGRADES.Value ? true : !cfg.LOCKSMITH_INDIVIDUAL.Value,
-                                    cfg.LOCKSMITH_ENABLED.Value,
-                                    cfg.LOCKSMITH_PRICE.Value);
+                                    PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.LOCKSMITH_INDIVIDUAL.Value,
+                                    PluginConfiguration.LOCKSMITH_ENABLED.Value,
+                                    PluginConfiguration.LOCKSMITH_PRICE.Value);
         }
         private void SetupPlayerHealthTerminalNode()
         {
             SetupMultiplePurchasableTerminalNode(Stimpack.UPGRADE_NAME,
-                                                cfg.SHARED_UPGRADES.Value ? true : !cfg.PLAYER_HEALTH_INDIVIDUAL.Value,
-                                                cfg.PLAYER_HEALTH_ENABLED.Value,
-                                                cfg.PLAYER_HEALTH_PRICE.Value,
-                                                ParseUpgradePrices(cfg.PLAYER_HEALTH_UPGRADE_PRICES.Value));
+                                                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.PLAYER_HEALTH_INDIVIDUAL.Value,
+                                                PluginConfiguration.PLAYER_HEALTH_ENABLED.Value,
+                                                PluginConfiguration.PLAYER_HEALTH_PRICE.Value,
+                                                ParseUpgradePrices(PluginConfiguration.PLAYER_HEALTH_UPGRADE_PRICES.Value));
         }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can be purchased multiple times
@@ -616,22 +571,21 @@ namespace MoreShipUpgrades.Managers
         /// <param name="enabled"> Wether the upgrade is enabled for gameplay or not</param>
         /// <param name="price"></param>
         /// <param name="info"> The information displayed when checking the upgrade's info</param>
-        private CustomTerminalNode SetupOneTimeTerminalNode(string upgradeName,
+        private void SetupOneTimeTerminalNode(string upgradeName,
                                               bool shareStatus,
                                               bool enabled,
                                               int price
                                               )
         {
             GameObject oneTimeUpgrade = AssetBundleHandler.GetPerkGameObject(upgradeName);
-            if (!oneTimeUpgrade) return null;
+            if (!oneTimeUpgrade) return;
 
             IndividualUpgrades.Add(upgradeName, shareStatus);
-            if (!enabled) return null;
+            if (!enabled) return;
             string info = SetupUpgradeInfo(upgrade: oneTimeUpgrade.GetComponent<BaseUpgrade>(), shareStatus: shareStatus, price: price);
 
             CustomTerminalNode node = new CustomTerminalNode(upgradeName, price, info, oneTimeUpgrade);
             terminalNodes.Add(node);
-            return node;
         }
         private string SetupUpgradeInfo(BaseUpgrade upgrade = null, bool shareStatus = false, int price = -1, int[] incrementalPrices = null)
         {

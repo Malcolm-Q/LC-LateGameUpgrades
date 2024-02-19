@@ -9,7 +9,7 @@ using UnityEngine;
 namespace MoreShipUpgrades.Patches.Weather
 {
     [HarmonyPatch(typeof(StormyWeather))]
-    internal class StormyWeatherPatcher
+    internal static class StormyWeatherPatcher
     {
         [HarmonyPrefix]
         [HarmonyPatch(nameof(StormyWeather.LightningStrike))]
@@ -26,7 +26,7 @@ namespace MoreShipUpgrades.Patches.Weather
         [HarmonyPatch(nameof(StormyWeather.Update))]
         static void InterceptSelectedObject(StormyWeather __instance, GrabbableObject ___targetingMetalObject)
         {
-            if (!BaseUpgrade.GetActiveUpgrade(LightningRod.UPGRADE_NAME) || !LGUStore.instance.IsHost || !LGUStore.instance.IsServer) { return; }
+            if (!BaseUpgrade.GetActiveUpgrade(LightningRod.UPGRADE_NAME) || !LguStore.Instance.IsHost || !LguStore.Instance.IsServer) { return; }
             if (___targetingMetalObject == null)
             {
                 if (LightningRod.instance != null) // Lightning rod could be disabled so we wouldn't have an instance
