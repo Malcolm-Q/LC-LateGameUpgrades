@@ -22,7 +22,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         float nightBattery;
         Transform batteryBar;
         PlayerControllerB client;
-        bool batteryExhaustion;
+        public bool batteryExhaustion;
         internal GameObject nightVisionPrefab;
         internal bool nightVisionActive = false;
         internal float nightVisRange;

@@ -43,8 +43,8 @@ namespace MoreShipUpgrades.Input
                 Asset = ScriptableObject.CreateInstance<InputActionAsset>();
                 ActionMap = new InputActionMap("MoreShipUpgrades");
                 InputActionSetupExtensions.AddActionMap(Asset, ActionMap);
-                WheelbarrowAction = InputActionSetupExtensions.AddAction(ActionMap, "MoreShipUpgrades.DropAll", binding: UpgradeBus.instance.cfg.WHEELBARROW_DROP_ALL_CONTROL_BIND.Value, interactions: "Press");
-                NvgAction = InputActionSetupExtensions.AddAction(ActionMap, "MoreShipUpgrades.NvgToggle", binding: UpgradeBus.instance.cfg.TOGGLE_NIGHT_VISION_KEY.Value, interactions: "Press");
+                WheelbarrowAction = InputActionSetupExtensions.AddAction(ActionMap, "MoreShipUpgrades.DropAll", binding: UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_DROP_ALL_CONTROL_BIND.Value, interactions: "Press");
+                NvgAction = InputActionSetupExtensions.AddAction(ActionMap, "MoreShipUpgrades.NvgToggle", binding: UpgradeBus.Instance.PluginConfiguration.TOGGLE_NIGHT_VISION_KEY.Value, interactions: "Press");
             }
         }
 
@@ -86,9 +86,9 @@ namespace MoreShipUpgrades.Input
                 return;
             }
 
-            if(NightVision.instance && !NightVision.instance.batteryExhaustion)
+            if(NightVision.Instance && !NightVision.Instance.batteryExhaustion)
             {
-                NightVision.instance.Toggle();
+                NightVision.Instance.Toggle();
             }
         }
     }
