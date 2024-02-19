@@ -442,7 +442,7 @@ namespace MoreShipUpgrades.Misc
             NIGHT_VIS_INTENSITY_INCREMENT = ConfigEntry(topSection, "Night Vision Intensity Increment", 0f, "Increases your intensity by this value each upgrade.");
             NIGHT_VIS_STARTUP = ConfigEntry(topSection, "Night Vision StartUp Cost", 0.1f, "The percent battery drained when turned on (0.1 = 10%).");
             NIGHT_VIS_EXHAUST = ConfigEntry(topSection, "Night Vision Exhaustion", 2f, "How many seconds night vision stays fully depleted.");
-            TOGGLE_NIGHT_VISION_KEY = ConfigEntry(topSection, "Toggle Night Vision Key", "<Keyboard>/leftAlt", "Key to toggle Night Vision, you can use any key on your system such as LeftAlt, LeftShift, or any letter which exists.");
+            TOGGLE_NIGHT_VISION_KEY = ConfigEntry(topSection, "Toggle Night Vision Key", "<Keyboard>/leftAlt", "More info in Unity's Control Path documentation in the new Input System");
             NIGHT_VIS_DRAIN_INCREMENT = ConfigEntry(topSection, "Decrease for night vis battery drain", 0.15f, "Applied to drain speed on each upgrade.");
             NIGHT_VIS_REGEN_INCREMENT = ConfigEntry(topSection, "Increase for night vis battery regen", 0.40f, "Applied to regen speed on each upgrade.");
             NIGHT_VIS_BATTERY_INCREMENT = ConfigEntry(topSection, "Increase for night vis battery life", 2f, "Applied to the max charge for night vis battery on each upgrade.");
@@ -617,7 +617,7 @@ namespace MoreShipUpgrades.Misc
             SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK = ConfigEntry(topSection, "Look sensitivity drawback of the Shopping Cart Item", 0.8f, "Value multiplied on the player's look sensitivity when moving with the Scrap wheelbarrow Item");
             SCRAP_WHEELBARROW_MOVEMENT_SLOPPY = ConfigEntry(topSection, "Sloppiness of the Shopping Cart Item", 2f, "Value multiplied on the player's movement to give the feeling of drifting while carrying the Scrap Wheelbarrow Item");
             SCRAP_WHEELBARROW_PLAY_NOISE = ConfigEntry(topSection, "Plays noises for players with Shopping Cart Item", true, "If false, it will just not play the sounds, it will still attract monsters to noise");
-            WHEELBARROW_DROP_ALL_CONTROL_BIND = ConfigEntry(topSection, "Control bind for drop all items", "<Mouse>/middleButton", "To know what to insert here, check documentation for UnityEngine.InputSystem.Key and UnityEngine.InputSystem.LowLevel.MouseButton");
+            WHEELBARROW_DROP_ALL_CONTROL_BIND = ConfigEntry(topSection, "Control bind for drop all items", "<Mouse>/middleButton", "More info in Unity's Control Path documentation in the new Input System");
         }
     }
 }
