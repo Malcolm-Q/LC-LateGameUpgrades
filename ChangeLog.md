@@ -25,6 +25,7 @@
 - Fixed "scan enemies" showing "Unkown" instead of "Unknown" for enemies without a scan node associated (e.g Ghost Girl).
 - Fixed (for like second or third time) Data Disk's "grabbable" area being blocked by the PC when it spawns.
 - Fixed "NV Headset Batteries" showing as level 1 after purchasing multiple levels of it without using the night vision goggles. The effect would still apply after unlocking NV.
+- Fixed "Enable Contracts" configuration not being used in the code
 
 ### Code Changes (developer level)
 - Spawned scrap now use a component called ``ScrapValueSyncer`` which is used to change the item's scrap value for every player in the game.

@@ -241,7 +241,7 @@ namespace MoreShipUpgrades.Managers
 
         void SyncAvailableContracts()
         {
-            if (!PluginConfiguration.DATA_CONTRACT.Value)
+            if (!PluginConfiguration.DATA_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
                 logger.LogInfo("Removing data contract");
                 int idx = CommandParser.contracts.IndexOf("data");
@@ -251,7 +251,7 @@ namespace MoreShipUpgrades.Managers
                     CommandParser.contracts.RemoveAt(idx);
                 }
             }
-            if (!PluginConfiguration.EXTRACTION_CONTRACT.Value)
+            if (!PluginConfiguration.EXTRACTION_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
                 logger.LogInfo("Removing extraction contract");
                 int idx = CommandParser.contracts.IndexOf("extraction");
@@ -261,7 +261,7 @@ namespace MoreShipUpgrades.Managers
                     CommandParser.contracts.RemoveAt(idx);
                 }
             }
-            if (!PluginConfiguration.EXORCISM_CONTRACT.Value)
+            if (!PluginConfiguration.EXORCISM_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
                 logger.LogInfo("Removing exorcism contract");
                 int idx = CommandParser.contracts.IndexOf("exorcism");
@@ -271,7 +271,7 @@ namespace MoreShipUpgrades.Managers
                     CommandParser.contracts.RemoveAt(idx);
                 }
             }
-            if (!PluginConfiguration.DEFUSAL_CONTRACT.Value)
+            if (!PluginConfiguration.DEFUSAL_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
                 logger.LogInfo("Removing defusal contract");
                 int idx = CommandParser.contracts.IndexOf("defusal");
@@ -281,9 +281,9 @@ namespace MoreShipUpgrades.Managers
                     CommandParser.contracts.RemoveAt(idx);
                 }
             }
-            if (!PluginConfiguration.EXTERMINATOR_CONTRACT.Value)
+            if (!PluginConfiguration.EXTERMINATOR_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
-                if(CommandParser.contracts.Count == 1)
+                if(CommandParser.contracts.Count == 1 && PluginConfiguration.CONTRACTS_ENABLED.Value)
                 {
                     logger.LogInfo("Why must you do the things you do");
                     logger.LogWarning("User tried to remove all contracts! Leaving exterminator present. Did you mean to disable contracts?");
