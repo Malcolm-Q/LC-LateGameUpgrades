@@ -92,8 +92,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         private const string START_DEPOSIT_TEXT = "Deposit item: [LMB]";
         private const string WITHDRAW_ITEM_TEXT = "Withdraw item: [LMB]";
 
-        public static WheelbarrowScript Instance;
-
         /// <summary>
         /// When the item spawns in-game, store the necessary variables for correct behaviours from the prefab asset
         /// </summary>
@@ -132,8 +130,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             checkMethods[Restrictions.All] = CheckWheelbarrowAllRestrictions;
 
             SetupItemAttributes();
-
-            Instance = this;
         }
 
         public float GetSloppiness()

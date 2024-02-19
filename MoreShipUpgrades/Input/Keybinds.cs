@@ -73,10 +73,10 @@ namespace MoreShipUpgrades.Input
                 return;
             }
 
-            if(WheelbarrowScript.Instance)
-            {
-                WheelbarrowScript.Instance.UpdateWheelbarrowDrop();
-            }
+            WheelbarrowScript wheelbarrow = localPlayerController.currentlyHeldObjectServer.GetComponentInParent<WheelbarrowScript>();
+            if (wheelbarrow == null) return;
+
+            wheelbarrow.UpdateWheelbarrowDrop();
         }
 
         private static void OnNvgActionPerformed(CallbackContext context)
