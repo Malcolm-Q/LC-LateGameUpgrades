@@ -1,10 +1,14 @@
 ﻿using GameNetcodeStuff;
+using LethalCompanyInputUtils.Api;
+using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
+using System.Xml.Linq;
 using System.Text;
 using Unity.Netcode;
 using UnityEngine;
@@ -18,8 +22,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         float nightBattery;
         Transform batteryBar;
         PlayerControllerB client;
-        bool batteryExhaustion;
-        Key toggleKey;
+        public bool batteryExhaustion;
         internal GameObject nightVisionPrefab;
         internal bool nightVisionActive = false;
         internal float nightVisRange;
@@ -39,25 +42,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             nightVisionPrefab = AssetBundleHandler.GetItemObject("Night Vision").spawnPrefab;
             batteryBar = transform.GetChild(0).GetChild(0).transform;
             transform.GetChild(0).gameObject.SetActive(false);
-            if (Enum.TryParse(UpgradeBus.Instance.PluginConfiguration.TOGGLE_NIGHT_VISION_KEY.Value, out Key toggle))
-            {
-                toggleKey = toggle;
-            }
-            else
-            {
-                logger.LogWarning("Error parsing the key for toggle night vision, defaulted to LeftAlt");
-                toggleKey = Key.LeftAlt;
-            }
         }
 
         void LateUpdate()
         {
             if (client == null) { return; }
-
-            if (Keyboard.current[toggleKey].wasPressedThisFrame && !batteryExhaustion)
-            {
-                Toggle();
-            }
 
             float maxBattery = UpgradeBus.Instance.PluginConfiguration.NIGHT_BATTERY_MAX.Value + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_BATTERY_INCREMENT.Value;
 
@@ -94,7 +83,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             batteryBar.localScale = new Vector3(scale, 1, 1);
         }
 
-        private void Toggle()
+        public void Toggle()
         {
             nightVisionActive = !nightVisionActive;
 

@@ -27,11 +27,14 @@ using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using System.Linq;
+using MoreShipUpgrades.Input;
+using MoreShipUpgrades.Compat;
 
 namespace MoreShipUpgrades
 {
     [BepInEx.BepInPlugin(Metadata.GUID,Metadata.NAME,Metadata.VERSION)]
     [BepInDependency("evaisa.lethallib","0.13.0")]
+    [BepInDependency("com.rune580.LethalCompanyInputUtils", BepInDependency.DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
         readonly Harmony harmony = new(Metadata.GUID);
@@ -49,7 +52,16 @@ namespace MoreShipUpgrades
             PluginConfiguration.InitBindings();
 
             // netcode patching stuff
-            var types = Assembly.GetExecutingAssembly().GetTypes();
+            IEnumerable<Type> types;
+            try
+            {
+                types = Assembly.GetExecutingAssembly().GetTypes();
+            }
+            catch (ReflectionTypeLoadException e)
+            {
+                types = e.Types.Where(t => t != null);
+            }
+
             foreach (var type in types)
             {
                 var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
@@ -84,6 +96,10 @@ namespace MoreShipUpgrades
 
             SetupContractMapObjects(ref UpgradeAssets);
 
+            if(InputUtils_Compat.Enabled)
+            {
+                InputUtils_Compat.Init();
+            }
 
             harmony.PatchAll();
 

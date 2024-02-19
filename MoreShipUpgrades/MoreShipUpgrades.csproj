@@ -11,12 +11,12 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all"/>
-    <PackageReference Include="BepInEx.Core" Version="5.*" PrivateAssets="all"/>
-    <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" PrivateAssets="all"/>
-    <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.1" PrivateAssets="all" ExcludeAssets="runtime"/>
-    <PackageReference Include="UnityEngine.Modules" Version="2022.3.9" PrivateAssets="all" IncludeAssets="compile" ExcludeAssets="runtime"/>
-    <PackageReference Include="Evaisa.LethalLib" Version="0.14.2" PrivateAssets="all"/>
+    <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
+    <PackageReference Include="BepInEx.Core" Version="5.*" PrivateAssets="all" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" PrivateAssets="all" />
+    <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.1" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="UnityEngine.Modules" Version="2022.3.9" PrivateAssets="all" IncludeAssets="compile" ExcludeAssets="runtime" />
+    <PackageReference Include="Evaisa.LethalLib" Version="0.14.2" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Managers\InfoStrings.json" />
@@ -28,6 +28,9 @@
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>$(LC_PATH)\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="LethalCompanyInputUtils">
+      <HintPath>$(LC_PLUGIN_PATH)\LethalCompanyInputUtils\LethalCompanyInputUtils.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(LC_PATH)\Newtonsoft.Json.dll</HintPath>
@@ -47,7 +50,7 @@
     </Reference>
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="cd ..\NetcodePatcher-2.4.0&#xD;&#xA;NetcodePatcher.dll $(TargetDir) deps/" />
+    <Exec Command="cd ..\NetcodePatcher&#xD;&#xA;NetcodePatcher.dll $(TargetDir) deps/" />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(LC_PLUGIN_DIR)" />
   </Target>
 </Project>
