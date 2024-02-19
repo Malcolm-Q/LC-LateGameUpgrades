@@ -66,7 +66,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
             {
                 //this shouldn't occur but if it does, this will teleport this client and the server targeted player.
                 StartOfRound.Instance.mapScreen.targetedPlayer = playerHeldBy;
-                UpgradeBus.instance.TPButtonPressed = true;
+                UpgradeBus.Instance.TPButtonPressed = true;
                 teleporter.PressTeleportButtonOnLocalClient();
                 if (Random.Range(0f, 1f) > breakChance)
                 {
@@ -173,7 +173,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
         [ClientRpc]
         private void ChangeTPButtonPressedClientRpc()
         {
-            UpgradeBus.instance.TPButtonPressed = true;
+            UpgradeBus.Instance.TPButtonPressed = true;
         }
     }
 }

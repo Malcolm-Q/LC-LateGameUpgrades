@@ -9,20 +9,20 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Misc
 {
-    internal class CommandParser
+    internal static class CommandParser
     {
-        private static LGULogger logger = new LGULogger(nameof(CommandParser));
+        private static LguLogger logger = new LguLogger(nameof(CommandParser));
         private static bool attemptCancelContract = false;
         private static string attemptSpecifyContract = null;
-        private static TerminalKeyword routeKeyword;
 
         const string LOAD_LGU_COMMAND = "load lgu";
-        public static List<string> contracts = new List<string> { "data", "exterminator", "extraction","exorcism","defusal" };
-        public static List<string> contractInfos = new List<string> {
+        public static readonly List<string> contracts = new List<string> { "data", "exterminator", "extraction","exorcism","defusal" };
+        public static readonly List<string> contractInfos = new List<string> {
             "\n\nOur systems have detected an active PC somewhere in the facility.\nFind it, use the bruteforce command on the ship terminal with the devices IP to get login credentials, then use the cd, ls, and mv commands to find the .db file (enter `mv survey.db` in the containing folder).\n\n",
             "\n\nIt's been reported that the population of hoarder bugs on this moon have skyrocketed and become aggressive. You must destroy their nest at all costs.\n\n",
             "\n\nCrew number 5339 have reported that one of their operatives was lost on this moon and left behind. You will have to find or bring a medkit to heal and extract the lost operative.\n\n" ,
@@ -42,17 +42,17 @@ namespace MoreShipUpgrades.Misc
         {
             if (!BaseUpgrade.GetActiveUpgrade(Discombobulator.UPGRADE_NAME)) return DisplayTerminalMessage("You don't have access to this command yet. Purchase the 'Discombobulator'.\n\n");
 
-            if (UpgradeBus.instance.flashCooldown > 0f) return DisplayTerminalMessage($"You can discombobulate again in {Mathf.Round(UpgradeBus.instance.flashCooldown)} seconds.\nType 'cooldown' or 'cd' to check discombobulation cooldown.\n\n");
+            if (Discombobulator.instance.flashCooldown > 0f) return DisplayTerminalMessage($"You can discombobulate again in {Mathf.Round(Discombobulator.instance.flashCooldown)} seconds.\nType 'cooldown' or 'cd' to check discombobulation cooldown.\n\n");
 
             RoundManager.Instance.PlayAudibleNoise(terminal.transform.position, 60f, 0.8f, 0, false, 14155);
             Discombobulator.instance.PlayAudioAndUpdateCooldownServerRpc();
 
-            Collider[] array = Physics.OverlapSphere(terminal.transform.position, UpgradeBus.instance.cfg.DISCOMBOBULATOR_RADIUS.Value, 524288);
+            Collider[] array = Physics.OverlapSphere(terminal.transform.position, UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_RADIUS.Value, 524288);
             if (array.Length <= 0) return DisplayTerminalMessage("No stunned enemies detected.\n\n");
 
-            if (UpgradeBus.instance.cfg.DISCOMBOBULATOR_NOTIFY_CHAT.Value)
+            if (UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_NOTIFY_CHAT.Value)
             {
-                terminal.StartCoroutine(CountDownChat(UpgradeBus.instance.cfg.DISCOMBOBULATOR_STUN_DURATION.Value + (UpgradeBus.instance.cfg.DISCOMBOBULATOR_INCREMENT.Value * BaseUpgrade.GetUpgradeLevel(Discombobulator.UPGRADE_NAME))));
+                terminal.StartCoroutine(CountDownChat(UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_STUN_DURATION.Value + (UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_INCREMENT.Value * BaseUpgrade.GetUpgradeLevel(Discombobulator.UPGRADE_NAME))));
             }
             return DisplayTerminalMessage($"Discombobulator hit {array.Length} enemies.\n\n");
         }
@@ -61,7 +61,7 @@ namespace MoreShipUpgrades.Misc
         {
             if (!BaseUpgrade.GetActiveUpgrade(Discombobulator.UPGRADE_NAME)) return DisplayTerminalMessage("You don't have access to this command yet. Purchase the 'Discombobulator'.\n\n");
 
-            if (UpgradeBus.instance.flashCooldown > 0f) return DisplayTerminalMessage($"You can discombobulate again in {Mathf.Round(UpgradeBus.instance.flashCooldown)} seconds.\n\n");
+            if (Discombobulator.instance.flashCooldown > 0f) return DisplayTerminalMessage($"You can discombobulate again in {Mathf.Round(Discombobulator.instance.flashCooldown)} seconds.\n\n");
 
             return DisplayTerminalMessage("Discombobulate is ready, Type 'initattack' or 'atk' to execute.\n\n");
         }
@@ -80,13 +80,13 @@ namespace MoreShipUpgrades.Misc
 
         private static TerminalNode ExecuteResetLGUSave()
         {
-            if (LGUStore.instance.lguSave.playerSaves.ContainsKey(GameNetworkManager.Instance.localPlayerController.playerSteamId))
+            if (LguStore.Instance.LguSave.playerSaves.ContainsKey(GameNetworkManager.Instance.localPlayerController.playerSteamId))
             {
-                UpgradeBus.instance.ResetAllValues(false);
+                UpgradeBus.Instance.ResetAllValues(false);
                 SaveInfo saveInfo = new SaveInfo();
                 ulong id = GameNetworkManager.Instance.localPlayerController.playerSteamId;
-                LGUStore.instance.saveInfo = saveInfo;
-                LGUStore.instance.UpdateLGUSaveServerRpc(id, JsonConvert.SerializeObject(saveInfo));
+                LguStore.Instance.SaveInfo = saveInfo;
+                LguStore.Instance.UpdateLGUSaveServerRpc(id, JsonConvert.SerializeObject(saveInfo));
                 return DisplayTerminalMessage("LGU save has been wiped.\n\n");
             }
             else
@@ -101,7 +101,7 @@ namespace MoreShipUpgrades.Misc
             {
                 if (__instance.IsHost || __instance.IsServer)
                 {
-                    LGUStore.instance.SyncCreditsClientRpc(value);
+                    LguStore.Instance.SyncCreditsClientRpc(value);
                     return DisplayTerminalMessage($"All clients should now have ${value}\n\n");
                 }
                 else return DisplayTerminalMessage("Only the host can do this");
@@ -112,16 +112,16 @@ namespace MoreShipUpgrades.Misc
 
         private static TerminalNode ExecuteInternsCommand(ref Terminal terminal)
         {
-            if (terminal.groupCredits < UpgradeBus.instance.cfg.INTERN_PRICE.Value) return DisplayTerminalMessage($"Interns cost {UpgradeBus.instance.cfg.INTERN_PRICE.Value} credits and you have {terminal.groupCredits} credits.\n");
+            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value) return DisplayTerminalMessage($"Interns cost {UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value} credits and you have {terminal.groupCredits} credits.\n");
 
             PlayerControllerB player = StartOfRound.Instance.mapScreen.targetedPlayer;
             if (!player.isPlayerDead) return DisplayTerminalMessage($"{player.playerUsername} is still alive, they can't be replaced with an intern.\n\n");
             logger.LogDebug($"Player {player.playerUsername} is dead and we have enough credits, executing revive command...");
-            terminal.groupCredits -= UpgradeBus.instance.cfg.INTERN_PRICE.Value;
-            LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits);
+            terminal.groupCredits -= UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value;
+            LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits);
             Interns.instance.ReviveTargetedPlayerServerRpc();
-            string name = UpgradeBus.instance.internNames[UnityEngine.Random.Range(0, UpgradeBus.instance.internNames.Length)];
-            string interest = UpgradeBus.instance.internInterests[UnityEngine.Random.Range(0, UpgradeBus.instance.internInterests.Length)];
+            string name = Interns.instance.internNames[UnityEngine.Random.Range(0, Interns.instance.internNames.Length)];
+            string interest = Interns.instance.internInterests[UnityEngine.Random.Range(0, Interns.instance.internInterests.Length)];
             logger.LogInfo($"Successfully executed intern command for {player.playerUsername}!");
             return DisplayTerminalMessage($"{player.playerUsername} has been replaced with:\n\nNAME: {name}\nAGE: {UnityEngine.Random.Range(19, 76)}\nIQ: {UnityEngine.Random.Range(2, 160)}\nINTERESTS: {interest}\n\n{name} HAS BEEN TELEPORTED INSIDE THE FACILITY, PLEASE ACQUAINTANCE YOURSELF ACCORDINGLY");
         }
@@ -143,7 +143,7 @@ namespace MoreShipUpgrades.Misc
                 logger.LogDebug($"Comparing {playerName} with {playerNameToSearch} case insensitive...");
                 if (playerName.ToLower() != playerNameToSearch.ToLower()) continue;
 
-                LGUStore.instance.ShareSaveServerRpc();
+                LguStore.Instance.ShareSaveServerRpc();
                 terminal.StartCoroutine(WaitForSync(playerSteamID));
                 logger.LogInfo($"Attempting to overwrite local save data with {playerName}'s save data.");
                 return DisplayTerminalMessage($"Attempting to overwrite local save data with {playerName}'s save data\nYou should see a popup in 5 seconds...\n.\n");
@@ -155,7 +155,7 @@ namespace MoreShipUpgrades.Misc
 
         private static TerminalNode ExecuteUpgradeCommand(string text, ref Terminal terminal, ref TerminalNode outputNode)
         {
-            foreach (CustomTerminalNode customNode in UpgradeBus.instance.terminalNodes)
+            foreach (CustomTerminalNode customNode in UpgradeBus.Instance.terminalNodes)
             {
                 if (text.ToLower() == customNode.Name.ToLower() || text.ToLower() == $"buy {customNode.Name.ToLower()}" || text.ToLower() == $"purchase {customNode.Name.ToLower()}") return ExecuteBuyUpgrade(customNode, ref terminal);
 
@@ -176,16 +176,16 @@ namespace MoreShipUpgrades.Misc
             bool canAfford = terminal.groupCredits >= price;
             if (canAfford && (!customNode.Unlocked || customNode.MaxUpgrade > customNode.CurrentUpgrade))
             {
-                LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits - price);
+                LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits - price);
                 if (!customNode.Unlocked)
                 {
-                    LGUStore.instance.HandleUpgrade(customNode.Name);
+                    LguStore.Instance.HandleUpgrade(customNode.Name);
                     if (customNode.MaxUpgrade != 0) { displayText = $"You Upgraded {customNode.Name} to level {customNode.CurrentUpgrade + 1}  \n\n"; }
                     else { displayText = $"You Purchased {customNode.Name}  \n\n"; }
                 }
                 else if (customNode.Unlocked && customNode.MaxUpgrade > customNode.CurrentUpgrade)
                 {
-                    LGUStore.instance.HandleUpgrade(customNode.Name, true);
+                    LguStore.Instance.HandleUpgrade(customNode.Name, true);
                     displayText = $"You Upgraded {customNode.Name} to level {customNode.CurrentUpgrade + 1} \n\n";
                 }
             }
@@ -204,8 +204,8 @@ namespace MoreShipUpgrades.Misc
         private static TerminalNode ExecuteUnloadUpgrade(CustomTerminalNode customNode)
         {
             logger.LogInfo($"Unload executed, unwinging {customNode.Name} on local client!");
-            UpgradeBus.instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>().Unwind();
-            LGUStore.instance.UpdateLGUSaveServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, JsonConvert.SerializeObject(new SaveInfo()));
+            UpgradeBus.Instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>().Unwind();
+            LguStore.Instance.UpdateLGUSaveServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, JsonConvert.SerializeObject(new SaveInfo()));
             customNode.Unlocked = false;
             customNode.CurrentUpgrade = 0;
             return DisplayTerminalMessage($"Unwinding {customNode.Name.ToLower()}\n\n");
@@ -218,14 +218,15 @@ namespace MoreShipUpgrades.Misc
             GrabbableObject[] scrapItems = UnityEngine.Object.FindObjectsOfType<GrabbableObject>().ToArray();
             GrabbableObject[] filteredHives = scrapItems.Where(scrap => scrap.itemProperties.itemName == "Hive").ToArray();
             GrabbableObject[] bestHives = filteredHives.OrderByDescending(v => v.scrapValue).ToArray();
-            string displayText = $"Found {bestHives.Length} Hives:";
+            StringBuilder stringBuilder = new();
+            stringBuilder.Append($"Found {bestHives.Length} Hives:").AppendLine();
             foreach (GrabbableObject scrap in bestHives)
             {
-                displayText += $"\n${scrap.scrapValue} // X: {scrap.gameObject.transform.position.x.ToString("F1")}, Y: {scrap.gameObject.transform.position.y.ToString("F1")}, Z: {scrap.gameObject.transform.position.z.ToString("F1")}";
+                stringBuilder.Append($"{scrap.scrapValue} // X: {scrap.gameObject.transform.position.x.ToString("F1")}, Y: {scrap.gameObject.transform.position.y.ToString("F1")}, Z: {scrap.gameObject.transform.position.z.ToString("F1")}").AppendLine();
             }
-            displayText += "\nDon't forget your GPS!\n\n";
+            stringBuilder.Append("Don't forget your GPS!").AppendLine().AppendLine();
             logger.LogInfo($"Scan Hives command found {filteredHives.Length} hives.");
-            return DisplayTerminalMessage(displayText);
+            return DisplayTerminalMessage(stringBuilder.ToString());
         }
 
         private static TerminalNode ExecuteScanScrapCommand()
@@ -235,14 +236,15 @@ namespace MoreShipUpgrades.Misc
             GrabbableObject[] scrapItems = UnityEngine.Object.FindObjectsOfType<GrabbableObject>().ToArray();
             GrabbableObject[] filteredScrap = scrapItems.Where(scrap => scrap.isInFactory && scrap.itemProperties.isScrap).ToArray();
             GrabbableObject[] bestScrap = filteredScrap.OrderByDescending(v => v.scrapValue).Take(5).ToArray();
-            string displayText = "Most valuable items:\n";
+            StringBuilder stringBuilder = new();
+            stringBuilder.Append("Most valuable items:").AppendLine();
             foreach (GrabbableObject scrap in bestScrap)
             {
-                displayText += $"\n{scrap.itemProperties.itemName}: ${scrap.scrapValue}\nX: {Mathf.RoundToInt(scrap.gameObject.transform.position.x)}, Y: {Mathf.RoundToInt(scrap.gameObject.transform.position.y)}, Z: {Mathf.RoundToInt(scrap.gameObject.transform.position.z)}\n";
+                stringBuilder.Append($"{scrap.itemProperties.itemName}: ${scrap.scrapValue}\nX: {Mathf.RoundToInt(scrap.gameObject.transform.position.x)}, Y: {Mathf.RoundToInt(scrap.gameObject.transform.position.y)}, Z: {Mathf.RoundToInt(scrap.gameObject.transform.position.z)}").AppendLine();
             }
-            displayText += "\n\nDon't forget your GPS!\n\n";
+            stringBuilder.Append("Don't forget your GPS!").AppendLine().AppendLine();
             logger.LogInfo($"Scan scrap command found {filteredScrap.Length} valid scrap items.");
-            return DisplayTerminalMessage(displayText);
+            return DisplayTerminalMessage(stringBuilder.ToString());
         }
 
         private static TerminalNode ExecuteScanPlayerCommand()
@@ -253,19 +255,21 @@ namespace MoreShipUpgrades.Misc
             PlayerControllerB[] filteredPlayers = players.Where(player => player.playerSteamId != 0).ToArray();
             PlayerControllerB[] alivePlayers = filteredPlayers.Where(player => !player.isPlayerDead).ToArray();
             PlayerControllerB[] deadPlayers = filteredPlayers.Where(player => player.isPlayerDead).ToArray();
-            string displayText = "Alive Players:\n";
+            StringBuilder stringBuilder = new();
+
+            stringBuilder.Append("Alive Players:").AppendLine();
             foreach (PlayerControllerB player in alivePlayers)
             {
-                displayText += $"\n{player.playerUsername} - X:{Mathf.RoundToInt(player.transform.position.x)},Y:{Mathf.RoundToInt(player.transform.position.y)},Z:{Mathf.RoundToInt(player.transform.position.z)}";
+                stringBuilder.Append($"\n{player.playerUsername} - X:{Mathf.RoundToInt(player.transform.position.x)},Y:{Mathf.RoundToInt(player.transform.position.y)},Z:{Mathf.RoundToInt(player.transform.position.z)}").AppendLine();
             }
-            displayText += "\nDead Players:\n";
+            stringBuilder.Append("Dead Players:").AppendLine();
             foreach (PlayerControllerB player in deadPlayers)
             {
-                displayText += $"\n{player.playerUsername} - X:{Mathf.RoundToInt(player.transform.position.x)},Y:{Mathf.RoundToInt(player.transform.position.y)},Z:{Mathf.RoundToInt(player.transform.position.z)}";
+                stringBuilder.Append($"\n{player.playerUsername} - X:{Mathf.RoundToInt(player.transform.position.x)},Y:{Mathf.RoundToInt(player.transform.position.y)},Z:{Mathf.RoundToInt(player.transform.position.z)}").AppendLine();
             }
-            displayText += "\n\n";
+            stringBuilder.AppendLine();
             logger.LogInfo($"Scan players command found {alivePlayers.Length} alive players and {deadPlayers.Length} dead players.");
-            return DisplayTerminalMessage(displayText);
+            return DisplayTerminalMessage(stringBuilder.ToString());
         }
 
         private static TerminalNode ExecuteScanEnemiesCommand()
@@ -273,11 +277,10 @@ namespace MoreShipUpgrades.Misc
             if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage("\nUpgrade Better Scanner to level 2 to use this command\nEnter `info better scanner` to check upgrades.\n\n");
 
             EnemyAI[] enemies = UnityEngine.Object.FindObjectsOfType<EnemyAI>().Where(enem => !enem.isEnemyDead).ToArray();
-            string displayText = null;
             if (enemies.Length <= 0) return DisplayTerminalMessage("0 enemies detected\n\n");
 
             Dictionary<string, int> enemyCount = new Dictionary<string, int>();
-            if (!UpgradeBus.instance.cfg.VERBOSE_ENEMIES.Value)
+            if (!UpgradeBus.Instance.PluginConfiguration.VERBOSE_ENEMIES.Value)
             {
                 logger.LogInfo("Scan Enemies: Verbose mode = true");
                 enemyCount.Add("Outside Enemies", 0);
@@ -303,13 +306,14 @@ namespace MoreShipUpgrades.Misc
 
             }
             logger.LogInfo($"Scan Enemies found {enemies.Length} alive enemies.");
-            displayText = $"Alive Enemies: {enemies.Length}\n";
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append($"Alive Enemies: {enemies.Length}").AppendLine();
             foreach (KeyValuePair<string, int> count in enemyCount)
             {
-                displayText += $"\n{count.Key} - {count.Value}";
+                stringBuilder.Append($"{count.Key} - {count.Value}").AppendLine();
             }
-            displayText += "\n\n";
-            return DisplayTerminalMessage(displayText);
+            stringBuilder.AppendLine();
+            return DisplayTerminalMessage(stringBuilder.ToString());
         }
 
         private static TerminalNode ExecuteScanDoorsCommand()
@@ -332,42 +336,54 @@ namespace MoreShipUpgrades.Misc
             }
             PlayerControllerB player = StartOfRound.Instance.mapScreen.targetedPlayer;
 
-            string displayText = null;
+            StringBuilder stringBuilder = new StringBuilder();
             if (player.isInsideFactory)
             {
-                displayText = $"Closest exits to {player.playerUsername} (X:{Mathf.RoundToInt(player.transform.position.x)},Y:{Mathf.RoundToInt(player.transform.position.y)},Z:{Mathf.RoundToInt(player.transform.position.z)}):\n";
+                stringBuilder.Append($"Closest exits to {player.playerUsername} " +
+                                    $"(X:{Mathf.RoundToInt(player.transform.position.x)}," +
+                                    $"Y:{Mathf.RoundToInt(player.transform.position.y)}," +
+                                    $"Z:{Mathf.RoundToInt(player.transform.position.z)}):")
+                            .AppendLine();
                 GameObject[] Closest3 = fireEscape.OrderBy(door => Vector3.Distance(door.transform.position, player.transform.position)).Take(3).ToArray();
-                foreach (GameObject door in fireEscape)
+                foreach (Vector3 doorPosition in Closest3.Select(door => door.transform.position))
                 {
-                    displayText += $"\nX:{Mathf.RoundToInt(door.transform.position.x)},Y:{Mathf.RoundToInt(door.transform.position.y)},Z:{Mathf.RoundToInt(door.transform.position.z)} - {Mathf.RoundToInt(Vector3.Distance(door.transform.position, player.transform.position))} units away.";
+                    stringBuilder.Append($"X:{Mathf.RoundToInt(doorPosition.x)}," +
+                                        $"Y:{Mathf.RoundToInt(doorPosition.y)}," +
+                                        $"Z:{Mathf.RoundToInt(doorPosition.z)} - " +
+                                        $"{Mathf.RoundToInt(Vector3.Distance(doorPosition, player.transform.position))} units away.")
+                                .AppendLine();
                 }
                 logger.LogInfo($"Scan Doors, player is inside factory. Found {fireEscape.Count} doors.");
             }
             else
             {
-                displayText = $"Entrances for {player.playerUsername} (X:{Mathf.RoundToInt(player.transform.position.x)},Y:{Mathf.RoundToInt(player.transform.position.y)},Z:{Mathf.RoundToInt(player.transform.position.z)}):\n";
-                foreach (EntranceTeleport door in mainDoors)
+                stringBuilder.Append($"Entrances for {player.playerUsername} " +
+                                    $"(X:{Mathf.RoundToInt(player.transform.position.x)}," +
+                                    $"Y:{Mathf.RoundToInt(player.transform.position.y)}," +
+                                    $"Z:{Mathf.RoundToInt(player.transform.position.z)}):")
+                            .AppendLine();
+                foreach (Vector3 doorPosition in mainDoors.Select(door => door.transform.position))
                 {
-                    displayText += $"\nX:{Mathf.RoundToInt(door.transform.position.x)},Y:{Mathf.RoundToInt(door.transform.position.y)},Z:{Mathf.RoundToInt(door.transform.position.z)} - {Mathf.RoundToInt(Vector3.Distance(door.transform.position, player.transform.position))} units away.";
+                    stringBuilder.Append($"X:{Mathf.RoundToInt(doorPosition.x)},Y:{Mathf.RoundToInt(doorPosition.y)},Z:{Mathf.RoundToInt(doorPosition.z)} - {Mathf.RoundToInt(Vector3.Distance(doorPosition, player.transform.position))} units away.").AppendLine();
                 }
                 logger.LogInfo($"Scan Doors, player is outside factory. Found {mainDoors.Count} doors.");
             }
-            displayText += "\n";
-            return DisplayTerminalMessage(displayText);
+            stringBuilder.AppendLine();
+            return DisplayTerminalMessage(stringBuilder.ToString());
         }
         private static TerminalNode ExecuteContractCommands(string secondWord, ref Terminal terminal)
         {
             switch(secondWord)
             {
-                case "cancel": return ExecuteContractCancelCommand(ref terminal);
-                case "info": return DisplayTerminalMessage(string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), UpgradeBus.instance.cfg.CONTRACT_PRICE.Value));
+                case "cancel": return ExecuteContractCancelCommand();
+                case "info": return DisplayTerminalMessage(string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value));
                 default: return TryGetContract(secondWord, ref terminal);
             }
         }
-        private static TerminalNode ExecuteContractCancelCommand(ref Terminal terminal)
+        private static TerminalNode ExecuteContractCancelCommand()
         {
             TerminalNode node = ScriptableObject.CreateInstance<TerminalNode>();
-            if (UpgradeBus.instance.contractLevel == "None")
+            if (ContractManager.Instance.contractLevel == "None")
             {
                 node.displayText = "You must have accepted a contract to execute this command...\n\n";
                 node.clearPreviousText = true;
@@ -382,140 +398,69 @@ namespace MoreShipUpgrades.Misc
         {
             logger.LogDebug($"Trying to assign a contract on moon called {possibleMoon}");
             string txt = null;
-            if (UpgradeBus.instance.contractLevel != "None")
+            if (ContractManager.Instance.contractLevel != "None")
             {
-                txt = $"You currently have a {UpgradeBus.instance.contractType} contract on {UpgradeBus.instance.contractLevel}!\n\n";
-                txt += string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE.Value);
-                logger.LogInfo($"User tried starting a new specified moon contract while they still have a {UpgradeBus.instance.contractType} contract on {UpgradeBus.instance.contractLevel}!");
+                txt = $"You currently have a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}!\n\n";
+                txt += string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value);
+                logger.LogInfo($"User tried starting a new specified moon contract while they still have a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}!");
                 return DisplayTerminalMessage(txt);
             }
-            if (terminal.groupCredits < UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE.Value)
+            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value)
             {
-                txt = $"Specified Moon contracts cost ${UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE.Value} and you have ${terminal.groupCredits}\n\n";
+                txt = $"Specified Moon contracts cost ${UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value} and you have ${terminal.groupCredits}\n\n";
                 return DisplayTerminalMessage(txt);
             }
-            string moon = GetSpecifiedLevel(possibleMoon);
+            string moon = ContractManager.GetSpecifiedLevel(possibleMoon);
             if (moon == "None")
             {
                 txt = $"Wasn't possible to find any moons whose name contains {possibleMoon} to provide a contract on it...\n\n";
                 return DisplayTerminalMessage(txt);
             }
             attemptSpecifyContract = moon;
-            txt = $"Type CONFIRM if you wish to have a contract on {moon} for the cost of {UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE.Value} Company credits.\n\n";
+            txt = $"Type CONFIRM if you wish to have a contract on {moon} for the cost of {UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value} Company credits.\n\n";
             return DisplayTerminalMessage(txt);
         }
         static TerminalNode TryGetContract(string possibleMoon, ref Terminal terminal)
         {
             if (possibleMoon != "") return TryGetMoonContract(possibleMoon, ref terminal);
             string txt = null;
-            if(UpgradeBus.instance.contractLevel != "None")
+            if(ContractManager.Instance.contractLevel != "None")
             {
-                txt = $"You currently have a {UpgradeBus.instance.contractType} contract on {UpgradeBus.instance.contractLevel}!\n\n";
-                txt += string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), UpgradeBus.instance.cfg.CONTRACT_PRICE.Value);
-                logger.LogInfo($"User tried starting a new contract while they still have a {UpgradeBus.instance.contractType} contract on {UpgradeBus.instance.contractLevel}!");
+                txt = $"You currently have a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}!\n\n";
+                txt += string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value);
+                logger.LogInfo($"User tried starting a new contract while they still have a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}!");
                 return DisplayTerminalMessage(txt);
             }
-            if(terminal.groupCredits < UpgradeBus.instance.cfg.CONTRACT_PRICE.Value)
+            if(terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value)
             {
-                txt = $"Contracts costs ${UpgradeBus.instance.cfg.CONTRACT_PRICE.Value} and you have ${terminal.groupCredits}\n\n";
+                txt = $"Contracts costs ${UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value} and you have ${terminal.groupCredits}\n\n";
                 return DisplayTerminalMessage(txt);
             }
-            LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits - UpgradeBus.instance.cfg.CONTRACT_PRICE.Value);
+            LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits - UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value);
             int i = Random.Range(0,contracts.Count);
             if( contracts.Count > 1)
             {
-                while (i == ContractScript.lastContractIndex)
+                while (i == ContractManager.Instance.lastContractIndex)
                 {
                     i = Random.Range(0, contracts.Count);
                 }
             }
-            UpgradeBus.instance.contractType = contracts[i];
-            txt = $"A {contracts[i]} contract has been accepted for {RandomLevel()}!{contractInfos[i]}";
+            ContractManager.Instance.contractType = contracts[i];
+            txt = $"A {contracts[i]} contract has been accepted for {ContractManager.RandomLevel()}!{contractInfos[i]}";
 
-            if (terminal.IsHost || terminal.IsServer) LGUStore.instance.SyncContractDetailsClientRpc(UpgradeBus.instance.contractLevel, i);
-            else LGUStore.instance.ReqSyncContractDetailsServerRpc(UpgradeBus.instance.contractLevel, i);
+            if (terminal.IsHost || terminal.IsServer) ContractManager.Instance.SyncContractDetailsClientRpc(ContractManager.Instance.contractLevel, i);
+            else ContractManager.Instance.ReqSyncContractDetailsServerRpc(ContractManager.Instance.contractLevel, i);
 
-            logger.LogInfo($"User accepted a {UpgradeBus.instance.contractType} contract on {UpgradeBus.instance.contractLevel}");
+            logger.LogInfo($"User accepted a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}");
 
             return DisplayTerminalMessage(txt);
-        }
-        static string GetSpecifiedLevel(string moon)
-        {
-            string lvl = UpgradeBus.instance.contractLevel;
-            SelectableLevel[] availableLevels = StartOfRound.Instance.levels;
-            for (int i = 0; i < availableLevels.Length; i++) 
-            {
-                logger.LogDebug(availableLevels[i].PlanetName.ToLower());
-                if (!availableLevels[i].PlanetName.ToLower().Contains(moon)) continue;
-                lvl = availableLevels[i].PlanetName;
-                break;
-            }
-            return lvl;
-        }
-        static string RandomLevel()
-        {
-            string lvl = UpgradeBus.instance.contractLevel;
-            string lastLevel = null;
-            SelectableLevel[] availableLevels = StartOfRound.Instance.levels;
-            bool[] usedLevels = new bool[availableLevels.Length];
-            for(int i = 0; i < usedLevels.Length; i++)
-            {
-                usedLevels[i] = false;
-            }
-            bool allUsed = true;
-            while (lvl == UpgradeBus.instance.contractLevel)
-            {
-                int levelIndex = UnityEngine.Random.Range(0, availableLevels.Length);
-                if (usedLevels[levelIndex]) continue;
-                usedLevels[levelIndex] = true;
-                SelectableLevel level = availableLevels[levelIndex];
-                lastLevel = level.PlanetName;
-                if (level.PlanetName.Contains("Gordion")) continue;
-                logger.LogDebug($"Picked {level.PlanetName} as possible moon for contract...");
-                if (routeKeyword == null) routeKeyword = UpgradeBus.instance.GetTerminal().terminalNodes.allKeywords.First(k => k.word == "route");
-                for(int i = 0; i < routeKeyword.compatibleNouns.Length && lvl == UpgradeBus.instance.contractLevel; i++)
-                {
-                    TerminalNode routeMoon = routeKeyword.compatibleNouns[i].result;
-                    int itemCost = routeMoon.itemCost;
-                    if (UpgradeBus.instance.cfg.CONTRACT_FREE_MOONS_ONLY.Value && itemCost != 0)
-                    {
-                        logger.LogDebug($"Criteria algorithm skipped a choice due to configuration only allowing free moons (Choice: {level.PlanetName})");
-                        break;
-                    }
-                    CompatibleNoun[] additionalNodes = routeMoon.terminalOptions;
-                    for(int j = 0; j < additionalNodes.Length && lvl == UpgradeBus.instance.contractLevel; j++)
-                    {
-                        TerminalNode confirmNode = additionalNodes[j].result;
-                        if (confirmNode == null) continue;
-                        if (confirmNode.buyRerouteToMoon != levelIndex) continue;
-
-                        logger.LogDebug($"Criteria algorithm made a choice and decided to assign contract on {level.PlanetName}");
-                        lvl = level.PlanetName;
-                    }
-                }
-                if (lvl != UpgradeBus.instance.contractLevel) break;
-                allUsed = true;
-                for (int i = 0; i < usedLevels.Length; i++)
-                {
-                    allUsed &= usedLevels[i];
-                }
-                if (allUsed) break;
-            }
-            if (lvl == UpgradeBus.instance.contractLevel && allUsed)
-            {
-                logger.LogDebug($"Criteria algorithm did not make a choice, we will use the last selected moon ({lastLevel})");
-                lvl = lastLevel;
-            }
-            logger.LogDebug($"{lvl} will be the moon for the random contract...");
-            UpgradeBus.instance.contractLevel = lvl;
-            return lvl;
         }
 
         private static TerminalNode ExecuteLategameCommands(string secondWord)
         {
             switch (secondWord)
             {
-                case "store": return UpgradeBus.instance.ConstructNode();
+                case "store": return UpgradeBus.Instance.ConstructNode();
                 default: return ExecuteModInformation();
             }
         }
@@ -549,7 +494,7 @@ namespace MoreShipUpgrades.Misc
         }
         private static TerminalNode ExecuteExtendDeadlineCommand(string daysString, ref Terminal terminal, ref TerminalNode outputNode)
         {
-            if (!UpgradeBus.instance.cfg.EXTEND_DEADLINE_ENABLED.Value) return outputNode;
+            if (!UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_ENABLED.Value) return outputNode;
 
             if (daysString == "")
                 return DisplayTerminalMessage($"You need to specify how many days you wish to extend the deadline for: \"extend deadline <days>\"\n\n");
@@ -557,11 +502,11 @@ namespace MoreShipUpgrades.Misc
             if (!(int.TryParse(daysString, out int days) && days > 0)) 
                 return DisplayTerminalMessage($"Invalid value ({daysString}) inserted to extend the deadline.\n\n");
 
-            if (terminal.groupCredits < days * UpgradeBus.instance.cfg.EXTEND_DEADLINE_PRICE.Value) 
-                return DisplayTerminalMessage($"Not enough credits to purchase the proposed deadline extension.\n Total price: {days * UpgradeBus.instance.cfg.EXTEND_DEADLINE_PRICE.Value}\n Current credits: {terminal.groupCredits}\n\n");
+            if (terminal.groupCredits < days * UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_PRICE.Value) 
+                return DisplayTerminalMessage($"Not enough credits to purchase the proposed deadline extension.\n Total price: {days * UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_PRICE.Value}\n Current credits: {terminal.groupCredits}\n\n");
 
-            terminal.groupCredits -= days * UpgradeBus.instance.cfg.EXTEND_DEADLINE_PRICE.Value;
-            LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits);
+            terminal.groupCredits -= days * UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_PRICE.Value;
+            LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits);
             ExtendDeadlineScript.instance.ExtendDeadlineServerRpc(days);
 
             return DisplayTerminalMessage($"Extended the deadline by {days} day{(days == 1 ? "" : "s")}.\n\n");
@@ -599,8 +544,8 @@ namespace MoreShipUpgrades.Misc
                 node.clearPreviousText = true;
                 return node;
             }
-            if (terminal.IsHost || terminal.IsServer) LGUStore.instance.SyncContractDetailsClientRpc("None", -1);
-            else LGUStore.instance.ReqSyncContractDetailsServerRpc("None", -1);
+            if (terminal.IsHost || terminal.IsServer) ContractManager.Instance.SyncContractDetailsClientRpc("None", -1);
+            else ContractManager.Instance.ReqSyncContractDetailsServerRpc("None", -1);
             node.displayText = "Cancelling contract...\n\n";
             node.clearPreviousText = true;
             return node;
@@ -618,13 +563,13 @@ namespace MoreShipUpgrades.Misc
                 return node;
             }
             
-            LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits - UpgradeBus.instance.cfg.CONTRACT_SPECIFY_PRICE.Value);
+            LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits - UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value);
             int i = Random.Range(0, contracts.Count);
-            UpgradeBus.instance.contractType = contracts[i];
-            UpgradeBus.instance.contractLevel = moon;
-            if (terminal.IsHost || terminal.IsServer) LGUStore.instance.SyncContractDetailsClientRpc(UpgradeBus.instance.contractLevel, i);
-            else LGUStore.instance.ReqSyncContractDetailsServerRpc(UpgradeBus.instance.contractLevel, i);
-            logger.LogInfo($"User accepted a {UpgradeBus.instance.contractType} contract on {UpgradeBus.instance.contractLevel}");
+            ContractManager.Instance.contractType = contracts[i];
+            ContractManager.Instance.contractLevel = moon;
+            if (terminal.IsHost || terminal.IsServer) ContractManager.Instance.SyncContractDetailsClientRpc(ContractManager.Instance.contractLevel, i);
+            else ContractManager.Instance.ReqSyncContractDetailsServerRpc(ContractManager.Instance.contractLevel, i);
+            logger.LogInfo($"User accepted a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}");
             return DisplayTerminalMessage($"A {contracts[i]} contract has been accepted for {moon}!{contractInfos[i]}");
         }
         public static void ParseLGUCommands(string fullText, ref Terminal terminal, ref TerminalNode outputNode)
@@ -655,7 +600,7 @@ namespace MoreShipUpgrades.Misc
                 case "cd":
                 case "cooldown": outputNode = ExecuteDiscombobulatorCooldown(); return;
                 case "lategame": outputNode = ExecuteLategameCommands(secondWord); return;
-                case "lgu": outputNode = UpgradeBus.instance.ConstructNode(); return;
+                case "lgu": outputNode = UpgradeBus.Instance.ConstructNode(); return;
                 case "reset": outputNode = ExecuteResetCommands(secondWord, ref outputNode); return;
                 case "forcecredits": outputNode = ExecuteForceCredits(secondWord, ref terminal); return;
                 case "intern":
@@ -669,7 +614,7 @@ namespace MoreShipUpgrades.Misc
         }
         private static TerminalNode ExecuteScrapInsuranceCommand(ref Terminal terminal, ref TerminalNode outputNode)
         {
-            if (!UpgradeBus.instance.cfg.SCRAP_INSURANCE_ENABLED.Value) return outputNode;
+            if (!UpgradeBus.Instance.PluginConfiguration.SCRAP_INSURANCE_ENABLED.Value) return outputNode;
 
             if (ScrapInsurance.GetScrapInsuranceStatus())
                 return DisplayTerminalMessage($"You already purchased insurance to protect your scrap belongings.\n\n");
@@ -677,11 +622,11 @@ namespace MoreShipUpgrades.Misc
             if (!StartOfRound.Instance.inShipPhase)
                 return DisplayTerminalMessage($"You can only acquire insurance while in orbit.\n\n");
 
-            if (terminal.groupCredits < UpgradeBus.instance.cfg.SCRAP_INSURANCE_PRICE.Value)
-                return DisplayTerminalMessage($"Not enough credits to purchase Scrap Insurance.\nPrice: {UpgradeBus.instance.cfg.SCRAP_INSURANCE_PRICE.Value}\nCurrent credits: {terminal.groupCredits}\n\n");
+            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.SCRAP_INSURANCE_PRICE.Value)
+                return DisplayTerminalMessage($"Not enough credits to purchase Scrap Insurance.\nPrice: {UpgradeBus.Instance.PluginConfiguration.SCRAP_INSURANCE_PRICE.Value}\nCurrent credits: {terminal.groupCredits}\n\n");
 
-            terminal.groupCredits -= UpgradeBus.instance.cfg.SCRAP_INSURANCE_PRICE.Value;
-            LGUStore.instance.SyncCreditsServerRpc(terminal.groupCredits);
+            terminal.groupCredits -= UpgradeBus.Instance.PluginConfiguration.SCRAP_INSURANCE_PRICE.Value;
+            LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits);
             ScrapInsurance.TurnOnScrapInsurance();
             return DisplayTerminalMessage($"Scrap Insurance has been activated.\nIn case of a team wipe in your next trip, your scrap will be preserved.\n\n");
         }
@@ -708,28 +653,28 @@ namespace MoreShipUpgrades.Misc
 
         private static TerminalNode DefuseBombCommand(string secondWord)
         {
-            if(UpgradeBus.instance.contractLevel != StartOfRound.Instance.currentLevel.PlanetName || UpgradeBus.instance.contractType != "defusal")
+            if(ContractManager.Instance.contractLevel != StartOfRound.Instance.currentLevel.PlanetName || ContractManager.Instance.contractType != "defusal")
             {
                 return DisplayTerminalMessage("YOU MUST BE IN A DEFUSAL CONTRACT TO USE THIS COMMAND!\n\n");
             }
             if (secondWord == "") return DisplayTerminalMessage("YOU MUST ENTER A SERIAL NUMBER TO LOOK UP!\n\n");
-            if (secondWord.ToLower() == UpgradeBus.instance.SerialNumber.ToLower() || secondWord.ToLower() == UpgradeBus.instance.SerialNumber.Replace("-","").ToLower())
+            if (secondWord.ToLower() == ContractManager.Instance.SerialNumber.ToLower() || secondWord.ToLower() == ContractManager.Instance.SerialNumber.Replace("-","").ToLower())
             {
                 logger.LogInfo("DEFUSAL: user entered correct serial number!");
-                return DisplayTerminalMessage("CUT THE WIRES IN THE FOLLOWING ORDER:\n\n" + string.Join("\n\n", UpgradeBus.instance.bombOrder) +"\n\n");
+                return DisplayTerminalMessage("CUT THE WIRES IN THE FOLLOWING ORDER:\n\n" + string.Join("\n\n", ContractManager.Instance.bombOrder) +"\n\n");
             }
             else
             {
-                logger.LogInfo($"DEFUSAL: user entered incorrect serial number! Entered: {secondWord}, Expected: {UpgradeBus.instance.SerialNumber} (case and hyphen insensitive)");
-                if (UpgradeBus.instance.fakeBombOrders.ContainsKey(secondWord))
+                logger.LogInfo($"DEFUSAL: user entered incorrect serial number! Entered: {secondWord}, Expected: {ContractManager.Instance.SerialNumber} (case and hyphen insensitive)");
+                if (ContractManager.Instance.fakeBombOrders.ContainsKey(secondWord))
                 {
                     logger.LogInfo("DEFUSAL: Reusing previously generated fake defusal under this key.");
-                    return DisplayTerminalMessage("CUT THE WIRES IN THE FOLLOWING ORDER:\n\n" + string.Join("\n\n", UpgradeBus.instance.fakeBombOrders[secondWord]) +"\n\n");
+                    return DisplayTerminalMessage("CUT THE WIRES IN THE FOLLOWING ORDER:\n\n" + string.Join("\n\n", ContractManager.Instance.fakeBombOrders[secondWord]) +"\n\n");
                 }
                 logger.LogInfo("DEFUSAL: Generating new fake defusal under this key.");
                 List<string> falseOrder = new List<string> { "red","green","blue" };
                 Tools.ShuffleList(falseOrder);
-                UpgradeBus.instance.fakeBombOrders.Add(secondWord, falseOrder);
+                ContractManager.Instance.fakeBombOrders.Add(secondWord, falseOrder);
                 return DisplayTerminalMessage("CUT THE WIRES IN THE FOLLOWING ORDER:\n\n" + string.Join("\n\n", falseOrder) +"\n\n");
             }
         }
@@ -737,12 +682,12 @@ namespace MoreShipUpgrades.Misc
         private static TerminalNode HandleBruteForce(string secondWord)
         {
             string txt = null;
-            string ip = UpgradeBus.instance.DataMinigameKey;
+            string ip = ContractManager.Instance.DataMinigameKey;
             if(secondWord == ip)
             {
-                logger.LogInfo($"USER CORRECTLY ENTERED IP ADDRESS, user: {UpgradeBus.instance.DataMinigameUser}, pass: {UpgradeBus.instance.DataMinigamePass}");
+                logger.LogInfo($"USER CORRECTLY ENTERED IP ADDRESS, user: {ContractManager.Instance.DataMinigameUser}, pass: {ContractManager.Instance.DataMinigamePass}");
                 txt = $"PING {ip} ({ip}): 56 data bytes\r\n64 bytes from {ip}: icmp_seq=0 ttl=64 time=1.234 ms\r\n64 bytes from {ip}: icmp_seq=1 ttl=64 time=1.345 ms\r\n64 bytes from {ip}: icmp_seq=2 ttl=64 time=1.123 ms\r\n64 bytes from {ip}: icmp_seq=3 ttl=64 time=1.456 ms\r\n\r\n--- {ip} ping statistics ---\r\n4 packets transmitted, 4 packets received, 0.0% packet loss\r\nround-trip min/avg/max/stddev = 1.123/1.289/1.456/0.123 ms\n\n";
-                txt += $"CONNECTION ESTABLISHED --- RETRIEVING CREDENTIALS...\n\nUSER: {UpgradeBus.instance.DataMinigameUser}\nPASSWORD: {UpgradeBus.instance.DataMinigamePass}\n";
+                txt += $"CONNECTION ESTABLISHED --- RETRIEVING CREDENTIALS...\n\nUSER: {ContractManager.Instance.DataMinigameUser}\nPASSWORD: {ContractManager.Instance.DataMinigamePass}\n";
             }
             else
             {
@@ -757,8 +702,8 @@ namespace MoreShipUpgrades.Misc
         {
             yield return new WaitForSeconds(3f);
             HUDManager.Instance.DisplayTip("LOADING SAVE DATA", $"Overwiting local save data with the save under player id: {id}");
-            LGUStore.instance.saveInfo = LGUStore.instance.lguSave.playerSaves[id];
-            LGUStore.instance.UpdateUpgradeBus(false);
+            LguStore.Instance.SaveInfo = LguStore.Instance.LguSave.playerSaves[id];
+            LguStore.Instance.UpdateUpgradeBus(false);
         }
         private static IEnumerator CountDownChat(float count)
         {

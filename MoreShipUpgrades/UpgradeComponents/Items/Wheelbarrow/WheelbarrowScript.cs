@@ -24,7 +24,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             ItemCount,
             All,
         }
-        private static LGULogger logger = new LGULogger(nameof(WheelbarrowScript));
+        private static LguLogger logger = new LguLogger(nameof(WheelbarrowScript));
         protected Restrictions restriction;
         private System.Random randomNoise;
         /// <summary>
@@ -101,8 +101,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         {
             base.Start();
             randomNoise = new System.Random(StartOfRound.Instance.randomMapSeed + 80);
-            maximumAmountItems = UpgradeBus.instance.cfg.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS.Value;
-            weightReduceMultiplier = UpgradeBus.instance.cfg.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER.Value;
+            maximumAmountItems = UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS.Value;
+            weightReduceMultiplier = UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER.Value;
             defaultWeight = itemProperties.weight;
             totalWeight = defaultWeight;
             soundCounter = 0f;
@@ -154,7 +154,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         public void UpdateWheelbarrowDrop()
         {
             if (!isHeld) return;
-            if (playerHeldBy != UpgradeBus.instance.GetLocalPlayer()) return;
+            if (playerHeldBy != UpgradeBus.Instance.GetLocalPlayer()) return;
             if (currentAmountItems <= 0) return;
             DropAllItemsInWheelbarrowServerRpc();
         }
@@ -368,7 +368,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             logger.LogDebug(nameof(UpdateWheelbarrowWeightClientRpc));
             logger.LogDebug(GameNetworkManager.Instance.localPlayerController.playerUsername);
             GrabbableObject[] storedItems = GetComponentsInChildren<GrabbableObject>();
-            if (isHeld && playerHeldBy == UpgradeBus.instance.GetLocalPlayer()) playerHeldBy.carryWeight -= Mathf.Clamp(BackMuscles.DecreasePossibleWeight(totalWeight - 1f), 0f, 10f);
+            if (isHeld && playerHeldBy == UpgradeBus.Instance.GetLocalPlayer()) playerHeldBy.carryWeight -= Mathf.Clamp(BackMuscles.DecreasePossibleWeight(totalWeight - 1f), 0f, 10f);
             totalWeight = defaultWeight;
             currentAmountItems = 0;
             for (int i = 0; i < storedItems.Length; i++)
@@ -379,7 +379,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
                 totalWeight += (storedItem.itemProperties.weight - 1f) * weightReduceMultiplier;
             }
             logger.LogDebug($"There's currently {(totalWeight - 1f)*100} lbs in the wheelcart");
-            if (isHeld && playerHeldBy == UpgradeBus.instance.GetLocalPlayer()) playerHeldBy.carryWeight += Mathf.Clamp(BackMuscles.DecreasePossibleWeight(totalWeight - 1f), 0f, 10f);
+            if (isHeld && playerHeldBy == UpgradeBus.Instance.GetLocalPlayer()) playerHeldBy.carryWeight += Mathf.Clamp(BackMuscles.DecreasePossibleWeight(totalWeight - 1f), 0f, 10f);
         }
         /// <summary>
         /// Action when the interaction bar is completely filled on the container of the wheelbarrow.
@@ -409,8 +409,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
 
         public static float CheckIfPlayerCarryingWheelbarrowLookSensitivity(float defaultValue)
         {
-            if (!UpgradeBus.instance.cfg.WHEELBARROW_ENABLED.Value && !UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_ENABLED.Value) return defaultValue;
-            PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
+            if (!UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_ENABLED.Value && !UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_ENABLED.Value) return defaultValue;
+            PlayerControllerB player = UpgradeBus.Instance.GetLocalPlayer();
             if (!player.isHoldingObject) return defaultValue;
             if (player.currentlyHeldObjectServer is not WheelbarrowScript) return defaultValue;
             if (player.thisController.velocity.magnitude <= 5.0f) return defaultValue;
@@ -418,8 +418,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         }
         public static float CheckIfPlayerCarryingWheelbarrowMovement(float defaultValue)
         {
-            if (!UpgradeBus.instance.cfg.WHEELBARROW_ENABLED.Value && !UpgradeBus.instance.cfg.SCRAP_WHEELBARROW_ENABLED.Value) return defaultValue;
-            PlayerControllerB player = UpgradeBus.instance.GetLocalPlayer();
+            if (!UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_ENABLED.Value && !UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_ENABLED.Value) return defaultValue;
+            PlayerControllerB player = UpgradeBus.Instance.GetLocalPlayer();
             if (!player.isHoldingObject) return defaultValue;
             if (player.currentlyHeldObjectServer is not WheelbarrowScript) return defaultValue;
             if (player.thisController.velocity.magnitude <= 5.0f) return defaultValue;

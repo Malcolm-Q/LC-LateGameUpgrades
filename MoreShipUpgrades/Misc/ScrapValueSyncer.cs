@@ -19,7 +19,7 @@ namespace MoreShipUpgrades.Misc
             GrabbableObject prop = GetComponent<GrabbableObject>();
             prop.scrapValue = scrapValue;
 
-            LGUScanNodeProperties.UpdateScrapValue(ref prop, scrapValue);
+            LguScanNodeProperties.UpdateScrapValue(ref prop, scrapValue);
             RoundManager.Instance.totalScrapValueInLevel += scrapValue;
         }
     }

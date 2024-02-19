@@ -16,33 +16,31 @@ using UnityEngine;
 namespace MoreShipUpgrades.Patches.HUD
 {
     [HarmonyPatch(typeof(HUDManager))]
-    internal class HUDManagerPatcher
+    internal static class HudManagerPatcher
     {
         [HarmonyPostfix]
         [HarmonyPatch(nameof(HUDManager.MeetsScanNodeRequirements))]
-        private static void alterReqs(ScanNodeProperties node, ref bool __result, PlayerControllerB playerScript)
+        static void alterReqs(ScanNodeProperties node, ref bool __result, PlayerControllerB playerScript)
         {
             if (node != null && node.GetComponentInParent<WheelbarrowScript>() != null && node.headerText != "Shopping Cart" && node.headerText != "Wheelbarrow") { __result = false; return; }
             if (!BaseUpgrade.GetActiveUpgrade(BetterScanner.UPGRADE_NAME)) { return; }
             if (node == null) { __result = false; return; }
             bool throughWall = Physics.Linecast(playerScript.gameplayCamera.transform.position, node.transform.position, 256, QueryTriggerInteraction.Ignore);
-            bool cannotSeeEnemiesThroughWalls = node.nodeType == 1 && !UpgradeBus.instance.cfg.BETTER_SCANNER_ENEMIES.Value;
-            if (throughWall)
+            bool hasRequiredLevel = BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) == 2;
+            bool cannotSeeEnemiesThroughWalls = node.nodeType == 1 && !UpgradeBus.Instance.PluginConfiguration.BETTER_SCANNER_ENEMIES.Value;
+            if (throughWall && !hasRequiredLevel || cannotSeeEnemiesThroughWalls)
             {
-                if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 2 || BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) == 2 && cannotSeeEnemiesThroughWalls)
-                {
-                    __result = false;
-                    return;
-                }
+                __result = false;
+                return;
             }
-            float rangeIncrease = node.headerText == "Main entrance" || node.headerText == "Ship" ? UpgradeBus.instance.cfg.SHIP_AND_ENTRANCE_DISTANCE_INCREASE.Value : UpgradeBus.instance.cfg.NODE_DISTANCE_INCREASE.Value;
+            float rangeIncrease = node.headerText == "Main entrance" || node.headerText == "Ship" ? UpgradeBus.Instance.PluginConfiguration.SHIP_AND_ENTRANCE_DISTANCE_INCREASE.Value : UpgradeBus.Instance.PluginConfiguration.NODE_DISTANCE_INCREASE.Value;
             float num = Vector3.Distance(playerScript.transform.position, node.transform.position);
             __result = num < node.maxRange + rangeIncrease && num > node.minRange;
         }
 
         [HarmonyPatch(nameof(HUDManager.FillEndGameStats))]
         [HarmonyTranspiler]
-        private static IEnumerable<CodeInstruction> FillEndGameStatsTranspiler(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> FillEndGameStatsTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             FieldInfo allPlayersDead = typeof(StartOfRound).GetField(nameof(StartOfRound.allPlayersDead));
             MethodInfo scrapInsuranceStatus = typeof(ScrapInsurance).GetMethod(nameof(ScrapInsurance.GetScrapInsuranceStatus));

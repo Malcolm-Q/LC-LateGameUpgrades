@@ -13,7 +13,7 @@ namespace MoreShipUpgrades.Misc
 {
     internal class Tools
     {
-        static LGULogger logger = new LGULogger(nameof(Tools));
+        static LguLogger logger = new LguLogger(nameof(Tools));
         public static int FindCodeInstruction(int index, ref List<CodeInstruction> codes, object findValue, MethodInfo addCode, bool skip = false, bool requireInstance = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, string errorMessage = "Not found")
         {
             bool found = false;

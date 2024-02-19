@@ -13,11 +13,11 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
     {
         public static string NAME = "Extend Deadline";
         public static string ENABLED_SECTION = $"Enable {NAME}";
-        private static LGULogger logger;
+        private static LguLogger logger;
         internal static ExtendDeadlineScript instance;
         void Start()
         {
-            logger = new LGULogger(NAME);
+            logger = new LguLogger(NAME);
             instance = this;
             DontDestroyOnLoad(gameObject);
         }

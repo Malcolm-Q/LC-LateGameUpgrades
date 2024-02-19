@@ -10,8 +10,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
     class BackMuscles : TierUpgrade, IUpgradeWorldBuilding
     {
+        internal float alteredWeight = 1f;
+        internal static BackMuscles Instance;
         public const string UPGRADE_NAME = "Back Muscles";
-        public static string PRICES_DEFAULT = "600,700,800";
+        public const string PRICES_DEFAULT = "600,700,800";
         internal const string WORLD_BUILDING_TEXT = "\n\nCompany-issued hydraulic girdles which are only awarded to high-performing {0} who can afford to opt in." +
             " Highly valued by all employees of The Company for their combination of miraculous health-preserving benefits and artificial, intentionally-implemented scarcity." +
             " Sardonically called the 'Back Muscles Upgrade' by some. Comes with a user manual, which mostly contains minimalistic ads for girdle maintenance contractors." +
@@ -21,6 +23,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             upgradeName = UPGRADE_NAME;
             base.Start();
+            Instance = this;
         }
 
         public override void Increment()
@@ -43,22 +46,22 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public static float DecreasePossibleWeight(float defaultWeight)
         {
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultWeight;
-            return defaultWeight * (UpgradeBus.instance.cfg.CARRY_WEIGHT_REDUCTION.Value - GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.instance.cfg.CARRY_WEIGHT_INCREMENT.Value);
+            return defaultWeight * (UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_REDUCTION.Value - GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_INCREMENT.Value);
         }
         public static void UpdatePlayerWeight()
         {
             PlayerControllerB player = GameNetworkManager.Instance.localPlayerController;
             if (player.ItemSlots.Length <= 0) return;
 
-            UpgradeBus.instance.alteredWeight = 1f;
+            Instance.alteredWeight = 1f;
             for (int i = 0; i < player.ItemSlots.Length; i++)
             {
                 GrabbableObject obj = player.ItemSlots[i];
                 if (obj == null) continue;
 
-                UpgradeBus.instance.alteredWeight += Mathf.Clamp(DecreasePossibleWeight(obj.itemProperties.weight - 1f), 0f, 10f);
+                Instance.alteredWeight += Mathf.Clamp(DecreasePossibleWeight(obj.itemProperties.weight - 1f), 0f, 10f);
             }
-            player.carryWeight = UpgradeBus.instance.alteredWeight;
+            player.carryWeight = Instance.alteredWeight;
             if (player.carryWeight < 1f) { player.carryWeight = 1f; }
         }
 
@@ -69,7 +72,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            Func<int, float> infoFunction = level => (UpgradeBus.instance.cfg.CARRY_WEIGHT_REDUCTION.Value - (level * UpgradeBus.instance.cfg.CARRY_WEIGHT_INCREMENT.Value)) * 100;
+            Func<int, float> infoFunction = level => (UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_REDUCTION.Value - (level * UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_INCREMENT.Value)) * 100;
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }

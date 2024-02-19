@@ -16,16 +16,16 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            logger = new LGULogger(UPGRADE_NAME);
+            logger = new LguLogger(UPGRADE_NAME);
             base.Start();
             changingAttribute = GameAttribute.PLAYER_JUMP_FORCE;
-            initialValue = UpgradeBus.instance.cfg.JUMP_FORCE_UNLOCK.Value;
-            incrementalValue = UpgradeBus.instance.cfg.JUMP_FORCE_INCREMENT.Value;
+            initialValue = UpgradeBus.Instance.PluginConfiguration.JUMP_FORCE_UNLOCK.Value;
+            incrementalValue = UpgradeBus.Instance.PluginConfiguration.JUMP_FORCE_INCREMENT.Value;
         }
         public static int ReduceFallDamage(int defaultValue)
         {
-            if (!(GetActiveUpgrade(UPGRADE_NAME) && GetUpgradeLevel(UPGRADE_NAME) == UpgradeBus.instance.cfg.STRONG_LEGS_UPGRADE_PRICES.Value.Split(',').Length)) return defaultValue;
-            return (int)(defaultValue * (1.0f - UpgradeBus.instance.cfg.STRONG_LEGS_REDUCE_FALL_DAMAGE_MULTIPLIER.Value));
+            if (!(GetActiveUpgrade(UPGRADE_NAME) && GetUpgradeLevel(UPGRADE_NAME) == UpgradeBus.Instance.PluginConfiguration.STRONG_LEGS_UPGRADE_PRICES.Value.Split(',').Length)) return defaultValue;
+            return (int)(defaultValue * (1.0f - UpgradeBus.Instance.PluginConfiguration.STRONG_LEGS_REDUCE_FALL_DAMAGE_MULTIPLIER.Value));
         }
         public string GetWorldBuildingText(bool shareStatus = false)
         {
@@ -34,7 +34,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.JUMP_FORCE_UNLOCK.Value + level * UpgradeBus.instance.cfg.JUMP_FORCE_INCREMENT.Value;
+            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.JUMP_FORCE_UNLOCK.Value + level * UpgradeBus.Instance.PluginConfiguration.JUMP_FORCE_INCREMENT.Value;
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }

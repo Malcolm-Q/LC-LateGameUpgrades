@@ -3,10 +3,9 @@ using Unity.Netcode;
 
 namespace MoreShipUpgrades.UpgradeComponents.Commands
 {
-    class ContractScript : NetworkBehaviour // Understand the purpose of this class better later
+    class ContractScript : NetworkBehaviour
     {
-        public static string NAME = "Contract";
-        public static int lastContractIndex = -1;
+        public const string NAME = "Contract";
 
         void Start()
         {
