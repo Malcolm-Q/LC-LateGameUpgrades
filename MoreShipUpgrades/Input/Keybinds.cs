@@ -73,8 +73,9 @@ namespace MoreShipUpgrades.Input
                 return;
             }
 
-            WheelbarrowScript wheelbarrow = localPlayerController.currentlyHeldObjectServer.GetComponentInParent<WheelbarrowScript>();
-            if (wheelbarrow == null) return;
+            if (!localPlayerController.currentlyHeldObjectServer) return;
+            WheelbarrowScript wheelbarrow = localPlayerController.currentlyHeldObjectServer.GetComponent<WheelbarrowScript>();
+            if (!wheelbarrow) return;
 
             wheelbarrow.UpdateWheelbarrowDrop();
         }
