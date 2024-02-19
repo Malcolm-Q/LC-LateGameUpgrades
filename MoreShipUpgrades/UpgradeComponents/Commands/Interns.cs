@@ -1,5 +1,6 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using Unity.Netcode;
@@ -10,12 +11,17 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
 {
     public class Interns : NetworkBehaviour
     {
-        public static string UPGRADE_NAME = "Interns";
+        public const string UPGRADE_NAME = "Interns";
         public static Interns instance;
+
+        internal string[] internNames, internInterests;
         void Start()
         {
             DontDestroyOnLoad(gameObject);
             instance = this;
+
+            internNames = AssetBundleHandler.GetInfoFromJSON("InternNames").Split(",");
+            internInterests = AssetBundleHandler.GetInfoFromJSON("InternInterests").Split(",");
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -44,7 +50,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
         private void ReviveTargetedPlayerClientRpc()
         {
             PlayerControllerB player = StartOfRound.Instance.mapScreen.targetedPlayer;
-            bool playerRegistered = UpgradeBus.instance.playerHealthLevels.ContainsKey(player.playerSteamId);
+            bool playerRegistered = Stimpack.Instance.playerHealthLevels.ContainsKey(player.playerSteamId);
             int health = playerRegistered ? Stimpack.GetHealthFromPlayer(100, player.playerSteamId) : 100;
             player.ResetPlayerBloodObjects(player.isPlayerDead);
 

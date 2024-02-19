@@ -16,16 +16,16 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            logger = new LGULogger(UPGRADE_NAME);
+            logger = new LguLogger(UPGRADE_NAME);
             base.Start();
             changingAttribute = GameAttribute.PLAYER_MOVEMENT_SPEED;
-            initialValue = UpgradeBus.instance.cfg.MOVEMENT_SPEED_UNLOCK.Value;
-            incrementalValue = UpgradeBus.instance.cfg.MOVEMENT_INCREMENT.Value;
+            initialValue = UpgradeBus.Instance.PluginConfiguration.MOVEMENT_SPEED_UNLOCK.Value;
+            incrementalValue = UpgradeBus.Instance.PluginConfiguration.MOVEMENT_INCREMENT.Value;
         }
         public static float ApplyPossibleReducedNoiseRange(float defaultValue)
         {
-            if (!(GetActiveUpgrade(UPGRADE_NAME) && GetUpgradeLevel(UPGRADE_NAME) == UpgradeBus.instance.cfg.RUNNING_SHOES_UPGRADE_PRICES.Value.Split(',').Length)) return defaultValue;
-            return Mathf.Clamp(defaultValue - UpgradeBus.instance.cfg.NOISE_REDUCTION.Value, 0f, defaultValue);
+            if (!(GetActiveUpgrade(UPGRADE_NAME) && GetUpgradeLevel(UPGRADE_NAME) == UpgradeBus.Instance.PluginConfiguration.RUNNING_SHOES_UPGRADE_PRICES.Value.Split(',').Length)) return defaultValue;
+            return Mathf.Clamp(defaultValue - UpgradeBus.Instance.PluginConfiguration.NOISE_REDUCTION.Value, 0f, defaultValue);
         }
 
         public string GetWorldBuildingText(bool shareStatus = false)
@@ -35,7 +35,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            Func<int, float> infoFunction = level => UpgradeBus.instance.cfg.MOVEMENT_SPEED_UNLOCK.Value + level * UpgradeBus.instance.cfg.MOVEMENT_INCREMENT.Value;
+            Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.MOVEMENT_SPEED_UNLOCK.Value + level * UpgradeBus.Instance.PluginConfiguration.MOVEMENT_INCREMENT.Value;
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }

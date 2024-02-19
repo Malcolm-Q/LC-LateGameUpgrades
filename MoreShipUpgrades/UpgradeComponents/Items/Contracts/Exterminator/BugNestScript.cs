@@ -33,7 +33,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exterminator
         void SpawnLootServerRpc(Vector3 pos)
         {
             GameObject go = Instantiate(loot, pos + Vector3.up, Quaternion.identity);
-            go.GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.instance.cfg.CONTRACT_BUG_REWARD.Value);
+            go.GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.Instance.PluginConfiguration.CONTRACT_BUG_REWARD.Value);
             go.GetComponent<NetworkObject>().Spawn();
             DisableNestClientRpc(new NetworkObjectReference(gameObject));
         }

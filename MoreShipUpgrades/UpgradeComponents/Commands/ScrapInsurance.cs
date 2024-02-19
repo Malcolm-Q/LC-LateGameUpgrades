@@ -19,20 +19,20 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
         }
         public static bool GetScrapInsuranceStatus()
         {
-            LGULogger logger = new LGULogger(COMMAND_NAME);
+            LguLogger logger = new LguLogger(COMMAND_NAME);
             logger.LogDebug("Grabbing status of insurance...");
             return insurance;
         }
         public static void TurnOnScrapInsurance()
         {
-            LGULogger logger = new LGULogger(COMMAND_NAME);
+            LguLogger logger = new LguLogger(COMMAND_NAME);
             logger.LogDebug("Turning on...");
             ToggleInsurance(true);
         }
 
         public static void TurnOffScrapInsurance()
         {
-            LGULogger logger = new LGULogger(COMMAND_NAME);
+            LguLogger logger = new LguLogger(COMMAND_NAME);
             logger.LogDebug("Turning off...");
             ToggleInsurance(false);
         }

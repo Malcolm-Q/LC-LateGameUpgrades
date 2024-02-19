@@ -16,7 +16,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         /// <summary>
         /// Logger of the class
         /// </summary>
-        private static LGULogger logger = new LGULogger(nameof(Medkit));
+        private static LguLogger logger = new LguLogger(nameof(Medkit));
         /// <summary>
         /// Sounds played when interacting with the medkit
         /// </summary>
@@ -47,8 +47,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         {
             audio = GetComponent<AudioSource>();
             hudManager = HUDManager.Instance;
-            maximumUses = UpgradeBus.instance.cfg.MEDKIT_USES.Value;
-            healAmount = UpgradeBus.instance.cfg.MEDKIT_HEAL_VALUE.Value;
+            maximumUses = UpgradeBus.Instance.PluginConfiguration.MEDKIT_USES.Value;
+            healAmount = UpgradeBus.Instance.PluginConfiguration.MEDKIT_HEAL_VALUE.Value;
             base.Start();
         }
         public override void DiscardItem()
@@ -66,7 +66,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         /// </summary>
         private void AttemptToHealPlayer()
         {
-            int health = UpgradeBus.instance.playerHealthLevels.ContainsKey(playerHeldBy.playerSteamId) ? Stimpack.GetHealthFromPlayer(100, playerHeldBy.playerSteamId) : 100;
+            int health = Stimpack.Instance.playerHealthLevels.ContainsKey(playerHeldBy.playerSteamId) ? Stimpack.GetHealthFromPlayer(100, playerHeldBy.playerSteamId) : 100;
             if (!CanUseMedkit(health)) return;
             UseMedkit(health);
         }
@@ -125,13 +125,13 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             if (uses < maximumUses) return;
 
             itemUsedUp = true;
-            if (playerHeldBy == UpgradeBus.instance.GetLocalPlayer()) hudManager.DisplayTip("NO MORE USES!", "This medkit doesn't have anymore supplies!", true, false, "LC_Tip1");
+            if (playerHeldBy == UpgradeBus.Instance.GetLocalPlayer()) hudManager.DisplayTip("NO MORE USES!", "This medkit doesn't have anymore supplies!", true, false, "LC_Tip1");
         }
         public string GetDisplayInfo()
         {
-            return $"MEDKIT - ${UpgradeBus.instance.cfg.MEDKIT_PRICE}\n\n" +
-                $"Left click to heal yourself for {UpgradeBus.instance.cfg.MEDKIT_HEAL_VALUE} health.\n" +
-                $"Can be used {UpgradeBus.instance.cfg.MEDKIT_USES} times.";
+            return $"MEDKIT - ${UpgradeBus.Instance.PluginConfiguration.MEDKIT_PRICE}\n\n" +
+                $"Left click to heal yourself for {UpgradeBus.Instance.PluginConfiguration.MEDKIT_HEAL_VALUE} health.\n" +
+                $"Can be used {UpgradeBus.Instance.PluginConfiguration.MEDKIT_USES} times.";
         }
     }
 }

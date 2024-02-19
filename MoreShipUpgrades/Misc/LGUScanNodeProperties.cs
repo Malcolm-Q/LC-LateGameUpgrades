@@ -5,7 +5,7 @@ namespace MoreShipUpgrades.Misc
     /// <summary>
     /// Handler that's responsible to manipulate the game's scan node properties (which are displayed when right-clicking which displays several nodes with information such as scrap value or description of the items)
     /// </summary>
-    internal class LGUScanNodeProperties
+    internal class LguScanNodeProperties
     {
         /// <summary>
         /// Enumerator used to describe each node type used by the game
@@ -48,7 +48,7 @@ namespace MoreShipUpgrades.Misc
         /// <param name="scrapValue">The value of the item in being sold to set on the component</param>
         /// <param name="minRange">The minimum range necessary to be displayed in the player's HUD to set on the component</param>
         /// <param name="maxRange">The maximum range allowed to be displayed in the player's HUD to set on the component</param>
-        public static void ChangeScanNode(ref ScanNodeProperties scanNodeProperties, NodeType nodeType, string header = "LGU Scan Node", string subText = "Used for LGU stuff", int creatureScanID = -1, int scrapValue = 0, int minRange = 5, int maxRange = 7)
+        public static void ChangeScanNode(ref ScanNodeProperties scanNodeProperties, NodeType nodeType, string header = "LGU Scan Node", string subText = "Used for LGU stuff", int creatureScanID = -1, int scrapValue = 0, int minRange = 2, int maxRange = 7)
         {
             scanNodeProperties.headerText = header;
             scanNodeProperties.subText = subText;
@@ -82,11 +82,11 @@ namespace MoreShipUpgrades.Misc
         /// <param name="creatureScanID">Identifier of the bestiary entry to unlock when scanning this node</param>
         /// <param name="minRange">Minimum range required to display this node</param>
         /// <param name="maxRange">Maximum range allowed to display this node</param>
-        static void AddScanNode(GameObject objectToAddScanNode, NodeType nodeType, string header = "LGU Scan Node", string subText = "Used for LGU stuff", int creatureScanID = -1, int minRange = 5, int maxRange = 7)
+        static void AddScanNode(GameObject objectToAddScanNode, NodeType nodeType, string header = "LGU Scan Node", string subText = "Used for LGU stuff", int creatureScanID = -1, int minRange = 2, int maxRange = 7)
         {
             GameObject scanNodeObject = CreateCanvasScanNode(ref objectToAddScanNode);
             ScanNodeProperties scanNodeProperties = scanNodeObject.AddComponent<ScanNodeProperties>();
-            ChangeScanNode(ref scanNodeProperties, nodeType, header, subText, creatureScanID, minRange, maxRange);
+            ChangeScanNode(scanNodeProperties: ref scanNodeProperties, nodeType: nodeType, header: header, subText: subText, creatureScanID: creatureScanID, minRange: minRange, maxRange: maxRange);
         }
         /// <summary>
         /// Adds a general scan node to the provided gameObject and set its attributes to the provided ones
@@ -97,7 +97,7 @@ namespace MoreShipUpgrades.Misc
         /// <param name="creatureScanID">Identifier of the bestiary entry to unlock when scanning this node</param>
         /// <param name="minRange">Minimum range required to display this node</param>
         /// <param name="maxRange">Maximum range allowed to display this node</param>
-        public static void AddGeneralScanNode(GameObject objectToAddScanNode, string header = "LGU Scan Node", string subText = "Used for LGU stuff", int creatureScanID = -1, int minRange = 5, int maxRange = 7)
+        public static void AddGeneralScanNode(GameObject objectToAddScanNode, string header = "LGU Scan Node", string subText = "Used for LGU stuff", int creatureScanID = -1, int minRange = 2, int maxRange = 7)
         {
             AddScanNode(objectToAddScanNode: objectToAddScanNode, nodeType: NodeType.GENERAL, header: header, subText: subText, creatureScanID: creatureScanID, minRange: minRange, maxRange: maxRange);
         }
@@ -110,7 +110,7 @@ namespace MoreShipUpgrades.Misc
         /// <param name="creatureScanID">Identifier of the bestiary entry to unlock when scanning this node</param>
         /// <param name="minRange">Minimum range required to display this node</param>
         /// <param name="maxRange">Maximum range allowed to display this node</param>
-        public static void AddScrapScanNode(GameObject objectToAddScanNode, string header = "LGU Scan Node", string subText = "Used for LGU stuff", int creatureScanID = -1, int minRange = 5, int maxRange = 7)
+        public static void AddScrapScanNode(GameObject objectToAddScanNode, string header = "LGU Scan Node", string subText = "Used for LGU stuff", int creatureScanID = -1, int minRange = 2, int maxRange = 7)
         {
             AddScanNode(objectToAddScanNode: objectToAddScanNode, nodeType: NodeType.SCRAP, header: header, subText: subText, creatureScanID: creatureScanID, minRange: minRange, maxRange: maxRange);
         }
@@ -123,7 +123,7 @@ namespace MoreShipUpgrades.Misc
         /// <param name="creatureScanID">Identifier of the bestiary entry to unlock when scanning this node</param>
         /// <param name="minRange">Minimum range required to display this node</param>
         /// <param name="maxRange">Maximum range allowed to display this node</param>
-        public static void AddDangerScanNode(GameObject objectToAddScanNode, string header = "LGU Scan Node", string subText = "Used for LGU stuff", int creatureScanID = -1, int minRange = 5, int maxRange = 7)
+        public static void AddDangerScanNode(GameObject objectToAddScanNode, string header = "LGU Scan Node", string subText = "Used for LGU stuff", int creatureScanID = -1, int minRange = 2, int maxRange = 7)
         {
             AddScanNode(objectToAddScanNode: objectToAddScanNode, nodeType: NodeType.DANGER, header: header, subText: subText, creatureScanID: creatureScanID, minRange: minRange, maxRange: maxRange);
         }

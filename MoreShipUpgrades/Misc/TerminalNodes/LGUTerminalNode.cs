@@ -8,13 +8,13 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
     /// Later on, this can also be used for when we decide to store our own TerminalNodes into the terminal
     /// instead of generating new terminal nodes left and right through CommandParser
     /// </summary>
-    internal class LGUTerminalNode
+    internal static class LguTerminalNode
     {
         static Terminal terminal;
         /// <summary>
         /// Handler's logger
         /// </summary>
-        static readonly LGULogger logger = new LGULogger(nameof(LGUTerminalNode));
+        static readonly LguLogger logger = new LguLogger(nameof(LguTerminalNode));
         /// <summary>
         /// Dictionary used as cache to optimize unnecessary searches when already found the reference.
         /// </summary>
@@ -25,7 +25,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         const string SHOVEL_NOUN = "shovel";
         static Terminal GetTerminal()
         {
-            if (terminal == null) terminal = UpgradeBus.instance.GetTerminal();
+            if (terminal == null) terminal = UpgradeBus.Instance.GetTerminal();
             return terminal;
         }
         /// <summary>
@@ -77,21 +77,19 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         /// <param name="node">Terminal node which we want to change the text of</param>
         /// <param name="insertText">The additional text we wish to add to the node</param>
         /// <param name="enabled">Feature associated with the additional text is enabled or not</param>
-        internal static void AddTextToNode(ref TerminalNode node, string insertText, bool enabled = true)
+        internal static void UpdateTextToNode(ref TerminalNode node, string insertText, bool enabled = true)
         {
             string text = node.displayText;
             int index = text.IndexOf(insertText);
             if (index != -1 && !enabled)
             {
-                text.Remove(index, insertText.Length);
-                node.displayText = text;
+                node.displayText = text.Remove(index, insertText.Length);
                 return;
             }
             if (index == -1 && enabled)
             {
                 text += insertText;
                 node.displayText = text;
-                return;
             }
         }
         /// <summary>

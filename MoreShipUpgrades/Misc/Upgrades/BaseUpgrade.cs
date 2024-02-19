@@ -38,14 +38,14 @@ namespace MoreShipUpgrades.Misc.Upgrades
             string loadColour = "#FF0000";
             string loadMessage = $"\n<color={loadColour}>{upgradeName} is active!</color>";
             HUDManager.Instance.chatText.text += loadMessage;
-            UpgradeBus.instance.activeUpgrades[upgradeName] = true;
+            UpgradeBus.Instance.activeUpgrades[upgradeName] = true;
         }
         /// <summary>
         /// Function responsible to insert this upgrade's gameObject into the UpgradeBus' list of gameObjects for handling
         /// </summary>
         public virtual void Register()
         {
-            if (!UpgradeBus.instance.UpgradeObjects.ContainsKey(upgradeName)) { UpgradeBus.instance.UpgradeObjects.Add(upgradeName, gameObject); }
+            if (!UpgradeBus.Instance.UpgradeObjects.ContainsKey(upgradeName)) { UpgradeBus.Instance.UpgradeObjects.Add(upgradeName, gameObject); }
         }
         /// <summary>
         /// Function called when the upgrade is being unloaded or the save is being reset
@@ -55,17 +55,17 @@ namespace MoreShipUpgrades.Misc.Upgrades
             string unloadColour = "#FF0000";
             string unloadMessage = $"\n<color={unloadColour}>{upgradeName} has been disabled!</color>";
             HUDManager.Instance.chatText.text += unloadMessage;
-            UpgradeBus.instance.activeUpgrades[upgradeName] = false;
+            UpgradeBus.Instance.activeUpgrades[upgradeName] = false;
         }
         #endregion
         internal static bool GetActiveUpgrade(string upgradeName)
         {
-            return UpgradeBus.instance.activeUpgrades.GetValueOrDefault(upgradeName, false);
+            return UpgradeBus.Instance.activeUpgrades.GetValueOrDefault(upgradeName, false);
         }
 
         internal static int GetUpgradeLevel(string upgradeName)
         {
-            return UpgradeBus.instance.upgradeLevels.GetValueOrDefault(upgradeName, 0);
+            return UpgradeBus.Instance.upgradeLevels.GetValueOrDefault(upgradeName, 0);
         }
     }
 }

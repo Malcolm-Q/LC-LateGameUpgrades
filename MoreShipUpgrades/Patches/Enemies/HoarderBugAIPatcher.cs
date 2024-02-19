@@ -4,15 +4,15 @@ using MoreShipUpgrades.Managers;
 namespace MoreShipUpgrades.Patches.Enemies
 {
     [HarmonyPatch(typeof(HoarderBugAI))]
-    internal class HoarderBugAIPatcher
+    internal static class HoarderBugAIPatcher
     {
         [HarmonyPostfix]
         [HarmonyPatch(nameof(HoarderBugAI.IsHoarderBugAngry))]
         private static void MakeHoarderBugSwarmAngry(ref bool __result)
         {
-            if (UpgradeBus.instance.contractType != "exterminator") return;
+            if (ContractManager.Instance.contractType != "exterminator") return;
 
-            if (UpgradeBus.instance.contractLevel == RoundManager.Instance.currentLevel.PlanetName)
+            if (ContractManager.Instance.contractLevel == RoundManager.Instance.currentLevel.PlanetName)
             {
                 __result = true;
             }
