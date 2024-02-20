@@ -14,6 +14,8 @@
 - Changed the time of saving LGU's data from disconnecting to autosaving. This should solve the issue of buying an upgrade, leaving and coming back with credits back and upgrade on.
 - Changed config values to ConfigEntry to allow in-game configuration mods to change the values (Note: LGU is not responsible for any breaking bugs that arise from changing configuration while in-game.)
 - Changed samples' particles not being played when dropped due to FPS issues when in high quantity.
+- Changed Night Vision Toggle and Wheelbarrow Drop All Stored Items' control bindings to allow be configurable with [LethalCompanyInputUtils](https://thunderstore.io/c/lethal-company/p/Rune580/LethalCompany_InputUtils/), implemented by [SnackSBR](https://github.com/SnackSBR)
+    - Previous configuration values won't apply due to different formatting, have a look at [Unity's Control Paths](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.0/manual/Controls.html#control-paths) to understand what to put in the configuration file when not using LethalCompanyInputUtils.
 
 ### Fixes
 - Fixed wheelbarrow cost using NV's cost instead of its own
