@@ -662,6 +662,7 @@ namespace MoreShipUpgrades
             SetupDiscombobulator();
             SetupBetterScanner();
             SetupWalkieGPS();
+            SetupFasterDropPod();
             SetupBackMuscles();
             SetupInterns();
             SetupPager();
@@ -736,6 +737,11 @@ namespace MoreShipUpgrades
         private void SetupWalkieGPS()
         {
             SetupGenericPerk<WalkieGPS>(WalkieGPS.UPGRADE_NAME);
+
+        }
+        private void SetupFasterDropPod()
+        {
+            SetupGenericPerk<FasterDropPod>(FasterDropPod.UPGRADE_NAME);
 
         }
         private void SetupBackMuscles()

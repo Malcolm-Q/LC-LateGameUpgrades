@@ -351,6 +351,7 @@ namespace MoreShipUpgrades.Managers
             SetupBargainConnectionsTerminalNode();
             SetupQuantumDisruptorTerminalNode();
             SetupLethalDealsTerminalNode();
+            SetupFasterDropPodTerminalNode();
             terminalNodes.Sort();
         }
         void SetupMarketInfluenceTerminalNode()
@@ -533,6 +534,13 @@ namespace MoreShipUpgrades.Managers
                                                 PluginConfiguration.PLAYER_HEALTH_ENABLED.Value,
                                                 PluginConfiguration.PLAYER_HEALTH_PRICE.Value,
                                                 ParseUpgradePrices(PluginConfiguration.PLAYER_HEALTH_UPGRADE_PRICES.Value));
+        }
+        private void SetupFasterDropPodTerminalNode()
+        {
+            SetupOneTimeTerminalNode(FasterDropPod.UPGRADE_NAME,
+                                    true,
+                                    PluginConfiguration.FASTER_DROP_POD_ENABLED.Value,
+                                    PluginConfiguration.FASTER_DROP_POD_PRICE.Value);
         }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can be purchased multiple times

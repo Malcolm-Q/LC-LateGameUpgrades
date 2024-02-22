@@ -81,6 +81,7 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<bool> SCRAP_WHEELBARROW_ENABLED { get; set; }
         public ConfigEntry<bool> DOOR_HYDRAULICS_BATTERY_ENABLED {  get; set; }
         public ConfigEntry<bool> SCRAP_INSURANCE_ENABLED {  get; set; }
+        public ConfigEntry<bool> FASTER_DROP_POD_ENABLED { get; set; }
 
         // individual or shared
         public ConfigEntry<bool> BEEKEEPER_INDIVIDUAL { get; set; }
@@ -129,6 +130,7 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<int> WHEELBARROW_PRICE { get; set; }
         public ConfigEntry<int> DOOR_HYDRAULICS_BATTERY_PRICE { get; set; }
         public ConfigEntry<int> SCRAP_INSURANCE_PRICE { get; set; }
+        public ConfigEntry<int> FASTER_DROP_POD_PRICE { get; set; }
 
         // attributes
         public ConfigEntry<float> BIGGER_LUNGS_STAMINA_REGEN_INCREASE { get; set; }
@@ -297,6 +299,7 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<int> BARGAIN_CONNECTIONS_INITIAL_ITEM_AMOUNT { get; set; }
         public ConfigEntry<int> BARGAIN_CONNECTIONS_INCREMENTAL_ITEM_AMOUNT { get; set; }
         public ConfigEntry<string> BARGAIN_CONNECTIONS_PRICES { get; set; }
+        public ConfigEntry<float> FASTER_DROP_POD_TIMER { get; set; }
 
 
         public PluginConfig(ConfigFile PluginConfiguration)
@@ -512,6 +515,11 @@ namespace MoreShipUpgrades.Misc
             WALKIE_ENABLED = ConfigEntry(topSection, "Enable the walkie talkie gps upgrade", true, "Holding a walkie talkie displays location.");
             WALKIE_PRICE = ConfigEntry(topSection, "Walkie GPS Price", 450, "Default price for upgrade.");
             WALKIE_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+
+            topSection = "Faster Drop Pod";
+            FASTER_DROP_POD_ENABLED = ConfigEntry(topSection, "Enable the faster drop pod upgrade", true, "Make the drop pod land faster.");
+            FASTER_DROP_POD_PRICE = ConfigEntry(topSection, "Faster Drop Pod Price", 600, "Default price for upgrade.");
+            FASTER_DROP_POD_TIMER = ConfigEntry(topSection, "Faster Drop Pod Timer", 20f, "Default timer for upgrade.");
 
             topSection = Hunter.UPGRADE_NAME;
             HUNTER_ENABLED = ConfigEntry(topSection, "Enable the Hunter upgrade", true, "Collect and sell samples from dead enemies");
