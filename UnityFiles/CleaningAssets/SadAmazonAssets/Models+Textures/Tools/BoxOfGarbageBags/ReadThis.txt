@@ -1,0 +1,1 @@
+For some reason the lids texture color changed so you will have to make a new material and just tinker with color until it's close enough
