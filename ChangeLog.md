@@ -1,4 +1,9 @@
-## V 3.2.0 - To be Determined
+## V 3.2.1 - To Be Determined
+### Fixes
+- Fixed Bigger Lungs error spam when loading into the game
+- Fixed Stimpack throwing error when reviving players due to lack of Singleton instance
+
+## V 3.2.0 - 2024-02-22
 ### Additions
 - Added keybind configuration for wheelbarrow's drop all items through configuration
 - Added World Building text to some upgrades/items (thanks to Nat(discordID:twinkula))
