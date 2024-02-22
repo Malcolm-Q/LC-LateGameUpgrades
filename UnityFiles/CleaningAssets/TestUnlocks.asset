@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb5890291368e4720f01896e9c2e556e, type: 3}
+  m_Name: TestUnlocks
+  m_EditorClassIdentifier: 
+  unlockables:
+  - unlockableName: Cleaning Cabinet
+    prefabObject: {fileID: 1730746555007417112, guid: 59bf56c78c63f7a45892a73ca95d806c,
+      type: 3}
+    unlockableType: 1
+    shopSelectionNode: {fileID: 0}
+    alwaysInStock: 0
+    IsPlaceable: 0
+    hasBeenMoved: 0
+    placedPosition: {x: 0, y: 0, z: 0}
+    placedRotation: {x: 0, y: 0, z: 0}
+    inStorage: 0
+    canBeStored: 0
+    maxNumber: 1
+    hasBeenUnlockedByPlayer: 0
+    suitMaterial: {fileID: 0}
+    alreadyUnlocked: 0
+    spawnPrefab: 1

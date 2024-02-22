@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c30496d6ae6d6f907456e10a94e01ec6, type: 3}
+  m_Name: DusterItem
+  m_EditorClassIdentifier: 
+  itemId: 7896465
+  itemName: Vacuum
+  spawnPositionTypes: []
+  twoHanded: 0
+  twoHandedAnimation: 0
+  canBeGrabbedBeforeGameStart: 0
+  weight: 1.05
+  itemIsTrigger: 0
+  holdButtonUse: 0
+  itemSpawnsOnGround: 1
+  isConductiveMetal: 0
+  isScrap: 0
+  creditsWorth: 0
+  lockedInDemo: 0
+  highestSalePercentage: 0
+  maxValue: 0
+  minValue: 0
+  spawnPrefab: {fileID: 964950470051568919, guid: 421755452625f054aae1b0c4f77fc604,
+    type: 3}
+  requiresBattery: 0
+  batteryUsage: 0
+  automaticallySetUsingPower: 0
+  itemIcon: {fileID: 21300000, guid: 29343858cd07afd429468d9e64100c65, type: 3}
+  grabAnim: 
+  useAnim: 
+  pocketAnim: 
+  throwAnim: 
+  grabAnimationTime: 0
+  grabSFX: {fileID: 8300000, guid: d6b79154c0135d941a4784f27240feb7, type: 3}
+  dropSFX: {fileID: 8300000, guid: f1c2a4471d6e1a94cb13593b1b1e724e, type: 3}
+  pocketSFX: {fileID: 8300000, guid: 00cd5a64fdb0bb04da9ca8275a51afb4, type: 3}
+  throwSFX: {fileID: 8300000, guid: f1c2a4471d6e1a94cb13593b1b1e724e, type: 3}
+  syncGrabFunction: 0
+  syncUseFunction: 0
+  syncDiscardFunction: 0
+  syncInteractLRFunction: 0
+  saveItemVariable: 0
+  isDefensiveWeapon: 0
+  toolTips: []
+  verticalOffset: 0
+  floorYOffset: 0
+  allowDroppingAheadOfPlayer: 0
+  restingRotation: {x: 90, y: 0, z: 0}
+  rotationOffset: {x: 180, y: 90, z: 0}
+  positionOffset: {x: -0.025, y: 1, z: 0}
+  meshOffset: 0
+  meshVariants: []
+  materialVariants: []
+  usableInSpecialAnimations: 0
+  canBeInspected: 0
