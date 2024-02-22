@@ -14,23 +14,24 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             " Opting into every maintenance procedure will arrange for your suit's pipes to be cleaned and repaired, filters re-issued," +
             " and DRM removed from the integrated air conditioning system.\n\n";
 
-        internal override void Start()
+        void Awake()
         {
             upgradeName = UPGRADE_NAME;
             logger = new LguLogger(UPGRADE_NAME);
-            base.Start();
             changingAttribute = GameAttribute.PLAYER_SPRINT_TIME;
             initialValue = UpgradeBus.Instance.PluginConfiguration.SPRINT_TIME_INCREASE_UNLOCK.Value;
             incrementalValue = UpgradeBus.Instance.PluginConfiguration.SPRINT_TIME_INCREMENT.Value;
         }
         public static float ApplyPossibleIncreasedStaminaRegen(float regenValue)
         {
+            if (!UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_ENABLED.Value) return regenValue * SickBeats.Instance.staminaDrainCoefficient;
             if (!GetActiveUpgrade(UPGRADE_NAME) || GetUpgradeLevel(UPGRADE_NAME) < 0) return regenValue * SickBeats.Instance.staminaDrainCoefficient;
             return regenValue * UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_STAMINA_REGEN_INCREASE.Value * SickBeats.Instance.staminaDrainCoefficient;
         }
 
         public static float ApplyPossibleReducedJumpStaminaCost(float jumpCost)
         {
+            if (!UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_ENABLED.Value) return jumpCost;
             if (!GetActiveUpgrade(UPGRADE_NAME) || GetUpgradeLevel(UPGRADE_NAME) < 1) return jumpCost;
             return jumpCost * UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_JUMP_STAMINA_COST_DECREASE.Value;
         }
