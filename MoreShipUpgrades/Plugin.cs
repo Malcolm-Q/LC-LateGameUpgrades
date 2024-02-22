@@ -247,10 +247,10 @@ namespace MoreShipUpgrades
             scav.spawnPrefab.AddComponent<ScrapValueSyncer>();
             TextAsset scavAudioPaths = AssetBundleHandler.TryLoadOtherAsset<TextAsset>(ref bundle, root + "scavSounds/scavAudio.json");
             Dictionary<string, string[]> scavAudioDict = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(scavAudioPaths.text);
-            extractScript.clipDict.Add("lost", CreateAudioClipArray(scavAudioDict["lost"], ref bundle));
-            extractScript.clipDict.Add("heal", CreateAudioClipArray(scavAudioDict["heal"], ref bundle));
-            extractScript.clipDict.Add("safe", CreateAudioClipArray(scavAudioDict["safe"], ref bundle));
-            extractScript.clipDict.Add("held", CreateAudioClipArray(scavAudioDict["held"], ref bundle));
+            ExtractPlayerScript.clipDict.Add("lost", CreateAudioClipArray(scavAudioDict["lost"], ref bundle));
+            ExtractPlayerScript.clipDict.Add("heal", CreateAudioClipArray(scavAudioDict["heal"], ref bundle));
+            ExtractPlayerScript.clipDict.Add("safe", CreateAudioClipArray(scavAudioDict["safe"], ref bundle));
+            ExtractPlayerScript.clipDict.Add("held", CreateAudioClipArray(scavAudioDict["held"], ref bundle));
 
             Utilities.FixMixerGroups(scav.spawnPrefab);
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(scav.spawnPrefab);
@@ -305,6 +305,7 @@ namespace MoreShipUpgrades
             GameObject modStore = AssetBundleHandler.TryLoadGameObjectAsset(ref bundle, "Assets/ShipUpgrades/LguStore.prefab");
             if (modStore == null) return;
 
+            modStore.AddComponent<ConfigSynchronizationManager>();
             modStore.AddComponent<ContractManager>();
             modStore.AddComponent<LguStore>();
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(modStore);

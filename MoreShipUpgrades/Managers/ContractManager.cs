@@ -8,18 +8,58 @@ namespace MoreShipUpgrades.Managers
 {
     internal class ContractManager : NetworkBehaviour
     {
+        #region Static Variables
         static LguLogger logger = new LguLogger(nameof(ContractManager));
-        internal static ContractManager Instance {get; set;}
-        internal string contractLevel = "None";
-        internal string contractType = "None";
-        internal string DataMinigameKey = "";
-        internal string DataMinigameUser = "";
-        internal string DataMinigamePass = "";
-        internal Dictionary<string, List<string>> fakeBombOrders = new Dictionary<string, List<string>>();
-        internal List<string> bombOrder = new List<string>();
-        internal string SerialNumber;
+        internal static ContractManager Instance {get; set; }
+        /// <summary>
+        /// Terminal node for "route" commands used to select the available moons for contract placements
+        /// </summary>
         private static TerminalKeyword routeKeyword;
+        #endregion
+        #region Variables
+        #region Selected Contract
+        /// <summary>
+        /// Chosen level (moon) of the selected contract
+        /// </summary>
+        internal string contractLevel = "None";
+        /// <summary>
+        /// Chose type of the selected contract
+        /// </summary>
+        internal string contractType = "None";
+        /// <summary>
+        /// Index of the last picked contract type
+        /// </summary>
         internal int lastContractIndex = -1;
+        #endregion
+        #region Data Contract
+        /// <summary>
+        /// Correct IP Address to bruteforce for user credentials
+        /// </summary>
+        internal string DataMinigameKey = "";
+        /// <summary>
+        /// Correct username to log in the PC
+        /// </summary>
+        internal string DataMinigameUser = "";
+        /// <summary>
+        /// Correct password to log in the PC
+        /// </summary>
+        internal string DataMinigamePass = "";
+        #endregion
+        #region Defusal Contract
+        /// <summary>
+        /// Possible combinations of triggering the bomb to activate on wrong wire sequence
+        /// </summary>
+        internal Dictionary<string, List<string>> fakeBombOrders = new Dictionary<string, List<string>>();
+        /// <summary>
+        /// The correct combination to defuse the bomb for loot
+        /// </summary>
+        internal List<string> bombOrder = new List<string>();
+        /// <summary>
+        /// Serial number associated with the bomb item
+        /// </summary>
+        internal string SerialNumber;
+        #endregion
+        #endregion
 
         void Awake()
         {
