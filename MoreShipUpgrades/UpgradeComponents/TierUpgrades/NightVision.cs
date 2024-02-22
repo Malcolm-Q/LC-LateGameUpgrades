@@ -35,12 +35,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public const string PRICES_DEFAULT = "300,400,500";
 
         private static LguLogger logger = new LguLogger(UPGRADE_NAME);
-        internal override void Start()
+        void Awake()
         {
             Instance = this;
             upgradeName = UPGRADE_NAME;
-            base.Start();
             nightVisionPrefab = AssetBundleHandler.GetItemObject("Night Vision").spawnPrefab;
+        }
+        internal override void Start()
+        {
+            base.Start();
             batteryBar = transform.GetChild(0).GetChild(0).transform;
             transform.GetChild(0).gameObject.SetActive(false);
         }
