@@ -249,7 +249,6 @@ namespace MoreShipUpgrades.Managers
             if (saveInfo.pager) UpgradeBus.Instance.activeUpgrades[FastEncryption.UPGRADE_NAME] = saveInfo.pager;
             if (saveInfo.DestroyTraps) UpgradeBus.Instance.activeUpgrades[MalwareBroadcaster.UPGRADE_NAME] = saveInfo.DestroyTraps;
             if (saveInfo.lightningRod) UpgradeBus.Instance.activeUpgrades[LightningRod.UPGRADE_NAME] = saveInfo.lightningRod;
-            if (saveInfo.DropPod) UpgradeBus.Instance.activeUpgrades[FasterDropPod.UPGRADE_NAME] = saveInfo.DropPod;
 
         }
         public void UpdateUpgradeBus(bool UseLocalSteamID = true, bool checkID = true)
@@ -518,8 +517,6 @@ namespace MoreShipUpgrades.Managers
         public string contractLevel = ContractManager.Instance.contractLevel;
         public Dictionary<string, float> SaleData = UpgradeBus.Instance.SaleData;
         public bool wearingHelmet = UpgradeBus.Instance.wearingHelmet;
-
-        public bool DropPod;
     }
 
     [Serializable]
