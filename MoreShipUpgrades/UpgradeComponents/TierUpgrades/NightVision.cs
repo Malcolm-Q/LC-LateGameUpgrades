@@ -85,7 +85,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public void Toggle()
         {
+            if (!GetActiveUpgrade(UPGRADE_NAME)) return;
             nightVisionActive = !nightVisionActive;
+            if (client == null) { client = GameNetworkManager.Instance.localPlayerController; }
 
             if (nightVisionActive)
             {

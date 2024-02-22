@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
@@ -39,6 +38,12 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
             index = Tools.FindInteger(index, ref codes, -10, addCode: lethalDealsGuaranteedItems, errorMessage: "Couldn't find negative value representing no sales");
             index = Tools.FindInteger(index, ref codes, 5, addCode: bargainConnectionsAmount, errorMessage: "Couldn't find first maximum amount of items to go on sale");
             index = Tools.FindInteger(index, ref codes, 5, addCode: bargainConnectionsAmount, errorMessage: "Couldn't find second maximum amount of items to go on sale");
+            index = Tools.FindInteger(index, ref codes, findValue: 0, skip: true);
+            index = Tools.FindInteger(index, ref codes, findValue: 0, skip: true);
+            index = Tools.FindInteger(index, ref codes, findValue: 0, skip: true);
+            index = Tools.FindInteger(index, ref codes, findValue: 0, skip: true);
+            index = Tools.FindInteger(index, ref codes, findValue: 0, skip: true);
+            index = Tools.FindInteger(index, ref codes, findValue: 0, skip: true);
             index = Tools.FindInteger(index, ref codes, 0, addCode: guaranteedMinimumSale, errorMessage: "Couldn't find minimum sale percentage");
             codes.Insert(index, new CodeInstruction(OpCodes.Ldloc_S, 4));
             return codes;

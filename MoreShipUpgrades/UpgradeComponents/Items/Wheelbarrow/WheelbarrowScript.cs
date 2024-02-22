@@ -144,7 +144,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         {
             base.Update();
             UpdateWheelbarrowSounds();
-            //UpdateWheelbarrowDrop();
             UpdateInteractTriggers();
         }
         public void UpdateWheelbarrowDrop()

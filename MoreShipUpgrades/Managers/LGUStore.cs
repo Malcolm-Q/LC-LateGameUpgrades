@@ -25,7 +25,6 @@ namespace MoreShipUpgrades.Managers
         private ulong playerID = 0;
         static LguLogger logger = new LguLogger(nameof(LguStore));
         const string saveDataKey = "LGU_SAVE_DATA";
-        bool retrievedPluginConfiguration;
         private bool receivedSave;
 
         private void Start()
@@ -61,7 +60,7 @@ namespace MoreShipUpgrades.Managers
             else
             {
                 logger.LogInfo("Requesting hosts config...");
-                SendConfigServerRpc();
+                ConfigSynchronizationManager.Instance.SendConfigServerRpc();
             }
         }
 
@@ -99,47 +98,6 @@ namespace MoreShipUpgrades.Managers
 
             GameObject insurance = Instantiate(AssetBundleHandler.GetPerkGameObject(ScrapInsurance.COMMAND_NAME));
             insurance.GetComponent<NetworkObject>().Spawn();
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        public void SendConfigServerRpc()
-        {
-            logger.LogInfo("Client has requested hosts client");
-            ConfigSynchronization cfg = new ConfigSynchronization();
-            cfg.SetupSynchronization();
-            string json = JsonConvert.SerializeObject(cfg);
-            SendConfigClientRpc(json);
-        }
-
-        [ClientRpc]
-        private void SendConfigClientRpc(string json)
-        {
-            if (retrievedPluginConfiguration)
-            {
-                logger.LogInfo("Config has already been received from host on this client, disregarding.");
-                return;
-            }
-            if (!IsHost && !IsServer)
-            {
-                ConfigSynchronization cfg = JsonConvert.DeserializeObject<ConfigSynchronization>(json);
-                logger.LogInfo("Config received, deserializing and constructing...");
-                Color col = UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_COLOR.Value;
-                cfg.SynchronizeConfiguration();
-                UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_COLOR.Value = col;
-                UpgradeBus.Instance.Reconstruct();
-                retrievedPluginConfiguration = true;
-            }
-            if(IsHost || IsServer)
-            {
-                StartCoroutine(WaitALittleToShareTheFile());
-            }
-        }
-
-        private IEnumerator WaitALittleToShareTheFile()
-        {
-            yield return new WaitForSeconds(0.5f);
-            logger.LogInfo("Now sharing save file with clients...");
-            ShareSaveServerRpc();
         }
 
         [ServerRpc(RequireOwnership = false)]
