@@ -37,11 +37,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         public const int ADDITIONAL_HEALTH_INCREMENT_DEFAULT = 20;
         public const string ADDITIONAL_HEALTH_INCREMENT_DESCRIPTION = $"Every time {UPGRADE_NAME} is upgraded this value will be added to the value above.";
 
-        internal override void Start()
+        void Awake()
         {
             upgradeName = UPGRADE_NAME;
             logger = new LguLogger(UPGRADE_NAME);
-            base.Start();
             Instance = this;
             changingAttribute = GameAttribute.PLAYER_HEALTH;
             initialValue = UpgradeBus.Instance.PluginConfiguration.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK.Value;
