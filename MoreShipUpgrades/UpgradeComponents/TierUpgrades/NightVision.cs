@@ -13,6 +13,7 @@ using System.Text;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using MoreShipUpgrades.Input;
 
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
@@ -174,7 +175,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             transform.GetChild(0).gameObject.SetActive(true);
             UpgradeBus.Instance.activeUpgrades[UPGRADE_NAME] = true;
             if (save) { LguStore.Instance.UpdateLGUSaveServerRpc(client.playerSteamId, JsonConvert.SerializeObject(new SaveInfo())); }
-            HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Press {UpgradeBus.Instance.PluginConfiguration.TOGGLE_NIGHT_VISION_KEY.Value} to toggle Night Vision!!!</color>";
+            HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Press {Keybinds.NvgAction.GetBindingDisplayString()} to toggle Night Vision!!!</color>";
         }
 
         public void DisableOnClient()

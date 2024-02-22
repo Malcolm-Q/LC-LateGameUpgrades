@@ -1,4 +1,5 @@
-﻿using MoreShipUpgrades.Misc.Upgrades;
+﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc.Upgrades;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,10 +18,15 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             base.Start();
         }
 
-        public override void Load()
+        void Awake()
         {
-            base.Load();
             Instance = this;
+        }
+
+        public static float GetUpgradedTimer(float defaultLimit)
+        {
+            if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultLimit;
+            return UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_TIMER.Value;
         }
 
         public override string GetDisplayInfo(int price = -1)

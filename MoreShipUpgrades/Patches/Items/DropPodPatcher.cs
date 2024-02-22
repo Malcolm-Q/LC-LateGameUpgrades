@@ -1,10 +1,14 @@
 ﻿using HarmonyLib;
-using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Reflection.Emit;
 using System.Text;
+using System.Xml.Linq;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Patches.Items
@@ -12,30 +16,17 @@ namespace MoreShipUpgrades.Patches.Items
     [HarmonyPatch(typeof(ItemDropship))]
     internal static class DropPodPatcher
     {
-        [HarmonyPostfix]
         [HarmonyPatch(nameof(ItemDropship.Update))]
-        static void UpdateTimer(ref float ___shipTimer, bool ___deliveringOrder, Terminal ___terminalScript, StartOfRound ___playersManager, ItemDropship __instance)
+        [HarmonyTranspiler]
+        static IEnumerable<CodeInstruction> UpdateTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            if (!BaseUpgrade.GetActiveUpgrade(FasterDropPod.UPGRADE_NAME)) { return; }
+            MethodInfo upgradedTimer = typeof(FasterDropPod).GetMethod(nameof(FasterDropPod.GetUpgradedTimer));
+            List<CodeInstruction> codes = new(instructions);
+            int index = 0;
 
-            float upgradedTimer = UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_TIMER.Value;
-
-            if (__instance.IsServer)
-            {
-                if (!___deliveringOrder)
-                {
-                    if (___terminalScript.orderedItemsFromTerminal.Count > 0)
-                    {
-                        if (___playersManager.shipHasLanded)
-                        {
-                            if(___shipTimer >= upgradedTimer && ___shipTimer < 40f)
-                            {
-                                ___shipTimer = 41f;
-                            }
-                        }
-                    }
-                }
-            }
+            index = Tools.FindFloat(index, ref codes, findValue: 20, addCode: upgradedTimer, errorMessage: "Couldn't find the 20 value which is used as first buy ship timer");
+            index = Tools.FindFloat(index, ref codes, findValue: 40, addCode: upgradedTimer, errorMessage: "Couldn't find the 40 value which is used as ship timer");
+            return codes.AsEnumerable();
         }
     }
 }

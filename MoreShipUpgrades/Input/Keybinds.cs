@@ -23,7 +23,7 @@ namespace MoreShipUpgrades.Input
 
         private static InputAction WheelbarrowAction;
 
-        private static InputAction NvgAction;
+        public static InputAction NvgAction;
 
         public static PlayerControllerB localPlayerController => StartOfRound.Instance?.localPlayerController;
 
@@ -43,8 +43,8 @@ namespace MoreShipUpgrades.Input
                 Asset = ScriptableObject.CreateInstance<InputActionAsset>();
                 ActionMap = new InputActionMap("MoreShipUpgrades");
                 InputActionSetupExtensions.AddActionMap(Asset, ActionMap);
-                WheelbarrowAction = InputActionSetupExtensions.AddAction(ActionMap, "MoreShipUpgrades.DropAll", binding: UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_DROP_ALL_CONTROL_BIND.Value, interactions: "Press");
-                NvgAction = InputActionSetupExtensions.AddAction(ActionMap, "MoreShipUpgrades.NvgToggle", binding: UpgradeBus.Instance.PluginConfiguration.TOGGLE_NIGHT_VISION_KEY.Value, interactions: "Press");
+                WheelbarrowAction = InputActionSetupExtensions.AddAction(ActionMap, "Drop all items from wheelbarrow", binding: UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_DROP_ALL_CONTROL_BIND.Value, interactions: "Press");
+                NvgAction = InputActionSetupExtensions.AddAction(ActionMap, "Toggle NVG", binding: UpgradeBus.Instance.PluginConfiguration.TOGGLE_NIGHT_VISION_KEY.Value, interactions: "Press");
             }
         }
 
