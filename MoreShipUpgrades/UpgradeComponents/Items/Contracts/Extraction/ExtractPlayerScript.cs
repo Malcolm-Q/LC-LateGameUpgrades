@@ -1,4 +1,5 @@
 ﻿using GameNetcodeStuff;
+using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using System.Collections;
@@ -13,7 +14,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Extraction
         AudioSource audio;
         PhysicsProp prop;
 
-        public Dictionary<string, AudioClip[]> clipDict = new Dictionary<string, AudioClip[]>();
+        internal static readonly Dictionary<string, AudioClip[]> clipDict = new Dictionary<string, AudioClip[]>();
 
         bool hurtState;
         InteractTrigger trig;

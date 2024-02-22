@@ -5,20 +5,15 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
     class FastEncryption : OneTimeUpgrade
     {
-        public static string UPGRADE_NAME = "Fast Encryption";
+        public const string UPGRADE_NAME = "Fast Encryption";
         public static FastEncryption instance;
-        private static LguLogger logger;
+        private static LguLogger logger = new LguLogger(UPGRADE_NAME);
 
         const float TRANSMIT_MULTIPLIER = 0.2f;
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            logger = new LguLogger(upgradeName);
             base.Start();
-        }
-        public override void Load()
-        {
-            base.Load();
             instance = this;
         }
 

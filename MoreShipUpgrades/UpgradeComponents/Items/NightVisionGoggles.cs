@@ -23,11 +23,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         {
             return WORLD_BUILDING_TEXT;
         }
-        public override void DiscardItem()
-        {
-            playerHeldBy.activatingItem = false;
-            base.DiscardItem();
-        }
 
         public override void ItemActivate(bool used, bool buttonDown = true)
         {
