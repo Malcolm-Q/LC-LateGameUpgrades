@@ -10,13 +10,11 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         private static LguLogger logger = new LguLogger(UPGRADE_NAME);
 
         const float TRANSMIT_MULTIPLIER = 0.2f;
-        internal override void Start()
+        void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            base.Start();
             instance = this;
         }
-
         public static int GetLimitOfCharactersTransmit(int defaultLimit, string message)
         {
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultLimit;

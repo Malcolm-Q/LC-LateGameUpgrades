@@ -13,9 +13,13 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
         private GameObject canvas;
         private Text x, y, z, time;
-        internal override void Start()
+        void Awake()
         {
             upgradeName = UPGRADE_NAME;
+            instance = this;
+        }
+        internal override void Start()
+        {
             base.Start();
             canvas = transform.GetChild(0).gameObject;
             x = canvas.transform.GetChild(0).GetComponent<Text>();
@@ -23,13 +27,6 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             z = canvas.transform.GetChild(2).GetComponent<Text>();
             time = canvas.transform.GetChild(3).GetComponent<Text>();
         }
-
-        public override void Load()
-        {
-            base.Load();
-            instance = this;
-        }
-
         public void Update()
         {
             if (!walkieUIActive) return;

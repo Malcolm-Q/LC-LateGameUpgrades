@@ -16,11 +16,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public const string PRICES_DEFAULT = "225,280,340";
         internal const string WORLD_BUILDING_TEXT = "\n\nOn-the-job training package that teaches {0} proper Circuit Bee Nest handling techniques." +
             " Also comes with a weekly issuance of alkaline pills to partially inoculate {0} against Circuit Bee Venom.\n\n";
-
-        internal override void Start()
+        void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            base.Start();
             Instance = this;
         }
 

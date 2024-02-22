@@ -18,14 +18,12 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             " Highly valued by all employees of The Company for their combination of miraculous health-preserving benefits and artificial, intentionally-implemented scarcity." +
             " Sardonically called the 'Back Muscles Upgrade' by some. Comes with a user manual, which mostly contains minimalistic ads for girdle maintenance contractors." +
             " Most of the phone numbers don't work anymore.\n\n";
-
-        internal override void Start()
+        void Awake()
         {
+
             upgradeName = UPGRADE_NAME;
-            base.Start();
             Instance = this;
         }
-
         public override void Increment()
         {
             base.Increment();

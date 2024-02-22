@@ -22,12 +22,14 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         public DoorLock currentDoor = null;
         private bool canPick = false;
         public int timesStruck;
-
-        internal override void Start()
+        void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            base.Start();
             instance = this;
+        }
+        internal override void Start()
+        {
+            base.Start();
             Transform tumbler = transform.GetChild(0).GetChild(0).GetChild(0);
             pin1 = tumbler.GetChild(0).gameObject;
             pin2 = tumbler.GetChild(1).gameObject;

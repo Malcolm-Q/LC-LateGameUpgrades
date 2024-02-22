@@ -10,11 +10,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
     {
         internal const string UPGRADE_NAME = "Quantum Disruptor";
         internal const string PRICES_DEFAULT = "1200,1500,1800";
-        internal override void Start()
+        void Awake()
         {
             upgradeName = UPGRADE_NAME;
             logger = new LguLogger(UPGRADE_NAME);
-            base.Start();
             changingAttribute = GameAttribute.TIME_GLOBAL_TIME_MULTIPLIER;
             initialValue = UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER.Value;
             incrementalValue = UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER.Value;
