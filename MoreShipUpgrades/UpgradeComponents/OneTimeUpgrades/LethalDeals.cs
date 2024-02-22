@@ -6,10 +6,9 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
     {
         public const string UPGRADE_NAME = "Lethal Deals";
         const int GUARANTEED_ITEMS_AMOUNT = 1;
-        internal override void Start()
+        void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            base.Start();
         }
         public static int GetLethalDealsGuaranteedItems(int amount)
         {

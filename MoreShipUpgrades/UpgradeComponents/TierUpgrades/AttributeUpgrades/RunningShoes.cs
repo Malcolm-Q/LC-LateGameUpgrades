@@ -13,11 +13,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         public static string PRICES_DEFAULT = "500,750,1000";
         internal const string WORLD_BUILDING_TEXT = "\n\nA new pair of boots {0} a whole new lease on life. In this instance," +
             " it might also result in fewer wet sock incidents and consequent trenchfoot. After all, who knows how many people have walked in {1} shoes?\n\n";
-        internal override void Start()
+        void Awake()
         {
             upgradeName = UPGRADE_NAME;
             logger = new LguLogger(UPGRADE_NAME);
-            base.Start();
             changingAttribute = GameAttribute.PLAYER_MOVEMENT_SPEED;
             initialValue = UpgradeBus.Instance.PluginConfiguration.MOVEMENT_SPEED_UNLOCK.Value;
             incrementalValue = UpgradeBus.Instance.PluginConfiguration.MOVEMENT_INCREMENT.Value;

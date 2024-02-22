@@ -12,12 +12,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         internal const string WORLD_BUILDING_TEXT = "\n\nOne-time issuance of {0}." +
             " Comes with a vague list of opt-in maintenance procedures offered by The Company, which includes such gems as 'actuation optimization'," +
             " 'weight & balance personalization', and similar nigh-meaningless corpo-tech jargon. All of it is expensive.\n\n";
-
-        internal override void Start()
+        void Awake()
         {
+
             upgradeName = UPGRADE_NAME;
             logger = new LguLogger(UPGRADE_NAME);
-            base.Start();
             changingAttribute = GameAttribute.PLAYER_JUMP_FORCE;
             initialValue = UpgradeBus.Instance.PluginConfiguration.JUMP_FORCE_UNLOCK.Value;
             incrementalValue = UpgradeBus.Instance.PluginConfiguration.JUMP_FORCE_INCREMENT.Value;
