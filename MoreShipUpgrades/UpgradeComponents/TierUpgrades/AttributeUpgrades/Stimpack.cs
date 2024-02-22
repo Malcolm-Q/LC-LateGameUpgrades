@@ -62,6 +62,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         }
         public static int CheckForAdditionalHealth(int health)
         {
+            if (!UpgradeBus.Instance.PluginConfiguration.PLAYER_HEALTH_ENABLED.Value) return health; // this is stupid to check
             PlayerControllerB player = UpgradeBus.Instance.GetLocalPlayer();
             if (!Instance.playerHealthLevels.ContainsKey(player.playerSteamId)) return health;
             int currentLevel = Instance.playerHealthLevels[player.playerSteamId];
