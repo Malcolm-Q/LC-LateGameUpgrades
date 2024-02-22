@@ -21,11 +21,14 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         internal static SickBeats Instance;
         static LguLogger logger = new LguLogger(UPGRADE_NAME);
 
+        void Awake()
+        {
+            upgradeName = UPGRADE_NAME;
+            Instance = this;
+        }
         internal override void Start()
         {
-            upgradeName = UPGRADE_NAME; 
             base.Start();
-            Instance = this;
             BoomboxIcon = transform.GetChild(0).GetChild(0).gameObject;
         }
 

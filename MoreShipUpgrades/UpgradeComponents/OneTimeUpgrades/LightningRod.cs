@@ -15,7 +15,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             "is saddled with the uniquely-awkward task of having to ransom a safety feature back to the employee in text while not also admitting to the existence of" +
             " an occupational hazard that was previously denied in court.\n\n";
         public static LightningRod instance;
-        private static LguLogger logger;
+        private static LguLogger logger = new LguLogger(UPGRADE_NAME);
 
         // Configuration
         public const string ENABLED_SECTION = $"Enable {UPGRADE_NAME} Upgrade";
@@ -42,12 +42,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         public bool CanTryInterceptLightning { get; internal set; }
         public bool LightningIntercepted { get; internal set; }
 
-        internal override void Start()
+        void Awake()
         {
             instance = this;
-            logger = new LguLogger(UPGRADE_NAME);
             upgradeName = UPGRADE_NAME;
-            base.Start();
         }
 
         public static void TryInterceptLightning(ref StormyWeather __instance, ref GrabbableObject ___targetingMetalObject)

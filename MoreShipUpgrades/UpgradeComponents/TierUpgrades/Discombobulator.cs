@@ -19,10 +19,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         internal const string WORLD_BUILDING_TEXT = "\n\nService key for the Ship's terminal which allows {0} to legally use the Ship's 'Discombobulator' module." +
             " Comes with a list of opt-in maintenance procedures that promise to optimze the discharge and refractory of the system." +
             " Said document contains no mention of whatever it might be that it was included in the Ship's design to discombobulate.\n\n";
-        internal override void Start()
+        void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            base.Start();
             instance = this;
         }
 
