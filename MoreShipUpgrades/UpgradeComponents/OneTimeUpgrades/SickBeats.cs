@@ -63,7 +63,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             return regenValue * Instance.staminaDrainCoefficient;
         }
 
-        public static float GetShovelHitForce(int force)
+        public static int GetShovelHitForce(int force)
         {
             if (!UpgradeBus.Instance.PluginConfiguration.BEATS_ENABLED.Value) return force;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return force;
