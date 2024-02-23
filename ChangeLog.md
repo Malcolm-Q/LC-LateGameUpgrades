@@ -1,4 +1,4 @@
-## V 3.2.3 - To Be Determined
+## V 3.2.3 - 2024-02-23
 - Fixed disabled contracts breaking lgu store
 - Fixed resetting all values breaking due to having singleton instances disabled, leading to NRE.
 - Fixed not having any contract throwing NRE when trying to purchase one
