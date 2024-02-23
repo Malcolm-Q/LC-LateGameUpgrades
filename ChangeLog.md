@@ -4,6 +4,7 @@
 - Fixed not having any contract throwing NRE when trying to purchase one
 - Fixed Beekeeper breaking hive spawns due to being disabled.
 - Fixed Bargain Connections throwing error when active but not upgraded past the first level.
+- Fixed Sick Beats being disabled breaking the stamina regeneration (which is also used by Bigger Lungs)
 
 ## V 3.2.2 - 2024-02-22
 - Actually fixing Stimpack softlock error
