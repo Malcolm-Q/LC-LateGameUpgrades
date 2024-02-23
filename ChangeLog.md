@@ -1,4 +1,13 @@
-## V 3.2.1 - To Be Determined
+## V 3.2.3 - To Be Determined
+- Fixed disabled contracts breaking lgu store
+- Fixed resetting all values breaking due to having singleton instances disabled, leading to NRE.
+- Fixed not having any contract throwing NRE when trying to purchase one
+- Fixed Beekeeper breaking hive spawns due to being disabled.
+
+## V 3.2.2 - 2024-02-22
+- Actually fixing Stimpack softlock error
+
+## V 3.2.1 - 2024-02-22
 ### Fixes
 - Fixed Bigger Lungs error spam when loading into the game
 - Fixed Stimpack throwing error when reviving players due to lack of Singleton instance
