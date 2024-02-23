@@ -23,9 +23,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             Instance = this;
         }
 
-        public static float GetUpgradedTimer(float defaultLimit)
+        public static float GetUpgradedTimer(float defaultValue)
         {
-            if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultLimit;
+            if (!UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_ENABLED.Value) return defaultValue;
+            if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             return UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_TIMER.Value;
         }
 
