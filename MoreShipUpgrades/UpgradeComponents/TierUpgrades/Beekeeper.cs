@@ -37,7 +37,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public static int GetHiveScrapValue(int originalValue)
         {
-            if (!Instance.increaseHivePrice) return originalValue;
+            if (!UpgradeBus.Instance.PluginConfiguration.BEEKEEPER_ENABLED.Value || !Instance.increaseHivePrice) return originalValue;
             return (int)(originalValue * UpgradeBus.Instance.PluginConfiguration.BEEKEEPER_HIVE_VALUE_INCREASE.Value);
         }
 

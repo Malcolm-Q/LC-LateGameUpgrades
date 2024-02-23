@@ -16,7 +16,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public static int GetBargainConnectionsAdditionalItems(int defaultAmountItems)
         {
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultAmountItems;
-            return defaultAmountItems + UpgradeBus.Instance.PluginConfiguration.BARGAIN_CONNECTIONS_INITIAL_ITEM_AMOUNT.Value + (UpgradeBus.Instance.upgradeLevels[UPGRADE_NAME] * UpgradeBus.Instance.PluginConfiguration.BARGAIN_CONNECTIONS_INCREMENTAL_ITEM_AMOUNT.Value);
+            return defaultAmountItems + UpgradeBus.Instance.PluginConfiguration.BARGAIN_CONNECTIONS_INITIAL_ITEM_AMOUNT.Value + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.BARGAIN_CONNECTIONS_INCREMENTAL_ITEM_AMOUNT.Value);
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
