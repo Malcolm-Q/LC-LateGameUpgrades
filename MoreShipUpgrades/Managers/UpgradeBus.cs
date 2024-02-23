@@ -101,12 +101,12 @@ namespace MoreShipUpgrades.Managers
             ResetPlayerAttributes();
             if(IsHost || IsServer) ResetShipAttributesClientRpc();
 
-            SickBeats.Instance.EffectsActive = false;
-            NightVision.Instance.nightVisionActive = false;
+            if (PluginConfiguration.BEATS_ENABLED.Value) SickBeats.Instance.EffectsActive = false;
+            if (PluginConfiguration.NIGHT_VISION_ENABLED.Value) NightVision.Instance.nightVisionActive = false;
             ContractManager.Instance.ResetAllValues();
 
-            Discombobulator.instance.flashCooldown = 0f;
-            BackMuscles.Instance.alteredWeight = 1f;
+            if (PluginConfiguration.DISCOMBOBULATOR_ENABLED.Value) Discombobulator.instance.flashCooldown = 0f;
+            if (PluginConfiguration.BACK_MUSCLES_ENABLED.Value) BackMuscles.Instance.alteredWeight = 1f;
             if (wipeObjRefs) {
                 UpgradeObjects = new Dictionary<string, GameObject>();
             }
@@ -292,8 +292,11 @@ namespace MoreShipUpgrades.Managers
                 {
                     logger.LogInfo("Removing exterminator contract");
                     int idx = CommandParser.contracts.IndexOf("exterminator");
-                    CommandParser.contractInfos.RemoveAt(idx);
-                    CommandParser.contracts.RemoveAt(idx);
+                    if (idx != -1)
+                    {
+                        CommandParser.contractInfos.RemoveAt(idx);
+                        CommandParser.contracts.RemoveAt(idx);
+                    }
                 }
             }
         }
