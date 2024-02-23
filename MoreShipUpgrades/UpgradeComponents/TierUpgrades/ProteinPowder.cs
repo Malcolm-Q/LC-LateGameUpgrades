@@ -46,7 +46,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public static int GetShovelHitForce(int force)
         {
             // Truly one of THE ternary operators
-            return (GetActiveUpgrade(UPGRADE_NAME) ? TryToCritEnemy() ? CRIT_DAMAGE_VALUE : UpgradeBus.Instance.PluginConfiguration.PROTEIN_INCREMENT.Value * GetUpgradeLevel(UPGRADE_NAME) + UpgradeBus.Instance.PluginConfiguration.PROTEIN_UNLOCK_FORCE.Value + force : force) + SickBeats.Instance.damageBoost;
+            return (GetActiveUpgrade(UPGRADE_NAME) ? TryToCritEnemy() ? CRIT_DAMAGE_VALUE : UpgradeBus.Instance.PluginConfiguration.PROTEIN_INCREMENT.Value * GetUpgradeLevel(UPGRADE_NAME) + UpgradeBus.Instance.PluginConfiguration.PROTEIN_UNLOCK_FORCE.Value + force : force) + (GetActiveUpgrade(SickBeats.UPGRADE_NAME) ? SickBeats.Instance.damageBoost : 0);
             // .damageBoost is tied to boombox upgrade, it will always be 0 when inactive or x when active.
         }
 
