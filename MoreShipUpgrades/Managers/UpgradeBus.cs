@@ -1,5 +1,6 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
+using LethalLib.Extras;
 using LethalLib.Modules;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
@@ -37,6 +38,8 @@ namespace MoreShipUpgrades.Managers
         PlayerControllerB localPlayer;
         HangarShipDoor hangarDoors;
 
+        internal Dictionary<string, SpawnableMapObjectDef> spawnableMapObjects = new Dictionary<string, SpawnableMapObjectDef>();
+        internal Dictionary<string, int> spawnableMapObjectsAmount = new Dictionary<string, int>();
         internal List<CustomTerminalNode> terminalNodes = new List<CustomTerminalNode>();
         internal Dictionary<string, GameObject> UpgradeObjects = new Dictionary<string, GameObject>();
         internal Dictionary<string, Item> ItemsToSync = new Dictionary<string, Item>();

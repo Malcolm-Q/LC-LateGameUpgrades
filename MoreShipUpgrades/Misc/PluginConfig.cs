@@ -297,6 +297,7 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<int> BARGAIN_CONNECTIONS_INITIAL_ITEM_AMOUNT { get; set; }
         public ConfigEntry<int> BARGAIN_CONNECTIONS_INCREMENTAL_ITEM_AMOUNT { get; set; }
         public ConfigEntry<string> BARGAIN_CONNECTIONS_PRICES { get; set; }
+        public ConfigEntry<int> EXTRACTION_CONTRACT_AMOUNT_MEDKITS {  get; set; }
 
 
         public PluginConfig(ConfigFile PluginConfiguration)
@@ -326,6 +327,7 @@ namespace MoreShipUpgrades.Misc
             CONTRACT_EXTRACT_WEIGHT = ConfigEntry(topSection,"Weight of an extraction human", 2.5f, "Subtract 1 and multiply by 100 (2.5 = 150lbs).");
             SCAV_VOLUME = ConfigEntry(topSection,"Volume of the scavenger voice clips", 0.25f, "0.0 - 1.0");
             MAIN_OBJECT_FURTHEST = ConfigEntry(topSection, "Spawn main object far away", true, "If true the main object for contracts will try spawn as far away from the main entrance as possible. If false it will spawn at a random location.");
+            EXTRACTION_CONTRACT_AMOUNT_MEDKITS = ConfigEntry(topSection, "Amount of medkits that can spawn in the Extraction contract", 3);
 
             // this is kind of dumb and I'd like to just use a comma seperated ConfigEntry<string> but this is much more foolproof
             DATA_CONTRACT = ConfigEntry(topSection,"Enable the data contract", true, "Make this false if you don't want the data contract");
