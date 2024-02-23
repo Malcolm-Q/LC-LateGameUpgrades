@@ -3,6 +3,7 @@
 - Fixed resetting all values breaking due to having singleton instances disabled, leading to NRE.
 - Fixed not having any contract throwing NRE when trying to purchase one
 - Fixed Beekeeper breaking hive spawns due to being disabled.
+- Fixed Bargain Connections throwing error when active but not upgraded past the first level.
 
 ## V 3.2.2 - 2024-02-22
 - Actually fixing Stimpack softlock error
