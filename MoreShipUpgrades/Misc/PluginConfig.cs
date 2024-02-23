@@ -516,10 +516,10 @@ namespace MoreShipUpgrades.Misc
             WALKIE_PRICE = ConfigEntry(topSection, "Walkie GPS Price", 450, "Default price for upgrade.");
             WALKIE_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
 
-            topSection = "Faster Drop Pod";
-            FASTER_DROP_POD_ENABLED = ConfigEntry(topSection, "Enable the faster drop pod upgrade", true, "Make the drop pod land faster.");
-            FASTER_DROP_POD_PRICE = ConfigEntry(topSection, "Faster Drop Pod Price", 600, "Default price for upgrade.");
-            FASTER_DROP_POD_TIMER = ConfigEntry(topSection, "Faster Drop Pod Timer", 20f, "Default timer for upgrade.");
+            topSection = "Drop Pod Thrusters";
+            FASTER_DROP_POD_ENABLED = ConfigEntry(topSection, "Enable the Drop Pod Thrusters upgrade", true, "Make the Drop Pod land faster.");
+            FASTER_DROP_POD_PRICE = ConfigEntry(topSection, "Drop Pod Thrusters Price", 600, "Default price for upgrade.");
+            FASTER_DROP_POD_TIMER = ConfigEntry(topSection, "Drop Pod Thrusters Timer", 20f, "Default timer for upgrade.");
 
             topSection = Hunter.UPGRADE_NAME;
             HUNTER_ENABLED = ConfigEntry(topSection, "Enable the Hunter upgrade", true, "Collect and sell samples from dead enemies");

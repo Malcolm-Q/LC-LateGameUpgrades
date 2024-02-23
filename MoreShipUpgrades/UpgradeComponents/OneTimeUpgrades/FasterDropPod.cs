@@ -9,7 +9,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
     class FasterDropPod : OneTimeUpgrade
     {
-        public const string UPGRADE_NAME = "Faster Drop Ship";
+        public const string UPGRADE_NAME = "Drop Pod Thrusters";
         public static FasterDropPod Instance;
 
         internal override void Start()
@@ -27,7 +27,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             if (!UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_ENABLED.Value) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
-            return UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_TIMER.Value;
+            return defaultValue - UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_TIMER.Value;
         }
 
         public override string GetDisplayInfo(int price = -1)
