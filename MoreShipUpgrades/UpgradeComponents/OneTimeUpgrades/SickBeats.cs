@@ -56,6 +56,12 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
                 Instance.damageBoost = 0;
             }
         }
+        public static float ApplyPossibleIncreasedStaminaRegen(float regenValue)
+        {
+            if (!UpgradeBus.Instance.PluginConfiguration.BEATS_ENABLED.Value) return regenValue;
+            if (!GetActiveUpgrade(UPGRADE_NAME)) return regenValue;
+            return regenValue * Instance.staminaDrainCoefficient;
+        }
 
         public static int CalculateDefense(int dmg)
         {

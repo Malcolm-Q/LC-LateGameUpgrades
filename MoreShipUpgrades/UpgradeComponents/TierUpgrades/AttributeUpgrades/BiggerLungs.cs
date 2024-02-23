@@ -24,9 +24,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         }
         public static float ApplyPossibleIncreasedStaminaRegen(float regenValue)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_ENABLED.Value) return regenValue * SickBeats.Instance.staminaDrainCoefficient;
-            if (!GetActiveUpgrade(UPGRADE_NAME) || GetUpgradeLevel(UPGRADE_NAME) < 0) return regenValue * SickBeats.Instance.staminaDrainCoefficient;
-            return regenValue * UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_STAMINA_REGEN_INCREASE.Value * SickBeats.Instance.staminaDrainCoefficient;
+            if (!UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_ENABLED.Value) return regenValue;
+            if (!GetActiveUpgrade(UPGRADE_NAME) || GetUpgradeLevel(UPGRADE_NAME) < 0) return regenValue;
+            return regenValue * UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_STAMINA_REGEN_INCREASE.Value;
         }
 
         public static float ApplyPossibleReducedJumpStaminaCost(float jumpCost)
