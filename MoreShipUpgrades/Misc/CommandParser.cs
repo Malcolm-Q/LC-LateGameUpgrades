@@ -422,6 +422,7 @@ namespace MoreShipUpgrades.Misc
         }
         static TerminalNode TryGetContract(string possibleMoon, ref Terminal terminal)
         {
+            if (contracts.Count == 0) return DisplayTerminalMessage("Not possible to provide a contracts due to configuration having it disabled.");
             if (possibleMoon != "") return TryGetMoonContract(possibleMoon, ref terminal);
             string txt = null;
             if(ContractManager.Instance.contractLevel != "None")
