@@ -115,5 +115,16 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Extraction
             audio.PlayOneShot(clipDict[soundType][index], UpgradeBus.Instance.PluginConfiguration.SCAV_VOLUME.Value);
             RoundManager.Instance.PlayAudibleNoise(transform.position, 30f, 0.9f, 0, prop.isInShipRoom, 5);
         }
+
+        internal void MakeScavengerGrabbable()
+        {
+            trig = GetComponentInChildren<InteractTrigger>();
+            trig.GetComponent<BoxCollider>().enabled = false;
+            anim = GetComponent<Animator>();
+            anim.SetTrigger("heal");
+            hurtState = false;
+            StartCoroutine(WaitForHealAnim());
+            GetComponent<PhysicsProp>().enabled = true;
+        }
     }
 }

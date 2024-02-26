@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal;
 
 namespace MoreShipUpgrades.UpgradeComponents.Contracts
 {
@@ -9,7 +7,12 @@ namespace MoreShipUpgrades.UpgradeComponents.Contracts
         public override void Start()
         {
             contractType = "defusal";
-            base.Start();
+            if (GetComponent<PhysicsProp>().isInShipRoom || GetComponent<PhysicsProp>().isInElevator) // Already in the ship, don't make it disappear
+            {
+                BombDefusalScript bomb = GetComponent<BombDefusalScript>();
+                bomb.MakeBombGrabbable();
+            }
+            else base.Start();
         }
     }
 }
