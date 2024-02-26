@@ -16,72 +16,129 @@ namespace MoreShipUpgrades.Misc
     {
         static readonly LguLogger logger = new LguLogger(typeof(AssetBundleHandler).Name);
         static Dictionary<string, string> infoJSON;
-        static string root = "Assets/ShipUpgrades/";
+        const string root = "Assets/ShipUpgrades/";
+
+        const string upgrades = root + "Upgrades/";
+
+        const string commands = root + "Commands/";
+
+        const string items = root + "Items/";
+        const string sampleItems = items + "Samples/";
+        const string storeItems = items + "Store/";
+        const string contractItems = items + "Contracts/";
+        const string extractionItems = contractItems + "Extraction/";
+        const string defusalItems = contractItems + "Defusal/";
+        const string dataItems = contractItems + "Data Retrieval/";
+        const string exorcismItems = contractItems + "Exorcism/";
+        const string ritualItems = exorcismItems + "Ritual Items/";
+        const string exterminatorItems = contractItems + "Exterminator/";
+
+        const string UI = root + "UI/";
+        const string introScreen = UI + "Intro Screen UI/";
+
+        const string models = root + "Models/";
+        const string prefabs = models + "Prefabs/";
+
+        const string SFX = root + "Sound Effects/";
+        const string contractSFX = SFX + "Contracts/";
+        const string defusalSFX = contractSFX + "Defusal/";
+        const string exorcismSFX = contractSFX + "Exorcism/";
+        const string extractionSFX = contractSFX + "Extraction/";
+        const string dataSFX = contractSFX + "Data Retrieval/";
+        const string DiscombobulatorSFX = SFX + "Discombobulator/";
+        const string ShoppingCartSFX = SFX + "Shopping Cart/";
+        const string WheelbarrowSFX = SFX + "Wheelbarrow/";
+        const string PortableTeleSFX = SFX + "Portable Teleporter/";
+        const string HelmetSFX = SFX + "Helmet/";
         internal static readonly Dictionary<string, string> samplePaths = new Dictionary<string, string>()
         {
-            { "centipede", root+"Samples/SnareFleaSample.asset" },
-            { "bunker spider", root+"Samples/BunkerSpiderSample.asset" },
-            { "hoarding bug", root+"Samples/HoardingBugSample.asset" },
-            { "flowerman", root+"Samples/BrackenSample.asset" },
-            { "mouthdog", root+"Samples/EyelessDogSample.asset" },
-            { "baboon hawk", root+"Samples/BaboonHawkSample.asset" },
-            { "crawler", root+"Samples/ThumperSample.asset" },
+            { "centipede", sampleItems+ "SnareFleaSample.asset" },
+            { "bunker spider", sampleItems+ "BunkerSpiderSample.asset" },
+            { "hoarding bug", sampleItems+ "HoardingBugSample.asset" },
+            { "flowerman", sampleItems+ "BrackenSample.asset" },
+            { "mouthdog", sampleItems+ "EyelessDogSample.asset" },
+            { "baboon hawk", sampleItems+ "BaboonHawkSample.asset" },
+            { "crawler", sampleItems+ "ThumperSample.asset" },
+        };
+        static Dictionary<string, string> SFXPaths = new Dictionary<string, string>()
+        {
+            { "Wheelbarrow Sound 0", WheelbarrowSFX+"Wheelbarrow_Move_1.mp3" },
+            { "Wheelbarrow Sound 1", WheelbarrowSFX+"Wheelbarrow_Move_2.ogg" },
+            { "Wheelbarrow Sound 2", WheelbarrowSFX+"Wheelbarrow_Move_3.ogg" },
+            { "Wheelbarrow Sound 3", WheelbarrowSFX+"Wheelbarrow_Move_4.ogg" },
+            { "Scrap Wheelbarrow Sound 0", ShoppingCartSFX+"Shopping_Cart_Move_1.ogg" },
+            { "Scrap Wheelbarrow Sound 1", ShoppingCartSFX+"Shopping_Cart_Move_2.ogg" },
+            { "Scrap Wheelbarrow Sound 2", ShoppingCartSFX+"Shopping_Cart_Move_3.ogg" },
+            { "Scrap Wheelbarrow Sound 3", ShoppingCartSFX+"Shopping_Cart_Move_4.ogg" },
+            { "HelmetHit", HelmetSFX+"bonk.mp3" },
+            { "breakWood", HelmetSFX+"breakWood.mp3" },
+            { "Break", PortableTeleSFX+"break.mp3" },
+            { "Error", PortableTeleSFX+"error.mp3" },
+            { "Button Press", PortableTeleSFX+"ButtonPress2.ogg" },
+            { "Flashbang", DiscombobulatorSFX+"flashbangsfx.ogg" },
+            { "Data Startup", contractSFX + "startup.mp3" },
+            { "Bomb Cut", defusalSFX + "scissors.mp3" },
+            { "Bomb Tick", defusalSFX + "tick.mp3" },
+            { "Ritual Fail", exorcismSFX + "ritualSFX.mp3" },
+            { "Ritual Success", exorcismSFX + "portal.mp3" },
+            { "Ritual Idle", exorcismSFX + "whisper.mp3" },
+            { "Laptop Error", dataSFX + "winError.mp3" },
+            { "Laptop Start", dataSFX + "startup.mp3" },
         };
         static Dictionary<string, string> assetPaths = new Dictionary<string, string>()
         {
-            { Beekeeper.UPGRADE_NAME, root+"beekeeper.prefab" },
-            { SickBeats.UPGRADE_NAME, root+"SickBeats.prefab" },
-            { ContractScript.NAME, root+"Contract.prefab" },
-            { ProteinPowder.UPGRADE_NAME, root+"ProteinPowder.prefab" },
-            { BiggerLungs.UPGRADE_NAME, root+"BiggerLungs.prefab" },
-            { RunningShoes.UPGRADE_NAME, root+"runningShoes.prefab" },
-            { StrongLegs.UPGRADE_NAME, root+"strongLegs.prefab" },
-            { MalwareBroadcaster.UPGRADE_NAME, root+"destructiveCodes.prefab" },
-            { NightVision.UPGRADE_NAME, root+"nightVision.prefab" },
-            { Discombobulator.UPGRADE_NAME, root+"terminalFlash.prefab" },
-            { Hunter.UPGRADE_NAME, root+"Hunter.prefab" },
-            { BetterScanner.UPGRADE_NAME, root+"strongScanner.prefab" },
-            { LightningRod.UPGRADE_NAME, root+"LightningRod.prefab" },
-            { WalkieGPS.UPGRADE_NAME, root+"walkieUpgrade.prefab" },
-            { BackMuscles.UPGRADE_NAME, root+"exoskeleton.prefab" },
-            { "Interns", root+"Intern.prefab" },
-            { FastEncryption.UPGRADE_NAME, root+"Pager.prefab" },
-            { LockSmith.UPGRADE_NAME, root+"LockSmith.prefab" },
-            { Stimpack.UPGRADE_NAME, root+"PlayerHealth.prefab" },
-            { ExtendDeadlineScript.NAME, root+"ExtendDeadline.prefab" },
-            { DoorsHydraulicsBattery.UPGRADE_NAME, root+"DoorsHydraulicsBattery.prefab" },
-            { ScrapInsurance.COMMAND_NAME, root+"ScrapInsurance.prefab" },
-            { MarketInfluence.UPGRADE_NAME, root+"MarketInfluence.prefab" },
-            { BargainConnections.UPGRADE_NAME, root+"BargainConnections.prefab" },
-            { LethalDeals.UPGRADE_NAME, root+"LethalDeals.prefab" },
-            { QuantumDisruptor.UPGRADE_NAME, root+"QuantumDisruptor.prefab" },
+            { Beekeeper.UPGRADE_NAME, upgrades+"beekeeper.prefab" },
+            { SickBeats.UPGRADE_NAME, upgrades+"SickBeats.prefab" },
+            { ProteinPowder.UPGRADE_NAME, upgrades+"ProteinPowder.prefab" },
+            { BiggerLungs.UPGRADE_NAME, upgrades+"BiggerLungs.prefab" },
+            { RunningShoes.UPGRADE_NAME, upgrades+"runningShoes.prefab" },
+            { StrongLegs.UPGRADE_NAME, upgrades+"strongLegs.prefab" },
+            { MalwareBroadcaster.UPGRADE_NAME, upgrades+"destructiveCodes.prefab" },
+            { NightVision.UPGRADE_NAME, upgrades+"nightVision.prefab" },
+            { Discombobulator.UPGRADE_NAME, upgrades+"terminalFlash.prefab" },
+            { Hunter.UPGRADE_NAME, upgrades+"Hunter.prefab" },
+            { BetterScanner.UPGRADE_NAME, upgrades+"strongScanner.prefab" },
+            { LightningRod.UPGRADE_NAME, upgrades+"LightningRod.prefab" },
+            { WalkieGPS.UPGRADE_NAME, upgrades+"walkieUpgrade.prefab" },
+            { BackMuscles.UPGRADE_NAME, upgrades+"exoskeleton.prefab" },
+            { "Interns", commands+"Intern.prefab" },
+            { FastEncryption.UPGRADE_NAME, upgrades+"Pager.prefab" },
+            { LockSmith.UPGRADE_NAME, upgrades+"LockSmith.prefab" },
+            { Stimpack.UPGRADE_NAME, upgrades+"PlayerHealth.prefab" },
+            { ExtendDeadlineScript.NAME, commands+"ExtendDeadline.prefab" },
+            { DoorsHydraulicsBattery.UPGRADE_NAME, upgrades+"DoorsHydraulicsBattery.prefab" },
+            { ScrapInsurance.COMMAND_NAME, commands+"ScrapInsurance.prefab" },
+            { MarketInfluence.UPGRADE_NAME, upgrades+"MarketInfluence.prefab" },
+            { BargainConnections.UPGRADE_NAME, upgrades+"BargainConnections.prefab" },
+            { LethalDeals.UPGRADE_NAME, upgrades+"LethalDeals.prefab" },
+            { QuantumDisruptor.UPGRADE_NAME, upgrades+"QuantumDisruptor.prefab" },
+            { "Intro Screen", introScreen + "IntroScreen.prefab" },
 
-            { "Advanced Portable Tele", root+"TpButtonAdv.asset" },
-            { "Portable Tele", root+"TpButton.asset" },
-            { "Peeper", root+"coilHead.asset" },
-            { "Medkit", root+"MedKitItem.asset" },
-            { "HelmetItem", root+"HelmetItem.asset" },
-            { "HelmetModel", root+"HelmetModel.prefab" },
-            { "MedkitMapItem", root+"MedKitMapItem.asset" },
-            { "Night Vision", root+"NightVisionItem.asset" },
-            { "Diving Kit", root+"DivingKitItem.asset" },
-            { "Store Wheelbarrow", root+"Items/Wheelbarrow/StoreWheelbarrowItem.asset" },
-            { "Scrap Wheelbarrow", root+"Items/Wheelbarrow/ScrapWheelbarrowItem.asset" },
-
-            { "Wheelbarrow Sound 0", root+"Items/Wheelbarrow/Wheelbarrow_Move_1.mp3" },
-            { "Wheelbarrow Sound 1", root+"Items/Wheelbarrow/Wheelbarrow_Move_2.ogg" },
-            { "Wheelbarrow Sound 2", root+"Items/Wheelbarrow/Wheelbarrow_Move_3.ogg" },
-            { "Wheelbarrow Sound 3", root+"Items/Wheelbarrow/Wheelbarrow_Move_4.ogg" },
-            { "Scrap Wheelbarrow Sound 0", root+"Items/Wheelbarrow/Shopping_Cart_Move_1.ogg" },
-            { "Scrap Wheelbarrow Sound 1", root+"Items/Wheelbarrow/Shopping_Cart_Move_2.ogg" },
-            { "Scrap Wheelbarrow Sound 2", root+"Items/Wheelbarrow/Shopping_Cart_Move_3.ogg" },
-            { "Scrap Wheelbarrow Sound 3", root+"Items/Wheelbarrow/Shopping_Cart_Move_4.ogg" },
-            { "HelmetHit", root+"bonk.mp3" },
-            { "breakWood", root+"breakWood.mp3" },
-            { "Break", root+"break.mp3" },
-            { "Error", root+"error.mp3" },
-            { "Button Press", root+"ButtonPress2.ogg" },
-            { "Flashbang", root+"flashbangsfx.ogg" },
+            { "Advanced Portable Tele", storeItems+"TpButtonAdv.asset" },
+            { "Portable Tele", storeItems+"TpButton.asset" },
+            { "Peeper", storeItems+"coilHead.asset" },
+            { "Medkit", storeItems+"MedKitItem.asset" },
+            { "HelmetItem", storeItems+"HelmetItem.asset" },
+            { "HelmetModel", prefabs+"HelmetModel.prefab" },
+            { "MedkitMapItem", extractionItems+"MedKitMapItem.asset" },
+            { "Night Vision", storeItems+"NightVisionItem.asset" },
+            { "Diving Kit", storeItems+"DivingKitItem.asset" },
+            { "Store Wheelbarrow", items + "Wheelbarrow/StoreWheelbarrowItem.asset" },
+            { "Scrap Wheelbarrow", items + "Wheelbarrow/ScrapWheelbarrowItem.asset" },
+            { "Bomb", defusalItems + "BombItem.asset" },
+            { "Demon Tome", exorcismItems + "ExorcLootItem.asset" },
+            { "Pentagram", exorcismItems + "PentagramItem.asset" },
+            { "RitualItem0", ritualItems + "Heart.asset" },
+            { "RitualItem1", ritualItems + "Crucifix.asset" },
+            { "RitualItem2", ritualItems + "candelabraItem.asset" },
+            { "RitualItem3", ritualItems + "Teddy Bear.asset" },
+            { "RitualItem4", ritualItems + "Bones.asset" },
+            { "HoardingBugEggsLoot", exterminatorItems + "EggLootItem.asset" },
+            { "HoardingBugEggs", exterminatorItems + "HoardingEggItem.asset" },
+            { "Scavenger", extractionItems + "ScavItem.asset" },
+            { "Scavenger Sounds", extractionSFX + "scavSounds/scavAudio.json" },
+            { "Floppy Disk", dataItems + "DiscItem.asset" },
+            { "Laptop", dataItems + "DataPCItem.asset" },
         };
         /// <summary>
         /// Tries to load an asset from provided asset bundle through a given path into a GameObject
@@ -157,7 +214,7 @@ namespace MoreShipUpgrades.Misc
         {
             if (infoJSON != null) return infoJSON;
 
-            TextAsset infoStringAsset = bundle.LoadAsset<TextAsset>(root+"InfoStrings.json");
+            TextAsset infoStringAsset = bundle.LoadAsset<TextAsset>(upgrades+"InfoStrings.json");
             if (!infoStringAsset)
             {
                 logger.LogError("An error has occurred trying to load info strings from the bundle");
@@ -207,12 +264,21 @@ namespace MoreShipUpgrades.Misc
 
         public static AudioClip GetAudioClip(string audioName)
         {
-            if (!assetPaths.ContainsKey(audioName))
+            if (!SFXPaths.ContainsKey(audioName))
             {
                 logger.LogError($"{audioName} was not present in the asset dictionary!");
                 return null;
             }
-            return TryLoadAudioClipAsset(ref UpgradeBus.Instance.UpgradeAssets, assetPaths[audioName]);
+            return TryLoadAudioClipAsset(ref UpgradeBus.Instance.UpgradeAssets, SFXPaths[audioName]);
+        }
+        public static T GetGenericAsset<T>(string assetName) where T : UnityEngine.Object
+        {
+            if (!assetPaths.ContainsKey(assetName))
+            {
+                logger.LogError($"{assetName} was not present in the asset dictionary!");
+                return default;
+            }
+            return TryLoadOtherAsset<T>(ref UpgradeBus.Instance.UpgradeAssets, assetPaths[assetName]);
         }
     }
 }
