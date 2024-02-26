@@ -131,7 +131,7 @@ Transform:
   m_GameObject: {fileID: 919132149155446097}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.01, y: 0.174, z: 0.07}
+  m_LocalPosition: {x: -0.01, y: 0.288, z: 0.07}
   m_LocalScale: {x: 0.89393, y: 0.89393, z: 0.89393}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -155,6 +155,7 @@ GameObject:
   - component: {fileID: 4340573993158127835}
   - component: {fileID: 8175271860859837483}
   - component: {fileID: 8976346898276869220}
+  - component: {fileID: -4417371915322946105}
   m_Layer: 9
   m_Name: Pentagram
   m_TagString: InteractTrigger
@@ -190,7 +191,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 931051424236503984}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3d0cf24d2ccc3b7eab72048d0f57c437, type: 3}
   m_Name: 
@@ -464,8 +465,38 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4.1225014, y: 0.8450538, z: 4.0687356}
-  m_Center: {x: -0.125216, y: -0.077473104, z: 0.01736331}
+  m_Size: {x: 4.1225014, y: 0.23342709, z: 4.0687356}
+  m_Center: {x: -0.125216, y: -0.099523894, z: 0.01736331}
+--- !u!114 &-4417371915322946105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 931051424236503984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 1
+  SyncScaleY: 1
+  SyncScaleZ: 1
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
+  Interpolate: 1
+  SlerpPosition: 0
 --- !u!1 &962030466668809555
 GameObject:
   m_ObjectHideFlags: 0
@@ -493,7 +524,7 @@ Transform:
   m_GameObject: {fileID: 962030466668809555}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.115, z: 0}
+  m_LocalPosition: {x: 0, y: 0.229, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -567,7 +598,7 @@ Transform:
   m_GameObject: {fileID: 1418107344045484552}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.271, z: 0}
+  m_LocalPosition: {x: 0, y: 0.385, z: 0}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -649,7 +680,7 @@ Transform:
   m_GameObject: {fileID: 5798976519032695836}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.114, z: 0}
   m_LocalScale: {x: 3, y: 0.13858, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -674,8 +705,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 4.382485, z: 1}
-  m_Center: {x: 0, y: 2.6573749, z: 0}
+  m_Size: {x: 1, y: 1.0511831, z: 1}
+  m_Center: {x: 0, y: 0.9917235, z: 0}
 --- !u!1 &7107795430764213571
 GameObject:
   m_ObjectHideFlags: 0
@@ -703,7 +734,7 @@ Transform:
   m_GameObject: {fileID: 7107795430764213571}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.271, z: 0}
+  m_LocalPosition: {x: 0, y: 0.385, z: 0}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -5641,7 +5672,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 4e32cb27cdc1d444ba68f26612a5333e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.176
+      value: 0.29
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4e32cb27cdc1d444ba68f26612a5333e,
         type: 3}

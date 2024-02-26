@@ -1,4 +1,24 @@
-## V 3.2.0 - To be Determined
+## V 3.2.4 - 2024-02-25
+- Fixed Sick Beats being disabled breaking damaging enemies.
+- Fixed Shopping Cart resetting its scrap value on reboot, discarding outside value changes such as GamblingCompany mod.
+
+## V 3.2.3 - 2024-02-23
+- Fixed disabled contracts breaking lgu store
+- Fixed resetting all values breaking due to having singleton instances disabled, leading to NRE.
+- Fixed not having any contract throwing NRE when trying to purchase one
+- Fixed Beekeeper breaking hive spawns due to being disabled.
+- Fixed Bargain Connections throwing error when active but not upgraded past the first level.
+- Fixed Sick Beats being disabled breaking the stamina regeneration (which is also used by Bigger Lungs)
+
+## V 3.2.2 - 2024-02-22
+- Actually fixing Stimpack softlock error
+
+## V 3.2.1 - 2024-02-22
+### Fixes
+- Fixed Bigger Lungs error spam when loading into the game
+- Fixed Stimpack throwing error when reviving players due to lack of Singleton instance
+
+## V 3.2.0 - 2024-02-22
 ### Additions
 - Added keybind configuration for wheelbarrow's drop all items through configuration
 - Added World Building text to some upgrades/items (thanks to Nat(discordID:twinkula))
