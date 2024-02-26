@@ -185,13 +185,13 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
             if (succeeded)
             {
                 Destroy(pcScript.GetComponent<BoxCollider>());
-                //pcScript.trig.disabledHoverTip = "Data has been retrieved!";
             }
             else
             {
                 pcScript.trig.interactable = true;
                 interactable = true;
             }
+            interactingPlayer = null;
             root.SetActive(false);
         }
 
@@ -276,7 +276,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
                             ExitGameServerRpc(new NetworkBehaviourReference(this), true);
                         }
                         Cursor.visible = false;
-                        Cursor.lockState = CursorLockMode.Locked;
                         return;
                     }
                     else
@@ -361,7 +360,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
             else if (Keyboard.current.escapeKey.wasReleasedThisFrame)
             {
                 Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
                 interactable = true;
                 if (IsHost || IsServer)
                 {
