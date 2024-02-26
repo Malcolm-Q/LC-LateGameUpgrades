@@ -1,3 +1,7 @@
+## V 3.2.5 - 2024-02-??
+- Fixed Sick Beats icon being a white square instead of a boombox
+- Fixed Data Retrieval Contract "floppy replication" exploit
+
 ## V 3.2.4 - 2024-02-25
 - Fixed Sick Beats being disabled breaking damaging enemies.
 - Fixed Shopping Cart resetting its scrap value on reboot, discarding outside value changes such as GamblingCompany mod.
