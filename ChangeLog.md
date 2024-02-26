@@ -1,5 +1,8 @@
-## V 3.2.5 - 2024-02-??
+## V 3.2.5 - 2024-02-26
 - Fixed Sick Beats icon being a white square instead of a boombox
+- Fixed a couple of the items displaying a white square when held
+- Fixed some interacts showing a white square, for the example of Data Retrieval's Laptop
+- Fixed Sick Beats being disabled breaking mods which patch ``BoomboxItem.Start()`` (such as DiscJockey)
 - Fixed Data Retrieval Contract "floppy replication" exploit
 - Fixed bomb and scavenger contract items disappearing during save reboot due its initial state initialization ignoring being stored in the ship.
 - Possibly fixed the duplicated non-interactable sample when Hunter is active
