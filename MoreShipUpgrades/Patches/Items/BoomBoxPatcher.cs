@@ -11,7 +11,7 @@ namespace MoreShipUpgrades.Patches.Items
         [HarmonyPatch(nameof(BoomboxItem.Start))]
         static void AddToList(BoomboxItem __instance)
         {
-            SickBeats.Instance.boomBoxes.Add(__instance);
+            if (UpgradeBus.Instance.PluginConfiguration.BEATS_ENABLED.Value) SickBeats.Instance.boomBoxes.Add(__instance);
         }
     }
 }
