@@ -44,38 +44,15 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
 
         void Start()
         {
+            InitializeFields();
             GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.Instance.PluginConfiguration.CONTRACT_DEFUSE_REWARD.Value);
-            grabBox = GetComponent<BoxCollider>();
 
-            Transform intactWires = transform.GetChild(0).GetChild(0);
-            wires["blue"] = intactWires.GetChild(0).gameObject;
-            wires["green"] = intactWires.GetChild(1).gameObject;
-            wires["red"] = intactWires.GetChild(2).gameObject;
-
-            Transform destroyedWires = transform.GetChild(0).GetChild(1);
-            cutWires["blue"] = destroyedWires.GetChild(0).gameObject;
-            cutWires["green"] = destroyedWires.GetChild(1).gameObject;
-            cutWires["red"] = destroyedWires.GetChild(2).gameObject;
-
-            audio = GetComponent<AudioSource>();
             audio.clip = tick;
             audio.Play();
-
-            trigs["red"] = transform.GetChild(0).GetChild(4).GetComponent<InteractTrigger>();
-            trigs["blue"] = transform.GetChild(0).GetChild(5).GetComponent<InteractTrigger>();
-            trigs["green"] = transform.GetChild(0).GetChild(6).GetComponent<InteractTrigger>();
 
             trigs["red"].onInteract.AddListener(CutRed);
             trigs["blue"].onInteract.AddListener(CutBlue);
             trigs["green"].onInteract.AddListener(CutGreen);
-
-            serialNumberMesh = transform.GetChild(0).GetChild(2).GetComponent<TextMesh>();
-            if (serialNumberMesh == null)
-            {
-                logger.LogError("FAILED TO GET SERIAL NUMBER MESH");
-            }
-
-            countdown = transform.GetChild(0).GetChild(3).GetComponent<TextMesh>();
 
             if (IsHost || IsServer)
             {
@@ -194,6 +171,48 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
             ContractManager.Instance.bombOrder = newOrder.Split(",").ToList();
             serialNumberMesh.text = serial;
         }
+        void InitializeFields()
+        {
+            grabBox = GetComponent<BoxCollider>();
+            audio = GetComponent<AudioSource>();
+            Transform intactWires = transform.GetChild(0).GetChild(0);
+            wires["blue"] = intactWires.GetChild(0).gameObject;
+            wires["green"] = intactWires.GetChild(1).gameObject;
+            wires["red"] = intactWires.GetChild(2).gameObject;
 
+            Transform destroyedWires = transform.GetChild(0).GetChild(1);
+            cutWires["blue"] = destroyedWires.GetChild(0).gameObject;
+            cutWires["green"] = destroyedWires.GetChild(1).gameObject;
+            cutWires["red"] = destroyedWires.GetChild(2).gameObject;
+
+            trigs["red"] = transform.GetChild(0).GetChild(4).GetComponent<InteractTrigger>();
+            trigs["blue"] = transform.GetChild(0).GetChild(5).GetComponent<InteractTrigger>();
+            trigs["green"] = transform.GetChild(0).GetChild(6).GetComponent<InteractTrigger>();
+
+            serialNumberMesh = transform.GetChild(0).GetChild(2).GetComponent<TextMesh>();
+            if (serialNumberMesh == null)
+            {
+                logger.LogError("FAILED TO GET SERIAL NUMBER MESH");
+            }
+
+            countdown = transform.GetChild(0).GetChild(3).GetComponent<TextMesh>();
+        }
+
+        internal void MakeBombGrabbable()
+        {
+            InitializeFields();
+            armed = false;
+            grabBox.enabled = true;
+            audio.Stop();
+            enabled = false;
+            foreach (string wire in wires.Keys)
+            {
+                wires[wire].SetActive(false);
+                cutWires[wire].SetActive(true);
+                trigs[wire].enabled = false;
+                trigs[wire].GetComponent<BoxCollider>().enabled = false;
+            }
+            GetComponent<PhysicsProp>().enabled = true;
+        }
     }
 }
