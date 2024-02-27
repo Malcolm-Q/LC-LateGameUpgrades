@@ -307,6 +307,7 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<float> FASTER_DROP_POD_TIMER { get; set; }
         public ConfigEntry<float> FASTER_DROP_POD_INITIAL_TIMER {  get; set; }
         public ConfigEntry<int> EXTRACTION_CONTRACT_AMOUNT_MEDKITS {  get; set; }
+        public ConfigEntry<int> CONTRACT_REWARD_QUOTA_MULTIPLIER { get; set; }
 
 
         public PluginConfig(ConfigFile PluginConfiguration)
@@ -344,6 +345,8 @@ namespace MoreShipUpgrades.Misc
             EXORCISM_CONTRACT = ConfigEntry(topSection,"Enable the exorcism contract", true, "Make this false if you don't want the exorcism contract");
             DEFUSAL_CONTRACT = ConfigEntry(topSection,"Enable the defusal contract", true, "Make this false if you don't want the defusal contract");
             EXTERMINATOR_CONTRACT = ConfigEntry(topSection,"Enable the exterminator contract", true, "Make this false if you don't want the exterminator contract");
+
+            CONTRACT_REWARD_QUOTA_MULTIPLIER = ConfigEntry(topSection, "Multiplier applied to the contract loot items dependant on the current applied quota", 25, "0 = None of the quota value will influence the loot's value.\n100 = The quota value will be added fully to the loot's value.");
 
             topSection = ChargingBooster.UPGRADE_NAME;
             CHARGING_BOOSTER_ENABLED = ConfigEntry(topSection, "Enable Charging Booster Upgrade", true, "Tier upgrade which allows charging items in a radar booster");

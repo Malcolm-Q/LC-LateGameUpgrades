@@ -171,7 +171,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
             if ((IsHost || IsServer) && succeeded)
             {
                 GameObject go = Instantiate(loot, transform.position + Vector3.up, Quaternion.identity);
-                go.GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.Instance.PluginConfiguration.CONTRACT_DATA_REWARD.Value);
+                go.GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.Instance.PluginConfiguration.CONTRACT_DATA_REWARD.Value + (int)(TimeOfDay.Instance.profitQuota * Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.CONTRACT_REWARD_QUOTA_MULTIPLIER.Value / 100f, 0f, 1f)));
                 go.GetComponent<NetworkObject>().Spawn();
                 logger.LogInfo("Loot successfully spawned");
             }
