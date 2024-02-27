@@ -357,6 +357,7 @@ namespace MoreShipUpgrades.Managers
             SetupBargainConnectionsTerminalNode();
             SetupQuantumDisruptorTerminalNode();
             SetupLethalDealsTerminalNode();
+            SetupChargingBoosterTerminalNode();
             terminalNodes.Sort();
         }
         void SetupMarketInfluenceTerminalNode()
@@ -539,6 +540,14 @@ namespace MoreShipUpgrades.Managers
                                                 PluginConfiguration.PLAYER_HEALTH_ENABLED.Value,
                                                 PluginConfiguration.PLAYER_HEALTH_PRICE.Value,
                                                 ParseUpgradePrices(PluginConfiguration.PLAYER_HEALTH_UPGRADE_PRICES.Value));
+        }
+        void SetupChargingBoosterTerminalNode()
+        {
+            SetupMultiplePurchasableTerminalNode(ChargingBooster.UPGRADE_NAME,
+                                                true,
+                                                PluginConfiguration.CHARGING_BOOSTER_ENABLED.Value,
+                                                PluginConfiguration.CHARGING_BOOSTER_PRICE.Value,
+                                                ParseUpgradePrices(PluginConfiguration.CHARGING_BOOSTER_PRICES.Value));
         }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can be purchased multiple times

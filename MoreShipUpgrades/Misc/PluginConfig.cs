@@ -54,7 +54,7 @@ namespace MoreShipUpgrades.Misc
         readonly ConfigFile configFile;
 
         // enabled disabled
-
+        public ConfigEntry<bool> CHARGING_BOOSTER_ENABLED {  get; set; }
         public ConfigEntry<bool> MARKET_INFLUENCE_ENABLED { get; set; }
         public ConfigEntry<bool> BARGAIN_CONNECTIONS_ENABLED { get; set; }
         public ConfigEntry<bool> LETHAL_DEALS_ENABLED { get; set; }
@@ -99,6 +99,7 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<bool> LOCKSMITH_INDIVIDUAL { get; set; }
 
         // prices
+        public ConfigEntry<int> CHARGING_BOOSTER_PRICE { get; set; }
         public ConfigEntry<int> MARKET_INFLUENCE_PRICE { get; set; }
         public ConfigEntry<int> BARGAIN_CONNECTIONS_PRICE {  get; set; }
         public ConfigEntry<int> LETHAL_DEALS_PRICE { get; set; }
@@ -131,6 +132,10 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<int> SCRAP_INSURANCE_PRICE { get; set; }
 
         // attributes
+        public ConfigEntry<string> CHARGING_BOOSTER_PRICES {  get; set; }
+        public ConfigEntry<float> CHARGING_BOOSTER_COOLDOWN {  get; set; }
+        public ConfigEntry<float> CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE { get; set; }
+        public ConfigEntry<int> CHARGING_BOOSTER_CHARGE_PERCENTAGE { get; set; }
         public ConfigEntry<float> BIGGER_LUNGS_STAMINA_REGEN_INCREASE { get; set; }
         public ConfigEntry<float> BIGGER_LUNGS_JUMP_STAMINA_COST_DECREASE { get; set; }
         public ConfigEntry<int> PROTEIN_INCREMENT { get; set; }
@@ -335,6 +340,14 @@ namespace MoreShipUpgrades.Misc
             EXORCISM_CONTRACT = ConfigEntry(topSection,"Enable the exorcism contract", true, "Make this false if you don't want the exorcism contract");
             DEFUSAL_CONTRACT = ConfigEntry(topSection,"Enable the defusal contract", true, "Make this false if you don't want the defusal contract");
             EXTERMINATOR_CONTRACT = ConfigEntry(topSection,"Enable the exterminator contract", true, "Make this false if you don't want the exterminator contract");
+
+            topSection = ChargingBooster.UPGRADE_NAME;
+            CHARGING_BOOSTER_ENABLED = ConfigEntry(topSection, "Enable Charging Booster Upgrade", true, "Tier upgrade which allows charging items in a radar booster");
+            CHARGING_BOOSTER_PRICE = ConfigEntry(topSection, "Price of Charging Booster Upgrade", 300);
+            CHARGING_BOOSTER_PRICES = ConfigEntry(topSection, BaseUpgrade.PRICES_SECTION, "250,300,400", BaseUpgrade.PRICES_DESCRIPTION);
+            CHARGING_BOOSTER_COOLDOWN = ConfigEntry(topSection, "Cooldown of the charging station in radar boosters when used", 90f);
+            CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE = ConfigEntry(topSection, "Incremental cooldown decrease whenever the level of the upgrade is incremented", 10f);
+            CHARGING_BOOSTER_CHARGE_PERCENTAGE = ConfigEntry(topSection, "Percentage of charge that is added to the held item when using the radar booster charge station", 50);
             
             topSection = "_Misc_";
             SHARED_UPGRADES = ConfigEntry(topSection, "Convert all upgrades to be shared.", true, "If true this will ignore the individual shared upgrade option for all other upgrades and set all upgrades to be shared.");
