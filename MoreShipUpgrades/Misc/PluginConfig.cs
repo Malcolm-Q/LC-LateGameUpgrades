@@ -305,6 +305,7 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<int> BARGAIN_CONNECTIONS_INCREMENTAL_ITEM_AMOUNT { get; set; }
         public ConfigEntry<string> BARGAIN_CONNECTIONS_PRICES { get; set; }
         public ConfigEntry<float> FASTER_DROP_POD_TIMER { get; set; }
+        public ConfigEntry<float> FASTER_DROP_POD_INITIAL_TIMER {  get; set; }
         public ConfigEntry<int> EXTRACTION_CONTRACT_AMOUNT_MEDKITS {  get; set; }
 
 
@@ -531,10 +532,11 @@ namespace MoreShipUpgrades.Misc
             WALKIE_PRICE = ConfigEntry(topSection, "Walkie GPS Price", 450, "Default price for upgrade.");
             WALKIE_INDIVIDUAL = ConfigEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
 
-            topSection = "Drop Pod Thrusters";
+            topSection = FasterDropPod.UPGRADE_NAME;
             FASTER_DROP_POD_ENABLED = ConfigEntry(topSection, "Enable the Drop Pod Thrusters upgrade", true, "Make the Drop Pod land faster.");
-            FASTER_DROP_POD_PRICE = ConfigEntry(topSection, "Drop Pod Thrusters Price", 600, "Default price for upgrade.");
-            FASTER_DROP_POD_TIMER = ConfigEntry(topSection, "Drop Pod Thrusters Timer", 20f, "Default timer for upgrade.");
+            FASTER_DROP_POD_PRICE = ConfigEntry(topSection, "Drop Pod Thrusters Price", 300, "Default price for upgrade.");
+            FASTER_DROP_POD_TIMER = ConfigEntry(topSection, "Time decrement on the timer used for subsequent item deliveries", 20f);
+            FASTER_DROP_POD_INITIAL_TIMER = ConfigEntry(topSection, "Time decrement on the timer used for the first ever item delivery", 10f);
 
             topSection = Hunter.UPGRADE_NAME;
             HUNTER_ENABLED = ConfigEntry(topSection, "Enable the Hunter upgrade", true, "Collect and sell samples from dead enemies");
