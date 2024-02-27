@@ -113,7 +113,7 @@ namespace MoreShipUpgrades.Misc
             { LethalDeals.UPGRADE_NAME, upgrades+"LethalDeals.prefab" },
             { QuantumDisruptor.UPGRADE_NAME, upgrades+"QuantumDisruptor.prefab" },
             { "Intro Screen", introScreen + "IntroScreen.prefab" },
-			{ FasterDropPod.UPGRADE_NAME, upgrades+"FasterDropPod.prefab" },
+            { FasterDropPod.UPGRADE_NAME, upgrades+"FasterDropPod.prefab" },
 
             { "Advanced Portable Tele", storeItems+"TpButtonAdv.asset" },
             { "Portable Tele", storeItems+"TpButton.asset" },
