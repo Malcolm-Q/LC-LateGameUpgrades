@@ -208,13 +208,13 @@ namespace MoreShipUpgrades
 
         void SetupExterminatorContract(ref AssetBundle bundle, AnimationCurve curve)
         {
-            Item bugLoot = AssetBundleHandler.GetItemObject("HoardingBugEggs");
+            Item bugLoot = AssetBundleHandler.GetItemObject("HoardingBugEggsLoot");
             bugLoot.spawnPrefab.AddComponent<ScrapValueSyncer>();
             Items.RegisterItem(bugLoot);
             Utilities.FixMixerGroups(bugLoot.spawnPrefab);
             NetworkPrefabs.RegisterNetworkPrefab(bugLoot.spawnPrefab);
 
-            Item nest = AssetBundleHandler.GetItemObject("HoardingBugEggsLoot");
+            Item nest = AssetBundleHandler.GetItemObject("HoardingBugEggs");
 
             ExterminatorContract coNest = nest.spawnPrefab.AddComponent<ExterminatorContract>();
             coNest.SetPosition = true;
