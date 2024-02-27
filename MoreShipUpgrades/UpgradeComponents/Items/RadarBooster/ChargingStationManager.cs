@@ -30,6 +30,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.RadarBooster
             interactTrigger.onStopInteract = new InteractEvent();
             interactTrigger.onInteract = new InteractEvent();
             interactTrigger.onInteract.AddListener(OnChargeInteract);
+            interactTrigger.hoverIcon = GetComponent<RadarBoosterItem>().itemProperties.itemIcon;
+            interactTrigger.disabledHoverIcon = GetComponent<RadarBoosterItem>().itemProperties.itemIcon;
             interactComponent = interactTrigger;
         }
 
