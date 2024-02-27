@@ -22,12 +22,17 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             Instance = this;
         }
-
+        public static float GetFirstOrderTimer(float defaultValue)
+        {
+            if (!UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_ENABLED.Value) return defaultValue;
+            if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
+            return Mathf.Clamp(defaultValue + UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_INITIAL_TIMER.Value, defaultValue, defaultValue + UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_TIMER.Value);
+        }
         public static float GetUpgradedTimer(float defaultValue)
         {
             if (!UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_ENABLED.Value) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
-            return defaultValue - UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_TIMER.Value;
+            return Mathf.Clamp(defaultValue - UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_TIMER.Value, 0f, defaultValue);
         }
 
         public override string GetDisplayInfo(int price = -1)

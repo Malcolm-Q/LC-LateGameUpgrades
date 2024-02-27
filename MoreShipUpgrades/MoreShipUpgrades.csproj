@@ -59,5 +59,6 @@
   </ItemGroup>
   <Target Name="NetcodePatch" AfterTargets="PostBuildEvent">
     <Exec Command="netcode-patch &quot;$(TargetPath)&quot; @(ReferencePathWithRefAssemblies->'&quot;%(Identity)&quot;', ' ')"/>
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(LC_PLUGIN_DIR)" />
   </Target>
 </Project>
