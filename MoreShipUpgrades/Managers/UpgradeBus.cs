@@ -357,6 +357,7 @@ namespace MoreShipUpgrades.Managers
             SetupBargainConnectionsTerminalNode();
             SetupQuantumDisruptorTerminalNode();
             SetupLethalDealsTerminalNode();
+            SetupFasterDropPodTerminalNode();
             SetupChargingBoosterTerminalNode();
             terminalNodes.Sort();
         }
@@ -540,6 +541,13 @@ namespace MoreShipUpgrades.Managers
                                                 PluginConfiguration.PLAYER_HEALTH_ENABLED.Value,
                                                 PluginConfiguration.PLAYER_HEALTH_PRICE.Value,
                                                 ParseUpgradePrices(PluginConfiguration.PLAYER_HEALTH_UPGRADE_PRICES.Value));
+        }
+        private void SetupFasterDropPodTerminalNode()
+        {
+            SetupOneTimeTerminalNode(FasterDropPod.UPGRADE_NAME,
+                                    true,
+                                    PluginConfiguration.FASTER_DROP_POD_ENABLED.Value,
+                                    PluginConfiguration.FASTER_DROP_POD_PRICE.Value);
         }
         void SetupChargingBoosterTerminalNode()
         {

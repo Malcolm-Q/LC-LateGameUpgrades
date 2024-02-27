@@ -9,6 +9,8 @@
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
     <LangVersion>latest</LangVersion>
+	<NetcodePatcherNoOverwrite>true</NetcodePatcherNoOverwrite>
+	<NetcodePatcherDisableParallel>true</NetcodePatcherDisableParallel> 
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
@@ -49,8 +51,13 @@
       <Private>false</Private>
     </Reference>
   </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="cd ..\NetcodePatcher&#xD;&#xA;NetcodePatcher.dll $(TargetDir) deps/" />
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(LC_PLUGIN_DIR)" />
+  <ItemGroup>
+    <PackageReference Include="Evaisa.NetcodePatcher.MSBuild" Version="3.*" PrivateAssets="all" />
+  </ItemGroup>
+  <ItemGroup>
+      <NetcodePatch Include="$(TargetPath)" />
+  </ItemGroup>
+  <Target Name="NetcodePatch" AfterTargets="PostBuildEvent">
+    <Exec Command="netcode-patch &quot;$(TargetPath)&quot; @(ReferencePathWithRefAssemblies->'&quot;%(Identity)&quot;', ' ')"/>
   </Target>
 </Project>
