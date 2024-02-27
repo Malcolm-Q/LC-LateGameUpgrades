@@ -112,6 +112,7 @@ namespace MoreShipUpgrades.Misc
             { BargainConnections.UPGRADE_NAME, upgrades+"BargainConnections.prefab" },
             { LethalDeals.UPGRADE_NAME, upgrades+"LethalDeals.prefab" },
             { QuantumDisruptor.UPGRADE_NAME, upgrades+"QuantumDisruptor.prefab" },
+            { ChargingBooster.UPGRADE_NAME, upgrades + "ChargingBooster.prefab" },
             { "Intro Screen", introScreen + "IntroScreen.prefab" },
             { FasterDropPod.UPGRADE_NAME, upgrades+"FasterDropPod.prefab" },
 
