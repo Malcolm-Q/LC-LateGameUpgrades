@@ -133,13 +133,13 @@ namespace MoreShipUpgrades
             AnimationCurve curve = new AnimationCurve(new Keyframe(0,1), new Keyframe(1,1)); // always spawn 1
 
             SetupScavContract(ref bundle, curve);
-            SetupExterminatorContract(ref bundle, curve);
-            SetupDataContract(ref bundle, curve);
-            SetupExorcismContract(ref bundle, curve);
-            SetupBombContract(ref bundle, curve);
+            SetupExterminatorContract(curve);
+            SetupDataContract(curve);
+            SetupExorcismContract(curve);
+            SetupBombContract(curve);
         }
 
-        void SetupBombContract(ref AssetBundle bundle, AnimationCurve curve)
+        void SetupBombContract(AnimationCurve curve)
         {
             Item bomb = AssetBundleHandler.GetItemObject("Bomb");
             bomb.spawnPrefab.AddComponent<ScrapValueSyncer>();
@@ -163,7 +163,7 @@ namespace MoreShipUpgrades
         }
 
 
-        void SetupExorcismContract(ref AssetBundle bundle, AnimationCurve curve)
+        void SetupExorcismContract(AnimationCurve curve)
         {
             Item contractLoot = AssetBundleHandler.GetItemObject("Demon Tome");
             contractLoot.spawnPrefab.AddComponent<ScrapValueSyncer>();
@@ -206,7 +206,7 @@ namespace MoreShipUpgrades
         }
 
 
-        void SetupExterminatorContract(ref AssetBundle bundle, AnimationCurve curve)
+        void SetupExterminatorContract(AnimationCurve curve)
         {
             Item bugLoot = AssetBundleHandler.GetItemObject("HoardingBugEggsLoot");
             bugLoot.spawnPrefab.AddComponent<ScrapValueSyncer>();
@@ -260,7 +260,7 @@ namespace MoreShipUpgrades
             MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
         }
 
-        void SetupDataContract(ref AssetBundle bundle, AnimationCurve curve)
+        void SetupDataContract(AnimationCurve curve)
         {
             Item dataLoot = AssetBundleHandler.GetItemObject("Floppy Disk");
             dataLoot.spawnPrefab.AddComponent<ScrapValueSyncer>();

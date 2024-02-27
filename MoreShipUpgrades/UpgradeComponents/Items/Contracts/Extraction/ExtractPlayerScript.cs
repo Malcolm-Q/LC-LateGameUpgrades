@@ -1,5 +1,4 @@
 ﻿using GameNetcodeStuff;
-using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using System.Collections;
@@ -24,7 +23,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Extraction
         void Start()
         {
             prop = GetComponent<PhysicsProp>();
-            GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.Instance.PluginConfiguration.CONTRACT_EXTRACT_REWARD.Value);
+            GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.Instance.PluginConfiguration.CONTRACT_EXTRACT_REWARD.Value + (int)(TimeOfDay.Instance.profitQuota * Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.CONTRACT_REWARD_QUOTA_MULTIPLIER.Value / 100f, 0f, 1f)));
 
 
             audio = GetComponent<AudioSource>();
