@@ -1,3 +1,14 @@
+## V 3.2.5 - 2024-02-??
+- Fixed Sick Beats icon being a white square instead of a boombox
+- Fixed Data Retrieval Contract "floppy replication" exploit
+- Fixed bomb and scavenger contract items disappearing during save reboot due its initial state initialization ignoring being stored in the ship.
+- Possibly fixed the duplicated non-interactable sample when Hunter is active
+  - I'm unable to reproduce this issue in any shape or form consistently, if this issue persists, I need you to make a github issue and post your logs of when this happens to understand what is causing the duplication, both the host and any clients in the session and at least Debug, Info and Error log levels activated.
+
+## V 3.2.4 - 2024-02-25
+- Fixed Sick Beats being disabled breaking damaging enemies.
+- Fixed Shopping Cart resetting its scrap value on reboot, discarding outside value changes such as GamblingCompany mod.
+
 ## V 3.2.3 - 2024-02-23
 - Fixed disabled contracts breaking lgu store
 - Fixed resetting all values breaking due to having singleton instances disabled, leading to NRE.

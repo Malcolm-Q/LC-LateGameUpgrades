@@ -35,7 +35,7 @@ namespace MoreShipUpgrades.Misc
         public static void UpdateScrapValue(ref GrabbableObject grabbableObject, int scrapValue = -1)
         {
             ScanNodeProperties scanNodeProperties = grabbableObject.GetComponentInChildren<ScanNodeProperties>();
-            ChangeScanNode(scanNodeProperties: ref scanNodeProperties, nodeType: (NodeType)scanNodeProperties.nodeType, header: scanNodeProperties.headerText, subText: $"Value: {scrapValue}", scrapValue: scrapValue);
+            ChangeScanNode(scanNodeProperties: ref scanNodeProperties, nodeType: (NodeType)scanNodeProperties.nodeType, header: scanNodeProperties.headerText, subText: $"Value: ${scrapValue}", scrapValue: scrapValue);
         }
         /// <summary>
         /// Alters the respective attributes of the scan node properties to the provided ones

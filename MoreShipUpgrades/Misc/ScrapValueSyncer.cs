@@ -17,6 +17,11 @@ namespace MoreShipUpgrades.Misc
         internal void SetScrapValue(int scrapValue)
         {
             GrabbableObject prop = GetComponent<GrabbableObject>();
+            if (prop.scrapValue > 0)
+            {
+                LguScanNodeProperties.UpdateScrapValue(ref prop, prop.scrapValue);
+                return;
+            }
             prop.scrapValue = scrapValue;
 
             LguScanNodeProperties.UpdateScrapValue(ref prop, scrapValue);
