@@ -10,7 +10,7 @@
 - Added interaction with doors to lockpick them to trigger the "Locksmith" upgrade's minigame. This way, you don't have to bump into doors to lockpick them.
 ### Fixes
 - Fixed medkit breaking when Stimpack upgrade is disabled
-
+- Fixed Night Vision showing incorrect keybind when using LethalCompanyInputUtils
 
 ## V 3.2.5 - 2024-02-26
 - Fixed Sick Beats icon being a white square instead of a boombox
