@@ -198,6 +198,7 @@ MonoBehaviour:
   grabbable: 0
   isHeld: 0
   isHeldByEnemy: 0
+  deactivated: 0
   parentObject: {fileID: 0}
   targetFloorPosition: {x: 0, y: 0, z: 0}
   startFallingPosition: {x: 0, y: 0, z: 0}
@@ -373,9 +374,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 507293d35d7a13e5b9ca9bb60e082e11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverIcon: {fileID: 21300000, guid: 5868f30510604a64ebe057e99d9fcace, type: 3}
+  hoverIcon: {fileID: 0}
   hoverTip: 'PLACE : [E]'
-  disabledHoverIcon: {fileID: 21300000, guid: 581794f9494a41d4289802a8eeb3992f, type: 3}
+  disabledHoverIcon: {fileID: 0}
   disabledHoverTip: You have nothing to place!
   interactable: 0
   oneHandedItemAllowed: 1

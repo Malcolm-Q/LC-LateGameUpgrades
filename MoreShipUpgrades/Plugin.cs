@@ -495,7 +495,7 @@ namespace MoreShipUpgrades
         {
             Item MedKitItem = AssetBundleHandler.GetItemObject("Medkit");
             if (MedKitItem == null) return;
-            AnimationCurve curve = new AnimationCurve(new Keyframe(0f, 3), new Keyframe(1f, 3));
+            AnimationCurve curve = new AnimationCurve(new Keyframe(0f, PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value), new Keyframe(1f, PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value));
 
             MedKitItem.creditsWorth = PluginConfiguration.MEDKIT_PRICE.Value;
             MedKitItem.itemId = 492016;
@@ -526,6 +526,8 @@ namespace MoreShipUpgrades
             mapObjDef.spawnableMapObject = new SpawnableMapObject();
             mapObjDef.spawnableMapObject.prefabToSpawn = MedKitMapItem.spawnPrefab;
             MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
+            UpgradeBus.Instance.spawnableMapObjects["MedkitMapItem"] = mapObjDef;
+            UpgradeBus.Instance.spawnableMapObjectsAmount["MedkitMapItem"] = PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value;
 
             UpgradeBus.Instance.ItemsToSync.Add("Medkit",MedKitItem);
         }
@@ -676,6 +678,7 @@ namespace MoreShipUpgrades
             SetupBargainConnections();
             SetupLethalDeals();
             SetupQuantumDisruptor();
+            SetupChargingBooster();
         }
 
         private void SetupSickBeats()
@@ -782,6 +785,10 @@ namespace MoreShipUpgrades
         private void SetupQuantumDisruptor()
         {
             SetupGenericPerk<QuantumDisruptor>(QuantumDisruptor.UPGRADE_NAME);
+        }
+        void SetupChargingBooster()
+        {
+            SetupGenericPerk<ChargingBooster>(ChargingBooster.UPGRADE_NAME);
         }
         /// <summary>
         /// Generic function where it adds a script (specificed through the type) into an GameObject asset 

@@ -1,4 +1,5 @@
-﻿using MoreShipUpgrades.Misc;
+﻿using LethalLib.Modules;
+using MoreShipUpgrades.Misc;
 using Newtonsoft.Json;
 using System.Collections;
 using Unity.Netcode;
@@ -40,6 +41,7 @@ namespace MoreShipUpgrades.Managers
                 logger.LogInfo("Config received, deserializing and constructing...");
                 Color col = UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_COLOR.Value;
                 cfg.SynchronizeConfiguration();
+                CheckMapObjectsConfigurations();
                 UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_COLOR.Value = col;
                 UpgradeBus.Instance.Reconstruct();
                 retrievedPluginConfiguration = true;
@@ -48,6 +50,18 @@ namespace MoreShipUpgrades.Managers
             {
                 StartCoroutine(WaitALittleToShareTheFile());
             }
+        }
+        void CheckMapObjectsConfigurations()
+        {
+            CheckMedkit();
+        }
+        void CheckMedkit()
+        {
+            int amount = UpgradeBus.Instance.spawnableMapObjectsAmount["MedkitMapItem"];
+            if (amount == UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value) return;
+            MapObjects.RemoveMapObject(UpgradeBus.Instance.spawnableMapObjects["MedkitMapItem"], Levels.LevelTypes.All);
+            AnimationCurve curve = new AnimationCurve(new Keyframe(0f, UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value), new Keyframe(1f, UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value));
+            MapObjects.RegisterMapObject(mapObject: UpgradeBus.Instance.spawnableMapObjects["MedkitMapItem"], levels: Levels.LevelTypes.All, spawnRateFunction: (level) => curve);
         }
         private IEnumerator WaitALittleToShareTheFile()
         {
