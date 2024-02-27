@@ -40,7 +40,6 @@ namespace MoreShipUpgrades
         readonly Harmony harmony = new(Metadata.GUID);
         internal static readonly ManualLogSource mls = BepInEx.Logging.Logger.CreateLogSource(Metadata.NAME);
         AudioClip itemBreak, buttonPressed, error;
-        const string root = "Assets/ShipUpgrades/";
         AudioClip[] wheelbarrowSound, shoppingCartSound;
 
         public static PluginConfig PluginConfiguration { get; private set; }
@@ -88,7 +87,7 @@ namespace MoreShipUpgrades
             
             SetupModStore(ref UpgradeAssets);
 
-            SetupIntroScreen(ref UpgradeAssets);
+            SetupIntroScreen();
 
             SetupItems();
             
@@ -142,15 +141,15 @@ namespace MoreShipUpgrades
 
         void SetupBombContract(ref AssetBundle bundle, AnimationCurve curve)
         {
-            Item bomb = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "BombItem.asset");
+            Item bomb = AssetBundleHandler.GetItemObject("Bomb");
             bomb.spawnPrefab.AddComponent<ScrapValueSyncer>();
             bomb.isConductiveMetal = false;
             DefusalContract coNest = bomb.spawnPrefab.AddComponent<DefusalContract>();
             coNest.SetPosition = true;
 
             BombDefusalScript bombScript = bomb.spawnPrefab.AddComponent<BombDefusalScript>();
-            bombScript.snip = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, root + "scissors.mp3");
-            bombScript.tick = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, root + "tick.mp3");
+            bombScript.snip = AssetBundleHandler.GetAudioClip("Bomb Cut");
+            bombScript.tick = AssetBundleHandler.GetAudioClip("Bomb Tick");
 
 
             Utilities.FixMixerGroups(bomb.spawnPrefab);
@@ -166,18 +165,17 @@ namespace MoreShipUpgrades
 
         void SetupExorcismContract(ref AssetBundle bundle, AnimationCurve curve)
         {
-            Item contractLoot = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "ExorcLootItem.asset");
+            Item contractLoot = AssetBundleHandler.GetItemObject("Demon Tome");
             contractLoot.spawnPrefab.AddComponent<ScrapValueSyncer>();
             Items.RegisterItem(contractLoot);
             Utilities.FixMixerGroups(contractLoot.spawnPrefab);
             NetworkPrefabs.RegisterNetworkPrefab(contractLoot.spawnPrefab);
 
-            Item mainItem = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + "PentagramItem.asset");
+            Item mainItem = AssetBundleHandler.GetItemObject("Pentagram");
 
-            string[] ritualItems = new string[] { "Heart.asset", "Crucifix.asset", "candelabraItem.asset", "Teddy Bear.asset", "Bones.asset" };
-            foreach(string ritualItem in ritualItems)
+            for (int i = 0; i < 5; i++)
             {
-                Item exorItem = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + "RitualItems/" +ritualItem);
+                Item exorItem = AssetBundleHandler.GetItemObject("RitualItem" + i);
                 exorItem.spawnPrefab.AddComponent<ExorcismContract>();
                 Items.RegisterItem(exorItem);
                 Utilities.FixMixerGroups(exorItem.spawnPrefab);
@@ -194,8 +192,8 @@ namespace MoreShipUpgrades
 
             PentagramScript pentScript = mainItem.spawnPrefab.AddComponent<PentagramScript>();
             pentScript.loot = contractLoot.spawnPrefab;
-            pentScript.chant = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, root + "ritualSFX.mp3");
-            pentScript.portal = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, root + "portal.mp3");
+            pentScript.chant = AssetBundleHandler.GetAudioClip("Ritual Fail");
+            pentScript.portal = AssetBundleHandler.GetAudioClip("Ritual Success");
 
             Utilities.FixMixerGroups(mainItem.spawnPrefab);
             NetworkPrefabs.RegisterNetworkPrefab(mainItem.spawnPrefab);
@@ -210,13 +208,13 @@ namespace MoreShipUpgrades
 
         void SetupExterminatorContract(ref AssetBundle bundle, AnimationCurve curve)
         {
-            Item bugLoot = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "EggLootItem.asset");
+            Item bugLoot = AssetBundleHandler.GetItemObject("HoardingBugEggs");
             bugLoot.spawnPrefab.AddComponent<ScrapValueSyncer>();
             Items.RegisterItem(bugLoot);
             Utilities.FixMixerGroups(bugLoot.spawnPrefab);
             NetworkPrefabs.RegisterNetworkPrefab(bugLoot.spawnPrefab);
 
-            Item nest = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + "HoardingEggItem.asset");
+            Item nest = AssetBundleHandler.GetItemObject("HoardingBugEggsLoot");
 
             ExterminatorContract coNest = nest.spawnPrefab.AddComponent<ExterminatorContract>();
             coNest.SetPosition = true;
@@ -236,7 +234,7 @@ namespace MoreShipUpgrades
 
         void SetupScavContract(ref AssetBundle bundle, AnimationCurve curve)
         {
-            Item scav = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "ScavItem.asset");
+            Item scav = AssetBundleHandler.GetItemObject("Scavenger");
             if (scav == null) return;
 
             scav.weight = UpgradeBus.Instance.PluginConfiguration.CONTRACT_EXTRACT_WEIGHT.Value;
@@ -245,7 +243,7 @@ namespace MoreShipUpgrades
 
             ExtractPlayerScript extractScript = scav.spawnPrefab.AddComponent<ExtractPlayerScript>();
             scav.spawnPrefab.AddComponent<ScrapValueSyncer>();
-            TextAsset scavAudioPaths = AssetBundleHandler.TryLoadOtherAsset<TextAsset>(ref bundle, root + "scavSounds/scavAudio.json");
+            TextAsset scavAudioPaths = AssetBundleHandler.GetGenericAsset<TextAsset>("Scavenger Sounds");
             Dictionary<string, string[]> scavAudioDict = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(scavAudioPaths.text);
             ExtractPlayerScript.clipDict.Add("lost", CreateAudioClipArray(scavAudioDict["lost"], ref bundle));
             ExtractPlayerScript.clipDict.Add("heal", CreateAudioClipArray(scavAudioDict["heal"], ref bundle));
@@ -264,20 +262,20 @@ namespace MoreShipUpgrades
 
         void SetupDataContract(ref AssetBundle bundle, AnimationCurve curve)
         {
-            Item dataLoot = AssetBundleHandler.TryLoadItemAsset(ref bundle, root + "DiscItem.asset");
+            Item dataLoot = AssetBundleHandler.GetItemObject("Floppy Disk");
             dataLoot.spawnPrefab.AddComponent<ScrapValueSyncer>();
             Items.RegisterItem(dataLoot);
             Utilities.FixMixerGroups(dataLoot.spawnPrefab);
             NetworkPrefabs.RegisterNetworkPrefab(dataLoot.spawnPrefab);
 
-            Item pc = AssetBundleHandler.TryLoadItemAsset(ref bundle,root + "DataPCItem.asset");
+            Item pc = AssetBundleHandler.GetItemObject("Laptop");
 
             DataRetrievalContract coPC = pc.spawnPrefab.AddComponent<DataRetrievalContract>();
             coPC.SetPosition = true;
 
             DataPCScript dataScript = pc.spawnPrefab.AddComponent<DataPCScript>();
-            dataScript.error = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, root + "winError.mp3");
-            dataScript.startup = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, root + "startup.mp3");
+            dataScript.error = AssetBundleHandler.GetAudioClip("Laptop Error");
+            dataScript.startup = AssetBundleHandler.GetAudioClip("Laptop Start");
             dataScript.loot = dataLoot.spawnPrefab;
 
             Utilities.FixMixerGroups(pc.spawnPrefab);
@@ -311,9 +309,9 @@ namespace MoreShipUpgrades
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(modStore);
             UpgradeBus.Instance.modStorePrefab = modStore;
         }
-        private void SetupIntroScreen(ref AssetBundle bundle)
+        private void SetupIntroScreen()
         {
-            UpgradeBus.Instance.IntroScreen = AssetBundleHandler.TryLoadGameObjectAsset(ref bundle, "Assets/ShipUpgrades/IntroScreen.prefab");
+            UpgradeBus.Instance.IntroScreen = AssetBundleHandler.GetPerkGameObject("Intro Screen");
             if (UpgradeBus.Instance.IntroScreen != null) UpgradeBus.Instance.IntroScreen.AddComponent<IntroScreenScript>();
         }
         private void SetupItems()
@@ -671,7 +669,6 @@ namespace MoreShipUpgrades
             SetupLocksmith();
             SetupPlayerHealth();
             SetupHunter();
-            SetupContract();
             SetupSickBeats();
             SetupExtendDeadline();
             SetupDoorsHydraulicsBattery();
@@ -685,11 +682,6 @@ namespace MoreShipUpgrades
         private void SetupSickBeats()
         {
             SetupGenericPerk<SickBeats>(SickBeats.UPGRADE_NAME);
-        }
-
-        private void SetupContract()
-        {
-            SetupGenericPerk<ContractScript>(ContractScript.NAME);
         }
 
         private void SetupBeekeeper()

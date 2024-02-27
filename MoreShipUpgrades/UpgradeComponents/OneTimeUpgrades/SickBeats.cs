@@ -63,6 +63,13 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             return regenValue * Instance.staminaDrainCoefficient;
         }
 
+        public static int GetShovelHitForce(int force)
+        {
+            if (!UpgradeBus.Instance.PluginConfiguration.BEATS_ENABLED.Value) return force;
+            if (!GetActiveUpgrade(UPGRADE_NAME)) return force;
+            return force + Instance.damageBoost;
+        }
+
         public static int CalculateDefense(int dmg)
         {
             if (!GetActiveUpgrade(UPGRADE_NAME) || dmg < 0) return dmg; // < 0 check to not hinder healing

@@ -31,7 +31,7 @@ namespace MoreShipUpgrades.Patches.Enemies
                 return;
             }
             logger.LogDebug($"Spawning sample for {name}");
-            SpawnItemManager.Instance.SpawnSample(name.ToLower(), __instance.transform.position);
+            if (__instance.IsServer || __instance.IsHost) SpawnItemManager.Instance.SpawnSample(name.ToLower(), __instance.transform.position);
         }
     }
 

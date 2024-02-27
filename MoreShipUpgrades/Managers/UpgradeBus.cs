@@ -466,7 +466,7 @@ namespace MoreShipUpgrades.Managers
         }
         private void SetupDiscombobulatorTerminalNode()
         {
-            AudioClip flashSFX = AssetBundleHandler.TryLoadAudioClipAsset(ref UpgradeAssets, "Assets/ShipUpgrades/flashbangsfx.ogg");
+            AudioClip flashSFX = AssetBundleHandler.GetAudioClip("Flashbang");
             if (!flashSFX) return;
 
             flashNoise = flashSFX;
