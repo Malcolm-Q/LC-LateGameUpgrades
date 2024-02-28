@@ -1,4 +1,4 @@
-## V 3.3.0 - 2024-??-??
+## V 3.3.0 - 2024-02-27
 ### Additions
 - Added "Charging Booster" upgrade which allows radar boosters to charge up player's held item by looking at the base of the booster. Has a cooldown after use which can be decremented by increasing the upgrade's level.
   - Configurable charge percentage on use.
@@ -7,10 +7,13 @@
 - Added "Drop Pod Thrusters" upgrade which decrease the amount of time you need to wait for the store's drop pod to arrive on the moon.
   - Configurable timer for the drop pod to arrive 
 - Added configuration to the amount of medkits that can spawn in the extraction contract
-- Added interaction with doors to lockpick them to trigger the "Locksmith" upgrade's minigame. This way, you don't have to bump into doors to lockpick them.
+- Added interaction with doors to lockpick them to trigger the "Locksmith" upgrade's minigame. This way, you have an alternative to bump into doors to lockpick them.
+- Added configuration value in which the contract reward value is influenced by the current profit quota you need to satisfy.
+  - This value will be clamped between 0% to 100% so any different input other than inside this range will be considered the closest limit.
+
 ### Fixes
 - Fixed medkit breaking when Stimpack upgrade is disabled
-
+- Fixed Night Vision showing incorrect keybind when using LethalCompanyInputUtils
 
 ## V 3.2.5 - 2024-02-26
 - Fixed Sick Beats icon being a white square instead of a boombox

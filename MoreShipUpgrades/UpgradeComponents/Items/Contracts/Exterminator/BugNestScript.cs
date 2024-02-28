@@ -33,7 +33,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exterminator
         void SpawnLootServerRpc(Vector3 pos)
         {
             GameObject go = Instantiate(loot, pos + Vector3.up, Quaternion.identity);
-            go.GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.Instance.PluginConfiguration.CONTRACT_BUG_REWARD.Value);
+            go.GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.Instance.PluginConfiguration.CONTRACT_BUG_REWARD.Value + (int)(TimeOfDay.Instance.profitQuota * Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.CONTRACT_REWARD_QUOTA_MULTIPLIER.Value / 100f, 0f, 1f)));
             go.GetComponent<NetworkObject>().Spawn();
             DisableNestClientRpc(new NetworkObjectReference(gameObject));
         }
@@ -54,6 +54,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exterminator
             if (IsHost || IsServer)
             {
                 GameObject go = Instantiate(loot, transform.position + Vector3.up, Quaternion.identity);
+                go.GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.Instance.PluginConfiguration.CONTRACT_BUG_REWARD.Value + (int)(TimeOfDay.Instance.profitQuota * Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.CONTRACT_REWARD_QUOTA_MULTIPLIER.Value / 100f, 0f, 1f)));
                 go.GetComponent<NetworkObject>().Spawn();
                 DisableNestClientRpc(new NetworkObjectReference(gameObject));
             }

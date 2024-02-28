@@ -217,7 +217,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exorcism
             if (IsHost || IsServer)
             {
                 GameObject go = Instantiate(loot, transform.position + new Vector3(0, 0.1f, 0), Quaternion.identity);
-                go.GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.Instance.PluginConfiguration.CONTRACT_EXOR_REWARD.Value);
+                go.GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.Instance.PluginConfiguration.CONTRACT_EXOR_REWARD.Value + (int)(TimeOfDay.Instance.profitQuota * Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.CONTRACT_REWARD_QUOTA_MULTIPLIER.Value / 100f, 0f, 1f)));
                 go.GetComponent<NetworkObject>().Spawn();
             }
         }
