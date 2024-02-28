@@ -82,6 +82,8 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<bool> DOOR_HYDRAULICS_BATTERY_ENABLED {  get; set; }
         public ConfigEntry<bool> SCRAP_INSURANCE_ENABLED {  get; set; }
         public ConfigEntry<bool> FASTER_DROP_POD_ENABLED { get; set; }
+        public ConfigEntry<bool> SIGURD_ENABLED { get; set; }
+        public ConfigEntry<bool> SIGURD_LAST_DAY_ENABLED { get; set; }
 
         // individual or shared
         public ConfigEntry<bool> BEEKEEPER_INDIVIDUAL { get; set; }
@@ -132,6 +134,7 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<int> DOOR_HYDRAULICS_BATTERY_PRICE { get; set; }
         public ConfigEntry<int> SCRAP_INSURANCE_PRICE { get; set; }
         public ConfigEntry<int> FASTER_DROP_POD_PRICE { get; set; }
+        public ConfigEntry<int> SIGURD_PRICE { get; set; }
 
         // attributes
         public ConfigEntry<string> CHARGING_BOOSTER_PRICES {  get; set; }
@@ -307,6 +310,10 @@ namespace MoreShipUpgrades.Misc
         public ConfigEntry<float> FASTER_DROP_POD_TIMER { get; set; }
         public ConfigEntry<float> FASTER_DROP_POD_INITIAL_TIMER {  get; set; }
         public ConfigEntry<int> EXTRACTION_CONTRACT_AMOUNT_MEDKITS {  get; set; }
+        public ConfigEntry<float> SIGURD_CHANCE { get; set; }
+        public ConfigEntry<float> SIGURD_LAST_DAY_CHANCE { get; set; }
+        public ConfigEntry<float> SIGURD_PERCENT { get; set; }
+        public ConfigEntry<float> SIGURD_LAST_DAY_PERCENT { get; set; }
 
 
         public PluginConfig(ConfigFile PluginConfiguration)
@@ -537,6 +544,15 @@ namespace MoreShipUpgrades.Misc
             FASTER_DROP_POD_PRICE = ConfigEntry(topSection, "Drop Pod Thrusters Price", 300, "Default price for upgrade.");
             FASTER_DROP_POD_TIMER = ConfigEntry(topSection, "Time decrement on the timer used for subsequent item deliveries", 20f);
             FASTER_DROP_POD_INITIAL_TIMER = ConfigEntry(topSection, "Time decrement on the timer used for the first ever item delivery", 10f);
+
+            topSection = Sigurd.UPGRADE_NAME;
+            SIGURD_ENABLED = ConfigEntry(topSection, "Enable the Sigurd Access upgrade", true, "There's a chance that The Company will pay more for the scrap.");
+            SIGURD_LAST_DAY_ENABLED = ConfigEntry(topSection, "Enable the Sigurd Access upgrade for the last day", true, "There's a chance that the last day scrap you go over 100% value.");
+            SIGURD_PRICE = ConfigEntry(topSection, "Sigurd Access Unlocker Price", 500, "Default price for upgrade.");
+            SIGURD_CHANCE = ConfigEntry(topSection, "Chance for the upgrade to work", 20f);
+            SIGURD_LAST_DAY_CHANCE = ConfigEntry(topSection, "Chance for the upgrade to work on the last day", 20f);
+            SIGURD_PERCENT = ConfigEntry(topSection, "How much the percentage will go up", 20f);
+            SIGURD_LAST_DAY_PERCENT = ConfigEntry(topSection, "How much the percentage will go up on the last day", 20f);
 
             topSection = Hunter.UPGRADE_NAME;
             HUNTER_ENABLED = ConfigEntry(topSection, "Enable the Hunter upgrade", true, "Collect and sell samples from dead enemies");

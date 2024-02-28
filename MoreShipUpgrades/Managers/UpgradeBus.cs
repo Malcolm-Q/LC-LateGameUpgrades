@@ -359,6 +359,7 @@ namespace MoreShipUpgrades.Managers
             SetupLethalDealsTerminalNode();
             SetupFasterDropPodTerminalNode();
             SetupChargingBoosterTerminalNode();
+            SetupSigurdTerminalNode();
             terminalNodes.Sort();
         }
         void SetupMarketInfluenceTerminalNode()
@@ -548,6 +549,13 @@ namespace MoreShipUpgrades.Managers
                                     true,
                                     PluginConfiguration.FASTER_DROP_POD_ENABLED.Value,
                                     PluginConfiguration.FASTER_DROP_POD_PRICE.Value);
+        }
+        private void SetupSigurdTerminalNode()
+        {
+            SetupOneTimeTerminalNode(Sigurd.UPGRADE_NAME,
+                                    true,
+                                    PluginConfiguration.SIGURD_ENABLED.Value,
+                                    PluginConfiguration.SIGURD_PRICE.Value);
         }
         void SetupChargingBoosterTerminalNode()
         {

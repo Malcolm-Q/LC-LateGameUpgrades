@@ -8,6 +8,7 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -79,6 +80,17 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             if (!GameNetworkManager.Instance.isHostingGame) return;
             logger.LogDebug("Saving the LGU upgrades unto a json file...");
             LguStore.Instance.ServerSaveFileServerRpc();
+        }
+
+        [HarmonyPatch(nameof(StartOfRound.ResetShip))]
+        [HarmonyTranspiler]
+        static IEnumerable<CodeInstruction> ResetShip(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo sigurdChance = typeof(Sigurd).GetMethod(nameof(Sigurd.GetBuyingRate));
+            List<CodeInstruction> codes = new(instructions);
+            int index = 0;
+            index = Tools.FindFloat(index, ref codes, findValue: 0.3f, addCode: sigurdChance, errorMessage: "Couldn't find the 0.3 value which is used as buying rate");
+            return codes.AsEnumerable();
         }
     }
 }
