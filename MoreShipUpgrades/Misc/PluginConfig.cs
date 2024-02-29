@@ -552,8 +552,8 @@ namespace MoreShipUpgrades.Misc
             SIGURD_ENABLED = ConfigEntry(topSection, "Enable the Sigurd Access upgrade", true, "There's a chance that The Company will pay more for the scrap.");
             SIGURD_LAST_DAY_ENABLED = ConfigEntry(topSection, "Enable the Sigurd Access upgrade for the last day", true, "There's a chance that the last day scrap you go over 100% value.");
             SIGURD_PRICE = ConfigEntry(topSection, "Sigurd Access Unlocker Price", 500, "Default price for upgrade.");
-            SIGURD_CHANCE = ConfigEntry(topSection, "Chance for the upgrade to work", 20f);
-            SIGURD_LAST_DAY_CHANCE = ConfigEntry(topSection, "Chance for the upgrade to work on the last day", 20f);
+            SIGURD_CHANCE = ConfigEntry(topSection, "Chance for the upgrade to activate", 20f);
+            SIGURD_LAST_DAY_CHANCE = ConfigEntry(topSection, "Chance for the upgrade to activate on the last day", 20f);
             SIGURD_PERCENT = ConfigEntry(topSection, "How much the percentage will go up", 20f);
             SIGURD_LAST_DAY_PERCENT = ConfigEntry(topSection, "How much the percentage will go up on the last day", 20f);
 
