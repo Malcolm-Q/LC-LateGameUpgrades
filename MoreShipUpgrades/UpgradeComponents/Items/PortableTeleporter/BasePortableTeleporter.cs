@@ -103,7 +103,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
         /// <returns>Wether the player can use the item or not</returns>
         private bool CanUsePortableTeleporter()
         {
-            if (!Mouse.current.leftButton.isPressed) return false;
             audio.PlayOneShot(buttonPress);
             if (itemUsedUp)
             {

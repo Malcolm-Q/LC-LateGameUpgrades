@@ -170,6 +170,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         [HarmonyPatch(nameof(PlayerControllerB.Update))]
         static void CheckForBoomboxes(PlayerControllerB __instance)
         {
+            if (!UpgradeBus.Instance.PluginConfiguration.BEATS_ENABLED.Value) return;
             if (!BaseUpgrade.GetActiveUpgrade(SickBeats.UPGRADE_NAME) || __instance != GameNetworkManager.Instance.localPlayerController) return;
             SickBeats.Instance.boomBoxes.RemoveAll(b => b == null);
             bool result = false;

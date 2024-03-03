@@ -46,14 +46,21 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             initialValue = UpgradeBus.Instance.PluginConfiguration.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK.Value;
             incrementalValue = UpgradeBus.Instance.PluginConfiguration.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT.Value;
         }
-
+        public override void Load()
+        {
+            base.Load();
+            UpdatePlayerHealthLevel();
+        }
         public override void Increment()
         {
             base.Increment();
+            UpdatePlayerHealthLevel();
+        }
+        void UpdatePlayerHealthLevel()
+        {
             PlayerControllerB player = UpgradeBus.Instance.GetLocalPlayer();
             PlayerHealthUpdateLevelServerRpc(player.playerSteamId, GetUpgradeLevel(UPGRADE_NAME));
         }
-
         public override void Unwind()
         {
             base.Unwind();

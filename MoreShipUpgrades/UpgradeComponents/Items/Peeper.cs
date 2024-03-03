@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
+using System.Linq;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items
@@ -43,7 +44,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
 
         public static bool HasLineOfSightToPeepers(Vector3 springPosition)
         {
-            foreach (Peeper peeper in UpgradeBus.Instance.coilHeadItems)
+            foreach (Peeper peeper in UpgradeBus.Instance.coilHeadItems.ToList())
             {
                 if (peeper == null)
                 {
