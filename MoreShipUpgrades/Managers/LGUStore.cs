@@ -278,6 +278,7 @@ namespace MoreShipUpgrades.Managers
 
             ContractManager.Instance.contractLevel = SaveInfo.contractLevel;
             ContractManager.Instance.contractType = SaveInfo.contractType;
+            
             UpgradeBus.Instance.wearingHelmet = SaveInfo.wearingHelmet;
 
             UpgradeBus.Instance.SaleData = SaveInfo.SaleData;
