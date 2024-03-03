@@ -278,7 +278,7 @@ namespace MoreShipUpgrades.Managers
 
             ContractManager.Instance.contractLevel = SaveInfo.contractLevel;
             ContractManager.Instance.contractType = SaveInfo.contractType;
-            if (UpgradeBus.Instance.PluginConfiguration.PLAYER_HEALTH_ENABLED.Value) Stimpack.Instance.playerHealthLevels = SaveInfo.healthLevels;
+            
             UpgradeBus.Instance.wearingHelmet = SaveInfo.wearingHelmet;
 
             UpgradeBus.Instance.SaleData = SaveInfo.SaleData;
@@ -516,7 +516,6 @@ namespace MoreShipUpgrades.Managers
         public string contractType = ContractManager.Instance.contractType;
         public string contractLevel = ContractManager.Instance.contractLevel;
         public Dictionary<string, float> SaleData = UpgradeBus.Instance.SaleData;
-        public Dictionary<ulong, int> healthLevels = Stimpack.Instance?.playerHealthLevels;
         public bool wearingHelmet = UpgradeBus.Instance.wearingHelmet;
     }
 
