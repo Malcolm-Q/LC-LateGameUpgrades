@@ -23,6 +23,12 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             upgradeName = UPGRADE_NAME;
             base.Start();
+
+            if (UpgradeBus.Instance.PluginConfiguration.SIGURD_ENABLED.Value && UpgradeBus.Instance.PluginConfiguration.SIGURD_PRICE.Value == 0)
+            {
+                UpgradeBus.Instance.activeUpgrades[UPGRADE_NAME] = true;
+                LguStore.Instance.HandleUpgrade(UPGRADE_NAME, false);
+            }
         }
 
         void Awake()
