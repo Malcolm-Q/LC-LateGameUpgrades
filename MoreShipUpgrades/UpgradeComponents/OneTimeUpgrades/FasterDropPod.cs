@@ -16,6 +16,12 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             upgradeName = UPGRADE_NAME;
             base.Start();
+
+            if (UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_ENABLED.Value && UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_PRICE.Value == 0)
+            {
+                UpgradeBus.Instance.activeUpgrades[UPGRADE_NAME] = true;
+                LguStore.Instance.HandleUpgrade(UPGRADE_NAME, false);
+            }
         }
 
         void Awake()
@@ -37,7 +43,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
         public override string GetDisplayInfo(int price = -1)
         {
-            return "Make the drop pod land faster.";
+            return "Make the Drop Pod, the ship that deliver items bought on the terminal, land faster.";
         }
     }
 }
