@@ -21,7 +21,7 @@ namespace MoreShipUpgrades.Input
 
         public static InputActionMap ActionMap;
 
-        private static InputAction WheelbarrowAction;
+        public static InputAction WheelbarrowAction;
 
         public static InputAction NvgAction;
 

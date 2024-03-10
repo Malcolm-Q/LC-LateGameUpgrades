@@ -1,9 +1,11 @@
 ﻿using LethalLib.Modules;
+using MoreShipUpgrades.Input;
 using MoreShipUpgrades.Misc;
 using Newtonsoft.Json;
 using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -40,9 +42,17 @@ namespace MoreShipUpgrades.Managers
                 ConfigSynchronization cfg = JsonConvert.DeserializeObject<ConfigSynchronization>(json);
                 logger.LogInfo("Config received, deserializing and constructing...");
                 Color col = UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_COLOR.Value;
+                InputAction WheelbarrowKey = Keybinds.WheelbarrowAction;
+                InputAction NvgKey = Keybinds.NvgAction;
+                string nvgconfig = UpgradeBus.Instance.PluginConfiguration.TOGGLE_NIGHT_VISION_KEY.Value;
+                string wbconfig = UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_DROP_ALL_CONTROL_BIND.Value;
                 cfg.SynchronizeConfiguration();
                 CheckMapObjectsConfigurations();
                 UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_COLOR.Value = col;
+                UpgradeBus.Instance.PluginConfiguration.TOGGLE_NIGHT_VISION_KEY.Value = nvgconfig;
+                UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_DROP_ALL_CONTROL_BIND.Value = wbconfig;
+                Keybinds.WheelbarrowAction = WheelbarrowKey;
+                Keybinds.NvgAction = NvgKey;
                 UpgradeBus.Instance.Reconstruct();
                 retrievedPluginConfiguration = true;
             }
