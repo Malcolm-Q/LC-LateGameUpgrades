@@ -42,39 +42,52 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             { "eyeless", "Eyeless Dog" },
             { "dog", "Eyeless Dog" },
             };
-        static public Dictionary<int, string[]> tiers;
+
+        /**
+         * A mapping from monster names to the Hunter level required to harvest them
+         */
+        static private Dictionary<string, int> levels;
+
         public static void SetupTierList()
         {
             logger = new LguLogger(UPGRADE_NAME);
-            tiers = new Dictionary<int, string[]>();
+            levels = new Dictionary<string, int>();
             string[] tiersList = UpgradeBus.Instance.PluginConfiguration.HUNTER_SAMPLE_TIERS.Value.ToLower().Split('-');
-            tiers[0] = tiersList[0].Split(",").Select(x => x.Trim()).ToArray();
-            for (int i = 1; i < tiersList.Length; i++)
+            for (int level = 0; level < tiersList.Length;  ++level)
             {
-                tiers[i] = tiers[i - 1].Concat(tiersList[i].Split(",").Select(x => x.Trim())).ToArray();
+                foreach (string monster in tiersList[level].Split(',').Select(x => x.Trim()))
+                {
+                    levels[monster] = level + 1;
+                }
             }
         }
+
+        public static bool CanHarvest(string monsterName)
+        {
+            int harvestLevel;
+            if (levels.TryGetValue(monsterName.ToLower(), out harvestLevel)) {
+                return harvestLevel <= BaseUpgrade.GetUpgradeLevel(UPGRADE_NAME);
+            }
+            return false;
+
+        }
+
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
             Instance = this;
         }
 
+
+
         public static string GetHunterInfo(int level, int price)
         {
-            string enems;
-            if (level != 1) enems = string.Join(", ", tiers[level - 1].Except(tiers[level - 2]).ToArray());
-            else enems = string.Join(", ", tiers[level - 1]);
-            string result = "";
-            foreach (string monsterTypeName in enems.Split(", "))
-            {
-                logger.LogDebug(monsterTypeName.Trim().ToLower());
-                logger.LogDebug(monsterNames[monsterTypeName.Trim().ToLower()]);
-                result += monsterNames[monsterTypeName.Trim().ToLower()] + ", ";
-            }
-            result = result.Substring(0, result.Length - 2);
-            result += "\n";
-            return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), level, price, result);
+            string monsterList = string.Join(", ",
+                levels.Where(item => item.Value == level)
+                .SelectMany(item => monsterNames[item.Key.Trim().ToLower()]).ToArray());
+
+            return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME),
+                level, price, monsterList);
         }
 
         public string GetWorldBuildingText(bool shareStatus = false)
