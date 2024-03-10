@@ -48,7 +48,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
          */
         static private Dictionary<string, int> levels;
 
-        public static void SetupTierList()
+        public static void SetupLevels()
         {
             logger = new LguLogger(UPGRADE_NAME);
             levels = new Dictionary<string, int>();
@@ -57,7 +57,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             {
                 foreach (string monster in tiersList[level].Split(',').Select(x => x.Trim()))
                 {
-                    levels[monster] = level + 1;
+                    logger.LogInfo($"{monster} set to level {level}");
+                    levels[monster] = level;
                 }
             }
         }
@@ -84,10 +85,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             string monsterList = string.Join(", ",
                 levels.Where(item => item.Value == level)
-                .SelectMany(item => monsterNames[item.Key.Trim().ToLower()]).ToArray());
+                .Select(item => monsterNames[item.Key.Trim().ToLower()]));
 
             return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME),
-                level, price, monsterList);
+                level + 1, price, monsterList);
         }
 
         public string GetWorldBuildingText(bool shareStatus = false)
@@ -97,9 +98,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            string info = GetHunterInfo(1, initialPrice);
+            string info = GetHunterInfo(0, initialPrice);
             for (int i = 0; i < maxLevels; i++)
-                info += GetHunterInfo(i + 2, incrementalPrices[i]);
+                info += GetHunterInfo(i + 1, incrementalPrices[i]);
             return info;
         }
     }
