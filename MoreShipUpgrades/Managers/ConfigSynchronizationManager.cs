@@ -65,7 +65,7 @@ namespace MoreShipUpgrades.Managers
         }
         private IEnumerator WaitALittleToShareTheFile()
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(2.5f);
             logger.LogInfo("Now sharing save file with clients...");
             LguStore.Instance.ShareSaveServerRpc();
         }
