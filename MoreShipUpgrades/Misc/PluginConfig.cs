@@ -13,6 +13,8 @@ using System.Runtime.CompilerServices;
 using CSync.Lib;
 using System.Runtime.Serialization;
 using CSync.Util;
+using LethalLib.Modules;
+using UnityEngine;
 
 
 namespace MoreShipUpgrades.Misc
@@ -848,6 +850,20 @@ namespace MoreShipUpgrades.Misc
             SCRAP_WHEELBARROW_MOVEMENT_SLOPPY = cfg.BindSyncedEntry(topSection, "Sloppiness of the Shopping Cart Item", 2f, "Value multiplied on the player's movement to give the feeling of drifting while carrying the Scrap Wheelbarrow Item");
             SCRAP_WHEELBARROW_PLAY_NOISE = cfg.BindSyncedEntry(topSection, "Plays noises for players with Shopping Cart Item", true, "If false, it will just not play the sounds, it will still attract monsters to noise");
             WHEELBARROW_DROP_ALL_CONTROL_BIND = cfg.Bind(topSection, "Control bind for drop all items", "<Mouse>/middleButton", "More info in Unity's Control Path documentation in the new Input System");
+
+            SyncComplete += PluginConfig_SyncComplete;
+        }
+
+        private void PluginConfig_SyncComplete(object sender, EventArgs e)
+        {
+            if (IsClient)
+            {
+                int amount = UpgradeBus.Instance.spawnableMapObjectsAmount["MedkitMapItem"];
+                if (amount == UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value) return;
+                MapObjects.RemoveMapObject(UpgradeBus.Instance.spawnableMapObjects["MedkitMapItem"], Levels.LevelTypes.All);
+                AnimationCurve curve = new(new Keyframe(0f, UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value), new Keyframe(1f, UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value));
+                MapObjects.RegisterMapObject(mapObject: UpgradeBus.Instance.spawnableMapObjects["MedkitMapItem"], levels: Levels.LevelTypes.All, spawnRateFunction: (level) => curve);
+            }
         }
     }
 }
