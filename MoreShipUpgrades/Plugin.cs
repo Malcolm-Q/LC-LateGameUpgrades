@@ -303,7 +303,6 @@ namespace MoreShipUpgrades
             GameObject modStore = AssetBundleHandler.TryLoadGameObjectAsset(ref bundle, "Assets/ShipUpgrades/LguStore.prefab");
             if (modStore == null) return;
 
-            //modStore.AddComponent<ConfigSynchronizationManager>();
             modStore.AddComponent<ContractManager>();
             modStore.AddComponent<LguStore>();
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(modStore);
