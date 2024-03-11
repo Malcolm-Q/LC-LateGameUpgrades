@@ -7,11 +7,11 @@ namespace MoreShipUpgrades.Patches.Items
     [HarmonyPatch(typeof(BoomboxItem))]
     internal static class BoomBoxPatcher
     {
-        [HarmonyPostfix]
-        [HarmonyPatch(nameof(BoomboxItem.Start))]
-        static void AddToList(BoomboxItem __instance)
+        [HarmonyPrefix]
+        [HarmonyPatch(nameof(BoomboxItem.StartMusic))]
+        static void StartMusicPrefix(BoomboxItem __instance)
         {
-            if (UpgradeBus.Instance.PluginConfiguration.BEATS_ENABLED.Value) SickBeats.Instance.boomBoxes.Add(__instance);
+            if (UpgradeBus.Instance.PluginConfiguration.BEATS_ENABLED.Value && !SickBeats.Instance.boomBoxes.Contains(__instance)) SickBeats.Instance.boomBoxes.Add(__instance);
         }
     }
 }

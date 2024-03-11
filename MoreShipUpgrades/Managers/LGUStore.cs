@@ -313,7 +313,7 @@ namespace MoreShipUpgrades.Managers
 
         private IEnumerator WaitForUpgradeObject()
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2f);
             logger.LogInfo("Applying loaded upgrades...");
             foreach (CustomTerminalNode customNode in UpgradeBus.Instance.terminalNodes)
             {
