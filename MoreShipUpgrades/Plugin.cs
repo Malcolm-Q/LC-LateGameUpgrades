@@ -34,6 +34,7 @@ namespace MoreShipUpgrades
 {
     [BepInEx.BepInPlugin(Metadata.GUID,Metadata.NAME,Metadata.VERSION)]
     [BepInDependency("evaisa.lethallib","0.13.0")]
+    [BepInDependency("com.sigurd.csync")]
     [BepInDependency("com.rune580.LethalCompanyInputUtils", BepInDependency.DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
@@ -47,8 +48,7 @@ namespace MoreShipUpgrades
 
         void Awake()
         {
-            PluginConfiguration = new(base.Config);
-            PluginConfiguration.InitBindings();
+            PluginConfiguration = new(Config);
 
             // netcode patching stuff
             IEnumerable<Type> types;
@@ -303,7 +303,7 @@ namespace MoreShipUpgrades
             GameObject modStore = AssetBundleHandler.TryLoadGameObjectAsset(ref bundle, "Assets/ShipUpgrades/LguStore.prefab");
             if (modStore == null) return;
 
-            modStore.AddComponent<ConfigSynchronizationManager>();
+            //modStore.AddComponent<ConfigSynchronizationManager>();
             modStore.AddComponent<ContractManager>();
             modStore.AddComponent<LguStore>();
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(modStore);

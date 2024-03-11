@@ -34,6 +34,9 @@
     <Reference Include="LethalCompanyInputUtils">
       <HintPath>$(LC_PLUGIN_PATH)\LethalCompanyInputUtils\LethalCompanyInputUtils.dll</HintPath>
     </Reference>
+	<Reference Include="com.sigurd.csync">
+      <HintPath>$(LC_PLUGIN_PATH)\CSync\com.sigurd.csync.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(LC_PATH)\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -58,7 +61,7 @@
       <NetcodePatch Include="$(TargetPath)" />
   </ItemGroup>
   <Target Name="NetcodePatch" AfterTargets="PostBuildEvent">
-    <Exec Command="netcode-patch &quot;$(TargetPath)&quot; @(ReferencePathWithRefAssemblies->'&quot;%(Identity)&quot;', ' ')"/>
+    <Exec Command="netcode-patch &quot;$(TargetPath)&quot; @(ReferencePathWithRefAssemblies->'&quot;%(Identity)&quot;', ' ')" />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(LC_PLUGIN_DIR)" />
   </Target>
 </Project>

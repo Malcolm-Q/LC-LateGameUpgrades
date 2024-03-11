@@ -57,11 +57,6 @@ namespace MoreShipUpgrades.Managers
                 UpgradeBus.Instance.Reconstruct();
                 HandleSpawns();
             }
-            else
-            {
-                logger.LogInfo("Requesting hosts config...");
-                ConfigSynchronizationManager.Instance.SendConfigServerRpc();
-            }
         }
 
         [ServerRpc(RequireOwnership = false)]
