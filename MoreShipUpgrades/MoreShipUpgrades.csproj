@@ -34,7 +34,7 @@
     <Reference Include="LethalCompanyInputUtils">
       <HintPath>$(LC_PLUGIN_PATH)\LethalCompanyInputUtils\LethalCompanyInputUtils.dll</HintPath>
     </Reference>
-	<Reference Include="com.sigurd.csync">
+    <Reference Include="com.sigurd.csync">
       <HintPath>$(LC_PLUGIN_PATH)\CSync\com.sigurd.csync.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">

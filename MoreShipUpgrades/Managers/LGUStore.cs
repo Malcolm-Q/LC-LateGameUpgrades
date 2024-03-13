@@ -382,9 +382,33 @@ namespace MoreShipUpgrades.Managers
         [ClientRpc]
         public void GenerateSalesClientRpc(int seed)
         {
-            UpgradeBus.Instance.GenerateSales(seed);
+            GenerateSales(seed);
         }
 
+        internal void GenerateSales(int seed = -1)
+        {
+            if (seed == -1) seed = UnityEngine.Random.Range(0, 999999);
+            logger.LogInfo($"Generating sales with seed: {seed} on this client...");
+            UnityEngine.Random.InitState(seed);
+            UpgradeBus.Instance.SaleData = new Dictionary<string, float>();
+            foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
+            {
+                if (UnityEngine.Random.value > UpgradeBus.Instance.PluginConfiguration.SALE_PERC.Value)
+                {
+                    node.salePerc = UnityEngine.Random.Range(0.60f, 0.90f);
+                    logger.LogInfo($"Set sale percentage to: {node.salePerc} for {node.Name}.");
+                }
+                else
+                {
+                    node.salePerc = 1f;
+                }
+                if (IsHost || IsServer)
+                {
+                    logger.LogInfo("Saving node into save");
+                    UpgradeBus.Instance.SaleData.Add(node.Name, node.salePerc);
+                }
+            }
+        }
         [ClientRpc]
         public void DestroyHelmetClientRpc(ulong id)
         {
