@@ -2,6 +2,7 @@
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using UnityEngine;
 
 namespace MoreShipUpgrades.Patches.RoundComponents
 {
@@ -32,7 +33,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             if (TimeOfDay.Instance.daysUntilDeadline == 0) return;
 
             System.Random random = new(StartOfRound.Instance.randomMapSeed);
-            if (random.Next(0, 100) < 100)
+            if (random.Next(0, 100) < Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.SIGURD_CHANCE.Value, 0, 100))
                 StartOfRound.Instance.companyBuyingRate += (UpgradeBus.Instance.PluginConfiguration.SIGURD_PERCENT.Value / 100);
         }
     }
