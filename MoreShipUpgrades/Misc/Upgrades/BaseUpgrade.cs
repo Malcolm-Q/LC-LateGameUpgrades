@@ -35,10 +35,9 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// </summary>
         public virtual void Load()
         {
-            string loadColour = "#FF0000";
-            string loadMessage = $"\n<color={loadColour}>{upgradeName} is active!</color>";
-            HUDManager.Instance.chatText.text += loadMessage;
             UpgradeBus.Instance.activeUpgrades[upgradeName] = true;
+            if (!UpgradeBus.Instance.PluginConfiguration.SHOW_UPGRADES_CHAT.Value) return;
+            ShowUpgradeNotification("#FF0000", $"{upgradeName} is active!");
         }
         /// <summary>
         /// Function responsible to insert this upgrade's gameObject into the UpgradeBus' list of gameObjects for handling
@@ -52,11 +51,20 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// </summary>
         public virtual void Unwind()
         {
-            string unloadColour = "#FF0000";
-            string unloadMessage = $"\n<color={unloadColour}>{upgradeName} has been disabled!</color>";
-            HUDManager.Instance.chatText.text += unloadMessage;
             UpgradeBus.Instance.activeUpgrades[upgradeName] = false;
+            if (!UpgradeBus.Instance.PluginConfiguration.SHOW_UPGRADES_CHAT.Value) return;
+            ShowUpgradeNotification("#FF0000", $"{upgradeName} has been disabled!");
         }
+        /// <summary>
+        /// Shows a notification for when an upgrade is loaded or unloaded from the player
+        /// </summary>
+        /// <param name="message">Message displayed to the player</param>
+        void ShowUpgradeNotification(string colourHex, string message)
+        {
+            string notification = $"\n<color={colourHex}>{message}</color>";
+            HUDManager.Instance.chatText.text += notification;
+        }
+
         #endregion
         internal static bool GetActiveUpgrade(string upgradeName)
         {
