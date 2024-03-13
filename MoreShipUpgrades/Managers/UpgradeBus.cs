@@ -142,30 +142,6 @@ namespace MoreShipUpgrades.Managers
             UpgradeObjects.Values.Where(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>() is IServerSync).Do(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute());
         }
 
-        internal void GenerateSales(int seed = -1)
-        {
-            if (seed == -1) seed = Random.Range(0, 999999);
-            logger.LogInfo($"Generating sales with seed: {seed} on this client...");
-            Random.InitState(seed);
-            SaleData = new Dictionary<string, float>();
-            foreach(CustomTerminalNode node in terminalNodes)
-            {
-                if(Random.value > PluginConfiguration.SALE_PERC.Value)
-                {
-                    node.salePerc = Random.Range(0.60f, 0.90f);
-                    logger.LogInfo($"Set sale percentage to: {node.salePerc} for {node.Name}.");
-                }
-                else
-                {
-                    node.salePerc = 1f;
-                }
-                if(IsHost || IsServer)
-                {
-                    SaleData.Add(node.Name, node.salePerc);
-                }
-            }
-        }
-
         internal void LoadSales()
         {
             if(SaleData.Count == 0)
