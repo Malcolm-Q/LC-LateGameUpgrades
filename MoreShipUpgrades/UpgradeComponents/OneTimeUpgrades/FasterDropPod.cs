@@ -19,7 +19,6 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
             if (UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_ENABLED.Value && UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_PRICE.Value == 0)
             {
-                UpgradeBus.Instance.activeUpgrades[UPGRADE_NAME] = true;
                 LguStore.Instance.HandleUpgrade(UPGRADE_NAME, false);
             }
         }
