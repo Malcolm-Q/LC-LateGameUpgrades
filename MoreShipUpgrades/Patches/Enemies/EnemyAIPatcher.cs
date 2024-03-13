@@ -29,8 +29,6 @@ namespace MoreShipUpgrades.Patches.Enemies
             {
                 logger.LogDebug($"Spawning sample for {name}");
                 SpawnItemManager.Instance.SpawnSample(name.ToLower(), __instance.transform.position);
-            } else {
-                logger.LogDebug($"No sample was found to spawn for {name.ToLower()}");
             }
         }
     }

@@ -10,14 +10,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
     class Hunter : TierUpgrade, IUpgradeWorldBuilding
     {
-        private static LguLogger logger = new LguLogger(UPGRADE_NAME);
+        private static readonly LguLogger logger = new(UPGRADE_NAME);
         internal static Hunter Instance;
 
         public const string UPGRADE_NAME = "Hunter";
         internal const string WORLD_BUILDING_TEXT = "\n\nOn-the-job training program that teaches your crew how to properly collect lab-ready samples of blood," +
             " skin, and organ tissue from entities found within the facility. These samples are valuable to The Company. Used to be a part of the standard onboarding procedure," +
             " but was made opt-in only in 2005 to cut onboarding costs.\n\n";
-        static Dictionary<string, string> monsterNames = new Dictionary<string, string>()
+
+        static readonly Dictionary<string, string> monsterNames = new()
             {
             { "hoarding", "Hoarding Bug" },
             { "hoarding bug", "Hoarding Bug" },
@@ -40,35 +41,57 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             { "mouthdog", "Eyeless Dog" },
             { "eyeless dog", "Eyeless Dog" },
             { "eyeless", "Eyeless Dog" },
-            { "dog", "Eyeless Dog" },
+            { "dog", "Eyeless Dog" }
             };
 
         /**
-         * A mapping from monster names to the Hunter level required to harvest them
+         * A mapping from monster names to the Hunter level required to harvest them.
+         * This mapping uses the value from the above list, translating from any key in the list
          */
         static private Dictionary<string, int> levels;
 
         public static void SetupLevels()
         {
-            logger = new LguLogger(UPGRADE_NAME);
-            levels = new Dictionary<string, int>();
+            levels = [];
             string[] tiersList = UpgradeBus.Instance.PluginConfiguration.HUNTER_SAMPLE_TIERS.Value.ToLower().Split('-');
             for (int level = 0; level < tiersList.Length;  ++level)
             {
-                foreach (string monster in tiersList[level].Split(',').Select(x => x.Trim()))
+                foreach (string monster in tiersList[level].Split(',').Select(x => x.Trim().ToLower()))
                 {
-                    logger.LogInfo($"{monster} set to level {level}");
-                    levels[monster] = level;
+                    if (monsterNames.TryGetValue(monster, out string fullName))
+                    {
+                        if (levels.ContainsKey(fullName))
+                        {
+                            logger.LogError("{fullName} appears twice is samples config! Appearing now as {monster}");
+                        }
+                        else
+                        {
+                            logger.LogInfo($"{fullName} set to be harvestable at level {level + 1}");
+                            levels[fullName] = level;
+                        }
+                    }
+                    else
+                    {
+                        logger.LogError("Unrecognized enemy name: {monster}");
+                    }
                 }
             }
         }
 
-        public static bool CanHarvest(string monsterName)
+        public static bool CanHarvest(string shortName)
         {
-            int harvestLevel;
-            if (levels.TryGetValue(monsterName.ToLower(), out harvestLevel)) {
+            if (!monsterNames.TryGetValue(shortName.ToLower(), out string monsterName))
+            {
+                logger.LogDebug($"{shortName} is not harvestable");
+                return false;
+            }
+
+            if (levels.TryGetValue(monsterName, out int harvestLevel)) {
+                logger.LogDebug($"{monsterName} can be harvested at level {harvestLevel+1}");
                 return harvestLevel <= BaseUpgrade.GetUpgradeLevel(UPGRADE_NAME);
             }
+
+            logger.LogDebug($"{monsterName} cannot be harvested at any level");
             return false;
 
         }
@@ -79,13 +102,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             Instance = this;
         }
 
-
-
         public static string GetHunterInfo(int level, int price)
         {
             string monsterList = string.Join(", ",
                 levels.Where(item => item.Value == level)
-                .Select(item => monsterNames[item.Key.Trim().ToLower()]));
+                .Select(item => item.Key));
 
             return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME),
                 level + 1, price, monsterList);
