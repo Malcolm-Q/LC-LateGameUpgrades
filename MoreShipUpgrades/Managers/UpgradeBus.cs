@@ -60,7 +60,7 @@ namespace MoreShipUpgrades.Managers
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            PluginConfiguration = Plugin.PluginConfiguration;
+            PluginConfiguration = PluginConfig.Instance;
         }
 
         public Terminal GetTerminal()
@@ -482,7 +482,7 @@ namespace MoreShipUpgrades.Managers
         }
         private void SetupHunterTerminalNode()
         {
-            Hunter.SetupTierList();
+            Hunter.SetupLevels();
             SetupMultiplePurchasableTerminalNode(Hunter.UPGRADE_NAME,
                                                 true,
                                                 PluginConfiguration.HUNTER_ENABLED.Value,
