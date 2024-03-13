@@ -17,7 +17,6 @@ Join [this modding discord](https://discord.gg/hzEcKFSSDX) and comment [on this 
 - If adding custom objects you need to set up a unity environment for making asset bundles. I recommend using [Evaisa's Template](https://github.com/EvaisaDev/LethalCompanyUnityTemplate). Prefabs for the assets are in the [UnityFiles folder.](/UnityFiles/)  
 - IMPORTANT: ***Do not include your new assets in the assets.zip file.*** Create a new file called IncomingAssets<name>.zip that contains only the new assets you've made.  
 - This project uses [LethalLib](https://github.com/EvaisaDev/LethalLib) by, you guessed it, [Evaisa](https://ko-fi.com/evaisa) to add items to the shop, register network prefabs, and in the future probably more so you can read about it there.  
-- The most recent (good chance it's unstable) dll and asset bundle can be found in the [output folder.](/output/)  
 
 *Included is a projectSetup.exe and projectSetup.py, you can run one or the other to quickly add all (or most of if some have been recently added) of the dependents to your .csproj
 
