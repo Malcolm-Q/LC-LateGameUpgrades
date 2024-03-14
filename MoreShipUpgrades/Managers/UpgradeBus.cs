@@ -60,7 +60,7 @@ namespace MoreShipUpgrades.Managers
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            PluginConfiguration = Plugin.PluginConfiguration;
+            PluginConfiguration = PluginConfig.Instance;
         }
 
         public Terminal GetTerminal()
@@ -140,30 +140,6 @@ namespace MoreShipUpgrades.Managers
         {
             logger.LogDebug($"Resetting the ship's attributes");
             UpgradeObjects.Values.Where(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>() is IServerSync).Do(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute());
-        }
-
-        internal void GenerateSales(int seed = -1)
-        {
-            if (seed == -1) seed = Random.Range(0, 999999);
-            logger.LogInfo($"Generating sales with seed: {seed} on this client...");
-            Random.InitState(seed);
-            SaleData = new Dictionary<string, float>();
-            foreach(CustomTerminalNode node in terminalNodes)
-            {
-                if(Random.value > PluginConfiguration.SALE_PERC.Value)
-                {
-                    node.salePerc = Random.Range(0.60f, 0.90f);
-                    logger.LogInfo($"Set sale percentage to: {node.salePerc} for {node.Name}.");
-                }
-                else
-                {
-                    node.salePerc = 1f;
-                }
-                if(IsHost || IsServer)
-                {
-                    SaleData.Add(node.Name, node.salePerc);
-                }
-            }
         }
 
         internal void LoadSales()
@@ -483,7 +459,7 @@ namespace MoreShipUpgrades.Managers
         }
         private void SetupHunterTerminalNode()
         {
-            Hunter.SetupTierList();
+            Hunter.SetupLevels();
             SetupMultiplePurchasableTerminalNode(Hunter.UPGRADE_NAME,
                                                 true,
                                                 PluginConfiguration.HUNTER_ENABLED.Value,

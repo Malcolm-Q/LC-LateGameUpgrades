@@ -20,7 +20,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             }
             else
             {
-                UpgradeBus.Instance.GenerateSales();
+                LguStore.Instance.GenerateSales();
             }
         }
 

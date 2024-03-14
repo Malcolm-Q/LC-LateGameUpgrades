@@ -29,11 +29,13 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using System.Linq;
 using MoreShipUpgrades.Input;
 using MoreShipUpgrades.Compat;
+using CSync.Lib;
 
 namespace MoreShipUpgrades
 {
     [BepInEx.BepInPlugin(Metadata.GUID,Metadata.NAME,Metadata.VERSION)]
     [BepInDependency("evaisa.lethallib","0.13.0")]
+    [BepInDependency("com.sigurd.csync")]
     [BepInDependency("com.rune580.LethalCompanyInputUtils", BepInDependency.DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
@@ -42,13 +44,11 @@ namespace MoreShipUpgrades
         AudioClip itemBreak, buttonPressed, error;
         AudioClip[] wheelbarrowSound, shoppingCartSound;
 
-        public static PluginConfig PluginConfiguration { get; private set; }
-
+        public new static PluginConfig Config;
 
         void Awake()
         {
-            PluginConfiguration = new(base.Config);
-            PluginConfiguration.InitBindings();
+            Config = new PluginConfig(base.Config);
 
             // netcode patching stuff
             IEnumerable<Type> types;
@@ -237,7 +237,7 @@ namespace MoreShipUpgrades
             Item scav = AssetBundleHandler.GetItemObject("Scavenger");
             if (scav == null) return;
 
-            scav.weight = UpgradeBus.Instance.PluginConfiguration.CONTRACT_EXTRACT_WEIGHT.Value;
+            scav.weight = PluginConfig.Instance.CONTRACT_EXTRACT_WEIGHT.Value;
             ExtractionContract co = scav.spawnPrefab.AddComponent<ExtractionContract>();
             co.SetPosition = true;
 
@@ -303,7 +303,6 @@ namespace MoreShipUpgrades
             GameObject modStore = AssetBundleHandler.TryLoadGameObjectAsset(ref bundle, "Assets/ShipUpgrades/LguStore.prefab");
             if (modStore == null) return;
 
-            modStore.AddComponent<ConfigSynchronizationManager>();
             modStore.AddComponent<ContractManager>();
             modStore.AddComponent<LguStore>();
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(modStore);
@@ -329,23 +328,23 @@ namespace MoreShipUpgrades
         {
             Dictionary<string, int> MINIMUM_VALUES = new Dictionary<string, int>()
             {
-                { "centipede", PluginConfiguration.SNARE_FLEA_SAMPLE_MINIMUM_VALUE.Value },
-                { "bunker spider", PluginConfiguration.BUNKER_SPIDER_SAMPLE_MINIMUM_VALUE.Value },
-                { "hoarding bug", PluginConfiguration.HOARDING_BUG_SAMPLE_MINIMUM_VALUE.Value },
-                { "flowerman", PluginConfiguration.BRACKEN_SAMPLE_MINIMUM_VALUE.Value },
-                { "mouthdog", PluginConfiguration.EYELESS_DOG_SAMPLE_MINIMUM_VALUE.Value },
-                { "baboon hawk", PluginConfiguration.BABOON_HAWK_SAMPLE_MINIMUM_VALUE.Value },
-                { "crawler", PluginConfiguration.THUMPER_SAMPLE_MINIMUM_VALUE.Value },
+                { "centipede", PluginConfig.Instance.SNARE_FLEA_SAMPLE_MINIMUM_VALUE.Value },
+                { "bunker spider", PluginConfig.Instance.BUNKER_SPIDER_SAMPLE_MINIMUM_VALUE.Value },
+                { "hoarding bug", PluginConfig.Instance.HOARDING_BUG_SAMPLE_MINIMUM_VALUE.Value },
+                { "flowerman", PluginConfig.Instance.BRACKEN_SAMPLE_MINIMUM_VALUE.Value },
+                { "mouthdog", PluginConfig.Instance.EYELESS_DOG_SAMPLE_MINIMUM_VALUE.Value },
+                { "baboon hawk", PluginConfig.Instance.BABOON_HAWK_SAMPLE_MINIMUM_VALUE.Value },
+                { "crawler", PluginConfig.Instance.THUMPER_SAMPLE_MINIMUM_VALUE.Value },
             };
             Dictionary<string, int> MAXIMUM_VALUES = new Dictionary<string, int>()
             {
-                { "centipede", PluginConfiguration.SNARE_FLEA_SAMPLE_MAXIMUM_VALUE.Value },
-                { "bunker spider", PluginConfiguration.BUNKER_SPIDER_SAMPLE_MAXIMUM_VALUE.Value },
-                { "hoarding bug", PluginConfiguration.HOARDING_BUG_SAMPLE_MAXIMUM_VALUE.Value },
-                { "flowerman", PluginConfiguration.BRACKEN_SAMPLE_MAXIMUM_VALUE.Value },
-                { "mouthdog", PluginConfiguration.EYELESS_DOG_SAMPLE_MAXIMUM_VALUE.Value },
-                { "baboon hawk", PluginConfiguration.BABOON_HAWK_SAMPLE_MAXIMUM_VALUE.Value },
-                { "crawler", PluginConfiguration.THUMPER_SAMPLE_MAXIMUM_VALUE.Value },
+                { "centipede", PluginConfig.Instance.SNARE_FLEA_SAMPLE_MAXIMUM_VALUE.Value },
+                { "bunker spider", PluginConfig.Instance.BUNKER_SPIDER_SAMPLE_MAXIMUM_VALUE.Value },
+                { "hoarding bug", PluginConfig.Instance.HOARDING_BUG_SAMPLE_MAXIMUM_VALUE.Value },
+                { "flowerman", PluginConfig.Instance.BRACKEN_SAMPLE_MAXIMUM_VALUE.Value },
+                { "mouthdog", PluginConfig.Instance.EYELESS_DOG_SAMPLE_MAXIMUM_VALUE.Value },
+                { "baboon hawk", PluginConfig.Instance.BABOON_HAWK_SAMPLE_MAXIMUM_VALUE.Value },
+                { "crawler", PluginConfig.Instance.THUMPER_SAMPLE_MAXIMUM_VALUE.Value },
             };
             foreach (string creatureName in AssetBundleHandler.samplePaths.Keys)
             {
@@ -387,7 +386,7 @@ namespace MoreShipUpgrades
             helmScript.itemProperties = helmet;
             helmScript.grabbable = true;
             helmScript.grabbableToEnemies = true;
-            helmet.creditsWorth = PluginConfiguration.HELMET_PRICE.Value;
+            helmet.creditsWorth = PluginConfig.Instance.HELMET_PRICE.Value;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(helmet.spawnPrefab);
 
             UpgradeBus.Instance.ItemsToSync.Add("Helmet", helmet);
@@ -422,7 +421,7 @@ namespace MoreShipUpgrades
             regularTeleportScript.useCooldown = 2f;
             regularTeleportScript.error = error;
             regularTeleportScript.buttonPress = buttonPressed;
-            regularPortableTeleporter.creditsWorth = PluginConfiguration.WEAK_TELE_PRICE.Value;
+            regularPortableTeleporter.creditsWorth = PluginConfig.Instance.WEAK_TELE_PRICE.Value;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(regularPortableTeleporter.spawnPrefab);
 
             UpgradeBus.Instance.ItemsToSync.Add("Tele", regularPortableTeleporter);
@@ -434,7 +433,7 @@ namespace MoreShipUpgrades
             Item advancedPortableTeleporter = AssetBundleHandler.GetItemObject("Advanced Portable Tele");
             if (advancedPortableTeleporter == null) return;
 
-            advancedPortableTeleporter.creditsWorth = PluginConfiguration.ADVANCED_TELE_PRICE.Value;
+            advancedPortableTeleporter.creditsWorth = PluginConfig.Instance.ADVANCED_TELE_PRICE.Value;
             advancedPortableTeleporter.itemName = "Advanced Portable Tele";
             advancedPortableTeleporter.itemId = 492013;
             AdvancedPortableTeleporter advancedTeleportScript = advancedPortableTeleporter.spawnPrefab.AddComponent<AdvancedPortableTeleporter>();
@@ -457,7 +456,7 @@ namespace MoreShipUpgrades
             Item nightVisionItem = AssetBundleHandler.GetItemObject("Night Vision");
             if (nightVisionItem == null) return;
 
-            nightVisionItem.creditsWorth = PluginConfiguration.NIGHT_VISION_PRICE.Value;
+            nightVisionItem.creditsWorth = PluginConfig.Instance.NIGHT_VISION_PRICE.Value;
             nightVisionItem.spawnPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             nightVisionItem.itemId = 492014;
             NightVisionGoggles visScript = nightVisionItem.spawnPrefab.AddComponent<NightVisionGoggles>();
@@ -476,10 +475,10 @@ namespace MoreShipUpgrades
             Item DiveItem = AssetBundleHandler.GetItemObject("Diving Kit");
             if (DiveItem == null) return;
 
-            DiveItem.creditsWorth = PluginConfiguration.DIVEKIT_PRICE.Value;
+            DiveItem.creditsWorth = PluginConfig.Instance.DIVEKIT_PRICE.Value;
             DiveItem.itemId = 492015;
-            DiveItem.twoHanded = PluginConfiguration.DIVEKIT_TWO_HANDED.Value;
-            DiveItem.weight = PluginConfiguration.DIVEKIT_WEIGHT.Value;
+            DiveItem.twoHanded = PluginConfig.Instance.DIVEKIT_TWO_HANDED.Value;
+            DiveItem.weight = PluginConfig.Instance.DIVEKIT_WEIGHT.Value;
             DiveItem.itemSpawnsOnGround = true;
             DivingKit diveScript = DiveItem.spawnPrefab.AddComponent<DivingKit>();
             diveScript.itemProperties = DiveItem;
@@ -495,9 +494,9 @@ namespace MoreShipUpgrades
         {
             Item MedKitItem = AssetBundleHandler.GetItemObject("Medkit");
             if (MedKitItem == null) return;
-            AnimationCurve curve = new AnimationCurve(new Keyframe(0f, PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value), new Keyframe(1f, PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value));
+            AnimationCurve curve = new AnimationCurve(new Keyframe(0f, PluginConfig.Instance.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value), new Keyframe(1f, PluginConfig.Instance.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value));
 
-            MedKitItem.creditsWorth = PluginConfiguration.MEDKIT_PRICE.Value;
+            MedKitItem.creditsWorth = PluginConfig.Instance.MEDKIT_PRICE.Value;
             MedKitItem.itemId = 492016;
             Medkit medScript = MedKitItem.spawnPrefab.AddComponent<Medkit>();
             medScript.itemProperties = MedKitItem;
@@ -527,7 +526,7 @@ namespace MoreShipUpgrades
             mapObjDef.spawnableMapObject.prefabToSpawn = MedKitMapItem.spawnPrefab;
             MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
             UpgradeBus.Instance.spawnableMapObjects["MedkitMapItem"] = mapObjDef;
-            UpgradeBus.Instance.spawnableMapObjectsAmount["MedkitMapItem"] = PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value;
+            UpgradeBus.Instance.spawnableMapObjectsAmount["MedkitMapItem"] = PluginConfig.Instance.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value;
 
             UpgradeBus.Instance.ItemsToSync.Add("Medkit",MedKitItem);
         }
@@ -536,7 +535,7 @@ namespace MoreShipUpgrades
             Item Peeper = AssetBundleHandler.GetItemObject("Peeper");
             if (Peeper == null) return;
 
-            Peeper.creditsWorth = PluginConfiguration.PEEPER_PRICE.Value;
+            Peeper.creditsWorth = PluginConfig.Instance.PEEPER_PRICE.Value;
             Peeper.twoHanded = false;
             Peeper.itemId = 492017;
             Peeper.twoHandedAnimation = false;
@@ -572,8 +571,8 @@ namespace MoreShipUpgrades
             Item wheelbarrow = AssetBundleHandler.GetItemObject("Scrap Wheelbarrow");
             if (wheelbarrow == null) return;
             wheelbarrow.itemId = 492018;
-            wheelbarrow.minValue = PluginConfiguration.SCRAP_WHEELBARROW_MINIMUM_VALUE.Value;
-            wheelbarrow.maxValue = PluginConfiguration.SCRAP_WHEELBARROW_MAXIMUM_VALUE.Value;
+            wheelbarrow.minValue = PluginConfig.Instance.SCRAP_WHEELBARROW_MINIMUM_VALUE.Value;
+            wheelbarrow.maxValue = PluginConfig.Instance.SCRAP_WHEELBARROW_MAXIMUM_VALUE.Value;
             wheelbarrow.twoHanded = true;
             wheelbarrow.twoHandedAnimation = true;
             wheelbarrow.grabAnim = "HoldJetpack";
@@ -582,7 +581,7 @@ namespace MoreShipUpgrades
             wheelbarrow.allowDroppingAheadOfPlayer = true;
             wheelbarrow.isConductiveMetal = true;
             wheelbarrow.isScrap = true;
-            wheelbarrow.weight = 0.99f + (PluginConfiguration.SCRAP_WHEELBARROW_WEIGHT.Value /100f);
+            wheelbarrow.weight = 0.99f + (PluginConfig.Instance.SCRAP_WHEELBARROW_WEIGHT.Value /100f);
             wheelbarrow.canBeGrabbedBeforeGameStart = true;
             ScrapWheelbarrow barrowScript = wheelbarrow.spawnPrefab.AddComponent<ScrapWheelbarrow>();
             wheelbarrow.toolTips = SetupWheelbarrowTooltips();
@@ -592,9 +591,9 @@ namespace MoreShipUpgrades
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
             LethalLib.Modules.Items.RegisterItem(wheelbarrow);
             Utilities.FixMixerGroups(wheelbarrow.spawnPrefab);
-            int amountToSpawn = PluginConfiguration.SCRAP_WHEELBARROW_ENABLED.Value ? 1 : 0;
+            int amountToSpawn = PluginConfig.Instance.SCRAP_WHEELBARROW_ENABLED.Value ? 1 : 0;
 
-            AnimationCurve curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe((1f - PluginConfiguration.SCRAP_WHEELBARROW_RARITY.Value), amountToSpawn), new Keyframe(1, amountToSpawn));
+            AnimationCurve curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe((1f - PluginConfig.Instance.SCRAP_WHEELBARROW_RARITY.Value), amountToSpawn), new Keyframe(1, amountToSpawn));
             SpawnableMapObjectDef mapObjDef = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
             mapObjDef.spawnableMapObject = new SpawnableMapObject();
             mapObjDef.spawnableMapObject.prefabToSpawn = wheelbarrow.spawnPrefab;
@@ -606,7 +605,7 @@ namespace MoreShipUpgrades
             if (wheelbarrow == null) return;
 
             wheelbarrow.itemId = 492019;
-            wheelbarrow.creditsWorth = PluginConfiguration.WHEELBARROW_PRICE.Value;
+            wheelbarrow.creditsWorth = PluginConfig.Instance.WHEELBARROW_PRICE.Value;
             wheelbarrow.twoHanded = true;
             wheelbarrow.twoHandedAnimation = true;
             wheelbarrow.grabAnim = "HoldJetpack";
@@ -615,7 +614,7 @@ namespace MoreShipUpgrades
             wheelbarrow.positionOffset = new Vector3(0f, -0.7f, 1.4f);
             wheelbarrow.allowDroppingAheadOfPlayer = true;
             wheelbarrow.isConductiveMetal = true;
-            wheelbarrow.weight = 0.99f + (PluginConfiguration.WHEELBARROW_WEIGHT.Value/100f);
+            wheelbarrow.weight = 0.99f + (PluginConfig.Instance.WHEELBARROW_WEIGHT.Value/100f);
             wheelbarrow.canBeGrabbedBeforeGameStart = true;
             StoreWheelbarrow barrowScript = wheelbarrow.spawnPrefab.AddComponent<StoreWheelbarrow>();
             wheelbarrow.toolTips = SetupWheelbarrowTooltips();
@@ -634,7 +633,7 @@ namespace MoreShipUpgrades
             UnityEngine.InputSystem.Key dropAllItemsKey = UnityEngine.InputSystem.Key.None;
             bool dropAllItemsMouseButtonSet;
             UnityEngine.InputSystem.LowLevel.MouseButton dropAllitemsMouseButton = UnityEngine.InputSystem.LowLevel.MouseButton.Middle;
-            string controlBind = UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_DROP_ALL_CONTROL_BIND.Value;
+            string controlBind = PluginConfig.Instance.WHEELBARROW_DROP_ALL_CONTROL_BIND.Value;
             if (Enum.TryParse(controlBind, out UnityEngine.InputSystem.Key toggle))
             {
                 dropAllItemsKey = toggle;
