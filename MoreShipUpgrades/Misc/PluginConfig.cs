@@ -280,7 +280,7 @@ namespace MoreShipUpgrades.Misc
         [DataMember] public SyncedEntry<float> FASTER_DROP_POD_INITIAL_TIMER { get; set; }
         [DataMember] public SyncedEntry<int> EXTRACTION_CONTRACT_AMOUNT_MEDKITS { get; set; }
         [DataMember] public SyncedEntry<int> CONTRACT_REWARD_QUOTA_MULTIPLIER { get; set; }
-        [DataMember] public SyncedEntry<bool> SHOW_UPGRADES_CHAT { get; set; }
+        public ConfigEntry<bool> SHOW_UPGRADES_CHAT { get; set; }
         [DataMember] public SyncedEntry<float> SIGURD_CHANCE { get; set; }
         [DataMember] public SyncedEntry<float> SIGURD_LAST_DAY_CHANCE { get; set; }
         [DataMember] public SyncedEntry<float> SIGURD_PERCENT { get; set; }
@@ -329,7 +329,7 @@ namespace MoreShipUpgrades.Misc
             SALE_PERC = cfg.BindSyncedEntry(topSection, "Chance of upgrades going on sale", 0.85f, "0.85 = 15% chance of an upgrade going on sale.");
             INTRO_ENABLED = cfg.BindSyncedEntry(topSection, "Intro Enabled", true, "If true shows a splashscreen with some info once per update of LGU.");
             KEEP_UPGRADES_AFTER_FIRED_CUTSCENE = cfg.BindSyncedEntry(topSection, "Keep upgrades after quota failure", false, "If true, you will keep your upgrades after being fired by The Company.");
-            SHOW_UPGRADES_CHAT = cfg.BindSyncedEntry(topSection, "Show upgrades being loaded in chat", true, "If enabled, chat messages will be displayed when loading an upgrade for the first time.");
+            SHOW_UPGRADES_CHAT = cfg.Bind(topSection, "Show upgrades being loaded in chat", true, "If enabled, chat messages will be displayed when loading an upgrade for the first time.");
 
             topSection = "Helmet";
             HELMET_ENABLED = cfg.BindSyncedEntry(topSection, "Enable the helmet for purchase", true, "");
@@ -511,13 +511,13 @@ namespace MoreShipUpgrades.Misc
             FASTER_DROP_POD_INITIAL_TIMER = cfg.BindSyncedEntry(topSection, "Time decrement on the timer used for the first ever item delivery", 10f, "");
 
             topSection = Sigurd.UPGRADE_NAME;
-            SIGURD_ENABLED = ConfigEntry(topSection, "Enable the Sigurd Access upgrade", true, "There's a chance that The Company will pay more for the scrap.");
-            SIGURD_LAST_DAY_ENABLED = ConfigEntry(topSection, "Enable the Sigurd Access upgrade for the last day", true, "There's a chance that the last day scrap you go over 100% value.");
-            SIGURD_PRICE = ConfigEntry(topSection, "Sigurd Access Price", 500, "Default price for upgrade. If set to 0 it will enable the Sigurd Access without buying the upgrade.");
-            SIGURD_CHANCE = ConfigEntry(topSection, "Chance for the upgrade to activate", 20f);
-            SIGURD_LAST_DAY_CHANCE = ConfigEntry(topSection, "Chance for the upgrade to activate on the last day", 20f);
-            SIGURD_PERCENT = ConfigEntry(topSection, "How much the percentage will go up", 20f);
-            SIGURD_LAST_DAY_PERCENT = ConfigEntry(topSection, "How much the percentage will go up on the last day", 20f);
+            SIGURD_ENABLED = cfg.BindSyncedEntry(topSection, "Enable the Sigurd Access upgrade", true, "There's a chance that The Company will pay more for the scrap.");
+            SIGURD_LAST_DAY_ENABLED = cfg.BindSyncedEntry(topSection, "Enable the Sigurd Access upgrade for the last day", true, "There's a chance that the last day scrap you go over 100% value.");
+            SIGURD_PRICE = cfg.BindSyncedEntry(topSection, "Sigurd Access Price", 500, "Default price for upgrade. If set to 0 it will enable the Sigurd Access without buying the upgrade.");
+            SIGURD_CHANCE = cfg.BindSyncedEntry(topSection, "Chance for the upgrade to activate", 20f, "");
+            SIGURD_LAST_DAY_CHANCE = cfg.BindSyncedEntry(topSection, "Chance for the upgrade to activate on the last day", 20f, "");
+            SIGURD_PERCENT = cfg.BindSyncedEntry(topSection, "How much the percentage will go up", 20f, "");
+            SIGURD_LAST_DAY_PERCENT = cfg.BindSyncedEntry(topSection, "How much the percentage will go up on the last day", 20f, "");
 
             topSection = Hunter.UPGRADE_NAME;
             HUNTER_ENABLED = cfg.BindSyncedEntry(topSection, "Enable the Hunter upgrade", true, "Collect and sell samples from dead enemies");
