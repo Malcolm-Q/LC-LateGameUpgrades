@@ -498,8 +498,8 @@ namespace MoreShipUpgrades.Misc
             WALKIE_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
 
             topSection = FasterDropPod.UPGRADE_NAME;
-            FASTER_DROP_POD_ENABLED = cfg.BindSyncedEntry(topSection, "Enable the Drop Pod Thrusters upgrade", true, "Make the Drop Pod land faster.");
-            FASTER_DROP_POD_PRICE = cfg.BindSyncedEntry(topSection, "Drop Pod Thrusters Price", 300, "Default price for upgrade.");
+            FASTER_DROP_POD_ENABLED = cfg.BindSyncedEntry(topSection, "Enable the Drop Pod Thrusters upgrade", true, "Make the Drop Pod, the ship that deliver items bought on the terminal, land faster.");
+            FASTER_DROP_POD_PRICE = cfg.BindSyncedEntry(topSection, "Drop Pod Thrusters Price", 300, "Default price for upgrade. If set to 0 it will enable the Drop Pod without buying the upgrade.");
             FASTER_DROP_POD_TIMER = cfg.BindSyncedEntry(topSection, "Time decrement on the timer used for subsequent item deliveries", 20f, "");
             FASTER_DROP_POD_INITIAL_TIMER = cfg.BindSyncedEntry(topSection, "Time decrement on the timer used for the first ever item delivery", 10f, "");
 
