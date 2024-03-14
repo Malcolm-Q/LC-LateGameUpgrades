@@ -87,7 +87,7 @@ namespace MoreShipUpgrades.Input
                 return;
             }
 
-            if(NightVision.Instance && !NightVision.Instance.batteryExhaustion && !localPlayerController.inTerminalMenu)
+            if(NightVision.Instance && !NightVision.Instance.batteryExhaustion)
             {
                 NightVision.Instance.Toggle();
             }
