@@ -51,6 +51,8 @@ namespace MoreShipUpgrades.Misc
         [DataMember] public SyncedEntry<bool> DOOR_HYDRAULICS_BATTERY_ENABLED { get; set; }
         [DataMember] public SyncedEntry<bool> SCRAP_INSURANCE_ENABLED { get; set; }
         [DataMember] public SyncedEntry<bool> FASTER_DROP_POD_ENABLED { get; set; }
+        [DataMember] public SyncedEntry<bool> SIGURD_ENABLED { get; set; }
+        [DataMember] public SyncedEntry<bool> SIGURD_LAST_DAY_ENABLED { get; set; }
 
         // individual or shared
         [DataMember] public SyncedEntry<bool> BEEKEEPER_INDIVIDUAL { get; set; }
@@ -101,6 +103,7 @@ namespace MoreShipUpgrades.Misc
         [DataMember] public SyncedEntry<int> DOOR_HYDRAULICS_BATTERY_PRICE { get; set; }
         [DataMember] public SyncedEntry<int> SCRAP_INSURANCE_PRICE { get; set; }
         [DataMember] public SyncedEntry<int> FASTER_DROP_POD_PRICE { get; set; }
+        [DataMember] public SyncedEntry<int> SIGURD_PRICE { get; set; }
 
         // attributes
         [DataMember] public SyncedEntry<string> CHARGING_BOOSTER_PRICES { get; set; }
@@ -278,6 +281,10 @@ namespace MoreShipUpgrades.Misc
         [DataMember] public SyncedEntry<int> EXTRACTION_CONTRACT_AMOUNT_MEDKITS { get; set; }
         [DataMember] public SyncedEntry<int> CONTRACT_REWARD_QUOTA_MULTIPLIER { get; set; }
         [DataMember] public SyncedEntry<bool> SHOW_UPGRADES_CHAT { get; set; }
+        [DataMember] public SyncedEntry<float> SIGURD_CHANCE { get; set; }
+        [DataMember] public SyncedEntry<float> SIGURD_LAST_DAY_CHANCE { get; set; }
+        [DataMember] public SyncedEntry<float> SIGURD_PERCENT { get; set; }
+        [DataMember] public SyncedEntry<float> SIGURD_LAST_DAY_PERCENT { get; set; }
 
         public PluginConfig(ConfigFile cfg) : base(Metadata.GUID)
         {
@@ -502,6 +509,15 @@ namespace MoreShipUpgrades.Misc
             FASTER_DROP_POD_PRICE = cfg.BindSyncedEntry(topSection, "Drop Pod Thrusters Price", 300, "Default price for upgrade. If set to 0 it will enable the Drop Pod without buying the upgrade.");
             FASTER_DROP_POD_TIMER = cfg.BindSyncedEntry(topSection, "Time decrement on the timer used for subsequent item deliveries", 20f, "");
             FASTER_DROP_POD_INITIAL_TIMER = cfg.BindSyncedEntry(topSection, "Time decrement on the timer used for the first ever item delivery", 10f, "");
+
+            topSection = Sigurd.UPGRADE_NAME;
+            SIGURD_ENABLED = ConfigEntry(topSection, "Enable the Sigurd Access upgrade", true, "There's a chance that The Company will pay more for the scrap.");
+            SIGURD_LAST_DAY_ENABLED = ConfigEntry(topSection, "Enable the Sigurd Access upgrade for the last day", true, "There's a chance that the last day scrap you go over 100% value.");
+            SIGURD_PRICE = ConfigEntry(topSection, "Sigurd Access Price", 500, "Default price for upgrade. If set to 0 it will enable the Sigurd Access without buying the upgrade.");
+            SIGURD_CHANCE = ConfigEntry(topSection, "Chance for the upgrade to activate", 20f);
+            SIGURD_LAST_DAY_CHANCE = ConfigEntry(topSection, "Chance for the upgrade to activate on the last day", 20f);
+            SIGURD_PERCENT = ConfigEntry(topSection, "How much the percentage will go up", 20f);
+            SIGURD_LAST_DAY_PERCENT = ConfigEntry(topSection, "How much the percentage will go up on the last day", 20f);
 
             topSection = Hunter.UPGRADE_NAME;
             HUNTER_ENABLED = cfg.BindSyncedEntry(topSection, "Enable the Hunter upgrade", true, "Collect and sell samples from dead enemies");
