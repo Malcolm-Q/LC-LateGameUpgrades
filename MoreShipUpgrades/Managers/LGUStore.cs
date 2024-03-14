@@ -14,6 +14,7 @@ using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using MoreShipUpgrades.Misc.TerminalNodes;
+using MoreShipUpgrades.Compat;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -22,6 +23,7 @@ namespace MoreShipUpgrades.Managers
         public static LguStore Instance { get; internal set; }
         public SaveInfo SaveInfo { get; internal set; }
         public LguSave LguSave { get; internal set; }
+        public LGUSaveV1 oldSave;
         private ulong playerID = 0;
         static LguLogger logger = new LguLogger(nameof(LguStore));
         const string saveDataKey = "LGU_SAVE_DATA";
@@ -38,29 +40,23 @@ namespace MoreShipUpgrades.Managers
                 if (File.Exists(filePath))
                 {
                     string tempJson = File.ReadAllText(filePath);
-                    ES3.Save(key: saveDataKey, value: tempJson, filePath: saveFile);
+                    oldSave = JsonConvert.DeserializeObject<LGUSaveV1>(tempJson);
                     File.Delete(filePath);
                 }
-                    string json = (string)ES3.Load(key: saveDataKey, defaultValue: null, filePath: saveFile);
+                string json = (string)ES3.Load(key: saveDataKey, defaultValue: null, filePath: saveFile);
                 if (json != null)
                 {
                     logger.LogInfo($"Loading save file for slot {saveNum}.");
                     LguSave = JsonConvert.DeserializeObject<LguSave>(json);
-                    UpdateUpgradeBus();
                 }
                 else
                 {
                     logger.LogInfo($"No save file found for slot {saveNum}. Creating new.");
                     LguSave = new LguSave();
-                    UpdateUpgradeBus();
                 }
+                UpdateUpgradeBus();
                 UpgradeBus.Instance.Reconstruct();
                 HandleSpawns();
-            }
-            else
-            {
-                logger.LogInfo("Requesting hosts config...");
-                ConfigSynchronizationManager.Instance.SendConfigServerRpc();
             }
         }
 
@@ -181,7 +177,7 @@ namespace MoreShipUpgrades.Managers
         /// Method to get old data from json and store in the new dictionaries
         /// </summary>
         /// <param name="saveInfo">Save that might contain old data</param>
-        void CheckForOldData(SaveInfo saveInfo)
+        void CheckForOldData(SaveInfoV1 saveInfo)
         {
             if (saveInfo.exoskeleton)
             {
@@ -274,7 +270,10 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.Instance.activeUpgrades = SaveInfo.activeUpgrades;
             UpgradeBus.Instance.upgradeLevels = SaveInfo.upgradeLevels;
 
-            CheckForOldData(SaveInfo);
+            if (oldSave.playerSaves.ContainsKey(playerID))
+            {
+                CheckForOldData(oldSave.playerSaves[playerID]);
+            }
 
             ContractManager.Instance.contractLevel = SaveInfo.contractLevel;
             ContractManager.Instance.contractType = SaveInfo.contractType;
@@ -318,7 +317,7 @@ namespace MoreShipUpgrades.Managers
 
         private IEnumerator WaitForUpgradeObject()
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2f);
             logger.LogInfo("Applying loaded upgrades...");
             foreach (CustomTerminalNode customNode in UpgradeBus.Instance.terminalNodes)
             {
@@ -387,9 +386,33 @@ namespace MoreShipUpgrades.Managers
         [ClientRpc]
         public void GenerateSalesClientRpc(int seed)
         {
-            UpgradeBus.Instance.GenerateSales(seed);
+            GenerateSales(seed);
         }
 
+        internal void GenerateSales(int seed = -1)
+        {
+            if (seed == -1) seed = UnityEngine.Random.Range(0, 999999);
+            logger.LogInfo($"Generating sales with seed: {seed} on this client...");
+            UnityEngine.Random.InitState(seed);
+            UpgradeBus.Instance.SaleData = new Dictionary<string, float>();
+            foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
+            {
+                if (UnityEngine.Random.value > UpgradeBus.Instance.PluginConfiguration.SALE_PERC.Value)
+                {
+                    node.salePerc = UnityEngine.Random.Range(0.60f, 0.90f);
+                    logger.LogInfo($"Set sale percentage to: {node.salePerc} for {node.Name}.");
+                }
+                else
+                {
+                    node.salePerc = 1f;
+                }
+                if (IsHost || IsServer)
+                {
+                    logger.LogInfo("Saving node into save");
+                    UpgradeBus.Instance.SaleData.Add(node.Name, node.salePerc);
+                }
+            }
+        }
         [ClientRpc]
         public void DestroyHelmetClientRpc(ulong id)
         {
@@ -473,55 +496,19 @@ namespace MoreShipUpgrades.Managers
     {
         public Dictionary<string, bool> activeUpgrades = UpgradeBus.Instance.activeUpgrades;
         public Dictionary<string, int> upgradeLevels = UpgradeBus.Instance.upgradeLevels;
-        public bool DestroyTraps;
-        public bool scannerUpgrade;
-        public bool nightVision;
-        public bool exoskeleton;
-        public bool beekeeper;
-        public bool terminalFlash;
-        public bool strongLegs;
-        public bool proteinPowder;
-        public bool runningShoes;
-        public bool biggerLungs;
-        public bool lockSmith;
-        public bool walkies;
-        public bool lightningRod;
-        public bool pager;
-        public bool hunter;
-        public bool playerHealth;
-        public bool sickBeats;
-        public bool doorsHydraulicsBattery;
-        public bool marketInfluence;
-        public bool bargainConnections;
-        public bool lethalDeals;
-        public bool quantumDisruptor;
-
-        public int beeLevel;
-        public int huntLevel;
-        public int proteinLevel;
-        public int lungLevel;
-        public int backLevel;
-        public int runningLevel;
-        public int scanLevel;
-        public int discoLevel;
-        public int legLevel;
-        public int nightVisionLevel;
-        public int playerHealthLevel;
-        public int doorsHydraulicsBatteryLevel;
-        public int marketInfluenceLevel;
-        public int bargainConnectionsLevel;
-        public int quantumDisruptorLevel;
 
         public bool TPButtonPressed = UpgradeBus.Instance.TPButtonPressed;
         public string contractType = ContractManager.Instance.contractType;
         public string contractLevel = ContractManager.Instance.contractLevel;
         public Dictionary<string, float> SaleData = UpgradeBus.Instance.SaleData;
         public bool wearingHelmet = UpgradeBus.Instance.wearingHelmet;
+
+        public string Version = "V2";
     }
 
     [Serializable]
     public class LguSave
     {
-        public Dictionary<ulong,SaveInfo> playerSaves = new Dictionary<ulong,SaveInfo>();
+        public Dictionary<ulong, SaveInfo> playerSaves = [];
     }
 }

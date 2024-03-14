@@ -1,3 +1,10 @@
+## V 3.3.1 - 2024-03-??
+### Fixes
+- Fixed Stimpack not being applied past the first day of the upgrade being applied.
+- Fixed Portable Teleporter not being triggered when using different control bindings other than mouse
+- Fixed Peeper throwing errors when spawning/deleting. (Harmless bug but error nonetheless.)
+- Fixed Sick Beats being disabled causing error when the player decided to turn it off through configuration after purchasing it.
+
 ## V 3.3.0 - 2024-02-27
 ### Additions
 - Added "Charging Booster" upgrade which allows radar boosters to charge up player's held item by looking at the base of the booster. Has a cooldown after use which can be decremented by increasing the upgrade's level.
