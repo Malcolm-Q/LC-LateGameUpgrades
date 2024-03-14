@@ -270,7 +270,7 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.Instance.activeUpgrades = SaveInfo.activeUpgrades;
             UpgradeBus.Instance.upgradeLevels = SaveInfo.upgradeLevels;
 
-            if (oldSave.playerSaves.ContainsKey(playerID))
+            if (oldSave != null && oldSave.playerSaves.ContainsKey(playerID))
             {
                 CheckForOldData(oldSave.playerSaves[playerID]);
             }
