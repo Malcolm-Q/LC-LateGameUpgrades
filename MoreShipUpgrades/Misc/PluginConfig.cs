@@ -280,7 +280,7 @@ namespace MoreShipUpgrades.Misc
         [DataMember] public SyncedEntry<float> FASTER_DROP_POD_INITIAL_TIMER { get; set; }
         [DataMember] public SyncedEntry<int> EXTRACTION_CONTRACT_AMOUNT_MEDKITS { get; set; }
         [DataMember] public SyncedEntry<int> CONTRACT_REWARD_QUOTA_MULTIPLIER { get; set; }
-        [DataMember] public SyncedEntry<bool> SHOW_UPGRADES_CHAT { get; set; }
+        public ConfigEntry<bool> SHOW_UPGRADES_CHAT { get; set; }
         [DataMember] public SyncedEntry<float> SIGURD_CHANCE { get; set; }
         [DataMember] public SyncedEntry<float> SIGURD_LAST_DAY_CHANCE { get; set; }
         [DataMember] public SyncedEntry<float> SIGURD_PERCENT { get; set; }
@@ -329,7 +329,7 @@ namespace MoreShipUpgrades.Misc
             SALE_PERC = cfg.BindSyncedEntry(topSection, "Chance of upgrades going on sale", 0.85f, "0.85 = 15% chance of an upgrade going on sale.");
             INTRO_ENABLED = cfg.BindSyncedEntry(topSection, "Intro Enabled", true, "If true shows a splashscreen with some info once per update of LGU.");
             KEEP_UPGRADES_AFTER_FIRED_CUTSCENE = cfg.BindSyncedEntry(topSection, "Keep upgrades after quota failure", false, "If true, you will keep your upgrades after being fired by The Company.");
-            SHOW_UPGRADES_CHAT = cfg.BindSyncedEntry(topSection, "Show upgrades being loaded in chat", true, "If enabled, chat messages will be displayed when loading an upgrade for the first time.");
+            SHOW_UPGRADES_CHAT = cfg.Bind(topSection, "Show upgrades being loaded in chat", true, "If enabled, chat messages will be displayed when loading an upgrade for the first time.");
 
             topSection = "Helmet";
             HELMET_ENABLED = cfg.BindSyncedEntry(topSection, "Enable the helmet for purchase", true, "");
