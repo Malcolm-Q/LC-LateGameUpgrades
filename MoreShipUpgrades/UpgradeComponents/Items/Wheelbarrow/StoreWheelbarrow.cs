@@ -15,9 +15,9 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
 
         public string GetDisplayInfo()
         {
-            return $"A portable container which has a maximum capacity of {UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS}" +
+            return $"A portable container which has a maximum capacity of {UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS.Value}" +
                 $" and reduces the effective weight of the inserted items by {UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER.Value * 100} %.\n" +
-                $"It weighs {UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_WEIGHT} lbs";
+                $"It weighs {UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_WEIGHT.Value} lbs";
         }
 
         public override void Start()
