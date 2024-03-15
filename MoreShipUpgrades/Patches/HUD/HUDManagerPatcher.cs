@@ -28,14 +28,14 @@ namespace MoreShipUpgrades.Patches.HUD
             bool throughWall = Physics.Linecast(playerScript.gameplayCamera.transform.position, node.transform.position, 256, QueryTriggerInteraction.Ignore);
             bool hasRequiredLevel = BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) == 2;
             bool cannotSeeEnemiesThroughWalls = node.nodeType == 1 && !UpgradeBus.Instance.PluginConfiguration.BETTER_SCANNER_ENEMIES.Value;
-            if (throughWall && !hasRequiredLevel || cannotSeeEnemiesThroughWalls)
+            if (throughWall && (!hasRequiredLevel || cannotSeeEnemiesThroughWalls))
             {
                 __result = false;
                 return;
             }
             float rangeIncrease = node.headerText == "Main entrance" || node.headerText == "Ship" ? UpgradeBus.Instance.PluginConfiguration.SHIP_AND_ENTRANCE_DISTANCE_INCREASE.Value : UpgradeBus.Instance.PluginConfiguration.NODE_DISTANCE_INCREASE.Value;
             float num = Vector3.Distance(playerScript.transform.position, node.transform.position);
-            __result = num < node.maxRange + rangeIncrease && num > node.minRange;
+            __result = num <= node.maxRange + rangeIncrease && num >= node.minRange;
         }
 
         [HarmonyPatch(nameof(HUDManager.FillEndGameStats))]

@@ -273,6 +273,7 @@ namespace MoreShipUpgrades.Managers
             if (oldSave != null && oldSave.playerSaves.ContainsKey(playerID))
             {
                 CheckForOldData(oldSave.playerSaves[playerID]);
+                ServerSaveFileServerRpc();
             }
 
             ContractManager.Instance.contractLevel = SaveInfo.contractLevel;
