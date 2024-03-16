@@ -24,7 +24,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
             {"green",null },
             {"blue",null }
         };
-        Dictionary<string, InteractTrigger> trigs = new Dictionary<string, InteractTrigger>
+        Dictionary<string, InteractTrigger[]> trigs = new Dictionary<string, InteractTrigger[]>
         {
             {"red",null },
             {"green",null },
@@ -50,9 +50,18 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
             audio.clip = tick;
             audio.Play();
 
-            trigs["red"].onInteract.AddListener(CutRed);
-            trigs["blue"].onInteract.AddListener(CutBlue);
-            trigs["green"].onInteract.AddListener(CutGreen);
+            foreach (InteractTrigger trigger in trigs["red"])
+            {
+                trigger.onInteract.AddListener(CutRed);
+            }
+            foreach (InteractTrigger trigger in trigs["blue"])
+            {
+                trigger.onInteract.AddListener(CutBlue);
+            }
+            foreach (InteractTrigger trigger in trigs["green"])
+            {
+                trigger.onInteract.AddListener(CutGreen);
+            }
 
             if (IsHost || IsServer)
             {
@@ -103,8 +112,11 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
                 audio.PlayOneShot(snip);
                 wires[wire].SetActive(false);
                 cutWires[wire].SetActive(true);
-                trigs[wire].enabled = false;
-                trigs[wire].GetComponent<BoxCollider>().enabled = false;
+                foreach (InteractTrigger trigger in trigs[wire])
+                {
+                    trigger.enabled = false;
+                    trigger.GetComponent<BoxCollider>().enabled = false;
+                }
                 if (ContractManager.Instance.bombOrder.Count == 0)
                 {
                     // win
@@ -170,6 +182,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
             ContractManager.Instance.SerialNumber = serial;
             ContractManager.Instance.bombOrder = newOrder.Split(",").ToList();
             serialNumberMesh.text = serial;
+            InteractTrigger serialDisplay = transform.Find("LGUBomb").Find("SerialDisplay").GetComponent<InteractTrigger>();
+            serialDisplay.disabledHoverTip = $"Serial: [{serial}]";
         }
         void InitializeFields()
         {
@@ -185,9 +199,9 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
             cutWires["green"] = destroyedWires.GetChild(1).gameObject;
             cutWires["red"] = destroyedWires.GetChild(2).gameObject;
 
-            trigs["red"] = transform.GetChild(0).GetChild(4).GetComponent<InteractTrigger>();
-            trigs["blue"] = transform.GetChild(0).GetChild(5).GetComponent<InteractTrigger>();
-            trigs["green"] = transform.GetChild(0).GetChild(6).GetComponent<InteractTrigger>();
+            trigs["red"] = transform.Find("LGUBomb").Find("InteractWires").Find("Red").GetComponentsInChildren<InteractTrigger>();
+            trigs["blue"] = transform.Find("LGUBomb").Find("InteractWires").Find("Blue").GetComponentsInChildren<InteractTrigger>();
+            trigs["green"] = transform.Find("LGUBomb").Find("InteractWires").Find("Green").GetComponentsInChildren<InteractTrigger>();
 
             serialNumberMesh = transform.GetChild(0).GetChild(2).GetComponent<TextMesh>();
             if (serialNumberMesh == null)
@@ -209,8 +223,11 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
             {
                 wires[wire].SetActive(false);
                 cutWires[wire].SetActive(true);
-                trigs[wire].enabled = false;
-                trigs[wire].GetComponent<BoxCollider>().enabled = false;
+                foreach (InteractTrigger trigger in trigs[wire])
+                {
+                    trigger.enabled = false;
+                    trigger.GetComponent<BoxCollider>().enabled = false;
+                }
             }
             GetComponent<PhysicsProp>().enabled = true;
         }
