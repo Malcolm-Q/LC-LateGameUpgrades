@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items.RadarBooster
 {
-    internal class ChargingStationManager : NetworkBehaviour
+    internal class ChargingStationManager : MonoBehaviour
     {
         InteractTrigger interactComponent;
         internal float cooldown = 0f;

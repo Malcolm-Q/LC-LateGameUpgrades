@@ -17,7 +17,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.Managers
 {
-    public class UpgradeBus : NetworkBehaviour
+    public class UpgradeBus : MonoBehaviour
     {
         internal static UpgradeBus Instance { get; set; }
         internal PluginConfig PluginConfiguration { get; set; }
@@ -102,7 +102,7 @@ namespace MoreShipUpgrades.Managers
         public void ResetAllValues(bool wipeObjRefs = true)
         {
             ResetPlayerAttributes();
-            if(IsHost || IsServer) LguStore.Instance.ResetShipAttributesClientRpc();
+            if (LguStore.Instance.IsServer || LguStore.Instance.IsHost) LguStore.Instance.ResetShipAttributesClientRpc();
 
             if (PluginConfiguration.BEATS_ENABLED.Value) SickBeats.Instance.EffectsActive = false;
             if (PluginConfiguration.NIGHT_VISION_ENABLED.Value) NightVision.Instance.nightVisionActive = false;
