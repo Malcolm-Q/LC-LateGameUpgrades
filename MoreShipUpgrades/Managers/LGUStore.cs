@@ -15,6 +15,8 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Compat;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
+using HarmonyLib;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -488,6 +490,13 @@ namespace MoreShipUpgrades.Managers
         {
             logger.LogInfo($"Instructing clients to play '{clip}' SFX");
             PlayAudioOnPlayerClientRpc(netRef, clip);
+        }
+
+        [ClientRpc]
+        internal void ResetShipAttributesClientRpc()
+        {
+            logger.LogDebug($"Resetting the ship's attributes");
+            UpgradeBus.Instance.UpgradeObjects.Values.Where(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>() is IServerSync).Do(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute());
         }
 
     }

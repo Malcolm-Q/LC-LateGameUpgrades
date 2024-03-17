@@ -102,7 +102,7 @@ namespace MoreShipUpgrades.Managers
         public void ResetAllValues(bool wipeObjRefs = true)
         {
             ResetPlayerAttributes();
-            if(IsHost || IsServer) ResetShipAttributesClientRpc();
+            if(IsHost || IsServer) LguStore.Instance.ResetShipAttributesClientRpc();
 
             if (PluginConfiguration.BEATS_ENABLED.Value) SickBeats.Instance.EffectsActive = false;
             if (PluginConfiguration.NIGHT_VISION_ENABLED.Value) NightVision.Instance.nightVisionActive = false;
@@ -133,13 +133,6 @@ namespace MoreShipUpgrades.Managers
 
             logger.LogDebug($"Resetting {player.playerUsername}'s attributes");
             UpgradeObjects.Values.Where(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>() is IPlayerSync).Do(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute());
-        }
-
-        [ClientRpc]
-        private void ResetShipAttributesClientRpc()
-        {
-            logger.LogDebug($"Resetting the ship's attributes");
-            UpgradeObjects.Values.Where(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>() is IServerSync).Do(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute());
         }
 
         internal void LoadSales()
