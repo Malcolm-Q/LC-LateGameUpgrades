@@ -188,6 +188,7 @@ namespace MoreShipUpgrades.Misc
                     LguStore.Instance.HandleUpgrade(customNode.Name, true);
                     displayText = $"You Upgraded {customNode.Name} to level {customNode.CurrentUpgrade + 1} \n\n";
                 }
+                if (customNode.salePerc != 1f && UpgradeBus.Instance.PluginConfiguration.SALE_APPLY_ONCE.Value) customNode.salePerc = 1f;
             }
             else if (customNode.Unlocked && canAfford)
             {
