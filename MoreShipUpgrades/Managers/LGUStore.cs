@@ -63,6 +63,11 @@ namespace MoreShipUpgrades.Managers
         [ServerRpc(RequireOwnership = false)]
         public void ServerSaveFileServerRpc()
         {
+            ServerSaveFile();
+        }
+
+        void ServerSaveFile()
+        {
             string saveFile = GameNetworkManager.Instance.currentSaveFileName;
             string json = JsonConvert.SerializeObject(LguSave);
             ES3.Save(key: saveDataKey, value: json, filePath: saveFile);
@@ -413,6 +418,7 @@ namespace MoreShipUpgrades.Managers
                     UpgradeBus.Instance.SaleData.Add(node.Name, node.salePerc);
                 }
             }
+            if (IsHost || IsServer) ServerSaveFile();
         }
         [ClientRpc]
         public void DestroyHelmetClientRpc(ulong id)
