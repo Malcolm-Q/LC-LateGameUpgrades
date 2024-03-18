@@ -618,7 +618,7 @@ namespace MoreShipUpgrades.Misc
         {
             if (!UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_ENABLED.Value) return outputNode;
             if (secondWord == "") return DisplayTerminalMessage($"Probe <moonName> [weatherType]\n\nmoonName: Name of a moon\nweatherType: Name of a weather allowed in the level\n\n");
-            if (!StartOfRound.Instance.inShipPhase) return DisplayTerminalMessage($"You can only send out weather probes while in orbit");
+            if (!StartOfRound.Instance.inShipPhase) return DisplayTerminalMessage($"You can only send out weather probes while in orbit.\n\n");
             if (thirdWord != "") return ExecuteSpecifiedProbeCommand(secondWord, thirdWord, terminal);
             
             (string, LevelWeatherType) selectedWeather = ContractManager.PickWeather(secondWord);
@@ -634,7 +634,7 @@ namespace MoreShipUpgrades.Misc
                 return DisplayTerminalMessage($"Not enough credits to purchase a weather probe with specified weather.\nPrice: {UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE.Value}\nCurrent credits: {terminal.groupCredits}\n\n");
 
             (string, LevelWeatherType) selectedWeather = ContractManager.PickWeather(secondWord, thirdWord);
-            if (selectedWeather.Item1 == null) return DisplayTerminalMessage($"No moon was found that has an occurence of selected input ({secondWord}).");
+            if (selectedWeather.Item1 == null) return DisplayTerminalMessage($"No moon was found that has an occurence of selected input ({secondWord}).\n\n");
             if (selectedWeather.Item2 == LevelWeatherType.DustClouds) return DisplayTerminalMessage($"An invalid weather was selected to probe for the moon.\n\n");
             if (StartOfRound.Instance.levels.First(x => x.PlanetName == selectedWeather.Item1).currentWeather == selectedWeather.Item2) return DisplayTerminalMessage($"The provided moon ({selectedWeather.Item1}) already has the selected weather ({selectedWeather.Item2}).\n\n");
             terminal.groupCredits -= UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE.Value;
