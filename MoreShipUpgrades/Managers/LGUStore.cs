@@ -523,6 +523,7 @@ namespace MoreShipUpgrades.Managers
             if (selectedLevel.overrideWeather) selectedLevel.overrideWeatherType = selectedWeather;
             else selectedLevel.currentWeather = selectedWeather;
             ContractManager.probedWeathers[selectedLevel.PlanetName] = selectedWeather;
+            if (selectedLevel == StartOfRound.Instance.currentLevel) StartOfRound.Instance.SetMapScreenInfoToCurrentLevel();
         }
         [ServerRpc(RequireOwnership = false)]
         internal void SyncProbeWeathersServerRpc()

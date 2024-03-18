@@ -164,9 +164,8 @@ namespace MoreShipUpgrades.Managers
         internal static (string, LevelWeatherType) PickWeather(string levelName, string weather = "")
         {
             SelectableLevel[] availableLevels = StartOfRound.Instance.levels;
-            SelectableLevel selectedLevel = Array.Find(availableLevels, x => x.PlanetName.ToLower().Contains(levelName));
+            SelectableLevel selectedLevel = Array.Find(availableLevels, x => x.PlanetName.ToLower().Contains(levelName) && !x.PlanetName.Contains("Gordion"));
             if (selectedLevel == null) return (null, LevelWeatherType.None);
-            LevelWeatherType selectedWeather = selectedLevel.overrideWeather ? selectedLevel.overrideWeatherType : selectedLevel.currentWeather;
             switch(weather)
             {
                 case "clear":
