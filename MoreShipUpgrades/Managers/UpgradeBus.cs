@@ -330,6 +330,7 @@ namespace MoreShipUpgrades.Managers
             SetupChargingBoosterTerminalNode();
             SetupSigurdTerminalNode();
             SetupEfficientEnginesNode();
+            SetupClimbingGlovesTerminalNode();
             terminalNodes.Sort();
         }
         void SetupEfficientEnginesNode()
@@ -339,6 +340,14 @@ namespace MoreShipUpgrades.Managers
                                                 PluginConfiguration.EFFICIENT_ENGINES_ENABLED.Value,
                                                 PluginConfiguration.EFFICIENT_ENGINES_PRICE.Value,
                                                 ParseUpgradePrices(PluginConfiguration.EFFICIENT_ENGINES_PRICES.Value));
+        }
+        void SetupClimbingGlovesTerminalNode()
+        {
+            SetupMultiplePurchasableTerminalNode(ClimbingGloves.UPGRADE_NAME,
+                                                PluginConfiguration.CLIMBING_GLOVES_INDIVIDUAL.Value,
+                                                PluginConfiguration.CLIMBING_GLOVES_ENABLED.Value,
+                                                PluginConfiguration.CLIMBING_GLOVES_PRICE.Value,
+                                                ParseUpgradePrices(PluginConfiguration.CLIMBING_GLOVES_PRICES.Value));
         }
         void SetupMarketInfluenceTerminalNode()
         {

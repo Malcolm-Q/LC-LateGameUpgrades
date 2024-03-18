@@ -54,7 +54,7 @@ namespace MoreShipUpgrades.Misc
         [DataMember] public SyncedEntry<bool> SIGURD_ENABLED { get; set; }
         [DataMember] public SyncedEntry<bool> SIGURD_LAST_DAY_ENABLED { get; set; }
         [DataMember] public SyncedEntry<bool> EFFICIENT_ENGINES_ENABLED { get; set; }
-
+        [DataMember] public SyncedEntry<bool> CLIMBING_GLOVES_ENABLED {  get; set; }
         // individual or shared
         [DataMember] public SyncedEntry<bool> BEEKEEPER_INDIVIDUAL { get; set; }
         [DataMember] public SyncedEntry<bool> PROTEIN_INDIVIDUAL { get; set; }
@@ -70,8 +70,9 @@ namespace MoreShipUpgrades.Misc
         [DataMember] public SyncedEntry<bool> MALWARE_BROADCASTER_INDIVIDUAL { get; set; }
         [DataMember] public SyncedEntry<bool> INTERN_INDIVIDUAL { get; set; }
         [DataMember] public SyncedEntry<bool> LOCKSMITH_INDIVIDUAL { get; set; }
-
+        [DataMember] public SyncedEntry<bool> CLIMBING_GLOVES_INDIVIDUAL { get; set; }
         // prices
+        [DataMember] public SyncedEntry<int> CLIMBING_GLOVES_PRICE {  get; set; }
         [DataMember] public SyncedEntry<int> CHARGING_BOOSTER_PRICE { get; set; }
         [DataMember] public SyncedEntry<int> MARKET_INFLUENCE_PRICE { get; set; }
         [DataMember] public SyncedEntry<int> BARGAIN_CONNECTIONS_PRICE { get; set; }
@@ -111,6 +112,9 @@ namespace MoreShipUpgrades.Misc
         [DataMember] public SyncedEntry<string> EFFICIENT_ENGINES_PRICES {  get; set; }
         [DataMember] public SyncedEntry<int> EFFICIENT_ENGINES_INITIAL_DISCOUNT {  get; set; }
         [DataMember] public SyncedEntry<int> EFFICIENT_ENGINES_INCREMENTAL_DISCOUNT { get; set; }
+        [DataMember] public SyncedEntry<string> CLIMBING_GLOVES_PRICES {  get; set; }
+        [DataMember] public SyncedEntry<float> INITIAL_CLIMBING_SPEED_BOOST {  get; set; }
+        [DataMember] public SyncedEntry<float> INCREMENTAL_CLIMBING_SPEED_BOOST { get; set; }
         [DataMember] public SyncedEntry<string> CHARGING_BOOSTER_PRICES { get; set; }
         [DataMember] public SyncedEntry<float> CHARGING_BOOSTER_COOLDOWN { get; set; }
         [DataMember] public SyncedEntry<float> CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE { get; set; }
@@ -615,6 +619,14 @@ namespace MoreShipUpgrades.Misc
             EFFICIENT_ENGINES_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, "600, 750, 900", BaseUpgrade.PRICES_DESCRIPTION);
             EFFICIENT_ENGINES_INITIAL_DISCOUNT = cfg.BindSyncedEntry(topSection, "Initial discount applied to moon routing (%)", 15, "");
             EFFICIENT_ENGINES_INCREMENTAL_DISCOUNT = cfg.BindSyncedEntry(topSection, "Incremental discount applied to moon routing (%)", 5, "");
+            
+            topSection = ClimbingGloves.UPGRADE_NAME;
+            CLIMBING_GLOVES_ENABLED = cfg.BindSyncedEntry(topSection, "Enable Climbing Gloves Upgrade", true, "Tier upgrade which increases the speed of climbing ladders");
+            CLIMBING_GLOVES_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            CLIMBING_GLOVES_PRICE = cfg.BindSyncedEntry(topSection, "Price of Climbing Gloves Upgrade", 150, "");
+            CLIMBING_GLOVES_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, "200,250,300", BaseUpgrade.PRICES_DESCRIPTION);
+            INITIAL_CLIMBING_SPEED_BOOST = cfg.BindSyncedEntry(topSection, "Initial value added to the players climbing speed", 1f, "Vanilla climb speed is 4 units");
+            INCREMENTAL_CLIMBING_SPEED_BOOST = cfg.BindSyncedEntry(topSection, "Incremental value added to the players climbing speed", 0.5f, "");
 
             topSection = "Wheelbarrow";
             WHEELBARROW_ENABLED = cfg.BindSyncedEntry(topSection, "Enable the Wheelbarrow Item", true, "Allows you to buy a wheelbarrow to carry items outside of your inventory");

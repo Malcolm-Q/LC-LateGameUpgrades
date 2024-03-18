@@ -117,6 +117,7 @@ namespace MoreShipUpgrades.Misc
             { FasterDropPod.UPGRADE_NAME, upgrades+"FasterDropPod.prefab" },
             { Sigurd.UPGRADE_NAME, upgrades+"Sigurd.prefab" },
             { EfficientEngines.UPGRADE_NAME, upgrades+"EfficientEngines.prefab" },
+            { ClimbingGloves.UPGRADE_NAME, upgrades+"ClimbingGloves.prefab" },
 
             { "Advanced Portable Tele", storeItems+"TpButtonAdv.asset" },
             { "Portable Tele", storeItems+"TpButton.asset" },
