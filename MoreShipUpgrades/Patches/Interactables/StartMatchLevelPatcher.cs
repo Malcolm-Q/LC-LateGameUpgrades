@@ -15,6 +15,7 @@ namespace MoreShipUpgrades.Patches.Interactables
             if (!(UpgradeBus.Instance.wearingHelmet && UpgradeBus.Instance.helmetDesync)) return;
             PlayerControllerB localPlayer = UpgradeBus.Instance.GetLocalPlayer();
             LguStore.Instance.ReqSpawnAndMoveHelmetServerRpc(new NetworkObjectReference(localPlayer.gameObject), localPlayer.playerClientId);
+            ContractManager.probedWeathers.Clear();
         }
     }
 
