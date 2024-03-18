@@ -53,6 +53,7 @@ namespace MoreShipUpgrades.Misc
         [DataMember] public SyncedEntry<bool> FASTER_DROP_POD_ENABLED { get; set; }
         [DataMember] public SyncedEntry<bool> SIGURD_ENABLED { get; set; }
         [DataMember] public SyncedEntry<bool> SIGURD_LAST_DAY_ENABLED { get; set; }
+        [DataMember] public SyncedEntry<bool> WEATHER_PROBE_ENABLED { get; set; }
 
         // individual or shared
         [DataMember] public SyncedEntry<bool> BEEKEEPER_INDIVIDUAL { get; set; }
@@ -71,6 +72,8 @@ namespace MoreShipUpgrades.Misc
         [DataMember] public SyncedEntry<bool> LOCKSMITH_INDIVIDUAL { get; set; }
 
         // prices
+        [DataMember] public SyncedEntry<int> WEATHER_PROBE_PRICE {  get; set; }
+        [DataMember] public SyncedEntry<int> WEATHER_PROBE_PICKED_WEATHER_PRICE {  get; set; }
         [DataMember] public SyncedEntry<int> CHARGING_BOOSTER_PRICE { get; set; }
         [DataMember] public SyncedEntry<int> MARKET_INFLUENCE_PRICE { get; set; }
         [DataMember] public SyncedEntry<int> BARGAIN_CONNECTIONS_PRICE { get; set; }
@@ -285,6 +288,7 @@ namespace MoreShipUpgrades.Misc
         [DataMember] public SyncedEntry<float> SIGURD_LAST_DAY_CHANCE { get; set; }
         [DataMember] public SyncedEntry<float> SIGURD_PERCENT { get; set; }
         [DataMember] public SyncedEntry<float> SIGURD_LAST_DAY_PERCENT { get; set; }
+        [DataMember] public SyncedEntry<bool> WEATHER_PROBE_ALWAYS_CLEAR {  get; set; }
 
         public PluginConfig(ConfigFile cfg) : base(Metadata.GUID)
         {
@@ -597,6 +601,12 @@ namespace MoreShipUpgrades.Misc
             QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER = cfg.BindSyncedEntry(topSection, "How slower time will go by when unlocking the Quantum Disruptor upgrade", 0.2f, "");
             QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER = cfg.BindSyncedEntry(topSection, "How slower time will go by when incrementing the Quantum Disruptor level", 0.1f, "");
             QUANTUM_DISRUPTOR_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, QuantumDisruptor.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+
+            topSection = "Weather Probe";
+            WEATHER_PROBE_ENABLED = cfg.BindSyncedEntry(topSection, "Enable Weather Probe Command", true, "Allows changing weather of a level through cost of credits");
+            WEATHER_PROBE_PRICE = cfg.BindSyncedEntry(topSection, "Price of Weather Probe", 300, "Price of the weather probe when a weather is not selected for the level");
+            WEATHER_PROBE_ALWAYS_CLEAR = cfg.BindSyncedEntry(topSection, "Always pick clear weather", false, "When enabled, randomized weather probe will always clear out the weather present in the selected level (when possible)");
+            WEATHER_PROBE_PICKED_WEATHER_PRICE = cfg.BindSyncedEntry(topSection, "Price of Weather Probe with selected weather", 500, "This price is used when using the probe command with a weather");
 
             topSection = "Wheelbarrow";
             WHEELBARROW_ENABLED = cfg.BindSyncedEntry(topSection, "Enable the Wheelbarrow Item", true, "Allows you to buy a wheelbarrow to carry items outside of your inventory");

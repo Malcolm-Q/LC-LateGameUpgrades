@@ -490,6 +490,25 @@ namespace MoreShipUpgrades.Managers
             PlayAudioOnPlayerClientRpc(netRef, clip);
         }
 
+        [ServerRpc(RequireOwnership = false)]
+        internal void SyncWeatherServerRpc(string level, LevelWeatherType selectedWeather)
+        {
+            SyncWeatherClientRpc(level, selectedWeather);
+        }
+
+        [ClientRpc]
+        internal void SyncWeatherClientRpc(string level, LevelWeatherType selectedWeather)
+        {
+            SyncWeather(level, selectedWeather);
+        }
+
+        internal void SyncWeather(string level, LevelWeatherType selectedWeather)
+        {
+            SelectableLevel[] availableLevels = StartOfRound.Instance.levels;
+            SelectableLevel selectedLevel = availableLevels.First(x => x.PlanetName.Contains(level));
+            if (selectedLevel.overrideWeather) selectedLevel.overrideWeatherType = selectedWeather;
+            else selectedLevel.currentWeather = selectedWeather;
+        }
     }
 
     [Serializable]
