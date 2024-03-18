@@ -336,7 +336,16 @@ namespace MoreShipUpgrades.Managers
             SetupFasterDropPodTerminalNode();
             SetupChargingBoosterTerminalNode();
             SetupSigurdTerminalNode();
+            SetupClimbingGlovesTerminalNode();
             terminalNodes.Sort();
+        }
+        void SetupClimbingGlovesTerminalNode()
+        {
+            SetupMultiplePurchasableTerminalNode(ClimbingGloves.UPGRADE_NAME,
+                                                PluginConfiguration.CLIMBING_GLOVES_INDIVIDUAL.Value,
+                                                PluginConfiguration.CLIMBING_GLOVES_ENABLED.Value,
+                                                PluginConfiguration.CLIMBING_GLOVES_PRICE.Value,
+                                                ParseUpgradePrices(PluginConfiguration.CLIMBING_GLOVES_PRICES.Value));
         }
         void SetupMarketInfluenceTerminalNode()
         {

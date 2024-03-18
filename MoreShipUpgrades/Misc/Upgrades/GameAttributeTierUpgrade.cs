@@ -69,6 +69,10 @@ namespace MoreShipUpgrades.Misc.Upgrades
             /// </summary>
             PLAYER_JUMP_FORCE,
             /// <summary>
+            /// AFfects the speed of climbing ladders
+            /// </summary>
+            PLAYER_CLIMB_SPEED,
+            /// <summary>
             /// Affects the total amount of time the ship's doors can hold shut
             /// </summary>
             SHIP_DOOR_BATTERY,
@@ -119,6 +123,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
                 case GameAttribute.PLAYER_MOVEMENT_SPEED: localPlayer.movementSpeed += initialValue; break;
                 case GameAttribute.PLAYER_SPRINT_TIME: localPlayer.sprintTime += initialValue; break;
                 case GameAttribute.PLAYER_JUMP_FORCE: localPlayer.jumpForce += initialValue; break;
+                case GameAttribute.PLAYER_CLIMB_SPEED: localPlayer.climbSpeed += initialValue; break;
                 case GameAttribute.SHIP_DOOR_BATTERY: doorControls.doorPowerDuration += initialValue; break;
                 case GameAttribute.TIME_GLOBAL_TIME_MULTIPLIER: TimeOfDay.Instance.globalTimeSpeedMultiplier -= initialValue; break;
                 default: logger.LogError("No attribute was set for this upgrade to add the initial value"); break;
@@ -140,6 +145,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
                 case GameAttribute.PLAYER_MOVEMENT_SPEED: localPlayer.movementSpeed += incrementalValue; break;
                 case GameAttribute.PLAYER_SPRINT_TIME: localPlayer.sprintTime += incrementalValue; break;
                 case GameAttribute.PLAYER_JUMP_FORCE: localPlayer.jumpForce += incrementalValue; break;
+                case GameAttribute.PLAYER_CLIMB_SPEED: localPlayer.climbSpeed += incrementalValue; break;
                 case GameAttribute.SHIP_DOOR_BATTERY: doorControls.doorPowerDuration += incrementalValue; break;
                 case GameAttribute.TIME_GLOBAL_TIME_MULTIPLIER: TimeOfDay.Instance.globalTimeSpeedMultiplier -= incrementalValue; break;
                 default: logger.LogError("No attribute was set for this upgrade to add the incremental value"); break;
@@ -167,6 +173,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
                 case GameAttribute.PLAYER_MOVEMENT_SPEED: localPlayer.movementSpeed += amountToIncrement; break;
                 case GameAttribute.PLAYER_SPRINT_TIME: localPlayer.sprintTime += amountToIncrement; break;
                 case GameAttribute.PLAYER_JUMP_FORCE: localPlayer.jumpForce += amountToIncrement; break;
+                case GameAttribute.PLAYER_CLIMB_SPEED: localPlayer.climbSpeed += amountToIncrement; break;
                 case GameAttribute.SHIP_DOOR_BATTERY: doorControls.doorPowerDuration += amountToIncrement; break;
                 case GameAttribute.TIME_GLOBAL_TIME_MULTIPLIER: TimeOfDay.Instance.globalTimeSpeedMultiplier -= amountToIncrement; break;
                 default: logger.LogError("No attribute was set for this upgrade to add the incremental values"); break;
@@ -201,6 +208,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
                 case GameAttribute.PLAYER_MOVEMENT_SPEED: localPlayer.movementSpeed -= initialValue; break;
                 case GameAttribute.PLAYER_SPRINT_TIME: localPlayer.sprintTime -= initialValue; break;
                 case GameAttribute.PLAYER_JUMP_FORCE: localPlayer.jumpForce -= initialValue; break;
+                case GameAttribute.PLAYER_CLIMB_SPEED: localPlayer.climbSpeed -= initialValue; break;
                 case GameAttribute.SHIP_DOOR_BATTERY: doorControls.doorPowerDuration -= initialValue; break;
                 case GameAttribute.TIME_GLOBAL_TIME_MULTIPLIER: TimeOfDay.Instance.globalTimeSpeedMultiplier += initialValue; break;
                 default: logger.LogError("No attribute was set for this upgrade to remove the initial value"); break;
@@ -225,6 +233,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
                 case GameAttribute.PLAYER_MOVEMENT_SPEED: localPlayer.movementSpeed -= amountToIncrement; break;
                 case GameAttribute.PLAYER_SPRINT_TIME: localPlayer.sprintTime -= amountToIncrement; break;
                 case GameAttribute.PLAYER_JUMP_FORCE: localPlayer.jumpForce -= amountToIncrement; break;
+                case GameAttribute.PLAYER_CLIMB_SPEED: localPlayer.climbSpeed -= amountToIncrement; break;
                 case GameAttribute.SHIP_DOOR_BATTERY: doorControls.doorPowerDuration -= amountToIncrement; break;
                 case GameAttribute.TIME_GLOBAL_TIME_MULTIPLIER: TimeOfDay.Instance.globalTimeSpeedMultiplier += amountToIncrement; break;
                 default: logger.LogError("No attribute was set for this upgrade to remove the incremental values"); break;
