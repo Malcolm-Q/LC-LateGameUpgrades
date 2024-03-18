@@ -53,6 +53,7 @@ namespace MoreShipUpgrades.Misc
         [DataMember] public SyncedEntry<bool> FASTER_DROP_POD_ENABLED { get; set; }
         [DataMember] public SyncedEntry<bool> SIGURD_ENABLED { get; set; }
         [DataMember] public SyncedEntry<bool> SIGURD_LAST_DAY_ENABLED { get; set; }
+        [DataMember] public SyncedEntry<bool> EFFICIENT_ENGINES_ENABLED { get; set; }
 
         // individual or shared
         [DataMember] public SyncedEntry<bool> BEEKEEPER_INDIVIDUAL { get; set; }
@@ -104,8 +105,12 @@ namespace MoreShipUpgrades.Misc
         [DataMember] public SyncedEntry<int> SCRAP_INSURANCE_PRICE { get; set; }
         [DataMember] public SyncedEntry<int> FASTER_DROP_POD_PRICE { get; set; }
         [DataMember] public SyncedEntry<int> SIGURD_PRICE { get; set; }
+        [DataMember] public SyncedEntry<int> EFFICIENT_ENGINES_PRICE { get; set; }
 
         // attributes
+        [DataMember] public SyncedEntry<string> EFFICIENT_ENGINES_PRICES {  get; set; }
+        [DataMember] public SyncedEntry<int> EFFICIENT_ENGINES_INITIAL_DISCOUNT {  get; set; }
+        [DataMember] public SyncedEntry<int> EFFICIENT_ENGINES_INCREMENTAL_DISCOUNT { get; set; }
         [DataMember] public SyncedEntry<string> CHARGING_BOOSTER_PRICES { get; set; }
         [DataMember] public SyncedEntry<float> CHARGING_BOOSTER_COOLDOWN { get; set; }
         [DataMember] public SyncedEntry<float> CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE { get; set; }
@@ -603,6 +608,13 @@ namespace MoreShipUpgrades.Misc
             QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER = cfg.BindSyncedEntry(topSection, "How slower time will go by when unlocking the Quantum Disruptor upgrade", 0.2f, "");
             QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER = cfg.BindSyncedEntry(topSection, "How slower time will go by when incrementing the Quantum Disruptor level", 0.1f, "");
             QUANTUM_DISRUPTOR_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, QuantumDisruptor.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+
+            topSection = EfficientEngines.UPGRADE_NAME;
+            EFFICIENT_ENGINES_ENABLED = cfg.BindSyncedEntry(topSection, "Enable Efficient Engines Upgrade", true, "Tier upgrade which applies a discount on moon routing prices for cheaper travels");
+            EFFICIENT_ENGINES_PRICE = cfg.BindSyncedEntry(topSection, "Price of Efficient Engines", 450, "");
+            EFFICIENT_ENGINES_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, "600, 750, 900", BaseUpgrade.PRICES_DESCRIPTION);
+            EFFICIENT_ENGINES_INITIAL_DISCOUNT = cfg.BindSyncedEntry(topSection, "Initial discount applied to moon routing (%)", 15, "");
+            EFFICIENT_ENGINES_INCREMENTAL_DISCOUNT = cfg.BindSyncedEntry(topSection, "Incremental discount applied to moon routing (%)", 5, "");
 
             topSection = "Wheelbarrow";
             WHEELBARROW_ENABLED = cfg.BindSyncedEntry(topSection, "Enable the Wheelbarrow Item", true, "Allows you to buy a wheelbarrow to carry items outside of your inventory");

@@ -329,7 +329,16 @@ namespace MoreShipUpgrades.Managers
             SetupFasterDropPodTerminalNode();
             SetupChargingBoosterTerminalNode();
             SetupSigurdTerminalNode();
+            SetupEfficientEnginesNode();
             terminalNodes.Sort();
+        }
+        void SetupEfficientEnginesNode()
+        {
+            SetupMultiplePurchasableTerminalNode(EfficientEngines.UPGRADE_NAME,
+                                                true,
+                                                PluginConfiguration.EFFICIENT_ENGINES_ENABLED.Value,
+                                                PluginConfiguration.EFFICIENT_ENGINES_PRICE.Value,
+                                                ParseUpgradePrices(PluginConfiguration.EFFICIENT_ENGINES_PRICES.Value));
         }
         void SetupMarketInfluenceTerminalNode()
         {
