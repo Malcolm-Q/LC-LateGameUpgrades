@@ -24,7 +24,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
             System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.INITIAL_CLIMBING_SPEED_BOOST.Value + level * UpgradeBus.Instance.PluginConfiguration.INCREMENTAL_CLIMBING_SPEED_BOOST.Value;
-            string infoFormat = "LVL {0} - ${1} - Increases your speed of climbing ladders by {2} units.\n";
+            string infoFormat = "LVL {0} - ${1} - Increases the speed of climbing ladders by {2} units.\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
     }
