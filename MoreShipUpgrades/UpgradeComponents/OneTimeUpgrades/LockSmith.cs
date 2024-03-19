@@ -1,4 +1,5 @@
-﻿using MoreShipUpgrades.Misc.Upgrades;
+﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Collections;
 using System.Collections.Generic;
@@ -128,6 +129,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         public override string GetDisplayInfo(int price = -1)
         {
             return "Allows you to pick door locks by completing a minigame.";
+        }
+        internal override bool CanInitializeOnStart()
+        {
+            return UpgradeBus.Instance.PluginConfiguration.LOCKSMITH_PRICE.Value <= 0;
         }
     }
 }

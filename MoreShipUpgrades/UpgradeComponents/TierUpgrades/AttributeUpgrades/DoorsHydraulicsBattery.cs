@@ -38,5 +38,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             string infoFormat = "LVL {0} - ${1} - Increases the door's hydraulic capacity to remain closed by {2} units\n"; // to put in the infoStrings after
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
+        internal override bool CanInitializeOnStart()
+        {
+            string[] prices = UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_PRICES.Value.Split(',');
+            bool free = UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+            return free;
+        }
     }
 }

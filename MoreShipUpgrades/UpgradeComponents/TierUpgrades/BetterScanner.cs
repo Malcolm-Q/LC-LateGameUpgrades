@@ -63,5 +63,12 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 stringBuilder.Append(GetBetterScannerInfo(i + 2, incrementalPrices[i]));
             return stringBuilder.ToString();
         }
+
+        internal override bool CanInitializeOnStart()
+        {
+            return UpgradeBus.Instance.PluginConfiguration.BETTER_SCANNER_PRICE.Value <= 0 &&
+                UpgradeBus.Instance.PluginConfiguration.BETTER_SCANNER_PRICE2.Value <= 0 &&
+                UpgradeBus.Instance.PluginConfiguration.BETTER_SCANNER_PRICE3.Value <= 0;
+        }
     }
 }

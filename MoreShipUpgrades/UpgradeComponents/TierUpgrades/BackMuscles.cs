@@ -20,7 +20,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             " Most of the phone numbers don't work anymore.\n\n";
         void Awake()
         {
-
             upgradeName = UPGRADE_NAME;
             Instance = this;
         }
@@ -73,6 +72,12 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             Func<int, float> infoFunction = level => (UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_REDUCTION.Value - (level * UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_INCREMENT.Value)) * 100;
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+        }
+        internal override bool CanInitializeOnStart()
+        {
+            string[] prices = UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_UPGRADE_PRICES.Value.Split(',');
+            bool free = UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+            return free;
         }
     }
 

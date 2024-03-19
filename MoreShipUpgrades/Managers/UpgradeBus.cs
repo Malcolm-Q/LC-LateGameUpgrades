@@ -541,7 +541,7 @@ namespace MoreShipUpgrades.Managers
         {
             SetupOneTimeTerminalNode(Sigurd.UPGRADE_NAME,
                                     true,
-                                    PluginConfiguration.SIGURD_ENABLED.Value,
+                                    PluginConfiguration.SIGURD_ENABLED.Value || PluginConfiguration.SIGURD_LAST_DAY_ENABLED.Value,
                                     PluginConfiguration.SIGURD_PRICE.Value);
         }
         void SetupChargingBoosterTerminalNode()

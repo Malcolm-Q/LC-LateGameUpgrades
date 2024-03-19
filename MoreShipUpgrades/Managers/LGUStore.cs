@@ -333,7 +333,7 @@ namespace MoreShipUpgrades.Managers
                 int upgradeLevel = UpgradeBus.Instance.upgradeLevels.GetValueOrDefault(customNode.Name, 0);
                 customNode.Unlocked = activeUpgrade;
                 customNode.CurrentUpgrade = upgradeLevel;
-                if (activeUpgrade) UpgradeBus.Instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>().Load();
+                if (activeUpgrade || UpgradeBus.Instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>().CanInitializeOnStart()) UpgradeBus.Instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>().Load();
                 if (customNode.Name == NightVision.UPGRADE_NAME)
                 {
                     customNode.Unlocked = true;

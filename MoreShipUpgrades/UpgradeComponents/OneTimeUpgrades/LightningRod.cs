@@ -99,5 +99,9 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), price, UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_DIST.Value);
         }
+        internal override bool CanInitializeOnStart()
+        {
+            return UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_PRICE.Value <= 0;
+        }
     }
 }

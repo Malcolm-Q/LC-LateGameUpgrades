@@ -27,5 +27,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             float discountedPrice = defaultPrice * (1f - ((UpgradeBus.Instance.PluginConfiguration.EFFICIENT_ENGINES_INITIAL_DISCOUNT.Value + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.EFFICIENT_ENGINES_INCREMENTAL_DISCOUNT.Value))/100f));
             return Mathf.CeilToInt(Mathf.Clamp(discountedPrice, 0f, defaultPrice));
         }
+        internal override bool CanInitializeOnStart()
+        {
+            string[] prices = UpgradeBus.Instance.PluginConfiguration.EFFICIENT_ENGINES_PRICES.Value.Split(',');
+            bool free = UpgradeBus.Instance.PluginConfiguration.EFFICIENT_ENGINES_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+            return free;
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using MoreShipUpgrades.Misc;
+﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
@@ -29,6 +30,11 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         public override string GetDisplayInfo(int price = -1)
         {
             return $"${price} - The transmitter will write the letters faster and the restriction of characters will be lifted.";
+        }
+
+        internal override bool CanInitializeOnStart()
+        {
+            return UpgradeBus.Instance.PluginConfiguration.PAGER_PRICE.Value <= 0;
         }
     }
 }
