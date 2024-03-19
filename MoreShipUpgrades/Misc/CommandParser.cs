@@ -19,6 +19,7 @@ namespace MoreShipUpgrades.Misc
         private static LguLogger logger = new LguLogger(nameof(CommandParser));
         private static bool attemptCancelContract = false;
         private static string attemptSpecifyContract = null;
+        static (string, LevelWeatherType) attemptWeatherProbe = (null, LevelWeatherType.None);
 
         const string LOAD_LGU_COMMAND = "load lgu";
         public static readonly List<string> contracts = new List<string> { "data", "exterminator", "extraction","exorcism","defusal" };
@@ -188,6 +189,7 @@ namespace MoreShipUpgrades.Misc
                     LguStore.Instance.HandleUpgrade(customNode.Name, true);
                     displayText = $"You Upgraded {customNode.Name} to level {customNode.CurrentUpgrade + 1} \n\n";
                 }
+                if (customNode.salePerc != 1f && UpgradeBus.Instance.PluginConfiguration.SALE_APPLY_ONCE.Value) customNode.salePerc = 1f;
             }
             else if (customNode.Unlocked && canAfford)
             {
@@ -573,6 +575,16 @@ namespace MoreShipUpgrades.Misc
             logger.LogInfo($"User accepted a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}");
             return DisplayTerminalMessage($"A {contracts[i]} contract has been accepted for {moon}!{contractInfos[i]}");
         }
+        static TerminalNode CheckConfirmForWeatherProbe(string word, ref Terminal terminal)
+        {
+            (string, LevelWeatherType) selectedWeather = attemptWeatherProbe;
+            attemptWeatherProbe = (null, LevelWeatherType.None);
+            if (word.ToLower() != "confirm") return DisplayTerminalMessage("Failed to confirm user's input. Invalidated specified weather probe request.\n\n");
+            terminal.groupCredits -= UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE.Value;
+            LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits);
+            LguStore.Instance.SyncWeatherServerRpc(selectedWeather.Item1, selectedWeather.Item2);
+            return DisplayTerminalMessage($"A probe has been sent to {selectedWeather.Item1} to change the weather to {selectedWeather.Item2}.\n\n{UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE.Value} credits have been pulled from your balance.\n\n");
+        }
         public static void ParseLGUCommands(string fullText, ref Terminal terminal, ref TerminalNode outputNode)
         {
             string[] textArray = fullText.Split();
@@ -589,7 +601,12 @@ namespace MoreShipUpgrades.Misc
                 outputNode = CheckConfirmForCancel(firstWord, ref terminal);
                 return;
             }
-            switch(firstWord)
+            if (attemptWeatherProbe != (null,LevelWeatherType.None))
+            {
+                outputNode = CheckConfirmForWeatherProbe(firstWord, ref terminal);
+                return;
+            }
+            switch (firstWord)
             {
                 case "demon": outputNode = LookupDemon(secondWord, thirdWord); return;
                 case "lookup": outputNode = DefuseBombCommand(secondWord); return;
@@ -610,8 +627,36 @@ namespace MoreShipUpgrades.Misc
                 case "load": outputNode = ExecuteLoadCommands(secondWord, fullText, ref terminal, ref outputNode); return;
                 case "scan": outputNode = ExecuteScanCommands(secondWord, ref outputNode); return;
                 case "scrap": outputNode = ExecuteScrapCommands(secondWord, ref terminal, ref outputNode); return;
+                case "probe": outputNode = ExecuteProbeCommands(secondWord, thirdWord, ref terminal, ref outputNode); return;
                 default: outputNode = ExecuteUpgradeCommand(fullText, ref terminal, ref outputNode); return;
             }
+        }
+        static TerminalNode ExecuteProbeCommands(string secondWord, string thirdWord, ref Terminal terminal, ref TerminalNode outputNode)
+        {
+            if (!UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_ENABLED.Value) return outputNode;
+            if (secondWord == "") return DisplayTerminalMessage($"Probe <moonName> [weatherType]\n\nmoonName: Name of a moon\nweatherType: Name of a weather allowed in the level\n\n");
+            if (!StartOfRound.Instance.inShipPhase) return DisplayTerminalMessage($"You can only send out weather probes while in orbit.\n\n");
+            if (thirdWord != "") return ExecuteSpecifiedProbeCommand(secondWord, thirdWord, terminal);
+            
+            (string, LevelWeatherType) selectedWeather = WeatherManager.PickWeather(secondWord);
+            if (selectedWeather.Item1 == null) return DisplayTerminalMessage($"No moon was found that has an occurence of selected input ({secondWord}).\n\n");
+            if (StartOfRound.Instance.levels.First(x => x.PlanetName == selectedWeather.Item1).currentWeather == selectedWeather.Item2) return DisplayTerminalMessage($"The provided moon ({selectedWeather.Item1}) already has the selected weather ({selectedWeather.Item2}).\n\n");
+            terminal.groupCredits -= UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE.Value;
+            LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits);
+            LguStore.Instance.SyncWeatherServerRpc(selectedWeather.Item1, selectedWeather.Item2);
+            return DisplayTerminalMessage($"A probe has been sent to {selectedWeather.Item1} to change the weather to {selectedWeather.Item2}.\n\n{UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE.Value} credits have been pulled from your balance.\n\n");
+        }
+        static TerminalNode ExecuteSpecifiedProbeCommand(string secondWord, string thirdWord, Terminal terminal)
+        {
+            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE.Value)
+                return DisplayTerminalMessage($"Not enough credits to purchase a weather probe with specified weather.\nPrice: {UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE.Value}\nCurrent credits: {terminal.groupCredits}\n\n");
+
+            (string, LevelWeatherType) selectedWeather = WeatherManager.PickWeather(secondWord, thirdWord);
+            if (selectedWeather.Item1 == null) return DisplayTerminalMessage($"No moon was found that has an occurence of selected input ({secondWord}).\n\n");
+            if (selectedWeather.Item2 == LevelWeatherType.DustClouds) return DisplayTerminalMessage($"An invalid weather was selected to probe for the moon.\n\n");
+            if (StartOfRound.Instance.levels.First(x => x.PlanetName == selectedWeather.Item1).currentWeather == selectedWeather.Item2) return DisplayTerminalMessage($"The provided moon ({selectedWeather.Item1}) already has the selected weather ({selectedWeather.Item2}).\n\n");
+            attemptWeatherProbe = selectedWeather;
+            return DisplayTerminalMessage($"Type CONFIRM if you wish to have {selectedWeather.Item1} with {(selectedWeather.Item2 == LevelWeatherType.None ? "no weather" : $"a {selectedWeather.Item2} weather")} for the cost of {UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE.Value} Company Credits.\n\n");
         }
         private static TerminalNode ExecuteScrapInsuranceCommand(ref Terminal terminal, ref TerminalNode outputNode)
         {

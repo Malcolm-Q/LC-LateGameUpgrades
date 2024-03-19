@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
-    class Sigurd : OneTimeUpgrade, IUpgradeWorldBuilding, IOneTimeUpgradeDisplayInfo
+    class Sigurd : OneTimeUpgrade, IUpgradeWorldBuilding
     {
         public const string UPGRADE_NAME = "Sigurd Access";
         internal const string WORLD_BUILDING_TEXT = "\n\nSigurd always laughed at Desmond when he remembered the stories about The Company paying 120% of the value of the" +
@@ -23,11 +23,6 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             upgradeName = UPGRADE_NAME;
             base.Start();
-
-            if (UpgradeBus.Instance.PluginConfiguration.SIGURD_ENABLED.Value && UpgradeBus.Instance.PluginConfiguration.SIGURD_PRICE.Value == 0)
-            {
-                LguStore.Instance.HandleUpgrade(UPGRADE_NAME, false);
-            }
         }
 
         void Awake()
@@ -64,6 +59,11 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         public string GetWorldBuildingText(bool shareStatus = false)
         {
             return WORLD_BUILDING_TEXT;
+        }
+
+        internal override bool CanInitializeOnStart()
+        {
+            return (UpgradeBus.Instance.PluginConfiguration.SIGURD_ENABLED.Value || UpgradeBus.Instance.PluginConfiguration.SIGURD_LAST_DAY_ENABLED.Value) && UpgradeBus.Instance.PluginConfiguration.SIGURD_PRICE.Value <= 0;
         }
     }
 }

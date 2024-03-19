@@ -14,6 +14,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using MoreShipUpgrades.Input;
+using UnityEngine.UI;
 
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
@@ -45,6 +46,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             base.Start();
             batteryBar = transform.GetChild(0).GetChild(0).transform;
+            batteryBar.GetComponent<Image>().color = UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_UI_BAR_COLOR.Value;
+            transform.GetChild(0).GetChild(1).GetComponent<Text>().color = UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_UI_TEXT_COLOR.Value;
+            transform.GetChild(0).GetChild(2).GetComponent<Image>().color = UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_UI_BAR_COLOR.Value;
             transform.GetChild(0).gameObject.SetActive(false);
         }
 
@@ -229,6 +233,12 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             for (int i = 0; i < maxLevels; i++)
                 stringBuilder.Append(GetNightVisionInfo(i + 2, incrementalPrices[i]));
             return stringBuilder.ToString();
+        }
+        internal override bool CanInitializeOnStart()
+        {
+            string[] prices = UpgradeBus.Instance.PluginConfiguration.NIGHT_VISION_UPGRADE_PRICES.Value.Split(',');
+            bool free = UpgradeBus.Instance.PluginConfiguration.NIGHT_VISION_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+            return free;
         }
     }
 }

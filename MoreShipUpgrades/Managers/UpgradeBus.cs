@@ -17,7 +17,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.Managers
 {
-    public class UpgradeBus : NetworkBehaviour
+    public class UpgradeBus : MonoBehaviour
     {
         internal static UpgradeBus Instance { get; set; }
         internal PluginConfig PluginConfiguration { get; set; }
@@ -102,7 +102,7 @@ namespace MoreShipUpgrades.Managers
         public void ResetAllValues(bool wipeObjRefs = true)
         {
             ResetPlayerAttributes();
-            if(IsHost || IsServer) ResetShipAttributesClientRpc();
+            if (LguStore.Instance.IsServer || LguStore.Instance.IsHost) LguStore.Instance.ResetShipAttributesClientRpc();
 
             if (PluginConfiguration.BEATS_ENABLED.Value) SickBeats.Instance.EffectsActive = false;
             if (PluginConfiguration.NIGHT_VISION_ENABLED.Value) NightVision.Instance.nightVisionActive = false;
@@ -133,13 +133,6 @@ namespace MoreShipUpgrades.Managers
 
             logger.LogDebug($"Resetting {player.playerUsername}'s attributes");
             UpgradeObjects.Values.Where(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>() is IPlayerSync).Do(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute());
-        }
-
-        [ClientRpc]
-        private void ResetShipAttributesClientRpc()
-        {
-            logger.LogDebug($"Resetting the ship's attributes");
-            UpgradeObjects.Values.Where(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>() is IServerSync).Do(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute());
         }
 
         internal void LoadSales()
@@ -336,7 +329,25 @@ namespace MoreShipUpgrades.Managers
             SetupFasterDropPodTerminalNode();
             SetupChargingBoosterTerminalNode();
             SetupSigurdTerminalNode();
+            SetupEfficientEnginesNode();
+            SetupClimbingGlovesTerminalNode();
             terminalNodes.Sort();
+        }
+        void SetupEfficientEnginesNode()
+        {
+            SetupMultiplePurchasableTerminalNode(EfficientEngines.UPGRADE_NAME,
+                                                true,
+                                                PluginConfiguration.EFFICIENT_ENGINES_ENABLED.Value,
+                                                PluginConfiguration.EFFICIENT_ENGINES_PRICE.Value,
+                                                ParseUpgradePrices(PluginConfiguration.EFFICIENT_ENGINES_PRICES.Value));
+        }
+        void SetupClimbingGlovesTerminalNode()
+        {
+            SetupMultiplePurchasableTerminalNode(ClimbingGloves.UPGRADE_NAME,
+                                                PluginConfiguration.CLIMBING_GLOVES_INDIVIDUAL.Value,
+                                                PluginConfiguration.CLIMBING_GLOVES_ENABLED.Value,
+                                                PluginConfiguration.CLIMBING_GLOVES_PRICE.Value,
+                                                ParseUpgradePrices(PluginConfiguration.CLIMBING_GLOVES_PRICES.Value));
         }
         void SetupMarketInfluenceTerminalNode()
         {
@@ -530,7 +541,7 @@ namespace MoreShipUpgrades.Managers
         {
             SetupOneTimeTerminalNode(Sigurd.UPGRADE_NAME,
                                     true,
-                                    PluginConfiguration.SIGURD_ENABLED.Value,
+                                    PluginConfiguration.SIGURD_ENABLED.Value || PluginConfiguration.SIGURD_LAST_DAY_ENABLED.Value,
                                     PluginConfiguration.SIGURD_PRICE.Value);
         }
         void SetupChargingBoosterTerminalNode()

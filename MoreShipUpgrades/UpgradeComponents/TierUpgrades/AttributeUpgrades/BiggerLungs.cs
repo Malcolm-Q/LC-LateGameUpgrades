@@ -46,5 +46,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
+        internal override bool CanInitializeOnStart()
+        {
+            string[] prices = UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_UPGRADE_PRICES.Value.Split(',');
+            bool free = UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+            return free;
+        }
     }
 }

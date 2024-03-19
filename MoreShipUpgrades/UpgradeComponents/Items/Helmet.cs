@@ -25,7 +25,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
 
         public string GetDisplayInfo()
         {
-            return string.Format(AssetBundleHandler.GetInfoFromJSON("Helmet"), UpgradeBus.Instance.PluginConfiguration.HELMET_HITS_BLOCKED);
+            return string.Format(AssetBundleHandler.GetInfoFromJSON("Helmet"), UpgradeBus.Instance.PluginConfiguration.HELMET_HITS_BLOCKED.Value);
         }
     }
 }

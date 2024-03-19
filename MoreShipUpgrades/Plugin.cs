@@ -680,6 +680,8 @@ namespace MoreShipUpgrades
             SetupLethalDeals();
             SetupQuantumDisruptor();
             SetupChargingBooster();
+            SetupEfficientEngines();
+            SetupClimbingGloves();
         }
 
         private void SetupSickBeats()
@@ -800,6 +802,14 @@ namespace MoreShipUpgrades
         void SetupChargingBooster()
         {
             SetupGenericPerk<ChargingBooster>(ChargingBooster.UPGRADE_NAME);
+        }
+        void SetupEfficientEngines()
+        {
+            SetupGenericPerk<EfficientEngines>(EfficientEngines.UPGRADE_NAME);
+        }
+        void SetupClimbingGloves()
+        {
+            SetupGenericPerk<ClimbingGloves>(ClimbingGloves.UPGRADE_NAME);
         }
         /// <summary>
         /// Generic function where it adds a script (specificed through the type) into an GameObject asset 

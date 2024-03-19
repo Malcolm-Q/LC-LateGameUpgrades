@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Commands;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
@@ -15,6 +16,7 @@ namespace MoreShipUpgrades.Managers
         /// Terminal node for "route" commands used to select the available moons for contract placements
         /// </summary>
         private static TerminalKeyword routeKeyword;
+        internal readonly static Dictionary<string, LevelWeatherType> probedWeathers = new Dictionary<string, LevelWeatherType>();
         #endregion
         #region Variables
         #region Selected Contract

@@ -75,5 +75,9 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             return "Displays your location and time when holding a walkie talkie.\nEspecially useful for fog.";
         }
+        internal override bool CanInitializeOnStart()
+        {
+            return UpgradeBus.Instance.PluginConfiguration.WALKIE_PRICE.Value <= 0;
+        }
     }
 }

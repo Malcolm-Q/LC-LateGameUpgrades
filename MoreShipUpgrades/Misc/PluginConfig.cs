@@ -53,7 +53,9 @@ namespace MoreShipUpgrades.Misc
         [DataMember] public SyncedEntry<bool> FASTER_DROP_POD_ENABLED { get; set; }
         [DataMember] public SyncedEntry<bool> SIGURD_ENABLED { get; set; }
         [DataMember] public SyncedEntry<bool> SIGURD_LAST_DAY_ENABLED { get; set; }
-
+        [DataMember] public SyncedEntry<bool> EFFICIENT_ENGINES_ENABLED { get; set; }
+        [DataMember] public SyncedEntry<bool> CLIMBING_GLOVES_ENABLED {  get; set; }
+        [DataMember] public SyncedEntry<bool> WEATHER_PROBE_ENABLED { get; set; }
         // individual or shared
         [DataMember] public SyncedEntry<bool> BEEKEEPER_INDIVIDUAL { get; set; }
         [DataMember] public SyncedEntry<bool> PROTEIN_INDIVIDUAL { get; set; }
@@ -69,8 +71,11 @@ namespace MoreShipUpgrades.Misc
         [DataMember] public SyncedEntry<bool> MALWARE_BROADCASTER_INDIVIDUAL { get; set; }
         [DataMember] public SyncedEntry<bool> INTERN_INDIVIDUAL { get; set; }
         [DataMember] public SyncedEntry<bool> LOCKSMITH_INDIVIDUAL { get; set; }
-
+        [DataMember] public SyncedEntry<bool> CLIMBING_GLOVES_INDIVIDUAL { get; set; }
         // prices
+        [DataMember] public SyncedEntry<int> CLIMBING_GLOVES_PRICE {  get; set; }
+        [DataMember] public SyncedEntry<int> WEATHER_PROBE_PRICE {  get; set; }
+        [DataMember] public SyncedEntry<int> WEATHER_PROBE_PICKED_WEATHER_PRICE {  get; set; }
         [DataMember] public SyncedEntry<int> CHARGING_BOOSTER_PRICE { get; set; }
         [DataMember] public SyncedEntry<int> MARKET_INFLUENCE_PRICE { get; set; }
         [DataMember] public SyncedEntry<int> BARGAIN_CONNECTIONS_PRICE { get; set; }
@@ -104,8 +109,15 @@ namespace MoreShipUpgrades.Misc
         [DataMember] public SyncedEntry<int> SCRAP_INSURANCE_PRICE { get; set; }
         [DataMember] public SyncedEntry<int> FASTER_DROP_POD_PRICE { get; set; }
         [DataMember] public SyncedEntry<int> SIGURD_PRICE { get; set; }
+        [DataMember] public SyncedEntry<int> EFFICIENT_ENGINES_PRICE { get; set; }
 
         // attributes
+        [DataMember] public SyncedEntry<string> EFFICIENT_ENGINES_PRICES {  get; set; }
+        [DataMember] public SyncedEntry<int> EFFICIENT_ENGINES_INITIAL_DISCOUNT {  get; set; }
+        [DataMember] public SyncedEntry<int> EFFICIENT_ENGINES_INCREMENTAL_DISCOUNT { get; set; }
+        [DataMember] public SyncedEntry<string> CLIMBING_GLOVES_PRICES {  get; set; }
+        [DataMember] public SyncedEntry<float> INITIAL_CLIMBING_SPEED_BOOST {  get; set; }
+        [DataMember] public SyncedEntry<float> INCREMENTAL_CLIMBING_SPEED_BOOST { get; set; }
         [DataMember] public SyncedEntry<string> CHARGING_BOOSTER_PRICES { get; set; }
         [DataMember] public SyncedEntry<float> CHARGING_BOOSTER_COOLDOWN { get; set; }
         [DataMember] public SyncedEntry<float> CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE { get; set; }
@@ -134,6 +146,10 @@ namespace MoreShipUpgrades.Misc
         [DataMember] public SyncedEntry<float> DISCOMBOBULATOR_STUN_DURATION { get; set; }
         [DataMember] public SyncedEntry<bool> DISCOMBOBULATOR_NOTIFY_CHAT { get; set; }
         public ConfigEntry<UnityEngine.Color> NIGHT_VIS_COLOR { get; set; }
+        
+        public ConfigEntry<UnityEngine.Color> NIGHT_VIS_UI_TEXT_COLOR {  get; set; }
+
+        public ConfigEntry<UnityEngine.Color> NIGHT_VIS_UI_BAR_COLOR { get; set; }
         [DataMember] public SyncedEntry<float> NIGHT_VIS_DRAIN_SPEED { get; set; }
         [DataMember] public SyncedEntry<float> NIGHT_VIS_REGEN_SPEED { get; set; }
         [DataMember] public SyncedEntry<float> NIGHT_BATTERY_MAX { get; set; }
@@ -285,6 +301,8 @@ namespace MoreShipUpgrades.Misc
         [DataMember] public SyncedEntry<float> SIGURD_LAST_DAY_CHANCE { get; set; }
         [DataMember] public SyncedEntry<float> SIGURD_PERCENT { get; set; }
         [DataMember] public SyncedEntry<float> SIGURD_LAST_DAY_PERCENT { get; set; }
+        [DataMember] public SyncedEntry<bool> SALE_APPLY_ONCE { get; set; }
+        [DataMember] public SyncedEntry<bool> WEATHER_PROBE_ALWAYS_CLEAR {  get; set; }
 
         public PluginConfig(ConfigFile cfg) : base(Metadata.GUID)
         {
@@ -330,6 +348,7 @@ namespace MoreShipUpgrades.Misc
             INTRO_ENABLED = cfg.BindSyncedEntry(topSection, "Intro Enabled", true, "If true shows a splashscreen with some info once per update of LGU.");
             KEEP_UPGRADES_AFTER_FIRED_CUTSCENE = cfg.BindSyncedEntry(topSection, "Keep upgrades after quota failure", false, "If true, you will keep your upgrades after being fired by The Company.");
             SHOW_UPGRADES_CHAT = cfg.Bind(topSection, "Show upgrades being loaded in chat", true, "If enabled, chat messages will be displayed when loading an upgrade for the first time.");
+            SALE_APPLY_ONCE = cfg.BindSyncedEntry(topSection, "Apply upgrade sale on one purchase", false, "When an upgrade is on sale, apply the sale only on the first ever purchase of it while on sale. Consecutive purchases will not have the sale applied");
 
             topSection = "Helmet";
             HELMET_ENABLED = cfg.BindSyncedEntry(topSection, "Enable the helmet for purchase", true, "");
@@ -427,6 +446,8 @@ namespace MoreShipUpgrades.Misc
             NIGHT_VIS_DRAIN_SPEED = cfg.BindSyncedEntry(topSection, "Multiplier for night vis battery drain", 1f, "Multiplied by timedelta, lower to increase battery life.");
             NIGHT_VIS_REGEN_SPEED = cfg.BindSyncedEntry(topSection, "Multiplier for night vis battery regen", 1f, "Multiplied by timedelta, raise to speed up battery regen time.");
             NIGHT_VIS_COLOR = cfg.Bind(topSection, "Night Vision Color", UnityEngine.Color.green, "The color your night vision light emits.");
+            NIGHT_VIS_UI_TEXT_COLOR = cfg.Bind(topSection, "Night Vision UI Text Color", UnityEngine.Color.white, "The color used for the night vision's UI text.");
+            NIGHT_VIS_UI_BAR_COLOR = cfg.Bind(topSection, "Night Vision UI Bar Color", UnityEngine.Color.green, "The color used for the night vision's UI battery bar.");
             NIGHT_VIS_RANGE = cfg.BindSyncedEntry(topSection, "Night Vision Range", 2000f, "Kind of like the distance your night vision travels.");
             NIGHT_VIS_RANGE_INCREMENT = cfg.BindSyncedEntry(topSection, "Night Vision Range Increment", 0f, "Increases your range by this value each upgrade.");
             NIGHT_VIS_INTENSITY = cfg.BindSyncedEntry(topSection, "Night Vision Intensity", 1000f, "Kind of like the brightness of your Night Vision.");
@@ -597,6 +618,27 @@ namespace MoreShipUpgrades.Misc
             QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER = cfg.BindSyncedEntry(topSection, "How slower time will go by when unlocking the Quantum Disruptor upgrade", 0.2f, "");
             QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER = cfg.BindSyncedEntry(topSection, "How slower time will go by when incrementing the Quantum Disruptor level", 0.1f, "");
             QUANTUM_DISRUPTOR_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, QuantumDisruptor.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+
+            topSection = EfficientEngines.UPGRADE_NAME;
+            EFFICIENT_ENGINES_ENABLED = cfg.BindSyncedEntry(topSection, "Enable Efficient Engines Upgrade", true, "Tier upgrade which applies a discount on moon routing prices for cheaper travels");
+            EFFICIENT_ENGINES_PRICE = cfg.BindSyncedEntry(topSection, "Price of Efficient Engines", 450, "");
+            EFFICIENT_ENGINES_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, "600, 750, 900", BaseUpgrade.PRICES_DESCRIPTION);
+            EFFICIENT_ENGINES_INITIAL_DISCOUNT = cfg.BindSyncedEntry(topSection, "Initial discount applied to moon routing (%)", 15, "");
+            EFFICIENT_ENGINES_INCREMENTAL_DISCOUNT = cfg.BindSyncedEntry(topSection, "Incremental discount applied to moon routing (%)", 5, "");
+            
+            topSection = ClimbingGloves.UPGRADE_NAME;
+            CLIMBING_GLOVES_ENABLED = cfg.BindSyncedEntry(topSection, "Enable Climbing Gloves Upgrade", true, "Tier upgrade which increases the speed of climbing ladders");
+            CLIMBING_GLOVES_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            CLIMBING_GLOVES_PRICE = cfg.BindSyncedEntry(topSection, "Price of Climbing Gloves Upgrade", 150, "");
+            CLIMBING_GLOVES_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, "200,250,300", BaseUpgrade.PRICES_DESCRIPTION);
+            INITIAL_CLIMBING_SPEED_BOOST = cfg.BindSyncedEntry(topSection, "Initial value added to the players climbing speed", 1f, "Vanilla climb speed is 4 units");
+            INCREMENTAL_CLIMBING_SPEED_BOOST = cfg.BindSyncedEntry(topSection, "Incremental value added to the players climbing speed", 0.5f, "");
+            
+            topSection = "Weather Probe";
+            WEATHER_PROBE_ENABLED = cfg.BindSyncedEntry(topSection, "Enable Weather Probe Command", true, "Allows changing weather of a level through cost of credits");
+            WEATHER_PROBE_PRICE = cfg.BindSyncedEntry(topSection, "Price of Weather Probe", 300, "Price of the weather probe when a weather is not selected for the level");
+            WEATHER_PROBE_ALWAYS_CLEAR = cfg.BindSyncedEntry(topSection, "Always pick clear weather", false, "When enabled, randomized weather probe will always clear out the weather present in the selected level");
+            WEATHER_PROBE_PICKED_WEATHER_PRICE = cfg.BindSyncedEntry(topSection, "Price of Weather Probe with selected weather", 500, "This price is used when using the probe command with a weather");
 
             topSection = "Wheelbarrow";
             WHEELBARROW_ENABLED = cfg.BindSyncedEntry(topSection, "Enable the Wheelbarrow Item", true, "Allows you to buy a wheelbarrow to carry items outside of your inventory");

@@ -1,4 +1,5 @@
-﻿using MoreShipUpgrades.Misc.Upgrades;
+﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc.Upgrades;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
@@ -18,6 +19,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         public override string GetDisplayInfo(int price = -1)
         {
             return $"${price} - Guarantees at least one item will be on sale in the store.";
+        }
+        internal override bool CanInitializeOnStart()
+        {
+            return UpgradeBus.Instance.PluginConfiguration.LETHAL_DEALS_PRICE.Value <= 0;
         }
     }
 }

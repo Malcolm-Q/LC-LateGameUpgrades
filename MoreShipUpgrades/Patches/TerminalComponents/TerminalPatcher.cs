@@ -1,9 +1,11 @@
-﻿using HarmonyLib;
+﻿using BepInEx.Logging;
+using HarmonyLib;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
 
@@ -58,6 +60,27 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
             index = Tools.FindInteger(index, ref codes, findValue: 10, skip: true, errorMessage: "Couldn't find the 10 value which is used as character limit");
             codes.Insert(index, new CodeInstruction(OpCodes.Call, newLimitCharactersTransmit));
             codes.Insert(index, new CodeInstruction(OpCodes.Ldloc_S, 12));
+            return codes;
+        }
+        [HarmonyPostfix]
+        [HarmonyPatch(nameof(Terminal.LoadNewNode))]
+        static void LoadNewNodePostfix(Terminal __instance, TerminalNode node) 
+        {
+            if (node.buyRerouteToMoon != -2) return;
+            string toReplace = EfficientEngines.GetDiscountedMoonPrice(node.itemCost).ToString();
+            __instance.screenText.text = __instance.currentText.Replace(node.itemCost.ToString(), toReplace);
+            __instance.currentText = __instance.screenText.text;
+        }
+        [HarmonyTranspiler]
+        [HarmonyPatch(nameof(Terminal.LoadNewNodeIfAffordable))]
+        static IEnumerable<CodeInstruction> LoadNewNodeIfAffordableTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            FieldInfo itemCost = typeof(TerminalNode).GetField(nameof(TerminalNode.itemCost));
+            MethodInfo applyMoonDiscount = typeof(EfficientEngines).GetMethod(nameof(EfficientEngines.GetDiscountedMoonPrice));
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            int index = 0;
+            index = Tools.FindField(index, ref codes, itemCost, skip: true, errorMessage: "Couldn't find the item cost applied to a specific item with index 7");
+            index = Tools.FindField(index, ref codes, itemCost, addCode: applyMoonDiscount, errorMessage: "Couldn't find the item cost applied to moon routing");
             return codes;
         }
     }

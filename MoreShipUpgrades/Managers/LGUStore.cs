@@ -15,6 +15,8 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Compat;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
+using HarmonyLib;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -62,6 +64,11 @@ namespace MoreShipUpgrades.Managers
 
         [ServerRpc(RequireOwnership = false)]
         public void ServerSaveFileServerRpc()
+        {
+            ServerSaveFile();
+        }
+
+        void ServerSaveFile()
         {
             string saveFile = GameNetworkManager.Instance.currentSaveFileName;
             string json = JsonConvert.SerializeObject(LguSave);
@@ -326,7 +333,7 @@ namespace MoreShipUpgrades.Managers
                 int upgradeLevel = UpgradeBus.Instance.upgradeLevels.GetValueOrDefault(customNode.Name, 0);
                 customNode.Unlocked = activeUpgrade;
                 customNode.CurrentUpgrade = upgradeLevel;
-                if (activeUpgrade) UpgradeBus.Instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>().Load();
+                if (activeUpgrade || UpgradeBus.Instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>().CanInitializeOnStart()) UpgradeBus.Instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>().Load();
                 if (customNode.Name == NightVision.UPGRADE_NAME)
                 {
                     customNode.Unlocked = true;
@@ -413,6 +420,9 @@ namespace MoreShipUpgrades.Managers
                     UpgradeBus.Instance.SaleData.Add(node.Name, node.salePerc);
                 }
             }
+            SaveInfo = new SaveInfo();
+            UpdateLGUSaveServerRpc(playerID, JsonConvert.SerializeObject(SaveInfo));
+            if (IsHost || IsServer) ServerSaveFile();
         }
         [ClientRpc]
         public void DestroyHelmetClientRpc(ulong id)
@@ -490,6 +500,41 @@ namespace MoreShipUpgrades.Managers
             PlayAudioOnPlayerClientRpc(netRef, clip);
         }
 
+        [ClientRpc]
+        internal void ResetShipAttributesClientRpc()
+        {
+            logger.LogDebug($"Resetting the ship's attributes");
+            UpgradeBus.Instance.UpgradeObjects.Values.Where(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>() is IServerSync).Do(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute());
+        }
+        [ServerRpc(RequireOwnership = false)]
+        internal void SyncWeatherServerRpc(string level, LevelWeatherType selectedWeather)
+        {
+            SyncWeatherClientRpc(level, selectedWeather);
+        }
+
+        [ClientRpc]
+        internal void SyncWeatherClientRpc(string level, LevelWeatherType selectedWeather)
+        {
+            SyncWeather(level, selectedWeather);
+        }
+
+        internal void SyncWeather(string level, LevelWeatherType selectedWeather)
+        {
+            SelectableLevel[] availableLevels = StartOfRound.Instance.levels;
+            SelectableLevel selectedLevel = availableLevels.First(x => x.PlanetName.Contains(level));
+            if (selectedLevel.overrideWeather) selectedLevel.overrideWeatherType = selectedWeather;
+            else selectedLevel.currentWeather = selectedWeather;
+            ContractManager.probedWeathers[selectedLevel.PlanetName] = selectedWeather;
+            if (selectedLevel == StartOfRound.Instance.currentLevel) StartOfRound.Instance.SetMapScreenInfoToCurrentLevel();
+        }
+        [ServerRpc(RequireOwnership = false)]
+        internal void SyncProbeWeathersServerRpc()
+        {
+            foreach (string level in ContractManager.probedWeathers.Keys.ToList())
+            {
+                SyncWeatherClientRpc(level, ContractManager.probedWeathers[level]);
+            }
+        }
     }
 
     [Serializable]

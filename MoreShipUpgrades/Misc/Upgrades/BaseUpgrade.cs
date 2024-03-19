@@ -66,14 +66,29 @@ namespace MoreShipUpgrades.Misc.Upgrades
         }
 
         #endregion
+        /// <summary>
+        /// Returns if the upgrade with provided name has been activated/loaded or not
+        /// </summary>
+        /// <param name="upgradeName">Name of the upgrade we wish to check its activity</param>
+        /// <returns>The given upgrade is active in the game or not</returns>
         internal static bool GetActiveUpgrade(string upgradeName)
         {
             return UpgradeBus.Instance.activeUpgrades.GetValueOrDefault(upgradeName, false);
         }
-
+        /// <summary>
+        /// Returns the current level for a given upgrade. <para></para>
+        /// 0 is considered level 1 in any UI that shows this stat and so on
+        /// </summary>
+        /// <param name="upgradeName">Name of the upgrade we wish to check the level of</param>
+        /// <returns>Currentl level of the upgrade</returns>
         internal static int GetUpgradeLevel(string upgradeName)
         {
             return UpgradeBus.Instance.upgradeLevels.GetValueOrDefault(upgradeName, 0);
         }
+        /// <summary>
+        /// </summary>
+        /// <returns>Wether the upgrade can be loaded immediately upon game being loaded or not</returns>
+        internal abstract bool CanInitializeOnStart();
+
     }
 }

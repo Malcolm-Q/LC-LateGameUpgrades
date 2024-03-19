@@ -1,4 +1,63 @@
-## V 3.3.1 - 2024-03-??
+## V 3.4.0 - 2024-03-??
+### Additions
+- Added "Sigurd" upgrade which might provide a boost on The Company's buying rate on certain amount of days.
+    - Configurable enabled only on last day of meeting the profit quota.
+    - Configurable enabled on any day of meeting the profit quota.
+    - Configurable purchase price.
+    - Configurable probability chance (%) that the upgrade will provide a boost on The Company's buying rate on any day of meeting the profit quota.
+    - Configurable probability chance (%) that the upgrade will provide a boost on The Company's buying rate on the last day of meeting the profit quota.
+    - Configurable amount of boost granted to The Company's buying rate when rolled successfully on any day of meeting the profit quota.
+    - Configurable amount of boost granted to The Company's buying rate when rolled successfully on the last day of meeting the profit quota.
+- Added "Climbing Gloves" upgrade which increases the speed at which you climb any sort of ladders (or similar)
+    - Configurable enabled upgrade.
+    - Configurable shared or individual upgrade.
+    - Configurable price of the first purchase of the upgrade.
+    - Configurable list of prices past the first purchase of the upgrade.
+    - Configurable initial speed boost on the climbing speed of the upgrade.
+    - Configurable incremental speed boost on the climbing speed of the upgrade.
+- Added "Efficient Engines" upgrade which applies a discount on moon routing prices.
+    - Configurable enabled upgrade.
+    - Configurable price of the first purchase of the upgrade.
+    - Configurable list of prices past the first purchase of the upgrade.
+    - Configurable initial discount applied on Moon Routing of the upgrade.
+    - Configurable incremental discount applied on Moon Routing of the upgrade.
+- Added "probe" command which a weather probe is sent to selected moon and change its current weather.
+    - Usage: ``probe <moonName> [weatherType]``
+        - moonName = Name of the moon you wish to change the weather of.
+        - weatherType = Type of weather you wish to change the moon's weather to.
+    - A confirm prompt is required when specifying the weather on a given moon.
+    - If weather type is absent, a random weather allowed on the moon will be choosen.
+    - The probe cannot change a moon's weather to some other weather that is not allowed in it.
+        - E.g Titan's to Flooded or Dine's to Rainy.
+        - However if using mods that allow changing allowed weathers on moons, it *should* use the selected ones.
+    - Configuration:
+        - Configurable enabled command.
+        - Configurable price when executing a weather probe with random weather.
+        - Configurable price when executing a weather probe with specified weather.
+        - Configurable toggle for randomized weather probe to always make the moon's weather cleared.
+- Added configuration for the LGU's Store Sales to apply only on the first ever purchase.
+    - E.g Protein Powder's on sale, you buy it once, the next level purchase will not have the sale anymore.
+- Added configuration to customize the Night Vision's UI colours (text and image)
+- Added configuration for message popups to appear on chat or not when upgrades are loaded.
+### Changes
+- When a given upgrade's configuration allows them to be immediately loaded (essentialy being free), they are automatically loaded.
+    - For tier upgrades, only the initial value configuration will apply.
+- Added wire interactions on all sides of the bomb (from defusal contract) and a serial preview (shown when looking at the middle of the item) for such cases of being spawned inside a wall
+### Fixes
+- Fixed Better Scanner sometimes preventing enemies being scanned while in full sight.
+- Fixed Night Vision being togglable while manipulating the terminal.
+- Fixed some info descriptions exibiting "ConfigEntry" text instead of the respective value.
+- Fixed Quantum Disruptor's info displaying the wrong value, leading to confusion.
+- Fixed Boombox crash error that would lead to mods that also manipulate the boombox to not work as intended.
+- Fixed LGU's Store sales not being saved properly, leading to being lost on reboot.
+- Possibly fixed host losing night vision when a client dies with "Lose Night Vision on Death" enabled.
+### Code Changes
+- Made Hunter implementation more robust to configuration changes (credits to [achohbee](https://github.com/achohbee))
+- Configuration synchronization is now handled by [CSync](https://thunderstore.io/c/lethal-company/p/Sigurd/CSync/)
+    - When meaningful updates are released to [Owen3H's](https://github.com/Owen3H) [CSync](https://thunderstore.io/c/lethal-company/p/Owen3H/CSync/), we will change to that one.
+- Changed implementation of acquiring old saves to not clutter the current save file format.
+
+## V 3.3.1 - 2024-03-10
 ### Fixes
 - Fixed Stimpack not being applied past the first day of the upgrade being applied.
 - Fixed Portable Teleporter not being triggered when using different control bindings other than mouse
