@@ -78,7 +78,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
         public override string GetDisplayInfo(int price = -1)
         {
-            string txt = $"Sick Beats - ${price}\nPlayers within a {UpgradeBus.Instance.PluginConfiguration.BEATS_RADIUS} unit radius from an active boombox will have the following effects:\n\n";
+            string txt = $"Sick Beats - ${price}\nPlayers within a {UpgradeBus.Instance.PluginConfiguration.BEATS_RADIUS.Value} unit radius from an active boombox will have the following effects:\n\n";
             if (UpgradeBus.Instance.PluginConfiguration.BEATS_SPEED.Value) txt += $"Movement speed increased by {UpgradeBus.Instance.PluginConfiguration.BEATS_SPEED_INC.Value}\n";
             if (UpgradeBus.Instance.PluginConfiguration.BEATS_DMG.Value) txt += $"Damage inflicted increased by {UpgradeBus.Instance.PluginConfiguration.BEATS_DMG_INC.Value}\n";
             if (UpgradeBus.Instance.PluginConfiguration.BEATS_DEF.Value) txt += $"Incoming Damage multiplied by {UpgradeBus.Instance.PluginConfiguration.BEATS_DEF_CO.Value}\n";

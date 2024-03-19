@@ -130,9 +130,9 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         }
         public string GetDisplayInfo()
         {
-            return $"MEDKIT - ${UpgradeBus.Instance.PluginConfiguration.MEDKIT_PRICE}\n\n" +
-                $"Left click to heal yourself for {UpgradeBus.Instance.PluginConfiguration.MEDKIT_HEAL_VALUE} health.\n" +
-                $"Can be used {UpgradeBus.Instance.PluginConfiguration.MEDKIT_USES} times.";
+            return $"MEDKIT - ${UpgradeBus.Instance.PluginConfiguration.MEDKIT_PRICE.Value}\n\n" +
+                $"Left click to heal yourself for {UpgradeBus.Instance.PluginConfiguration.MEDKIT_HEAL_VALUE.Value} health.\n" +
+                $"Can be used {UpgradeBus.Instance.PluginConfiguration.MEDKIT_USES.Value} times.";
         }
     }
 }
