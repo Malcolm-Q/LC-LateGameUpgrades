@@ -637,7 +637,7 @@ namespace MoreShipUpgrades.Misc
             topSection = "Weather Probe";
             WEATHER_PROBE_ENABLED = cfg.BindSyncedEntry(topSection, "Enable Weather Probe Command", true, "Allows changing weather of a level through cost of credits");
             WEATHER_PROBE_PRICE = cfg.BindSyncedEntry(topSection, "Price of Weather Probe", 300, "Price of the weather probe when a weather is not selected for the level");
-            WEATHER_PROBE_ALWAYS_CLEAR = cfg.BindSyncedEntry(topSection, "Always pick clear weather", false, "When enabled, randomized weather probe will always clear out the weather present in the selected level (when possible)");
+            WEATHER_PROBE_ALWAYS_CLEAR = cfg.BindSyncedEntry(topSection, "Always pick clear weather", false, "When enabled, randomized weather probe will always clear out the weather present in the selected level");
             WEATHER_PROBE_PICKED_WEATHER_PRICE = cfg.BindSyncedEntry(topSection, "Price of Weather Probe with selected weather", 500, "This price is used when using the probe command with a weather");
 
             topSection = "Wheelbarrow";
