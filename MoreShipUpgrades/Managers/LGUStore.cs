@@ -420,6 +420,8 @@ namespace MoreShipUpgrades.Managers
                     UpgradeBus.Instance.SaleData.Add(node.Name, node.salePerc);
                 }
             }
+            SaveInfo = new SaveInfo();
+            UpdateLGUSaveServerRpc(playerID, JsonConvert.SerializeObject(SaveInfo));
             if (IsHost || IsServer) ServerSaveFile();
         }
         [ClientRpc]
