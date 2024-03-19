@@ -176,3 +176,67 @@ Anyone who contributes in any way is greatly appreciated. People willing to cont
 * __Quantum Disruptor - $1000__
     * Increases the amount of time you can stay during a moon landing (time it takes to reach final hour in the moon)
     * Each level increase further increases the amount of time.
+
+* __Helmet - $750__
+    * Blocks incoming damage through amount of hits.
+    * Once reached the limit of hits, it will be destroyed, having to purchase a new one if needed.
+
+* __Wheelbarrow - $400__
+    * Allows depositing items inside and carry all of them at once.
+    * Can be restricted to amount of items or weight allowed in the wheelbarrow.
+    * Applies a weight reduction multiplier on the deposited items when carried through the wheelbarrow.
+    * Makes noise when being carried so be careful around monsters when using it!
+
+* __Drop Pod Thrusters - $300__
+    * Speeds up the shop's drop pod to deliver items faster.
+
+* __Sick Beats - $500_
+    * Boomboxes when playing music apply effects on nearby players such as movement speed, damage boost and defense.
+    * An icon is displayed when the effects are being applied to your player.
+
+* __Shutter Batteries - $300__
+    * The ship's doors can last longer while being closed.
+    * Though let's be honest, they will get in anyways.
+
+## Contracts
+* __Defusal Contract__
+    * Look around the facility for a ticking bomb. Defuse it before the timer runs out or anyone near it might meet a gruesome fate.
+    * A serial is shown on it. You will need this for the command ``lookup <serial>`` in the terminal which it will show the right sequence of wires you need to cut to defuse it.
+
+* __Data Contract__
+    * An old laptop has been found inside the facility with valuable data. Find it and retrieve the disk contained within.
+    * Upon first interaction, an IP is displayed that needs to be inputted in the command ``bruteforce <IP>`` in the terminal.
+    * This will show the user credentials used to log in into the laptop.
+    * Upon logging in, a command line screen is displayed. Players will need to navigate through the screen through the commands:
+        *  ``ls`` (list all files in current directory/folder)
+        *  ``cd <folder>`` (move into selected folder)
+        *  ``cd ..`` (move back to parent/previous folder)
+        * ``mv survey.db`` (retrieve the requested file when present in current directory)
+
+* __Exterminator Contract__
+    * A nest of hoarding bugs has been detected on this facility. Clear them out and destroy the nest.
+    * It's this simple: look for the nest while avoiding the monsters within and destroy it. A loot object will spawn after destroying it.
+
+* __Exorcism Contract__
+    * A ritual site has been detected in the facility. Look for the site and stop the ritual by using the correct items scattered around.
+    * A pentagram will spawn around the facility that you will need to find. It makes a sound to tell that it's nearby.
+    * Upon being found, you can look at the altar and find which demon the altar belongs to. You will need this information for the terminal command ``demon <demonName>``.
+    * It will show the list of required items you need to put into the altar to stop the ritual. Any wrong item put in the altar will attract unwanted visitors.
+    * Upon inserting the right items, a loot item will spawn to which you can carry to the ship.
+
+* __Extraction Contract__
+    * A fellow employee has been reported missing in the facility. You will need to find him and escort them back to the ship for safety (and disciplinary action by The Company)
+    * They will be laying on the floor pleading for help. You can tell when they are nearby through their shouts.
+    * You will also find several medkits found in the facility. You will need one as the scavenger appears to have hurt themselves and cannot get back up on their feet.
+    * After helping the employee, you will have to carry them out of the facility. They are really heavy and will start making alot of noise when sensing any nearby danger.
+    * After being escorted back to the ship, they will thank you for your help non-stop til you arrive at The Company (where you escort them for disciplinary action).
+
+## Commands
+* ``extend deadline <days>``
+    * Extends the current deadline of the profit quota by ``<days>``.
+    * Each day added requires $800 (configurable).
+* ``probe <moonName> [weatherType]``
+    * Sends out a weather probe to the selected moon to change its current weather.
+    * If provided a ``weatherType``, it will change the moon's weather to the selected one for $500 (configurable)
+    * Otherwise, a random weather will be selected and will cost $300 (configurable)
+    * You can configure the random weather command to only select cleared weathers (off by default)
