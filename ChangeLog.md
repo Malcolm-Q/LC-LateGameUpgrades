@@ -1,4 +1,10 @@
-## V 3.4.0 - 2024-03-??
+## V 3.4.1 - 2024-03-20
+- Fixed weather syncing between host and client breaking vital initializations.
+- Fixed NV UI appearing for clients even with NV upgrade off
+- Made NV colours be synced between host and client.
+    - This is a temporary solution for when I understand better why the configuration entries for these are being broken, leading to clients not being able to use Night Vision.
+
+## V 3.4.0 - 2024-03-19
 ### Additions
 - Added "Sigurd" upgrade which might provide a boost on The Company's buying rate on certain amount of days.
     - Configurable enabled only on last day of meeting the profit quota.
