@@ -190,7 +190,7 @@ Anyone who contributes in any way is greatly appreciated. People willing to cont
 * __Drop Pod Thrusters - $300__
     * Speeds up the shop's drop pod to deliver items faster.
 
-* __Sick Beats - $500_
+* __Sick Beats - $500__
     * Boomboxes when playing music apply effects on nearby players such as movement speed, damage boost and defense.
     * An icon is displayed when the effects are being applied to your player.
 
