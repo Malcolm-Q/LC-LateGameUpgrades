@@ -22,7 +22,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
     internal class NightVision : TierUpgrade
     {
         float nightBattery;
-        Transform batteryBar;
         PlayerControllerB client;
         public bool batteryExhaustion;
         internal GameObject nightVisionPrefab;
@@ -45,8 +44,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         internal override void Start()
         {
             base.Start();
-            batteryBar = transform.GetChild(0).GetChild(0).transform;
-            batteryBar.GetComponent<Image>().color = UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_UI_BAR_COLOR.Value;
+            transform.GetChild(0).GetChild(0).GetComponent<Image>().color = UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_UI_BAR_COLOR.Value;
             transform.GetChild(0).GetChild(1).GetComponent<Text>().color = UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_UI_TEXT_COLOR.Value;
             transform.GetChild(0).GetChild(2).GetComponent<Image>().color = UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_UI_BAR_COLOR.Value;
             transform.GetChild(0).gameObject.SetActive(false);
@@ -62,7 +60,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             {
                 nightBattery -= Time.deltaTime * (UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_DRAIN_SPEED.Value - GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_DRAIN_INCREMENT.Value);
                 nightBattery = Mathf.Clamp(nightBattery, 0f, maxBattery);
-                batteryBar.parent.gameObject.SetActive(true);
+                transform.GetChild(0).gameObject.SetActive(true);
 
                 if (nightBattery <= 0f)
                 {
@@ -76,11 +74,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
                 if (nightBattery >= maxBattery)
                 {
-                    batteryBar.parent.gameObject.SetActive(false);
+                    transform.GetChild(0).gameObject.SetActive(false);
                 }
                 else
                 {
-                    batteryBar.parent.gameObject.SetActive(true);
+                    transform.GetChild(0).gameObject.SetActive(true);
                 }
             }
             // this ensures the vanilla behaviour for the night vision light remains
@@ -88,7 +86,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             else client.nightVision.enabled = false;
 
             float scale = nightBattery / maxBattery;
-            batteryBar.localScale = new Vector3(scale, 1, 1);
+            transform.GetChild(0).GetChild(0).localScale = new Vector3(scale, 1, 1);
         }
 
         public void Toggle()
