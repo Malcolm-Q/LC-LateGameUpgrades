@@ -92,7 +92,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             index = Tools.FindFloat(index, ref codes, findValue: 0.3f, addCode: sigurdChance, errorMessage: "Couldn't find the 0.3 value which is used as buying rate");
             return codes.AsEnumerable();
         }
-        [HarmonyPatch(nameof(StartOfRound.SetPlanetsWeather))]
+        [HarmonyPatch(nameof(StartOfRound.OnPlayerConnectedClientRpc))]
         [HarmonyPostfix]
         static void SetPlanetsWeatherPostfix(StartOfRound __instance)
         {

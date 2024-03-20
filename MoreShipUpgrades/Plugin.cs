@@ -27,9 +27,7 @@ using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using System.Linq;
-using MoreShipUpgrades.Input;
 using MoreShipUpgrades.Compat;
-using CSync.Lib;
 
 namespace MoreShipUpgrades
 {
