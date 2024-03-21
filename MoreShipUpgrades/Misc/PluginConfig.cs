@@ -123,7 +123,11 @@ namespace MoreShipUpgrades.Misc
         [DataMember] public SyncedEntry<float> CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE { get; set; }
         [DataMember] public SyncedEntry<int> CHARGING_BOOSTER_CHARGE_PERCENTAGE { get; set; }
         [DataMember] public SyncedEntry<float> BIGGER_LUNGS_STAMINA_REGEN_INCREASE { get; set; }
+        [DataMember] public SyncedEntry<float> BIGGER_LUNGS_STAMINA_REGEN_INCREMENTAL_INCREASE { get; set; }
+        [DataMember] public SyncedEntry<int> BIGGER_LUNGS_STAMINA_REGEN_APPLY_LEVEL { get; set; }
+        [DataMember] public SyncedEntry<int> BIGGER_LUNGS_JUMP_STAMINA_APPLY_LEVEL { get; set; }
         [DataMember] public SyncedEntry<float> BIGGER_LUNGS_JUMP_STAMINA_COST_DECREASE { get; set; }
+        [DataMember] public SyncedEntry<float> BIGGER_LUNGS_JUMP_STAMINA_COST_INCREMENTAL_DECREASE { get; set; }
         [DataMember] public SyncedEntry<int> PROTEIN_INCREMENT { get; set; }
         [DataMember] public SyncedEntry<bool> KEEP_ITEMS_ON_TELE { get; set; }
         [DataMember] public SyncedEntry<float> SPRINT_TIME_INCREASE_UNLOCK { get; set; }
@@ -404,8 +408,12 @@ namespace MoreShipUpgrades.Misc
             SPRINT_TIME_INCREMENT = cfg.BindSyncedEntry(topSection, "Sprint Time Increment", 1.25f, "Amount of sprint time gained when increasing the level of upgrade.");
             BIGGER_LUNGS_UPGRADE_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, BiggerLungs.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             BIGGER_LUNGS_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            BIGGER_LUNGS_STAMINA_REGEN_INCREASE = cfg.BindSyncedEntry(topSection, "Stamina Regeneration Increase", 1.05f, "Increase of stamina regeneration applied past level 1");
+            BIGGER_LUNGS_STAMINA_REGEN_APPLY_LEVEL = cfg.BindSyncedEntry(topSection, "Level of Bigger Lungs to apply stamina regeneration", 1, "When reached provided level, the effect will start applying.");
+            BIGGER_LUNGS_STAMINA_REGEN_INCREASE = cfg.BindSyncedEntry(topSection, "Stamina Regeneration Increase", 1.05f, "Affects the rate of the player regaining stamina");
+            BIGGER_LUNGS_STAMINA_REGEN_INCREMENTAL_INCREASE = cfg.BindSyncedEntry(topSection, "Incremental stamina regeneration increase", 0.05f, "Added to initial multiplier");
+            BIGGER_LUNGS_JUMP_STAMINA_APPLY_LEVEL = cfg.BindSyncedEntry(topSection, "Level of Bigger Lungs to apply stamina cost decrease on jumps", 2, "When reached provided level, the effect will start applying.");
             BIGGER_LUNGS_JUMP_STAMINA_COST_DECREASE = cfg.BindSyncedEntry(topSection, "Stamina cost decrease on jumps", 0.90f, "Multiplied with the vanilla cost of jumping");
+            BIGGER_LUNGS_JUMP_STAMINA_COST_INCREMENTAL_DECREASE = cfg.BindSyncedEntry(topSection, "Incremental stamina cost decrease on jumps", 0.05f, "Added to initial multiplier (as in reduce the factor)");
 
             topSection = "Extend Deadline";
             EXTEND_DEADLINE_ENABLED = cfg.BindSyncedEntry(topSection, "Enable Extend Deadline Purchase", true, "Increments the amount of days before deadline is reached.");
