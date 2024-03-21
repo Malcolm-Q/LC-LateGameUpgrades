@@ -3,6 +3,7 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 {
@@ -25,15 +26,16 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         public static float ApplyPossibleIncreasedStaminaRegen(float regenValue)
         {
             if (!UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_ENABLED.Value) return regenValue;
-            if (!GetActiveUpgrade(UPGRADE_NAME) || GetUpgradeLevel(UPGRADE_NAME) < 0) return regenValue;
-            return regenValue * UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_STAMINA_REGEN_INCREASE.Value;
+            if (!GetActiveUpgrade(UPGRADE_NAME) || GetUpgradeLevel(UPGRADE_NAME) < (UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_STAMINA_REGEN_APPLY_LEVEL.Value-1)) return regenValue;
+            return regenValue * Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_STAMINA_REGEN_INCREASE.Value + (UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_STAMINA_REGEN_INCREMENTAL_INCREASE * Mathf.Abs(GetUpgradeLevel(UPGRADE_NAME) - UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_STAMINA_REGEN_APPLY_LEVEL.Value - 1)), 0f, 10f);
+
         }
 
         public static float ApplyPossibleReducedJumpStaminaCost(float jumpCost)
         {
             if (!UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_ENABLED.Value) return jumpCost;
-            if (!GetActiveUpgrade(UPGRADE_NAME) || GetUpgradeLevel(UPGRADE_NAME) < 1) return jumpCost;
-            return jumpCost * UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_JUMP_STAMINA_COST_DECREASE.Value;
+            if (!GetActiveUpgrade(UPGRADE_NAME) || GetUpgradeLevel(UPGRADE_NAME) < (UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_JUMP_STAMINA_APPLY_LEVEL.Value-1)) return jumpCost;
+            return jumpCost * Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_JUMP_STAMINA_COST_DECREASE.Value - (UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_JUMP_STAMINA_COST_INCREMENTAL_DECREASE * Mathf.Abs(GetUpgradeLevel(UPGRADE_NAME) - UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_JUMP_STAMINA_APPLY_LEVEL.Value - 1)), 0f, 10f);
         }
         public string GetWorldBuildingText(bool shareStatus = false)
         {

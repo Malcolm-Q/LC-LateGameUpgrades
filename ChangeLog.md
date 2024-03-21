@@ -1,4 +1,17 @@
-## V 3.4.0 - 2024-03-??
+## V 3.4.2 - 2024-03-21
+- Fixed configuration synchronization due to serialization issues with colours
+    - As a consequence, reverted the synchronization between host and client for colours
+- Fixed upgrades not being loaded when you have sales saved and enabled one of the upgrades after the sales.
+- Fixed upgrades being able to be purchased in the cases of being free through configuration.
+- Added configuration for Bigger Lungs' additional effects (Stamina regeneration increase and stamina cost reduction on jumps)
+
+## V 3.4.1 - 2024-03-20
+- Fixed weather syncing between host and client breaking vital initializations.
+- Fixed NV UI appearing for clients even with NV upgrade off
+- Made NV colours be synced between host and client.
+    - This is a temporary solution for when I understand better why the configuration entries for these are being broken, leading to clients not being able to use Night Vision.
+
+## V 3.4.0 - 2024-03-19
 ### Additions
 - Added "Sigurd" upgrade which might provide a boost on The Company's buying rate on certain amount of days.
     - Configurable enabled only on last day of meeting the profit quota.
