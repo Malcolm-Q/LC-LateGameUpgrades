@@ -145,9 +145,9 @@ namespace MoreShipUpgrades.Misc
         [DataMember] public SyncedEntry<float> DISCOMBOBULATOR_RADIUS { get; set; }
         [DataMember] public SyncedEntry<float> DISCOMBOBULATOR_STUN_DURATION { get; set; }
         [DataMember] public SyncedEntry<bool> DISCOMBOBULATOR_NOTIFY_CHAT { get; set; }
-        [DataMember] public SyncedEntry<UnityEngine.Color> NIGHT_VIS_COLOR { get; set; }
-        [DataMember] public SyncedEntry<UnityEngine.Color> NIGHT_VIS_UI_TEXT_COLOR {  get; set; }
-        [DataMember] public SyncedEntry<UnityEngine.Color> NIGHT_VIS_UI_BAR_COLOR { get; set; }
+        public ConfigEntry<string> NIGHT_VIS_COLOR { get; set; }
+        public ConfigEntry<string> NIGHT_VIS_UI_TEXT_COLOR {  get; set; }
+        public ConfigEntry<string> NIGHT_VIS_UI_BAR_COLOR { get; set; }
         [DataMember] public SyncedEntry<float> NIGHT_VIS_DRAIN_SPEED { get; set; }
         [DataMember] public SyncedEntry<float> NIGHT_VIS_REGEN_SPEED { get; set; }
         [DataMember] public SyncedEntry<float> NIGHT_BATTERY_MAX { get; set; }
@@ -443,9 +443,9 @@ namespace MoreShipUpgrades.Misc
             NIGHT_BATTERY_MAX = cfg.BindSyncedEntry(topSection, "The max charge for your night vision battery", 10f, "Default settings this will be the unupgraded time in seconds the battery will drain and regen in. Increase to increase battery life.");
             NIGHT_VIS_DRAIN_SPEED = cfg.BindSyncedEntry(topSection, "Multiplier for night vis battery drain", 1f, "Multiplied by timedelta, lower to increase battery life.");
             NIGHT_VIS_REGEN_SPEED = cfg.BindSyncedEntry(topSection, "Multiplier for night vis battery regen", 1f, "Multiplied by timedelta, raise to speed up battery regen time.");
-            NIGHT_VIS_COLOR = cfg.BindSyncedEntry(topSection, "Night Vision Color", UnityEngine.Color.green, "The color your night vision light emits.");
-            NIGHT_VIS_UI_TEXT_COLOR = cfg.BindSyncedEntry(topSection, "Night Vision UI Text Color", UnityEngine.Color.white, "The color used for the night vision's UI text.");
-            NIGHT_VIS_UI_BAR_COLOR = cfg.BindSyncedEntry(topSection, "Night Vision UI Bar Color", UnityEngine.Color.green, "The color used for the night vision's UI battery bar.");
+            NIGHT_VIS_COLOR = cfg.Bind(topSection, "Night Vision Color", "#00FF00FF", "The color your night vision light emits.");
+            NIGHT_VIS_UI_TEXT_COLOR = cfg.Bind(topSection, "Night Vision UI Text Color", "#FFFFFFFF", "The color used for the night vision's UI text.");
+            NIGHT_VIS_UI_BAR_COLOR = cfg.Bind(topSection, "Night Vision UI Bar Color", "#00FF00FF", "The color used for the night vision's UI battery bar.");
             NIGHT_VIS_RANGE = cfg.BindSyncedEntry(topSection, "Night Vision Range", 2000f, "Kind of like the distance your night vision travels.");
             NIGHT_VIS_RANGE_INCREMENT = cfg.BindSyncedEntry(topSection, "Night Vision Range Increment", 0f, "Increases your range by this value each upgrade.");
             NIGHT_VIS_INTENSITY = cfg.BindSyncedEntry(topSection, "Night Vision Intensity", 1000f, "Kind of like the brightness of your Night Vision.");

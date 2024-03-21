@@ -1,4 +1,5 @@
-﻿using MoreShipUpgrades.Managers;
+﻿using CSync.Lib;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -36,7 +37,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
         public virtual void Load()
         {
             UpgradeBus.Instance.activeUpgrades[upgradeName] = true;
-            if (!UpgradeBus.Instance.PluginConfiguration.SHOW_UPGRADES_CHAT.Value) return;
+            if (!SyncedInstance<PluginConfig>.Default.SHOW_UPGRADES_CHAT.Value) return;
             ShowUpgradeNotification("#FF0000", $"{upgradeName} is active!");
         }
         /// <summary>
@@ -52,7 +53,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
         public virtual void Unwind()
         {
             UpgradeBus.Instance.activeUpgrades[upgradeName] = false;
-            if (!UpgradeBus.Instance.PluginConfiguration.SHOW_UPGRADES_CHAT.Value) return;
+            if (!SyncedInstance<PluginConfig>.Default.SHOW_UPGRADES_CHAT.Value) return;
             ShowUpgradeNotification("#FF0000", $"{upgradeName} has been disabled!");
         }
         /// <summary>
