@@ -28,6 +28,7 @@ using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using System.Linq;
 using MoreShipUpgrades.Compat;
+using CSync.Lib;
 
 namespace MoreShipUpgrades
 {
@@ -631,7 +632,7 @@ namespace MoreShipUpgrades
             UnityEngine.InputSystem.Key dropAllItemsKey = UnityEngine.InputSystem.Key.None;
             bool dropAllItemsMouseButtonSet;
             UnityEngine.InputSystem.LowLevel.MouseButton dropAllitemsMouseButton = UnityEngine.InputSystem.LowLevel.MouseButton.Middle;
-            string controlBind = PluginConfig.Instance.WHEELBARROW_DROP_ALL_CONTROL_BIND.Value;
+            string controlBind = SyncedInstance<PluginConfig>.Default.WHEELBARROW_DROP_ALL_CONTROL_BIND.Value;
             if (Enum.TryParse(controlBind, out UnityEngine.InputSystem.Key toggle))
             {
                 dropAllItemsKey = toggle;
