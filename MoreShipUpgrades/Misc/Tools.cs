@@ -187,5 +187,11 @@ namespace MoreShipUpgrades.Misc
             return info;
         }
 
+        public static Color ConvertValueToColor(string hex, Color defaultValue)
+        {
+            if (hex == null || !ColorUtility.TryParseHtmlString("#" + hex.Trim('#', ' '), out Color color))
+                return defaultValue;
+            return color;
+        }
     }
 }
