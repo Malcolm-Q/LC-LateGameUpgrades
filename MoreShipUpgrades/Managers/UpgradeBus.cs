@@ -144,6 +144,7 @@ namespace MoreShipUpgrades.Managers
             }
             foreach(CustomTerminalNode node in terminalNodes)
             {
+                if (!SaleData.ContainsKey(node.Name)) continue;
                 node.salePerc = SaleData[node.Name];
                 if(node.salePerc != 1f)
                 {
