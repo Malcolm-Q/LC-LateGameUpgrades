@@ -12,13 +12,17 @@ namespace MoreShipUpgrades.Patches.NetworkManager
         static LguLogger logger = new LguLogger(nameof(GameNetworkManagerPatcher));
         [HarmonyPostfix]
         [HarmonyPatch(nameof(GameNetworkManager.Disconnect))]
-        static void ResetUpgradeBus()
+        static void ResetUpgradeBus(GameNetworkManager __instance)
         {
+            if (__instance.isDisconnecting || StartOfRound.Instance == null) return;
             logger.LogDebug("Resetting the Upgrade Bus due to disconnecting...");
-            BaseUpgrade[] upgradeObjects = Object.FindObjectsOfType<BaseUpgrade>();
-            foreach (BaseUpgrade upgrade in upgradeObjects)
+            if (__instance.isHostingGame)
             {
-                Object.Destroy(upgrade.gameObject);
+                BaseUpgrade[] upgradeObjects = Object.FindObjectsOfType<BaseUpgrade>();
+                foreach (BaseUpgrade upgrade in upgradeObjects)
+                {
+                    Object.Destroy(upgrade.gameObject);
+                }
             }
             UpgradeBus.Instance.ResetAllValues();
         }
