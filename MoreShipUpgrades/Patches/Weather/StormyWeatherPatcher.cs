@@ -1,6 +1,5 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using UnityEngine;

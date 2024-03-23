@@ -2,14 +2,9 @@
 using GameNetcodeStuff;
 using HarmonyLib;
 using MoreShipUpgrades.Compat;
-using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;

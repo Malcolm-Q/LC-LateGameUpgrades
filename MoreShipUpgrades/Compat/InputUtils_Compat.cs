@@ -1,9 +1,4 @@
 ﻿using MoreShipUpgrades.Input;
-using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine.InputSystem;
 
 namespace MoreShipUpgrades.Compat

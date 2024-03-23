@@ -1,10 +1,7 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.UpgradeComponents.Commands;
-using System;
 using System.Collections.Generic;
-using System.Reflection.Emit;
 using System.Reflection;
-using System.Text;
 using MoreShipUpgrades.Misc;
 
 namespace MoreShipUpgrades.Patches.RoundComponents

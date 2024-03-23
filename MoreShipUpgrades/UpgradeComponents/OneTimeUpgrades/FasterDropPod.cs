@@ -1,8 +1,5 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades

@@ -1,11 +1,8 @@
 ﻿using HarmonyLib;
-using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
-using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Text;
 
 namespace MoreShipUpgrades.Patches.Enemies
 {

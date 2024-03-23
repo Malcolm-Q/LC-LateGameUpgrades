@@ -4,10 +4,7 @@ using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Misc

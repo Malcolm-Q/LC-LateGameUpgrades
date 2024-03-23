@@ -2,10 +2,6 @@
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
