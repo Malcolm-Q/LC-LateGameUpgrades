@@ -1,6 +1,4 @@
-﻿using BepInEx.Logging;
-using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.UpgradeComponents.Interfaces;
+﻿using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.Misc.Upgrades
 {

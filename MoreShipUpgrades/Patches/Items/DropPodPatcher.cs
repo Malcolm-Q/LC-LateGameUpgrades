@@ -1,15 +1,9 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Misc;
-using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Reflection.Emit;
-using System.Text;
-using System.Xml.Linq;
-using UnityEngine;
 
 namespace MoreShipUpgrades.Patches.Items
 {

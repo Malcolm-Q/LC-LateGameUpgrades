@@ -1,18 +1,12 @@
-﻿using BepInEx.Logging;
-using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
-using MoreShipUpgrades.Misc.Upgrades;
+﻿using MoreShipUpgrades.Misc;
 using Unity.Netcode;
 
 namespace MoreShipUpgrades.UpgradeComponents.Commands
 {
-    /// <summary>
-    /// Currently this isn't working, I will have to figure out why
-    /// </summary>
     public class ExtendDeadlineScript : NetworkBehaviour
     {
-        public static string NAME = "Extend Deadline";
-        public static string ENABLED_SECTION = $"Enable {NAME}";
+        internal const string NAME = "Extend Deadline";
+        internal const string ENABLED_SECTION = $"Enable {NAME}";
         private static LguLogger logger;
         internal static ExtendDeadlineScript instance;
         void Start()

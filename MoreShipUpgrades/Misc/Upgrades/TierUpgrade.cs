@@ -1,6 +1,5 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
-using System.Collections.Generic;
 
 namespace MoreShipUpgrades.Misc.Upgrades
 {

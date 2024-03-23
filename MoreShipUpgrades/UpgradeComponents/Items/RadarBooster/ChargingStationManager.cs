@@ -1,9 +1,6 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -21,6 +18,11 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.RadarBooster
             chargeStation.layer = LayerMask.NameToLayer("Props");
             chargeStation.name = "Charging Station";
             chargeStation.GetComponent<BoxCollider>().isTrigger = true;
+            InitializeInteractTrigger(ref chargeStation);
+        }
+
+        void InitializeInteractTrigger(ref GameObject chargeStation)
+        {
             InteractTrigger interactTrigger = chargeStation.AddComponent<InteractTrigger>();
             interactTrigger.interactable = true;
             interactTrigger.holdInteraction = true;
@@ -34,7 +36,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.RadarBooster
             interactTrigger.disabledHoverIcon = GetComponent<RadarBoosterItem>().itemProperties.itemIcon;
             interactComponent = interactTrigger;
         }
-
         void Update()
         {
             PlayerControllerB localPlayer = UpgradeBus.Instance.GetLocalPlayer();

@@ -1,13 +1,9 @@
-﻿using BepInEx;
-using BepInEx.Logging;
-using HarmonyLib;
+﻿using HarmonyLib;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace MoreShipUpgrades.Patches.RoundComponents
 {

@@ -12,7 +12,6 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Managers

@@ -2,7 +2,6 @@
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
-using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades

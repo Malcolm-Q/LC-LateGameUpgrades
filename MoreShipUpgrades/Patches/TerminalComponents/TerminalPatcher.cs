@@ -1,11 +1,9 @@
-﻿using BepInEx.Logging;
-using HarmonyLib;
+﻿using HarmonyLib;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
 

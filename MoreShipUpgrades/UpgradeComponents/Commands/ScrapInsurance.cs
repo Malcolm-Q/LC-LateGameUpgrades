@@ -1,16 +1,12 @@
-﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MoreShipUpgrades.Misc;
 using Unity.Netcode;
 
 namespace MoreShipUpgrades.UpgradeComponents.Commands
 {
     internal class ScrapInsurance : NetworkBehaviour
     {
-        public static string COMMAND_NAME = "Scrap Insurance";
-        public static int DEFAULT_PRICE = 400;
+        internal const string COMMAND_NAME = "Scrap Insurance";
+        internal const int DEFAULT_PRICE = 400;
         static bool insurance = false;
         void Start()
         {

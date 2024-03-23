@@ -4,7 +4,6 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {

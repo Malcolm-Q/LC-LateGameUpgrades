@@ -1,17 +1,14 @@
 ﻿using GameNetcodeStuff;
-using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
-using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace MoreShipUpgrades.UpgradeComponents.Commands
 {
     public class Interns : NetworkBehaviour
     {
-        public const string UPGRADE_NAME = "Interns";
+        internal const string UPGRADE_NAME = "Interns";
         public static Interns instance;
 
         internal string[] internNames, internInterests;

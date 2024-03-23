@@ -1,15 +1,11 @@
 ﻿using BepInEx.Configuration;
 using System;
-using Newtonsoft.Json;
-using System.Collections.Generic;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
-using System.Reflection;
 using MoreShipUpgrades.Managers;
-using System.Runtime.CompilerServices;
 using CSync.Lib;
 using System.Runtime.Serialization;
 using CSync.Util;

@@ -1,10 +1,8 @@
-﻿using GameNetcodeStuff;
-using HarmonyLib;
+﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using System.Collections.Generic;
 using System.Linq;
