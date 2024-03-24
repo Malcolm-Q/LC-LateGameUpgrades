@@ -128,7 +128,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
         public override string GetDisplayInfo(int price = -1)
         {
-            return "Allows you to pick door locks by completing a minigame.";
+            return $"${price} - Allows you to pick door locks by completing a minigame.";
         }
         internal override bool CanInitializeOnStart()
         {
