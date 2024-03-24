@@ -82,14 +82,10 @@ namespace MoreShipUpgrades.Managers
         {
             modStoreInterface = ScriptableObject.CreateInstance<TerminalNode>();
             modStoreInterface.clearPreviousText = true;
+            //modStoreInterface.displayText += "===================================================\n";
             foreach (CustomTerminalNode terminalNode in terminalNodes)
-            {
-                string saleStatus = terminalNode.salePerc < 1f ? $"- {((1-terminalNode.salePerc)*100).ToString("F0")}% OFF!" : "";
-                if (!terminalNode.Unlocked) { modStoreInterface.displayText += $"\n{terminalNode.Name} // ${(int)(terminalNode.UnlockPrice * terminalNode.salePerc)} {saleStatus}  "; }
-                else if (terminalNode.MaxUpgrade == 0) { modStoreInterface.displayText += $"\n{terminalNode.Name} // UNLOCKED  "; }
-                else if (terminalNode.MaxUpgrade > terminalNode.CurrentUpgrade) { modStoreInterface.displayText += $"\n{terminalNode.Name} // ${(int)(terminalNode.Prices[terminalNode.CurrentUpgrade]*terminalNode.salePerc)} // LVL {terminalNode.CurrentUpgrade + 1} {saleStatus}  "; }
-                else { modStoreInterface.displayText += $"\n{terminalNode.Name} // MAX LVL"; }
-            }
+                modStoreInterface.displayText += terminalNode.GetTerminalNodeText();
+
             if (modStoreInterface.displayText == "")
             {
                 modStoreInterface.displayText = "No upgrades available";
@@ -577,7 +573,7 @@ namespace MoreShipUpgrades.Managers
 
             string infoString = SetupUpgradeInfo(upgrade: multiPerk.GetComponent<BaseUpgrade>(), shareStatus: shareStatus, price: initialPrice, incrementalPrices: prices);
 
-            CustomTerminalNode node = new CustomTerminalNode(upgradeName, initialPrice, infoString, multiPerk, prices, prices.Length);
+            CustomTerminalNode node = new TierTerminalNode(upgradeName, initialPrice, infoString, multiPerk, prices, prices.Length);
             terminalNodes.Add(node);
             return node;
         }
@@ -602,7 +598,7 @@ namespace MoreShipUpgrades.Managers
             if (!enabled) return;
             string info = SetupUpgradeInfo(upgrade: oneTimeUpgrade.GetComponent<BaseUpgrade>(), shareStatus: shareStatus, price: price);
 
-            CustomTerminalNode node = new CustomTerminalNode(upgradeName, price, info, oneTimeUpgrade);
+            CustomTerminalNode node = new OneTimeTerminalNode(upgradeName, price, info, oneTimeUpgrade);
             terminalNodes.Add(node);
         }
         private string SetupUpgradeInfo(BaseUpgrade upgrade = null, bool shareStatus = false, int price = -1, int[] incrementalPrices = null)

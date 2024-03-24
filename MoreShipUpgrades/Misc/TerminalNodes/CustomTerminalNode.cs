@@ -6,7 +6,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
     /// <summary>
     /// Terminal node used to display the lgu upgrade store
     /// </summary>
-    public class CustomTerminalNode : IComparable
+    public abstract class CustomTerminalNode : IComparable
     {
         public string Name {get; set;}
         public int[] Prices { get; set; }
@@ -38,5 +38,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
             CustomTerminalNode other = obj as CustomTerminalNode;
             return Name.CompareTo(other.Name);
         }
+
+        internal abstract string GetTerminalNodeText();
     }
 }
