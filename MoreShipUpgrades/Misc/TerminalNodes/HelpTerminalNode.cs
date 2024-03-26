@@ -22,9 +22,13 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         /// <summary>
         /// Prepares the "help" terminal node to add information related to LGU-related commands such as "Scrap Insurance", "Interns", etc.
         /// </summary>
-        internal static void SetupLGUHelpCommand()
+        internal static void SetupLGUHelpCommand(TerminalNode helpNode = null)
         {
-            TerminalNode helpNode = LguTerminalNode.GetHelpTerminalNode();
+            if (helpNode == null)
+            {
+                helpNode = LguTerminalNode.GetHelpTerminalNode();
+            }
+
             if (startingIndex != -1 && endingIndex != -1) helpNode.displayText = helpNode.displayText.Remove(startingIndex, endingIndex - startingIndex);
             startingIndex = helpNode.displayText.Length;
             helpNode.displayText += ">LATEGAME\nDisplays information related with Lategame-Upgrades mod\n\n";

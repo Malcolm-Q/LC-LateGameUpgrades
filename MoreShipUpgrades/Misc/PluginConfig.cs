@@ -301,6 +301,8 @@ namespace MoreShipUpgrades.Misc
         [DataMember] public SyncedEntry<float> SIGURD_LAST_DAY_PERCENT { get; set; }
         [DataMember] public SyncedEntry<bool> SALE_APPLY_ONCE { get; set; }
         [DataMember] public SyncedEntry<bool> WEATHER_PROBE_ALWAYS_CLEAR {  get; set; }
+        public ConfigEntry<bool> USE_ALTERNATIVE_TERMINAL_NODE { get; set; }
+        public ConfigEntry<string> ALTERNATIVE_TERMINAL_NODE { get; set; }
 
         public PluginConfig(ConfigFile cfg) : base(Metadata.GUID)
         {
@@ -347,6 +349,9 @@ namespace MoreShipUpgrades.Misc
             KEEP_UPGRADES_AFTER_FIRED_CUTSCENE = cfg.BindSyncedEntry(topSection, "Keep upgrades after quota failure", false, "If true, you will keep your upgrades after being fired by The Company.");
             SHOW_UPGRADES_CHAT = cfg.Bind(topSection, "Show upgrades being loaded in chat", true, "If enabled, chat messages will be displayed when loading an upgrade for the first time.");
             SALE_APPLY_ONCE = cfg.BindSyncedEntry(topSection, "Apply upgrade sale on one purchase", false, "When an upgrade is on sale, apply the sale only on the first ever purchase of it while on sale. Consecutive purchases will not have the sale applied");
+
+            USE_ALTERNATIVE_TERMINAL_NODE = cfg.Bind(topSection, "Use Alternative Terminal Node", true, "If enabled, the help text on the terminal will be displayed inside the node defined in ALTERNATIVE_TERMINAL_NODE"); ;
+            ALTERNATIVE_TERMINAL_NODE = cfg.Bind(topSection, "Alternative Terminal Node Name", "other", "Name of the node to be used when USE_ALTERNATIVE_TERMINAL_NODE is enabled"); ;
 
             topSection = "Helmet";
             HELMET_ENABLED = cfg.BindSyncedEntry(topSection, "Enable the helmet for purchase", true, "");
