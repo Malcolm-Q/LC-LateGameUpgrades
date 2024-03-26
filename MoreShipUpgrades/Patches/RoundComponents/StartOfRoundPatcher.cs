@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using GameNetcodeStuff;
+using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
@@ -96,6 +97,14 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         {
             if (__instance.IsHost || __instance.IsServer) return;
             LguStore.Instance.SyncProbeWeathersServerRpc();
+        }
+
+        [HarmonyPatch(nameof(StartOfRound.OnPlayerConnectedClientRpc))]
+        [HarmonyPostfix]
+        static void ShareSaveShipDataPostfix()
+        {
+            if (GameNetworkManager.Instance.isHostingGame) return;
+            Tools.ReplaceSaveWithHost();
         }
     }
 }
