@@ -38,7 +38,6 @@ namespace MoreShipUpgrades.Misc.Upgrades
         public virtual void Load()
         {
             UpgradeBus.Instance.activeUpgrades[upgradeName] = true;
-            LguStore.Instance.ServerSaveFileServerRpc();
             if (!SyncedInstance<PluginConfig>.Default.SHOW_UPGRADES_CHAT.Value) return;
             ShowUpgradeNotification("#FF0000", $"{upgradeName} is active!");
         }

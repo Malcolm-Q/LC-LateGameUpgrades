@@ -197,7 +197,6 @@ namespace MoreShipUpgrades.Misc
         {
             if (GameNetworkManager.Instance.isHostingGame) return;
             var localPlayer = StartOfRound.Instance.localPlayerController;
-            if (LguStore.Instance.LguSave != null && LguStore.Instance.LguSave.playerSaves.ContainsKey(localPlayer.playerSteamId)) return;
             logger.LogDebug("Sharing host savefile on reconnecting...");
             LguStore.Instance.ShareSaveServerRpc();
             PlayerControllerB[] players = UnityEngine.Object.FindObjectsOfType<PlayerControllerB>();
