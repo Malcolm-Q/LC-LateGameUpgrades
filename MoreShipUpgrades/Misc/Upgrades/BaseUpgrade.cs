@@ -2,6 +2,7 @@
 using MoreShipUpgrades.Managers;
 using System.Collections.Generic;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace MoreShipUpgrades.Misc.Upgrades
 {
@@ -28,6 +29,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
         internal virtual void Start()
         {
             DontDestroyOnLoad(gameObject);
+            gameObject.hideFlags = HideFlags.HideAndDontSave;
             Register();
         }
         /// <summary>

@@ -166,7 +166,6 @@ namespace MoreShipUpgrades.Managers
             SyncCreditsClientRpc(credits);
         }
 
-
         [ClientRpc]
         public void SyncCreditsClientRpc(int newCredits)
         {
@@ -300,17 +299,20 @@ namespace MoreShipUpgrades.Managers
 
             StartCoroutine(WaitForUpgradeObject());
         }
-
+        
         private IEnumerator WaitForSteamID()
         {
             yield return new WaitForSeconds(1f);
-            int tries = 0;
-            while(playerID == 0 && tries < 10)
+
+            if(!GameNetworkManager.Instance.disableSteam)
             {
-                tries++;
-                playerID = GameNetworkManager.Instance.localPlayerController.playerSteamId;
-                yield return new WaitForSeconds(0.5f);
+                while (playerID == 0)
+                {
+                    playerID = GameNetworkManager.Instance.localPlayerController.playerSteamId;
+                    yield return new WaitForSeconds(0.5f);
+                }
             }
+            
             if (playerID != 0)
             {
                 logger.LogInfo($"Loading SteamID: {playerID}");
