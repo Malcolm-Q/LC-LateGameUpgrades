@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using CSync.Lib;
+using HarmonyLib;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
@@ -12,17 +13,40 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
     [HarmonyPatch(typeof(Terminal))]
     internal static class TerminalPatcher
     {
+        private static LguLogger logger = new LguLogger("TerminalPatcher");
+
         [HarmonyPostfix]
         [HarmonyPatch(nameof(Terminal.Start))]
         static void StartPostfix()
         {
-            HelpTerminalNode.SetupLGUHelpCommand();
+            if(!SyncedInstance<PluginConfig>.Default.USE_ALTERNATIVE_TERMINAL_NODE.Value)
+            {
+                HelpTerminalNode.SetupLGUHelpCommand();
+            }
         }
         [HarmonyPostfix]
         [HarmonyPatch(nameof(Terminal.ParsePlayerSentence))]
         static void CustomParser(ref Terminal __instance, ref TerminalNode __result)
         {
             string text = __instance.screenText.text.Substring(__instance.screenText.text.Length - __instance.textAdded);
+            if (SyncedInstance<PluginConfig>.Default.USE_ALTERNATIVE_TERMINAL_NODE.Value)
+            {
+                string nodeName = SyncedInstance<PluginConfig>.Default.ALTERNATIVE_TERMINAL_NODE.Value.ToLower();
+                
+                if (LguTerminalNode.GetTerminal().CheckForExactSentences(nodeName) != null)
+                {
+                    if(text.ToLower().Equals(nodeName))
+                    {
+                        HelpTerminalNode.SetupLGUHelpCommand(__result);
+                        return;
+                    }
+                }
+                else
+                {
+                    logger.LogDebug($"Terminal node {nodeName} not found");
+                }
+            }
+
             CommandParser.ParseLGUCommands(text, ref __instance, ref __result);
         }
 
