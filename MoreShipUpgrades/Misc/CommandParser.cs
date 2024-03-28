@@ -142,7 +142,7 @@ namespace MoreShipUpgrades.Misc
                 if (playerName == null) continue;
                 playerNames.Add(playerName);
                 logger.LogDebug($"Comparing {playerName} with {playerNameToSearch} case insensitive...");
-                if (playerName.ToLower() != playerNameToSearch.ToLower()) continue;
+                if (!playerName.ToLower().Contains(playerNameToSearch.ToLower())) continue;
 
                 LguStore.Instance.ShareSaveServerRpc();
                 terminal.StartCoroutine(WaitForSync(playerSteamID));
