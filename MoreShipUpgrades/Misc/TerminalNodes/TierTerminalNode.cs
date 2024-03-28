@@ -10,7 +10,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
     {
         const string DELIMITER = "//";
         const string MAX_LEVEL_TEXT = "MAX LVL";
-        public TierTerminalNode(string name, int unlockPrice, string description, GameObject prefab, int[] prices, int maxUpgrade) : base(name, unlockPrice, description, prefab, prices, maxUpgrade)
+        public TierTerminalNode(string name, int unlockPrice, string description, GameObject prefab, int[] prices, int maxUpgrade, string simplifiedDescription = "") : base(name, unlockPrice, description, prefab, prices, maxUpgrade, simplifiedDescription: simplifiedDescription)
         {
 
         }

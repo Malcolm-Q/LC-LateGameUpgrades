@@ -2,11 +2,10 @@
 using MoreShipUpgrades.Input;
 using MoreShipUpgrades.Managers;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using static UnityEngine.InputSystem.DefaultInputActions;
 using static UnityEngine.InputSystem.InputAction;
 
 namespace MoreShipUpgrades.Misc.UI
@@ -23,8 +22,7 @@ namespace MoreShipUpgrades.Misc.UI
             cursorElements = new UpgradeApplication(UpgradeBus.Instance.terminalNodes.ToArray());
             terminalReference = UpgradeBus.Instance.GetTerminal();
             lastTerminalNode = terminalReference.currentNode;
-            terminalReference.screenText.DeactivateInputField();
-            terminalReference.screenText.interactable = false;
+            StartCoroutine(UpdateInput(false));
             UpdateInputBindings(enable: true);
         }
         void Update()
@@ -38,9 +36,24 @@ namespace MoreShipUpgrades.Misc.UI
         {
             UpdateInputBindings(enable : false);
             terminalReference.LoadNewNode(lastTerminalNode);
-            terminalReference.screenText.interactable = true;
-            terminalReference.screenText.ActivateInputField();
+            StartCoroutine(UpdateInput(true));
         }
+        internal IEnumerator UpdateInput(bool enable)
+        {
+            yield return new WaitForEndOfFrame();
+            if (enable)
+            {
+                terminalReference.screenText.interactable = true;
+                terminalReference.screenText.ActivateInputField();
+                terminalReference.screenText.Select();
+            }
+            else
+            {
+                terminalReference.screenText.DeactivateInputField();
+                terminalReference.screenText.interactable = false;
+            }
+        }
+
         void UpdateInputBindings(bool enable = false)
         {
             if (enable) AddInputBindings();

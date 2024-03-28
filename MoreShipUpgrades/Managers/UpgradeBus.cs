@@ -13,6 +13,7 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -572,8 +573,10 @@ namespace MoreShipUpgrades.Managers
             if (!enabled) return null;
 
             string infoString = SetupUpgradeInfo(upgrade: multiPerk.GetComponent<BaseUpgrade>(), shareStatus: shareStatus, price: initialPrice, incrementalPrices: prices);
+            string moreInfo = infoString;
+            if (multiPerk.GetComponent<BaseUpgrade>() is IUpgradeWorldBuilding component) moreInfo += component.GetWorldBuildingText(shareStatus) + "\n";
 
-            CustomTerminalNode node = new TierTerminalNode(upgradeName, initialPrice, infoString, multiPerk, prices, prices.Length);
+            CustomTerminalNode node = new TierTerminalNode(upgradeName, initialPrice, infoString, multiPerk, prices, prices.Length, moreInfo);
             terminalNodes.Add(node);
             return node;
         }
@@ -597,8 +600,10 @@ namespace MoreShipUpgrades.Managers
             IndividualUpgrades.Add(upgradeName, shareStatus);
             if (!enabled) return;
             string info = SetupUpgradeInfo(upgrade: oneTimeUpgrade.GetComponent<BaseUpgrade>(), shareStatus: shareStatus, price: price);
+            string moreInfo = info;
+            if (oneTimeUpgrade.GetComponent<BaseUpgrade>() is IUpgradeWorldBuilding component) moreInfo += component.GetWorldBuildingText(shareStatus) + "\n";
 
-            CustomTerminalNode node = new OneTimeTerminalNode(upgradeName, price, info, oneTimeUpgrade);
+            CustomTerminalNode node = new OneTimeTerminalNode(upgradeName, price, info, oneTimeUpgrade, moreInfo);
             terminalNodes.Add(node);
         }
         private string SetupUpgradeInfo(BaseUpgrade upgrade = null, bool shareStatus = false, int price = -1, int[] incrementalPrices = null)
@@ -606,7 +611,6 @@ namespace MoreShipUpgrades.Managers
             string info = "";
             if (upgrade is IOneTimeUpgradeDisplayInfo upgradeInfo) info += upgradeInfo.GetDisplayInfo(price) + "\n";
             if (upgrade is ITierUpgradeDisplayInfo tierUpgradeInfo) info += tierUpgradeInfo.GetDisplayInfo(initialPrice: price, maxLevels: incrementalPrices.Length, incrementalPrices: incrementalPrices);
-            if (upgrade is IUpgradeWorldBuilding component) info += component.GetWorldBuildingText(shareStatus) + "\n";
             return info;
         }
         /// <summary>
