@@ -150,18 +150,10 @@ namespace MoreShipUpgrades
             bombScript.snip = AssetBundleHandler.GetAudioClip("Bomb Cut");
             bombScript.tick = AssetBundleHandler.GetAudioClip("Bomb Tick");
 
-
-            Utilities.FixMixerGroups(bomb.spawnPrefab);
-            NetworkPrefabs.RegisterNetworkPrefab(bomb.spawnPrefab);
-            Items.RegisterItem(bomb);
-
-            SpawnableMapObjectDef mapObjDefBug = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
-            mapObjDefBug.spawnableMapObject = new SpawnableMapObject();
-            mapObjDefBug.spawnableMapObject.prefabToSpawn = bomb.spawnPrefab;
-            MapObjects.RegisterMapObject(mapObjDefBug, Levels.LevelTypes.All, (level) => curve);
+            RegisterSpawnableContractObject(bomb, curve);
         }
 
-
+        const int MAXIMUM_RITUAL_ITEMS = 5;
         void SetupExorcismContract(AnimationCurve curve)
         {
             Item contractLoot = AssetBundleHandler.GetItemObject("Demon Tome");
@@ -172,18 +164,11 @@ namespace MoreShipUpgrades
 
             Item mainItem = AssetBundleHandler.GetItemObject("Pentagram");
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < MAXIMUM_RITUAL_ITEMS; i++)
             {
                 Item exorItem = AssetBundleHandler.GetItemObject("RitualItem" + i);
                 exorItem.spawnPrefab.AddComponent<ExorcismContract>();
-                Items.RegisterItem(exorItem);
-                Utilities.FixMixerGroups(exorItem.spawnPrefab);
-                NetworkPrefabs.RegisterNetworkPrefab(exorItem.spawnPrefab);
-
-                SpawnableMapObjectDef mapObjDefRitual = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
-                mapObjDefRitual.spawnableMapObject = new SpawnableMapObject();
-                mapObjDefRitual.spawnableMapObject.prefabToSpawn = exorItem.spawnPrefab;
-                MapObjects.RegisterMapObject(mapObjDefRitual, Levels.LevelTypes.All, (level) => new AnimationCurve(new Keyframe(0,3),new Keyframe(1,3)));
+                RegisterSpawnableContractObject(exorItem, new AnimationCurve(new Keyframe(0, 3), new Keyframe(1, 3)));
             }
 
             ExorcismContract co = mainItem.spawnPrefab.AddComponent<ExorcismContract>();
@@ -194,14 +179,19 @@ namespace MoreShipUpgrades
             pentScript.chant = AssetBundleHandler.GetAudioClip("Ritual Fail");
             pentScript.portal = AssetBundleHandler.GetAudioClip("Ritual Success");
 
-            Utilities.FixMixerGroups(mainItem.spawnPrefab);
-            NetworkPrefabs.RegisterNetworkPrefab(mainItem.spawnPrefab);
-            Items.RegisterItem(mainItem);
+            RegisterSpawnableContractObject(mainItem, curve);
+        }
 
-            SpawnableMapObjectDef mapObjDef = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
-            mapObjDef.spawnableMapObject = new SpawnableMapObject();
-            mapObjDef.spawnableMapObject.prefabToSpawn = mainItem.spawnPrefab;
-            MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
+        void RegisterSpawnableContractObject(Item item, AnimationCurve curve)
+        {
+            Utilities.FixMixerGroups(item.spawnPrefab);
+            NetworkPrefabs.RegisterNetworkPrefab(item.spawnPrefab);
+            Items.RegisterItem(item);
+
+            SpawnableMapObjectDef mapObjDefBug = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
+            mapObjDefBug.spawnableMapObject = new SpawnableMapObject();
+            mapObjDefBug.spawnableMapObject.prefabToSpawn = item.spawnPrefab;
+            MapObjects.RegisterMapObject(mapObjDefBug, Levels.LevelTypes.All, (level) => curve);
         }
 
 
@@ -221,14 +211,7 @@ namespace MoreShipUpgrades
             BugNestScript nestScript = nest.spawnPrefab.AddComponent<BugNestScript>();
             nestScript.loot = bugLoot.spawnPrefab;
 
-            Utilities.FixMixerGroups(nest.spawnPrefab);
-            NetworkPrefabs.RegisterNetworkPrefab(nest.spawnPrefab);
-            Items.RegisterItem(nest);
-
-            SpawnableMapObjectDef mapObjDefBug = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
-            mapObjDefBug.spawnableMapObject = new SpawnableMapObject();
-            mapObjDefBug.spawnableMapObject.prefabToSpawn = nest.spawnPrefab;
-            MapObjects.RegisterMapObject(mapObjDefBug, Levels.LevelTypes.All, (level) => curve);
+            RegisterSpawnableContractObject(nest, curve);
         }
 
         void SetupScavContract(ref AssetBundle bundle, AnimationCurve curve)
@@ -249,14 +232,7 @@ namespace MoreShipUpgrades
             ExtractPlayerScript.clipDict.Add("safe", CreateAudioClipArray(scavAudioDict["safe"], ref bundle));
             ExtractPlayerScript.clipDict.Add("held", CreateAudioClipArray(scavAudioDict["held"], ref bundle));
 
-            Utilities.FixMixerGroups(scav.spawnPrefab);
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(scav.spawnPrefab);
-            Items.RegisterItem(scav);
-
-            SpawnableMapObjectDef mapObjDef = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
-            mapObjDef.spawnableMapObject = new SpawnableMapObject();
-            mapObjDef.spawnableMapObject.prefabToSpawn = scav.spawnPrefab;
-            MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
+            RegisterSpawnableContractObject(scav, curve);
         }
 
         void SetupDataContract(AnimationCurve curve)
@@ -277,14 +253,7 @@ namespace MoreShipUpgrades
             dataScript.startup = AssetBundleHandler.GetAudioClip("Laptop Start");
             dataScript.loot = dataLoot.spawnPrefab;
 
-            Utilities.FixMixerGroups(pc.spawnPrefab);
-            NetworkPrefabs.RegisterNetworkPrefab(pc.spawnPrefab);
-            Items.RegisterItem(pc);
-
-            SpawnableMapObjectDef mapObjDefPC = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
-            mapObjDefPC.spawnableMapObject = new SpawnableMapObject();
-            mapObjDefPC.spawnableMapObject.prefabToSpawn = pc.spawnPrefab;
-            MapObjects.RegisterMapObject(mapObjDefPC, Levels.LevelTypes.All, (level) => curve);
+            RegisterSpawnableContractObject(pc, curve);
         }
 
         private AudioClip[] CreateAudioClipArray(string[] paths, ref AssetBundle bundle)

@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.TerminalNodes;
+using MoreShipUpgrades.Misc.UI;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exorcism;
@@ -618,7 +619,16 @@ namespace MoreShipUpgrades.Misc
                 case "cd":
                 case "cooldown": outputNode = ExecuteDiscombobulatorCooldown(); return;
                 case "lategame": outputNode = ExecuteLategameCommands(secondWord); return;
-                case "lgu": outputNode = UpgradeBus.Instance.ConstructNode(); return;
+                case "lgu":
+                    {
+                        GameObject store = Object.Instantiate(GameObject.CreatePrimitive(PrimitiveType.Cube));
+                        store.name = "UpgradesStore";
+                        Object.Destroy(store.GetComponent<MeshRenderer>());
+                        Object.Destroy(store.GetComponent<MeshFilter>());
+                        store.AddComponent<UpgradesStore>();
+                        outputNode = UpgradeBus.Instance.ConstructNode();
+                        return;
+                    }
                 case "reset": outputNode = ExecuteResetCommands(secondWord, ref outputNode); return;
                 case "forcecredits": outputNode = ExecuteForceCredits(secondWord, ref terminal); return;
                 case "intern":

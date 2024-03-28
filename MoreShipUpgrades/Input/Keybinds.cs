@@ -21,6 +21,11 @@ namespace MoreShipUpgrades.Input
         public static InputAction WheelbarrowAction;
 
         public static InputAction NvgAction;
+        public static InputAction cursorUpAction;
+        public static InputAction cursorDownAction;
+        public static InputAction cursorExitAction;
+        public static InputAction pageUpAction;
+        public static InputAction pageDownAction;
 
         public static PlayerControllerB localPlayerController => StartOfRound.Instance?.localPlayerController;
 
@@ -34,6 +39,11 @@ namespace MoreShipUpgrades.Input
                 ActionMap = Asset.actionMaps[0];
                 WheelbarrowAction = InputUtils_Compat.WheelbarrowKey;
                 NvgAction = InputUtils_Compat.NvgKey;
+                cursorUpAction = InputUtils_Compat.CursorUpKey;
+                cursorDownAction = InputUtils_Compat.CursorDownKey;
+                cursorExitAction = InputUtils_Compat.CursorExitKey;
+                pageUpAction = InputUtils_Compat.PageUpKey;
+                pageDownAction = InputUtils_Compat.PageDownKey;
             }
             else
             {
@@ -42,6 +52,11 @@ namespace MoreShipUpgrades.Input
                 InputActionSetupExtensions.AddActionMap(Asset, ActionMap);
                 WheelbarrowAction = InputActionSetupExtensions.AddAction(ActionMap, "Drop all items from wheelbarrow", binding: SyncedInstance<PluginConfig>.Default.WHEELBARROW_DROP_ALL_CONTROL_BIND.Value, interactions: "Press");
                 NvgAction = InputActionSetupExtensions.AddAction(ActionMap, "Toggle NVG", binding: SyncedInstance<PluginConfig>.Default.TOGGLE_NIGHT_VISION_KEY.Value, interactions: "Press");
+                cursorUpAction = InputActionSetupExtensions.AddAction(ActionMap, "Upgrade store cursor up", binding: "<Keyboard>/w", interactions: "Press");
+                cursorDownAction = InputActionSetupExtensions.AddAction(ActionMap, "Upgrade store cursor down", binding: "<Keyboard>/s", interactions: "Press");
+                cursorExitAction = InputActionSetupExtensions.AddAction(ActionMap, "Upgrade store cursor exit", binding: "<Keyboard>/escape", interactions: "Press");
+                pageUpAction = InputActionSetupExtensions.AddAction(ActionMap, "Upgrade store page up", binding: "<Keyboard>/e", interactions: "Press");
+                pageDownAction = InputActionSetupExtensions.AddAction(ActionMap, "Upgrade store page down", binding: "<Keyboard>/q", interactions: "Press");
             }
         }
 

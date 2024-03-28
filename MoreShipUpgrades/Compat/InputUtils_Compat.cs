@@ -9,6 +9,11 @@ namespace MoreShipUpgrades.Compat
         internal static InputActionAsset Asset => IngameKeybinds.GetAsset();
         public static InputAction WheelbarrowKey => IngameKeybinds.Instance.WheelbarrowKey;
         public static InputAction NvgKey => IngameKeybinds.Instance.NvgKey;
+        public static InputAction CursorUpKey => IngameKeybinds.Instance.UpgradeStoreCursorUpKey;
+        public static InputAction CursorDownKey => IngameKeybinds.Instance.UpgradeStoreCursorDownKey;
+        public static InputAction CursorExitKey => IngameKeybinds.Instance.UpgradeStoreCursorExitKey;
+        public static InputAction PageUpKey => IngameKeybinds.Instance.UpgradeStorePageUpKey;
+        public static InputAction PageDownKey => IngameKeybinds.Instance.UpgradeStorePageDownKey;
 
         internal static void Init()
         {
