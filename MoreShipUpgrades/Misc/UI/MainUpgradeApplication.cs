@@ -10,6 +10,20 @@ namespace MoreShipUpgrades.Misc.UI
 {
     internal class MainUpgradeApplication
     {
+        internal const int AVAILABLE_CHARACTERS_PER_LINE = 51;
+        internal const int LEVEL_DISPLAY_INDEX = 30;
+        internal const char TOP_LEFT_CORNER = '╭';
+        internal const char TOP_RIGHT_CORNER = '╮';
+        internal const char BOTTOM_LEFT_CORNER = '╰';
+        internal const char BOTTOM_RIGHT_CORNER = '╯';
+        internal const char VERTICAL_LINE = '│';
+        internal const char HORIZONTAL_LINE = '─';
+        internal const char WHITE_SPACE = ' ';
+        internal const char CURSOR = '>';
+
+        internal const char EMPTY_LEVEL = '○';
+        internal const char FILLED_LEVEL = '●';
+
         PageCursorElement MainPage;
 
         IScreen currentScreen;
@@ -58,7 +72,6 @@ namespace MoreShipUpgrades.Misc.UI
                         cursorMenu
                     ]
                 };
-                IScreen screen = screens[i];
                 for (int j = 0; j < upgrades.Length; j++)
                 {
                     CustomTerminalNode upgrade = upgrades[j];
@@ -66,7 +79,7 @@ namespace MoreShipUpgrades.Misc.UI
                     elements[j] = new UpgradeCursorElement()
                     {
                         Node = upgrade,
-                        Action = () => BuyUpgrade(upgrade, () => SwitchScreen(screen, cursorMenu, false))
+                        Action = () => BuyUpgrade(upgrade, () => SwitchScreen(null, cursorMenu, false))
                     };
                 }
             }
@@ -77,7 +90,7 @@ namespace MoreShipUpgrades.Misc.UI
                 elements = screens,
             };
             currentCursorMenu = MainPage.GetCurrentCursorMenu();
-            currentScreen = MainPage.GetCurrentScreen();
+            currentScreen = null;
         }
         internal void MoveCursorUp()
         {
@@ -90,12 +103,12 @@ namespace MoreShipUpgrades.Misc.UI
         internal void MovePageUp()
         {
             MainPage.PageUp();
-            SwitchScreen(MainPage.GetCurrentScreen(), MainPage.GetCurrentCursorMenu(), false);
+            SwitchScreen(null, MainPage.GetCurrentCursorMenu(), false);
         }
         internal void MovePageDown()
         {
             MainPage.PageDown();
-            SwitchScreen(MainPage.GetCurrentScreen(), MainPage.GetCurrentCursorMenu(), false);
+            SwitchScreen(null, MainPage.GetCurrentCursorMenu(), false);
         }
         public void Submit()
         {
@@ -103,8 +116,7 @@ namespace MoreShipUpgrades.Misc.UI
         }
         public void UpdateText()
         {
-
-            string text = currentScreen.GetText(UpgradeApplication.AVAILABLE_CHARACTERS_PER_LINE);
+            string text = currentScreen != null ? currentScreen.GetText(AVAILABLE_CHARACTERS_PER_LINE) : MainPage.GetText(AVAILABLE_CHARACTERS_PER_LINE);
             terminal.screenText.text = text;
             terminal.currentText = text;
         }
@@ -177,7 +189,7 @@ namespace MoreShipUpgrades.Misc.UI
                 NotEnoughCredits(node, backAction);
                 return;
             }
-            Confirm(node.Name, node.SimplifiedDescription, () => PurchaseUpgrade(node, price, backAction), backAction, $"Do you wish to purchase this upgrade for {price}?");
+            Confirm(node.Name, node.SimplifiedDescription, () => PurchaseUpgrade(node, price, backAction), backAction, $"Do you wish to purchase this upgrade for {price} credits?");
         }
         void PurchaseUpgrade(CustomTerminalNode node, int price, Action backAction)
         {

@@ -13,33 +13,26 @@ namespace MoreShipUpgrades.Misc.UI
     internal class UpgradesStore : MonoBehaviour
     {
         static UpgradesStore Instance;
-        UpgradeApplication cursorElements;
         MainUpgradeApplication mainUpgradeApplication;
         Terminal terminalReference;
         TerminalNode lastTerminalNode;
-        bool updateText;
         void Start()
         {
             Instance = this;
-            cursorElements = new UpgradeApplication(UpgradeBus.Instance.terminalNodes.ToArray());
             mainUpgradeApplication = new MainUpgradeApplication();
             mainUpgradeApplication.Initialization();
             terminalReference = UpgradeBus.Instance.GetTerminal();
             lastTerminalNode = terminalReference.currentNode;
             StartCoroutine(UpdateInput(false));
             UpdateInputBindings(enable: true);
-            updateText = true;
         }
         void Update()
         {
             if (terminalReference == null) return;
-            if (cursorElements == null) return;
-            if (!updateText) return;
-            //terminalReference.screenText.text = cursorElements.GetText();
-            //terminalReference.currentText = cursorElements.GetText();
+            if (mainUpgradeApplication == null) return;
             mainUpgradeApplication.UpdateText();
-            updateText = true;
         }
+
         void OnDestroy()
         {
             UpdateInputBindings(enable : false);
@@ -92,27 +85,19 @@ namespace MoreShipUpgrades.Misc.UI
         }
         void MoveCursorUp()
         {
-            cursorElements.Backward();
             mainUpgradeApplication.MoveCursorUp();
-            updateText = true;
         }
         void MoveCursorDown()
         {
-            cursorElements.Forward();
             mainUpgradeApplication.MoveCursorDown();
-            updateText = true;
         }
         void MovePageUp()
         {
-            cursorElements.PageUp();
             mainUpgradeApplication.MovePageUp();
-            updateText = true;
         }
         void MovePageDown()
         {
-            cursorElements.PageDown();
             mainUpgradeApplication.MovePageDown();
-            updateText = true;
         }
         void Submit()
         {

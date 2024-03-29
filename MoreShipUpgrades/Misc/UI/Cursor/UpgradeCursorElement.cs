@@ -22,16 +22,16 @@ namespace MoreShipUpgrades.Misc.UI.Cursor
             int remainingLevels = Node.Unlocked ? 0 : 1;
             remainingLevels += Node.MaxUpgrade != 0 ? Node.MaxUpgrade - Node.CurrentUpgrade : 0;
             string levels = new string(FILLED_LEVEL, currentLevel) + new string(EMPTY_LEVEL, remainingLevels);
-            sb.Append(UpgradeApplication.WHITE_SPACE);
+            sb.Append(MainUpgradeApplication.WHITE_SPACE);
             sb.Append(levels);
             if (remainingLevels > 0)
             {
-                sb.Append(UpgradeApplication.WHITE_SPACE);
+                sb.Append(MainUpgradeApplication.WHITE_SPACE);
                 sb.Append(Node.Unlocked ? (int)(Node.Prices[Node.CurrentUpgrade] * Node.salePerc) : (int)(Node.UnlockPrice * Node.salePerc) + "$");
             }
             if (Node.salePerc < 1f)
             {
-                sb.Append(UpgradeApplication.WHITE_SPACE);
+                sb.Append(MainUpgradeApplication.WHITE_SPACE);
                 sb.Append($"({((1 - Node.salePerc) * 100).ToString("F0")}% OFF)");
             }
             sb.AppendLine();

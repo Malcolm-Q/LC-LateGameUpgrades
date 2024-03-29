@@ -36,7 +36,7 @@ namespace MoreShipUpgrades.Misc.UI.Cursor
             for(int i = 0; i < elements.Length; i++)
             {
                 CursorElement element = elements[i];
-                if (i == cursorIndex) sb.Append(CURSOR).Append(UpgradeApplication.WHITE_SPACE);
+                if (i == cursorIndex) sb.Append(CURSOR).Append(MainUpgradeApplication.WHITE_SPACE);
                 sb.Append(element.GetText(availableLength)); // TODO: Wrap text
             }
             return sb.ToString();
