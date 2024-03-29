@@ -145,7 +145,7 @@ namespace MoreShipUpgrades.Misc
                 if (playerName.ToLower() != playerNameToSearch.ToLower()) continue;
 
                 LguStore.Instance.ShareSaveServerRpc();
-                terminal.StartCoroutine(Tools.WaitForSync(playerSteamID));
+                terminal.StartCoroutine(WaitForSync(playerSteamID));
                 logger.LogInfo($"Attempting to overwrite local save data with {playerName}'s save data.");
                 return DisplayTerminalMessage($"Attempting to overwrite local save data with {playerName}'s save data\nYou should see a popup in 5 seconds...\n.\n");
             }
@@ -744,6 +744,13 @@ namespace MoreShipUpgrades.Misc
             return DisplayTerminalMessage(txt);
         }
 
+        private static IEnumerator WaitForSync(ulong id)
+        {
+            yield return new WaitForSeconds(3f);
+            HUDManager.Instance.DisplayTip("LOADING SAVE DATA", $"Overwiting local save data with the save under player id: {id}");
+            LguStore.Instance.SaveInfo = LguStore.Instance.LguSave.playerSaves[id];
+            LguStore.Instance.UpdateUpgradeBus(false);
+        }
         private static IEnumerator CountDownChat(float count)
         {
             HUDManager.Instance.chatText.text = "";

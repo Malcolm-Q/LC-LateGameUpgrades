@@ -101,10 +101,10 @@ namespace MoreShipUpgrades.Patches.RoundComponents
 
         [HarmonyPatch(nameof(StartOfRound.OnPlayerConnectedClientRpc))]
         [HarmonyPostfix]
-        static void ShareSaveShipDataPostfix()
+        static void ShareSaveShipDataPostfix(StartOfRound __instance)
         {
-            if (GameNetworkManager.Instance.isHostingGame) return;
-            Tools.ReplaceSaveWithHost();
+            if (__instance.IsHost || __instance.IsServer) return;
+            LguStore.Instance.ShareSaveServerRpc();
         }
     }
 }

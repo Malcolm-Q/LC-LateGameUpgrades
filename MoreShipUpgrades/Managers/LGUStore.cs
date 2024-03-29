@@ -17,6 +17,7 @@ using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using HarmonyLib;
+using LethalLib.Modules;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -302,8 +303,6 @@ namespace MoreShipUpgrades.Managers
         
         private IEnumerator WaitForSteamID()
         {
-            yield return new WaitForSeconds(1f);
-
             if(!GameNetworkManager.Instance.disableSteam)
             {
                 while (playerID == 0)
@@ -320,7 +319,7 @@ namespace MoreShipUpgrades.Managers
             }
             else
             {
-                logger.LogInfo("Timeout reached, loading under ID 0");
+                logger.LogInfo("LAN detected, loading under ID 0");
                 UpdateUpgradeBus(true, false);
             }
         }

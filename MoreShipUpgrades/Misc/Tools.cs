@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Misc
@@ -191,31 +192,6 @@ namespace MoreShipUpgrades.Misc
             if (hex == null || !ColorUtility.TryParseHtmlString("#" + hex.Trim('#', ' '), out Color color))
                 return defaultValue;
             return color;
-        }
-
-        public static void ReplaceSaveWithHost()
-        {
-            if (GameNetworkManager.Instance.isHostingGame) return;
-            var localPlayer = StartOfRound.Instance.localPlayerController;
-            logger.LogDebug("Sharing host savefile on reconnecting...");
-            LguStore.Instance.ShareSaveServerRpc();
-            PlayerControllerB[] players = UnityEngine.Object.FindObjectsOfType<PlayerControllerB>();
-            foreach (var player in players)
-            {
-                if (player.IsHost)
-                {
-                    StartOfRound.Instance.StartCoroutine(WaitForSync(player.playerSteamId));
-                    break;
-                }
-            }
-        }
-
-        public static IEnumerator WaitForSync(ulong id)
-        {
-            yield return new WaitForSeconds(3f);
-            HUDManager.Instance.DisplayTip("LOADING SAVE DATA", $"Overwiting local save data with the save under player id: {id}");
-            LguStore.Instance.SaveInfo = LguStore.Instance.LguSave.playerSaves[id];
-            LguStore.Instance.UpdateUpgradeBus(false);
         }
     }
 }
