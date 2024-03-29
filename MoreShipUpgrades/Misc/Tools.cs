@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.Misc
 {
-    internal class Tools
+    internal static class Tools
     {
         static LguLogger logger = new LguLogger(nameof(Tools));
         public static int FindCodeInstruction(int index, ref List<CodeInstruction> codes, object findValue, MethodInfo addCode, bool skip = false, bool requireInstance = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, string errorMessage = "Not found")
@@ -189,13 +189,6 @@ namespace MoreShipUpgrades.Misc
             if (hex == null || !ColorUtility.TryParseHtmlString("#" + hex.Trim('#', ' '), out Color color))
                 return defaultValue;
             return color;
-        }
-        public static IEnumerable<IEnumerable<T>> Split<T>(this T[] array, int size)
-        {
-            for (var i = 0; i < (float)array.Length / size; i++)
-            {
-                yield return array.Skip(i * size).Take(size);
-            }
         }
     }
 }

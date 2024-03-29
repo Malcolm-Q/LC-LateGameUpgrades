@@ -30,6 +30,8 @@ namespace MoreShipUpgrades.Input
 
         [InputAction("<Keyboard>/q", Name = "Upgrade store page down")]
         public InputAction UpgradeStorePageDownKey { get; set; }
+        [InputAction("<Keyboard>/enter", Name = "Enter upgrade store prompt")]
+        public InputAction LguStoreConfirmKey { get; set; }
 
     }
 }

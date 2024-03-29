@@ -26,6 +26,7 @@ namespace MoreShipUpgrades.Input
         public static InputAction cursorExitAction;
         public static InputAction pageUpAction;
         public static InputAction pageDownAction;
+        public static InputAction storeConfirmAction;
 
         public static PlayerControllerB localPlayerController => StartOfRound.Instance?.localPlayerController;
 
@@ -44,6 +45,7 @@ namespace MoreShipUpgrades.Input
                 cursorExitAction = InputUtils_Compat.CursorExitKey;
                 pageUpAction = InputUtils_Compat.PageUpKey;
                 pageDownAction = InputUtils_Compat.PageDownKey;
+                storeConfirmAction = InputUtils_Compat.LguStoreConfirmKey;
             }
             else
             {
@@ -57,6 +59,7 @@ namespace MoreShipUpgrades.Input
                 cursorExitAction = InputActionSetupExtensions.AddAction(ActionMap, "Upgrade store cursor exit", binding: "<Keyboard>/escape", interactions: "Press");
                 pageUpAction = InputActionSetupExtensions.AddAction(ActionMap, "Upgrade store page up", binding: "<Keyboard>/e", interactions: "Press");
                 pageDownAction = InputActionSetupExtensions.AddAction(ActionMap, "Upgrade store page down", binding: "<Keyboard>/q", interactions: "Press");
+                storeConfirmAction = InputActionSetupExtensions.AddAction(ActionMap, "Enter upgrade store prompt", binding: "<Keyboard>/enter", interactions: "Press");
             }
         }
 

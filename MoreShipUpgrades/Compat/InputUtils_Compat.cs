@@ -14,6 +14,7 @@ namespace MoreShipUpgrades.Compat
         public static InputAction CursorExitKey => IngameKeybinds.Instance.UpgradeStoreCursorExitKey;
         public static InputAction PageUpKey => IngameKeybinds.Instance.UpgradeStorePageUpKey;
         public static InputAction PageDownKey => IngameKeybinds.Instance.UpgradeStorePageDownKey;
+        public static InputAction LguStoreConfirmKey => IngameKeybinds.Instance.LguStoreConfirmKey;
 
         internal static void Init()
         {

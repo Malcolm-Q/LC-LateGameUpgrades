@@ -29,9 +29,10 @@ namespace MoreShipUpgrades.Misc.UI.Screen
         public string GetText(int availableLength)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append(new string(WHITE_SPACE, 2))
+            sb.AppendLine().AppendLine();
+            sb.Append(new string(WHITE_SPACE, 1))
                 .Append(TOP_LEFT_TITLE_CORNER)
-                .Append(new string(HORIZONTAL_TITLE_LINE, Title.Length))
+                .Append(new string(HORIZONTAL_TITLE_LINE, Title.Length+2))
                 .Append(TOP_RIGHT_TITLE_CORNER)
                 .AppendLine();
             sb.Append(TOP_LEFT_CORNER)
@@ -41,18 +42,23 @@ namespace MoreShipUpgrades.Misc.UI.Screen
                 .Append(WHITE_SPACE)
                 .Append(CONNECTING_TITLE_RIGHT)
                 .Append(new string(HORIZONTAL_LINE, availableLength - 6 - Title.Length))
+                .Append(TOP_RIGHT_CORNER)
                 .AppendLine();
             sb.Append(VERTICAL_LINE)
                 .Append(BOTTOM_LEFT_TITLE_CORNER)
-                .Append(new string(HORIZONTAL_TITLE_LINE, Title.Length))
+                .Append(new string(HORIZONTAL_TITLE_LINE, Title.Length+2))
                 .Append(BOTTOM_RIGHT_TITLE_CORNER)
                 .Append(new string(WHITE_SPACE, availableLength - 6 - Title.Length))
                 .Append(VERTICAL_LINE)
                 .AppendLine();
             for(int i = 0; i < elements.Length; i++)
             {
+                sb.Append(VERTICAL_LINE).Append(WHITE_SPACE);
                 //TODO: Get element text wrapped over our screen (surround with VERTICAL_LINE and limit each line to availableLength-4 (4 because of lines and white spaces in each side)
+                sb.Append(elements[i].GetText(availableLength - 4));
+                sb.Append(WHITE_SPACE).Append(VERTICAL_LINE);
             }
+            sb.AppendLine();
             sb.Append(BOTTOM_LEFT_CORNER)
                 .Append(new string(HORIZONTAL_LINE, availableLength - 2))
                 .Append(BOTTOM_RIGHT_CORNER)

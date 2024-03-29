@@ -4,45 +4,109 @@ using MoreShipUpgrades.Misc.UI.Cursor;
 using MoreShipUpgrades.Misc.UI.Page;
 using MoreShipUpgrades.Misc.UI.Screen;
 using System;
+using UnityEngine;
 
 namespace MoreShipUpgrades.Misc.UI
 {
     internal class MainUpgradeApplication
     {
-        PageElement MainPage;
-        BoxedScreen MainScreen;
-        CursorMenu MainCursorMenu;
+        PageCursorElement MainPage;
 
         IScreen currentScreen;
         CursorMenu currentCursorMenu;
-        Terminal terminal = UpgradeBus.Instance.GetTerminal();
+        readonly Terminal terminal = UpgradeBus.Instance.GetTerminal();
 
         public void Initialization()
         {
+            int lengthPerPage = UpgradeBus.Instance.terminalNodes.Count / 2;
+            int amountPages = Mathf.CeilToInt((float)UpgradeBus.Instance.terminalNodes.Count / lengthPerPage);
+            CustomTerminalNode[][] pagesUpgrades = new CustomTerminalNode[amountPages][];
+            for (int i = 0; i < amountPages - 1; i++)
+                pagesUpgrades[i] = new CustomTerminalNode[lengthPerPage];
+            pagesUpgrades[amountPages - 1] = new CustomTerminalNode[UpgradeBus.Instance.terminalNodes.Count % lengthPerPage];
+            for (int i = 0; i < UpgradeBus.Instance.terminalNodes.Count; i++)
+            {
+                int row = i / lengthPerPage;
+                int col = i % lengthPerPage;
+                pagesUpgrades[row][col] = UpgradeBus.Instance.terminalNodes[i];
+            }
+            IScreen[] screens = new IScreen[pagesUpgrades.Length];
+            CursorMenu[] cursorMenus = new CursorMenu[pagesUpgrades.Length];
+            for(int i = 0; i < pagesUpgrades.Length; i++)
+            {
+                CustomTerminalNode[] upgrades = pagesUpgrades[i];
+                CursorElement[] elements = new CursorElement[upgrades.Length];
+                cursorMenus[i] = new CursorMenu()
+                {
+                    cursorIndex = 0,
+                    elements = elements
+                };
+                CursorMenu cursorMenu = cursorMenus[i];
+                screens[i] = new BoxedScreen()
+                {
+                    Title = "Lategame Upgrades",
+                    elements =
+                    [
+                        new TextElement()
+                        {
+                            Text = "Select an upgrade to purchase:"
+                        },
+                        new TextElement()
+                        {
+                            Text = " "
+                        },
+                        cursorMenu
+                    ]
+                };
+                IScreen screen = screens[i];
+                for (int j = 0; j < upgrades.Length; j++)
+                {
+                    CustomTerminalNode upgrade = upgrades[j];
+                    if (upgrade == null) continue;
+                    elements[j] = new UpgradeCursorElement()
+                    {
+                        Node = upgrade,
+                        Action = () => BuyUpgrade(upgrade, () => SwitchScreen(screen, cursorMenu, false))
+                    };
+                }
+            }
+            MainPage = new PageCursorElement()
+            {
+                pageIndex = 0,
+                cursorMenus = cursorMenus,
+                elements = screens,
+            };
+            currentCursorMenu = MainPage.GetCurrentCursorMenu();
+            currentScreen = MainPage.GetCurrentScreen();
         }
-        void MoveCursorUp()
+        internal void MoveCursorUp()
         {
             currentCursorMenu.Backward();
         }
-        void MoveCursorDown()
+        internal void MoveCursorDown()
         {
             currentCursorMenu.Forward();
         }
-        void MovePageUp()
+        internal void MovePageUp()
         {
             MainPage.PageUp();
+            SwitchScreen(MainPage.GetCurrentScreen(), MainPage.GetCurrentCursorMenu(), false);
         }
-        void MovePageDown()
+        internal void MovePageDown()
         {
             MainPage.PageDown();
+            SwitchScreen(MainPage.GetCurrentScreen(), MainPage.GetCurrentCursorMenu(), false);
         }
         public void Submit()
         {
-            MainCursorMenu.Execute();
+            currentCursorMenu.Execute();
         }
         public void UpdateText()
         {
-            terminal.screenText.text = currentScreen.GetText(UpgradeApplication.AVAILABLE_CHARACTERS_PER_LINE);
+
+            string text = currentScreen.GetText(UpgradeApplication.AVAILABLE_CHARACTERS_PER_LINE);
+            terminal.screenText.text = text;
+            terminal.currentText = text;
         }
         void NotEnoughCredits(CustomTerminalNode node, Action backAction)
         {
@@ -102,23 +166,22 @@ namespace MoreShipUpgrades.Misc.UI
         {
             int groupCredits = UpgradeBus.Instance.GetTerminal().groupCredits;
             bool maxLevel = node.CurrentUpgrade >= node.MaxUpgrade;
-            if (maxLevel)
+            if (maxLevel && node.Unlocked)
             {
                 MaxUpgrade(node, backAction);
                 return;
             }
-            int price = node.Unlocked ? node.Prices[node.CurrentUpgrade] : node.UnlockPrice;
+            int price = node.Unlocked ? (int)(node.Prices[node.CurrentUpgrade] * node.salePerc) : (int)(node.UnlockPrice * node.salePerc);
             if (groupCredits < price)
             {
                 NotEnoughCredits(node, backAction);
                 return;
             }
-            Confirm(node.Name, node.SimplifiedDescription, () => PurchaseUpgrade(node, price), backAction);
+            Confirm(node.Name, node.SimplifiedDescription, () => PurchaseUpgrade(node, price, backAction), backAction, $"Do you wish to purchase this upgrade for {price}?");
         }
-        void PurchaseUpgrade(CustomTerminalNode node, int price)
+        void PurchaseUpgrade(CustomTerminalNode node, int price, Action backAction)
         {
             LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits - price);
-            LguStore.Instance.HandleUpgrade(node.Name);
             if (!node.Unlocked)
             {
                 LguStore.Instance.HandleUpgrade(node.Name);
@@ -128,8 +191,9 @@ namespace MoreShipUpgrades.Misc.UI
                 LguStore.Instance.HandleUpgrade(node.Name, true);
             }
             if (node.salePerc != 1f && UpgradeBus.Instance.PluginConfiguration.SALE_APPLY_ONCE.Value) node.salePerc = 1f;
+            backAction();
         }
-        public void Confirm(string title, string description, Action confirmAction, Action declineAction)
+        public void Confirm(string title, string description, Action confirmAction, Action declineAction, string additionalMessage = "")
         {
             CursorMenu cursorMenu = new CursorMenu()
             {
@@ -162,6 +226,10 @@ namespace MoreShipUpgrades.Misc.UI
                     new TextElement()
                     {
                         Text = " "
+                    },
+                    new TextElement()
+                    {
+                        Text = additionalMessage
                     },
                     cursorMenu
                 ]

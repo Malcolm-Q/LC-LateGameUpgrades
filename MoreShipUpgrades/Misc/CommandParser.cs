@@ -626,7 +626,7 @@ namespace MoreShipUpgrades.Misc
                         Object.Destroy(store.GetComponent<MeshRenderer>());
                         Object.Destroy(store.GetComponent<MeshFilter>());
                         store.AddComponent<UpgradesStore>();
-                        outputNode = UpgradeBus.Instance.ConstructNode();
+                        //outputNode = UpgradeBus.Instance.ConstructNode();
                         return;
                     }
                 case "reset": outputNode = ExecuteResetCommands(secondWord, ref outputNode); return;

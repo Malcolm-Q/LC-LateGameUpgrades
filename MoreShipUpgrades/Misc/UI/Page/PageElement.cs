@@ -34,5 +34,9 @@ namespace MoreShipUpgrades.Misc.UI.Page
         {
             pageIndex = 0;
         }
+        public IScreen GetCurrentScreen()
+        {
+            return elements[pageIndex];
+        }
     }
 }

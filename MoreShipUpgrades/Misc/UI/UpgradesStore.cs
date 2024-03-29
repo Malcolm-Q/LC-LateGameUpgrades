@@ -14,28 +14,39 @@ namespace MoreShipUpgrades.Misc.UI
     {
         static UpgradesStore Instance;
         UpgradeApplication cursorElements;
+        MainUpgradeApplication mainUpgradeApplication;
         Terminal terminalReference;
         TerminalNode lastTerminalNode;
+        bool updateText;
         void Start()
         {
             Instance = this;
             cursorElements = new UpgradeApplication(UpgradeBus.Instance.terminalNodes.ToArray());
+            mainUpgradeApplication = new MainUpgradeApplication();
+            mainUpgradeApplication.Initialization();
             terminalReference = UpgradeBus.Instance.GetTerminal();
             lastTerminalNode = terminalReference.currentNode;
             StartCoroutine(UpdateInput(false));
             UpdateInputBindings(enable: true);
+            updateText = true;
         }
         void Update()
         {
             if (terminalReference == null) return;
             if (cursorElements == null) return;
-            terminalReference.screenText.text = cursorElements.GetText();
-            terminalReference.currentText = cursorElements.GetText();
+            if (!updateText) return;
+            //terminalReference.screenText.text = cursorElements.GetText();
+            //terminalReference.currentText = cursorElements.GetText();
+            mainUpgradeApplication.UpdateText();
+            updateText = true;
         }
         void OnDestroy()
         {
             UpdateInputBindings(enable : false);
             terminalReference.LoadNewNode(lastTerminalNode);
+            terminalReference.screenText.interactable = true;
+            terminalReference.screenText.ActivateInputField();
+            terminalReference.screenText.Select();
             StartCoroutine(UpdateInput(true));
         }
         internal IEnumerator UpdateInput(bool enable)
@@ -66,6 +77,7 @@ namespace MoreShipUpgrades.Misc.UI
             Keybinds.cursorExitAction.performed += OnUpgradeStoreCursorExit;
             Keybinds.pageUpAction.performed += OnUpgradeStorePageUp;
             Keybinds.pageDownAction.performed += OnUpgradeStorePageDown;
+            Keybinds.storeConfirmAction.performed += OnUpgradeStoreConfirm;
             terminalReference.playerActions.Movement.OpenMenu.performed -= terminalReference.PressESC;
         }
         void RemoveInputBindings()
@@ -75,23 +87,40 @@ namespace MoreShipUpgrades.Misc.UI
             Keybinds.cursorExitAction.performed -= OnUpgradeStoreCursorExit;
             Keybinds.pageUpAction.performed -= OnUpgradeStorePageUp;
             Keybinds.pageDownAction.performed -= OnUpgradeStorePageDown;
+            Keybinds.storeConfirmAction.performed -= OnUpgradeStoreConfirm;
             terminalReference.playerActions.Movement.OpenMenu.performed += terminalReference.PressESC;
         }
         void MoveCursorUp()
         {
             cursorElements.Backward();
+            mainUpgradeApplication.MoveCursorUp();
+            updateText = true;
         }
         void MoveCursorDown()
         {
             cursorElements.Forward();
+            mainUpgradeApplication.MoveCursorDown();
+            updateText = true;
         }
         void MovePageUp()
         {
             cursorElements.PageUp();
+            mainUpgradeApplication.MovePageUp();
+            updateText = true;
         }
         void MovePageDown()
         {
             cursorElements.PageDown();
+            mainUpgradeApplication.MovePageDown();
+            updateText = true;
+        }
+        void Submit()
+        {
+            mainUpgradeApplication.Submit();
+        }
+        static void OnUpgradeStoreConfirm(CallbackContext context)
+        {
+            Instance.Submit();
         }
         static void OnUpgradeStoreCursorUp(CallbackContext context)
         {
