@@ -30,14 +30,6 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// </summary>
         protected GameAttribute changingAttribute;
         /// <summary>
-        /// Instance of the ship's doors which holds attributes such as time it can stay closed, etc..
-        /// </summary>
-        private HangarShipDoor doorControls;
-        /// <summary>
-        /// Instance of the local player's controller which holds attributes such as PLAYER_HEALTH, movement speed, etc..
-        /// </summary>
-        private PlayerControllerB localPlayer;
-        /// <summary>
         /// Logger associated with this class for logging purposes (incase an attribute change is not occuring)
         /// </summary>
         protected LguLogger logger;
@@ -83,13 +75,11 @@ namespace MoreShipUpgrades.Misc.Upgrades
         }
         PlayerControllerB GetLocalPlayer()
         {
-            if (localPlayer == null) localPlayer = UpgradeBus.Instance.GetLocalPlayer();
-            return localPlayer;
+            return UpgradeBus.Instance.GetLocalPlayer();
         }
         HangarShipDoor GetShipDoors()
         {
-            if (doorControls == null) doorControls = UpgradeBus.Instance.GetShipDoors();
-            return doorControls;
+            return UpgradeBus.Instance.GetShipDoors();
         }
         #endregion
         #region Attribute Setters
@@ -220,6 +210,8 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// <param name="upgradeLevel">Current level of the upgrade</param>
         protected void RemovePossibleIncrementalValues(int upgradeLevel = 0)
         {
+            PlayerControllerB localPlayer = GetLocalPlayer();
+            HangarShipDoor doorControls = GetShipDoors();
             float amountToIncrement = 0;
             for (int i = 0; i < upgradeLevel; i++)
             {
