@@ -73,7 +73,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
         public override string GetDisplayInfo(int price = -1)
         {
-            return "Displays your location and time when holding a walkie talkie.\nEspecially useful for fog.";
+            return $"${price} - Displays your location and time when holding a walkie talkie.\nEspecially useful for fog.";
         }
         internal override bool CanInitializeOnStart()
         {

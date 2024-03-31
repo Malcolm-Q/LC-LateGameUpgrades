@@ -305,9 +305,13 @@ namespace MoreShipUpgrades.Managers
         {
             if(!GameNetworkManager.Instance.disableSteam)
             {
-                while (playerID == 0)
+                int tries = 0;
+                while (playerID == 0 && tries < 10)
                 {
-                    playerID = GameNetworkManager.Instance.localPlayerController.playerSteamId;
+                    tries++;
+                    PlayerControllerB player = UpgradeBus.Instance.GetLocalPlayer();
+                    if (player == null) continue;
+                    playerID = player.playerSteamId;
                     yield return new WaitForSeconds(0.5f);
                 }
             }

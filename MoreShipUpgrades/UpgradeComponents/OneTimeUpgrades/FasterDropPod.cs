@@ -33,7 +33,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         }
         public override string GetDisplayInfo(int price = -1)
         {
-            return "Make the Drop Pod, the ship that deliver items bought on the terminal, land faster.";
+            return $"${price} - Make the Drop Pod, the ship that deliver items bought on the terminal, land faster.";
         }
         internal override bool CanInitializeOnStart()
         {

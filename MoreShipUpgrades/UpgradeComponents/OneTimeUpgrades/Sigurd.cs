@@ -49,7 +49,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
         public override string GetDisplayInfo(int price = -1)
         {
-            return "There's a chance that the company will pay more.";
+            return $"${price} - There's a chance that the company will pay more.";
         }
 
         public string GetWorldBuildingText(bool shareStatus = false)
