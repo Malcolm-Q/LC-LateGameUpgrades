@@ -51,7 +51,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             sb.Append(string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), level, price, infoFunction(level-1)));
             if (level >= UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_STAMINA_REGEN_APPLY_LEVEL.Value) sb.Append($"Stamina regeneration is increased by {Mathf.FloorToInt(staminaRegenerationInfo(level)*100f)}%\n");
             if (level >= UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_JUMP_STAMINA_APPLY_LEVEL.Value) sb.Append($"Stamina used when jumping is reduced by {Mathf.FloorToInt(costReductionInfo(level)*100f)}%\n");
-            sb.AppendLine();
             return sb.ToString();
         }
 

@@ -16,6 +16,7 @@ namespace MoreShipUpgrades.Misc.UI
         MainUpgradeApplication mainUpgradeApplication;
         Terminal terminalReference;
         TerminalNode lastTerminalNode;
+        Color previousCaretColor;
         void Start()
         {
             Instance = this;
@@ -23,7 +24,7 @@ namespace MoreShipUpgrades.Misc.UI
             mainUpgradeApplication.Initialization();
             terminalReference = UpgradeBus.Instance.GetTerminal();
             lastTerminalNode = terminalReference.currentNode;
-            StartCoroutine(UpdateInput(false));
+            UpdateInput(false);
             UpdateInputBindings(enable: true);
         }
         void Update()
@@ -40,21 +41,24 @@ namespace MoreShipUpgrades.Misc.UI
             terminalReference.screenText.interactable = true;
             terminalReference.screenText.ActivateInputField();
             terminalReference.screenText.Select();
-            StartCoroutine(UpdateInput(true));
+            UpdateInput(true);
+            Instance = null;
         }
-        internal IEnumerator UpdateInput(bool enable)
+        internal void UpdateInput(bool enable)
         {
-            yield return new WaitForEndOfFrame();
             if (enable)
             {
                 terminalReference.screenText.interactable = true;
                 terminalReference.screenText.ActivateInputField();
                 terminalReference.screenText.Select();
+                terminalReference.screenText.caretColor = previousCaretColor;
             }
             else
             {
                 terminalReference.screenText.DeactivateInputField();
                 terminalReference.screenText.interactable = false;
+                previousCaretColor = terminalReference.screenText.caretColor;
+                terminalReference.screenText.caretColor = new Color(0,0,0,0);
             }
         }
 
@@ -115,17 +119,21 @@ namespace MoreShipUpgrades.Misc.UI
         {
             Instance.MoveCursorDown();
         }
-        static void OnUpgradeStorePageUp(CallbackContext context)
+        internal static void OnUpgradeStorePageUp(CallbackContext context)
         {
             Instance.MovePageUp();
         }
-        static void OnUpgradeStorePageDown(CallbackContext context)
+        internal static void OnUpgradeStorePageDown(CallbackContext context)
         {
             Instance.MovePageDown();
         }
         static void OnUpgradeStoreCursorExit(CallbackContext context)
         {
             Destroy(Instance);
+        }
+        public static bool UpgradeStoreBeingUsed()
+        {
+            return Instance != null;
         }
     }
 }

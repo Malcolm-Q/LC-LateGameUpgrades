@@ -9,7 +9,7 @@ namespace MoreShipUpgrades.Misc.UI
         internal string Text { get; set; }
         public string GetText(int availableLength)
         {
-            return Text; // TODO: wrap with availableLength
+            return Tools.WrapText(Text, "", "", availableLength);
         }
     }
 }

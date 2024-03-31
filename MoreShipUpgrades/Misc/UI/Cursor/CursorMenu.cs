@@ -36,8 +36,8 @@ namespace MoreShipUpgrades.Misc.UI.Cursor
             for(int i = 0; i < elements.Length; i++)
             {
                 CursorElement element = elements[i];
-                if (i == cursorIndex) sb.Append(CURSOR).Append(MainUpgradeApplication.WHITE_SPACE);
-                sb.Append(element.GetText(availableLength)); // TODO: Wrap text
+                if (i == cursorIndex) sb.Append(CURSOR).Append(MainUpgradeApplication.WHITE_SPACE); else sb.Append(MainUpgradeApplication.WHITE_SPACE).Append(MainUpgradeApplication.WHITE_SPACE);
+                sb.Append( Tools.WrapText((i == cursorIndex ? "<color=#FFFFFFFF>" : "") + element.GetText(availableLength-2)+ (i == cursorIndex ? "</color>" : ""), "  ", "", availableLength, false));
             }
             return sb.ToString();
         }

@@ -53,12 +53,9 @@ namespace MoreShipUpgrades.Misc.UI.Screen
                 .AppendLine();
             for(int i = 0; i < elements.Length; i++)
             {
-                sb.Append(VERTICAL_LINE).Append(WHITE_SPACE);
                 //TODO: Get element text wrapped over our screen (surround with VERTICAL_LINE and limit each line to availableLength-4 (4 because of lines and white spaces in each side)
-                sb.Append(elements[i].GetText(availableLength - 4));
-                sb.Append(WHITE_SPACE).Append(VERTICAL_LINE);
+                sb.Append(Tools.WrapText(elements[i].GetText(availableLength - 4), "│ ", " │", availableLength));
             }
-            sb.AppendLine();
             sb.Append(BOTTOM_LEFT_CORNER)
                 .Append(new string(HORIZONTAL_LINE, availableLength - 2))
                 .Append(BOTTOM_RIGHT_CORNER)

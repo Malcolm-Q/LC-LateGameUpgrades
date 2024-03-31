@@ -13,7 +13,9 @@ namespace MoreShipUpgrades.Misc.UI.Cursor
         public virtual string GetText(int availableLength)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append(Name).AppendLine().Append(Description); // TODO: wrap description
+            sb.Append(Name);
+            if (Description == null || Description == "") return sb.ToString();
+            sb.AppendLine().Append(Tools.WrapText(Description, " ", "", availableLength));
             return sb.ToString();
         }
     }

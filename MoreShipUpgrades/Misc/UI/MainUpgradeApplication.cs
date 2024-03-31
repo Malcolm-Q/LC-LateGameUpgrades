@@ -1,4 +1,5 @@
-﻿using MoreShipUpgrades.Managers;
+﻿using MoreShipUpgrades.Input;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.UI.Cursor;
 using MoreShipUpgrades.Misc.UI.Page;
@@ -79,7 +80,7 @@ namespace MoreShipUpgrades.Misc.UI
                     elements[j] = new UpgradeCursorElement()
                     {
                         Node = upgrade,
-                        Action = () => BuyUpgrade(upgrade, () => SwitchScreen(null, cursorMenu, false))
+                        Action = () => BuyUpgrade(upgrade, () => SwitchScreen(null, cursorMenu, false, true))
                     };
                 }
             }
@@ -103,12 +104,12 @@ namespace MoreShipUpgrades.Misc.UI
         internal void MovePageUp()
         {
             MainPage.PageUp();
-            SwitchScreen(null, MainPage.GetCurrentCursorMenu(), false);
+            SwitchScreen(null, MainPage.GetCurrentCursorMenu(), false, true);
         }
         internal void MovePageDown()
         {
             MainPage.PageDown();
-            SwitchScreen(null, MainPage.GetCurrentCursorMenu(), false);
+            SwitchScreen(null, MainPage.GetCurrentCursorMenu(), false, true);
         }
         public void Submit()
         {
@@ -139,7 +140,7 @@ namespace MoreShipUpgrades.Misc.UI
                         new CursorElement()
                         {
                             Name = "Back",
-                            Description = null,
+                            Description = "",
                             Action = backAction,
                         }
                     ]
@@ -151,11 +152,7 @@ namespace MoreShipUpgrades.Misc.UI
                 [
                     new TextElement()
                     {
-                            Text = node.SimplifiedDescription,
-                        },
-                        new TextElement()
-                        {
-                            Text = " ",
+                            Text = node.Description,
                         },
                         new TextElement()
                         {
@@ -172,7 +169,7 @@ namespace MoreShipUpgrades.Misc.UI
                         cursorMenu
                 ]
             };
-            SwitchScreen(screen, cursorMenu, false);
+            SwitchScreen(screen, cursorMenu, false, false);
         }
         public void BuyUpgrade(CustomTerminalNode node, Action backAction)
         {
@@ -189,7 +186,7 @@ namespace MoreShipUpgrades.Misc.UI
                 NotEnoughCredits(node, backAction);
                 return;
             }
-            Confirm(node.Name, node.SimplifiedDescription, () => PurchaseUpgrade(node, price, backAction), backAction, $"Do you wish to purchase this upgrade for {price} credits?");
+            Confirm(node.Name, node.Description, () => PurchaseUpgrade(node, price, backAction), backAction, $"Do you wish to purchase this upgrade for {price} credits?");
         }
         void PurchaseUpgrade(CustomTerminalNode node, int price, Action backAction)
         {
@@ -214,13 +211,13 @@ namespace MoreShipUpgrades.Misc.UI
                     new CursorElement()
                     {
                         Name = "Confirm",
-                        Description = null,
+                        Description = "",
                         Action = () => { confirmAction(); }
                     },
                     new CursorElement()
                     {
                         Name = "Abort",
-                        Description = null,
+                        Description = "",
                         Action = () => { declineAction(); }
                     }
                 ]
@@ -246,14 +243,24 @@ namespace MoreShipUpgrades.Misc.UI
                     cursorMenu
                 ]
             };
-            SwitchScreen(screen, cursorMenu, false);
+            SwitchScreen(screen, cursorMenu, false, false);
         }
 
-        public void SwitchScreen(IScreen screen, CursorMenu cursorMenu, bool previous)
+        public void SwitchScreen(IScreen screen, CursorMenu cursorMenu, bool previous, bool enablePage)
         {
             currentScreen = screen;
             currentCursorMenu = cursorMenu;
             if (!previous) cursorMenu.cursorIndex = 0;
+            if (enablePage)
+            {
+                Keybinds.pageUpAction.performed += UpgradesStore.OnUpgradeStorePageUp;
+                Keybinds.pageDownAction.performed += UpgradesStore.OnUpgradeStorePageDown;
+            }
+            else
+            {
+                Keybinds.pageUpAction.performed -= UpgradesStore.OnUpgradeStorePageUp;
+                Keybinds.pageDownAction.performed -= UpgradesStore.OnUpgradeStorePageDown;
+            }
         }
     }
 }

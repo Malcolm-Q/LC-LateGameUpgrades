@@ -16,8 +16,7 @@ namespace MoreShipUpgrades.Misc.UI.Page
             StringBuilder sb = new StringBuilder();
             sb.Append(selectedScreen.GetText(availableLength));
             sb.Append(new string(MainUpgradeApplication.WHITE_SPACE, availableLength - START_PAGE_COUNTER))
-                .Append($"Page {pageIndex+1}/{elements.Length}")
-                .AppendLine();
+                .Append($"Page {pageIndex + 1}/{elements.Length}");
 
             return sb.ToString();
         }
