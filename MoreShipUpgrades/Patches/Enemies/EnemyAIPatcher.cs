@@ -3,9 +3,6 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
-using System.Linq;
-using Unity.Netcode;
-using UnityEngine;
 
 namespace MoreShipUpgrades.Patches.Enemies
 {
