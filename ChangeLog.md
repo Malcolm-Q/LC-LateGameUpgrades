@@ -9,7 +9,7 @@
 ## V 3.4.3 - 2024-03-23
 - Fixed clients disconnecting throwing errors, leading to upgrades on next reconnect to not load.
 - Fixed error throw when quiting the game (harmless but an error)
-- 
+
 ## V 3.4.2 - 2024-03-21
 - Fixed configuration synchronization due to serialization issues with colours
     - As a consequence, reverted the synchronization between host and client for colours
