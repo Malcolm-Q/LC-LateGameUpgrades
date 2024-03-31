@@ -37,7 +37,7 @@ namespace MoreShipUpgrades.Misc.UI.Cursor
             {
                 CursorElement element = elements[i];
                 if (i == cursorIndex) sb.Append(CURSOR).Append(MainUpgradeApplication.WHITE_SPACE); else sb.Append(MainUpgradeApplication.WHITE_SPACE).Append(MainUpgradeApplication.WHITE_SPACE);
-                sb.Append( Tools.WrapText((i == cursorIndex ? "<color=#FFFFFFFF>" : "") + element.GetText(availableLength-2)+ (i == cursorIndex ? "</color>" : ""), "  ", "", availableLength, false));
+                sb.Append( Tools.WrapText((i == cursorIndex ? "<mark=#00FF0033><color=#FFFFFFFF>" : "") + element.GetText(availableLength-2)+ (i == cursorIndex ? "</color></mark>" : ""), "  ", "", availableLength, false));
             }
             return sb.ToString();
         }
