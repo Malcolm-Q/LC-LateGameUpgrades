@@ -2,6 +2,7 @@
 using GameNetcodeStuff;
 using HarmonyLib;
 using MoreShipUpgrades.Compat;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
@@ -52,8 +53,8 @@ namespace MoreShipUpgrades.Input
                 Asset = ScriptableObject.CreateInstance<InputActionAsset>();
                 ActionMap = new InputActionMap("MoreShipUpgrades");
                 InputActionSetupExtensions.AddActionMap(Asset, ActionMap);
-                WheelbarrowAction = InputActionSetupExtensions.AddAction(ActionMap, "Drop all items from wheelbarrow", binding: SyncedInstance<PluginConfig>.Default.WHEELBARROW_DROP_ALL_CONTROL_BIND.Value, interactions: "Press");
-                NvgAction = InputActionSetupExtensions.AddAction(ActionMap, "Toggle NVG", binding: SyncedInstance<PluginConfig>.Default.TOGGLE_NIGHT_VISION_KEY.Value, interactions: "Press");
+                WheelbarrowAction = InputActionSetupExtensions.AddAction(ActionMap, "Drop all items from wheelbarrow", binding: UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_DROP_ALL_CONTROL_BIND.LocalValue, interactions: "Press");
+                NvgAction = InputActionSetupExtensions.AddAction(ActionMap, "Toggle NVG", binding: UpgradeBus.Instance.PluginConfiguration.TOGGLE_NIGHT_VISION_KEY.LocalValue, interactions: "Press");
                 cursorUpAction = InputActionSetupExtensions.AddAction(ActionMap, "Move Cursor Up in Lategame Upgrades Store", binding: "<Keyboard>/w", interactions: "Press");
                 cursorDownAction = InputActionSetupExtensions.AddAction(ActionMap, "Move Cursor Down in Lategame Upgrades Store", binding: "<Keyboard>/s", interactions: "Press");
                 cursorExitAction = InputActionSetupExtensions.AddAction(ActionMap, "Exit Lategame Upgrades Store", binding: "<Keyboard>/escape", interactions: "Press");

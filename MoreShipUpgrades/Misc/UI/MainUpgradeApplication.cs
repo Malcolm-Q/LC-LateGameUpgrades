@@ -21,16 +21,18 @@ namespace MoreShipUpgrades.Misc.UI
 
         public void Initialization()
         {
-            int lengthPerPage = UpgradeBus.Instance.terminalNodes.Count / 2;
+            int lengthPerPage = Mathf.CeilToInt(UpgradeBus.Instance.terminalNodes.Count / 2f);
             int amountPages = Mathf.CeilToInt((float)UpgradeBus.Instance.terminalNodes.Count / lengthPerPage);
             CustomTerminalNode[][] pagesUpgrades = new CustomTerminalNode[amountPages][];
-            for (int i = 0; i < amountPages - 1; i++)
+            for (int i = 0; i < amountPages; i++)
                 pagesUpgrades[i] = new CustomTerminalNode[lengthPerPage];
-            pagesUpgrades[amountPages - 1] = new CustomTerminalNode[UpgradeBus.Instance.terminalNodes.Count % lengthPerPage];
             for (int i = 0; i < UpgradeBus.Instance.terminalNodes.Count; i++)
             {
                 int row = i / lengthPerPage;
                 int col = i % lengthPerPage;
+                Plugin.mls.LogDebug(lengthPerPage);
+                Plugin.mls.LogDebug(amountPages);
+                Plugin.mls.LogDebug(row + ", " + col);
                 pagesUpgrades[row][col] = UpgradeBus.Instance.terminalNodes[i];
             }
             IScreen[] screens = new IScreen[pagesUpgrades.Length];
