@@ -42,11 +42,6 @@ namespace MoreShipUpgrades.Managers
                 UpgradeBus.Instance.Reconstruct();
                 HandleSpawns();
             }
-            else
-            {
-                CheckMedkit();
-                UpgradeBus.Instance.Reconstruct();
-            }
         }
         void CheckMedkit()
         {

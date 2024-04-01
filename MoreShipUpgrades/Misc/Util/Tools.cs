@@ -73,6 +73,10 @@ namespace MoreShipUpgrades.Misc.Util
         {
             return FindCodeInstruction(index, ref codes, findValue: OpCodes.Sub, addCode, skip, notInstruction, andInstruction, orInstruction, requireInstance, errorMessage);
         }
+        public static int FindDiv(int index, ref List<CodeInstruction> codes, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
+        {
+            return FindCodeInstruction(index, ref codes, findValue: OpCodes.Div, addCode, skip, notInstruction, andInstruction, orInstruction, requireInstance, errorMessage);
+        }
         public static int FindAdd(int index, ref List<CodeInstruction> codes, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
         {
             return FindCodeInstruction(index, ref codes, findValue: OpCodes.Add, addCode, skip, notInstruction, andInstruction, orInstruction, requireInstance, errorMessage);

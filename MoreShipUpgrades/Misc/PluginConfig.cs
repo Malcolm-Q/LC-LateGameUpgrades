@@ -53,6 +53,7 @@ namespace MoreShipUpgrades.Misc
         [DataMember] public SyncedEntry<bool> EFFICIENT_ENGINES_ENABLED { get; set; }
         [DataMember] public SyncedEntry<bool> CLIMBING_GLOVES_ENABLED {  get; set; }
         [DataMember] public SyncedEntry<bool> WEATHER_PROBE_ENABLED { get; set; }
+        [DataMember] public SyncedEntry<bool> LITHIUM_BATTERIES_ENABLED { get; set; }
         // individual or shared
         [DataMember] public SyncedEntry<bool> BEEKEEPER_INDIVIDUAL { get; set; }
         [DataMember] public SyncedEntry<bool> PROTEIN_INDIVIDUAL { get; set; }
@@ -69,6 +70,7 @@ namespace MoreShipUpgrades.Misc
         [DataMember] public SyncedEntry<bool> INTERN_INDIVIDUAL { get; set; }
         [DataMember] public SyncedEntry<bool> LOCKSMITH_INDIVIDUAL { get; set; }
         [DataMember] public SyncedEntry<bool> CLIMBING_GLOVES_INDIVIDUAL { get; set; }
+        [DataMember] public SyncedEntry<bool> LITHIUM_BATTERIES_INDIVIDUAL { get; set; }
         // prices
         [DataMember] public SyncedEntry<int> CLIMBING_GLOVES_PRICE {  get; set; }
         [DataMember] public SyncedEntry<int> WEATHER_PROBE_PRICE {  get; set; }
@@ -107,8 +109,12 @@ namespace MoreShipUpgrades.Misc
         [DataMember] public SyncedEntry<int> FASTER_DROP_POD_PRICE { get; set; }
         [DataMember] public SyncedEntry<int> SIGURD_PRICE { get; set; }
         [DataMember] public SyncedEntry<int> EFFICIENT_ENGINES_PRICE { get; set; }
+        [DataMember] public SyncedEntry<int> LITHIUM_BATTERIES_PRICE {  get; set; }
 
         // attributes
+        [DataMember] public SyncedEntry<string> LITHIUM_BATTERIES_PRICES { get; set; }
+        [DataMember] public SyncedEntry<int> LITHIUM_BATTERIES_INITIAL_MULTIPLIER { get; set; }
+        [DataMember] public SyncedEntry<int> LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER {  get; set; }
         [DataMember] public SyncedEntry<string> EFFICIENT_ENGINES_PRICES {  get; set; }
         [DataMember] public SyncedEntry<int> EFFICIENT_ENGINES_INITIAL_DISCOUNT {  get; set; }
         [DataMember] public SyncedEntry<int> EFFICIENT_ENGINES_INCREMENTAL_DISCOUNT { get; set; }
@@ -636,7 +642,15 @@ namespace MoreShipUpgrades.Misc
             CLIMBING_GLOVES_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.PRICES_SECTION, "200,250,300", BaseUpgrade.PRICES_DESCRIPTION);
             INITIAL_CLIMBING_SPEED_BOOST = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Initial value added to the players climbing speed", 1f, "Vanilla climb speed is 4 units");
             INCREMENTAL_CLIMBING_SPEED_BOOST = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Incremental value added to the players climbing speed", 0.5f, "");
-            
+
+            topSection = LithiumBatteries.UPGRADE_NAME;
+            LITHIUM_BATTERIES_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Enable Lithium Batteries Upgrade", true, "Tier upgrade which decreases the rate of battery consumed when using the item");
+            LITHIUM_BATTERIES_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            LITHIUM_BATTERIES_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Price of Lithium Batteries upgrade", 100);
+            LITHIUM_BATTERIES_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, LithiumBatteries.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            LITHIUM_BATTERIES_INITIAL_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Initial multiplier applied to the use rate of the battery (%)", 10, "Past 100%, it won't consume any battery charge from the item");
+            LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Incremental multiplier applied to the use rate of the battery (%)", 10, "Past 100%, it won't consume any battery charge from the item");
+
             topSection = "Weather Probe";
             WEATHER_PROBE_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Weather Probe Command", true, "Allows changing weather of a level through cost of credits");
             WEATHER_PROBE_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of Weather Probe", 300, "Price of the weather probe when a weather is not selected for the level");

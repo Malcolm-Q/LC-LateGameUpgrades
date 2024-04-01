@@ -28,7 +28,6 @@ using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using System.Linq;
 using MoreShipUpgrades.Compat;
-using CSync.Lib;
 
 namespace MoreShipUpgrades
 {
@@ -651,6 +650,7 @@ namespace MoreShipUpgrades
             SetupChargingBooster();
             SetupEfficientEngines();
             SetupClimbingGloves();
+            SetupLithiumBatteries();
         }
 
         private void SetupSickBeats()
@@ -779,6 +779,10 @@ namespace MoreShipUpgrades
         void SetupClimbingGloves()
         {
             SetupGenericPerk<ClimbingGloves>(ClimbingGloves.UPGRADE_NAME);
+        }
+        void SetupLithiumBatteries()
+        {
+            SetupGenericPerk<LithiumBatteries>(LithiumBatteries.UPGRADE_NAME);
         }
         /// <summary>
         /// Generic function where it adds a script (specificed through the type) into an GameObject asset 
