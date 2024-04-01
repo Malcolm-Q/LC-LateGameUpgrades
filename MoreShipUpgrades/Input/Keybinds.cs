@@ -54,12 +54,12 @@ namespace MoreShipUpgrades.Input
                 InputActionSetupExtensions.AddActionMap(Asset, ActionMap);
                 WheelbarrowAction = InputActionSetupExtensions.AddAction(ActionMap, "Drop all items from wheelbarrow", binding: SyncedInstance<PluginConfig>.Default.WHEELBARROW_DROP_ALL_CONTROL_BIND.Value, interactions: "Press");
                 NvgAction = InputActionSetupExtensions.AddAction(ActionMap, "Toggle NVG", binding: SyncedInstance<PluginConfig>.Default.TOGGLE_NIGHT_VISION_KEY.Value, interactions: "Press");
-                cursorUpAction = InputActionSetupExtensions.AddAction(ActionMap, "Upgrade store cursor up", binding: "<Keyboard>/w", interactions: "Press");
-                cursorDownAction = InputActionSetupExtensions.AddAction(ActionMap, "Upgrade store cursor down", binding: "<Keyboard>/s", interactions: "Press");
-                cursorExitAction = InputActionSetupExtensions.AddAction(ActionMap, "Upgrade store cursor exit", binding: "<Keyboard>/escape", interactions: "Press");
-                pageUpAction = InputActionSetupExtensions.AddAction(ActionMap, "Upgrade store page up", binding: "<Keyboard>/e", interactions: "Press");
-                pageDownAction = InputActionSetupExtensions.AddAction(ActionMap, "Upgrade store page down", binding: "<Keyboard>/q", interactions: "Press");
-                storeConfirmAction = InputActionSetupExtensions.AddAction(ActionMap, "Enter upgrade store prompt", binding: "<Keyboard>/enter", interactions: "Press");
+                cursorUpAction = InputActionSetupExtensions.AddAction(ActionMap, "Move Cursor Up in Lategame Upgrades Store", binding: "<Keyboard>/w", interactions: "Press");
+                cursorDownAction = InputActionSetupExtensions.AddAction(ActionMap, "Move Cursor Down in Lategame Upgrades Store", binding: "<Keyboard>/s", interactions: "Press");
+                cursorExitAction = InputActionSetupExtensions.AddAction(ActionMap, "Exit Lategame Upgrades Store", binding: "<Keyboard>/escape", interactions: "Press");
+                pageUpAction = InputActionSetupExtensions.AddAction(ActionMap, "Next Page in Lategame Upgrades Store", binding: "<Keyboard>/d", interactions: "Press");
+                pageDownAction = InputActionSetupExtensions.AddAction(ActionMap, "Previous Page in Lategame Upgrades Store", binding: "<Keyboard>/a", interactions: "Press");
+                storeConfirmAction = InputActionSetupExtensions.AddAction(ActionMap, "Submit Prompt in Lategame Upgrades Store", binding: "<Keyboard>/enter", interactions: "Press");
             }
         }
 

@@ -17,20 +17,20 @@ namespace MoreShipUpgrades.Input
         [InputAction("<Keyboard>/leftAlt", Name = "Toggle NVG")]
         public InputAction NvgKey { get; set; }
 
-        [InputAction("<Keyboard>/w", Name = "Upgrade store cursor up")]
+        [InputAction("<Keyboard>/w", Name = "Move Cursor Up in Lategame Upgrades Store")]
         public InputAction UpgradeStoreCursorUpKey { get; set; }
 
-        [InputAction("<Keyboard>/s", Name = "Upgrade store cursor down")]
+        [InputAction("<Keyboard>/s", Name = "Move Cursor Down in Lategame Upgrades Store")]
         public InputAction UpgradeStoreCursorDownKey { get; set; }
-        [InputAction("<Keyboard>/escape", Name = "Upgrade store cursor down")]
+        [InputAction("<Keyboard>/escape", Name = "Exit Lategame Upgrades Store")]
         public InputAction UpgradeStoreCursorExitKey { get; set; }
 
-        [InputAction("<Keyboard>/e", Name = "Upgrade store page up")]
+        [InputAction("<Keyboard>/d", Name = "Next Page in Lategame Upgrades Store")]
         public InputAction UpgradeStorePageUpKey { get; set; }
 
-        [InputAction("<Keyboard>/q", Name = "Upgrade store page down")]
+        [InputAction("<Keyboard>/a", Name = "Previous Page in Lategame Upgrades Store")]
         public InputAction UpgradeStorePageDownKey { get; set; }
-        [InputAction("<Keyboard>/enter", Name = "Enter upgrade store prompt")]
+        [InputAction("<Keyboard>/enter", Name = "Submit Prompt in Lategame Upgrades Store")]
         public InputAction LguStoreConfirmKey { get; set; }
 
     }

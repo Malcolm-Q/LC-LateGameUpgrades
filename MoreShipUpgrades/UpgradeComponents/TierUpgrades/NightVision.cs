@@ -11,6 +11,7 @@ using UnityEngine.InputSystem;
 using MoreShipUpgrades.Input;
 using UnityEngine.UI;
 using CSync.Lib;
+using MoreShipUpgrades.Misc.Util;
 
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades

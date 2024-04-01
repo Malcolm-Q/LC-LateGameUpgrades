@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MoreShipUpgrades.Misc.UI
+﻿namespace MoreShipUpgrades.Misc.UI
 {
     internal interface ITextElement
     {

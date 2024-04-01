@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using MoreShipUpgrades.Misc.Util;
 
 namespace MoreShipUpgrades.Misc.UI.Cursor
 {
@@ -36,8 +37,10 @@ namespace MoreShipUpgrades.Misc.UI.Cursor
             for(int i = 0; i < elements.Length; i++)
             {
                 CursorElement element = elements[i];
-                if (i == cursorIndex) sb.Append(CURSOR).Append(MainUpgradeApplication.WHITE_SPACE); else sb.Append(MainUpgradeApplication.WHITE_SPACE).Append(MainUpgradeApplication.WHITE_SPACE);
-                sb.Append( Tools.WrapText((i == cursorIndex ? "<mark=#00FF0033><color=#FFFFFFFF>" : "") + element.GetText(availableLength-2)+ (i == cursorIndex ? "</color></mark>" : ""), "  ", "", availableLength, false));
+                if (i == cursorIndex) sb.Append(CURSOR).Append(Constants.WHITE_SPACE); else sb.Append(Constants.WHITE_SPACE).Append(Constants.WHITE_SPACE);
+                string text = element.GetText(availableLength - 2);
+                text = (i == cursorIndex ? string.Format(Constants.SELECTED_CURSOR_ELEMENT_FORMAT, Constants.DEFAULT_BACKGROUND_SELECTED_COLOR, Constants.DEFAULT_TEXT_SELECTED_COLOR, text) : text);
+                sb.Append(Tools.WrapText(text, availableLength, leftPadding: "  ", rightPadding: "", false));
             }
             return sb.ToString();
         }

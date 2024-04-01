@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using MoreShipUpgrades.Misc.Util;
 
 namespace MoreShipUpgrades.Misc.UI.Cursor
 {
@@ -15,7 +16,7 @@ namespace MoreShipUpgrades.Misc.UI.Cursor
             StringBuilder sb = new StringBuilder();
             sb.Append(Name);
             if (Description == null || Description == "") return sb.ToString();
-            sb.AppendLine().Append(Tools.WrapText(Description, " ", "", availableLength));
+            sb.AppendLine().Append(Tools.WrapText(Description, availableLength));
             return sb.ToString();
         }
     }

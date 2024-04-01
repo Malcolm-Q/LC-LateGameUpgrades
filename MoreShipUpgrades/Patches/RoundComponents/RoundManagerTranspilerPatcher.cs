@@ -2,7 +2,7 @@
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using System.Collections.Generic;
 using System.Reflection;
-using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Util;
 
 namespace MoreShipUpgrades.Patches.RoundComponents
 {

@@ -11,7 +11,7 @@ using System.Text;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace MoreShipUpgrades.Misc
+namespace MoreShipUpgrades.Misc.Util
 {
     internal static class Tools
     {
@@ -71,7 +71,7 @@ namespace MoreShipUpgrades.Misc
         }
         public static int FindSub(int index, ref List<CodeInstruction> codes, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
         {
-            return FindCodeInstruction(index, ref codes, findValue : OpCodes.Sub, addCode, skip, notInstruction, andInstruction, orInstruction, requireInstance, errorMessage);
+            return FindCodeInstruction(index, ref codes, findValue: OpCodes.Sub, addCode, skip, notInstruction, andInstruction, orInstruction, requireInstance, errorMessage);
         }
         public static int FindAdd(int index, ref List<CodeInstruction> codes, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
         {
@@ -119,14 +119,14 @@ namespace MoreShipUpgrades.Misc
                 return result;
             }
             if (findValue is string) return code.opcode == OpCodes.Ldstr && code.operand.Equals(findValue);
-            if (findValue is MethodInfo) return ((code.opcode == OpCodes.Call || code.opcode == OpCodes.Callvirt) &&  code.operand == findValue);
+            if (findValue is MethodInfo) return (code.opcode == OpCodes.Call || code.opcode == OpCodes.Callvirt) && code.operand == findValue;
             if (findValue is FieldInfo) return (code.opcode == OpCodes.Ldfld || code.opcode == OpCodes.Stfld) && code.operand == findValue;
-            if (findValue is OpCode) return (code.opcode == (OpCode)findValue);
+            if (findValue is OpCode) return code.opcode == (OpCode)findValue;
             return false;
         }
         private static bool CheckIntegerCodeInstruction(CodeInstruction code, object findValue)
         {
-            switch((sbyte)findValue)
+            switch ((sbyte)findValue)
             {
                 case 0: return code.opcode == OpCodes.Ldc_I4_0;
                 case 1: return code.opcode == OpCodes.Ldc_I4_1;
@@ -145,7 +145,7 @@ namespace MoreShipUpgrades.Misc
         }
         public static void ShuffleList<T>(List<T> list)
         {
-            if(list == null) throw new ArgumentNullException("list");
+            if (list == null) throw new ArgumentNullException("list");
 
             System.Random random = new System.Random();
             int n = list.Count;
@@ -196,7 +196,7 @@ namespace MoreShipUpgrades.Misc
             return color;
         }
 
-        internal static string WrapText(string text, string leftPadding, string rightPadding, int availableLength, bool padLeftFirst = true)
+        internal static string WrapText(string text, int availableLength, string leftPadding = "", string rightPadding = "", bool padLeftFirst = true)
         {
             int actualLength = availableLength - leftPadding.Length - rightPadding.Length;
             string result = "";
@@ -205,7 +205,7 @@ namespace MoreShipUpgrades.Misc
             int possibleWrap = -1;
             bool first = true;
             bool HTMLTag = false;
-            for (int characterIndex = 0; characterIndex < text.Length;  characterIndex++)
+            for (int characterIndex = 0; characterIndex < text.Length; characterIndex++)
             {
                 char character = text[characterIndex];
                 if (character == '<')

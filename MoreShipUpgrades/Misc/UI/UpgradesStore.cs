@@ -1,10 +1,6 @@
-﻿using GameNetcodeStuff;
-using MoreShipUpgrades.Input;
+﻿using MoreShipUpgrades.Input;
 using MoreShipUpgrades.Managers;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
+using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
 
@@ -58,7 +54,7 @@ namespace MoreShipUpgrades.Misc.UI
                 terminalReference.screenText.DeactivateInputField();
                 terminalReference.screenText.interactable = false;
                 previousCaretColor = terminalReference.screenText.caretColor;
-                terminalReference.screenText.caretColor = new Color(0,0,0,0);
+                terminalReference.screenText.caretColor = Constants.Invisible;
             }
         }
 

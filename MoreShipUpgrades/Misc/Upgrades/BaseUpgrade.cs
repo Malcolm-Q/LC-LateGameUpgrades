@@ -1,5 +1,6 @@
 ﻿using CSync.Lib;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc.Util;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -39,7 +40,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
         {
             UpgradeBus.Instance.activeUpgrades[upgradeName] = true;
             if (!SyncedInstance<PluginConfig>.Default.SHOW_UPGRADES_CHAT.Value) return;
-            ShowUpgradeNotification("#FF0000", $"{upgradeName} is active!");
+            ShowUpgradeNotification(Constants.UPGRADE_UNLOADED_NOTIFICATION_DEFAULT_COLOR, $"{upgradeName} is active!");
         }
         /// <summary>
         /// Function responsible to insert this upgrade's gameObject into the UpgradeBus' list of gameObjects for handling
@@ -55,7 +56,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
         {
             UpgradeBus.Instance.activeUpgrades[upgradeName] = false;
             if (!SyncedInstance<PluginConfig>.Default.SHOW_UPGRADES_CHAT.Value) return;
-            ShowUpgradeNotification("#FF0000", $"{upgradeName} has been disabled!");
+            ShowUpgradeNotification(Constants.UPGRADE_LOADED_NOTIFICATION_DEFAULT_COLOR, $"{upgradeName} has been disabled!");
         }
         /// <summary>
         /// Shows a notification for when an upgrade is loaded or unloaded from the player

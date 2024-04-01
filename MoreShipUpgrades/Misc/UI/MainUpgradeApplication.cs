@@ -4,6 +4,7 @@ using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.UI.Cursor;
 using MoreShipUpgrades.Misc.UI.Page;
 using MoreShipUpgrades.Misc.UI.Screen;
+using MoreShipUpgrades.Misc.Util;
 using System;
 using UnityEngine;
 
@@ -11,19 +12,6 @@ namespace MoreShipUpgrades.Misc.UI
 {
     internal class MainUpgradeApplication
     {
-        internal const int AVAILABLE_CHARACTERS_PER_LINE = 51;
-        internal const int LEVEL_DISPLAY_INDEX = 30;
-        internal const char TOP_LEFT_CORNER = '╭';
-        internal const char TOP_RIGHT_CORNER = '╮';
-        internal const char BOTTOM_LEFT_CORNER = '╰';
-        internal const char BOTTOM_RIGHT_CORNER = '╯';
-        internal const char VERTICAL_LINE = '│';
-        internal const char HORIZONTAL_LINE = '─';
-        internal const char WHITE_SPACE = ' ';
-        internal const char CURSOR = '>';
-
-        internal const char EMPTY_LEVEL = '○';
-        internal const char FILLED_LEVEL = '●';
 
         PageCursorElement MainPage;
 
@@ -80,7 +68,7 @@ namespace MoreShipUpgrades.Misc.UI
                     elements[j] = new UpgradeCursorElement()
                     {
                         Node = upgrade,
-                        Action = () => BuyUpgrade(upgrade, () => SwitchScreen(null, cursorMenu, false, true))
+                        Action = () => BuyUpgrade(upgrade, () => SwitchScreen(null, cursorMenu, true, true))
                     };
                 }
             }
@@ -117,7 +105,7 @@ namespace MoreShipUpgrades.Misc.UI
         }
         public void UpdateText()
         {
-            string text = currentScreen != null ? currentScreen.GetText(AVAILABLE_CHARACTERS_PER_LINE) : MainPage.GetText(AVAILABLE_CHARACTERS_PER_LINE);
+            string text = currentScreen != null ? currentScreen.GetText(Constants.AVAILABLE_CHARACTERS_PER_LINE) : MainPage.GetText(Constants.AVAILABLE_CHARACTERS_PER_LINE);
             terminal.screenText.text = text;
             terminal.currentText = text;
         }
