@@ -1,3 +1,15 @@
+## V 3.4.4 - 2024-03-31
+- Another attempt at fixing the upgrades not loading when reconnecting.
+    - If it still persists, report the issue in the github repository with logs attached from both host and clients.
+    - If there's an issue already reported in the repository, post on that one instead.
+- Fixed some upgrade infos showing incorrect values.
+- Changed Bigger Lungs info to include stamina regeneration and stamina cost reduction on jumps.
+- Fixed ``weather <moonName>`` leading to negative values due to lack of price check.
+
+## V 3.4.3 - 2024-03-23
+- Fixed clients disconnecting throwing errors, leading to upgrades on next reconnect to not load.
+- Fixed error throw when quiting the game (harmless but an error)
+
 ## V 3.4.2 - 2024-03-21
 - Fixed configuration synchronization due to serialization issues with colours
     - As a consequence, reverted the synchronization between host and client for colours

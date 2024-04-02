@@ -240,3 +240,6 @@ Anyone who contributes in any way is greatly appreciated. People willing to cont
     * If provided a ``weatherType``, it will change the moon's weather to the selected one for $500 (configurable)
     * Otherwise, a random weather will be selected and will cost $300 (configurable)
     * You can configure the random weather command to only select cleared weathers (off by default)
+* ``contract [moonName]``
+    * Provides a contract for the players to finish on a moon.
+    * If provided a ``moonName``, it will give out a contract on specified moon.

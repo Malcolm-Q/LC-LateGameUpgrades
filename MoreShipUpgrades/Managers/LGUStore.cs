@@ -17,6 +17,7 @@ using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using HarmonyLib;
+using LethalLib.Modules;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -166,7 +167,6 @@ namespace MoreShipUpgrades.Managers
             SyncCreditsClientRpc(credits);
         }
 
-
         [ClientRpc]
         public void SyncCreditsClientRpc(int newCredits)
         {
@@ -300,17 +300,22 @@ namespace MoreShipUpgrades.Managers
 
             StartCoroutine(WaitForUpgradeObject());
         }
-
+        
         private IEnumerator WaitForSteamID()
         {
-            yield return new WaitForSeconds(1f);
-            int tries = 0;
-            while(playerID == 0 && tries < 10)
+            if(!GameNetworkManager.Instance.disableSteam)
             {
-                tries++;
-                playerID = GameNetworkManager.Instance.localPlayerController.playerSteamId;
-                yield return new WaitForSeconds(0.5f);
+                int tries = 0;
+                while (playerID == 0 && tries < 10)
+                {
+                    tries++;
+                    PlayerControllerB player = UpgradeBus.Instance.GetLocalPlayer();
+                    if (player == null) continue;
+                    playerID = player.playerSteamId;
+                    yield return new WaitForSeconds(0.5f);
+                }
             }
+            
             if (playerID != 0)
             {
                 logger.LogInfo($"Loading SteamID: {playerID}");
@@ -318,7 +323,7 @@ namespace MoreShipUpgrades.Managers
             }
             else
             {
-                logger.LogInfo("Timeout reached, loading under ID 0");
+                logger.LogInfo("LAN detected, loading under ID 0");
                 UpdateUpgradeBus(true, false);
             }
         }

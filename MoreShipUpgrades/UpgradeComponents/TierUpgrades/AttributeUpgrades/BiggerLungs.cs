@@ -2,6 +2,7 @@
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
+using System.Text;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
@@ -41,11 +42,26 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             return string.Format(WORLD_BUILDING_TEXT, shareStatus ? "your crew's suit oxigen delivery systems" : "your suit's oxygen delivery system");
         }
 
-        public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
+        string GetBiggerlungsInfo(int level, int price)
         {
             System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.SPRINT_TIME_INCREASE_UNLOCK.Value + level * UpgradeBus.Instance.PluginConfiguration.SPRINT_TIME_INCREMENT.Value;
-            string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            System.Func<int, float> costReductionInfo = level => 1f-(UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_JUMP_STAMINA_COST_DECREASE.Value - level * UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_JUMP_STAMINA_COST_INCREMENTAL_DECREASE.Value);
+            System.Func<int, float> staminaRegenerationInfo = level => (UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_STAMINA_REGEN_INCREASE.Value + level * UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_STAMINA_REGEN_INCREMENTAL_INCREASE.Value)-1f;
+            StringBuilder sb = new StringBuilder();
+            sb.Append(string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), level, price, infoFunction(level-1)));
+            if (level >= UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_STAMINA_REGEN_APPLY_LEVEL.Value) sb.Append($"Stamina regeneration is increased by {Mathf.FloorToInt(staminaRegenerationInfo(level)*100f)}%\n");
+            if (level >= UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_JUMP_STAMINA_APPLY_LEVEL.Value) sb.Append($"Stamina used when jumping is reduced by {Mathf.FloorToInt(costReductionInfo(level)*100f)}%\n");
+            sb.AppendLine();
+            return sb.ToString();
+        }
+
+        public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(GetBiggerlungsInfo(1, initialPrice));
+            for (int i = 0; i < maxLevels; i++)
+                sb.Append(GetBiggerlungsInfo(i + 2, incrementalPrices[i]));
+            return sb.ToString();
         }
         internal override bool CanInitializeOnStart()
         {

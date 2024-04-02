@@ -142,7 +142,7 @@ namespace MoreShipUpgrades.Misc
                 if (playerName == null) continue;
                 playerNames.Add(playerName);
                 logger.LogDebug($"Comparing {playerName} with {playerNameToSearch} case insensitive...");
-                if (playerName.ToLower() != playerNameToSearch.ToLower()) continue;
+                if (!playerName.ToLower().Contains(playerNameToSearch.ToLower())) continue;
 
                 LguStore.Instance.ShareSaveServerRpc();
                 terminal.StartCoroutine(WaitForSync(playerSteamID));
@@ -637,8 +637,9 @@ namespace MoreShipUpgrades.Misc
             if (secondWord == "") return DisplayTerminalMessage($"Probe <moonName> [weatherType]\n\nmoonName: Name of a moon\nweatherType: Name of a weather allowed in the level\n\n");
             if (!StartOfRound.Instance.inShipPhase) return DisplayTerminalMessage($"You can only send out weather probes while in orbit.\n\n");
             if (thirdWord != "") return ExecuteSpecifiedProbeCommand(secondWord, thirdWord, terminal);
-            
-            (string, LevelWeatherType) selectedWeather = WeatherManager.PickWeather(secondWord);
+            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE.Value) return DisplayTerminalMessage($"You do not have enough credits to purchase a weather probe.\nPrice: {UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE.Value}\nCurrent credits: {terminal.groupCredits}\n\n");
+
+                (string, LevelWeatherType) selectedWeather = WeatherManager.PickWeather(secondWord);
             if (selectedWeather.Item1 == null) return DisplayTerminalMessage($"No moon was found that has an occurence of selected input ({secondWord}).\n\n");
             if (StartOfRound.Instance.levels.First(x => x.PlanetName == selectedWeather.Item1).currentWeather == selectedWeather.Item2) return DisplayTerminalMessage($"The provided moon ({selectedWeather.Item1}) already has the selected weather ({selectedWeather.Item2}).\n\n");
             terminal.groupCredits -= UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE.Value;

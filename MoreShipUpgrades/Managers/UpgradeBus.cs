@@ -33,9 +33,6 @@ namespace MoreShipUpgrades.Managers
         internal AudioClip flashNoise;
         internal GameObject modStorePrefab;
         internal TerminalNode modStoreInterface;
-        Terminal terminal;
-        PlayerControllerB localPlayer;
-        HangarShipDoor hangarDoors;
 
         internal Dictionary<string, SpawnableMapObjectDef> spawnableMapObjects = new Dictionary<string, SpawnableMapObjectDef>();
         internal Dictionary<string, int> spawnableMapObjectsAmount = new Dictionary<string, int>();
@@ -64,19 +61,15 @@ namespace MoreShipUpgrades.Managers
 
         public Terminal GetTerminal()
         {
-            if (terminal == null) terminal = GameObject.Find("TerminalScript").GetComponent<Terminal>();
-
-            return terminal;
+            return GameObject.Find("TerminalScript").GetComponent<Terminal>();
         }
         public PlayerControllerB GetLocalPlayer()
         {
-            if (localPlayer == null) localPlayer = GameNetworkManager.Instance.localPlayerController;
-            return localPlayer;
+            return GameNetworkManager.Instance.localPlayerController;
         }
         public HangarShipDoor GetShipDoors()
         {
-            if (hangarDoors == null) hangarDoors = FindObjectOfType<HangarShipDoor>();
-            return hangarDoors;
+            return FindObjectOfType<HangarShipDoor>();
         }
         public TerminalNode ConstructNode()
         {
