@@ -175,7 +175,6 @@ namespace MoreShipUpgrades.Misc
         [field: DataMember] public SyncedEntry<int> LOCKSMITH_PRICE { get; set; }
         [field: DataMember] public SyncedEntry<bool> INTERN_ENABLED { get; set; }
         [field: DataMember] public SyncedEntry<bool> LOCKSMITH_ENABLED { get; set; }
-        [field: DataMember] public SyncedEntry<string> TOGGLE_NIGHT_VISION_KEY { get; set; }
         [field: DataMember] public SyncedEntry<float> SALE_PERC { get; set; }
         [field: DataMember] public SyncedEntry<bool> LOSE_NIGHT_VIS_ON_DEATH { get; set; }
         [field: DataMember] public SyncedEntry<bool> NIGHT_VISION_DROP_ON_DEATH { get; set; }
@@ -289,7 +288,6 @@ namespace MoreShipUpgrades.Misc
         [field: DataMember] public SyncedEntry<bool> EXTRACTION_CONTRACT { get; set; }
         [field: DataMember] public SyncedEntry<bool> DEFUSAL_CONTRACT { get; set; }
         [field: DataMember] public SyncedEntry<bool> MAIN_OBJECT_FURTHEST { get; set; }
-        [field: DataMember] public SyncedEntry<string> WHEELBARROW_DROP_ALL_CONTROL_BIND { get; set; }
         [field: DataMember] public SyncedEntry<string> MARKET_INFLUENCE_PRICES { get; set; }
         [field: DataMember] public SyncedEntry<int> MARKET_INFLUENCE_INITIAL_PERCENTAGE { get; set; }
         [field: DataMember] public SyncedEntry<int> MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE { get; set; }
@@ -462,7 +460,6 @@ namespace MoreShipUpgrades.Misc
             NIGHT_VIS_INTENSITY_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Night Vision Intensity Increment", 0f, "Increases your intensity by this value each upgrade.");
             NIGHT_VIS_STARTUP = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Night Vision StartUp Cost", 0.1f, "The percent battery drained when turned on (0.1 = 10%).");
             NIGHT_VIS_EXHAUST = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Night Vision Exhaustion", 2f, "How many seconds night vision stays fully depleted.");
-            TOGGLE_NIGHT_VISION_KEY = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Toggle Night Vision Key", "<Keyboard>/leftAlt", "More info in Unity's Control Path documentation in the new Input System");
             NIGHT_VIS_DRAIN_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Decrease for night vis battery drain", 0.15f, "Applied to drain speed on each upgrade.");
             NIGHT_VIS_REGEN_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Increase for night vis battery regen", 0.40f, "Applied to regen speed on each upgrade.");
             NIGHT_VIS_BATTERY_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Increase for night vis battery life", 2f, "Applied to the max charge for night vis battery on each upgrade.");
@@ -681,7 +678,6 @@ namespace MoreShipUpgrades.Misc
             SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Look sensitivity drawback of the Shopping Cart Item", 0.8f, "Value multiplied on the player's look sensitivity when moving with the Scrap wheelbarrow Item");
             SCRAP_WHEELBARROW_MOVEMENT_SLOPPY = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Sloppiness of the Shopping Cart Item", 2f, "Value multiplied on the player's movement to give the feeling of drifting while carrying the Scrap Wheelbarrow Item");
             SCRAP_WHEELBARROW_PLAY_NOISE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Plays noises for players with Shopping Cart Item", true, "If false, it will just not play the sounds, it will still attract monsters to noise");
-            WHEELBARROW_DROP_ALL_CONTROL_BIND = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Control bind for drop all items", "<Mouse>/middleButton", "More info in Unity's Control Path documentation in the new Input System");
             InitialSyncCompleted += PluginConfig_InitialSyncCompleted;
         }
 

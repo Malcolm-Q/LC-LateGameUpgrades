@@ -35,33 +35,16 @@ namespace MoreShipUpgrades.Input
         [HarmonyPrefix]
         public static void AddToKeybindMenu()
         {
-            if (InputUtils_Compat.Enabled)
-            {
-                Asset = InputUtils_Compat.Asset;
-                ActionMap = Asset.actionMaps[0];
-                WheelbarrowAction = InputUtils_Compat.WheelbarrowKey;
-                NvgAction = InputUtils_Compat.NvgKey;
-                cursorUpAction = InputUtils_Compat.CursorUpKey;
-                cursorDownAction = InputUtils_Compat.CursorDownKey;
-                cursorExitAction = InputUtils_Compat.CursorExitKey;
-                pageUpAction = InputUtils_Compat.PageUpKey;
-                pageDownAction = InputUtils_Compat.PageDownKey;
-                storeConfirmAction = InputUtils_Compat.LguStoreConfirmKey;
-            }
-            else
-            {
-                Asset = ScriptableObject.CreateInstance<InputActionAsset>();
-                ActionMap = new InputActionMap("MoreShipUpgrades");
-                InputActionSetupExtensions.AddActionMap(Asset, ActionMap);
-                WheelbarrowAction = InputActionSetupExtensions.AddAction(ActionMap, "Drop all items from wheelbarrow", binding: UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_DROP_ALL_CONTROL_BIND.LocalValue, interactions: "Press");
-                NvgAction = InputActionSetupExtensions.AddAction(ActionMap, "Toggle NVG", binding: UpgradeBus.Instance.PluginConfiguration.TOGGLE_NIGHT_VISION_KEY.LocalValue, interactions: "Press");
-                cursorUpAction = InputActionSetupExtensions.AddAction(ActionMap, "Move Cursor Up in Lategame Upgrades Store", binding: "<Keyboard>/w", interactions: "Press");
-                cursorDownAction = InputActionSetupExtensions.AddAction(ActionMap, "Move Cursor Down in Lategame Upgrades Store", binding: "<Keyboard>/s", interactions: "Press");
-                cursorExitAction = InputActionSetupExtensions.AddAction(ActionMap, "Exit Lategame Upgrades Store", binding: "<Keyboard>/escape", interactions: "Press");
-                pageUpAction = InputActionSetupExtensions.AddAction(ActionMap, "Next Page in Lategame Upgrades Store", binding: "<Keyboard>/d", interactions: "Press");
-                pageDownAction = InputActionSetupExtensions.AddAction(ActionMap, "Previous Page in Lategame Upgrades Store", binding: "<Keyboard>/a", interactions: "Press");
-                storeConfirmAction = InputActionSetupExtensions.AddAction(ActionMap, "Submit Prompt in Lategame Upgrades Store", binding: "<Keyboard>/enter", interactions: "Press");
-            }
+            Asset = InputUtils_Compat.Asset;
+            ActionMap = Asset.actionMaps[0];
+            WheelbarrowAction = InputUtils_Compat.WheelbarrowKey;
+            NvgAction = InputUtils_Compat.NvgKey;
+            cursorUpAction = InputUtils_Compat.CursorUpKey;
+            cursorDownAction = InputUtils_Compat.CursorDownKey;
+            cursorExitAction = InputUtils_Compat.CursorExitKey;
+            pageUpAction = InputUtils_Compat.PageUpKey;
+            pageDownAction = InputUtils_Compat.PageDownKey;
+            storeConfirmAction = InputUtils_Compat.LguStoreConfirmKey;
         }
 
         [HarmonyPatch(typeof(StartOfRound), "OnEnable")]

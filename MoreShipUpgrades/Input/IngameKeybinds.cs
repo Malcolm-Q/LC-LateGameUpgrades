@@ -5,7 +5,7 @@ namespace MoreShipUpgrades.Input
 {
     internal class IngameKeybinds : LcInputActions
     {
-        public static IngameKeybinds Instance = new();
+        public static IngameKeybinds Instance;
         internal static InputActionAsset GetAsset()
         {
             return Instance.Asset;

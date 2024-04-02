@@ -28,13 +28,15 @@ using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using System.Linq;
 using MoreShipUpgrades.Compat;
+using UnityEngine.InputSystem;
+using MoreShipUpgrades.Input;
 
 namespace MoreShipUpgrades
 {
     [BepInEx.BepInPlugin(Metadata.GUID,Metadata.NAME,Metadata.VERSION)]
     [BepInDependency("evaisa.lethallib","0.13.0")]
     [BepInDependency("com.sigurd.csync")]
-    [BepInDependency("com.rune580.LethalCompanyInputUtils", BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency("com.rune580.LethalCompanyInputUtils")]
     public class Plugin : BaseUnityPlugin
     {
         readonly Harmony harmony = new(Metadata.GUID);
@@ -94,10 +96,7 @@ namespace MoreShipUpgrades
 
             SetupContractMapObjects(ref UpgradeAssets);
 
-            if(InputUtils_Compat.Enabled)
-            {
-                InputUtils_Compat.Init();
-            }
+            InputUtils_Compat.Init();
 
             harmony.PatchAll();
 
@@ -552,7 +551,6 @@ namespace MoreShipUpgrades
             wheelbarrow.weight = 0.99f + (UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_WEIGHT.Value /100f);
             wheelbarrow.canBeGrabbedBeforeGameStart = true;
             ScrapWheelbarrow barrowScript = wheelbarrow.spawnPrefab.AddComponent<ScrapWheelbarrow>();
-            wheelbarrow.toolTips = SetupWheelbarrowTooltips();
             barrowScript.itemProperties = wheelbarrow;
             barrowScript.wheelsClip = shoppingCartSound;
             wheelbarrow.spawnPrefab.AddComponent<ScrapValueSyncer>();
@@ -585,7 +583,6 @@ namespace MoreShipUpgrades
             wheelbarrow.weight = 0.99f + (UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_WEIGHT.Value/100f);
             wheelbarrow.canBeGrabbedBeforeGameStart = true;
             StoreWheelbarrow barrowScript = wheelbarrow.spawnPrefab.AddComponent<StoreWheelbarrow>();
-            wheelbarrow.toolTips = SetupWheelbarrowTooltips();
             barrowScript.itemProperties = wheelbarrow;
             barrowScript.wheelsClip = wheelbarrowSound;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
@@ -594,29 +591,6 @@ namespace MoreShipUpgrades
             UpgradeBus.Instance.ItemsToSync.Add("Wheel", wheelbarrow);
 
             SetupStoreItem(wheelbarrow);
-        }
-        private string[] SetupWheelbarrowTooltips()
-        {
-            bool dropAllItemsKeySet;
-            UnityEngine.InputSystem.Key dropAllItemsKey = UnityEngine.InputSystem.Key.None;
-            bool dropAllItemsMouseButtonSet;
-            UnityEngine.InputSystem.LowLevel.MouseButton dropAllitemsMouseButton = UnityEngine.InputSystem.LowLevel.MouseButton.Middle;
-            string controlBind = UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_DROP_ALL_CONTROL_BIND.LocalValue;
-            if (Enum.TryParse(controlBind, out UnityEngine.InputSystem.Key toggle))
-            {
-                dropAllItemsKey = toggle;
-                dropAllItemsKeySet = true;
-            }
-            else dropAllItemsKeySet = false;
-            if (Enum.TryParse(controlBind, out UnityEngine.InputSystem.LowLevel.MouseButton mouseButton))
-            {
-                dropAllitemsMouseButton = mouseButton;
-                dropAllItemsMouseButtonSet = true;
-            }
-            else dropAllItemsMouseButtonSet = false;
-            string usedMouseButton = dropAllItemsMouseButtonSet ? dropAllitemsMouseButton.ToString() : "MMB";
-            string usedKey = dropAllItemsKeySet ? dropAllItemsKey.ToString() : usedMouseButton;
-            return [$"Drop all items: [{usedKey}]"];
         }
         private void SetupPerks()
         {
