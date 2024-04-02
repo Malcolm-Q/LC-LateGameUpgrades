@@ -110,7 +110,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
                 return false;
             }
             ShipTeleporter teleporter = GetShipTeleporter();
-            if (teleporter == null)
+            if (teleporter == null || !teleporter.buttonTrigger.interactable)
             {
                 audio.PlayOneShot(error);
                 return false;

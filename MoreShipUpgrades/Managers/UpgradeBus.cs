@@ -13,6 +13,7 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -56,7 +57,7 @@ namespace MoreShipUpgrades.Managers
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            PluginConfiguration = PluginConfig.Instance;
+            PluginConfiguration = Plugin.Config;
         }
 
         public Terminal GetTerminal()
@@ -76,13 +77,8 @@ namespace MoreShipUpgrades.Managers
             modStoreInterface = ScriptableObject.CreateInstance<TerminalNode>();
             modStoreInterface.clearPreviousText = true;
             foreach (CustomTerminalNode terminalNode in terminalNodes)
-            {
-                string saleStatus = terminalNode.salePerc < 1f ? $"- {((1-terminalNode.salePerc)*100).ToString("F0")}% OFF!" : "";
-                if (!terminalNode.Unlocked) { modStoreInterface.displayText += $"\n{terminalNode.Name} // ${(int)(terminalNode.UnlockPrice * terminalNode.salePerc)} {saleStatus}  "; }
-                else if (terminalNode.MaxUpgrade == 0) { modStoreInterface.displayText += $"\n{terminalNode.Name} // UNLOCKED  "; }
-                else if (terminalNode.MaxUpgrade > terminalNode.CurrentUpgrade) { modStoreInterface.displayText += $"\n{terminalNode.Name} // ${(int)(terminalNode.Prices[terminalNode.CurrentUpgrade]*terminalNode.salePerc)} // LVL {terminalNode.CurrentUpgrade + 1} {saleStatus}  "; }
-                else { modStoreInterface.displayText += $"\n{terminalNode.Name} // MAX LVL"; }
-            }
+                modStoreInterface.displayText += terminalNode.GetTerminalNodeText();
+
             if (modStoreInterface.displayText == "")
             {
                 modStoreInterface.displayText = "No upgrades available";
@@ -324,12 +320,13 @@ namespace MoreShipUpgrades.Managers
             SetupSigurdTerminalNode();
             SetupEfficientEnginesNode();
             SetupClimbingGlovesTerminalNode();
+            SetupLithiumBatteriesTerminalNode();
             terminalNodes.Sort();
         }
         void SetupEfficientEnginesNode()
         {
             SetupMultiplePurchasableTerminalNode(EfficientEngines.UPGRADE_NAME,
-                                                true,
+                                                shareStatus: true,
                                                 PluginConfiguration.EFFICIENT_ENGINES_ENABLED.Value,
                                                 PluginConfiguration.EFFICIENT_ENGINES_PRICE.Value,
                                                 ParseUpgradePrices(PluginConfiguration.EFFICIENT_ENGINES_PRICES.Value));
@@ -337,7 +334,7 @@ namespace MoreShipUpgrades.Managers
         void SetupClimbingGlovesTerminalNode()
         {
             SetupMultiplePurchasableTerminalNode(ClimbingGloves.UPGRADE_NAME,
-                                                PluginConfiguration.CLIMBING_GLOVES_INDIVIDUAL.Value,
+                                                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.CLIMBING_GLOVES_INDIVIDUAL.Value,
                                                 PluginConfiguration.CLIMBING_GLOVES_ENABLED.Value,
                                                 PluginConfiguration.CLIMBING_GLOVES_PRICE.Value,
                                                 ParseUpgradePrices(PluginConfiguration.CLIMBING_GLOVES_PRICES.Value));
@@ -345,7 +342,7 @@ namespace MoreShipUpgrades.Managers
         void SetupMarketInfluenceTerminalNode()
         {
             SetupMultiplePurchasableTerminalNode(MarketInfluence.UPGRADE_NAME,
-                                                true,
+                                                shareStatus: true,
                                                 PluginConfiguration.MARKET_INFLUENCE_ENABLED.Value,
                                                 PluginConfiguration.MARKET_INFLUENCE_PRICE.Value,
                                                 ParseUpgradePrices(PluginConfiguration.MARKET_INFLUENCE_PRICES.Value));
@@ -353,7 +350,7 @@ namespace MoreShipUpgrades.Managers
         void SetupBargainConnectionsTerminalNode()
         {
             SetupMultiplePurchasableTerminalNode(BargainConnections.UPGRADE_NAME,
-                                                true,
+                                                shareStatus: true,
                                                 PluginConfiguration.BARGAIN_CONNECTIONS_ENABLED.Value,
                                                 PluginConfiguration.BARGAIN_CONNECTIONS_PRICE.Value,
                                                 ParseUpgradePrices(PluginConfiguration.BARGAIN_CONNECTIONS_PRICES.Value));
@@ -361,14 +358,14 @@ namespace MoreShipUpgrades.Managers
         void SetupLethalDealsTerminalNode()
         {
             SetupOneTimeTerminalNode(LethalDeals.UPGRADE_NAME,
-                                    true,
+                                    shareStatus: true,
                                     PluginConfiguration.LETHAL_DEALS_ENABLED.Value,
                                     PluginConfiguration.LETHAL_DEALS_PRICE.Value);
         }
         private void SetupQuantumDisruptorTerminalNode()
         {
             SetupMultiplePurchasableTerminalNode(QuantumDisruptor.UPGRADE_NAME,
-                                                true,
+                                                shareStatus: true,
                                                 PluginConfiguration.QUANTUM_DISRUPTOR_ENABLED.Value,
                                                 PluginConfiguration.QUANTUM_DISRUPTOR_PRICE.Value,
                                                 ParseUpgradePrices(PluginConfiguration.QUANTUM_DISRUPTOR_PRICES.Value));
@@ -376,7 +373,7 @@ namespace MoreShipUpgrades.Managers
         private void SetupShutterBatteriesTerminalNode()
         {
             SetupMultiplePurchasableTerminalNode(DoorsHydraulicsBattery.UPGRADE_NAME,
-                                                true,
+                                                shareStatus: true,
                                                 PluginConfiguration.DOOR_HYDRAULICS_BATTERY_ENABLED.Value,
                                                 PluginConfiguration.DOOR_HYDRAULICS_BATTERY_PRICE.Value,
                                                 ParseUpgradePrices(PluginConfiguration.DOOR_HYDRAULICS_BATTERY_PRICES.Value));
@@ -465,7 +462,7 @@ namespace MoreShipUpgrades.Managers
         {
             Hunter.SetupLevels();
             SetupMultiplePurchasableTerminalNode(Hunter.UPGRADE_NAME,
-                                                true,
+                                                shareStatus: true,
                                                 PluginConfiguration.HUNTER_ENABLED.Value,
                                                 PluginConfiguration.HUNTER_PRICE.Value,
                                                 ParseUpgradePrices(PluginConfiguration.HUNTER_UPGRADE_PRICES.Value));
@@ -482,14 +479,14 @@ namespace MoreShipUpgrades.Managers
         private void SetupLightningRodTerminalNode()
         {
             SetupOneTimeTerminalNode(LightningRod.UPGRADE_NAME,
-                                    true,
+                                    shareStatus: true,
                                     PluginConfiguration.LIGHTNING_ROD_ENABLED.Value,
                                     PluginConfiguration.LIGHTNING_ROD_PRICE.Value);
         }
         private void SetupWalkieGPSTerminalNode()
         {
             SetupOneTimeTerminalNode(WalkieGPS.UPGRADE_NAME,
-                                    true,
+                                    shareStatus: true,
                                     PluginConfiguration.WALKIE_ENABLED.Value,
                                     PluginConfiguration.WALKIE_PRICE.Value);
         }
@@ -504,7 +501,7 @@ namespace MoreShipUpgrades.Managers
         private void SetupPagerTerminalNode()
         {
             SetupOneTimeTerminalNode(FastEncryption.UPGRADE_NAME,
-                                    true,
+                                    shareStatus: true,
                                     PluginConfiguration.PAGER_ENABLED.Value,
                                     PluginConfiguration.PAGER_PRICE.Value);
         }
@@ -526,24 +523,32 @@ namespace MoreShipUpgrades.Managers
         private void SetupFasterDropPodTerminalNode()
         {
             SetupOneTimeTerminalNode(FasterDropPod.UPGRADE_NAME,
-                                    true,
+                                    shareStatus: true,
                                     PluginConfiguration.FASTER_DROP_POD_ENABLED.Value,
                                     PluginConfiguration.FASTER_DROP_POD_PRICE.Value);
         }
         private void SetupSigurdTerminalNode()
         {
             SetupOneTimeTerminalNode(Sigurd.UPGRADE_NAME,
-                                    true,
+                                    shareStatus: true,
                                     PluginConfiguration.SIGURD_ENABLED.Value || PluginConfiguration.SIGURD_LAST_DAY_ENABLED.Value,
                                     PluginConfiguration.SIGURD_PRICE.Value);
         }
         void SetupChargingBoosterTerminalNode()
         {
             SetupMultiplePurchasableTerminalNode(ChargingBooster.UPGRADE_NAME,
-                                                true,
+                                                shareStatus: true,
                                                 PluginConfiguration.CHARGING_BOOSTER_ENABLED.Value,
                                                 PluginConfiguration.CHARGING_BOOSTER_PRICE.Value,
                                                 ParseUpgradePrices(PluginConfiguration.CHARGING_BOOSTER_PRICES.Value));
+        }
+        void SetupLithiumBatteriesTerminalNode()
+        {
+            SetupMultiplePurchasableTerminalNode(LithiumBatteries.UPGRADE_NAME,
+                                                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.LITHIUM_BATTERIES_INDIVIDUAL.Value,
+                                                PluginConfiguration.LITHIUM_BATTERIES_ENABLED.Value,
+                                                PluginConfiguration.LITHIUM_BATTERIES_PRICE.Value,
+                                                ParseUpgradePrices(PluginConfiguration.LITHIUM_BATTERIES_PRICES.Value));
         }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can be purchased multiple times
@@ -569,8 +574,10 @@ namespace MoreShipUpgrades.Managers
             if (!enabled) return null;
 
             string infoString = SetupUpgradeInfo(upgrade: multiPerk.GetComponent<BaseUpgrade>(), shareStatus: shareStatus, price: initialPrice, incrementalPrices: prices);
+            string moreInfo = infoString;
+            if (multiPerk.GetComponent<BaseUpgrade>() is IUpgradeWorldBuilding component) moreInfo += component.GetWorldBuildingText(shareStatus) + "\n";
 
-            CustomTerminalNode node = new CustomTerminalNode(upgradeName, initialPrice, infoString, multiPerk, prices, prices.Length);
+            CustomTerminalNode node = new TierTerminalNode(upgradeName, initialPrice, infoString, multiPerk, prices, prices.Length, moreInfo);
             terminalNodes.Add(node);
             return node;
         }
@@ -594,8 +601,10 @@ namespace MoreShipUpgrades.Managers
             IndividualUpgrades.Add(upgradeName, shareStatus);
             if (!enabled) return;
             string info = SetupUpgradeInfo(upgrade: oneTimeUpgrade.GetComponent<BaseUpgrade>(), shareStatus: shareStatus, price: price);
+            string moreInfo = info;
+            if (oneTimeUpgrade.GetComponent<BaseUpgrade>() is IUpgradeWorldBuilding component) moreInfo += component.GetWorldBuildingText(shareStatus) + "\n";
 
-            CustomTerminalNode node = new CustomTerminalNode(upgradeName, price, info, oneTimeUpgrade);
+            CustomTerminalNode node = new OneTimeTerminalNode(upgradeName, price, info, oneTimeUpgrade, moreInfo);
             terminalNodes.Add(node);
         }
         private string SetupUpgradeInfo(BaseUpgrade upgrade = null, bool shareStatus = false, int price = -1, int[] incrementalPrices = null)
@@ -603,7 +612,6 @@ namespace MoreShipUpgrades.Managers
             string info = "";
             if (upgrade is IOneTimeUpgradeDisplayInfo upgradeInfo) info += upgradeInfo.GetDisplayInfo(price) + "\n";
             if (upgrade is ITierUpgradeDisplayInfo tierUpgradeInfo) info += tierUpgradeInfo.GetDisplayInfo(initialPrice: price, maxLevels: incrementalPrices.Length, incrementalPrices: incrementalPrices);
-            if (upgrade is IUpgradeWorldBuilding component) info += component.GetWorldBuildingText(shareStatus) + "\n";
             return info;
         }
         /// <summary>

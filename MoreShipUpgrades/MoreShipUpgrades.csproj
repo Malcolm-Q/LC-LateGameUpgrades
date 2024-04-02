@@ -32,10 +32,10 @@
       <HintPath>$(LC_PATH)\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="LethalCompanyInputUtils">
-      <HintPath>$(LC_PLUGIN_PATH)\LethalCompanyInputUtils\LethalCompanyInputUtils.dll</HintPath>
+      <HintPath>$(LC_PLUGIN_PATH)\Rune580-LethalCompany_InputUtils\LethalCompanyInputUtils\LethalCompanyInputUtils.dll</HintPath>
     </Reference>
     <Reference Include="com.sigurd.csync">
-      <HintPath>$(LC_PLUGIN_PATH)\CSync\com.sigurd.csync.dll</HintPath>
+      <HintPath>$(LC_PLUGIN_PATH)\Sigurd-CSync\CSync\com.sigurd.csync.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(LC_PATH)\Newtonsoft.Json.dll</HintPath>

@@ -17,7 +17,6 @@ using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using HarmonyLib;
-using LethalLib.Modules;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -37,29 +36,42 @@ namespace MoreShipUpgrades.Managers
             Instance = this;
             if (NetworkManager.IsHost)
             {
-                string saveFile = GameNetworkManager.Instance.currentSaveFileName;
-                int saveNum = GameNetworkManager.Instance.saveFileNum;
-                string filePath = Path.Combine(Application.persistentDataPath, $"LGU_{saveNum}.json");
-                if (File.Exists(filePath))
-                {
-                    string tempJson = File.ReadAllText(filePath);
-                    oldSave = JsonConvert.DeserializeObject<LGUSaveV1>(tempJson);
-                    File.Delete(filePath);
-                }
-                string json = (string)ES3.Load(key: saveDataKey, defaultValue: null, filePath: saveFile);
-                if (json != null)
-                {
-                    logger.LogInfo($"Loading save file for slot {saveNum}.");
-                    LguSave = JsonConvert.DeserializeObject<LguSave>(json);
-                }
-                else
-                {
-                    logger.LogInfo($"No save file found for slot {saveNum}. Creating new.");
-                    LguSave = new LguSave();
-                }
+                FetchLGUSaveFile();
                 UpdateUpgradeBus();
                 UpgradeBus.Instance.Reconstruct();
                 HandleSpawns();
+            }
+            else
+            {
+                StartCoroutine(WaitForConfigSync());
+            }
+        }
+        IEnumerator WaitForConfigSync()
+        {
+            yield return new WaitForSeconds(2.5f);
+            UpgradeBus.Instance.Reconstruct();
+        }
+        void FetchLGUSaveFile()
+        {
+            string saveFile = GameNetworkManager.Instance.currentSaveFileName;
+            int saveNum = GameNetworkManager.Instance.saveFileNum;
+            string filePath = Path.Combine(Application.persistentDataPath, $"LGU_{saveNum}.json");
+            if (File.Exists(filePath))
+            {
+                string tempJson = File.ReadAllText(filePath);
+                oldSave = JsonConvert.DeserializeObject<LGUSaveV1>(tempJson);
+                File.Delete(filePath);
+            }
+            string json = (string)ES3.Load(key: saveDataKey, defaultValue: null, filePath: saveFile);
+            if (json != null)
+            {
+                logger.LogInfo($"Loading save file for slot {saveNum}.");
+                LguSave = JsonConvert.DeserializeObject<LguSave>(json);
+            }
+            else
+            {
+                logger.LogInfo($"No save file found for slot {saveNum}. Creating new.");
+                LguSave = new LguSave();
             }
         }
 
@@ -338,8 +350,9 @@ namespace MoreShipUpgrades.Managers
                 int upgradeLevel = UpgradeBus.Instance.upgradeLevels.GetValueOrDefault(customNode.Name, 0);
                 customNode.Unlocked = activeUpgrade;
                 customNode.CurrentUpgrade = upgradeLevel;
-                bool free = UpgradeBus.Instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>().CanInitializeOnStart();
-                if (activeUpgrade || free) UpgradeBus.Instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>().Load();
+                BaseUpgrade comp = UpgradeBus.Instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>();
+                bool free = comp.CanInitializeOnStart();
+                if (activeUpgrade || free) comp.Load();
                 if (customNode.Name == NightVision.UPGRADE_NAME || free)
                 {
                     customNode.Unlocked = true;

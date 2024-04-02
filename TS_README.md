@@ -53,6 +53,10 @@ Anyone who contributes in any way is greatly appreciated. People willing to cont
     - Glitched
     - a glitched npc - [twitch](https://www.twitch.tv/a_glitched_npc)
 
+## Upgrade Store Interface
+``lgu`` prompts an interactive user interface in which you can select the upgrade you wish to upgrade or to simply check what it does through its displayed information.
+You can check the key binds used for More Ship Upgrades to understand how to navigate through the interface (and customize to your liking)
+
 ## Upgrades & Items
 ***Everything is tweakable via the config***
 
