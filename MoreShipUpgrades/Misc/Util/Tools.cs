@@ -4,14 +4,16 @@ using MoreShipUpgrades.Managers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Text;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace MoreShipUpgrades.Misc
+namespace MoreShipUpgrades.Misc.Util
 {
-    internal class Tools
+    internal static class Tools
     {
         static LguLogger logger = new LguLogger(nameof(Tools));
         public static int FindCodeInstruction(int index, ref List<CodeInstruction> codes, object findValue, MethodInfo addCode, bool skip = false, bool requireInstance = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, string errorMessage = "Not found")
@@ -69,7 +71,11 @@ namespace MoreShipUpgrades.Misc
         }
         public static int FindSub(int index, ref List<CodeInstruction> codes, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
         {
-            return FindCodeInstruction(index, ref codes, findValue : OpCodes.Sub, addCode, skip, notInstruction, andInstruction, orInstruction, requireInstance, errorMessage);
+            return FindCodeInstruction(index, ref codes, findValue: OpCodes.Sub, addCode, skip, notInstruction, andInstruction, orInstruction, requireInstance, errorMessage);
+        }
+        public static int FindDiv(int index, ref List<CodeInstruction> codes, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
+        {
+            return FindCodeInstruction(index, ref codes, findValue: OpCodes.Div, addCode, skip, notInstruction, andInstruction, orInstruction, requireInstance, errorMessage);
         }
         public static int FindAdd(int index, ref List<CodeInstruction> codes, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
         {
@@ -117,14 +123,14 @@ namespace MoreShipUpgrades.Misc
                 return result;
             }
             if (findValue is string) return code.opcode == OpCodes.Ldstr && code.operand.Equals(findValue);
-            if (findValue is MethodInfo) return (code.opcode == OpCodes.Call &&  code.operand == findValue);
+            if (findValue is MethodInfo) return (code.opcode == OpCodes.Call || code.opcode == OpCodes.Callvirt) && code.operand == findValue;
             if (findValue is FieldInfo) return (code.opcode == OpCodes.Ldfld || code.opcode == OpCodes.Stfld) && code.operand == findValue;
-            if (findValue is OpCode) return (code.opcode == (OpCode)findValue);
+            if (findValue is OpCode) return code.opcode == (OpCode)findValue;
             return false;
         }
         private static bool CheckIntegerCodeInstruction(CodeInstruction code, object findValue)
         {
-            switch((sbyte)findValue)
+            switch ((sbyte)findValue)
             {
                 case 0: return code.opcode == OpCodes.Ldc_I4_0;
                 case 1: return code.opcode == OpCodes.Ldc_I4_1;
@@ -143,7 +149,7 @@ namespace MoreShipUpgrades.Misc
         }
         public static void ShuffleList<T>(List<T> list)
         {
-            if(list == null) throw new ArgumentNullException("list");
+            if (list == null) throw new ArgumentNullException("list");
 
             System.Random random = new System.Random();
             int n = list.Count;
@@ -192,6 +198,62 @@ namespace MoreShipUpgrades.Misc
             if (hex == null || !ColorUtility.TryParseHtmlString("#" + hex.Trim('#', ' '), out Color color))
                 return defaultValue;
             return color;
+        }
+
+        internal static string WrapText(string text, int availableLength, string leftPadding = "", string rightPadding = "", bool padLeftFirst = true)
+        {
+            int actualLength = availableLength - leftPadding.Length - rightPadding.Length;
+            string result = "";
+            string currentLine = "";
+            int currentLinePosition = 0; // due to use of HTML tags
+            int possibleWrap = -1;
+            bool first = true;
+            bool HTMLTag = false;
+            for (int characterIndex = 0; characterIndex < text.Length; characterIndex++)
+            {
+                char character = text[characterIndex];
+                if (character == '<')
+                    HTMLTag = true;
+                if (character == ' ' && !HTMLTag)
+                {
+                    possibleWrap = currentLine.Length;
+                }
+                if (character != '\n')
+                {
+                    currentLine += character;
+                    if (!HTMLTag) currentLinePosition++;
+                }
+                if (character == '>' && HTMLTag) HTMLTag = false;
+                if (currentLinePosition >= actualLength || character == '\n')
+                {
+                    if (character != '\n' && character != ' ')
+                    {
+                        if (possibleWrap != -1)
+                        {
+                            string newText = (padLeftFirst || !first ? leftPadding : "") + currentLine.Substring(0, possibleWrap) + new string(' ', Mathf.Max(0, actualLength - possibleWrap)) + rightPadding;
+                            result += newText + '\n';
+                            currentLine = currentLine.Substring(possibleWrap + 1);
+                        }
+                        else
+                        {
+                            string newText = (padLeftFirst || !first ? leftPadding : "") + currentLine + rightPadding;
+                            result += newText + "\n";
+                            currentLine = "";
+                        }
+                    }
+                    else
+                    {
+                        if (currentLine != "") result += (padLeftFirst || !first ? leftPadding : "") + currentLine + new string(' ', Mathf.Max(0, actualLength - currentLinePosition)) + rightPadding + '\n';
+                        currentLine = "";
+                    }
+                    possibleWrap = -1;
+                    first = false;
+                    currentLinePosition = currentLine.Length;
+                }
+
+            }
+            if (currentLine != "") result += (padLeftFirst || !first ? leftPadding : "") + currentLine + new string(' ', Mathf.Max(0, actualLength - currentLinePosition)) + rightPadding + '\n';
+            return result;
         }
     }
 }

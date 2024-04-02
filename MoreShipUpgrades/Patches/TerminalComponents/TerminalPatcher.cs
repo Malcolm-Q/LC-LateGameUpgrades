@@ -1,11 +1,15 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
+using MoreShipUpgrades.Misc.UI;
+using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 namespace MoreShipUpgrades.Patches.TerminalComponents
 {
@@ -17,6 +21,17 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
         static void StartPostfix()
         {
             HelpTerminalNode.SetupLGUHelpCommand();
+        }
+        [HarmonyTranspiler]
+        [HarmonyPatch(nameof(Terminal.Update))]
+        static IEnumerable<CodeInstruction> UpdateTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo LategameStoreBeingUsed = typeof(UpgradesStore).GetMethod(nameof(UpgradesStore.UpgradeStoreBeingUsed));
+            MethodInfo wasPressed = typeof(ButtonControl).GetMethod("get_wasPressedThisFrame");
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            int index = 0;
+            index = Tools.FindMethod(index, ref codes, wasPressed, LategameStoreBeingUsed, notInstruction: true, andInstruction: true, errorMessage: "Couldn't find field used to check if the terminal is being used");
+            return codes;
         }
         [HarmonyPostfix]
         [HarmonyPatch(nameof(Terminal.ParsePlayerSentence))]

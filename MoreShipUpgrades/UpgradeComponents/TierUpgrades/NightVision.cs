@@ -11,6 +11,7 @@ using UnityEngine.InputSystem;
 using MoreShipUpgrades.Input;
 using UnityEngine.UI;
 using CSync.Lib;
+using MoreShipUpgrades.Misc.Util;
 
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
@@ -40,9 +41,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         internal override void Start()
         {
             base.Start();
-            transform.GetChild(0).GetChild(0).GetComponent<Image>().color = Tools.ConvertValueToColor(SyncedInstance<PluginConfig>.Default.NIGHT_VIS_UI_BAR_COLOR.Value, Color.green);
-            transform.GetChild(0).GetChild(1).GetComponent<Text>().color = Tools.ConvertValueToColor(SyncedInstance<PluginConfig>.Default.NIGHT_VIS_UI_TEXT_COLOR.Value, Color.white);
-            transform.GetChild(0).GetChild(2).GetComponent<Image>().color = Tools.ConvertValueToColor(SyncedInstance<PluginConfig>.Default.NIGHT_VIS_UI_BAR_COLOR.Value, Color.green);
+            transform.GetChild(0).GetChild(0).GetComponent<Image>().color = Tools.ConvertValueToColor(UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_UI_BAR_COLOR.LocalValue, Color.green);
+            transform.GetChild(0).GetChild(1).GetComponent<Text>().color = Tools.ConvertValueToColor(UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_UI_TEXT_COLOR.LocalValue, Color.white);
+            transform.GetChild(0).GetChild(2).GetComponent<Image>().color = Tools.ConvertValueToColor(UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_UI_BAR_COLOR.LocalValue, Color.green);
             transform.GetChild(0).gameObject.SetActive(false);
         }
 
@@ -121,7 +122,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             nightVisRange = client.nightVision.range;
             nightVisIntensity = client.nightVision.intensity;
 
-            client.nightVision.color = Tools.ConvertValueToColor(SyncedInstance<PluginConfig>.Default.NIGHT_VIS_COLOR.Value, Color.green);
+            client.nightVision.color = Tools.ConvertValueToColor(UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_COLOR.LocalValue, Color.green);
             client.nightVision.range = UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_RANGE.Value + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_RANGE_INCREMENT.Value;
             client.nightVision.intensity = UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_INTENSITY.Value + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_INTENSITY_INCREMENT.Value;
             nightBattery -= UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_STARTUP.Value; // 0.1f
