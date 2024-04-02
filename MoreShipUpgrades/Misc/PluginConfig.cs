@@ -5,13 +5,12 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
-using MoreShipUpgrades.Managers;
 using CSync.Lib;
 using System.Runtime.Serialization;
-using CSync.Util;
-using LethalLib.Modules;
-using UnityEngine;
 using CSync.Extensions;
+using LethalLib.Modules;
+using MoreShipUpgrades.Managers;
+using UnityEngine;
 
 
 namespace MoreShipUpgrades.Misc
@@ -20,294 +19,294 @@ namespace MoreShipUpgrades.Misc
     public class PluginConfig : SyncedConfig<PluginConfig>
     {
         // enabled disabled
-        [DataMember] public SyncedEntry<bool> CHARGING_BOOSTER_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> MARKET_INFLUENCE_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> BARGAIN_CONNECTIONS_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> LETHAL_DEALS_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> QUANTUM_DISRUPTOR_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> CONTRACTS_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> ADVANCED_TELE_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> WEAK_TELE_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> BEEKEEPER_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> PROTEIN_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> BIGGER_LUNGS_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> BACK_MUSCLES_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> NIGHT_VISION_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> RUNNING_SHOES_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> BETTER_SCANNER_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> STRONG_LEGS_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> DISCOMBOBULATOR_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> MALWARE_BROADCASTER_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> LIGHTNING_ROD_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> HUNTER_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> PLAYER_HEALTH_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> PEEPER_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> EXTEND_DEADLINE_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> WHEELBARROW_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> SCRAP_WHEELBARROW_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> DOOR_HYDRAULICS_BATTERY_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> SCRAP_INSURANCE_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> FASTER_DROP_POD_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> SIGURD_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> SIGURD_LAST_DAY_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> EFFICIENT_ENGINES_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> CLIMBING_GLOVES_ENABLED {  get; set; }
-        [DataMember] public SyncedEntry<bool> WEATHER_PROBE_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> LITHIUM_BATTERIES_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> CHARGING_BOOSTER_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> MARKET_INFLUENCE_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> BARGAIN_CONNECTIONS_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> LETHAL_DEALS_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> QUANTUM_DISRUPTOR_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> CONTRACTS_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> ADVANCED_TELE_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> WEAK_TELE_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> BEEKEEPER_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> PROTEIN_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> BIGGER_LUNGS_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> BACK_MUSCLES_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> NIGHT_VISION_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> RUNNING_SHOES_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> BETTER_SCANNER_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> STRONG_LEGS_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> DISCOMBOBULATOR_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> MALWARE_BROADCASTER_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> LIGHTNING_ROD_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> HUNTER_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> PLAYER_HEALTH_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> PEEPER_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> EXTEND_DEADLINE_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> WHEELBARROW_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> SCRAP_WHEELBARROW_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> DOOR_HYDRAULICS_BATTERY_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> SCRAP_INSURANCE_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> FASTER_DROP_POD_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> SIGURD_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> SIGURD_LAST_DAY_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> EFFICIENT_ENGINES_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> CLIMBING_GLOVES_ENABLED {  get; set; }
+        [field: DataMember] public SyncedEntry<bool> WEATHER_PROBE_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> LITHIUM_BATTERIES_ENABLED { get; set; }
         // individual or shared
-        [DataMember] public SyncedEntry<bool> BEEKEEPER_INDIVIDUAL { get; set; }
-        [DataMember] public SyncedEntry<bool> PROTEIN_INDIVIDUAL { get; set; }
-        [DataMember] public SyncedEntry<bool> BIGGER_LUNGS_INDIVIDUAL { get; set; }
-        [DataMember] public SyncedEntry<bool> BACK_MUSCLES_INDIVIDUAL { get; set; }
-        [DataMember] public SyncedEntry<bool> NIGHT_VISION_INDIVIDUAL { get; set; }
-        [DataMember] public SyncedEntry<bool> PLAYER_HEALTH_INDIVIDUAL { get; set; }
+        [field: DataMember] public SyncedEntry<bool> BEEKEEPER_INDIVIDUAL { get; set; }
+        [field: DataMember] public SyncedEntry<bool> PROTEIN_INDIVIDUAL { get; set; }
+        [field: DataMember] public SyncedEntry<bool> BIGGER_LUNGS_INDIVIDUAL { get; set; }
+        [field: DataMember] public SyncedEntry<bool> BACK_MUSCLES_INDIVIDUAL { get; set; }
+        [field: DataMember] public SyncedEntry<bool> NIGHT_VISION_INDIVIDUAL { get; set; }
+        [field: DataMember] public SyncedEntry<bool> PLAYER_HEALTH_INDIVIDUAL { get; set; }
 
-        [DataMember] public SyncedEntry<bool> RUNNING_SHOES_INDIVIDUAL { get; set; }
-        [DataMember] public SyncedEntry<bool> BETTER_SCANNER_INDIVIDUAL { get; set; }
-        [DataMember] public SyncedEntry<bool> STRONG_LEGS_INDIVIDUAL { get; set; }
-        [DataMember] public SyncedEntry<bool> DISCOMBOBULATOR_INDIVIDUAL { get; set; }
-        [DataMember] public SyncedEntry<bool> MALWARE_BROADCASTER_INDIVIDUAL { get; set; }
-        [DataMember] public SyncedEntry<bool> INTERN_INDIVIDUAL { get; set; }
-        [DataMember] public SyncedEntry<bool> LOCKSMITH_INDIVIDUAL { get; set; }
-        [DataMember] public SyncedEntry<bool> CLIMBING_GLOVES_INDIVIDUAL { get; set; }
-        [DataMember] public SyncedEntry<bool> LITHIUM_BATTERIES_INDIVIDUAL { get; set; }
+        [field: DataMember] public SyncedEntry<bool> RUNNING_SHOES_INDIVIDUAL { get; set; }
+        [field: DataMember] public SyncedEntry<bool> BETTER_SCANNER_INDIVIDUAL { get; set; }
+        [field: DataMember] public SyncedEntry<bool> STRONG_LEGS_INDIVIDUAL { get; set; }
+        [field: DataMember] public SyncedEntry<bool> DISCOMBOBULATOR_INDIVIDUAL { get; set; }
+        [field: DataMember] public SyncedEntry<bool> MALWARE_BROADCASTER_INDIVIDUAL { get; set; }
+        [field: DataMember] public SyncedEntry<bool> INTERN_INDIVIDUAL { get; set; }
+        [field: DataMember] public SyncedEntry<bool> LOCKSMITH_INDIVIDUAL { get; set; }
+        [field: DataMember] public SyncedEntry<bool> CLIMBING_GLOVES_INDIVIDUAL { get; set; }
+        [field: DataMember] public SyncedEntry<bool> LITHIUM_BATTERIES_INDIVIDUAL { get; set; }
         // prices
-        [DataMember] public SyncedEntry<int> CLIMBING_GLOVES_PRICE {  get; set; }
-        [DataMember] public SyncedEntry<int> WEATHER_PROBE_PRICE {  get; set; }
-        [DataMember] public SyncedEntry<int> WEATHER_PROBE_PICKED_WEATHER_PRICE {  get; set; }
-        [DataMember] public SyncedEntry<int> CHARGING_BOOSTER_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> MARKET_INFLUENCE_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> BARGAIN_CONNECTIONS_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> LETHAL_DEALS_PRICE { get; set; }
-        [DataMember] public SyncedEntry<float> QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER { get; set; }
-        [DataMember] public SyncedEntry<float> QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER { get; set; }
-        [DataMember] public SyncedEntry<string> QUANTUM_DISRUPTOR_PRICES { get; set; }
-        [DataMember] public SyncedEntry<int> QUANTUM_DISRUPTOR_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> PEEPER_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> HUNTER_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> ADVANCED_TELE_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> WEAK_TELE_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> BEEKEEPER_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> PROTEIN_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> BIGGER_LUNGS_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> BACK_MUSCLES_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> NIGHT_VISION_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> RUNNING_SHOES_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> BETTER_SCANNER_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> STRONG_LEGS_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> DISCOMBOBULATOR_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> MALWARE_BROADCASTER_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> WALKIE_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> LIGHTNING_ROD_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> PLAYER_HEALTH_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> EXTEND_DEADLINE_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> CONTRACT_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> CONTRACT_SPECIFY_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> WHEELBARROW_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> DOOR_HYDRAULICS_BATTERY_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> SCRAP_INSURANCE_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> FASTER_DROP_POD_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> SIGURD_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> EFFICIENT_ENGINES_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> LITHIUM_BATTERIES_PRICE {  get; set; }
+        [field: DataMember] public SyncedEntry<int> CLIMBING_GLOVES_PRICE {  get; set; }
+        [field: DataMember] public SyncedEntry<int> WEATHER_PROBE_PRICE {  get; set; }
+        [field: DataMember] public SyncedEntry<int> WEATHER_PROBE_PICKED_WEATHER_PRICE {  get; set; }
+        [field: DataMember] public SyncedEntry<int> CHARGING_BOOSTER_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> MARKET_INFLUENCE_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> BARGAIN_CONNECTIONS_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> LETHAL_DEALS_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<float> QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER { get; set; }
+        [field: DataMember] public SyncedEntry<float> QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER { get; set; }
+        [field: DataMember] public SyncedEntry<string> QUANTUM_DISRUPTOR_PRICES { get; set; }
+        [field: DataMember] public SyncedEntry<int> QUANTUM_DISRUPTOR_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> PEEPER_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> HUNTER_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> ADVANCED_TELE_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> WEAK_TELE_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> BEEKEEPER_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> PROTEIN_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> BIGGER_LUNGS_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> BACK_MUSCLES_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> NIGHT_VISION_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> RUNNING_SHOES_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> BETTER_SCANNER_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> STRONG_LEGS_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> DISCOMBOBULATOR_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> MALWARE_BROADCASTER_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> WALKIE_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> LIGHTNING_ROD_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> PLAYER_HEALTH_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> EXTEND_DEADLINE_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> CONTRACT_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> CONTRACT_SPECIFY_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> WHEELBARROW_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> DOOR_HYDRAULICS_BATTERY_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> SCRAP_INSURANCE_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> FASTER_DROP_POD_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> SIGURD_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> EFFICIENT_ENGINES_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> LITHIUM_BATTERIES_PRICE {  get; set; }
 
         // attributes
-        [DataMember] public SyncedEntry<string> LITHIUM_BATTERIES_PRICES { get; set; }
-        [DataMember] public SyncedEntry<int> LITHIUM_BATTERIES_INITIAL_MULTIPLIER { get; set; }
-        [DataMember] public SyncedEntry<int> LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER {  get; set; }
-        [DataMember] public SyncedEntry<string> EFFICIENT_ENGINES_PRICES {  get; set; }
-        [DataMember] public SyncedEntry<int> EFFICIENT_ENGINES_INITIAL_DISCOUNT {  get; set; }
-        [DataMember] public SyncedEntry<int> EFFICIENT_ENGINES_INCREMENTAL_DISCOUNT { get; set; }
-        [DataMember] public SyncedEntry<string> CLIMBING_GLOVES_PRICES {  get; set; }
-        [DataMember] public SyncedEntry<float> INITIAL_CLIMBING_SPEED_BOOST {  get; set; }
-        [DataMember] public SyncedEntry<float> INCREMENTAL_CLIMBING_SPEED_BOOST { get; set; }
-        [DataMember] public SyncedEntry<string> CHARGING_BOOSTER_PRICES { get; set; }
-        [DataMember] public SyncedEntry<float> CHARGING_BOOSTER_COOLDOWN { get; set; }
-        [DataMember] public SyncedEntry<float> CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE { get; set; }
-        [DataMember] public SyncedEntry<int> CHARGING_BOOSTER_CHARGE_PERCENTAGE { get; set; }
-        [DataMember] public SyncedEntry<float> BIGGER_LUNGS_STAMINA_REGEN_INCREASE { get; set; }
-        [DataMember] public SyncedEntry<float> BIGGER_LUNGS_STAMINA_REGEN_INCREMENTAL_INCREASE { get; set; }
-        [DataMember] public SyncedEntry<int> BIGGER_LUNGS_STAMINA_REGEN_APPLY_LEVEL { get; set; }
-        [DataMember] public SyncedEntry<int> BIGGER_LUNGS_JUMP_STAMINA_APPLY_LEVEL { get; set; }
-        [DataMember] public SyncedEntry<float> BIGGER_LUNGS_JUMP_STAMINA_COST_DECREASE { get; set; }
-        [DataMember] public SyncedEntry<float> BIGGER_LUNGS_JUMP_STAMINA_COST_INCREMENTAL_DECREASE { get; set; }
-        [DataMember] public SyncedEntry<int> PROTEIN_INCREMENT { get; set; }
-        [DataMember] public SyncedEntry<bool> KEEP_ITEMS_ON_TELE { get; set; }
-        [DataMember] public SyncedEntry<float> SPRINT_TIME_INCREASE_UNLOCK { get; set; }
-        [DataMember] public SyncedEntry<float> MOVEMENT_SPEED_UNLOCK { get; set; }
-        [DataMember] public SyncedEntry<float> JUMP_FORCE_UNLOCK { get; set; }
-        [DataMember] public SyncedEntry<bool> DESTROY_TRAP { get; set; }
-        [DataMember] public SyncedEntry<float> DISARM_TIME { get; set; }
-        [DataMember] public SyncedEntry<bool> EXPLODE_TRAP { get; set; }
-        [DataMember] public SyncedEntry<float> CARRY_WEIGHT_REDUCTION { get; set; }
-        [DataMember] public SyncedEntry<float> NODE_DISTANCE_INCREASE { get; set; }
-        [DataMember] public SyncedEntry<float> SHIP_AND_ENTRANCE_DISTANCE_INCREASE { get; set; }
-        [DataMember] public SyncedEntry<float> NOISE_REDUCTION { get; set; }
-        [DataMember] public SyncedEntry<float> DISCOMBOBULATOR_COOLDOWN { get; set; }
-        [DataMember] public SyncedEntry<float> ADV_CHANCE_TO_BREAK { get; set; }
-        [DataMember] public SyncedEntry<bool> ADV_KEEP_ITEMS_ON_TELE { get; set; }
-        [DataMember] public SyncedEntry<float> CHANCE_TO_BREAK { get; set; }
-        [DataMember] public SyncedEntry<float> BEEKEEPER_DAMAGE_MULTIPLIER { get; set; }
-        [DataMember] public SyncedEntry<float> BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT { get; set; }
-        [DataMember] public SyncedEntry<float> DISCOMBOBULATOR_RADIUS { get; set; }
-        [DataMember] public SyncedEntry<float> DISCOMBOBULATOR_STUN_DURATION { get; set; }
-        [DataMember] public SyncedEntry<bool> DISCOMBOBULATOR_NOTIFY_CHAT { get; set; }
-        [DataMember] public SyncedEntry<string> NIGHT_VIS_COLOR { get; set; }
-        [DataMember] public SyncedEntry<string> NIGHT_VIS_UI_TEXT_COLOR {  get; set; }
-        [DataMember] public SyncedEntry<string> NIGHT_VIS_UI_BAR_COLOR { get; set; }
-        [DataMember] public SyncedEntry<float> NIGHT_VIS_DRAIN_SPEED { get; set; }
-        [DataMember] public SyncedEntry<float> NIGHT_VIS_REGEN_SPEED { get; set; }
-        [DataMember] public SyncedEntry<float> NIGHT_BATTERY_MAX { get; set; }
-        [DataMember] public SyncedEntry<float> NIGHT_VIS_RANGE { get; set; }
-        [DataMember] public SyncedEntry<float> NIGHT_VIS_RANGE_INCREMENT { get; set; }
-        [DataMember] public SyncedEntry<float> NIGHT_VIS_INTENSITY { get; set; }
-        [DataMember] public SyncedEntry<float> NIGHT_VIS_INTENSITY_INCREMENT { get; set; }
-        [DataMember] public SyncedEntry<float> NIGHT_VIS_STARTUP { get; set; }
-        [DataMember] public SyncedEntry<float> NIGHT_VIS_EXHAUST { get; set; }
-        [DataMember] public SyncedEntry<float> NIGHT_VIS_DRAIN_INCREMENT { get; set; }
-        [DataMember] public SyncedEntry<float> NIGHT_VIS_REGEN_INCREMENT { get; set; }
-        [DataMember] public SyncedEntry<float> NIGHT_VIS_BATTERY_INCREMENT { get; set; }
-        [DataMember] public SyncedEntry<float> CARRY_WEIGHT_INCREMENT { get; set; }
-        [DataMember] public SyncedEntry<float> MOVEMENT_INCREMENT { get; set; }
-        [DataMember] public SyncedEntry<float> SPRINT_TIME_INCREMENT { get; set; }
-        [DataMember] public SyncedEntry<float> JUMP_FORCE_INCREMENT { get; set; }
-        [DataMember] public SyncedEntry<float> DISCOMBOBULATOR_INCREMENT { get; set; }
-        [DataMember] public SyncedEntry<int> INTERN_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> LOCKSMITH_PRICE { get; set; }
-        [DataMember] public SyncedEntry<bool> INTERN_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> LOCKSMITH_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<string> TOGGLE_NIGHT_VISION_KEY { get; set; }
-        [DataMember] public SyncedEntry<float> SALE_PERC { get; set; }
-        [DataMember] public SyncedEntry<bool> LOSE_NIGHT_VIS_ON_DEATH { get; set; }
-        [DataMember] public SyncedEntry<bool> NIGHT_VISION_DROP_ON_DEATH { get; set; }
-        [DataMember] public SyncedEntry<string> BEEKEEPER_UPGRADE_PRICES { get; set; }
-        [DataMember] public SyncedEntry<float> BEEKEEPER_HIVE_VALUE_INCREASE { get; set; }
-        [DataMember] public SyncedEntry<string> BACK_MUSCLES_UPGRADE_PRICES { get; set; }
-        [DataMember] public SyncedEntry<string> BIGGER_LUNGS_UPGRADE_PRICES { get; set; }
-        [DataMember] public SyncedEntry<string> NIGHT_VISION_UPGRADE_PRICES { get; set; }
-        [DataMember] public SyncedEntry<string> RUNNING_SHOES_UPGRADE_PRICES { get; set; }
-        [DataMember] public SyncedEntry<string> STRONG_LEGS_UPGRADE_PRICES { get; set; }
-        [DataMember] public SyncedEntry<string> DISCO_UPGRADE_PRICES { get; set; }
-        [DataMember] public SyncedEntry<string> PROTEIN_UPGRADE_PRICES { get; set; }
-        [DataMember] public SyncedEntry<string> PLAYER_HEALTH_UPGRADE_PRICES { get; set; }
-        [DataMember] public SyncedEntry<string> HUNTER_UPGRADE_PRICES { get; set; }
-        [DataMember] public SyncedEntry<string> HUNTER_SAMPLE_TIERS { get; set; }
-        [DataMember] public SyncedEntry<bool> SHARED_UPGRADES { get; set; }
-        [DataMember] public SyncedEntry<bool> WALKIE_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> WALKIE_INDIVIDUAL { get; set; }
-        [DataMember] public SyncedEntry<int> PROTEIN_UNLOCK_FORCE { get; set; }
-        [DataMember] public SyncedEntry<float> PROTEIN_CRIT_CHANCE { get; set; }
-        [DataMember] public SyncedEntry<int> BETTER_SCANNER_PRICE2 { get; set; }
-        [DataMember] public SyncedEntry<int> BETTER_SCANNER_PRICE3 { get; set; }
-        [DataMember] public SyncedEntry<bool> BETTER_SCANNER_ENEMIES { get; set; }
-        [DataMember] public SyncedEntry<bool> INTRO_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<bool> LIGHTNING_ROD_ACTIVE { get; set; }
-        [DataMember] public SyncedEntry<float> LIGHTNING_ROD_DIST { get; set; }
-        [DataMember] public SyncedEntry<bool> PAGER_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<int> PAGER_PRICE { get; set; }
-        [DataMember] public SyncedEntry<bool> VERBOSE_ENEMIES { get; set; }
-        [DataMember] public SyncedEntry<int> PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK { get; set; }
-        [DataMember] public SyncedEntry<int> PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT { get; set; }
-        [DataMember] public SyncedEntry<bool> MEDKIT_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<int> MEDKIT_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> MEDKIT_HEAL_VALUE { get; set; }
-        [DataMember] public SyncedEntry<int> MEDKIT_USES { get; set; }
-        [DataMember] public SyncedEntry<int> DIVEKIT_PRICE { get; set; }
-        [DataMember] public SyncedEntry<bool> DIVEKIT_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<float> DIVEKIT_WEIGHT { get; set; }
-        [DataMember] public SyncedEntry<bool> DIVEKIT_TWO_HANDED { get; set; }
-        [DataMember] public SyncedEntry<int> DISCOMBOBULATOR_DAMAGE_LEVEL { get; set; }
-        [DataMember] public SyncedEntry<int> DISCOMBOBULATOR_INITIAL_DAMAGE { get; set; }
-        [DataMember] public SyncedEntry<int> DISCOMBOBULATOR_DAMAGE_INCREASE { get; set; }
-        [DataMember] public SyncedEntry<float> STRONG_LEGS_REDUCE_FALL_DAMAGE_MULTIPLIER { get; set; }
-        [DataMember] public SyncedEntry<bool> KEEP_UPGRADES_AFTER_FIRED_CUTSCENE { get; set; }
-        [DataMember] public SyncedEntry<int> CONTRACT_BUG_REWARD { get; set; }
-        [DataMember] public SyncedEntry<int> CONTRACT_EXOR_REWARD { get; set; }
-        [DataMember] public SyncedEntry<int> CONTRACT_DEFUSE_REWARD { get; set; }
-        [DataMember] public SyncedEntry<int> CONTRACT_BUG_SPAWNS { get; set; }
-        [DataMember] public SyncedEntry<int> CONTRACT_EXTRACT_REWARD { get; set; }
-        [DataMember] public SyncedEntry<float> CONTRACT_EXTRACT_WEIGHT { get; set; }
-        [DataMember] public SyncedEntry<int> CONTRACT_DATA_REWARD { get; set; }
-        [DataMember] public SyncedEntry<bool> BEATS_INDIVIDUAL { get; set; }
-        [DataMember] public SyncedEntry<bool> BEATS_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<int> BEATS_PRICE { get; set; }
-        [DataMember] public SyncedEntry<bool> BEATS_SPEED { get; set; }
-        [DataMember] public SyncedEntry<bool> BEATS_DMG { get; set; }
-        [DataMember] public SyncedEntry<bool> BEATS_STAMINA { get; set; }
-        [DataMember] public SyncedEntry<float> BEATS_STAMINA_CO { get; set; }
-        [DataMember] public SyncedEntry<bool> BEATS_DEF { get; set; }
-        [DataMember] public SyncedEntry<float> BEATS_DEF_CO { get; set; }
-        [DataMember] public SyncedEntry<float> BEATS_SPEED_INC { get; set; }
-        [DataMember] public SyncedEntry<float> BEATS_RADIUS { get; set; }
-        [DataMember] public SyncedEntry<int> BEATS_DMG_INC { get; set; }
-        [DataMember] public SyncedEntry<bool> HELMET_ENABLED { get; set; }
-        [DataMember] public SyncedEntry<int> HELMET_PRICE { get; set; }
-        [DataMember] public SyncedEntry<int> HELMET_HITS_BLOCKED { get; set; }
-        [DataMember] public SyncedEntry<int> SNARE_FLEA_SAMPLE_MINIMUM_VALUE { get; set; }
-        [DataMember] public SyncedEntry<int> SNARE_FLEA_SAMPLE_MAXIMUM_VALUE { get; set; }
-        [DataMember] public SyncedEntry<int> BUNKER_SPIDER_SAMPLE_MINIMUM_VALUE { get; set; }
-        [DataMember] public SyncedEntry<int> BUNKER_SPIDER_SAMPLE_MAXIMUM_VALUE { get; set; }
-        [DataMember] public SyncedEntry<int> HOARDING_BUG_SAMPLE_MINIMUM_VALUE { get; set; }
-        [DataMember] public SyncedEntry<int> HOARDING_BUG_SAMPLE_MAXIMUM_VALUE { get; set; }
-        [DataMember] public SyncedEntry<int> BRACKEN_SAMPLE_MINIMUM_VALUE { get; set; }
-        [DataMember] public SyncedEntry<int> BRACKEN_SAMPLE_MAXIMUM_VALUE { get; set; }
-        [DataMember] public SyncedEntry<int> EYELESS_DOG_SAMPLE_MINIMUM_VALUE { get; set; }
-        [DataMember] public SyncedEntry<int> EYELESS_DOG_SAMPLE_MAXIMUM_VALUE { get; set; }
-        [DataMember] public SyncedEntry<int> BABOON_HAWK_SAMPLE_MINIMUM_VALUE { get; set; }
-        [DataMember] public SyncedEntry<int> BABOON_HAWK_SAMPLE_MAXIMUM_VALUE { get; set; }
-        [DataMember] public SyncedEntry<int> THUMPER_SAMPLE_MINIMUM_VALUE { get; set; }
-        [DataMember] public SyncedEntry<int> THUMPER_SAMPLE_MAXIMUM_VALUE { get; set; }
-        [DataMember] public SyncedEntry<int> CONTRACT_GHOST_SPAWN { get; set; }
-        [DataMember] public SyncedEntry<string> WHEELBARROW_RESTRICTION_MODE { get; set; }
-        [DataMember] public SyncedEntry<int> WHEELBARROW_MAXIMUM_AMOUNT_ITEMS { get; set; }
-        [DataMember] public SyncedEntry<float> WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED { get; set; }
-        [DataMember] public SyncedEntry<float> WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER { get; set; }
-        [DataMember] public SyncedEntry<float> WHEELBARROW_WEIGHT { get; set; }
-        [DataMember] public SyncedEntry<float> WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK { get; set; }
-        [DataMember] public SyncedEntry<float> WHEELBARROW_MOVEMENT_SLOPPY { get; set; }
-        [DataMember] public SyncedEntry<float> WHEELBARROW_NOISE_RANGE { get; set; }
-        [DataMember] public SyncedEntry<bool> WHEELBARROW_PLAY_NOISE { get; set; }
-        [DataMember] public SyncedEntry<string> SCRAP_WHEELBARROW_RESTRICTION_MODE { get; set; }
-        [DataMember] public SyncedEntry<int> SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS { get; set; }
-        [DataMember] public SyncedEntry<float> SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED { get; set; }
-        [DataMember] public SyncedEntry<float> SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER { get; set; }
-        [DataMember] public SyncedEntry<float> SCRAP_WHEELBARROW_WEIGHT { get; set; }
-        [DataMember] public SyncedEntry<float> SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK { get; set; }
-        [DataMember] public SyncedEntry<float> SCRAP_WHEELBARROW_NOISE_RANGE { get; set; }
-        [DataMember] public SyncedEntry<int> SCRAP_WHEELBARROW_MINIMUM_VALUE { get; set; }
-        [DataMember] public SyncedEntry<int> SCRAP_WHEELBARROW_MAXIMUM_VALUE { get; set; }
-        [DataMember] public SyncedEntry<float> SCRAP_WHEELBARROW_MOVEMENT_SLOPPY { get; set; }
-        [DataMember] public SyncedEntry<float> SCRAP_WHEELBARROW_RARITY { get; set; }
-        [DataMember] public SyncedEntry<bool> SCRAP_WHEELBARROW_PLAY_NOISE { get; set; }
-        [DataMember] public SyncedEntry<float> SCAV_VOLUME { get; set; }
-        [DataMember] public SyncedEntry<bool> CONTRACT_FREE_MOONS_ONLY { get; set; }
-        [DataMember] public SyncedEntry<string> DOOR_HYDRAULICS_BATTERY_PRICES { get; set; }
-        [DataMember] public SyncedEntry<float> DOOR_HYDRAULICS_BATTERY_INITIAL { get; set; }
-        [DataMember] public SyncedEntry<float> DOOR_HYDRAULICS_BATTERY_INCREMENTAL { get; set; }
-        [DataMember] public SyncedEntry<bool> DATA_CONTRACT { get; set; }
-        [DataMember] public SyncedEntry<bool> EXTERMINATOR_CONTRACT { get; set; }
-        [DataMember] public SyncedEntry<bool> EXORCISM_CONTRACT { get; set; }
-        [DataMember] public SyncedEntry<bool> EXTRACTION_CONTRACT { get; set; }
-        [DataMember] public SyncedEntry<bool> DEFUSAL_CONTRACT { get; set; }
-        [DataMember] public SyncedEntry<bool> MAIN_OBJECT_FURTHEST { get; set; }
-        [DataMember] public SyncedEntry<string> WHEELBARROW_DROP_ALL_CONTROL_BIND { get; set; }
-        [DataMember] public SyncedEntry<string> MARKET_INFLUENCE_PRICES { get; set; }
-        [DataMember] public SyncedEntry<int> MARKET_INFLUENCE_INITIAL_PERCENTAGE { get; set; }
-        [DataMember] public SyncedEntry<int> MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE { get; set; }
-        [DataMember] public SyncedEntry<int> BARGAIN_CONNECTIONS_INITIAL_ITEM_AMOUNT { get; set; }
-        [DataMember] public SyncedEntry<int> BARGAIN_CONNECTIONS_INCREMENTAL_ITEM_AMOUNT { get; set; }
-        [DataMember] public SyncedEntry<string> BARGAIN_CONNECTIONS_PRICES { get; set; }
-        [DataMember] public SyncedEntry<float> FASTER_DROP_POD_TIMER { get; set; }
-        [DataMember] public SyncedEntry<float> FASTER_DROP_POD_INITIAL_TIMER { get; set; }
-        [DataMember] public SyncedEntry<int> EXTRACTION_CONTRACT_AMOUNT_MEDKITS { get; set; }
-        [DataMember] public SyncedEntry<int> CONTRACT_REWARD_QUOTA_MULTIPLIER { get; set; }
-        [DataMember] public SyncedEntry<bool> SHOW_UPGRADES_CHAT { get; set; }
-        [DataMember] public SyncedEntry<float> SIGURD_CHANCE { get; set; }
-        [DataMember] public SyncedEntry<float> SIGURD_LAST_DAY_CHANCE { get; set; }
-        [DataMember] public SyncedEntry<float> SIGURD_PERCENT { get; set; }
-        [DataMember] public SyncedEntry<float> SIGURD_LAST_DAY_PERCENT { get; set; }
-        [DataMember] public SyncedEntry<bool> SALE_APPLY_ONCE { get; set; }
-        [DataMember] public SyncedEntry<bool> WEATHER_PROBE_ALWAYS_CLEAR {  get; set; }
+        [field: DataMember] public SyncedEntry<string> LITHIUM_BATTERIES_PRICES { get; set; }
+        [field: DataMember] public SyncedEntry<int> LITHIUM_BATTERIES_INITIAL_MULTIPLIER { get; set; }
+        [field: DataMember] public SyncedEntry<int> LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER {  get; set; }
+        [field: DataMember] public SyncedEntry<string> EFFICIENT_ENGINES_PRICES {  get; set; }
+        [field: DataMember] public SyncedEntry<int> EFFICIENT_ENGINES_INITIAL_DISCOUNT {  get; set; }
+        [field: DataMember] public SyncedEntry<int> EFFICIENT_ENGINES_INCREMENTAL_DISCOUNT { get; set; }
+        [field: DataMember] public SyncedEntry<string> CLIMBING_GLOVES_PRICES {  get; set; }
+        [field: DataMember] public SyncedEntry<float> INITIAL_CLIMBING_SPEED_BOOST {  get; set; }
+        [field: DataMember] public SyncedEntry<float> INCREMENTAL_CLIMBING_SPEED_BOOST { get; set; }
+        [field: DataMember] public SyncedEntry<string> CHARGING_BOOSTER_PRICES { get; set; }
+        [field: DataMember] public SyncedEntry<float> CHARGING_BOOSTER_COOLDOWN { get; set; }
+        [field: DataMember] public SyncedEntry<float> CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE { get; set; }
+        [field: DataMember] public SyncedEntry<int> CHARGING_BOOSTER_CHARGE_PERCENTAGE { get; set; }
+        [field: DataMember] public SyncedEntry<float> BIGGER_LUNGS_STAMINA_REGEN_INCREASE { get; set; }
+        [field: DataMember] public SyncedEntry<float> BIGGER_LUNGS_STAMINA_REGEN_INCREMENTAL_INCREASE { get; set; }
+        [field: DataMember] public SyncedEntry<int> BIGGER_LUNGS_STAMINA_REGEN_APPLY_LEVEL { get; set; }
+        [field: DataMember] public SyncedEntry<int> BIGGER_LUNGS_JUMP_STAMINA_APPLY_LEVEL { get; set; }
+        [field: DataMember] public SyncedEntry<float> BIGGER_LUNGS_JUMP_STAMINA_COST_DECREASE { get; set; }
+        [field: DataMember] public SyncedEntry<float> BIGGER_LUNGS_JUMP_STAMINA_COST_INCREMENTAL_DECREASE { get; set; }
+        [field: DataMember] public SyncedEntry<int> PROTEIN_INCREMENT { get; set; }
+        [field: DataMember] public SyncedEntry<bool> KEEP_ITEMS_ON_TELE { get; set; }
+        [field: DataMember] public SyncedEntry<float> SPRINT_TIME_INCREASE_UNLOCK { get; set; }
+        [field: DataMember] public SyncedEntry<float> MOVEMENT_SPEED_UNLOCK { get; set; }
+        [field: DataMember] public SyncedEntry<float> JUMP_FORCE_UNLOCK { get; set; }
+        [field: DataMember] public SyncedEntry<bool> DESTROY_TRAP { get; set; }
+        [field: DataMember] public SyncedEntry<float> DISARM_TIME { get; set; }
+        [field: DataMember] public SyncedEntry<bool> EXPLODE_TRAP { get; set; }
+        [field: DataMember] public SyncedEntry<float> CARRY_WEIGHT_REDUCTION { get; set; }
+        [field: DataMember] public SyncedEntry<float> NODE_DISTANCE_INCREASE { get; set; }
+        [field: DataMember] public SyncedEntry<float> SHIP_AND_ENTRANCE_DISTANCE_INCREASE { get; set; }
+        [field: DataMember] public SyncedEntry<float> NOISE_REDUCTION { get; set; }
+        [field: DataMember] public SyncedEntry<float> DISCOMBOBULATOR_COOLDOWN { get; set; }
+        [field: DataMember] public SyncedEntry<float> ADV_CHANCE_TO_BREAK { get; set; }
+        [field: DataMember] public SyncedEntry<bool> ADV_KEEP_ITEMS_ON_TELE { get; set; }
+        [field: DataMember] public SyncedEntry<float> CHANCE_TO_BREAK { get; set; }
+        [field: DataMember] public SyncedEntry<float> BEEKEEPER_DAMAGE_MULTIPLIER { get; set; }
+        [field: DataMember] public SyncedEntry<float> BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT { get; set; }
+        [field: DataMember] public SyncedEntry<float> DISCOMBOBULATOR_RADIUS { get; set; }
+        [field: DataMember] public SyncedEntry<float> DISCOMBOBULATOR_STUN_DURATION { get; set; }
+        [field: DataMember] public SyncedEntry<bool> DISCOMBOBULATOR_NOTIFY_CHAT { get; set; }
+        [field: DataMember] public SyncedEntry<string> NIGHT_VIS_COLOR { get; set; }
+        [field: DataMember] public SyncedEntry<string> NIGHT_VIS_UI_TEXT_COLOR {  get; set; }
+        [field: DataMember] public SyncedEntry<string> NIGHT_VIS_UI_BAR_COLOR { get; set; }
+        [field: DataMember] public SyncedEntry<float> NIGHT_VIS_DRAIN_SPEED { get; set; }
+        [field: DataMember] public SyncedEntry<float> NIGHT_VIS_REGEN_SPEED { get; set; }
+        [field: DataMember] public SyncedEntry<float> NIGHT_BATTERY_MAX { get; set; }
+        [field: DataMember] public SyncedEntry<float> NIGHT_VIS_RANGE { get; set; }
+        [field: DataMember] public SyncedEntry<float> NIGHT_VIS_RANGE_INCREMENT { get; set; }
+        [field: DataMember] public SyncedEntry<float> NIGHT_VIS_INTENSITY { get; set; }
+        [field: DataMember] public SyncedEntry<float> NIGHT_VIS_INTENSITY_INCREMENT { get; set; }
+        [field: DataMember] public SyncedEntry<float> NIGHT_VIS_STARTUP { get; set; }
+        [field: DataMember] public SyncedEntry<float> NIGHT_VIS_EXHAUST { get; set; }
+        [field: DataMember] public SyncedEntry<float> NIGHT_VIS_DRAIN_INCREMENT { get; set; }
+        [field: DataMember] public SyncedEntry<float> NIGHT_VIS_REGEN_INCREMENT { get; set; }
+        [field: DataMember] public SyncedEntry<float> NIGHT_VIS_BATTERY_INCREMENT { get; set; }
+        [field: DataMember] public SyncedEntry<float> CARRY_WEIGHT_INCREMENT { get; set; }
+        [field: DataMember] public SyncedEntry<float> MOVEMENT_INCREMENT { get; set; }
+        [field: DataMember] public SyncedEntry<float> SPRINT_TIME_INCREMENT { get; set; }
+        [field: DataMember] public SyncedEntry<float> JUMP_FORCE_INCREMENT { get; set; }
+        [field: DataMember] public SyncedEntry<float> DISCOMBOBULATOR_INCREMENT { get; set; }
+        [field: DataMember] public SyncedEntry<int> INTERN_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> LOCKSMITH_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<bool> INTERN_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> LOCKSMITH_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<string> TOGGLE_NIGHT_VISION_KEY { get; set; }
+        [field: DataMember] public SyncedEntry<float> SALE_PERC { get; set; }
+        [field: DataMember] public SyncedEntry<bool> LOSE_NIGHT_VIS_ON_DEATH { get; set; }
+        [field: DataMember] public SyncedEntry<bool> NIGHT_VISION_DROP_ON_DEATH { get; set; }
+        [field: DataMember] public SyncedEntry<string> BEEKEEPER_UPGRADE_PRICES { get; set; }
+        [field: DataMember] public SyncedEntry<float> BEEKEEPER_HIVE_VALUE_INCREASE { get; set; }
+        [field: DataMember] public SyncedEntry<string> BACK_MUSCLES_UPGRADE_PRICES { get; set; }
+        [field: DataMember] public SyncedEntry<string> BIGGER_LUNGS_UPGRADE_PRICES { get; set; }
+        [field: DataMember] public SyncedEntry<string> NIGHT_VISION_UPGRADE_PRICES { get; set; }
+        [field: DataMember] public SyncedEntry<string> RUNNING_SHOES_UPGRADE_PRICES { get; set; }
+        [field: DataMember] public SyncedEntry<string> STRONG_LEGS_UPGRADE_PRICES { get; set; }
+        [field: DataMember] public SyncedEntry<string> DISCO_UPGRADE_PRICES { get; set; }
+        [field: DataMember] public SyncedEntry<string> PROTEIN_UPGRADE_PRICES { get; set; }
+        [field: DataMember] public SyncedEntry<string> PLAYER_HEALTH_UPGRADE_PRICES { get; set; }
+        [field: DataMember] public SyncedEntry<string> HUNTER_UPGRADE_PRICES { get; set; }
+        [field: DataMember] public SyncedEntry<string> HUNTER_SAMPLE_TIERS { get; set; }
+        [field: DataMember] public SyncedEntry<bool> SHARED_UPGRADES { get; set; }
+        [field: DataMember] public SyncedEntry<bool> WALKIE_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> WALKIE_INDIVIDUAL { get; set; }
+        [field: DataMember] public SyncedEntry<int> PROTEIN_UNLOCK_FORCE { get; set; }
+        [field: DataMember] public SyncedEntry<float> PROTEIN_CRIT_CHANCE { get; set; }
+        [field: DataMember] public SyncedEntry<int> BETTER_SCANNER_PRICE2 { get; set; }
+        [field: DataMember] public SyncedEntry<int> BETTER_SCANNER_PRICE3 { get; set; }
+        [field: DataMember] public SyncedEntry<bool> BETTER_SCANNER_ENEMIES { get; set; }
+        [field: DataMember] public SyncedEntry<bool> INTRO_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> LIGHTNING_ROD_ACTIVE { get; set; }
+        [field: DataMember] public SyncedEntry<float> LIGHTNING_ROD_DIST { get; set; }
+        [field: DataMember] public SyncedEntry<bool> PAGER_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<int> PAGER_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<bool> VERBOSE_ENEMIES { get; set; }
+        [field: DataMember] public SyncedEntry<int> PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK { get; set; }
+        [field: DataMember] public SyncedEntry<int> PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT { get; set; }
+        [field: DataMember] public SyncedEntry<bool> MEDKIT_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<int> MEDKIT_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> MEDKIT_HEAL_VALUE { get; set; }
+        [field: DataMember] public SyncedEntry<int> MEDKIT_USES { get; set; }
+        [field: DataMember] public SyncedEntry<int> DIVEKIT_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<bool> DIVEKIT_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<float> DIVEKIT_WEIGHT { get; set; }
+        [field: DataMember] public SyncedEntry<bool> DIVEKIT_TWO_HANDED { get; set; }
+        [field: DataMember] public SyncedEntry<int> DISCOMBOBULATOR_DAMAGE_LEVEL { get; set; }
+        [field: DataMember] public SyncedEntry<int> DISCOMBOBULATOR_INITIAL_DAMAGE { get; set; }
+        [field: DataMember] public SyncedEntry<int> DISCOMBOBULATOR_DAMAGE_INCREASE { get; set; }
+        [field: DataMember] public SyncedEntry<float> STRONG_LEGS_REDUCE_FALL_DAMAGE_MULTIPLIER { get; set; }
+        [field: DataMember] public SyncedEntry<bool> KEEP_UPGRADES_AFTER_FIRED_CUTSCENE { get; set; }
+        [field: DataMember] public SyncedEntry<int> CONTRACT_BUG_REWARD { get; set; }
+        [field: DataMember] public SyncedEntry<int> CONTRACT_EXOR_REWARD { get; set; }
+        [field: DataMember] public SyncedEntry<int> CONTRACT_DEFUSE_REWARD { get; set; }
+        [field: DataMember] public SyncedEntry<int> CONTRACT_BUG_SPAWNS { get; set; }
+        [field: DataMember] public SyncedEntry<int> CONTRACT_EXTRACT_REWARD { get; set; }
+        [field: DataMember] public SyncedEntry<float> CONTRACT_EXTRACT_WEIGHT { get; set; }
+        [field: DataMember] public SyncedEntry<int> CONTRACT_DATA_REWARD { get; set; }
+        [field: DataMember] public SyncedEntry<bool> BEATS_INDIVIDUAL { get; set; }
+        [field: DataMember] public SyncedEntry<bool> BEATS_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<int> BEATS_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<bool> BEATS_SPEED { get; set; }
+        [field: DataMember] public SyncedEntry<bool> BEATS_DMG { get; set; }
+        [field: DataMember] public SyncedEntry<bool> BEATS_STAMINA { get; set; }
+        [field: DataMember] public SyncedEntry<float> BEATS_STAMINA_CO { get; set; }
+        [field: DataMember] public SyncedEntry<bool> BEATS_DEF { get; set; }
+        [field: DataMember] public SyncedEntry<float> BEATS_DEF_CO { get; set; }
+        [field: DataMember] public SyncedEntry<float> BEATS_SPEED_INC { get; set; }
+        [field: DataMember] public SyncedEntry<float> BEATS_RADIUS { get; set; }
+        [field: DataMember] public SyncedEntry<int> BEATS_DMG_INC { get; set; }
+        [field: DataMember] public SyncedEntry<bool> HELMET_ENABLED { get; set; }
+        [field: DataMember] public SyncedEntry<int> HELMET_PRICE { get; set; }
+        [field: DataMember] public SyncedEntry<int> HELMET_HITS_BLOCKED { get; set; }
+        [field: DataMember] public SyncedEntry<int> SNARE_FLEA_SAMPLE_MINIMUM_VALUE { get; set; }
+        [field: DataMember] public SyncedEntry<int> SNARE_FLEA_SAMPLE_MAXIMUM_VALUE { get; set; }
+        [field: DataMember] public SyncedEntry<int> BUNKER_SPIDER_SAMPLE_MINIMUM_VALUE { get; set; }
+        [field: DataMember] public SyncedEntry<int> BUNKER_SPIDER_SAMPLE_MAXIMUM_VALUE { get; set; }
+        [field: DataMember] public SyncedEntry<int> HOARDING_BUG_SAMPLE_MINIMUM_VALUE { get; set; }
+        [field: DataMember] public SyncedEntry<int> HOARDING_BUG_SAMPLE_MAXIMUM_VALUE { get; set; }
+        [field: DataMember] public SyncedEntry<int> BRACKEN_SAMPLE_MINIMUM_VALUE { get; set; }
+        [field: DataMember] public SyncedEntry<int> BRACKEN_SAMPLE_MAXIMUM_VALUE { get; set; }
+        [field: DataMember] public SyncedEntry<int> EYELESS_DOG_SAMPLE_MINIMUM_VALUE { get; set; }
+        [field: DataMember] public SyncedEntry<int> EYELESS_DOG_SAMPLE_MAXIMUM_VALUE { get; set; }
+        [field: DataMember] public SyncedEntry<int> BABOON_HAWK_SAMPLE_MINIMUM_VALUE { get; set; }
+        [field: DataMember] public SyncedEntry<int> BABOON_HAWK_SAMPLE_MAXIMUM_VALUE { get; set; }
+        [field: DataMember] public SyncedEntry<int> THUMPER_SAMPLE_MINIMUM_VALUE { get; set; }
+        [field: DataMember] public SyncedEntry<int> THUMPER_SAMPLE_MAXIMUM_VALUE { get; set; }
+        [field: DataMember] public SyncedEntry<int> CONTRACT_GHOST_SPAWN { get; set; }
+        [field: DataMember] public SyncedEntry<string> WHEELBARROW_RESTRICTION_MODE { get; set; }
+        [field: DataMember] public SyncedEntry<int> WHEELBARROW_MAXIMUM_AMOUNT_ITEMS { get; set; }
+        [field: DataMember] public SyncedEntry<float> WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED { get; set; }
+        [field: DataMember] public SyncedEntry<float> WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER { get; set; }
+        [field: DataMember] public SyncedEntry<float> WHEELBARROW_WEIGHT { get; set; }
+        [field: DataMember] public SyncedEntry<float> WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK { get; set; }
+        [field: DataMember] public SyncedEntry<float> WHEELBARROW_MOVEMENT_SLOPPY { get; set; }
+        [field: DataMember] public SyncedEntry<float> WHEELBARROW_NOISE_RANGE { get; set; }
+        [field: DataMember] public SyncedEntry<bool> WHEELBARROW_PLAY_NOISE { get; set; }
+        [field: DataMember] public SyncedEntry<string> SCRAP_WHEELBARROW_RESTRICTION_MODE { get; set; }
+        [field: DataMember] public SyncedEntry<int> SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS { get; set; }
+        [field: DataMember] public SyncedEntry<float> SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED { get; set; }
+        [field: DataMember] public SyncedEntry<float> SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER { get; set; }
+        [field: DataMember] public SyncedEntry<float> SCRAP_WHEELBARROW_WEIGHT { get; set; }
+        [field: DataMember] public SyncedEntry<float> SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK { get; set; }
+        [field: DataMember] public SyncedEntry<float> SCRAP_WHEELBARROW_NOISE_RANGE { get; set; }
+        [field: DataMember] public SyncedEntry<int> SCRAP_WHEELBARROW_MINIMUM_VALUE { get; set; }
+        [field: DataMember] public SyncedEntry<int> SCRAP_WHEELBARROW_MAXIMUM_VALUE { get; set; }
+        [field: DataMember] public SyncedEntry<float> SCRAP_WHEELBARROW_MOVEMENT_SLOPPY { get; set; }
+        [field: DataMember] public SyncedEntry<float> SCRAP_WHEELBARROW_RARITY { get; set; }
+        [field: DataMember] public SyncedEntry<bool> SCRAP_WHEELBARROW_PLAY_NOISE { get; set; }
+        [field: DataMember] public SyncedEntry<float> SCAV_VOLUME { get; set; }
+        [field: DataMember] public SyncedEntry<bool> CONTRACT_FREE_MOONS_ONLY { get; set; }
+        [field: DataMember] public SyncedEntry<string> DOOR_HYDRAULICS_BATTERY_PRICES { get; set; }
+        [field: DataMember] public SyncedEntry<float> DOOR_HYDRAULICS_BATTERY_INITIAL { get; set; }
+        [field: DataMember] public SyncedEntry<float> DOOR_HYDRAULICS_BATTERY_INCREMENTAL { get; set; }
+        [field: DataMember] public SyncedEntry<bool> DATA_CONTRACT { get; set; }
+        [field: DataMember] public SyncedEntry<bool> EXTERMINATOR_CONTRACT { get; set; }
+        [field: DataMember] public SyncedEntry<bool> EXORCISM_CONTRACT { get; set; }
+        [field: DataMember] public SyncedEntry<bool> EXTRACTION_CONTRACT { get; set; }
+        [field: DataMember] public SyncedEntry<bool> DEFUSAL_CONTRACT { get; set; }
+        [field: DataMember] public SyncedEntry<bool> MAIN_OBJECT_FURTHEST { get; set; }
+        [field: DataMember] public SyncedEntry<string> WHEELBARROW_DROP_ALL_CONTROL_BIND { get; set; }
+        [field: DataMember] public SyncedEntry<string> MARKET_INFLUENCE_PRICES { get; set; }
+        [field: DataMember] public SyncedEntry<int> MARKET_INFLUENCE_INITIAL_PERCENTAGE { get; set; }
+        [field: DataMember] public SyncedEntry<int> MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE { get; set; }
+        [field: DataMember] public SyncedEntry<int> BARGAIN_CONNECTIONS_INITIAL_ITEM_AMOUNT { get; set; }
+        [field: DataMember] public SyncedEntry<int> BARGAIN_CONNECTIONS_INCREMENTAL_ITEM_AMOUNT { get; set; }
+        [field: DataMember] public SyncedEntry<string> BARGAIN_CONNECTIONS_PRICES { get; set; }
+        [field: DataMember] public SyncedEntry<float> FASTER_DROP_POD_TIMER { get; set; }
+        [field: DataMember] public SyncedEntry<float> FASTER_DROP_POD_INITIAL_TIMER { get; set; }
+        [field: DataMember] public SyncedEntry<int> EXTRACTION_CONTRACT_AMOUNT_MEDKITS { get; set; }
+        [field: DataMember] public SyncedEntry<int> CONTRACT_REWARD_QUOTA_MULTIPLIER { get; set; }
+        [field: DataMember] public SyncedEntry<bool> SHOW_UPGRADES_CHAT { get; set; }
+        [field: DataMember] public SyncedEntry<float> SIGURD_CHANCE { get; set; }
+        [field: DataMember] public SyncedEntry<float> SIGURD_LAST_DAY_CHANCE { get; set; }
+        [field: DataMember] public SyncedEntry<float> SIGURD_PERCENT { get; set; }
+        [field: DataMember] public SyncedEntry<float> SIGURD_LAST_DAY_PERCENT { get; set; }
+        [field: DataMember] public SyncedEntry<bool> SALE_APPLY_ONCE { get; set; }
+        [field: DataMember] public SyncedEntry<bool> WEATHER_PROBE_ALWAYS_CLEAR {  get; set; }
 
         public PluginConfig(ConfigFile cfg) : base(Metadata.GUID)
         {
@@ -683,6 +682,23 @@ namespace MoreShipUpgrades.Misc
             SCRAP_WHEELBARROW_MOVEMENT_SLOPPY = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Sloppiness of the Shopping Cart Item", 2f, "Value multiplied on the player's movement to give the feeling of drifting while carrying the Scrap Wheelbarrow Item");
             SCRAP_WHEELBARROW_PLAY_NOISE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Plays noises for players with Shopping Cart Item", true, "If false, it will just not play the sounds, it will still attract monsters to noise");
             WHEELBARROW_DROP_ALL_CONTROL_BIND = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Control bind for drop all items", "<Mouse>/middleButton", "More info in Unity's Control Path documentation in the new Input System");
+            InitialSyncCompleted += PluginConfig_InitialSyncCompleted;
+        }
+
+        private void PluginConfig_InitialSyncCompleted(object sender, EventArgs e)
+        {
+            UpgradeBus.Instance.PluginConfiguration = Instance;
+            CheckMedkit();
+            UpgradeBus.Instance.Reconstruct();
+        }
+
+        void CheckMedkit()
+        {
+            int amount = UpgradeBus.Instance.spawnableMapObjectsAmount["MedkitMapItem"];
+            if (amount == UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value) return;
+            MapObjects.RemoveMapObject(UpgradeBus.Instance.spawnableMapObjects["MedkitMapItem"], Levels.LevelTypes.All);
+            AnimationCurve curve = new(new Keyframe(0f, UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value), new Keyframe(1f, UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value));
+            MapObjects.RegisterMapObject(mapObject: UpgradeBus.Instance.spawnableMapObjects["MedkitMapItem"], levels: Levels.LevelTypes.All, spawnRateFunction: (level) => curve);
         }
 
     }

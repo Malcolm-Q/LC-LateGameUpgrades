@@ -159,7 +159,6 @@ namespace MoreShipUpgrades.Misc
             {
                 logger.LogError($"An error has occurred trying to load asset from {path}");
             }
-            logger.LogDebug($"Loaded asset located in {path}");
             return result;
         }
         /// <summary>
@@ -178,7 +177,6 @@ namespace MoreShipUpgrades.Misc
             {
                 logger.LogError($"An error has occurred trying to load asset from {path}");
             }
-            logger.LogDebug($"Loaded asset located in {path}");
             return result;
         }
 
@@ -189,7 +187,6 @@ namespace MoreShipUpgrades.Misc
             {
                 logger.LogError($"An error has occurred trying to load asset from {path}");
             }
-            logger.LogDebug($"Loaded asset located in {path}");
             return result;
         }
 
@@ -209,7 +206,6 @@ namespace MoreShipUpgrades.Misc
             {
                 logger.LogError($"An error has occurred trying to load asset from {path}");
             }
-            logger.LogDebug($"Loaded asset located in {path}");
             return result;
         }
 

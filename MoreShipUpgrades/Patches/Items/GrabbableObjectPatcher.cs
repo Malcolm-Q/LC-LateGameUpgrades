@@ -20,7 +20,6 @@ namespace MoreShipUpgrades.Patches.Items
             index = Tools.FindField(index, ref codes, batteryUsage, GetChargeOnUse, errorMessage: "Couldn't find the field which is used to drain the item's battery on use");
             return codes;
         }
-        [HarmonyDebug]
         [HarmonyTranspiler]
         [HarmonyPatch(nameof(GrabbableObject.Update))]
         static IEnumerable<CodeInstruction> UpdateTranspiler(IEnumerable<CodeInstruction> instructions)

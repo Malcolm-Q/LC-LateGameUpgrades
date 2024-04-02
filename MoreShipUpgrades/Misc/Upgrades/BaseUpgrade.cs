@@ -39,7 +39,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
         public virtual void Load()
         {
             UpgradeBus.Instance.activeUpgrades[upgradeName] = true;
-            if (!SyncedInstance<PluginConfig>.Default.SHOW_UPGRADES_CHAT.Value) return;
+            if (!UpgradeBus.Instance.PluginConfiguration.SHOW_UPGRADES_CHAT.LocalValue) return;
             ShowUpgradeNotification(Constants.UPGRADE_UNLOADED_NOTIFICATION_DEFAULT_COLOR, $"{upgradeName} is active!");
         }
         /// <summary>
@@ -55,7 +55,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
         public virtual void Unwind()
         {
             UpgradeBus.Instance.activeUpgrades[upgradeName] = false;
-            if (!SyncedInstance<PluginConfig>.Default.SHOW_UPGRADES_CHAT.Value) return;
+            if (!UpgradeBus.Instance.PluginConfiguration.SHOW_UPGRADES_CHAT.LocalValue) return;
             ShowUpgradeNotification(Constants.UPGRADE_LOADED_NOTIFICATION_DEFAULT_COLOR, $"{upgradeName} has been disabled!");
         }
         /// <summary>

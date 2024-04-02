@@ -17,7 +17,6 @@ using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using HarmonyLib;
-using LethalLib.Modules;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -42,14 +41,15 @@ namespace MoreShipUpgrades.Managers
                 UpgradeBus.Instance.Reconstruct();
                 HandleSpawns();
             }
+            else
+            {
+                StartCoroutine(WaitForConfigSync());
+            }
         }
-        void CheckMedkit()
+        IEnumerator WaitForConfigSync()
         {
-            int amount = UpgradeBus.Instance.spawnableMapObjectsAmount["MedkitMapItem"];
-            if (amount == UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value) return;
-            MapObjects.RemoveMapObject(UpgradeBus.Instance.spawnableMapObjects["MedkitMapItem"], Levels.LevelTypes.All);
-            AnimationCurve curve = new(new Keyframe(0f, UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value), new Keyframe(1f, UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value));
-            MapObjects.RegisterMapObject(mapObject: UpgradeBus.Instance.spawnableMapObjects["MedkitMapItem"], levels: Levels.LevelTypes.All, spawnRateFunction: (level) => curve);
+            yield return new WaitForSeconds(2.5f);
+            UpgradeBus.Instance.Reconstruct();
         }
         void FetchLGUSaveFile()
         {

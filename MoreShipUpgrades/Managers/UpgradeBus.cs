@@ -57,7 +57,7 @@ namespace MoreShipUpgrades.Managers
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            PluginConfiguration = PluginConfig.Instance;
+            PluginConfiguration = Plugin.Config;
         }
 
         public Terminal GetTerminal()
