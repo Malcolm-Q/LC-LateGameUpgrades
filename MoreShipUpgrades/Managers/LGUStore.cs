@@ -34,6 +34,7 @@ namespace MoreShipUpgrades.Managers
         private void Start()
         {
             Instance = this;
+            Plugin.TryPatchBetaVersion(GameNetworkManager.Instance.gameVersionNum);
             if (NetworkManager.IsHost)
             {
                 FetchLGUSaveFile();

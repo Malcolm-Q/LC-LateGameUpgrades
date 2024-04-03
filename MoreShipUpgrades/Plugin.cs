@@ -28,7 +28,14 @@ using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using System.Linq;
 using MoreShipUpgrades.Compat;
-using UnityEngine.InputSystem;
+using MoreShipUpgrades.Patches.Enemies;
+using MoreShipUpgrades.Patches.HUD;
+using MoreShipUpgrades.Patches.Interactables;
+using MoreShipUpgrades.Patches.Items;
+using MoreShipUpgrades.Patches.NetworkManager;
+using MoreShipUpgrades.Patches.PlayerController;
+using MoreShipUpgrades.Patches.RoundComponents;
+using MoreShipUpgrades.Patches.TerminalComponents;
 using MoreShipUpgrades.Input;
 
 namespace MoreShipUpgrades
@@ -39,7 +46,7 @@ namespace MoreShipUpgrades
     [BepInDependency("com.rune580.LethalCompanyInputUtils")]
     public class Plugin : BaseUnityPlugin
     {
-        readonly Harmony harmony = new(Metadata.GUID);
+        internal static readonly Harmony harmony = new(Metadata.GUID);
         internal static readonly ManualLogSource mls = BepInEx.Logging.Logger.CreateLogSource(Metadata.NAME);
         AudioClip itemBreak, buttonPressed, error;
         AudioClip[] wheelbarrowSound, shoppingCartSound;
@@ -97,12 +104,80 @@ namespace MoreShipUpgrades
             SetupContractMapObjects(ref UpgradeAssets);
 
             InputUtils_Compat.Init();
-
-            harmony.PatchAll();
+            PatchMainVersion();
 
             mls.LogDebug("LGU has been patched");
         }
 
+        // Change to -1 incase of no public beta, change to public beta version otherwise
+        const int UNDEFINED_BETA_VERSION = -1;
+        static readonly int BETA_VERSION = 50;
+        internal static void TryPatchBetaVersion(int currentVersion)
+        {
+            if (currentVersion >= BETA_VERSION)
+            {
+                Plugin.harmony.PatchAll(typeof(KnifePatcher));
+                Plugin.harmony.PatchAll(typeof(ButlerBeesPatcher));
+            }
+        }
+        internal static void PatchMainVersion()
+        {
+            if (BETA_VERSION == UNDEFINED_BETA_VERSION) harmony.PatchAll();
+            PatchEnemies();
+            PatchHUD();
+            PatchInteractables();
+            PatchItems();
+            PatchVitalComponents();
+            PatchWeather();
+        }
+        static void PatchEnemies()
+        {
+            harmony.PatchAll(typeof(BaboonBirdAIPatcher));
+            harmony.PatchAll(typeof(EnemyAIPatcher));
+            harmony.PatchAll(typeof(HoarderBugAIPatcher));
+            harmony.PatchAll(typeof(RedLocustBeesPatch));
+            harmony.PatchAll(typeof(SpringManAIPatcher));
+        }
+
+        static void PatchHUD()
+        {
+            harmony.PatchAll(typeof(HudManagerPatcher));
+        }
+
+        static void PatchInteractables()
+        {
+            harmony.PatchAll(typeof(DoorLockPatcher));
+            harmony.PatchAll(typeof(InteractTriggerPatcher));
+            harmony.PatchAll(typeof(StartMatchLevelPatcher));
+            harmony.PatchAll(typeof(SteamValveHazardPatch));
+        }
+
+        static void PatchItems()
+        {
+            harmony.PatchAll(typeof(BoomBoxPatcher));
+            harmony.PatchAll(typeof(DropPodPatcher));
+            harmony.PatchAll(typeof(GrabbableObjectPatcher));
+            harmony.PatchAll(typeof(RadarBoosterPatcher));
+            harmony.PatchAll(typeof(ShovelPatcher));
+            harmony.PatchAll(typeof(WalkiePatcher));
+        }
+        static void PatchVitalComponents()
+        {
+            harmony.PatchAll(typeof(GameNetworkManagerPatcher));
+            harmony.PatchAll(typeof(PlayerControllerBPatcher));
+            harmony.PatchAll(typeof(RoundManagerPatcher));
+            harmony.PatchAll(typeof(RoundManagerTranspilerPatcher));
+            harmony.PatchAll(typeof(StartOfRoundPatcher));
+            harmony.PatchAll(typeof(TimeOfDayPatcher));
+            harmony.PatchAll(typeof(TimeOfDayTranspilerPatcher));
+            harmony.PatchAll(typeof(TerminalAccessibleObjectPatcher));
+            harmony.PatchAll(typeof(TerminalPatcher));
+            harmony.PatchAll(typeof(Keybinds));
+        }
+        static void PatchWeather()
+        {
+            harmony.PatchAll(typeof(StormyWeather));
+        }
         // I don't even know if modsync is still used but here we are.
         public void sendModInfo()
         {
