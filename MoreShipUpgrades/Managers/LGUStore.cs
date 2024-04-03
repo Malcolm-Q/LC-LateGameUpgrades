@@ -17,6 +17,7 @@ using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using HarmonyLib;
+using MoreShipUpgrades.Patches.NetworkManager;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -34,7 +35,7 @@ namespace MoreShipUpgrades.Managers
         private void Start()
         {
             Instance = this;
-            Plugin.TryPatchBetaVersion(GameNetworkManager.Instance.gameVersionNum);
+            Plugin.TryPatchBetaVersion(GameNetworkManagerPatcher.originalVersion);
             if (NetworkManager.IsHost)
             {
                 FetchLGUSaveFile();

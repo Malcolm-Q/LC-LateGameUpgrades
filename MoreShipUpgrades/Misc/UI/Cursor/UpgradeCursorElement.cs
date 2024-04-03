@@ -1,6 +1,7 @@
 ﻿using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Util;
 using System.Text;
+using UnityEngine;
 
 namespace MoreShipUpgrades.Misc.UI.Cursor
 {
@@ -13,13 +14,13 @@ namespace MoreShipUpgrades.Misc.UI.Cursor
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(new string(Constants.WHITE_SPACE, 2));
-            string name = Node.Name.Length > Constants.NAME_LENGTH ? Node.Name.Substring(0, Constants.NAME_LENGTH) : Node.Name + new string(Constants.WHITE_SPACE, Constants.NAME_LENGTH -Node.Name.Length);
+            string name = Node.Name.Length > Constants.NAME_LENGTH ? Node.Name.Substring(0, Constants.NAME_LENGTH) : Node.Name + new string(Constants.WHITE_SPACE, Mathf.Max(0, Constants.NAME_LENGTH-Node.Name.Length));
             sb.Append(name);
 
             int currentLevel = Node.Unlocked ? Node.CurrentUpgrade + 1 : 0;
             int remainingLevels = Node.Unlocked ? 0 : 1;
             remainingLevels += Node.MaxUpgrade != 0 ? Node.MaxUpgrade - Node.CurrentUpgrade : 0;
-            string levels = new string(Constants.FILLED_LEVEL, currentLevel) + new string(Constants.EMPTY_LEVEL, remainingLevels) + new string(Constants.WHITE_SPACE, Constants.LEVEL_LENGTH - currentLevel - remainingLevels );
+            string levels = new string(Constants.FILLED_LEVEL, currentLevel) + new string(Constants.EMPTY_LEVEL, remainingLevels) + new string(Constants.WHITE_SPACE, Mathf.Max(0, Constants.LEVEL_LENGTH - currentLevel - remainingLevels));
             sb.Append(Constants.WHITE_SPACE);
             sb.Append(levels);
             if (remainingLevels > 0)

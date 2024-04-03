@@ -10,6 +10,7 @@ namespace MoreShipUpgrades.Patches.NetworkManager
     internal static class GameNetworkManagerPatcher
     {
         static LguLogger logger = new LguLogger(nameof(GameNetworkManagerPatcher));
+        internal static int originalVersion = -1;
         [HarmonyPostfix]
         [HarmonyPatch(nameof(GameNetworkManager.Disconnect))]
         static void ResetUpgradeBus(GameNetworkManager __instance)
@@ -21,6 +22,13 @@ namespace MoreShipUpgrades.Patches.NetworkManager
             {
                 Object.Destroy(upgrade.gameObject);
             }
+        }
+
+        [HarmonyPostfix]
+        [HarmonyPatch(nameof(GameNetworkManager.Awake))]
+        static void AwakePrefix(GameNetworkManager __instance)
+        {
+            originalVersion = __instance.gameVersionNum;
         }
     }
 }
