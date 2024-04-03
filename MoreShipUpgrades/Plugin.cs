@@ -109,20 +109,31 @@ namespace MoreShipUpgrades
             mls.LogDebug("LGU has been patched");
         }
 
-        // Change to -1 incase of no public beta, change to public beta version otherwise
-        const int UNDEFINED_BETA_VERSION = -1;
-        static readonly int BETA_VERSION = 50;
-        internal static void TryPatchBetaVersion(int currentVersion)
+        internal static void TryPatchBetaVersion() 
         {
-            if (currentVersion >= BETA_VERSION)
+            bool butlerPatched = false, knifePatched = false;
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            for(int i = 0; i < assemblies.Length && (!butlerPatched || !knifePatched); i++)
             {
-                Plugin.harmony.PatchAll(typeof(KnifePatcher));
-                Plugin.harmony.PatchAll(typeof(ButlerBeesPatcher));
+                Type[] types = assemblies[i].GetTypes();
+                for(int j = 0; j < types.Length && (!butlerPatched || !knifePatched); j++)
+                {
+                    Type type = types[j];
+                    if (type.Name == "KnifeItem")
+                    {
+                        harmony.PatchAll(typeof(KnifePatcher));
+                        knifePatched = true;
+                    }
+                    if (type.Name == "ButlerBeesEnemyAI")
+                    {
+                        harmony.PatchAll(typeof(ButlerBeesPatcher));
+                        butlerPatched = true;
+                    }
+                }
             }
         }
         internal static void PatchMainVersion()
         {
-            if (BETA_VERSION == UNDEFINED_BETA_VERSION) harmony.PatchAll();
             PatchEnemies();
             PatchHUD();
             PatchInteractables();

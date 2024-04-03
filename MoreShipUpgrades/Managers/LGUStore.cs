@@ -17,6 +17,7 @@ using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using HarmonyLib;
+using MoreShipUpgrades.Patches.NetworkManager;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -34,7 +35,6 @@ namespace MoreShipUpgrades.Managers
         private void Start()
         {
             Instance = this;
-            Plugin.TryPatchBetaVersion(GameNetworkManager.Instance.gameVersionNum);
             if (NetworkManager.IsHost)
             {
                 FetchLGUSaveFile();
@@ -46,6 +46,7 @@ namespace MoreShipUpgrades.Managers
             {
                 StartCoroutine(WaitForConfigSync());
             }
+            Plugin.TryPatchBetaVersion();
         }
         IEnumerator WaitForConfigSync()
         {
@@ -108,12 +109,15 @@ namespace MoreShipUpgrades.Managers
             logger.LogInfo($"Successfully spawned {i} upgrade objects.");
 
             GameObject intern = Instantiate(AssetBundleHandler.GetPerkGameObject(Interns.UPGRADE_NAME));
+            intern.hideFlags = HideFlags.HideAndDontSave;
             intern.GetComponent<NetworkObject>().Spawn();
 
             GameObject extendDeadline = Instantiate(AssetBundleHandler.GetPerkGameObject(ExtendDeadlineScript.NAME));
+            intern.hideFlags = HideFlags.HideAndDontSave;
             extendDeadline.GetComponent<NetworkObject>().Spawn();
 
             GameObject insurance = Instantiate(AssetBundleHandler.GetPerkGameObject(ScrapInsurance.COMMAND_NAME));
+            intern.hideFlags = HideFlags.HideAndDontSave;
             insurance.GetComponent<NetworkObject>().Spawn();
         }
 
