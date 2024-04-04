@@ -1,3 +1,22 @@
+## V 3.5.0 - 2024-04-02
+### Additions
+- Implemented ``Lithium Batteries`` upgrade which decrease the rate of battery usage of the items, both passively and on use.
+- ``lgu`` in the terminal will prompt a new interface which the user can interact to buy upgrades.
+   - Default keybinds: 'w' for cursor up, 's' for cursor down, 'a' for previous page, 'd' for next page, 'enter' for submit prompt, 'escape' for leaving the LGU store
+
+### Changes
+- Updated to use CSync's latest 4.x.x releases for configuration synchronization.
+- Made InputUtils a hard dependency rather than soft dependency.
+- Made ``Protein Powder`` affect the knife's force.
+- Made ``Beekeeper`` affect the buttler's bees' damage.
+
+### Fixes
+- Fixed ``Climbing Gloves`` individual status not being affected by ``Misc`` ``Share all upgrades``
+- Fixed Portable Teleporter allowing you to be used when somebody else is using it.
+
+### Code Changes
+- Removed logs associated with asset loading
+
 ## V 3.4.4 - 2024-03-31
 - Another attempt at fixing the upgrades not loading when reconnecting.
     - If it still persists, report the issue in the github repository with logs attached from both host and clients.
@@ -9,6 +28,7 @@
 ## V 3.4.3 - 2024-03-23
 - Fixed clients disconnecting throwing errors, leading to upgrades on next reconnect to not load.
 - Fixed error throw when quiting the game (harmless but an error)
+
 
 ## V 3.4.2 - 2024-03-21
 - Fixed configuration synchronization due to serialization issues with colours

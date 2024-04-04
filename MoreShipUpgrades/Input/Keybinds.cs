@@ -2,6 +2,7 @@
 using GameNetcodeStuff;
 using HarmonyLib;
 using MoreShipUpgrades.Compat;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
@@ -21,6 +22,12 @@ namespace MoreShipUpgrades.Input
         public static InputAction WheelbarrowAction;
 
         public static InputAction NvgAction;
+        public static InputAction cursorUpAction;
+        public static InputAction cursorDownAction;
+        public static InputAction cursorExitAction;
+        public static InputAction pageUpAction;
+        public static InputAction pageDownAction;
+        public static InputAction storeConfirmAction;
 
         public static PlayerControllerB localPlayerController => StartOfRound.Instance?.localPlayerController;
 
@@ -28,21 +35,16 @@ namespace MoreShipUpgrades.Input
         [HarmonyPrefix]
         public static void AddToKeybindMenu()
         {
-            if (InputUtils_Compat.Enabled)
-            {
-                Asset = InputUtils_Compat.Asset;
-                ActionMap = Asset.actionMaps[0];
-                WheelbarrowAction = InputUtils_Compat.WheelbarrowKey;
-                NvgAction = InputUtils_Compat.NvgKey;
-            }
-            else
-            {
-                Asset = ScriptableObject.CreateInstance<InputActionAsset>();
-                ActionMap = new InputActionMap("MoreShipUpgrades");
-                InputActionSetupExtensions.AddActionMap(Asset, ActionMap);
-                WheelbarrowAction = InputActionSetupExtensions.AddAction(ActionMap, "Drop all items from wheelbarrow", binding: SyncedInstance<PluginConfig>.Default.WHEELBARROW_DROP_ALL_CONTROL_BIND.Value, interactions: "Press");
-                NvgAction = InputActionSetupExtensions.AddAction(ActionMap, "Toggle NVG", binding: SyncedInstance<PluginConfig>.Default.TOGGLE_NIGHT_VISION_KEY.Value, interactions: "Press");
-            }
+            Asset = InputUtils_Compat.Asset;
+            ActionMap = Asset.actionMaps[0];
+            WheelbarrowAction = InputUtils_Compat.WheelbarrowKey;
+            NvgAction = InputUtils_Compat.NvgKey;
+            cursorUpAction = InputUtils_Compat.CursorUpKey;
+            cursorDownAction = InputUtils_Compat.CursorDownKey;
+            cursorExitAction = InputUtils_Compat.CursorExitKey;
+            pageUpAction = InputUtils_Compat.PageUpKey;
+            pageDownAction = InputUtils_Compat.PageDownKey;
+            storeConfirmAction = InputUtils_Compat.LguStoreConfirmKey;
         }
 
         [HarmonyPatch(typeof(StartOfRound), "OnEnable")]

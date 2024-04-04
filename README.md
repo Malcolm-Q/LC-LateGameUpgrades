@@ -10,7 +10,6 @@ Source code for the [LateGameUpgrades mod.](https://thunderstore.io/c/lethal-com
 Join [this modding discord](https://discord.gg/hzEcKFSSDX) and comment [on this post](https://discord.com/channels/1168655651455639582/1178407269994594435)  to discuss the mod.
 ### LethalCompanyInputUtils Compatibility
 - This mod has support for mentioned mod so you can change the control binding in the main menu's control bindings menu.
-- When not using this mod, you will have to change manually the binding in the configuration file. We have a [file](/inputs.md) which could help in knowing how select a key by typing.
 
 ## **Contributing:**
 - You will need to set up Evaisa's [Netcode Patcher](https://github.com/EvaisaDev/UnityNetcodeWeaver) if you want to add more custom netcode. If you are making simple additions that don't need to be tested online you can still build an unpatched dll and test it.  

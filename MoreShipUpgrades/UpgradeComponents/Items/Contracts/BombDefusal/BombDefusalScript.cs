@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc.Util;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
 {

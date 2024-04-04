@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using LethalCompanyInputUtils.Api;
 using MoreShipUpgrades.Compat;
+using MoreShipUpgrades.Input;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
@@ -341,8 +342,15 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         {
             grabbable = true;
             grabbableToEnemies = true;
+            itemProperties.toolTips = SetupWheelbarrowTooltips();
             SetupScanNodeProperties();
         }
+        private string[] SetupWheelbarrowTooltips()
+        {
+            string controlBind = IngameKeybinds.Instance.WheelbarrowKey.GetBindingDisplayString();
+            return [$"Drop all items: [{controlBind}]"];
+        }
+
         /// <summary>
         /// Prepares the Scan Node associated with the Wheelbarrow for user display
         /// </summary>
