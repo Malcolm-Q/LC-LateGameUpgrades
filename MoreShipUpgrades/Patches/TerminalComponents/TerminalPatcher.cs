@@ -23,10 +23,7 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
         [HarmonyPatch(nameof(Terminal.Start))]
         static void StartPostfix()
         {
-            if(!SyncedInstance<PluginConfig>.Default.USE_ALTERNATIVE_TERMINAL_NODE.Value)
-            {
-                HelpTerminalNode.SetupLGUHelpCommand();
-            }
+            HelpTerminalNode.SetupLGUHelpCommand();
         }
         [HarmonyTranspiler]
         [HarmonyPatch(nameof(Terminal.Update))]
@@ -44,24 +41,6 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
         static void CustomParser(ref Terminal __instance, ref TerminalNode __result)
         {
             string text = __instance.screenText.text.Substring(__instance.screenText.text.Length - __instance.textAdded);
-            if (SyncedInstance<PluginConfig>.Default.USE_ALTERNATIVE_TERMINAL_NODE.Value)
-            {
-                string nodeName = SyncedInstance<PluginConfig>.Default.ALTERNATIVE_TERMINAL_NODE.Value.ToLower();
-                
-                if (LguTerminalNode.GetTerminal().CheckForExactSentences(nodeName) != null)
-                {
-                    if(text.ToLower().Equals(nodeName))
-                    {
-                        HelpTerminalNode.SetupLGUHelpCommand(__result);
-                        return;
-                    }
-                }
-                else
-                {
-                    logger.LogDebug($"Terminal node {nodeName} not found");
-                }
-            }
-
             CommandParser.ParseLGUCommands(text, ref __instance, ref __result);
         }
 

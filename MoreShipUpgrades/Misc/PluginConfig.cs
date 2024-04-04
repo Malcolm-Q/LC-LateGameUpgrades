@@ -352,9 +352,6 @@ namespace MoreShipUpgrades.Misc
             SHOW_UPGRADES_CHAT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Show upgrades being loaded in chat", true, "If enabled, chat messages will be displayed when loading an upgrade for the first time.");
             SALE_APPLY_ONCE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Apply upgrade sale on one purchase", false, "When an upgrade is on sale, apply the sale only on the first ever purchase of it while on sale. Consecutive purchases will not have the sale applied");
 
-            USE_ALTERNATIVE_TERMINAL_NODE = cfg.Bind(topSection, "Use Alternative Terminal Node", true, "If enabled, the help text on the terminal will be displayed inside the node defined in ALTERNATIVE_TERMINAL_NODE"); ;
-            ALTERNATIVE_TERMINAL_NODE = cfg.Bind(topSection, "Alternative Terminal Node Name", "other", "Name of the node to be used when USE_ALTERNATIVE_TERMINAL_NODE is enabled"); ;
-
             topSection = "Helmet";
             HELMET_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable the helmet for purchase", true, "");
             HELMET_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of the helmet", 750, "");
