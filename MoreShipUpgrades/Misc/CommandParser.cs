@@ -210,12 +210,12 @@ namespace MoreShipUpgrades.Misc
             LguStore.Instance.UpdateLGUSaveServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, JsonConvert.SerializeObject(new SaveInfo()));
             customNode.Unlocked = false;
             customNode.CurrentUpgrade = 0;
-            return DisplayTerminalMessage($"Unwinding {customNode.Name.ToLower()}\n\n");
+            return DisplayTerminalMessage(string.Format(LGUConstants.UNLOAD_LGU_SUCCESS_FORMAT, customNode.Name));
         }
 
         private static TerminalNode ExecuteScanHivesCommand()
         {
-            if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage("\nUpgrade Better Scanner to level 2 to use this command\nEnter `info better scanner` to check upgrades.\n\n");
+            if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage(LGUConstants.SCANNER_LEVEL_REQUIRED);
 
             GrabbableObject[] scrapItems = UnityEngine.Object.FindObjectsOfType<GrabbableObject>().ToArray();
             GrabbableObject[] filteredHives = scrapItems.Where(scrap => scrap.itemProperties.itemName == "Hive").ToArray();
@@ -233,7 +233,7 @@ namespace MoreShipUpgrades.Misc
 
         private static TerminalNode ExecuteScanScrapCommand()
         {
-            if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage("\nUpgrade Better Scanner to level 2 to use this command\nEnter `info better scanner` to check upgrades.\n\n");
+            if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage(LGUConstants.SCANNER_LEVEL_REQUIRED);
 
             GrabbableObject[] scrapItems = UnityEngine.Object.FindObjectsOfType<GrabbableObject>().ToArray();
             GrabbableObject[] filteredScrap = scrapItems.Where(scrap => scrap.isInFactory && scrap.itemProperties.isScrap).ToArray();
@@ -251,7 +251,7 @@ namespace MoreShipUpgrades.Misc
 
         private static TerminalNode ExecuteScanPlayerCommand()
         {
-            if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage("\nUpgrade Better Scanner to level 2 to use this command\nEnter `info better scanner` to check upgrades.\n\n");
+            if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage(LGUConstants.SCANNER_LEVEL_REQUIRED);
 
             PlayerControllerB[] players = UnityEngine.Object.FindObjectsOfType<PlayerControllerB>().ToArray();
             PlayerControllerB[] filteredPlayers = players.Where(player => player.playerSteamId != 0).ToArray();
@@ -276,7 +276,7 @@ namespace MoreShipUpgrades.Misc
 
         private static TerminalNode ExecuteScanEnemiesCommand()
         {
-            if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage("\nUpgrade Better Scanner to level 2 to use this command\nEnter `info better scanner` to check upgrades.\n\n");
+            if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage(LGUConstants.SCANNER_LEVEL_REQUIRED);
 
             EnemyAI[] enemies = UnityEngine.Object.FindObjectsOfType<EnemyAI>().Where(enem => !enem.isEnemyDead).ToArray();
             if (enemies.Length <= 0) return DisplayTerminalMessage("0 enemies detected\n\n");
@@ -320,7 +320,7 @@ namespace MoreShipUpgrades.Misc
 
         private static TerminalNode ExecuteScanDoorsCommand()
         {
-            if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage("\nUpgrade Better Scanner to level 2 to use this command\nEnter `info better scanner` to check upgrades.\n\n");
+            if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage(LGUConstants.SCANNER_LEVEL_REQUIRED);
 
             List<GameObject> fireEscape = UnityEngine.Object.FindObjectsOfType<GameObject>().Where(obj => obj.name == "SpawnEntranceBTrigger").ToList();
             List<EntranceTeleport> mainDoors = UnityEngine.Object.FindObjectsOfType<EntranceTeleport>().ToList();

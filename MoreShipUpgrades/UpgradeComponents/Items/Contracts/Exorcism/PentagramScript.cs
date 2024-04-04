@@ -195,7 +195,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exorcism
         private IEnumerator WaitToExplode()
         {
             yield return new WaitForSeconds(2.5f);
-            Landmine.SpawnExplosion(transform.position + new Vector3(0, 0.2f, 0), true, 10, 20);
+            Tools.SpawnExplosion(transform.position + new Vector3(0, 0.2f, 0), true, 10, 20);
             yield return new WaitForSeconds(0.5f);
             if (IsHost)
             {

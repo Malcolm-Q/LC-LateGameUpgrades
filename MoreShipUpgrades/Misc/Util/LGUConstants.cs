@@ -126,6 +126,10 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string LOAD_LGU_SUCCESS_FORMAT = "Attempting to overwrite local save data with {0}'s save data\nYou should see a popup in 5 seconds...\n.\n";
         internal const string LOAD_LGU_FAILURE_FORMAT = "The name {0} was not found. The following names were found:\n{1}\n";
 
+        internal const string UNLOAD_LGU_SUCCESS_FORMAT = "Unwinding {0}\n\n";
+
+        internal const string SCANNER_LEVEL_REQUIRED = "Upgrade Better Scanner to level 2 to use this command\nEnter `info better scanner` to check upgrades.\n\n";
+
         #endregion
 
         #region Chat Notifications

@@ -19,7 +19,7 @@ namespace MoreShipUpgrades.Misc.UI.Cursor
 
             int currentLevel = Node.Unlocked ? Node.CurrentUpgrade + 1 : 0;
             int remainingLevels = Node.Unlocked ? 0 : 1;
-            remainingLevels += Node.MaxUpgrade != 0 ? Node.MaxUpgrade - Node.CurrentUpgrade : 0;
+            remainingLevels += Node.MaxUpgrade != 0 ? Mathf.Max(0, Node.MaxUpgrade - Node.CurrentUpgrade) : 0;
             string levels = new string(LGUConstants.FILLED_LEVEL, currentLevel) + new string(LGUConstants.EMPTY_LEVEL, remainingLevels) + new string(LGUConstants.WHITE_SPACE, Mathf.Max(0, LGUConstants.LEVEL_LENGTH - currentLevel - remainingLevels));
             sb.Append(LGUConstants.WHITE_SPACE);
             sb.Append(levels);

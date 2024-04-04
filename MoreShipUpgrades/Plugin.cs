@@ -134,6 +134,7 @@ namespace MoreShipUpgrades
                     }
                 }
             }
+            UpgradeBus.Instance.IsBeta = knifePatched || butlerPatched;
         }
         internal static void PatchMainVersion()
         {

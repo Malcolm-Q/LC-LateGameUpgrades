@@ -52,6 +52,7 @@ namespace MoreShipUpgrades.Managers
 
         internal Dictionary<string, AudioClip> SFX = new Dictionary<string, AudioClip>();
         internal bool helmetDesync;
+        internal bool IsBeta = false;
 
         void Awake()
         {
