@@ -46,7 +46,6 @@ namespace MoreShipUpgrades.Managers
             {
                 StartCoroutine(WaitForConfigSync());
             }
-            Plugin.TryPatchBetaVersion();
         }
         IEnumerator WaitForConfigSync()
         {

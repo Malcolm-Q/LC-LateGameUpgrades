@@ -115,25 +115,30 @@ namespace MoreShipUpgrades
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
             for(int i = 0; i < assemblies.Length && (!butlerPatched || !knifePatched); i++)
             {
+                if (assemblies[i].GetName().Name != "Assembly-CSharp") continue;
                 Type[] types = assemblies[i].GetTypes();
                 for(int j = 0; j < types.Length && (!butlerPatched || !knifePatched); j++)
                 {
                     Type type = types[j];
                     if (type.Name == "KnifeItem")
                     {
+                        mls.LogDebug("Knife found!");
                         harmony.PatchAll(typeof(KnifePatcher));
                         knifePatched = true;
                     }
                     if (type.Name == "ButlerBeesEnemyAI")
                     {
+                        mls.LogDebug("Butler Bees found!");
                         harmony.PatchAll(typeof(ButlerBeesPatcher));
                         butlerPatched = true;
                     }
                 }
             }
+            UpgradeBus.Instance.IsBeta = knifePatched || butlerPatched;
         }
         internal static void PatchMainVersion()
         {
+            TryPatchBetaVersion();
             PatchEnemies();
             PatchHUD();
             PatchInteractables();

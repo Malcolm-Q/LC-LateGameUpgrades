@@ -30,9 +30,6 @@ namespace MoreShipUpgrades.Misc.UI
             {
                 int row = i / lengthPerPage;
                 int col = i % lengthPerPage;
-                Plugin.mls.LogDebug(lengthPerPage);
-                Plugin.mls.LogDebug(amountPages);
-                Plugin.mls.LogDebug(row + ", " + col);
                 pagesUpgrades[row][col] = UpgradeBus.Instance.terminalNodes[i];
             }
             IScreen[] screens = new IScreen[pagesUpgrades.Length];
@@ -107,7 +104,7 @@ namespace MoreShipUpgrades.Misc.UI
         }
         public void UpdateText()
         {
-            string text = currentScreen != null ? currentScreen.GetText(Constants.AVAILABLE_CHARACTERS_PER_LINE) : MainPage.GetText(Constants.AVAILABLE_CHARACTERS_PER_LINE);
+            string text = currentScreen != null ? currentScreen.GetText(LGUConstants.AVAILABLE_CHARACTERS_PER_LINE) : MainPage.GetText(LGUConstants.AVAILABLE_CHARACTERS_PER_LINE);
             terminal.screenText.text = text;
             terminal.currentText = text;
         }

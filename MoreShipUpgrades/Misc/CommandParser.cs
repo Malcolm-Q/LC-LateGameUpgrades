@@ -43,30 +43,30 @@ namespace MoreShipUpgrades.Misc
         }
         private static TerminalNode ExecuteDiscombobulatorAttack(ref Terminal terminal)
         {
-            if (!BaseUpgrade.GetActiveUpgrade(Discombobulator.UPGRADE_NAME)) return DisplayTerminalMessage("You don't have access to this command yet. Purchase the 'Discombobulator'.\n\n");
+            if (!BaseUpgrade.GetActiveUpgrade(Discombobulator.UPGRADE_NAME)) return DisplayTerminalMessage(LGUConstants.DISCOMBOBULATOR_NOT_ACTIVE);
 
-            if (Discombobulator.instance.flashCooldown > 0f) return DisplayTerminalMessage($"You can discombobulate again in {Mathf.Round(Discombobulator.instance.flashCooldown)} seconds.\nType 'cooldown' or 'cd' to check discombobulation cooldown.\n\n");
+            if (Discombobulator.instance.flashCooldown > 0f) return DisplayTerminalMessage(string.Format(LGUConstants.DISCOMBOBULATOR_ON_COOLDOWN_FORMAT, Mathf.Round(Discombobulator.instance.flashCooldown)));
 
             RoundManager.Instance.PlayAudibleNoise(terminal.transform.position, 60f, 0.8f, 0, false, 14155);
             Discombobulator.instance.PlayAudioAndUpdateCooldownServerRpc();
 
             Collider[] array = Physics.OverlapSphere(terminal.transform.position, UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_RADIUS.Value, 524288);
-            if (array.Length <= 0) return DisplayTerminalMessage("No stunned enemies detected.\n\n");
+            if (array.Length <= 0) return DisplayTerminalMessage(LGUConstants.DISCOMBOBULATOR_NO_ENEMIES);
 
             if (UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_NOTIFY_CHAT.Value)
             {
                 terminal.StartCoroutine(CountDownChat(UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_STUN_DURATION.Value + (UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_INCREMENT.Value * BaseUpgrade.GetUpgradeLevel(Discombobulator.UPGRADE_NAME))));
             }
-            return DisplayTerminalMessage($"Discombobulator hit {array.Length} enemies.\n\n");
+            return DisplayTerminalMessage(string.Format(LGUConstants.DISCOMBULATOR_HIT_ENEMIES, array.Length));
         }
 
         private static TerminalNode ExecuteDiscombobulatorCooldown()
         {
-            if (!BaseUpgrade.GetActiveUpgrade(Discombobulator.UPGRADE_NAME)) return DisplayTerminalMessage("You don't have access to this command yet. Purchase the 'Discombobulator'.\n\n");
+            if (!BaseUpgrade.GetActiveUpgrade(Discombobulator.UPGRADE_NAME)) return DisplayTerminalMessage(LGUConstants.DISCOMBOBULATOR_NOT_ACTIVE);
 
-            if (Discombobulator.instance.flashCooldown > 0f) return DisplayTerminalMessage($"You can discombobulate again in {Mathf.Round(Discombobulator.instance.flashCooldown)} seconds.\n\n");
+            if (Discombobulator.instance.flashCooldown > 0f) return DisplayTerminalMessage(string.Format(LGUConstants.DISCOMBOBULATOR_DISPLAY_COOLDOWN, Mathf.Round(Discombobulator.instance.flashCooldown)));
 
-            return DisplayTerminalMessage("Discombobulate is ready, Type 'initattack' or 'atk' to execute.\n\n");
+            return DisplayTerminalMessage(LGUConstants.DISCOMBOBULATOR_READY);
         }
 
         private static TerminalNode ExecuteModInformation()
@@ -90,12 +90,12 @@ namespace MoreShipUpgrades.Misc
                 ulong id = GameNetworkManager.Instance.localPlayerController.playerSteamId;
                 LguStore.Instance.SaveInfo = saveInfo;
                 LguStore.Instance.UpdateLGUSaveServerRpc(id, JsonConvert.SerializeObject(saveInfo));
-                return DisplayTerminalMessage("LGU save has been wiped.\n\n");
+                return DisplayTerminalMessage(LGUConstants.LGU_SAVE_WIPED);
             }
             else
             {
                 logger.LogError("LGU SAVE NOT FOUND in ExecuteResetLGUSave()!");
-                return DisplayTerminalMessage("LGU save was not found!\n\n");
+                return DisplayTerminalMessage(LGUConstants.LGU_SAVE_NOT_FOUND);
             }
         }
         private static TerminalNode ExecuteForceCredits(string creditAmount, ref Terminal __instance)
@@ -105,21 +105,21 @@ namespace MoreShipUpgrades.Misc
                 if (__instance.IsHost || __instance.IsServer)
                 {
                     LguStore.Instance.SyncCreditsClientRpc(value);
-                    return DisplayTerminalMessage($"All clients should now have ${value}\n\n");
+                    return DisplayTerminalMessage(string.Format(LGUConstants.FORCE_CREDITS_SUCCESS_FORMAT, value));
                 }
-                else return DisplayTerminalMessage("Only the host can do this");
+                else return DisplayTerminalMessage(LGUConstants.FORCE_CREDITS_HOST_ONLY);
             }
 
-            return DisplayTerminalMessage($"Failed to parse value {creditAmount}.\n\n");
+            return DisplayTerminalMessage(string.Format(LGUConstants.FORCE_CREDITS_PARSED_FAIL_FORMAT, creditAmount));
         }
 
         private static TerminalNode ExecuteInternsCommand(ref Terminal terminal)
         {
-            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value) return DisplayTerminalMessage($"Interns cost {UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value} credits and you have {terminal.groupCredits} credits.\n");
+            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value)
+                return DisplayTerminalMessage(string.Format(LGUConstants.INTERNS_NOT_ENOUGH_CREDITS_FORMAT, UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value, terminal.groupCredits));
 
             PlayerControllerB player = StartOfRound.Instance.mapScreen.targetedPlayer;
-            if (!player.isPlayerDead) return DisplayTerminalMessage($"{player.playerUsername} is still alive, they can't be replaced with an intern.\n\n");
-            logger.LogDebug($"Player {player.playerUsername} is dead and we have enough credits, executing revive command...");
+            if (!player.isPlayerDead) return DisplayTerminalMessage(string.Format(LGUConstants.INTERNS_PLAYER_ALREADY_ALIVE_FORMAT, player.playerUsername));
             terminal.groupCredits -= UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value;
             LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits);
             Interns.instance.ReviveTargetedPlayerServerRpc();
@@ -130,12 +130,11 @@ namespace MoreShipUpgrades.Misc
         }
         private static TerminalNode ExecuteLoadLGUCommand(string text, ref Terminal terminal)
         {
-            if (text.ToLower() == LOAD_LGU_COMMAND) return DisplayTerminalMessage("Enter the name of the user whos upgrades/save you want to copy. Ex: `load lgu steve`\n");
+            if (text.ToLower() == LOAD_LGU_COMMAND) return DisplayTerminalMessage(LGUConstants.LOAD_LGU_NO_NAME);
 
             PlayerControllerB[] players = UnityEngine.Object.FindObjectsOfType<PlayerControllerB>();
             List<string> playerNames = new List<string>();
             string playerNameToSearch = text.Substring(text.IndexOf(LOAD_LGU_COMMAND) + LOAD_LGU_COMMAND.Length).Trim();
-            logger.LogDebug($"Starting to look for players with same name as {playerNameToSearch}");
             foreach (PlayerControllerB player in players)
             {
                 if (player == null) continue;
@@ -143,17 +142,16 @@ namespace MoreShipUpgrades.Misc
                 ulong playerSteamID = player.playerSteamId;
                 if (playerName == null) continue;
                 playerNames.Add(playerName);
-                logger.LogDebug($"Comparing {playerName} with {playerNameToSearch} case insensitive...");
                 if (!playerName.ToLower().Contains(playerNameToSearch.ToLower())) continue;
 
                 LguStore.Instance.ShareSaveServerRpc();
                 terminal.StartCoroutine(WaitForSync(playerSteamID));
                 logger.LogInfo($"Attempting to overwrite local save data with {playerName}'s save data.");
-                return DisplayTerminalMessage($"Attempting to overwrite local save data with {playerName}'s save data\nYou should see a popup in 5 seconds...\n.\n");
+                return DisplayTerminalMessage(string.Format(LGUConstants.LOAD_LGU_SUCCESS_FORMAT, playerName));
             }
             string csvNames = string.Join(", ", playerNames);
             logger.LogInfo($"{playerNameToSearch} was not found among: {csvNames}");
-            return DisplayTerminalMessage($"The name {playerNameToSearch} was not found. The following names were found:\n{csvNames}\n");
+            return DisplayTerminalMessage(string.Format(LGUConstants.LOAD_LGU_FAILURE_FORMAT, playerNameToSearch, csvNames));
         }
 
         private static TerminalNode ExecuteUpgradeCommand(string text, ref Terminal terminal, ref TerminalNode outputNode)
@@ -212,12 +210,12 @@ namespace MoreShipUpgrades.Misc
             LguStore.Instance.UpdateLGUSaveServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, JsonConvert.SerializeObject(new SaveInfo()));
             customNode.Unlocked = false;
             customNode.CurrentUpgrade = 0;
-            return DisplayTerminalMessage($"Unwinding {customNode.Name.ToLower()}\n\n");
+            return DisplayTerminalMessage(string.Format(LGUConstants.UNLOAD_LGU_SUCCESS_FORMAT, customNode.Name));
         }
 
         private static TerminalNode ExecuteScanHivesCommand()
         {
-            if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage("\nUpgrade Better Scanner to level 2 to use this command\nEnter `info better scanner` to check upgrades.\n\n");
+            if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage(LGUConstants.SCANNER_LEVEL_REQUIRED);
 
             GrabbableObject[] scrapItems = UnityEngine.Object.FindObjectsOfType<GrabbableObject>().ToArray();
             GrabbableObject[] filteredHives = scrapItems.Where(scrap => scrap.itemProperties.itemName == "Hive").ToArray();
@@ -235,7 +233,7 @@ namespace MoreShipUpgrades.Misc
 
         private static TerminalNode ExecuteScanScrapCommand()
         {
-            if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage("\nUpgrade Better Scanner to level 2 to use this command\nEnter `info better scanner` to check upgrades.\n\n");
+            if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage(LGUConstants.SCANNER_LEVEL_REQUIRED);
 
             GrabbableObject[] scrapItems = UnityEngine.Object.FindObjectsOfType<GrabbableObject>().ToArray();
             GrabbableObject[] filteredScrap = scrapItems.Where(scrap => scrap.isInFactory && scrap.itemProperties.isScrap).ToArray();
@@ -253,7 +251,7 @@ namespace MoreShipUpgrades.Misc
 
         private static TerminalNode ExecuteScanPlayerCommand()
         {
-            if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage("\nUpgrade Better Scanner to level 2 to use this command\nEnter `info better scanner` to check upgrades.\n\n");
+            if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage(LGUConstants.SCANNER_LEVEL_REQUIRED);
 
             PlayerControllerB[] players = UnityEngine.Object.FindObjectsOfType<PlayerControllerB>().ToArray();
             PlayerControllerB[] filteredPlayers = players.Where(player => player.playerSteamId != 0).ToArray();
@@ -278,7 +276,7 @@ namespace MoreShipUpgrades.Misc
 
         private static TerminalNode ExecuteScanEnemiesCommand()
         {
-            if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage("\nUpgrade Better Scanner to level 2 to use this command\nEnter `info better scanner` to check upgrades.\n\n");
+            if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage(LGUConstants.SCANNER_LEVEL_REQUIRED);
 
             EnemyAI[] enemies = UnityEngine.Object.FindObjectsOfType<EnemyAI>().Where(enem => !enem.isEnemyDead).ToArray();
             if (enemies.Length <= 0) return DisplayTerminalMessage("0 enemies detected\n\n");
@@ -322,7 +320,7 @@ namespace MoreShipUpgrades.Misc
 
         private static TerminalNode ExecuteScanDoorsCommand()
         {
-            if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage("\nUpgrade Better Scanner to level 2 to use this command\nEnter `info better scanner` to check upgrades.\n\n");
+            if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage(LGUConstants.SCANNER_LEVEL_REQUIRED);
 
             List<GameObject> fireEscape = UnityEngine.Object.FindObjectsOfType<GameObject>().Where(obj => obj.name == "SpawnEntranceBTrigger").ToList();
             List<EntranceTeleport> mainDoors = UnityEngine.Object.FindObjectsOfType<EntranceTeleport>().ToList();

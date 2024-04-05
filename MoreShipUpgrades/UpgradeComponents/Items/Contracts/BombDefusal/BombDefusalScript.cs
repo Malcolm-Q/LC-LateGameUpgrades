@@ -91,7 +91,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
             if (BombTimer <= 0f)
             {
                 armed = false;
-                Landmine.SpawnExplosion(transform.position, true, 20f, 10f);
+                Tools.SpawnExplosion(transform.position, true, 20f, 10f);
                 gameObject.SetActive(false);
                 enabled = false;
             }
@@ -131,7 +131,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
             else
             {
                 armed = false;
-                Landmine.SpawnExplosion(transform.position, true, 20f, 10f);
+                Tools.SpawnExplosion(transform.position, true, 20f, 10f);
                 gameObject.SetActive(false);
                 enabled = false;
             }

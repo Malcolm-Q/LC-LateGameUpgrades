@@ -1,4 +1,5 @@
 ﻿using LethalCompanyInputUtils.Api;
+using MoreShipUpgrades.Misc.Util;
 using UnityEngine.InputSystem;
 
 namespace MoreShipUpgrades.Input
@@ -11,26 +12,26 @@ namespace MoreShipUpgrades.Input
             return Instance.Asset;
         }
 
-        [InputAction("<Mouse>/middleButton", Name = "Drop all items from wheelbarrow")]
+        [InputAction(LGUConstants.DROP_ALL_ITEMS_WHEELBARROW_DEFAULT_KEYBIND, Name = LGUConstants.DROP_ALL_ITEMS_WHEELBARROW_KEYBIND_NAME)]
         public InputAction WheelbarrowKey { get; set; }
 
-        [InputAction("<Keyboard>/leftAlt", Name = "Toggle NVG")]
+        [InputAction(LGUConstants.TOGGLE_NIGHT_VISION_DEFAULT_KEYBIND, Name = LGUConstants.TOGGLE_NIGHT_VISION_KEYBIND_NAME)]
         public InputAction NvgKey { get; set; }
 
-        [InputAction("<Keyboard>/w", Name = "Move Cursor Up in Lategame Upgrades Store")]
+        [InputAction(LGUConstants.MOVE_CURSOR_UP_DEFAULT_KEYBIND, Name = LGUConstants.MOVE_CURSOR_UP_KEYBIND_NAME)]
         public InputAction UpgradeStoreCursorUpKey { get; set; }
 
-        [InputAction("<Keyboard>/s", Name = "Move Cursor Down in Lategame Upgrades Store")]
+        [InputAction(LGUConstants.MOVE_CURSOR_DOWN_DEFAULT_KEYBIND, Name = LGUConstants.MOVE_CURSOR_DOWN_KEYBIND_NAME)]
         public InputAction UpgradeStoreCursorDownKey { get; set; }
-        [InputAction("<Keyboard>/escape", Name = "Exit Lategame Upgrades Store")]
+        [InputAction(LGUConstants.EXIT_STORE_DEFAULT_KEYBIND, Name = LGUConstants.EXIT_STORE_KEYBIND_NAME)]
         public InputAction UpgradeStoreCursorExitKey { get; set; }
 
-        [InputAction("<Keyboard>/d", Name = "Next Page in Lategame Upgrades Store")]
+        [InputAction(LGUConstants.NEXT_PAGE_DEFAULT_KEYBIND, Name = LGUConstants.NEXT_PAGE_KEYBIND_NAME)]
         public InputAction UpgradeStorePageUpKey { get; set; }
 
-        [InputAction("<Keyboard>/a", Name = "Previous Page in Lategame Upgrades Store")]
+        [InputAction(LGUConstants.PREVIOUS_PAGE_DEFAULT_KEYBIND, Name = LGUConstants.PREVIOUS_PAGE_KEYBIND_NAME)]
         public InputAction UpgradeStorePageDownKey { get; set; }
-        [InputAction("<Keyboard>/enter", Name = "Submit Prompt in Lategame Upgrades Store")]
+        [InputAction(LGUConstants.SUBMIT_PROMPT_DEFAULT_KEYBIND, Name = LGUConstants.SUBMIT_PROMPT_KEYBIND_NAME)]
         public InputAction LguStoreConfirmKey { get; set; }
 
     }

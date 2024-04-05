@@ -47,9 +47,9 @@ namespace MoreShipUpgrades.Misc.UI.Cursor
             {
                 CursorElement element = elements[i];
                 if (element == null) continue;
-                if (i == cursorIndex) sb.Append(CURSOR).Append(Constants.WHITE_SPACE); else sb.Append(Constants.WHITE_SPACE).Append(Constants.WHITE_SPACE);
+                if (i == cursorIndex) sb.Append(CURSOR).Append(LGUConstants.WHITE_SPACE); else sb.Append(LGUConstants.WHITE_SPACE).Append(LGUConstants.WHITE_SPACE);
                 string text = element.GetText(availableLength - 2);
-                text = (i == cursorIndex ? string.Format(Constants.SELECTED_CURSOR_ELEMENT_FORMAT, Constants.DEFAULT_BACKGROUND_SELECTED_COLOR, Constants.DEFAULT_TEXT_SELECTED_COLOR, text) : text);
+                text = (i == cursorIndex ? string.Format(LGUConstants.SELECTED_CURSOR_ELEMENT_FORMAT, LGUConstants.DEFAULT_BACKGROUND_SELECTED_COLOR, LGUConstants.DEFAULT_TEXT_SELECTED_COLOR, text) : text);
                 sb.Append(Tools.WrapText(text, availableLength, leftPadding: "  ", rightPadding: "", false));
             }
             return sb.ToString();

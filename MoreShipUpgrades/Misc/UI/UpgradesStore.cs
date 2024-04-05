@@ -54,7 +54,7 @@ namespace MoreShipUpgrades.Misc.UI
                 terminalReference.screenText.DeactivateInputField();
                 terminalReference.screenText.interactable = false;
                 previousCaretColor = terminalReference.screenText.caretColor;
-                terminalReference.screenText.caretColor = Constants.Invisible;
+                terminalReference.screenText.caretColor = LGUConstants.Invisible;
             }
         }
 
