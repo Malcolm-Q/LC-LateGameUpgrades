@@ -3,6 +3,7 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using System;
+using System.Diagnostics;
 using System.Numerics;
 using System.Xml.Linq;
 using UnityEngine;
@@ -57,12 +58,32 @@ namespace MoreShipUpgrades.Misc.Util
 
         #region LGU Store Interactive UI
 
+        #region Main Screen
+
+        internal const string MAIN_SCREEN_TITLE = "Lategame Upgrades";
+        internal const string MAIN_SCREEN_TOP_TEXT = "Select an upgrade to purchase:";
+
+        #endregion
+
+        #region Upgrade Display
+
+        internal const string NOT_ENOUGH_CREDITS = "You do not have enough credits to purchase this upgrade.";
+        internal const string REACHED_MAX_LEVEL = "You have reached the maximum level of this upgrade.";
+        internal const string PURCHASE_UPGRADE_FORMAT = "Do you wish to purchase this upgrade for {0} credits?";
+
+        #endregion
+
         #region Cursor Display
         internal const char CURSOR = '>';
 
         internal const string SELECTED_CURSOR_ELEMENT_FORMAT = "<mark={0}><color={1}>{2}</color></mark>";
         internal const string DEFAULT_BACKGROUND_SELECTED_COLOR = HEXADECIMAL_GREEN + "33";
         internal const string DEFAULT_TEXT_SELECTED_COLOR = HEXADECIMAL_WHITE + "FF";
+
+        internal const string GO_BACK_PROMPT = "Back";
+
+        internal const string CONFIRM_PROMPT = "Confirm";
+        internal const string CANCEL_PROMPT = "Abort";
         #endregion
 
         #region Screen Display

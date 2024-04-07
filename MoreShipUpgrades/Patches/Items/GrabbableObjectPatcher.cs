@@ -17,7 +17,7 @@ namespace MoreShipUpgrades.Patches.Items
             FieldInfo batteryUsage = typeof(Item).GetField(nameof(Item.batteryUsage));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
-            index = Tools.FindField(index, ref codes, batteryUsage, GetChargeOnUse, errorMessage: "Couldn't find the field which is used to drain the item's battery on use");
+            Tools.FindField(ref index, ref codes, batteryUsage, GetChargeOnUse, errorMessage: "Couldn't find the field which is used to drain the item's battery on use");
             return codes;
         }
         [HarmonyTranspiler]
@@ -28,8 +28,8 @@ namespace MoreShipUpgrades.Patches.Items
             FieldInfo batteryUsage = typeof(Item).GetField(nameof(Item.batteryUsage));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
-            index = Tools.FindField(index, ref codes, batteryUsage, skip:true, errorMessage: "Couldn't find the field which is used to drain the item's battery passively");
-            index = Tools.FindDiv(index, ref codes, GetChargeRate, errorMessage: "Couldn't find the field which is used to drain the item's battery passively");
+            Tools.FindField(ref index, ref codes, batteryUsage, skip: true, errorMessage: "Couldn't find the field which is used to drain the item's battery passively");
+            Tools.FindDiv(ref index, ref codes, GetChargeRate, errorMessage: "Couldn't find the field which is used to drain the item's battery passively");
             return codes;
         }
     }

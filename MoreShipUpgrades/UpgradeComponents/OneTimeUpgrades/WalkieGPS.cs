@@ -39,11 +39,6 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             int num = (int)(TimeOfDay.Instance.normalizedTimeOfDay * (60f * TimeOfDay.Instance.numberOfHours)) + 360;
             int num2 = (int)Mathf.Floor(num / 60f);
             string amPM = "AM";
-            string text = "";
-            if (num2 >= 24)
-            {
-                text = "12:00 AM";
-            }
             if (num2 > 12)
             {
                 amPM = "PM";
@@ -53,7 +48,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
                 num2 %= 12;
             }
             int num3 = num % 60;
-            text = string.Format("{0:00}:{1:00}", num2, num3).TrimStart('0') + amPM;
+            string text = string.Format("{0:00}:{1:00}", num2, num3).TrimStart('0') + amPM;
             time.text = text;
         }
 

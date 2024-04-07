@@ -55,8 +55,6 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
             Terminal terminal = UpgradeBus.Instance.GetTerminal();
             float dist = Vector3.Distance(___targetingMetalObject.transform.position, terminal.transform.position);
-            logger.LogDebug($"Distance from ship: {dist}");
-            logger.LogDebug($"Effective distance of the lightning rod: {UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_DIST}");
 
             if (dist > UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_DIST.Value) return;
 
@@ -64,11 +62,8 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             float prob = 1 - dist;
             float rand = Random.value;
 
-            logger.LogDebug($"Number to beat: {prob}");
-            logger.LogDebug($"Number: {rand}");
             if (rand < prob)
             {
-                logger.LogDebug("Planning interception...");
                 __instance.staticElectricityParticle.Stop();
                 instance.LightningIntercepted = true;
                 instance.CoordinateInterceptionClientRpc();
@@ -76,7 +71,6 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         }
         public static void RerouteLightningBolt(ref Vector3 strikePosition, ref StormyWeather __instance)
         {
-            logger.LogDebug($"Intercepted Lightning Strike...");
             Terminal terminal = UpgradeBus.Instance.GetTerminal();
             strikePosition = terminal.transform.position;
             instance.LightningIntercepted = false;
@@ -85,7 +79,6 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         [ClientRpc]
         public void CoordinateInterceptionClientRpc()
         {
-            logger.LogInfo("Setting lighting to intercepted on this client...");
             LightningIntercepted = true;
             FindObjectOfType<StormyWeather>(true).staticElectricityParticle.gameObject.SetActive(false);
         }

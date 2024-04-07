@@ -4,6 +4,7 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
@@ -118,10 +119,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            string info = GetHunterInfo(0, initialPrice);
+            StringBuilder sb = new StringBuilder();
+            sb.Append(GetHunterInfo(0, initialPrice));
             for (int i = 0; i < maxLevels; i++)
-                info += GetHunterInfo(i + 1, incrementalPrices[i]);
-            return info;
+                sb.Append(GetHunterInfo(i + 1, incrementalPrices[i]));
+            return sb.ToString();
         }
         internal override bool CanInitializeOnStart()
         {

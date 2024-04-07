@@ -30,7 +30,7 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
             MethodInfo wasPressed = typeof(ButtonControl).GetMethod("get_wasPressedThisFrame");
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
-            index = Tools.FindMethod(index, ref codes, wasPressed, LategameStoreBeingUsed, notInstruction: true, andInstruction: true, errorMessage: "Couldn't find field used to check if the terminal is being used");
+            Tools.FindMethod(ref index, ref codes, wasPressed, LategameStoreBeingUsed, notInstruction: true, andInstruction: true, errorMessage: "Couldn't find field used to check if the terminal is being used");
             return codes;
         }
         [HarmonyPostfix]
@@ -50,16 +50,16 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
             MethodInfo guaranteedMinimumSale = typeof(MarketInfluence).GetMethod(nameof(MarketInfluence.GetGuaranteedPercentageSale));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
-            index = Tools.FindInteger(index, ref codes, -10, addCode: lethalDealsGuaranteedItems, errorMessage: "Couldn't find negative value representing no sales");
-            index = Tools.FindInteger(index, ref codes, 5, addCode: bargainConnectionsAmount, errorMessage: "Couldn't find first maximum amount of items to go on sale");
-            index = Tools.FindInteger(index, ref codes, 5, addCode: bargainConnectionsAmount, errorMessage: "Couldn't find second maximum amount of items to go on sale");
-            index = Tools.FindInteger(index, ref codes, findValue: 0, skip: true);
-            index = Tools.FindInteger(index, ref codes, findValue: 0, skip: true);
-            index = Tools.FindInteger(index, ref codes, findValue: 0, skip: true);
-            index = Tools.FindInteger(index, ref codes, findValue: 0, skip: true);
-            index = Tools.FindInteger(index, ref codes, findValue: 0, skip: true);
-            index = Tools.FindInteger(index, ref codes, findValue: 0, skip: true);
-            index = Tools.FindInteger(index, ref codes, 0, addCode: guaranteedMinimumSale, errorMessage: "Couldn't find minimum sale percentage");
+            Tools.FindInteger(ref index, ref codes, -10, addCode: lethalDealsGuaranteedItems, errorMessage: "Couldn't find negative value representing no sales");
+            Tools.FindInteger(ref index, ref codes, 5, addCode: bargainConnectionsAmount, errorMessage: "Couldn't find first maximum amount of items to go on sale");
+            Tools.FindInteger(ref index, ref codes, 5, addCode: bargainConnectionsAmount, errorMessage: "Couldn't find second maximum amount of items to go on sale");
+            Tools.FindInteger(ref index, ref codes, findValue: 0, skip: true);
+            Tools.FindInteger(ref index, ref codes, findValue: 0, skip: true);
+            Tools.FindInteger(ref index, ref codes, findValue: 0, skip: true);
+            Tools.FindInteger(ref index, ref codes, findValue: 0, skip: true);
+            Tools.FindInteger(ref index, ref codes, findValue: 0, skip: true);
+            Tools.FindInteger(ref index, ref codes, findValue: 0, skip: true);
+            Tools.FindInteger(ref index, ref codes, 0, addCode: guaranteedMinimumSale, errorMessage: "Couldn't find minimum sale percentage");
             codes.Insert(index, new CodeInstruction(OpCodes.Ldloc_S, 4));
             return codes;
         }
@@ -70,7 +70,7 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
             MethodInfo newLimitCharactersTransmit = typeof(FastEncryption).GetMethod(nameof(FastEncryption.GetLimitOfCharactersTransmit));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
-            index = Tools.FindInteger(index, ref codes, findValue: 10, skip: true, errorMessage: "Couldn't find the 10 value which is used as character limit");
+            Tools.FindInteger(ref index, ref codes, findValue: 10, skip: true, errorMessage: "Couldn't find the 10 value which is used as character limit");
             codes.Insert(index, new CodeInstruction(OpCodes.Call, newLimitCharactersTransmit));
             codes.Insert(index, new CodeInstruction(OpCodes.Ldloc_S, 12));
             return codes;
@@ -92,8 +92,8 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
             MethodInfo applyMoonDiscount = typeof(EfficientEngines).GetMethod(nameof(EfficientEngines.GetDiscountedMoonPrice));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
-            index = Tools.FindField(index, ref codes, itemCost, skip: true, errorMessage: "Couldn't find the item cost applied to a specific item with index 7");
-            index = Tools.FindField(index, ref codes, itemCost, addCode: applyMoonDiscount, errorMessage: "Couldn't find the item cost applied to moon routing");
+            Tools.FindField(ref index, ref codes, itemCost, skip: true, errorMessage: "Couldn't find the item cost applied to a specific item with index 7");
+            Tools.FindField(ref index, ref codes, itemCost, addCode: applyMoonDiscount, errorMessage: "Couldn't find the item cost applied to moon routing");
             return codes;
         }
     }

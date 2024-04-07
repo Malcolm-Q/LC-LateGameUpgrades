@@ -23,8 +23,8 @@ namespace MoreShipUpgrades.Patches.Items
 
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
-            index = Tools.FindField(index, ref codes, findField: knifeHitForce, addCode: proteinHitFoce, errorMessage: "Couldn't find shovel hit force field");
-            index = Tools.FindMethod(index, ref codes, findMethod: proteinHitFoce, addCode: sickBeatsForce, errorMessage: "Couldn't find our Protein Powder shovel hit force method");
+            Tools.FindField(ref index, ref codes, findField: knifeHitForce, addCode: proteinHitFoce, errorMessage: "Couldn't find shovel hit force field");
+            Tools.FindMethod(ref index, ref codes, findMethod: proteinHitFoce, addCode: sickBeatsForce, errorMessage: "Couldn't find our Protein Powder shovel hit force method");
             return codes.AsEnumerable();
         }
     }

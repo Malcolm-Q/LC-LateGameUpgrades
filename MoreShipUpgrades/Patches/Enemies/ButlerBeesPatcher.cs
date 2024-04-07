@@ -22,7 +22,7 @@ namespace MoreShipUpgrades.Patches.Enemies
             MethodInfo beeReduceDamage = typeof(Beekeeper).GetMethod(nameof(Beekeeper.CalculateBeeDamage));
             List<CodeInstruction> codes = instructions.ToList();
             int index = 0;
-            index = Tools.FindInteger(index, ref codes, 10, beeReduceDamage, errorMessage: "Couldn't find the damage number applied to the player when colliding");
+            Tools.FindInteger(ref index, ref codes, 10, beeReduceDamage, errorMessage: "Couldn't find the damage number applied to the player when colliding");
             return codes.AsEnumerable();
         }
     }

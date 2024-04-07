@@ -37,20 +37,14 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             Instance.BoomboxIcon.SetActive(Instance.EffectsActive);
             if (Instance.EffectsActive)
             {
-                logger.LogDebug("Applying effects!");
-                logger.LogDebug($"Updating player's movement speed ({player.movementSpeed})");
                 if (UpgradeBus.Instance.PluginConfiguration.BEATS_SPEED.Value) player.movementSpeed += UpgradeBus.Instance.PluginConfiguration.BEATS_SPEED_INC.Value;
-                logger.LogDebug($"Updated player's movement speed ({player.movementSpeed})");
                 if (UpgradeBus.Instance.PluginConfiguration.BEATS_STAMINA.Value) Instance.staminaDrainCoefficient = UpgradeBus.Instance.PluginConfiguration.BEATS_STAMINA_CO.Value;
                 if (UpgradeBus.Instance.PluginConfiguration.BEATS_DEF.Value) Instance.incomingDamageCoefficient = UpgradeBus.Instance.PluginConfiguration.BEATS_DEF_CO.Value;
                 if (UpgradeBus.Instance.PluginConfiguration.BEATS_DMG.Value) Instance.damageBoost = UpgradeBus.Instance.PluginConfiguration.BEATS_DMG_INC.Value;
             }
             else
             {
-                logger.LogDebug("Removing effects!");
-                logger.LogDebug($"Updating player's movement speed ({player.movementSpeed})");
                 if (UpgradeBus.Instance.PluginConfiguration.BEATS_SPEED.Value) player.movementSpeed -= UpgradeBus.Instance.PluginConfiguration.BEATS_SPEED_INC.Value;
-                logger.LogDebug($"Updated player's movement speed ({player.movementSpeed})");
                 Instance.staminaDrainCoefficient = 1f;
                 Instance.incomingDamageCoefficient = 1f;
                 Instance.damageBoost = 0;
