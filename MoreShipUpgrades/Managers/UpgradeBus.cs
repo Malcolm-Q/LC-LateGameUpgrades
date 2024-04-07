@@ -90,6 +90,7 @@ namespace MoreShipUpgrades.Managers
 
         public void ResetAllValues(bool wipeObjRefs = true)
         {
+            if (LguStore.Instance == null) return; // Quitting the game
             ResetPlayerAttributes();
             if (LguStore.Instance.IsServer || LguStore.Instance.IsHost) LguStore.Instance.ResetShipAttributesClientRpc();
 

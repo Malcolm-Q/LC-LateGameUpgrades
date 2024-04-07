@@ -269,7 +269,7 @@ namespace MoreShipUpgrades.Misc.Util
         /// <param name="damageRange"></param>
         internal static void SpawnExplosion(Vector3 explosionPosition, bool spawnExplosionEffect = false, float killRange = 1f, float damageRange = 1f)
         {
-            Debug.Log("Spawning explosion at pos: {explosionPosition}");
+            Debug.Log($"Spawning explosion at pos: {explosionPosition}");
             if (spawnExplosionEffect)
             {
                 UnityEngine.Object.Instantiate(StartOfRound.Instance.explosionPrefab, explosionPosition, Quaternion.Euler(-90f, 0f, 0f), RoundManager.Instance.mapPropsContainer.transform).SetActive(value: true);

@@ -14,10 +14,11 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
         [HarmonyPatch(nameof(TerminalAccessibleObject.CallFunctionFromTerminal))]
         static bool DestroyObject(ref TerminalAccessibleObject __instance, ref float ___codeAccessCooldownTimer, ref bool ___inCooldown)
         {
-            if (!BaseUpgrade.GetActiveUpgrade(MalwareBroadcaster.UPGRADE_NAME) || __instance.gameObject.layer != LayerMask.NameToLayer("MapHazards")) { return true; }
+            if (!BaseUpgrade.GetActiveUpgrade(MalwareBroadcaster.UPGRADE_NAME)) { return true; }
+            if (!MalwareBroadcaster.IsMapHazard(ref __instance)) return true;
             if (UpgradeBus.Instance.PluginConfiguration.DESTROY_TRAP.Value)
             {
-                MalwareBroadcaster.instance.ReqDestroyObjectServerRpc(new NetworkObjectReference(__instance.gameObject.transform.parent.gameObject.GetComponent<NetworkObject>()));
+                MalwareBroadcaster.instance.ReqDestroyObjectServerRpc(new NetworkObjectReference(__instance.gameObject.GetComponentInParent<NetworkObject>()));
                 return false;
             }
             if (!___inCooldown)

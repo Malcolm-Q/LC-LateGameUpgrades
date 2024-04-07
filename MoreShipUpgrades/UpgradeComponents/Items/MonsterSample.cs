@@ -6,10 +6,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
     internal class MonsterSample : PhysicsProp
     {
         /// <summary>
-        /// The ParticleSystem component linked to the sample
-        /// </summary>
-        private ParticleSystem particles;
-        /// <summary>
         /// Logger of the class
         /// </summary>
         private static LguLogger logger = new LguLogger(nameof(MonsterSample));
@@ -23,28 +19,29 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
                 usedMapSeed = StartOfRound.Instance.randomMapSeed;
                 random = new System.Random(usedMapSeed + 105);
             }
-            particles = GetComponentInChildren<ParticleSystem>();
-            if (particles == null) logger.LogError($"Couldn't find {nameof(ParticleSystem)} component in the sample...");
             GetComponent<ScrapValueSyncer>().SetScrapValue(random.Next(minValue: itemProperties.minValue, maxValue: itemProperties.maxValue));
         }
         public override void EquipItem()
         {
             base.EquipItem();
-            particles?.Play();
+            ParticleSystem particles = GetComponentInChildren<ParticleSystem>();
+            particles.Play();
         }
 
         public override void DiscardItem()
         {
             base.DiscardItem();
-            particles?.Stop();
-            particles?.Clear();
+            ParticleSystem particles = GetComponentInChildren<ParticleSystem>();
+            particles.Stop();
+            particles.Clear();
         }
 
         public override void PocketItem()
         {
             base.PocketItem();
-            particles?.Stop();
-            particles?.Clear();
+            ParticleSystem particles = GetComponentInChildren<ParticleSystem>();
+            particles.Stop();
+            particles.Clear();
         }
     }
 }

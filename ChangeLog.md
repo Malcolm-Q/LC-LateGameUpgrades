@@ -1,3 +1,19 @@
+## V 3.5.4 - 2024-04-??
+- Fixed Malware Broadcaster not applying on ||Spike Roof Traps||
+- Fixed monster samples not deactivating the particle system when dropped
+- Fixed an error when shutting down the game.
+
+## V 3.5.3 - 2024-04-04
+- Refined version checking to not load unnecessary types (and possibly lead to errors due to compatibility modes)
+- Fixed Malware Broadcaster not working with explosion enabled due to changes on Landmine.SpawnExplosion signature between current release and beta release.
+
+## V 3.5.2 - 2024-04-03
+- Fixed compatibility not working when mods that modify the game version are present.
+
+## V 3.5.1 - 2024-04-03
+- Added compatibility with version 49 of the Lethal Company game.
+   - You should still be able to play in version 50 (which is in public beta at the time of this release)
+
 ## V 3.5.0 - 2024-04-02
 ### Additions
 - Implemented ``Lithium Batteries`` upgrade which decrease the rate of battery usage of the items, both passively and on use.
