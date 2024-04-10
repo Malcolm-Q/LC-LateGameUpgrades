@@ -19,6 +19,7 @@ namespace MoreShipUpgrades.Misc
     public class PluginConfig : SyncedConfig<PluginConfig>
     {
         // enabled disabled
+        [field: DataMember] public SyncedEntry<bool> ALUMINIUM_COILS_ENABLED {  get; set; }
         [field: DataMember] public SyncedEntry<bool> CHARGING_BOOSTER_ENABLED { get; set; }
         [field: DataMember] public SyncedEntry<bool> MARKET_INFLUENCE_ENABLED { get; set; }
         [field: DataMember] public SyncedEntry<bool> BARGAIN_CONNECTIONS_ENABLED { get; set; }
@@ -54,6 +55,7 @@ namespace MoreShipUpgrades.Misc
         [field: DataMember] public SyncedEntry<bool> WEATHER_PROBE_ENABLED { get; set; }
         [field: DataMember] public SyncedEntry<bool> LITHIUM_BATTERIES_ENABLED { get; set; }
         // individual or shared
+        [field: DataMember] public SyncedEntry<bool> ALUMINIUM_COILS_INDIVIDUAL { get; set; }
         [field: DataMember] public SyncedEntry<bool> BEEKEEPER_INDIVIDUAL { get; set; }
         [field: DataMember] public SyncedEntry<bool> PROTEIN_INDIVIDUAL { get; set; }
         [field: DataMember] public SyncedEntry<bool> BIGGER_LUNGS_INDIVIDUAL { get; set; }
@@ -71,6 +73,7 @@ namespace MoreShipUpgrades.Misc
         [field: DataMember] public SyncedEntry<bool> CLIMBING_GLOVES_INDIVIDUAL { get; set; }
         [field: DataMember] public SyncedEntry<bool> LITHIUM_BATTERIES_INDIVIDUAL { get; set; }
         // prices
+        [field: DataMember] public SyncedEntry<int> ALUMINIUM_COILS_PRICE { get; set; }
         [field: DataMember] public SyncedEntry<int> CLIMBING_GLOVES_PRICE {  get; set; }
         [field: DataMember] public SyncedEntry<int> WEATHER_PROBE_PRICE {  get; set; }
         [field: DataMember] public SyncedEntry<int> WEATHER_PROBE_PICKED_WEATHER_PRICE {  get; set; }
@@ -111,6 +114,15 @@ namespace MoreShipUpgrades.Misc
         [field: DataMember] public SyncedEntry<int> LITHIUM_BATTERIES_PRICE {  get; set; }
 
         // attributes
+        [field: DataMember] public SyncedEntry<string> ALUMINIUM_COILS_PRICES {  get; set; }
+        [field: DataMember] public SyncedEntry<int> ALUMINIUM_COILS_INITIAL_COOLDOWN_DECREASE {  get; set; }
+        [field: DataMember] public SyncedEntry<int> ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_DECREASE { get; set; }
+        [field: DataMember] public SyncedEntry<int> ALUMINIUM_COILS_INITIAL_DIFFICULTY_DECREASE {  get; set; }
+        [field: DataMember] public SyncedEntry<float> ALUMINIUM_COILS_INITIAL_STUN_TIMER_INCREASE {  get; set; }
+        [field: DataMember] public SyncedEntry<float> ALUMINIUM_COILS_INCREMENTAL_STUN_TIMER_INCREASE { get; set; }
+        [field: DataMember] public SyncedEntry<int> ALUMINIUM_COILS_INCREMENTAL_DIFFICULTY_DECREASE { get; set; }
+        [field: DataMember] public SyncedEntry<float> ALUMINIUM_COILS_INITIAL_RANGE_INCREASE { get; set; }
+        [field: DataMember] public SyncedEntry<float> ALUMINIUM_COILS_INCREMENTAL_RANGE_INCREASE { get; set; }
         [field: DataMember] public SyncedEntry<string> LITHIUM_BATTERIES_PRICES { get; set; }
         [field: DataMember] public SyncedEntry<int> LITHIUM_BATTERIES_INITIAL_MULTIPLIER { get; set; }
         [field: DataMember] public SyncedEntry<int> LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER {  get; set; }
@@ -646,6 +658,21 @@ namespace MoreShipUpgrades.Misc
             LITHIUM_BATTERIES_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, LithiumBatteries.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             LITHIUM_BATTERIES_INITIAL_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Initial multiplier applied to the use rate of the battery (%)", 10, "Past 100%, it won't consume any battery charge from the item");
             LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Incremental multiplier applied to the use rate of the battery (%)", 10, "Past 100%, it won't consume any battery charge from the item");
+
+            topSection = AluminiumCoils.UPGRADE_NAME;
+            ALUMINIUM_COILS_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Enable Aluminium Coils Upgrade", true, "Tier upgrade which reduces the zap gun minigame's difficulty, making it easier to manage.");
+            ALUMINIUM_COILS_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            ALUMINIUM_COILS_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Price of Aluminium Coils upgrade", 750);
+            ALUMINIUM_COILS_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, "600, 800, 1000", BaseUpgrade.PRICES_DESCRIPTION);
+            ALUMINIUM_COILS_INITIAL_DIFFICULTY_DECREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Initial multiplier applied to the minigame difficulty multiplier (%)", 25, "Past 100%, the zap gun minigame will have no difficulty in following it.");
+            ALUMINIUM_COILS_INCREMENTAL_DIFFICULTY_DECREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Incremental multiplier applied to the minigame difficulty multiplier (%)", 10, "Past 100%, the zap gun minigame will have no difficulty in following it.");
+            ALUMINIUM_COILS_INITIAL_STUN_TIMER_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Initial value incremented to the enemy stun timer when using the zap gun", 1f);
+            ALUMINIUM_COILS_INCREMENTAL_STUN_TIMER_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Incremental value incremented to the enemy stun timer when using the zap gun", 1f);
+            ALUMINIUM_COILS_INITIAL_RANGE_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Initial value incremented to the zap guns range to stun an enemy", 2f);
+            ALUMINIUM_COILS_INCREMENTAL_RANGE_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Incremental value incremented to the zap guns range to stun an enemy", 1f);
+            ALUMINIUM_COILS_INITIAL_COOLDOWN_DECREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Initial multiplier applied to the zap guns cooldown (%)", 10, "Past 100%, the zap gun will have no cooldown after being used");
+            ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_DECREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Incremental multiplier applied to the zap guns cooldown", 10, "Past 100%, the zap gun will have no cooldown after being used");
+
 
             topSection = "Weather Probe";
             WEATHER_PROBE_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Weather Probe Command", true, "Allows changing weather of a level through cost of credits");

@@ -1,6 +1,5 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
-using ScarletMansion;
 using System.Linq;
 using UnityEngine;
 
@@ -41,10 +40,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             float num = Vector3.Distance(transform.position, pos);
             bool result = num < range && !Physics.Linecast(transform.position, pos, StartOfRound.Instance.collidersRoomDefaultAndFoliage, QueryTriggerInteraction.Ignore);
             return result;
-        }
-        public bool KnightHasLineOfSightToPosition(KnightVariant knight)
-        {
-            return HasLineOfSightToPosition(knight.transform.position);
         }
 
         public static bool HasLineOfSightToPeepers(Vector3 springPosition)

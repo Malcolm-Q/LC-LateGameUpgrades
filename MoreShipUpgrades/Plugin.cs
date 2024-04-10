@@ -150,6 +150,7 @@ namespace MoreShipUpgrades
         {
             harmony.PatchAll(typeof(BaboonBirdAIPatcher));
             harmony.PatchAll(typeof(EnemyAIPatcher));
+            harmony.PatchAll(typeof(EnemyAICollisionDetectPatcher));
             harmony.PatchAll(typeof(HoarderBugAIPatcher));
             harmony.PatchAll(typeof(RedLocustBeesPatch));
             harmony.PatchAll(typeof(SpringManAIPatcher));
@@ -173,6 +174,7 @@ namespace MoreShipUpgrades
             harmony.PatchAll(typeof(BoomBoxPatcher));
             harmony.PatchAll(typeof(DropPodPatcher));
             harmony.PatchAll(typeof(GrabbableObjectPatcher));
+            harmony.PatchAll(typeof(PatchToolPatcher));
             harmony.PatchAll(typeof(RadarBoosterPatcher));
             harmony.PatchAll(typeof(ShovelPatcher));
             harmony.PatchAll(typeof(WalkiePatcher));
@@ -716,6 +718,7 @@ namespace MoreShipUpgrades
             SetupEfficientEngines();
             SetupClimbingGloves();
             SetupLithiumBatteries();
+            SetupAluminiumCoils();
         }
 
         private void SetupSickBeats()
@@ -848,6 +851,10 @@ namespace MoreShipUpgrades
         void SetupLithiumBatteries()
         {
             SetupGenericPerk<LithiumBatteries>(LithiumBatteries.UPGRADE_NAME);
+        }
+        void SetupAluminiumCoils()
+        {
+            SetupGenericPerk<AluminiumCoils>(AluminiumCoils.UPGRADE_NAME);
         }
         /// <summary>
         /// Generic function where it adds a script (specificed through the type) into an GameObject asset 
