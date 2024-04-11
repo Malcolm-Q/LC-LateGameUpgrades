@@ -11,6 +11,7 @@ using CSync.Extensions;
 using LethalLib.Modules;
 using MoreShipUpgrades.Managers;
 using UnityEngine;
+using MoreShipUpgrades.Misc.Util;
 
 
 namespace MoreShipUpgrades.Misc
@@ -322,39 +323,39 @@ namespace MoreShipUpgrades.Misc
         {
             ConfigManager.Register(this);
 
-            string topSection = "Contracts";
-            CONTRACTS_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable the ability to purchase contracts / missions", true, "");
-            CONTRACT_FREE_MOONS_ONLY = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Random contracts on free moons only", true, "If true, \"contract\" command will only generate contracts on free moons.");
-            CONTRACT_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of a random contract", 500, "");
-            CONTRACT_SPECIFY_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of a specified moon contract", 750, "");
-            CONTRACT_BUG_REWARD = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Value of an exterminator contract reward", 500, "");
-            CONTRACT_EXOR_REWARD = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Value of an exorcism contract reward", 500, "");
-            CONTRACT_DEFUSE_REWARD = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Value of an defusal contract reward", 500, "");
-            CONTRACT_EXTRACT_REWARD = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Value of an extraction contract reward", 500, "");
-            CONTRACT_DATA_REWARD = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Value of a data contract reward", 500, "");
-            CONTRACT_BUG_SPAWNS = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Hoarder Bug Spawn Number", 20, "How many bugs to spawn during exterminator contracts.");
-            CONTRACT_GHOST_SPAWN = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Dress Girl / Thumper Spawn Number", 3, "How many ghosts/thumpers to spawn when failing exorcism contracts");
-            CONTRACT_EXTRACT_WEIGHT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Weight of an extraction human", 2.5f, "Subtract 1 and multiply by 100 (2.5 = 150lbs).");
-            SCAV_VOLUME = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Volume of the scavenger voice clips", 0.25f, "0.0 - 1.0");
-            MAIN_OBJECT_FURTHEST = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Spawn main object far away", true, "If true the main object for contracts will try spawn as far away from the main entrance as possible. If false it will spawn at a random location.");
-            EXTRACTION_CONTRACT_AMOUNT_MEDKITS = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Amount of medkits that can spawn in the Extraction contract", 3, "");
+            string topSection = LGUConstants.CONTRACTS_SECTION;
+            CONTRACTS_ENABLED                   = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.ENABLE_CONTRACTS_KEY, LGUConstants.ENABLE_CONTRACTS_DEFAULT);
+            CONTRACT_FREE_MOONS_ONLY            = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_FREE_MOONS_ONLY_KEY, LGUConstants.CONTRACT_FREE_MOONS_ONLY_DEFAULT, LGUConstants.CONTRACT_FREE_MOONS_ONLY_DESCRIPTION);
+            CONTRACT_PRICE                      = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_PRICE_KEY, LGUConstants.CONTRACT_PRICE_DEFAULT);
+            CONTRACT_SPECIFY_PRICE              = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_SPECIFY_PRICE_KEY, LGUConstants.CONTRACT_SPECIFY_PRICE_DEFAULT);
+            CONTRACT_BUG_REWARD                 = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_BUG_REWARD_KEY, LGUConstants.CONTRACT_BUG_REWARD_DEFAULT);
+            CONTRACT_EXOR_REWARD                = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_EXORCISM_REWARD_KEY, LGUConstants.CONTRACT_EXORCISM_REWARD_DEFAULT);
+            CONTRACT_DEFUSE_REWARD              = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_DEFUSAL_REWARD_KEY, LGUConstants.CONTRACT_DEFUSAL_REWARD_DEFAULT);
+            CONTRACT_EXTRACT_REWARD             = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_EXTRACTION_REWARD_KEY, LGUConstants.CONTRACT_EXTRACTION_REWARD_DEFAULT);
+            CONTRACT_DATA_REWARD                = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_DATA_REWARD_KEY, LGUConstants.CONTRACT_DATA_REWARD_DEFAULT);
+            CONTRACT_BUG_SPAWNS                 = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.EXTERMINATION_BUG_SPAWNS_KEY, LGUConstants.EXTERMINATION_BUG_SPAWNS_DEFAULT, LGUConstants.EXTERMINATION_BUG_SPAWNS_DESCRIPTION);
+            CONTRACT_GHOST_SPAWN                = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.EXORCISM_GHOST_SPAWN_KEY, LGUConstants.EXORCISM_GHOST_SPAWN_DEFAULT, LGUConstants.EXORCISM_GHOST_SPAWN_DESCRIPTION);
+            CONTRACT_EXTRACT_WEIGHT             = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.EXTRACTION_SCAVENGER_WEIGHT_KEY, LGUConstants.EXTRACTION_SCAVENGER_WEIGHT_DEFAULT, LGUConstants.EXTRACTION_SCAVENGER_WEIGHT_DESCRIPTION);
+            SCAV_VOLUME                         = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.EXTRACTION_SCAVENGER_SOUND_VOLUME_KEY, LGUConstants.EXTRACTION_SCAVENGER_SOUND_VOLUME_DEFAULT, LGUConstants.EXTRACTION_SCAVENGER_SOUND_VOLUME_DESCRIPTION);
+            MAIN_OBJECT_FURTHEST                = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_FAR_FROM_MAIN_KEY, LGUConstants.CONTRACT_FAR_FROM_MAIN_DEFAULT, LGUConstants.CONTRACT_FAR_FROM_MAIN_DESCRIPTION);
+            EXTRACTION_CONTRACT_AMOUNT_MEDKITS  = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.EXTRACTION_MEDKIT_AMOUNT_KEY, LGUConstants.EXTRACTION_MEDKIT_AMOUNT_DEFAULT);
 
             // this is kind of dumb and I'd like to just use a comma seperated cfg.BindSyncedEntry<string> but this is much more foolproof
-            DATA_CONTRACT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable the data contract", true, "Make this false if you don't want the data contract");
-            EXTRACTION_CONTRACT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable the extraction contract", true, "Make this false if you don't want the extraction contract");
-            EXORCISM_CONTRACT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable the exorcism contract", true, "Make this false if you don't want the exorcism contract");
-            DEFUSAL_CONTRACT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable the defusal contract", true, "Make this false if you don't want the defusal contract");
-            EXTERMINATOR_CONTRACT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable the exterminator contract", true, "Make this false if you don't want the exterminator contract");
+            DATA_CONTRACT                       = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_DATA_ENABLED_KEY, LGUConstants.CONTRACT_DATA_ENABLED_DEFAULT, LGUConstants.CONTRACT_DATA_ENABLED_DESCRIPTION);
+            EXTRACTION_CONTRACT                 = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_EXTRACTION_ENABLED_KEY, LGUConstants.CONTRACT_EXTRACTION_ENABLED_DEFAULT, LGUConstants.CONTRACT_EXTRACTION_ENABLED_DESCRIPTION);
+            EXORCISM_CONTRACT                   = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_EXORCISM_ENABLED_KEY, LGUConstants.CONTRACT_EXORCISM_ENABLED_DEFAULT, LGUConstants.CONTRACT_EXORCISM_ENABLED_DESCRIPTION);
+            DEFUSAL_CONTRACT                    = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_DEFUSAL_ENABLED_KEY, LGUConstants.CONTRACT_DEFUSAL_ENABLED_DEFAULT, LGUConstants.CONTRACT_DEFUSAL_ENABLED_DESCRIPTION);
+            EXTERMINATOR_CONTRACT               = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_EXTERMINATION_ENABLED_KEY, LGUConstants.CONTRACT_EXTERMINATION_ENABLED_DEFAULT, LGUConstants.CONTRACT_EXTERMINATION_ENABLED_DESCRIPTION);
 
-            CONTRACT_REWARD_QUOTA_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Multiplier applied to the contract loot items dependant on the current applied quota", 25, "0 = None of the quota value will influence the loot's value.\n100 = The quota value will be added fully to the loot's value.");
+            CONTRACT_REWARD_QUOTA_MULTIPLIER    = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_QUOTA_MULTIPLIER_KEY, LGUConstants.CONTRACT_QUOTA_MULTIPLIER_DEFAULT, LGUConstants.CONTRACT_QUOTA_MULTIPLIER_DESCRIPTION);
 
             topSection = ChargingBooster.UPGRADE_NAME;
-            CHARGING_BOOSTER_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Charging Booster Upgrade", true, "Tier upgrade which allows charging items in a radar booster");
-            CHARGING_BOOSTER_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of Charging Booster Upgrade", 300, "");
-            CHARGING_BOOSTER_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.PRICES_SECTION, "250,300,400", BaseUpgrade.PRICES_DESCRIPTION);
-            CHARGING_BOOSTER_COOLDOWN = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Cooldown of the charging station in radar boosters when used", 90f, "");
-            CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Incremental cooldown decrease whenever the level of the upgrade is incremented", 10f, "");
-            CHARGING_BOOSTER_CHARGE_PERCENTAGE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Percentage of charge that is added to the held item when using the radar booster charge station", 50, "");
+            CHARGING_BOOSTER_ENABLED                        = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CHARGING_BOOSTER_ENABLED_KEY, LGUConstants.CHARGING_BOOSTER_ENABLED_DEFAULT, LGUConstants.CHARGING_BOOSTER_ENABLED_DESCRIPTION);
+            CHARGING_BOOSTER_PRICE                          = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CHARGING_BOOSTER_PRICE_KEY, LGUConstants.CHARGING_BOOSTER_PRICE_DEFAULT);
+            CHARGING_BOOSTER_PRICES                         = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.PRICES_SECTION, LGUConstants.CHARGING_BOOSTER_PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            CHARGING_BOOSTER_COOLDOWN                       = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CHARGING_BOOSTER_COOLDOWN_KEY, LGUConstants.CHARGING_BOOSTER_COOLDOWN_DEFAULT);
+            CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE  = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE_KEY, LGUConstants.CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE_DEFAULT);
+            CHARGING_BOOSTER_CHARGE_PERCENTAGE              = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CHARGING_BOOSTER_CHARGE_PERCENTAGE_KEY, LGUConstants.CHARGING_BOOSTER_CHARGE_PERCENTAGE_DEFAULT);
 
             topSection = "_Misc_";
             SHARED_UPGRADES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Convert all upgrades to be shared.", true, "If true this will ignore the individual shared upgrade option for all other upgrades and set all upgrades to be shared.");

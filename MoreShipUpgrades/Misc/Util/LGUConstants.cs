@@ -56,6 +56,111 @@ namespace MoreShipUpgrades.Misc.Util
 
         #endregion
 
+        #region Plugin Configuration
+
+        #region Contracts
+        internal const string CONTRACTS_SECTION = "Contracts";
+
+        internal const string ENABLE_CONTRACTS_KEY = "Enable the ability to purchase contracts / missions";
+        internal const bool ENABLE_CONTRACTS_DEFAULT = true;
+
+        internal const string CONTRACT_FREE_MOONS_ONLY_KEY = "Random contracts on free moons only";
+        internal const bool CONTRACT_FREE_MOONS_ONLY_DEFAULT = true;
+        internal const string CONTRACT_FREE_MOONS_ONLY_DESCRIPTION = "If true, \"contract\" command will only generate contracts on free moons.";
+
+        internal const string CONTRACT_PRICE_KEY = "Price of a random contract";
+        internal const int CONTRACT_PRICE_DEFAULT = 500;
+
+        internal const string CONTRACT_SPECIFY_PRICE_KEY = "Price of a specified moon contract";
+        internal const int CONTRACT_SPECIFY_PRICE_DEFAULT = 750;
+
+        internal const string CONTRACT_BUG_REWARD_KEY = "Value of an exterminator contract reward";
+        internal const int CONTRACT_BUG_REWARD_DEFAULT = CONTRACT_PRICE_DEFAULT;
+
+        internal const string CONTRACT_EXORCISM_REWARD_KEY = "Value of an exorcism contract reward";
+        internal const int CONTRACT_EXORCISM_REWARD_DEFAULT = CONTRACT_PRICE_DEFAULT;
+
+        internal const string CONTRACT_DEFUSAL_REWARD_KEY = "Value of an defusal contract reward";
+        internal const int CONTRACT_DEFUSAL_REWARD_DEFAULT = CONTRACT_PRICE_DEFAULT;
+
+        internal const string CONTRACT_EXTRACTION_REWARD_KEY = "Value of an extraction contract reward";
+        internal const int CONTRACT_EXTRACTION_REWARD_DEFAULT = CONTRACT_PRICE_DEFAULT;
+
+        internal const string CONTRACT_DATA_REWARD_KEY = "Value of a data contract reward";
+        internal const int CONTRACT_DATA_REWARD_DEFAULT = CONTRACT_PRICE_DEFAULT;
+
+        internal const string EXTERMINATION_BUG_SPAWNS_KEY = "Hoarder Bug Spawn Number";
+        internal const int EXTERMINATION_BUG_SPAWNS_DEFAULT = 20;
+        internal const string EXTERMINATION_BUG_SPAWNS_DESCRIPTION = "How many bugs to spawn during exterminator contracts.";
+
+        internal const string EXORCISM_GHOST_SPAWN_KEY = "Dress Girl / Thumper Spawn Number";
+        internal const int EXORCISM_GHOST_SPAWN_DEFAULT = 3;
+        internal const string EXORCISM_GHOST_SPAWN_DESCRIPTION = "How many ghosts/thumpers to spawn when failing exorcism contracts";
+
+        internal const string EXTRACTION_SCAVENGER_WEIGHT_KEY = "Weight of an extraction human";
+        internal const float EXTRACTION_SCAVENGER_WEIGHT_DEFAULT = 2.5f;
+        internal const string EXTRACTION_SCAVENGER_WEIGHT_DESCRIPTION = "Subtract 1 and multiply by 100 (2.5 = 150lbs).";
+
+        internal const string EXTRACTION_SCAVENGER_SOUND_VOLUME_KEY = "Volume of the scavenger voice clips";
+        internal const float EXTRACTION_SCAVENGER_SOUND_VOLUME_DEFAULT = 0.25f;
+        internal const string EXTRACTION_SCAVENGER_SOUND_VOLUME_DESCRIPTION = "0.0 - 1.0";
+
+        internal const string CONTRACT_FAR_FROM_MAIN_KEY = "Spawn main object far away";
+        internal const bool CONTRACT_FAR_FROM_MAIN_DEFAULT = true;
+        internal const string CONTRACT_FAR_FROM_MAIN_DESCRIPTION = "If true the main object for contracts will try spawn as far away from the main entrance as possible. If false it will spawn at a random location.";
+
+        internal const string EXTRACTION_MEDKIT_AMOUNT_KEY = "Amount of medkits that can spawn in the Extraction contract";
+        internal const int EXTRACTION_MEDKIT_AMOUNT_DEFAULT = 3;
+
+        internal const string CONTRACT_DATA_ENABLED_KEY = "Enable the data contract";
+        internal const bool CONTRACT_DATA_ENABLED_DEFAULT = true;
+        internal const string CONTRACT_DATA_ENABLED_DESCRIPTION = "Make this false if you don't want the data contract";
+
+        internal const string CONTRACT_EXTRACTION_ENABLED_KEY = "Enable the extraction contract";
+        internal const bool CONTRACT_EXTRACTION_ENABLED_DEFAULT = true;
+        internal const string CONTRACT_EXTRACTION_ENABLED_DESCRIPTION = "Make this false if you don't want the extraction contract";
+
+        internal const string CONTRACT_EXORCISM_ENABLED_KEY = "Enable the exorcism contract";
+        internal const bool CONTRACT_EXORCISM_ENABLED_DEFAULT = true;
+        internal const string CONTRACT_EXORCISM_ENABLED_DESCRIPTION = "Make this false if you don't want the exorcism contract";
+
+        internal const string CONTRACT_DEFUSAL_ENABLED_KEY = "Enable the defusal contract";
+        internal const bool CONTRACT_DEFUSAL_ENABLED_DEFAULT = true;
+        internal const string CONTRACT_DEFUSAL_ENABLED_DESCRIPTION = "Make this false if you don't want the defusal contract";
+
+        internal const string CONTRACT_EXTERMINATION_ENABLED_KEY = "Enable the exterminator contract";
+        internal const bool CONTRACT_EXTERMINATION_ENABLED_DEFAULT = true;
+        internal const string CONTRACT_EXTERMINATION_ENABLED_DESCRIPTION = "Make this false if you don't want the exterminator contract";
+
+        internal const string CONTRACT_QUOTA_MULTIPLIER_KEY = "Multiplier applied to the contract loot items dependant on the current applied quota";
+        internal const int CONTRACT_QUOTA_MULTIPLIER_DEFAULT = 25;
+        internal const string CONTRACT_QUOTA_MULTIPLIER_DESCRIPTION = "0 = None of the quota value will influence the loot's value.\n100 = The quota value will be added fully to the loot's value.";
+        #endregion
+
+        #region Charging Booster
+
+        internal const string CHARGING_BOOSTER_ENABLED_KEY = "Enable Charging Booster Upgrade";
+        internal const bool CHARGING_BOOSTER_ENABLED_DEFAULT = true;
+        internal const string CHARGING_BOOSTER_ENABLED_DESCRIPTION = "Tier upgrade which allows charging items in a radar booster";
+
+        internal const string CHARGING_BOOSTER_PRICE_KEY = "Price of Charging Booster Upgrade";
+        internal const int CHARGING_BOOSTER_PRICE_DEFAULT = 300;
+
+        internal const string CHARGING_BOOSTER_PRICES_DEFAULT = "250,300,400";
+
+        internal const string CHARGING_BOOSTER_COOLDOWN_KEY = "Cooldown of the charging station in radar boosters when used";
+        internal const float CHARGING_BOOSTER_COOLDOWN_DEFAULT = 90f;
+
+        internal const string CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE_KEY = "Incremental cooldown decrease whenever the level of the upgrade is incremented";
+        internal const float CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE_DEFAULT = 10f;
+
+        internal const string CHARGING_BOOSTER_CHARGE_PERCENTAGE_KEY = "Percentage of charge that is added to the held item when using the radar booster charge station";
+        internal const int CHARGING_BOOSTER_CHARGE_PERCENTAGE_DEFAULT = 50;
+
+        #endregion
+
+        #endregion
+
         #region LGU Store Interactive UI
 
         #region Main Screen

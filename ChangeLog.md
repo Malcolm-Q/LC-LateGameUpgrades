@@ -7,6 +7,7 @@
 - Fixed Malware Broadcaster not applying on ||Spike Roof Traps||
 - Fixed monster samples not deactivating the particle system when dropped
 - Fixed an error when shutting down the game.
+- Fixed errors when using Lobby Control due to unity assets' meshes not being readable.
 
 ## V 3.5.3 - 2024-04-04
 - Refined version checking to not load unnecessary types (and possibly lead to errors due to compatibility modes)

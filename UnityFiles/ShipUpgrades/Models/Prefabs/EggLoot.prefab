@@ -52,13 +52,14 @@ MonoBehaviour:
   grabbable: 1
   isHeld: 0
   isHeldByEnemy: 0
+  deactivated: 0
   parentObject: {fileID: 0}
   targetFloorPosition: {x: 0, y: 0, z: 0}
   startFallingPosition: {x: 0, y: 0, z: 0}
   floorYRot: 0
   fallTime: 0
   hasHitGround: 0
-  scrapValue: 500
+  scrapValue: 0
   itemUsedUp: 0
   playerHeldBy: {fileID: 0}
   isPocketed: 0
