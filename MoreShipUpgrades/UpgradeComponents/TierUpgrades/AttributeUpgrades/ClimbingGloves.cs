@@ -9,7 +9,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
     internal class ClimbingGloves : GameAttributeTierUpgrade, IPlayerSync
     {
         internal const string UPGRADE_NAME = "Climbing Gloves";
-
+        internal const string DEFAULT_PRICES = "200,250,300";
         void Awake()
         {
             upgradeName = UPGRADE_NAME;

@@ -11,14 +11,13 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
     class LockSmith : OneTimeUpgrade, IUpgradeWorldBuilding
     {
-        public static string UPGRADE_NAME = "Locksmith";
+        internal const string UPGRADE_NAME = "Locksmith";
         internal const string WORLD_BUILDING_TEXT = "\n\nOn-the-job training package that supplies {0} with proprietary knowledge of the 'Ram, Scan, Bump' technique" +
             " for bypassing The Company's proprietary Low-Tech Manual Security Doors' security system. Comes with an 'all-nines-notched' key, a rubber gasket, and a plastic handle on a metal rod {1}.\n\n";
         public static LockSmith instance;
 
-        private GameObject pin1, pin2, pin3, pin4, pin5;
         private List<GameObject> pins;
-        private List<int> order = new List<int> { 0, 1, 2, 3, 4 };
+        private readonly List<int> order = new List<int> { 0, 1, 2, 3, 4 };
         private int currentPin = 0;
         public DoorLock currentDoor = null;
         private bool canPick = false;
@@ -32,6 +31,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             base.Start();
             Transform tumbler = transform.GetChild(0).GetChild(0).GetChild(0);
+            GameObject pin1, pin2, pin3, pin4, pin5;
             pin1 = tumbler.GetChild(0).gameObject;
             pin2 = tumbler.GetChild(1).gameObject;
             pin3 = tumbler.GetChild(2).gameObject;

@@ -202,6 +202,13 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
     * The ship's doors can last longer while being closed.
     * Though let's be honest, they will get in anyways.
 
+* __Aluminium Coils - $750__
+    * Provides several buffs to the zap gun such as:
+	* Increased stun range
+	* Increased stun timer after stopping zapping
+	* Decreased difficulty in its minigame
+	* Decreased cooldown time after failing the minigame (stopping zapping the enemy)
+
 ## Contracts
 * __Defusal Contract__
     * Look around the facility for a ticking bomb. Defuse it before the timer runs out or anyone near it might meet a gruesome fate.

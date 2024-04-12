@@ -10,6 +10,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
     /// </summary>
     internal class DivingKit : GrabbableObject, IDisplayInfo
     {
+        internal const string ITEM_NAME = "Diving Kit";
         /// <summary>
         /// Local player of Network Manager
         /// </summary>

@@ -8,6 +8,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
 {
     public class Helmet : GrabbableObject, IDisplayInfo
     {
+        internal const string ITEM_NAME = "Helmet";
         public override void ItemActivate(bool used, bool buttonDown = true)
         {
             base.ItemActivate(used, buttonDown);

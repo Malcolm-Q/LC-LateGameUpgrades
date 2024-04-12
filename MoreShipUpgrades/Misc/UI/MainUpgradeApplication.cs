@@ -46,12 +46,12 @@ namespace MoreShipUpgrades.Misc.UI
                 CursorMenu cursorMenu = cursorMenus[i];
                 screens[i] = new BoxedScreen()
                 {
-                    Title = "Lategame Upgrades",
+                    Title = LGUConstants.MAIN_SCREEN_TITLE,
                     elements =
                     [
                         new TextElement()
                         {
-                            Text = "Select an upgrade to purchase:"
+                            Text = LGUConstants.MAIN_SCREEN_TOP_TEXT,
                         },
                         new TextElement()
                         {
@@ -110,11 +110,11 @@ namespace MoreShipUpgrades.Misc.UI
         }
         void NotEnoughCredits(CustomTerminalNode node, Action backAction)
         {
-            ErrorMessage(node, backAction, "You do not have enough credits to purchase this upgrade.");
+            ErrorMessage(node, backAction, LGUConstants.NOT_ENOUGH_CREDITS);
         }
         void MaxUpgrade(CustomTerminalNode node, Action backAction)
         {
-            ErrorMessage(node, backAction, "You have reached the maximum level of this upgrade.");
+            ErrorMessage(node, backAction, LGUConstants.REACHED_MAX_LEVEL);
         }
         void ErrorMessage(CustomTerminalNode node, Action backAction, string error)
         {
@@ -126,7 +126,7 @@ namespace MoreShipUpgrades.Misc.UI
                     [
                         new CursorElement()
                         {
-                            Name = "Back",
+                            Name = LGUConstants.GO_BACK_PROMPT,
                             Description = "",
                             Action = backAction,
                         }
@@ -173,7 +173,7 @@ namespace MoreShipUpgrades.Misc.UI
                 NotEnoughCredits(node, backAction);
                 return;
             }
-            Confirm(node.Name, node.Description, () => PurchaseUpgrade(node, price, backAction), backAction, $"Do you wish to purchase this upgrade for {price} credits?");
+            Confirm(node.Name, node.Description, () => PurchaseUpgrade(node, price, backAction), backAction, string.Format(LGUConstants.PURCHASE_UPGRADE_FORMAT, price));
         }
         void PurchaseUpgrade(CustomTerminalNode node, int price, Action backAction)
         {
@@ -197,13 +197,13 @@ namespace MoreShipUpgrades.Misc.UI
                 [
                     new CursorElement()
                     {
-                        Name = "Confirm",
+                        Name = LGUConstants.CONFIRM_PROMPT,
                         Description = "",
                         Action = () => { confirmAction(); }
                     },
                     new CursorElement()
                     {
-                        Name = "Abort",
+                        Name = LGUConstants.CANCEL_PROMPT,
                         Description = "",
                         Action = () => { declineAction(); }
                     }

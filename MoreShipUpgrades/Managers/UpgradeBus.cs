@@ -90,6 +90,7 @@ namespace MoreShipUpgrades.Managers
 
         public void ResetAllValues(bool wipeObjRefs = true)
         {
+            if (LguStore.Instance == null) return; // Quitting the game
             ResetPlayerAttributes();
             if (LguStore.Instance.IsServer || LguStore.Instance.IsHost) LguStore.Instance.ResetShipAttributesClientRpc();
 
@@ -322,6 +323,7 @@ namespace MoreShipUpgrades.Managers
             SetupEfficientEnginesNode();
             SetupClimbingGlovesTerminalNode();
             SetupLithiumBatteriesTerminalNode();
+            SetupAluminiumCoilsTerminalNode();
             terminalNodes.Sort();
         }
         void SetupEfficientEnginesNode()
@@ -550,6 +552,14 @@ namespace MoreShipUpgrades.Managers
                                                 PluginConfiguration.LITHIUM_BATTERIES_ENABLED.Value,
                                                 PluginConfiguration.LITHIUM_BATTERIES_PRICE.Value,
                                                 ParseUpgradePrices(PluginConfiguration.LITHIUM_BATTERIES_PRICES.Value));
+        }
+        void SetupAluminiumCoilsTerminalNode()
+        {
+            SetupMultiplePurchasableTerminalNode(AluminiumCoils.UPGRADE_NAME,
+                                                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.ALUMINIUM_COILS_INDIVIDUAL.Value,
+                                                PluginConfiguration.ALUMINIUM_COILS_ENABLED.Value,
+                                                PluginConfiguration.ALUMINIUM_COILS_PRICE.Value,
+                                                ParseUpgradePrices(PluginConfiguration.ALUMINIUM_COILS_PRICES.Value));
         }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can be purchased multiple times

@@ -8,7 +8,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
 {
     public class Interns : NetworkBehaviour
     {
-        internal const string UPGRADE_NAME = "Interns";
+        internal const string NAME = "Interns";
         public static Interns instance;
 
         internal string[] internNames, internInterests;
