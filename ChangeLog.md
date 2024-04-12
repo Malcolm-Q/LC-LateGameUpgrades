@@ -1,10 +1,10 @@
-## V 3.5.4 - 2024-04-??
+## V 3.5.4 - 2024-04-11
 - Implemented "Aluminium Coils" tier upgrade which provides several buffs to the zap gun item such as:
      - Reduced cooldown usage after failing its minigame
      - Reduced difficulty multiplier used to initialize the minigame's variables
      - Increased stun range
      - Increased stun time on enemies
-- Fixed Malware Broadcaster not applying on ||Spike Roof Traps||
+- Fixed Malware Broadcaster not applying on Spike Roof Traps
 - Fixed monster samples not deactivating the particle system when dropped
 - Fixed an error when shutting down the game.
 - Fixed errors when using Lobby Control due to unity assets' meshes not being readable.

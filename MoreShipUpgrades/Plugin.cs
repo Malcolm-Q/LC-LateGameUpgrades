@@ -37,6 +37,7 @@ using MoreShipUpgrades.Patches.PlayerController;
 using MoreShipUpgrades.Patches.RoundComponents;
 using MoreShipUpgrades.Patches.TerminalComponents;
 using MoreShipUpgrades.Input;
+using com.github.zehsteam;
 
 namespace MoreShipUpgrades
 {
@@ -92,10 +93,7 @@ namespace MoreShipUpgrades
 
             UpgradeBus.Instance.version = Metadata.VERSION;
             UpgradeBus.Instance.UpgradeAssets = UpgradeAssets;
-            
             SetupModStore(ref UpgradeAssets);
-
-            SetupIntroScreen();
 
             SetupItems();
             
@@ -106,7 +104,7 @@ namespace MoreShipUpgrades
             InputUtils_Compat.Init();
             PatchMainVersion();
 
-            mls.LogDebug("LGU has been patched");
+            mls.LogInfo($"{Metadata.NAME} {Metadata.VERSION} has been loaded successfully.");
         }
 
         internal static void TryPatchBetaVersion() 
@@ -368,11 +366,6 @@ namespace MoreShipUpgrades
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(modStore);
             UpgradeBus.Instance.modStorePrefab = modStore;
         }
-        private void SetupIntroScreen()
-        {
-            UpgradeBus.Instance.IntroScreen = AssetBundleHandler.GetPerkGameObject("Intro Screen");
-            if (UpgradeBus.Instance.IntroScreen != null) UpgradeBus.Instance.IntroScreen.AddComponent<IntroScreenScript>();
-        }
         private void SetupItems()
         {
             SetupTeleporterButtons();
@@ -383,6 +376,7 @@ namespace MoreShipUpgrades
             SetupHelmet();
             SetupDivingKit();
             SetupWheelbarrows();
+            mls.LogInfo("Items have been setup");
         }
         private void SetupSamples()
         {
@@ -719,6 +713,7 @@ namespace MoreShipUpgrades
             SetupClimbingGloves();
             SetupLithiumBatteries();
             SetupAluminiumCoils();
+            mls.LogInfo("Upgrades have been setup");
         }
 
         private void SetupSickBeats()
@@ -790,7 +785,7 @@ namespace MoreShipUpgrades
         }
         private void SetupInterns()
         {
-            SetupGenericPerk<Interns>(Interns.UPGRADE_NAME);
+            SetupGenericPerk<Interns>(Interns.NAME);
         }
         private void SetupPager()
         {

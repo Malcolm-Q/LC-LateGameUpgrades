@@ -7,6 +7,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
 {
     public class Peeper : GrabbableObject, IDisplayInfo
     {
+        internal const string ITEM_NAME = "Peeper";
         /// <summary>
         /// Wether the instance of the class can stop coil-heads from moving or not
         /// </summary>

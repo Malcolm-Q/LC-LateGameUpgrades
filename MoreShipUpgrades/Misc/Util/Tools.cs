@@ -34,12 +34,12 @@ namespace MoreShipUpgrades.Misc.Util
             if (!found) logger.LogError(errorMessage);
             index++;
         }
-        public static int FindLocalField(int index, ref List<CodeInstruction> codes, Type localType, int localIndex, object addCode, bool skip = false, bool store = false, bool requireInstance = false, string errorMessage = "Not found")
+        public static int FindLocalField(int index, ref List<CodeInstruction> codes, int localIndex, object addCode, bool skip = false, bool store = false, bool requireInstance = false, string errorMessage = "Not found")
         {
             bool found = false;
             for (; index < codes.Count; index++)
             {
-                if (!CheckCodeInstruction(codes[index], localType, localIndex, store)) continue;
+                if (!CheckCodeInstruction(codes[index], localIndex, store)) continue;
                 found = true;
                 if (skip) break;
                 codes.Insert(index + 1, new CodeInstruction(OpCodes.Call, addCode));
@@ -85,7 +85,7 @@ namespace MoreShipUpgrades.Misc.Util
         {
             FindCodeInstruction(ref index, ref codes, findValue: OpCodes.Mul, addCode: addCode, skip: skip, notInstruction: notInstruction, andInstruction: andInstruction, orInstruction: orInstruction, requireInstance: requireInstance, errorMessage: errorMessage);
         }
-        private static bool CheckCodeInstruction(CodeInstruction code, Type localType, int localIndex, bool store = false)
+        private static bool CheckCodeInstruction(CodeInstruction code, int localIndex, bool store = false)
         {
             if (!store)
             {
@@ -95,7 +95,7 @@ namespace MoreShipUpgrades.Misc.Util
                     case 1: return code.opcode == OpCodes.Ldloc_1;
                     case 2: return code.opcode == OpCodes.Ldloc_2;
                     case 3: return code.opcode == OpCodes.Ldloc_3;
-                    default: return code.opcode == OpCodes.Ldloc && code.operand.ToString() == $"{nameof(localType)} ({localIndex})";
+                    default: return code.opcode == OpCodes.Ldloc && (int)code.operand == localIndex;
                 }
             }
             else
@@ -106,7 +106,7 @@ namespace MoreShipUpgrades.Misc.Util
                     case 1: return code.opcode == OpCodes.Stloc_1;
                     case 2: return code.opcode == OpCodes.Stloc_2;
                     case 3: return code.opcode == OpCodes.Stloc_3;
-                    default: return code.opcode == OpCodes.Stloc && code.operand.ToString() == $"{nameof(localType)} ({localIndex})";
+                    default: return code.opcode == OpCodes.Stloc && (int)code.operand == localIndex;
                 }
             }
         }

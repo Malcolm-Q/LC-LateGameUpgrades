@@ -12,6 +12,8 @@ using LethalLib.Modules;
 using MoreShipUpgrades.Managers;
 using UnityEngine;
 using MoreShipUpgrades.Misc.Util;
+using MoreShipUpgrades.UpgradeComponents.Items;
+using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
 
 
 namespace MoreShipUpgrades.Misc
@@ -19,7 +21,8 @@ namespace MoreShipUpgrades.Misc
     [DataContract]
     public class PluginConfig : SyncedConfig<PluginConfig>
     {
-        // enabled disabled
+        #region Enabled
+
         [field: DataMember] public SyncedEntry<bool> ALUMINIUM_COILS_ENABLED {  get; set; }
         [field: DataMember] public SyncedEntry<bool> CHARGING_BOOSTER_ENABLED { get; set; }
         [field: DataMember] public SyncedEntry<bool> MARKET_INFLUENCE_ENABLED { get; set; }
@@ -55,7 +58,10 @@ namespace MoreShipUpgrades.Misc
         [field: DataMember] public SyncedEntry<bool> CLIMBING_GLOVES_ENABLED {  get; set; }
         [field: DataMember] public SyncedEntry<bool> WEATHER_PROBE_ENABLED { get; set; }
         [field: DataMember] public SyncedEntry<bool> LITHIUM_BATTERIES_ENABLED { get; set; }
-        // individual or shared
+
+        #endregion
+
+        #region Individual
         [field: DataMember] public SyncedEntry<bool> ALUMINIUM_COILS_INDIVIDUAL { get; set; }
         [field: DataMember] public SyncedEntry<bool> BEEKEEPER_INDIVIDUAL { get; set; }
         [field: DataMember] public SyncedEntry<bool> PROTEIN_INDIVIDUAL { get; set; }
@@ -69,11 +75,13 @@ namespace MoreShipUpgrades.Misc
         [field: DataMember] public SyncedEntry<bool> STRONG_LEGS_INDIVIDUAL { get; set; }
         [field: DataMember] public SyncedEntry<bool> DISCOMBOBULATOR_INDIVIDUAL { get; set; }
         [field: DataMember] public SyncedEntry<bool> MALWARE_BROADCASTER_INDIVIDUAL { get; set; }
-        [field: DataMember] public SyncedEntry<bool> INTERN_INDIVIDUAL { get; set; }
         [field: DataMember] public SyncedEntry<bool> LOCKSMITH_INDIVIDUAL { get; set; }
         [field: DataMember] public SyncedEntry<bool> CLIMBING_GLOVES_INDIVIDUAL { get; set; }
         [field: DataMember] public SyncedEntry<bool> LITHIUM_BATTERIES_INDIVIDUAL { get; set; }
-        // prices
+
+        #endregion
+
+        #region Initial Prices
         [field: DataMember] public SyncedEntry<int> ALUMINIUM_COILS_PRICE { get; set; }
         [field: DataMember] public SyncedEntry<int> CLIMBING_GLOVES_PRICE {  get; set; }
         [field: DataMember] public SyncedEntry<int> WEATHER_PROBE_PRICE {  get; set; }
@@ -114,7 +122,9 @@ namespace MoreShipUpgrades.Misc
         [field: DataMember] public SyncedEntry<int> EFFICIENT_ENGINES_PRICE { get; set; }
         [field: DataMember] public SyncedEntry<int> LITHIUM_BATTERIES_PRICE {  get; set; }
 
-        // attributes
+        #endregion
+
+        #region Attributes
         [field: DataMember] public SyncedEntry<string> ALUMINIUM_COILS_PRICES {  get; set; }
         [field: DataMember] public SyncedEntry<int> ALUMINIUM_COILS_INITIAL_COOLDOWN_DECREASE {  get; set; }
         [field: DataMember] public SyncedEntry<int> ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_DECREASE { get; set; }
@@ -211,7 +221,6 @@ namespace MoreShipUpgrades.Misc
         [field: DataMember] public SyncedEntry<int> BETTER_SCANNER_PRICE2 { get; set; }
         [field: DataMember] public SyncedEntry<int> BETTER_SCANNER_PRICE3 { get; set; }
         [field: DataMember] public SyncedEntry<bool> BETTER_SCANNER_ENEMIES { get; set; }
-        [field: DataMember] public SyncedEntry<bool> INTRO_ENABLED { get; set; }
         [field: DataMember] public SyncedEntry<bool> LIGHTNING_ROD_ACTIVE { get; set; }
         [field: DataMember] public SyncedEntry<float> LIGHTNING_ROD_DIST { get; set; }
         [field: DataMember] public SyncedEntry<bool> PAGER_ENABLED { get; set; }
@@ -319,144 +328,488 @@ namespace MoreShipUpgrades.Misc
         [field: DataMember] public SyncedEntry<bool> SALE_APPLY_ONCE { get; set; }
         [field: DataMember] public SyncedEntry<bool> WEATHER_PROBE_ALWAYS_CLEAR {  get; set; }
 
+        #endregion
+
         public PluginConfig(ConfigFile cfg) : base(Metadata.GUID)
         {
             ConfigManager.Register(this);
+            string topSection;
 
-            string topSection = LGUConstants.CONTRACTS_SECTION;
-            CONTRACTS_ENABLED                   = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.ENABLE_CONTRACTS_KEY, LGUConstants.ENABLE_CONTRACTS_DEFAULT);
-            CONTRACT_FREE_MOONS_ONLY            = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_FREE_MOONS_ONLY_KEY, LGUConstants.CONTRACT_FREE_MOONS_ONLY_DEFAULT, LGUConstants.CONTRACT_FREE_MOONS_ONLY_DESCRIPTION);
-            CONTRACT_PRICE                      = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_PRICE_KEY, LGUConstants.CONTRACT_PRICE_DEFAULT);
-            CONTRACT_SPECIFY_PRICE              = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_SPECIFY_PRICE_KEY, LGUConstants.CONTRACT_SPECIFY_PRICE_DEFAULT);
-            CONTRACT_BUG_REWARD                 = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_BUG_REWARD_KEY, LGUConstants.CONTRACT_BUG_REWARD_DEFAULT);
-            CONTRACT_EXOR_REWARD                = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_EXORCISM_REWARD_KEY, LGUConstants.CONTRACT_EXORCISM_REWARD_DEFAULT);
-            CONTRACT_DEFUSE_REWARD              = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_DEFUSAL_REWARD_KEY, LGUConstants.CONTRACT_DEFUSAL_REWARD_DEFAULT);
-            CONTRACT_EXTRACT_REWARD             = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_EXTRACTION_REWARD_KEY, LGUConstants.CONTRACT_EXTRACTION_REWARD_DEFAULT);
-            CONTRACT_DATA_REWARD                = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_DATA_REWARD_KEY, LGUConstants.CONTRACT_DATA_REWARD_DEFAULT);
-            CONTRACT_BUG_SPAWNS                 = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.EXTERMINATION_BUG_SPAWNS_KEY, LGUConstants.EXTERMINATION_BUG_SPAWNS_DEFAULT, LGUConstants.EXTERMINATION_BUG_SPAWNS_DESCRIPTION);
-            CONTRACT_GHOST_SPAWN                = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.EXORCISM_GHOST_SPAWN_KEY, LGUConstants.EXORCISM_GHOST_SPAWN_DEFAULT, LGUConstants.EXORCISM_GHOST_SPAWN_DESCRIPTION);
-            CONTRACT_EXTRACT_WEIGHT             = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.EXTRACTION_SCAVENGER_WEIGHT_KEY, LGUConstants.EXTRACTION_SCAVENGER_WEIGHT_DEFAULT, LGUConstants.EXTRACTION_SCAVENGER_WEIGHT_DESCRIPTION);
+            #region Miscellaneous
+
+            topSection = LGUConstants.MISCELLANEOUS_SECTION;
+            SHARED_UPGRADES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SHARE_ALL_UPGRADES_KEY, LGUConstants.SHARE_ALL_UPGRADES_DEFAULT, LGUConstants.SHARE_ALL_UPGRADES_DESCRIPTION);
+            SALE_PERC = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SALE_PERCENT_KEY, LGUConstants.SALE_PERCENT_DEFAULT, LGUConstants.SALE_PERCENT_DESCRIPTION);
+            KEEP_UPGRADES_AFTER_FIRED_CUTSCENE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.KEEP_UPGRADES_AFTER_FIRED_KEY, LGUConstants.KEEP_UPGRADES_AFTER_FIRED_DEFAULT, LGUConstants.KEEP_UPGRADES_AFTER_FIRED_DESCRIPTION);
+            SHOW_UPGRADES_CHAT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SHOW_UPGRADES_CHAT_KEY, LGUConstants.SHOW_UPGRADES_CHAT_DEFAULT, LGUConstants.SHOW_UPGRADES_CHAT_DESCRIPTION);
+            SALE_APPLY_ONCE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SALE_APPLY_ONCE_KEY, LGUConstants.SALE_APPLY_ONCE_DEFAULT, LGUConstants.SALE_APPLY_ONCE_DESCRIPTION);
+
+            #endregion
+
+            #region Contracts
+
+            topSection = LGUConstants.CONTRACTS_SECTION;
+            CONTRACTS_ENABLED                   = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.ENABLE_CONTRACTS_KEY                 , LGUConstants.ENABLE_CONTRACTS_DEFAULT);
+            CONTRACT_FREE_MOONS_ONLY            = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_FREE_MOONS_ONLY_KEY         , LGUConstants.CONTRACT_FREE_MOONS_ONLY_DEFAULT, LGUConstants.CONTRACT_FREE_MOONS_ONLY_DESCRIPTION);
+            CONTRACT_PRICE                      = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_PRICE_KEY                   , LGUConstants.CONTRACT_PRICE_DEFAULT);
+            CONTRACT_SPECIFY_PRICE              = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_SPECIFY_PRICE_KEY           , LGUConstants.CONTRACT_SPECIFY_PRICE_DEFAULT);
+            CONTRACT_BUG_REWARD                 = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_BUG_REWARD_KEY              , LGUConstants.CONTRACT_BUG_REWARD_DEFAULT);
+            CONTRACT_EXOR_REWARD                = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_EXORCISM_REWARD_KEY         , LGUConstants.CONTRACT_EXORCISM_REWARD_DEFAULT);
+            CONTRACT_DEFUSE_REWARD              = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_DEFUSAL_REWARD_KEY          , LGUConstants.CONTRACT_DEFUSAL_REWARD_DEFAULT);
+            CONTRACT_EXTRACT_REWARD             = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_EXTRACTION_REWARD_KEY       , LGUConstants.CONTRACT_EXTRACTION_REWARD_DEFAULT);
+            CONTRACT_DATA_REWARD                = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_DATA_REWARD_KEY             , LGUConstants.CONTRACT_DATA_REWARD_DEFAULT);
+            CONTRACT_BUG_SPAWNS                 = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.EXTERMINATION_BUG_SPAWNS_KEY         , LGUConstants.EXTERMINATION_BUG_SPAWNS_DEFAULT, LGUConstants.EXTERMINATION_BUG_SPAWNS_DESCRIPTION);
+            CONTRACT_GHOST_SPAWN                = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.EXORCISM_GHOST_SPAWN_KEY             , LGUConstants.EXORCISM_GHOST_SPAWN_DEFAULT, LGUConstants.EXORCISM_GHOST_SPAWN_DESCRIPTION);
+            CONTRACT_EXTRACT_WEIGHT             = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.EXTRACTION_SCAVENGER_WEIGHT_KEY      , LGUConstants.EXTRACTION_SCAVENGER_WEIGHT_DEFAULT, LGUConstants.EXTRACTION_SCAVENGER_WEIGHT_DESCRIPTION);
             SCAV_VOLUME                         = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.EXTRACTION_SCAVENGER_SOUND_VOLUME_KEY, LGUConstants.EXTRACTION_SCAVENGER_SOUND_VOLUME_DEFAULT, LGUConstants.EXTRACTION_SCAVENGER_SOUND_VOLUME_DESCRIPTION);
-            MAIN_OBJECT_FURTHEST                = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_FAR_FROM_MAIN_KEY, LGUConstants.CONTRACT_FAR_FROM_MAIN_DEFAULT, LGUConstants.CONTRACT_FAR_FROM_MAIN_DESCRIPTION);
-            EXTRACTION_CONTRACT_AMOUNT_MEDKITS  = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.EXTRACTION_MEDKIT_AMOUNT_KEY, LGUConstants.EXTRACTION_MEDKIT_AMOUNT_DEFAULT);
+            MAIN_OBJECT_FURTHEST                = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_FAR_FROM_MAIN_KEY           , LGUConstants.CONTRACT_FAR_FROM_MAIN_DEFAULT, LGUConstants.CONTRACT_FAR_FROM_MAIN_DESCRIPTION);
+            EXTRACTION_CONTRACT_AMOUNT_MEDKITS  = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.EXTRACTION_MEDKIT_AMOUNT_KEY         , LGUConstants.EXTRACTION_MEDKIT_AMOUNT_DEFAULT);
 
             // this is kind of dumb and I'd like to just use a comma seperated cfg.BindSyncedEntry<string> but this is much more foolproof
-            DATA_CONTRACT                       = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_DATA_ENABLED_KEY, LGUConstants.CONTRACT_DATA_ENABLED_DEFAULT, LGUConstants.CONTRACT_DATA_ENABLED_DESCRIPTION);
-            EXTRACTION_CONTRACT                 = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_EXTRACTION_ENABLED_KEY, LGUConstants.CONTRACT_EXTRACTION_ENABLED_DEFAULT, LGUConstants.CONTRACT_EXTRACTION_ENABLED_DESCRIPTION);
-            EXORCISM_CONTRACT                   = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_EXORCISM_ENABLED_KEY, LGUConstants.CONTRACT_EXORCISM_ENABLED_DEFAULT, LGUConstants.CONTRACT_EXORCISM_ENABLED_DESCRIPTION);
-            DEFUSAL_CONTRACT                    = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_DEFUSAL_ENABLED_KEY, LGUConstants.CONTRACT_DEFUSAL_ENABLED_DEFAULT, LGUConstants.CONTRACT_DEFUSAL_ENABLED_DESCRIPTION);
-            EXTERMINATOR_CONTRACT               = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_EXTERMINATION_ENABLED_KEY, LGUConstants.CONTRACT_EXTERMINATION_ENABLED_DEFAULT, LGUConstants.CONTRACT_EXTERMINATION_ENABLED_DESCRIPTION);
+            DATA_CONTRACT                       = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_DATA_ENABLED_KEY            , LGUConstants.CONTRACT_DATA_ENABLED_DEFAULT, LGUConstants.CONTRACT_DATA_ENABLED_DESCRIPTION);
+            EXTRACTION_CONTRACT                 = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_EXTRACTION_ENABLED_KEY      , LGUConstants.CONTRACT_EXTRACTION_ENABLED_DEFAULT, LGUConstants.CONTRACT_EXTRACTION_ENABLED_DESCRIPTION);
+            EXORCISM_CONTRACT                   = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_EXORCISM_ENABLED_KEY        , LGUConstants.CONTRACT_EXORCISM_ENABLED_DEFAULT, LGUConstants.CONTRACT_EXORCISM_ENABLED_DESCRIPTION);
+            DEFUSAL_CONTRACT                    = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_DEFUSAL_ENABLED_KEY         , LGUConstants.CONTRACT_DEFUSAL_ENABLED_DEFAULT, LGUConstants.CONTRACT_DEFUSAL_ENABLED_DESCRIPTION);
+            EXTERMINATOR_CONTRACT               = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_EXTERMINATION_ENABLED_KEY   , LGUConstants.CONTRACT_EXTERMINATION_ENABLED_DEFAULT, LGUConstants.CONTRACT_EXTERMINATION_ENABLED_DESCRIPTION);
+            CONTRACT_REWARD_QUOTA_MULTIPLIER    = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_QUOTA_MULTIPLIER_KEY        , LGUConstants.CONTRACT_QUOTA_MULTIPLIER_DEFAULT, LGUConstants.CONTRACT_QUOTA_MULTIPLIER_DESCRIPTION);
 
-            CONTRACT_REWARD_QUOTA_MULTIPLIER    = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CONTRACT_QUOTA_MULTIPLIER_KEY, LGUConstants.CONTRACT_QUOTA_MULTIPLIER_DEFAULT, LGUConstants.CONTRACT_QUOTA_MULTIPLIER_DESCRIPTION);
+            #endregion
 
-            topSection = ChargingBooster.UPGRADE_NAME;
-            CHARGING_BOOSTER_ENABLED                        = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CHARGING_BOOSTER_ENABLED_KEY, LGUConstants.CHARGING_BOOSTER_ENABLED_DEFAULT, LGUConstants.CHARGING_BOOSTER_ENABLED_DESCRIPTION);
-            CHARGING_BOOSTER_PRICE                          = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CHARGING_BOOSTER_PRICE_KEY, LGUConstants.CHARGING_BOOSTER_PRICE_DEFAULT);
-            CHARGING_BOOSTER_PRICES                         = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.PRICES_SECTION, LGUConstants.CHARGING_BOOSTER_PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            CHARGING_BOOSTER_COOLDOWN                       = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CHARGING_BOOSTER_COOLDOWN_KEY, LGUConstants.CHARGING_BOOSTER_COOLDOWN_DEFAULT);
-            CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE  = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE_KEY, LGUConstants.CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE_DEFAULT);
-            CHARGING_BOOSTER_CHARGE_PERCENTAGE              = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LGUConstants.CHARGING_BOOSTER_CHARGE_PERCENTAGE_KEY, LGUConstants.CHARGING_BOOSTER_CHARGE_PERCENTAGE_DEFAULT);
+            #region Items
 
-            topSection = "_Misc_";
-            SHARED_UPGRADES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Convert all upgrades to be shared.", true, "If true this will ignore the individual shared upgrade option for all other upgrades and set all upgrades to be shared.");
-            SALE_PERC = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Chance of upgrades going on sale", 0.85f, "0.85 = 15% chance of an upgrade going on sale.");
-            INTRO_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Intro Enabled", true, "If true shows a splashscreen with some info once per update of LGU.");
-            KEEP_UPGRADES_AFTER_FIRED_CUTSCENE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Keep upgrades after quota failure", false, "If true, you will keep your upgrades after being fired by The Company.");
-            SHOW_UPGRADES_CHAT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Show upgrades being loaded in chat", true, "If enabled, chat messages will be displayed when loading an upgrade for the first time.");
-            SALE_APPLY_ONCE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Apply upgrade sale on one purchase", false, "When an upgrade is on sale, apply the sale only on the first ever purchase of it while on sale. Consecutive purchases will not have the sale applied");
+            #region Weak Portable Teleporter
 
-            topSection = "Helmet";
-            HELMET_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable the helmet for purchase", true, "");
-            HELMET_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of the helmet", 750, "");
-            HELMET_HITS_BLOCKED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Amount of hits blocked by helmet", 2, "");
+            topSection = RegularPortableTeleporter.ITEM_NAME;
+            WEAK_TELE_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.PORTABLE_TELEPORTER_ENABLED_KEY, LGUConstants.PORTABLE_TELEPORTER_ENABLED_DEFAULT);
+            WEAK_TELE_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.PORTABLE_TELEPORTER_PRICE_KEY, LGUConstants.PORTABLE_TELEPORTER_PRICE_DEFAULT);
+            CHANCE_TO_BREAK = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.PORTABLE_TELEPORTER_BREAK_CHANCE_KEY, LGUConstants.PORTABLE_TELEPORTER_BREAK_CHANCE_DEFAULT, LGUConstants.PORTABLE_TELEPORTER_BREAK_CHANCE_DESCRIPTION);
+            KEEP_ITEMS_ON_TELE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.PORTABLE_TELEPORTER_KEEP_ITEMS_KEY, LGUConstants.PORTABLE_TELEPORTER_KEEP_ITEMS_DEFAULT, LGUConstants.PORTABLE_TELEPORTER_KEEP_ITEMS_DESCRIPTION);
 
-            topSection = "Sick Beats";
-            BEATS_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Sick Beats Upgrade", true, "Get buffs from nearby active boomboxes.");
-            BEATS_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            BEATS_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Default unlock price", 500, "");
-            BEATS_SPEED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Speed Boost Effect", true, "");
-            BEATS_DMG = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Damage Boost Effect", true, "");
-            BEATS_STAMINA = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Stamina Boost Effect", false, "");
-            BEATS_DEF = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Defense Boost Effect", false, "");
-            BEATS_DEF_CO = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Defense Boost Coefficient", 0.5f, "Multiplied to incoming damage.");
-            BEATS_STAMINA_CO = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Stamina Regen Coefficient", 1.25f, "Multiplied to stamina regen.");
-            BEATS_DMG_INC = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Additional Damage Dealt", 1, "");
-            BEATS_SPEED_INC = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Speed Boost Addition", 1.5f, "");
-            BEATS_RADIUS = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Effect Radius", 15f, "Radius in unity units players will be effected by an active boombox.");
+            #endregion
 
-            topSection = "Advanced Portable Teleporter";
-            ADVANCED_TELE_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Advanced Portable Teleporter", true, "");
-            ADVANCED_TELE_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of Advanced Portable Teleporter", 1750, "");
-            ADV_CHANCE_TO_BREAK = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Chance to break on use", 0.1f, "value should be 0.00 - 1.00");
-            ADV_KEEP_ITEMS_ON_TELE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Keep Items When Using Advanced Portable Teleporters", true, "If set to false you will drop your items like when using the vanilla TP.");
+            #region Advanced Portable Teleporter
 
-            topSection = "Portable Teleporter";
-            WEAK_TELE_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Portable Teleporter", true, "");
-            WEAK_TELE_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of Portable Teleporter", 300, "");
-            CHANCE_TO_BREAK = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Chance to break on use", 0.9f, "value should be 0.00 - 1.00");
-            KEEP_ITEMS_ON_TELE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Keep Items When Using Weak Portable Teleporters", true, "If set to false you will drop your items like when using the vanilla TP.");
+            topSection = AdvancedPortableTeleporter.ITEM_NAME;
+            ADVANCED_TELE_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ADVANCED_PORTABLE_TELEPORTER_ENABLED_KEY, LGUConstants.ADVANCED_PORTABLE_TELEPORTER_ENABLED_DEFAULT);
+            ADVANCED_TELE_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ADVANCED_PORTABLE_TELEPORTER_PRICE_KEY, LGUConstants.ADVANCED_PORTABLE_TELEPORTER_PRICE_DEFAULT);
+            ADV_CHANCE_TO_BREAK = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ADVANCED_PORTABLE_TELEPORTER_BREAK_CHANCE_KEY, LGUConstants.ADVANCED_PORTABLE_TELEPORTER_BREAK_CHANCE_DEFAULT, LGUConstants.ADVANCED_PORTABLE_TELEPORTER_BREAK_CHANCE_DESCRIPTION);
+            ADV_KEEP_ITEMS_ON_TELE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ADVANCED_PORTABLE_TELEPORTER_KEEP_ITEMS_KEY, LGUConstants.ADVANCED_PORTABLE_TELEPORTER_KEEP_ITEMS_DEFAULT, LGUConstants.ADVANCED_PORTABLE_TELEPORTER_KEEP_ITEMS_DESCRIPTION);
+
+            #endregion
+
+            #region Helmet
+
+            topSection = Helmet.ITEM_NAME;
+            HELMET_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.HELMET_ENABLED_KEY, LGUConstants.HELMET_ENABLED_DEFAULT);
+            HELMET_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.HELMET_PRICE_KEY, LGUConstants.HELMET_PRICE_DEFAULT);
+            HELMET_HITS_BLOCKED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.HELMET_AMOUNT_OF_HITS_KEY, LGUConstants.HELMET_AMOUNT_OF_HITS_DEFAULT);
+
+            #endregion
+
+            #region Peeper
+
+            topSection = Peeper.ITEM_NAME;
+            PEEPER_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.PEEPER_ENABLED_KEY, LGUConstants.PEEPER_ENABLED_DEFAULT, LGUConstants.PEEPER_ENABLED_DESCRIPTION);
+            PEEPER_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.PEEPER_PRICE_KEY, LGUConstants.PEEPER_PRICE_DEFAULT, LGUConstants.PEEPER_PRICE_DESCRIPTION);
+
+            #endregion
+
+            #region Medkit
+
+            topSection = Medkit.ITEM_NAME;
+            MEDKIT_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MEDKIT_ENABLED_KEY, LGUConstants.MEDKIT_ENABLED_DEFAULT, LGUConstants.MEDKIT_ENABLED_DESCRIPTION);
+            MEDKIT_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MEDKIT_PRICE_KEY, LGUConstants.MEDKIT_PRICE_DEFAULT, LGUConstants.MEDKIT_PRICE_DESCRIPTION);
+            MEDKIT_HEAL_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MEDKIT_HEAL_AMOUNT_KEY, LGUConstants.MEDKIT_HEAL_AMOUNT_DEFAULT, LGUConstants.MEDKIT_HEAL_AMOUNT_DESCRIPTION);
+            MEDKIT_USES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MEDKIT_USES_KEY, LGUConstants.MEDKIT_USES_DEFAULT, LGUConstants.MEDKIT_USES_DESCRIPTION);
+
+            #endregion
+
+            #region Diving Kit
+
+            topSection = DivingKit.ITEM_NAME;
+            DIVEKIT_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DIVING_KIT_ENABLED_KEY, LGUConstants.DIVING_KIT_ENABLED_DEFAULT, LGUConstants.DIVING_KIT_ENABLED_DESCRIPTION);
+            DIVEKIT_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DIVING_KIT_PRICE_KEY, LGUConstants.DIVING_KIT_PRICE_DEFAULT, LGUConstants.DIVING_KIT_PRICE_DESCRIPTION);
+            DIVEKIT_WEIGHT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DIVING_KIT_WEIGHT_KEY, LGUConstants.DIVING_KIT_WEIGHT_DEFAULT, LGUConstants.DIVING_KIT_WEIGHT_DESCRIPTION);
+            DIVEKIT_TWO_HANDED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DIVING_KIT_TWO_HANDED_KEY, LGUConstants.DIVING_KIT_TWO_HANDED_DEFAULT, LGUConstants.DIVING_KIT_TWO_HANDED_DESCRIPTION);
+
+            #endregion
+
+            #endregion
+
+            #region Upgrades
+
+            #region Aluminium Coils
+
+            topSection = AluminiumCoils.UPGRADE_NAME;
+            ALUMINIUM_COILS_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ALUMINIUM_COILS_ENABLED_KEY, LGUConstants.ALUMINIUM_COILS_ENABLED_DEFAULT, LGUConstants.ALUMINIUM_COILS_ENABLED_DESCRIPTION);
+            ALUMINIUM_COILS_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            ALUMINIUM_COILS_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ALUMINIUM_COILS_PRICE_KEY, LGUConstants.ALUMINIUM_COILS_PRICE_DEFAULT);
+            ALUMINIUM_COILS_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, AluminiumCoils.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
+            ALUMINIUM_COILS_INITIAL_DIFFICULTY_DECREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ALUMINIUM_COILS_INITIAL_DIFFICULTY_MULTIPLIER_KEY, LGUConstants.ALUMINIUM_COILS_INITIAL_DIFFICULTY_MULTIPLIER_DEFAULT, LGUConstants.ALUMINIUM_COILS_INITIAL_DIFFICULTY_MULTIPLIER_DESCRIPTION);
+            ALUMINIUM_COILS_INCREMENTAL_DIFFICULTY_DECREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ALUMINIUM_COILS_INCREMENTAL_DIFFICULTY_MULTIPLIER_KEY, LGUConstants.ALUMINIUM_COILS_INCREMENTAL_DIFFICULTY_MULTIPLIER_DEFAULT, LGUConstants.ALUMINIUM_COILS_INCREMENTAL_DIFFICULTY_MULTIPLIER_DESCRIPTION);
+            ALUMINIUM_COILS_INITIAL_STUN_TIMER_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ALUMINIUM_COILS_INITIAL_STUN_TIMER_KEY, LGUConstants.ALUMINIUM_COILS_INITIAL_STUN_TIMER_DEFAULT);
+            ALUMINIUM_COILS_INCREMENTAL_STUN_TIMER_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ALUMINIUM_COILS_INCREMENTAL_STUN_TIMER_KEY, LGUConstants.ALUMINIUM_COILS_INCREMENTAL_STUN_TIMER_DEFAULT);
+            ALUMINIUM_COILS_INITIAL_RANGE_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ALUMINIUM_COILS_INITIAL_RANGE_KEY, LGUConstants.ALUMINIUM_COILS_INITIAL_RANGE_DEFAULT);
+            ALUMINIUM_COILS_INCREMENTAL_RANGE_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ALUMINIUM_COILS_INCREMENTAL_RANGE_KEY, LGUConstants.ALUMINIUM_COILS_INCREMENTAL_RANGE_DEFAULT);
+            ALUMINIUM_COILS_INITIAL_COOLDOWN_DECREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ALUMINIUM_COILS_INITIAL_COOLDOWN_KEY, LGUConstants.ALUMINIUM_COILS_INITIAL_COOLDOWN_DEFAULT, LGUConstants.ALUMINIUM_COILS_INITIAL_COOLDOWN_DESCRIPTION);
+            ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_DECREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_KEY, LGUConstants.ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_DEFAULT, LGUConstants.ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_DESCRIPTION);
+
+            #endregion
+
+            #region Back Muscles
+
+            topSection = BackMuscles.UPGRADE_NAME;
+            BACK_MUSCLES_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BACK_MUSCLES_ENABLED_KEY, LGUConstants.BACK_MUSCLES_ENABLED_DEFAULT, LGUConstants.BACK_MUSCLES_ENABLED_DESCRIPTION);
+            BACK_MUSCLES_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BACK_MUSCLES_PRICE_KEY, LGUConstants.BACK_MUSCLES_PRICE_DEFAULT);
+            CARRY_WEIGHT_REDUCTION = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BACK_MUSCLES_INITIAL_WEIGHT_MULTIPLIER_KEY, LGUConstants.BACK_MUSCLES_INITIAL_WEIGHT_MULTIPLIER_DEFAULT, LGUConstants.BACK_MUSCLES_INITIAL_WEIGHT_MULTIPLIER_DESCRIPTION);
+            CARRY_WEIGHT_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BACK_MUSCLES_INCREMENTAL_WEIGHT_MULTIPLIER_KEY, LGUConstants.BACK_MUSCLES_INCREMENTAL_WEIGHT_MULTIPLIER_DEFAULT, LGUConstants.BACK_MUSCLES_INCREMENTAL_WEIGHT_MULTIPLIER_DESCRIPTION);
+            BACK_MUSCLES_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, BackMuscles.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            BACK_MUSCLES_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+
+            #endregion
+
+            #region Bargain Connections
+
+            topSection = BargainConnections.UPGRADE_NAME;
+            BARGAIN_CONNECTIONS_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BARGAIN_CONNECTIONS_ENABLED_KEY, LGUConstants.BARGAIN_CONNECTIONS_ENABLED_DEFAULT, LGUConstants.BARGAIN_CONNECTIONS_ENABLED_DESCRIPTION);
+            BARGAIN_CONNECTIONS_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BARGAIN_CONNECTIONS_PRICE_KEY, LGUConstants.BARGAIN_CONNECTIONS_PRICE_DEFAULT);
+            BARGAIN_CONNECTIONS_INITIAL_ITEM_AMOUNT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BARGAIN_CONNECTIONS_INITIAL_AMOUNT_KEY, LGUConstants.BARGAIN_CONNECTIONS_INITIAL_AMOUNT_DEFAULT);
+            BARGAIN_CONNECTIONS_INCREMENTAL_ITEM_AMOUNT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BARGAIN_CONNECTIONS_INCREMENTAL_AMOUNT_KEY, LGUConstants.BARGAIN_CONNECTIONS_INCREMENTAL_AMOUNT_DEFAULT);
+            BARGAIN_CONNECTIONS_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, BargainConnections.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+
+            #endregion
+
+            #region Beekeeper
 
             topSection = Beekeeper.UPGRADE_NAME;
-            BEEKEEPER_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Beekeeper Upgrade", true, "Take less damage from bees");
-            BEEKEEPER_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of Beekeeper Upgrade", 450, "");
-            BEEKEEPER_DAMAGE_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Multiplied to incoming damage (rounded to cfg.BindSyncedEntry<int>)", 0.64f, "Incoming damage from bees is 10.");
-            BEEKEEPER_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.PRICES_SECTION, Beekeeper.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            BEEKEEPER_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Additional % Reduced per level", 0.15f, "Every time beekeeper is upgraded this value will be subtracted to the base multiplier above.");
-            BEEKEEPER_HIVE_VALUE_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Hive value increase multiplier", 1.5f, "Multiplier applied to the value of beehive when reached max level");
+            BEEKEEPER_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BEEKEEPER_ENABLED_KEY, LGUConstants.BEEKEEPER_ENABLED_DEFAULT, LGUConstants.BEEKEEPER_ENABLED_DESCRIPTION);
+            BEEKEEPER_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BEEKEEPER_PRICE_KEY, LGUConstants.BEEKEEPER_PRICE_DEFAULT);
+            BEEKEEPER_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, Beekeeper.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            BEEKEEPER_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            BEEKEEPER_DAMAGE_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BEEKEEPER_DAMAGE_MULTIPLIER_KEY, LGUConstants.BEEKEEPER_DAMAGE_MULTIPLIER_DEFAULT, LGUConstants.BEEKEEPER_DAMAGE_MULTIPLIER_DESCRIPTION);
+            BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BEEKEEPER_DAMAGE_INCREMENTAL_MULTIPLIER_KEY, LGUConstants.BEEKEEPER_DAMAGE_INCREMENTAL_MULTIPLIER_DEFAULT, LGUConstants.BEEKEEPER_DAMAGE_INCREMENTAL_MULTIPLIER_DESCRIPTION);
+            BEEKEEPER_HIVE_VALUE_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BEEKEEPER_HIVE_MULTIPLIER_KEY, LGUConstants.BEEKEEPER_HIVE_MULTIPLIER_DEFAULT, LGUConstants.BEEKEEPER_HIVE_MULTIPLIER_DESCRIPTION);
 
-            topSection = ProteinPowder.UPGRADE_NAME;
-            PROTEIN_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, ProteinPowder.ENABLED_SECTION, ProteinPowder.ENABLED_DEFAULT, ProteinPowder.ENABLED_DESCRIPTION);
-            PROTEIN_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, ProteinPowder.PRICE_SECTION, ProteinPowder.PRICE_DEFAULT, "");
-            PROTEIN_UNLOCK_FORCE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, ProteinPowder.UNLOCK_FORCE_SECTION, ProteinPowder.UNLOCK_FORCE_DEFAULT, ProteinPowder.UNLOCK_FORCE_DESCRIPTION);
-            PROTEIN_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, ProteinPowder.INCREMENT_FORCE_SECTION, ProteinPowder.INCREMENT_FORCE_DEFAULT, ProteinPowder.INCREMENT_FORCE_DESCRIPTION);
-            PROTEIN_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            PROTEIN_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.PRICES_SECTION, ProteinPowder.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            PROTEIN_CRIT_CHANCE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, ProteinPowder.CRIT_CHANCE_SECTION, ProteinPowder.CRIT_CHANCE_DEFAULT, ProteinPowder.CRIT_CHANCE_DESCRIPTION);
+            #endregion
+
+            #region Better Scanner
+
+            topSection = BetterScanner.UPGRADE_NAME;
+            BETTER_SCANNER_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BETTER_SCANNER_ENABLED_KEY, LGUConstants.BETTER_SCANNER_ENABLED_DEFAULT, LGUConstants.BETTER_SCANNER_ENABLED_DESCRIPTION);
+            BETTER_SCANNER_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BETTER_SCANNER_PRICE_KEY, LGUConstants.BETTER_SCANNER_PRICE_DEFAULT);
+            SHIP_AND_ENTRANCE_DISTANCE_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BETTER_SCANNER_OUTSIDE_NODE_DISTANCE_INCREASE_KEY, LGUConstants.BETTER_SCANNER_OUTSIDE_NODE_DISTANCE_INCREASE_DEFAULT, LGUConstants.BETTER_SCANNER_OUTSIDE_NODE_DISTANCE_INCREASE_DESCRIPTION);
+            NODE_DISTANCE_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BETTER_SCANNER_NODE_DISTANCE_INCREASE_KEY, LGUConstants.BETTER_SCANNER_NODE_DISTANCE_INCREASE_DEFAULT, LGUConstants.BETTER_SCANNER_NODE_DISTANCE_INCREASE_DESCRIPTION);
+            BETTER_SCANNER_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            BETTER_SCANNER_PRICE2 = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BETTER_SCANNER_SECOND_TIER_PRICE_KEY, LGUConstants.BETTER_SCANNER_SECOND_TIER_PRICE_DEFAULT, LGUConstants.BETTER_SCANNER_SECOND_TIER_PRICE_DESCRIPTION);
+            BETTER_SCANNER_PRICE3 = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BETTER_SCANNER_THIRD_TIER_PRICE_KEY, LGUConstants.BETTER_SCANNER_THIRD_TIER_PRICE_DEFAULT, LGUConstants.BETTER_SCANNER_THIRD_TIER_PRICE_DESCRIPTION);
+            BETTER_SCANNER_ENEMIES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BETTER_SCANNER_ENEMIES_THROUGH_WALLS_KEY, LGUConstants.BETTER_SCANNER_ENEMIES_THROUGH_WALLS_DEFAULT, LGUConstants.BETTER_SCANNER_ENEMIES_THROUGH_WALLS_DESCRIPTION);
+            VERBOSE_ENEMIES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BETTER_SCANNER_VERBOSE_ENEMIES_KEY, LGUConstants.BETTER_SCANNER_VERBOSE_ENEMIES_DEFAULT, LGUConstants.BETTER_SCANNER_VERBOSE_ENEMIES_DESCRIPTION);
+
+            #endregion
+
+            #region Bigger Lungs
 
             topSection = BiggerLungs.UPGRADE_NAME;
-            BIGGER_LUNGS_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Bigger Lungs Upgrade", true, "More Stamina");
-            BIGGER_LUNGS_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of Bigger Lungs Upgrade", 600, "");
-            SPRINT_TIME_INCREASE_UNLOCK = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Sprint Time Unlock", 6f, "Amount of sprint time gained when unlocking the upgrade.\nDefault vanilla value is 11f.");
-            SPRINT_TIME_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Sprint Time Increment", 1.25f, "Amount of sprint time gained when increasing the level of upgrade.");
-            BIGGER_LUNGS_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.PRICES_SECTION, BiggerLungs.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            BIGGER_LUNGS_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            BIGGER_LUNGS_STAMINA_REGEN_APPLY_LEVEL = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Level of Bigger Lungs to apply stamina regeneration", 1, "When reached provided level, the effect will start applying.");
-            BIGGER_LUNGS_STAMINA_REGEN_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Stamina Regeneration Increase", 1.05f, "Affects the rate of the player regaining stamina");
-            BIGGER_LUNGS_STAMINA_REGEN_INCREMENTAL_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Incremental stamina regeneration increase", 0.05f, "Added to initial multiplier");
-            BIGGER_LUNGS_JUMP_STAMINA_APPLY_LEVEL = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Level of Bigger Lungs to apply stamina cost decrease on jumps", 2, "When reached provided level, the effect will start applying.");
-            BIGGER_LUNGS_JUMP_STAMINA_COST_DECREASE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Stamina cost decrease on jumps", 0.90f, "Multiplied with the vanilla cost of jumping");
-            BIGGER_LUNGS_JUMP_STAMINA_COST_INCREMENTAL_DECREASE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Incremental stamina cost decrease on jumps", 0.05f, "Added to initial multiplier (as in reduce the factor)");
+            BIGGER_LUNGS_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BIGGER_LUNGS_ENABLED_KEY, LGUConstants.BIGGER_LUNGS_ENABLED_DEFAULT, LGUConstants.BIGGER_LUNGS_ENABLED_DESCRIPTION);
+            BIGGER_LUNGS_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BIGGER_LUNGS_PRICE_KEY, LGUConstants.BIGGER_LUNGS_PRICE_DEFAULT);
+            SPRINT_TIME_INCREASE_UNLOCK = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BIGGER_LUNGS_INITIAL_SPRINT_TIME_KEY, LGUConstants.BIGGER_LUNGS_INITIAL_SPRINT_TIME_DEFAULT, LGUConstants.BIGGER_LUNGS_INITIAL_SPRINT_TIME_DESCRIPTION);
+            SPRINT_TIME_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BIGGER_LUNGS_INCREMENTAL_SPRINT_TIME_KEY, LGUConstants.BIGGER_LUNGS_INCREMENTAL_SPRINT_TIME_DEFAULT, LGUConstants.BIGGER_LUNGS_INCREMENTAL_SPRINT_TIME_DESCRIPTION);
+            BIGGER_LUNGS_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, BiggerLungs.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            BIGGER_LUNGS_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            BIGGER_LUNGS_STAMINA_REGEN_APPLY_LEVEL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BIGGER_LUNGS_STAMINA_APPLY_LEVEL_KEY, LGUConstants.BIGGER_LUNGS_STAMINA_APPLY_LEVEL_DEFAULT, LGUConstants.BIGGER_LUNGS_STAMINA_APPLY_LEVEL_DESCRIPTION);
+            BIGGER_LUNGS_STAMINA_REGEN_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BIGGER_LUNGS_INITIAL_STAMINA_REGEN_KEY, LGUConstants.BIGGER_LUNGS_INITIAL_STAMINA_REGEN_DEFAULT, LGUConstants.BIGGER_LUNGS_INITIAL_STAMINA_REGEN_DESCRIPTION);
+            BIGGER_LUNGS_STAMINA_REGEN_INCREMENTAL_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BIGGER_LUNGS_INCREMENTAL_STAMINA_REGEN_KEY, LGUConstants.BIGGER_LUNGS_INCREMENTAL_STAMINA_REGEN_DEFAULT, LGUConstants.BIGGER_LUNGS_INCREMENTAL_STAMINA_REGEN_DESCRIPTION);
+            BIGGER_LUNGS_JUMP_STAMINA_APPLY_LEVEL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BIGGER_LUNGS_JUMP_STAMINA_DECREASE_APPLY_LEVEL_KEY, LGUConstants.BIGGER_LUNGS_JUMP_STAMINA_DECREASE_APPLY_LEVEL_DEFAULT, LGUConstants.BIGGER_LUNGS_JUMP_STAMINA_DECREASE_APPLY_LEVEL_DESCRIPTION);
+            BIGGER_LUNGS_JUMP_STAMINA_COST_DECREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BIGGER_LUNGS_INITIAL_JUMP_STAMINA_DECREASE_KEY, LGUConstants.BIGGER_LUNGS_INITIAL_JUMP_STAMINA_DECREASE_DEFAULT, LGUConstants.BIGGER_LUNGS_INITIAL_JUMP_STAMINA_DECREASE_DESCRIPTION);
+            BIGGER_LUNGS_JUMP_STAMINA_COST_INCREMENTAL_DECREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BIGGER_LUNGS_INCREMENTAL_JUMP_STAMINA_DECREASE_KEY, LGUConstants.BIGGER_LUNGS_INCREMENTAL_JUMP_STAMINA_DECREASE_DEFAULT, LGUConstants.BIGGER_LUNGS_INCREMENTAL_JUMP_STAMINA_DECREASE_DESCRIPTION);
 
-            topSection = "Extend Deadline";
-            EXTEND_DEADLINE_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Extend Deadline Purchase", true, "Increments the amount of days before deadline is reached.");
-            EXTEND_DEADLINE_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Extend Deadline Price", 800, "Price of each day extension requested in the terminal.");
+            #endregion
 
-            topSection = RunningShoes.UPGRADE_NAME;
-            RUNNING_SHOES_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Running Shoes Upgrade", true, "Run Faster");
-            RUNNING_SHOES_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of Running Shoes Upgrade", 650, "");
-            MOVEMENT_SPEED_UNLOCK = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Movement Speed Unlock", 1.4f, "Value added to player's movement speed when first purchased.\nDefault vanilla value is 4.6f.");
-            MOVEMENT_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Movement Speed Increment", 0.5f, "How much the above value is increased on upgrade.");
-            RUNNING_SHOES_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.PRICES_SECTION, BiggerLungs.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            RUNNING_SHOES_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            NOISE_REDUCTION = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Noise Reduction", 10f, "Distance units to subtract from footstep noise when reached final level.");
+            #region Charging Booster
 
-            topSection = StrongLegs.UPGRADE_NAME;
-            STRONG_LEGS_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Strong Legs Upgrade", true, "Jump Higher");
-            STRONG_LEGS_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of Strong Legs Upgrade", 300, "");
-            JUMP_FORCE_UNLOCK = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Jump Force Unlock", 3f, "Amount of jump force added when unlocking the upgrade.\nDefault vanilla value is 13f.");
-            JUMP_FORCE_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Jump Force Increment", 0.75f, "How much the above value is increased on upgrade.");
-            STRONG_LEGS_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.PRICES_SECTION, StrongLegs.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            STRONG_LEGS_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            STRONG_LEGS_REDUCE_FALL_DAMAGE_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Damage mitigation when falling", 0.5f, "Multiplier applied on fall damage that you wish to ignore when reached max level");
+            topSection = ChargingBooster.UPGRADE_NAME;
+            CHARGING_BOOSTER_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.CHARGING_BOOSTER_ENABLED_KEY, LGUConstants.CHARGING_BOOSTER_ENABLED_DEFAULT, LGUConstants.CHARGING_BOOSTER_ENABLED_DESCRIPTION);
+            CHARGING_BOOSTER_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.CHARGING_BOOSTER_PRICE_KEY, LGUConstants.CHARGING_BOOSTER_PRICE_DEFAULT);
+            CHARGING_BOOSTER_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, LGUConstants.CHARGING_BOOSTER_PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            CHARGING_BOOSTER_COOLDOWN = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.CHARGING_BOOSTER_COOLDOWN_KEY, LGUConstants.CHARGING_BOOSTER_COOLDOWN_DEFAULT);
+            CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE_KEY, LGUConstants.CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE_DEFAULT);
+            CHARGING_BOOSTER_CHARGE_PERCENTAGE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.CHARGING_BOOSTER_CHARGE_PERCENTAGE_KEY, LGUConstants.CHARGING_BOOSTER_CHARGE_PERCENTAGE_DEFAULT);
+
+            #endregion
+                
+            #region Climbing Gloves
+
+            topSection = ClimbingGloves.UPGRADE_NAME;
+            CLIMBING_GLOVES_ENABLED             = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.CLIMBING_GLOVES_ENABLED_KEY, LGUConstants.CLIMBING_GLOVES_ENABLED_DEFAULT, LGUConstants.CLIMBING_GLOVES_ENABLED_DESCRIPTION);
+            CLIMBING_GLOVES_INDIVIDUAL          = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            CLIMBING_GLOVES_PRICE               = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.CLIMBING_GLOVES_PRICE_KEY, LGUConstants.CLIMBING_GLOVES_PRICE_DEFAULT);
+            CLIMBING_GLOVES_PRICES              = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, ClimbingGloves.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
+            INITIAL_CLIMBING_SPEED_BOOST        = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.CLIMBING_GLOVES_INITIAL_MULTIPLIER_KEY, LGUConstants.CLIMBING_GLOVES_INITIAL_MULTIPLIER_DEFAULT, LGUConstants.CLIMBING_GLOVES_INITIAL_MULTIPLIER_DESCRIPTION);
+            INCREMENTAL_CLIMBING_SPEED_BOOST    = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.CLIMBING_GLOVES_INCREMENTAL_MULTIPLIER_KEY, LGUConstants.CLIMBING_GLOVES_INCREMENTAL_MULTIPLIER_DEFAULT);
+
+            #endregion
+
+            #region Discombobulator
+
+            topSection = Discombobulator.UPGRADE_NAME;
+            DISCOMBOBULATOR_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DISCOMBOBULATOR_ENABLED_KEY, LGUConstants.DISCOMBOBULATOR_ENABLED_DEFAULT, LGUConstants.DISCOMBOBULATOR_ENABLED_DESCRIPTION);
+            DISCOMBOBULATOR_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DISCOMBOBULATOR_PRICE_KEY, LGUConstants.DISCOMBOBULATOR_PRICE_DEFAULT);
+            DISCOMBOBULATOR_COOLDOWN = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DISCOMBOBULATOR_COOLDOWN_KEY, LGUConstants.DISCOMBOBULATOR_COOLDOWN_DEFAULT);
+            DISCOMBOBULATOR_RADIUS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DISCOMBOBULATOR_EFFECT_RADIUS_KEY, LGUConstants.DISCOMBOBULATOR_EFFECT_RADIUS_DEFAULT);
+            DISCOMBOBULATOR_STUN_DURATION = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DISCOMBOBULATOR_STUN_DURATION_KEY, LGUConstants.DISCOMBOBULATOR_STUN_DURATION_DEFAULT);
+            DISCOMBOBULATOR_NOTIFY_CHAT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DISCOMBOBULATOR_NOTIFY_CHAT_KEY, LGUConstants.DISCOMBOBULATOR_NOTIFY_CHAT_DEFAULT);
+            DISCOMBOBULATOR_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DISCOMBOBULATOR_INCREMENTAL_STUN_TIME_KEY, LGUConstants.DISCOMBOBULATOR_INCREMENTAL_STUN_TIME_DEFAULT, LGUConstants.DISCOMBOBULATOR_INCREMENTAL_STUN_TIME_DESCRIPTION);
+            DISCO_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, Discombobulator.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            DISCOMBOBULATOR_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            DISCOMBOBULATOR_DAMAGE_LEVEL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DISCOMBOBULATOR_APPLY_DAMAGE_LEVEL_KEY, LGUConstants.DISCOMBOBULATOR_APPLY_DAMAGE_LEVEL_DEFAULT, LGUConstants.DISCOMBOBULATOR_APPLY_DAMAGE_LEVEL_DESCRIPTION);
+            DISCOMBOBULATOR_INITIAL_DAMAGE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DISCOMBOBULATOR_INITIAL_DAMAGE_KEY, LGUConstants.DISCOMBOBULATOR_INITIAL_DAMAGE_DEFAULT, LGUConstants.DISCOMBOBULATOR_INITIAL_DAMAGE_DESCRIPTION);
+            DISCOMBOBULATOR_DAMAGE_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DISCOMBOBULATOR_INCREMENTAL_DAMAGE_KEY, LGUConstants.DISCOMBOBULATOR_INCREMENTAL_DAMAGE_DEFAULT, LGUConstants.DISCOMBOBULATOR_INCREMENTAL_DAMAGE_DESCRIPTION);
+
+            #endregion
+
+            #region Drop Pod Thrusters
+
+            topSection = FasterDropPod.UPGRADE_NAME;
+            FASTER_DROP_POD_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DROP_POD_THRUSTERS_ENABLED_KEY, LGUConstants.DROP_POD_THRUSTERS_ENABLED_DEFAULT, LGUConstants.DROP_POD_THRUSTERS_ENABLED_DESCRIPTION);
+            FASTER_DROP_POD_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DROP_POD_THRUSTERS_PRICE_KEY, LGUConstants.DROP_POD_THRUSTERS_PRICE_DEFAULT, LGUConstants.DROP_POD_THRUSTERS_PRICE_DESCRIPTION);
+            FASTER_DROP_POD_TIMER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DROP_POD_THRUSTERS_TIME_DECREASE_KEY, LGUConstants.DROP_POD_THRUSTERS_TIME_DECREASE_DEFAULT);
+            FASTER_DROP_POD_INITIAL_TIMER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DROP_POD_THRUSTERS_FIRST_TIME_DECREASE_KEY, LGUConstants.DROP_POD_THRUSTERS_FIRST_TIME_DECREASE_DEFAULT);
+
+            #endregion
+
+            #region Efficient Engines
+
+            topSection = EfficientEngines.UPGRADE_NAME;
+            EFFICIENT_ENGINES_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.EFFICIENT_ENGINES_ENABLED_KEY, LGUConstants.EFFICIENT_ENGINES_ENABLED_DEFAULT, LGUConstants.EFFICIENT_ENGINES_ENABLED_DESCRIPTION);
+            EFFICIENT_ENGINES_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.EFFICIENT_ENGINES_PRICE_KEY, LGUConstants.EFFICIENT_ENGINES_PRICE_DEFAULT);
+            EFFICIENT_ENGINES_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, EfficientEngines.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
+            EFFICIENT_ENGINES_INITIAL_DISCOUNT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.EFFICIENT_ENGINES_INITIAL_MULTIPLIER_KEY, LGUConstants.EFFICIENT_ENGINES_INITIAL_MULTIPLIER_DEFAULT);
+            EFFICIENT_ENGINES_INCREMENTAL_DISCOUNT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.EFFICIENT_ENGINES_INCREMENTAL_MULTIPLIER_KEY, LGUConstants.EFFICIENT_ENGINES_INCREMENTAL_MULTIPLIER_DEFAULT);
+
+            #endregion
+
+            #region Fast Encryption
+
+            topSection = FastEncryption.UPGRADE_NAME;
+            PAGER_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.FAST_ENCRYPTION_ENABLED_KEY, LGUConstants.FAST_ENCRYPTION_ENABLED_DEFAULT, LGUConstants.FAST_ENCRYPTION_ENABLED_DESCRIPTION);
+            PAGER_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.FAST_ENCRYPTION_PRICE_KEY, LGUConstants.FAST_ENCRYPTION_PRICE_DEFAULT);
+
+            #endregion
+
+            #region Lethal Deals
+
+            topSection = LethalDeals.UPGRADE_NAME;
+            LETHAL_DEALS_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.LETHAL_DEALS_ENABLED_KEY, LGUConstants.LETHAL_DEALS_ENABLED_DEFAULT, LGUConstants.LETHAL_DEALS_ENABLED_DESCRIPTION);
+            LETHAL_DEALS_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.LETHAL_DEALS_PRICE_KEY, LGUConstants.LETHAL_DEALS_PRICE_DEFAULT);
+
+            #endregion
+
+            #region Lightning Rod
+
+            topSection = LightningRod.UPGRADE_NAME;
+            LIGHTNING_ROD_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LightningRod.ENABLED_SECTION, LightningRod.ENABLED_DEFAULT, LightningRod.ENABLED_DESCRIPTION);
+            LIGHTNING_ROD_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LightningRod.PRICE_SECTION, LightningRod.PRICE_DEFAULT);
+            LIGHTNING_ROD_ACTIVE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LightningRod.ACTIVE_SECTION, LightningRod.ACTIVE_DEFAULT, LightningRod.ACTIVE_DESCRIPTION);
+            LIGHTNING_ROD_DIST = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LightningRod.DIST_SECTION, LightningRod.DIST_DEFAULT, LightningRod.DIST_DESCRIPTION);
+
+            #endregion
+
+            #region Lithium Batteries
+
+            topSection = LithiumBatteries.UPGRADE_NAME;
+            LITHIUM_BATTERIES_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.LITHIUM_BATTERIES_ENABLED_KEY, LGUConstants.LITHIUM_BATTERIES_ENABLED_DEFAULT, LGUConstants.LITHIUM_BATTERIES_ENABLED_DESCRIPTION);
+            LITHIUM_BATTERIES_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            LITHIUM_BATTERIES_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.LITHIUM_BATTERIES_PRICE_KEY, LGUConstants.LITHIUM_BATTERIES_PRICE_DEFAULT);
+            LITHIUM_BATTERIES_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, LithiumBatteries.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            LITHIUM_BATTERIES_INITIAL_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.LITHIUM_BATTERIES_INITIAL_MULTIPLIER_KEY, LGUConstants.LITHIUM_BATTERIES_INITIAL_MULTIPLIER_DEFAULT, LGUConstants.LITHIUM_BATTERIES_INITIAL_MULTIPLIER_DESCRIPTION);
+            LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER_KEY, LGUConstants.LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER_DEFAULT, LGUConstants.LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER_DESCRIPTION);
+
+            #endregion
+
+            #region Locksmith
+
+            topSection = LockSmith.UPGRADE_NAME;
+            LOCKSMITH_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.LOCKSMITH_ENABLED_KEY, LGUConstants.LOCKSMITH_ENABLED_DEFAULT, LGUConstants.LOCKSMITH_ENABLED_DESCRIPTION);
+            LOCKSMITH_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.LOCKSMITH_PRICE_KEY, LGUConstants.LOCKSMITH_PRICE_DEFAULT, LGUConstants.LOCKSMITH_PRICE_DESCRIPTION);
+            LOCKSMITH_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+
+            #endregion
+
+            #region Malware Broadcaster
 
             topSection = MalwareBroadcaster.UPGRADE_NAME;
-            MALWARE_BROADCASTER_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Malware Broadcaster Upgrade", true, "Explode Map Hazards");
-            MALWARE_BROADCASTER_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of Malware Broadcaster Upgrade", 550, "");
-            DESTROY_TRAP = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Destroy Trap", true, "If false Malware Broadcaster will disable the trap for a long time instead of destroying.");
-            DISARM_TIME = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Disarm Time", 7f, "If `Destroy Trap` is false this is the duration traps will be disabled.");
-            EXPLODE_TRAP = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Explode Trap", true, "Destroy Trap must be true! If this is true when destroying a trap it will also explode.");
-            MALWARE_BROADCASTER_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            MALWARE_BROADCASTER_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MALWARE_BROADCASTER_ENABLED_KEY, LGUConstants.MALWARE_BROADCASTER_ENABLED_DEFAULT, LGUConstants.MALWARE_BROADCASTER_ENABLED_DESCRIPTION);
+            MALWARE_BROADCASTER_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MALWARE_BROADCASTER_PRICE_KEY, LGUConstants.MALWARE_BROADCASTER_PRICE_DEFAULT);
+            DESTROY_TRAP = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MALWARE_BROADCASTER_DESTROY_TRAPS_KEY, LGUConstants.MALWARE_BROADCASTER_DESTROY_TRAPS_DEFAULT, LGUConstants.MALWARE_BROADCASTER_DESTROY_TRAPS_DESCRIPTION);
+            DISARM_TIME = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MALWARE_BROADCASTER_DISARM_TIME_KEY, LGUConstants.MALWARE_BROADCASTER_DISARM_TIME_DEFAULT, LGUConstants.MALWARE_BROADCASTER_DISARM_TIME_DESCRIPTION);
+            EXPLODE_TRAP = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MALWARE_BROADCASTER_EXPLODE_TRAPS_KEY, LGUConstants.MALWARE_BROADCASTER_EXPLODE_TRAPS_DEFAULT, LGUConstants.MALWARE_BROADCASTER_EXPLODE_TRAPS_DESCRIPTION);
+            MALWARE_BROADCASTER_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+
+            #endregion
+
+            #region Market Influence
+
+            topSection = MarketInfluence.UPGRADE_NAME;
+            MARKET_INFLUENCE_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MARKET_INFLUENCE_ENABLED_KEY, LGUConstants.MARKET_INFLUENCE_ENABLED_DEFAULT, LGUConstants.MARKET_INFLUENCE_ENABLED_DESCRIPTION);
+            MARKET_INFLUENCE_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MARKET_INFLUENCE_PRICE_KEY, LGUConstants.MARKET_INFLUENCE_PRICE_DEFAULT);
+            MARKET_INFLUENCE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, MarketInfluence.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            MARKET_INFLUENCE_INITIAL_PERCENTAGE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MARKET_INFLUENCE_INITIAL_PERCENTAGE_KEY, LGUConstants.MARKET_INFLUENCE_INITIAL_PERCENTAGE_DEFAULT);
+            MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE_KEY, LGUConstants.MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE_DEFAULT);
+
+            #endregion
+
+            #region Protein Powder
+
+            topSection = ProteinPowder.UPGRADE_NAME;
+            PROTEIN_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, ProteinPowder.ENABLED_SECTION, ProteinPowder.ENABLED_DEFAULT, ProteinPowder.ENABLED_DESCRIPTION);
+            PROTEIN_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, ProteinPowder.PRICE_SECTION, ProteinPowder.PRICE_DEFAULT);
+            PROTEIN_UNLOCK_FORCE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, ProteinPowder.UNLOCK_FORCE_SECTION, ProteinPowder.UNLOCK_FORCE_DEFAULT, ProteinPowder.UNLOCK_FORCE_DESCRIPTION);
+            PROTEIN_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, ProteinPowder.INCREMENT_FORCE_SECTION, ProteinPowder.INCREMENT_FORCE_DEFAULT, ProteinPowder.INCREMENT_FORCE_DESCRIPTION);
+            PROTEIN_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            PROTEIN_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, ProteinPowder.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            PROTEIN_CRIT_CHANCE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, ProteinPowder.CRIT_CHANCE_SECTION, ProteinPowder.CRIT_CHANCE_DEFAULT, ProteinPowder.CRIT_CHANCE_DESCRIPTION);
+
+            #endregion
+
+            #region Quantum Disruptor
+
+            topSection = QuantumDisruptor.UPGRADE_NAME;
+            QUANTUM_DISRUPTOR_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.QUANTUM_DISRUPTOR_ENABLED_KEY, LGUConstants.QUANTUM_DISRUPTOR_ENABLED_DEFAULT, LGUConstants.QUANTUM_DISRUPTOR_ENABLED_DESCRIPTION);
+            QUANTUM_DISRUPTOR_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.QUANTUM_DISRUPTOR_PRICE_KEY, LGUConstants.QUANTUM_DISRUPTOR_PRICE_DEFAULT);
+            QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER_KEY, LGUConstants.QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER_DEFAULT);
+            QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER_KEY, LGUConstants.QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER_DEFAULT);
+            QUANTUM_DISRUPTOR_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, QuantumDisruptor.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+
+            #endregion
+
+            #region Running Shoes
+
+            topSection = RunningShoes.UPGRADE_NAME;
+            RUNNING_SHOES_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.RUNNING_SHOES_ENABLED_KEY, LGUConstants.RUNNING_SHOES_ENABLED_DEFAULT, LGUConstants.RUNNING_SHOES_ENABLED_DESCRIPTION);
+            RUNNING_SHOES_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.RUNNING_SHOES_PRICE_KEY, LGUConstants.RUNNING_SHOES_PRICE_DEFAULT);
+            MOVEMENT_SPEED_UNLOCK = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.RUNNING_SHOES_INITIAL_MOVEMENT_BOOST_KEY, LGUConstants.RUNNING_SHOES_INITIAL_MOVEMENT_BOOST_DEFAULT, LGUConstants.RUNNING_SHOES_INITIAL_MOVEMENT_BOOST_DESCRIPTION);
+            MOVEMENT_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.RUNNING_SHOES_INCREMENTAL_MOVEMENT_BOOST_KEY, LGUConstants.RUNNING_SHOES_INCREMENTAL_MOVEMENT_BOOST_DEFAULT, LGUConstants.RUNNING_SHOES_INCREMENTAL_MOVEMENT_BOOST_DESCRIPTION);
+            RUNNING_SHOES_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, BiggerLungs.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            RUNNING_SHOES_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            NOISE_REDUCTION = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.RUNNING_SHOES_NOISE_REDUCTION_KEY, LGUConstants.RUNNING_SHOES_NOISE_REDUCTION_DEFAULT, LGUConstants.RUNNING_SHOES_NOISE_REDUCTION_DESCRIPTION);
+
+            #endregion
+
+            #region Shutter Batteries
+
+            topSection = DoorsHydraulicsBattery.UPGRADE_NAME;
+            DOOR_HYDRAULICS_BATTERY_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, DoorsHydraulicsBattery.ENABLED_SECTION, true, DoorsHydraulicsBattery.ENABLED_DESCRIPTION);
+            DOOR_HYDRAULICS_BATTERY_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, DoorsHydraulicsBattery.PRICE_SECTION, DoorsHydraulicsBattery.PRICE_DEFAULT, "");
+            DOOR_HYDRAULICS_BATTERY_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, DoorsHydraulicsBattery.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            DOOR_HYDRAULICS_BATTERY_INITIAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, DoorsHydraulicsBattery.INITIAL_SECTION, DoorsHydraulicsBattery.INITIAL_DEFAULT, DoorsHydraulicsBattery.INITIAL_DESCRIPTION);
+            DOOR_HYDRAULICS_BATTERY_INCREMENTAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, DoorsHydraulicsBattery.INCREMENTAL_SECTION, DoorsHydraulicsBattery.INCREMENTAL_DEFAULT, DoorsHydraulicsBattery.INCREMENTAL_DESCRIPTION);
+
+            #endregion
+
+            #region Sick Beats
+
+            topSection = SickBeats.UPGRADE_NAME;
+            BEATS_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SICK_BEATS_ENABLED_KEY, LGUConstants.SICK_BEATS_ENABLED_DEFAULT, LGUConstants.SICK_BEATS_ENABLED_DESCRIPTION);
+            BEATS_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            BEATS_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SICK_BEATS_PRICE_KEY, LGUConstants.SICK_BEATS_PRICE_DEFAULT);
+            BEATS_SPEED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SICK_BEATS_SPEED_KEY, LGUConstants.SICK_BEATS_SPEED_DEFAULT);
+            BEATS_DMG = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SICK_BEATS_DAMAGE_KEY, LGUConstants.SICK_BEATS_DAMAGE_DEFAULT);
+            BEATS_STAMINA = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SICK_BEATS_STAMINA_KEY, LGUConstants.SICK_BEATS_STAMINA_DEFAULT);
+            BEATS_DEF = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SICK_BEATS_DEFENSE_KEY, LGUConstants.SICK_BEATS_DEFENSE_DEFAULT);
+            BEATS_DEF_CO = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SICK_BEATS_DEFENSE_MULTIPLIER_KEY, LGUConstants.SICK_BEATS_DEFENSE_MULTIPLIER_DEFAULT, LGUConstants.SICK_BEATS_DEFENSE_MULTIPLIER_DESCRIPTION);
+            BEATS_STAMINA_CO = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SICK_BEATS_STAMINA_MULTIPLIER_KEY, LGUConstants.SICK_BEATS_STAMINA_MULTIPLIER_DEFAULT, LGUConstants.SICK_BEATS_STAMINA_MULTIPLIER_DESCRIPTION);
+            BEATS_DMG_INC = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SICK_BEATS_ADDITIONAL_DAMAGE_KEY, LGUConstants.SICK_BEATS_ADDITIONAL_DAMAGE_DEFAULT);
+            BEATS_SPEED_INC = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SICK_BEATS_ADDITIONAL_SPEED_KEY, LGUConstants.SICK_BEATS_ADDITIONAL_SPEED_DEFAULT);
+            BEATS_RADIUS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SICK_BEATS_EFFECT_RADIUS_KEY, LGUConstants.SICK_BEATS_EFFECT_RADIUS_DEFAULT, LGUConstants.SICK_BEATS_EFFECT_RADIUS_DESCRIPTION);
+
+            #endregion
+
+            #region Sigurd Access
+
+            topSection = Sigurd.UPGRADE_NAME;
+            SIGURD_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SIGURD_ACCESS_ENABLED_KEY, LGUConstants.SIGURD_ACCESS_ENABLED_DEFAULT, LGUConstants.SIGURD_ACCESS_ENABLED_DESCRIPTION);
+            SIGURD_LAST_DAY_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SIGURD_ACCESS_ENABLED_LAST_DAY_KEY, LGUConstants.SIGURD_ACCESS_ENABLED_LAST_DAY_DEFAULT, LGUConstants.SIGURD_ACCESS_ENABLED_LAST_DAY_DESCRIPTION);
+            SIGURD_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SIGURD_ACCESS_PRICE_KEY, LGUConstants.SIGURD_ACCESS_PRICE_DEFAULT, LGUConstants.SIGURD_ACCESS_PRICE_DESCRIPTION);
+            SIGURD_CHANCE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SIGURD_ACCESS_CHANCE_KEY, LGUConstants.SIGURD_ACCESS_CHANCE_DEFAULT);
+            SIGURD_LAST_DAY_CHANCE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SIGURD_ACCESS_CHANCE_LAST_DAY_KEY, LGUConstants.SIGURD_ACCESS_CHANCE_LAST_DAY_DEFAULT);
+            SIGURD_PERCENT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SIGURD_ACCESS_ADDITIONAL_PERCENT_KEY, LGUConstants.SIGURD_ACCESS_ADDITIONAL_PERCENT_DEFAULT);
+            SIGURD_LAST_DAY_PERCENT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SIGURD_ACCESS_ADDITIONAL_PERCENT_LAST_DAY_KEY, LGUConstants.SIGURD_ACCESS_ADDITIONAL_PERCENT_LAST_DAY_DEFAULT);
+
+            #endregion
+
+            #region Stimpack
+
+            topSection = Stimpack.UPGRADE_NAME;
+            PLAYER_HEALTH_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, Stimpack.ENABLED_SECTION, Stimpack.ENABLED_DEFAULT, Stimpack.ENABLED_DESCRIPTION);
+            PLAYER_HEALTH_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, Stimpack.PRICE_SECTION, Stimpack.PRICE_DEFAULT);
+            PLAYER_HEALTH_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            PLAYER_HEALTH_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, Stimpack.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, Stimpack.ADDITIONAL_HEALTH_UNLOCK_SECTION, Stimpack.ADDITIONAL_HEALTH_UNLOCK_DEFAULT, Stimpack.ADDITIONAL_HEALTH_UNLOCK_DESCRIPTION);
+            PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, Stimpack.ADDITIONAL_HEALTH_INCREMENT_SECTION, Stimpack.ADDITIONAL_HEALTH_INCREMENT_DEFAULT, Stimpack.ADDITIONAL_HEALTH_INCREMENT_DESCRIPTION);
+
+            #endregion
+
+            #region Strong Legs
+
+            topSection = StrongLegs.UPGRADE_NAME;
+            STRONG_LEGS_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.STRONG_LEGS_ENABLED_KEY, LGUConstants.STRONG_LEGS_ENABLED_DEFAULT, LGUConstants.STRONG_LEGS_ENABLED_DESCRIPTION);
+            STRONG_LEGS_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.STRONG_LEGS_PRICE_KEY, LGUConstants.STRONG_LEGS_PRICE_DEFAULT);
+            JUMP_FORCE_UNLOCK = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.STRONG_LEGS_INITIAL_JUMP_FORCE_KEY, LGUConstants.STRONG_LEGS_INITIAL_JUMP_FORCE_DEFAULT, LGUConstants.STRONG_LEGS_INITIAL_JUMP_FORCE_DESCRIPTION);
+            JUMP_FORCE_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.STRONG_LEGS_INCREMENTAL_JUMP_FORCE_KEY, LGUConstants.STRONG_LEGS_INCREMENTAL_JUMP_FORCE_DEFAULT, LGUConstants.STRONG_LEGS_INCREMENTAL_JUMP_FORCE_DESCRIPTION);
+            STRONG_LEGS_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, StrongLegs.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            STRONG_LEGS_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            STRONG_LEGS_REDUCE_FALL_DAMAGE_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.STRONG_LEGS_FALL_DAMAGE_MITIGATION_KEY, LGUConstants.STRONG_LEGS_FALL_DAMAGE_MITIGATION_DEFAULT, LGUConstants.STRONG_LEGS_FALL_DAMAGE_MITIGATION_DESCRIPTION);
+
+            #endregion
+
+            #region Walkie GPS
+
+            topSection = WalkieGPS.UPGRADE_NAME;
+            WALKIE_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.WALKIE_GPS_ENABLED_KEY, LGUConstants.WALKIE_GPS_ENABLED_DEFAULT, LGUConstants.WALKIE_GPS_ENABLED_DESCRIPTION);
+            WALKIE_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.WALKIE_GPS_PRICE_KEY, LGUConstants.WALKIE_GPS_PRICE_DEFAULT, LGUConstants.WALKIE_GPS_PRICE_DESCRIPTION);
+            WALKIE_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+
+            #endregion
+
+            #endregion
+
+            #region Commands
+
+            #region Extend Deadline
+
+            topSection = ExtendDeadlineScript.NAME;
+            EXTEND_DEADLINE_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.EXTEND_DEADLINE_ENABLED_KEY, LGUConstants.EXTEND_DEADLINE_ENABLED_DEFAULT, LGUConstants.EXTEND_DEADLINE_ENABLED_DESCRIPTION);
+            EXTEND_DEADLINE_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.EXTEND_DEADLINE_PRICE_KEY, LGUConstants.EXTEND_DEADLINE_PRICE_DEFAULT, LGUConstants.EXTEND_DEADLINE_PRICE_DESCRIPTION);
+
+            #endregion
+
+            #region Interns
+
+            topSection = Interns.NAME;
+            INTERN_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.INTERNS_ENABLED_KEY, LGUConstants.INTERNS_ENABLED_DEFAULT, LGUConstants.INTERNS_ENABLED_DESCRIPTION);
+            INTERN_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.INTERNS_PRICE_KEY, LGUConstants.INTERNS_PRICE_DEFAULT, LGUConstants.INTERNS_PRICE_DESCRIPTION);
+
+            #endregion
+
+            #region Scrap Insurance
+
+            topSection = ScrapInsurance.COMMAND_NAME;
+            SCRAP_INSURANCE_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SCRAP_INSURANCE_ENABLED_KEY, LGUConstants.SCRAP_INSURANCE_ENABLED_DEFAULT, LGUConstants.SCRAP_INSURANCE_ENABLED_DESCRIPTION);
+            SCRAP_INSURANCE_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SCRAP_INSURANCE_PRICE_KEY, ScrapInsurance.DEFAULT_PRICE);
+
+            #endregion
+
+            #region Weather Probe
+
+            topSection = WeatherManager.WEATHER_PROBE_COMMAND;
+            WEATHER_PROBE_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.WEATHER_PROBE_ENABLED_KEY, LGUConstants.WEATHER_PROBE_ENABLED_DEFAULT, LGUConstants.WEATHER_PROBE_ENABLED_DESCRIPTION);
+            WEATHER_PROBE_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.WEATHER_PROBE_PRICE_KEY, LGUConstants.WEATHER_PROBE_PRICE_DEFAULT, LGUConstants.WEATHER_PROBE_PRICE_DESCRIPTION);
+            WEATHER_PROBE_ALWAYS_CLEAR = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.WEATHER_PROBE_ALWAYS_CLEAR_KEY, LGUConstants.WEATHER_PROBE_ALWAYS_CLEAR_DEFAULT, LGUConstants.WEATHER_PROBE_ALWAYS_CLEAR_DESCRIPTION);
+            WEATHER_PROBE_PICKED_WEATHER_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.WEATHER_PROBE_PICKED_WEATHER_PRICE_KEY, LGUConstants.WEATHER_PROBE_PICKED_WEATHER_PRICE_DEFAULT, LGUConstants.WEATHER_PROBE_PICKED_WEATHER_PRICE_DESCRIPTION);
+
+            #endregion
+
+            #endregion
 
             topSection = "Night Vision";
             NIGHT_VISION_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Night Vision Upgrade", true, "Toggleable night vision.");
@@ -481,83 +834,6 @@ namespace MoreShipUpgrades.Misc
             NIGHT_VISION_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.PRICES_SECTION, NightVision.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             NIGHT_VISION_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
 
-            topSection = Discombobulator.UPGRADE_NAME;
-            DISCOMBOBULATOR_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Discombobulator Upgrade", true, "Stun enemies around the ship.");
-            DISCOMBOBULATOR_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of Discombobulator Upgrade", 450, "");
-            DISCOMBOBULATOR_COOLDOWN = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Discombobulator Cooldown", 120f, "");
-            DISCOMBOBULATOR_RADIUS = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Discombobulator Effect Radius", 40f, "");
-            DISCOMBOBULATOR_STUN_DURATION = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Discombobulator Stun Duration", 7.5f, "");
-            DISCOMBOBULATOR_NOTIFY_CHAT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Notify Local Chat of Enemy Stun Duration", true, "");
-            DISCOMBOBULATOR_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Discombobulator Increment", 1f, "The amount added to stun duration on upgrade.");
-            DISCO_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.PRICES_SECTION, Discombobulator.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            DISCOMBOBULATOR_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            DISCOMBOBULATOR_DAMAGE_LEVEL = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Initial level of dealing damage", 2, "Level of Discombobulator in which it starts dealing damage on enemies it stuns");
-            DISCOMBOBULATOR_INITIAL_DAMAGE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Initial amount of damage", 2, "Amount of damage when reaching the first level that unlocks damage on stun\nTo give an idea of what's too much, Eyeless Dogs have 12 health.");
-            DISCOMBOBULATOR_DAMAGE_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Damage Increase on Purchase", 1, "Damage increase when purchasing later levels");
-
-            topSection = BetterScanner.UPGRADE_NAME;
-            BETTER_SCANNER_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Better Scanner Upgrade", true, "Further scan distance, no LOS needed.");
-            BETTER_SCANNER_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of Better Scanner Upgrade", 650, "");
-            SHIP_AND_ENTRANCE_DISTANCE_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Ship and Entrance node distance boost", 150f, "How much further away you can scan the ship and entrance.");
-            NODE_DISTANCE_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Node distance boost", 20f, "How much further away you can scan other nodes.");
-            BETTER_SCANNER_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            BETTER_SCANNER_PRICE2 = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of first Better Scanner tier", 500, "This tier unlocks ship scan commands.");
-            BETTER_SCANNER_PRICE3 = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of second Better Scanner tier", 800, "This tier unlocks scanning through walls.");
-            BETTER_SCANNER_ENEMIES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Scan enemies through walls on final upgrade", false, "If true the final upgrade will scan scrap AND enemies through walls.");
-            VERBOSE_ENEMIES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Verbose `scan enemies` command", true, "If false `scan enemies` only returns a count of outside and inside enemies, else it returns the count for each enemy type.");
-
-            topSection = BackMuscles.UPGRADE_NAME;
-            BACK_MUSCLES_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Back Muscles Upgrade", true, "Reduce carry weight");
-            BACK_MUSCLES_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of Back Muscles Upgrade", 715, "");
-            CARRY_WEIGHT_REDUCTION = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Carry Weight Multiplier", 0.5f, "Your carry weight is multiplied by this.");
-            CARRY_WEIGHT_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Carry Weight Increment", 0.1f, "Each upgrade subtracts this from the above coefficient.");
-            BACK_MUSCLES_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.PRICES_SECTION, BackMuscles.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            BACK_MUSCLES_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-
-            topSection = "Interns";
-            INTERN_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable hiring of interns", true, "Pay x amount of credits to revive a player.");
-            INTERN_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Intern Price", 1000, "Default price to hire an intern.");
-            INTERN_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-
-            topSection = FastEncryption.UPGRADE_NAME;
-            PAGER_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Fast Encryption", true, "Upgrades the transmitter.");
-            PAGER_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Fast Encryption Price", 300, "");
-
-            topSection = LockSmith.UPGRADE_NAME;
-            LOCKSMITH_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Locksmith upgrade", true, "Allows you to pick locked doors by completing a minigame.");
-            LOCKSMITH_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Locksmith Price", 640, "Default price of Locksmith upgrade.");
-            LOCKSMITH_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-
-            topSection = "Peeper";
-            PEEPER_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Peeper item", true, "An item that will stare at coilheads for you.");
-            PEEPER_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Peeper Price", 500, "Default price to purchase a Peeper.");
-
-            topSection = LightningRod.UPGRADE_NAME;
-            LIGHTNING_ROD_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LightningRod.ENABLED_SECTION, LightningRod.ENABLED_DEFAULT, LightningRod.ENABLED_DESCRIPTION);
-            LIGHTNING_ROD_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LightningRod.PRICE_SECTION, LightningRod.PRICE_DEFAULT, "");
-            LIGHTNING_ROD_ACTIVE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LightningRod.ACTIVE_SECTION, LightningRod.ACTIVE_DEFAULT, LightningRod.ACTIVE_DESCRIPTION);
-            LIGHTNING_ROD_DIST = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, LightningRod.DIST_SECTION, LightningRod.DIST_DEFAULT, LightningRod.DIST_DESCRIPTION);
-
-            topSection = "Walkie";
-            WALKIE_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable the walkie talkie gps upgrade", true, "Holding a walkie talkie displays location.");
-            WALKIE_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Walkie GPS Price", 450, "Default price for upgrade.");
-            WALKIE_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-
-            topSection = FasterDropPod.UPGRADE_NAME;
-            FASTER_DROP_POD_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable the Drop Pod Thrusters upgrade", true, "Make the Drop Pod, the ship that deliver items bought on the terminal, land faster.");
-            FASTER_DROP_POD_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Drop Pod Thrusters Price", 300, "Default price for upgrade. If set to 0 it will enable the Drop Pod without buying the upgrade.");
-            FASTER_DROP_POD_TIMER = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Time decrement on the timer used for subsequent item deliveries", 20f, "");
-            FASTER_DROP_POD_INITIAL_TIMER = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Time decrement on the timer used for the first ever item delivery", 10f, "");
-
-            topSection = Sigurd.UPGRADE_NAME;
-            SIGURD_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable the Sigurd Access upgrade", true, "There's a chance that The Company will pay more for the scrap.");
-            SIGURD_LAST_DAY_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable the Sigurd Access upgrade for the last day", true, "There's a chance that the last day scrap you go over 100% value.");
-            SIGURD_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Sigurd Access Price", 500, "Default price for upgrade. If set to 0 it will enable the Sigurd Access without buying the upgrade.");
-            SIGURD_CHANCE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Chance for the upgrade to activate", 20f, "");
-            SIGURD_LAST_DAY_CHANCE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Chance for the upgrade to activate on the last day", 20f, "");
-            SIGURD_PERCENT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "How much the percentage will go up", 20f, "");
-            SIGURD_LAST_DAY_PERCENT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "How much the percentage will go up on the last day", 20f, "");
-
             topSection = Hunter.UPGRADE_NAME;
             HUNTER_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable the Hunter upgrade", true, "Collect and sell samples from dead enemies");
             HUNTER_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Hunter price", 700, "Default price for upgrade.");
@@ -580,106 +856,6 @@ namespace MoreShipUpgrades.Misc
             BABOON_HAWK_SAMPLE_MAXIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Maximum scrap value of a Baboon Hawk sample", 115, "");
             THUMPER_SAMPLE_MINIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Minimum scrap value of a Half sample", 80, "");
             THUMPER_SAMPLE_MAXIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Maximum scrap value of a Half sample", 125, "");
-
-            topSection = Stimpack.UPGRADE_NAME;
-            PLAYER_HEALTH_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, Stimpack.ENABLED_SECTION, Stimpack.ENABLED_DEFAULT, Stimpack.ENABLED_DESCRIPTION);
-            PLAYER_HEALTH_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, Stimpack.PRICE_SECTION, Stimpack.PRICE_DEFAULT, "");
-            PLAYER_HEALTH_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            PLAYER_HEALTH_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.PRICES_SECTION, Stimpack.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, Stimpack.ADDITIONAL_HEALTH_UNLOCK_SECTION, Stimpack.ADDITIONAL_HEALTH_UNLOCK_DEFAULT, Stimpack.ADDITIONAL_HEALTH_UNLOCK_DESCRIPTION);
-            PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, Stimpack.ADDITIONAL_HEALTH_INCREMENT_SECTION, Stimpack.ADDITIONAL_HEALTH_INCREMENT_DEFAULT, Stimpack.ADDITIONAL_HEALTH_INCREMENT_DESCRIPTION);
-
-            topSection = "Medkit";
-            MEDKIT_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable the medkit item", true, "Allows you to buy a medkit to heal yourself.");
-            MEDKIT_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "price", 300, "Default price for Medkit.");
-            MEDKIT_HEAL_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Heal Amount", 20, "The amount the medkit heals you.");
-            MEDKIT_USES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Uses", 3, "The amount of times the medkit can heal you.");
-
-            topSection = "Diving Kit";
-            DIVEKIT_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable the Diving Kit Item", true, "Allows you to buy a diving kit to breathe underwater.");
-            DIVEKIT_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "price", 650, "Price for Diving Kit.");
-            DIVEKIT_WEIGHT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Item weight", 1.65f, "-1 and multiply by 100 (1.65 = 65 lbs)");
-            DIVEKIT_TWO_HANDED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Two Handed Item", true, "One or two handed item.");
-
-            topSection = DoorsHydraulicsBattery.UPGRADE_NAME;
-            DOOR_HYDRAULICS_BATTERY_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, DoorsHydraulicsBattery.ENABLED_SECTION, true, DoorsHydraulicsBattery.ENABLED_DESCRIPTION);
-            DOOR_HYDRAULICS_BATTERY_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, DoorsHydraulicsBattery.PRICE_SECTION, DoorsHydraulicsBattery.PRICE_DEFAULT, "");
-            DOOR_HYDRAULICS_BATTERY_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.PRICES_SECTION, DoorsHydraulicsBattery.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            DOOR_HYDRAULICS_BATTERY_INITIAL = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, DoorsHydraulicsBattery.INITIAL_SECTION, DoorsHydraulicsBattery.INITIAL_DEFAULT, DoorsHydraulicsBattery.INITIAL_DESCRIPTION);
-            DOOR_HYDRAULICS_BATTERY_INCREMENTAL = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, DoorsHydraulicsBattery.INCREMENTAL_SECTION, DoorsHydraulicsBattery.INCREMENTAL_DEFAULT, DoorsHydraulicsBattery.INCREMENTAL_DESCRIPTION);
-
-            topSection = ScrapInsurance.COMMAND_NAME;
-            SCRAP_INSURANCE_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Scrap Insurance Command", true, "One time purchase which allows you to keep all your scrap upon a team wipe on a moon trip");
-            SCRAP_INSURANCE_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of Scrap Insurance", ScrapInsurance.DEFAULT_PRICE, "");
-
-            topSection = MarketInfluence.UPGRADE_NAME;
-            MARKET_INFLUENCE_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Market Influence Upgrade", true, "Tier upgrade which guarantees a minimum percentage sale on the selected item in the store.");
-            MARKET_INFLUENCE_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of Market Influence", 250, "");
-            MARKET_INFLUENCE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.PRICES_SECTION, MarketInfluence.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            MARKET_INFLUENCE_INITIAL_PERCENTAGE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Initial percentage guarantee on the items on sale", 10, "");
-            MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Incremental percentage guarantee on the items on sale", 5, "");
-
-            topSection = BargainConnections.UPGRADE_NAME;
-            BARGAIN_CONNECTIONS_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Bargain Connections Upgrade", true, "Tier upgrade which increases the amount of items that can be on sale in the store");
-            BARGAIN_CONNECTIONS_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of Bargain Connections", 200, "");
-            BARGAIN_CONNECTIONS_INITIAL_ITEM_AMOUNT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Initial additional amount of items that can go on sale", 3, "");
-            BARGAIN_CONNECTIONS_INCREMENTAL_ITEM_AMOUNT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Incremental additional amount of items that can go on sale", 2, "");
-            BARGAIN_CONNECTIONS_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.PRICES_SECTION, BargainConnections.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-
-            topSection = LethalDeals.UPGRADE_NAME;
-            LETHAL_DEALS_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Lethal Deals Upgrade", true, "One time upgrade which guarantees at least one item will be on sale in the store.");
-            LETHAL_DEALS_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of Lethal Deals", 300, "");
-
-            topSection = QuantumDisruptor.UPGRADE_NAME;
-            QUANTUM_DISRUPTOR_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Quantum Disruptor Upgrade", true, "Tier upgrade which increases the time you can stay in a moon landing");
-            QUANTUM_DISRUPTOR_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of Quantum Disruptor Upgrade", 1000, "");
-            QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "How slower time will go by when unlocking the Quantum Disruptor upgrade", 0.2f, "");
-            QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "How slower time will go by when incrementing the Quantum Disruptor level", 0.1f, "");
-            QUANTUM_DISRUPTOR_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.PRICES_SECTION, QuantumDisruptor.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-
-            topSection = EfficientEngines.UPGRADE_NAME;
-            EFFICIENT_ENGINES_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Efficient Engines Upgrade", true, "Tier upgrade which applies a discount on moon routing prices for cheaper travels");
-            EFFICIENT_ENGINES_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of Efficient Engines", 450, "");
-            EFFICIENT_ENGINES_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.PRICES_SECTION, "600, 750, 900", BaseUpgrade.PRICES_DESCRIPTION);
-            EFFICIENT_ENGINES_INITIAL_DISCOUNT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Initial discount applied to moon routing (%)", 15, "");
-            EFFICIENT_ENGINES_INCREMENTAL_DISCOUNT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Incremental discount applied to moon routing (%)", 5, "");
-            
-            topSection = ClimbingGloves.UPGRADE_NAME;
-            CLIMBING_GLOVES_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Climbing Gloves Upgrade", true, "Tier upgrade which increases the speed of climbing ladders");
-            CLIMBING_GLOVES_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            CLIMBING_GLOVES_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of Climbing Gloves Upgrade", 150, "");
-            CLIMBING_GLOVES_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.PRICES_SECTION, "200,250,300", BaseUpgrade.PRICES_DESCRIPTION);
-            INITIAL_CLIMBING_SPEED_BOOST = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Initial value added to the players climbing speed", 1f, "Vanilla climb speed is 4 units");
-            INCREMENTAL_CLIMBING_SPEED_BOOST = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Incremental value added to the players climbing speed", 0.5f, "");
-
-            topSection = LithiumBatteries.UPGRADE_NAME;
-            LITHIUM_BATTERIES_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Enable Lithium Batteries Upgrade", true, "Tier upgrade which decreases the rate of battery consumed when using the item");
-            LITHIUM_BATTERIES_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            LITHIUM_BATTERIES_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Price of Lithium Batteries upgrade", 100);
-            LITHIUM_BATTERIES_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, LithiumBatteries.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            LITHIUM_BATTERIES_INITIAL_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Initial multiplier applied to the use rate of the battery (%)", 10, "Past 100%, it won't consume any battery charge from the item");
-            LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Incremental multiplier applied to the use rate of the battery (%)", 10, "Past 100%, it won't consume any battery charge from the item");
-
-            topSection = AluminiumCoils.UPGRADE_NAME;
-            ALUMINIUM_COILS_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Enable Aluminium Coils Upgrade", true, "Tier upgrade which reduces the zap gun minigame's difficulty, making it easier to manage.");
-            ALUMINIUM_COILS_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            ALUMINIUM_COILS_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Price of Aluminium Coils upgrade", 750);
-            ALUMINIUM_COILS_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, "600, 800, 1000", BaseUpgrade.PRICES_DESCRIPTION);
-            ALUMINIUM_COILS_INITIAL_DIFFICULTY_DECREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Initial multiplier applied to the minigame difficulty multiplier (%)", 25, "Past 100%, the zap gun minigame will have no difficulty in following it.");
-            ALUMINIUM_COILS_INCREMENTAL_DIFFICULTY_DECREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Incremental multiplier applied to the minigame difficulty multiplier (%)", 10, "Past 100%, the zap gun minigame will have no difficulty in following it.");
-            ALUMINIUM_COILS_INITIAL_STUN_TIMER_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Initial value incremented to the enemy stun timer when using the zap gun", 1f);
-            ALUMINIUM_COILS_INCREMENTAL_STUN_TIMER_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Incremental value incremented to the enemy stun timer when using the zap gun", 1f);
-            ALUMINIUM_COILS_INITIAL_RANGE_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Initial value incremented to the zap guns range to stun an enemy", 2f);
-            ALUMINIUM_COILS_INCREMENTAL_RANGE_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Incremental value incremented to the zap guns range to stun an enemy", 1f);
-            ALUMINIUM_COILS_INITIAL_COOLDOWN_DECREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Initial multiplier applied to the zap guns cooldown (%)", 10, "Past 100%, the zap gun will have no cooldown after being used");
-            ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_DECREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Incremental multiplier applied to the zap guns cooldown", 10, "Past 100%, the zap gun will have no cooldown after being used");
-
-
-            topSection = "Weather Probe";
-            WEATHER_PROBE_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable Weather Probe Command", true, "Allows changing weather of a level through cost of credits");
-            WEATHER_PROBE_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of Weather Probe", 300, "Price of the weather probe when a weather is not selected for the level");
-            WEATHER_PROBE_ALWAYS_CLEAR = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Always pick clear weather", false, "When enabled, randomized weather probe will always clear out the weather present in the selected level");
-            WEATHER_PROBE_PICKED_WEATHER_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of Weather Probe with selected weather", 500, "This price is used when using the probe command with a weather");
 
             topSection = "Wheelbarrow";
             WHEELBARROW_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable the Wheelbarrow Item", true, "Allows you to buy a wheelbarrow to carry items outside of your inventory");

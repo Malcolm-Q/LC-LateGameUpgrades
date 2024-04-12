@@ -107,7 +107,7 @@ namespace MoreShipUpgrades.Managers
             }
             logger.LogInfo($"Successfully spawned {i} upgrade objects.");
 
-            GameObject intern = Instantiate(AssetBundleHandler.GetPerkGameObject(Interns.UPGRADE_NAME));
+            GameObject intern = Instantiate(AssetBundleHandler.GetPerkGameObject(Interns.NAME));
             intern.hideFlags = HideFlags.HideAndDontSave;
             intern.GetComponent<NetworkObject>().Spawn();
 

@@ -8,6 +8,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
     internal class EfficientEngines : TierUpgrade
     {
         internal const string UPGRADE_NAME = "Efficient Engines";
+        internal const string DEFAULT_PRICES = "600, 750, 900";
         void Awake()
         {
             upgradeName = UPGRADE_NAME;

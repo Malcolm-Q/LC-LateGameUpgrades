@@ -13,6 +13,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
     /// </summary>
     internal class Medkit : GrabbableObject, IDisplayInfo
     {
+        internal const string ITEM_NAME = "Medkit";
         /// <summary>
         /// Logger of the class
         /// </summary>

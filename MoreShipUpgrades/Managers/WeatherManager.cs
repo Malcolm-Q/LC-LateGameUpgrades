@@ -5,6 +5,7 @@ namespace MoreShipUpgrades.Managers
 {
     internal static class WeatherManager
     {
+        internal const string WEATHER_PROBE_COMMAND = "Weather Probe";
         internal static (string, LevelWeatherType) PickWeather(string levelName, string weather = "")
         {
             SelectableLevel[] availableLevels = StartOfRound.Instance.levels;

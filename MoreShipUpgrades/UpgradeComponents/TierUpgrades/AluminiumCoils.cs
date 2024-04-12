@@ -12,6 +12,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
     internal class AluminiumCoils : TierUpgrade
     {
         internal const string UPGRADE_NAME = "Aluminium Coils";
+        internal const string DEFAULT_PRICES = "600, 800, 1000";
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
