@@ -1,5 +1,6 @@
 ## V 3.5.5 - 2024-04-13
-- Fixed an error appearing in closing/opening doors through terminal due to lack of checking between v49 and v50 versions.
+- Fixed Beekeeper not affecting Butler's Hornet's damage.
+- Implemented "Name Override" configuration where you can change the name of the upgrades to your liking.
 
 ## V 3.5.4 - 2024-04-11
 - Implemented "Aluminium Coils" tier upgrade which provides several buffs to the zap gun item such as:
