@@ -108,30 +108,7 @@ namespace MoreShipUpgrades
 
         internal static void TryPatchBetaVersion() 
         {
-            bool butlerPatched = false, knifePatched = false;
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            for(int i = 0; i < assemblies.Length && (!butlerPatched || !knifePatched); i++)
-            {
-                if (assemblies[i].GetName().Name != "Assembly-CSharp") continue;
-                Type[] types = assemblies[i].GetTypes();
-                for(int j = 0; j < types.Length && (!butlerPatched || !knifePatched); j++)
-                {
-                    Type type = types[j];
-                    if (type.Name == "KnifeItem")
-                    {
-                        mls.LogDebug("Knife found!");
-                        harmony.PatchAll(typeof(KnifePatcher));
-                        knifePatched = true;
-                    }
-                    if (type.Name == "ButlerBeesEnemyAI")
-                    {
-                        mls.LogDebug("Butler Bees found!");
-                        harmony.PatchAll(typeof(ButlerBeesPatcher));
-                        butlerPatched = true;
-                    }
-                }
-            }
-            UpgradeBus.Instance.IsBeta = knifePatched || butlerPatched;
+            UpgradeBus.Instance.IsBeta = false;
         }
         internal static void PatchMainVersion()
         {
@@ -146,6 +123,7 @@ namespace MoreShipUpgrades
         static void PatchEnemies()
         {
             harmony.PatchAll(typeof(BaboonBirdAIPatcher));
+            harmony.PatchAll(typeof(ButlerBeesPatcher));
             harmony.PatchAll(typeof(EnemyAIPatcher));
             harmony.PatchAll(typeof(EnemyAICollisionDetectPatcher));
             harmony.PatchAll(typeof(HoarderBugAIPatcher));
@@ -171,6 +149,7 @@ namespace MoreShipUpgrades
             harmony.PatchAll(typeof(BoomBoxPatcher));
             harmony.PatchAll(typeof(DropPodPatcher));
             harmony.PatchAll(typeof(GrabbableObjectPatcher));
+            harmony.PatchAll(typeof(KnifePatcher));
             harmony.PatchAll(typeof(PatchToolPatcher));
             harmony.PatchAll(typeof(RadarBoosterPatcher));
             harmony.PatchAll(typeof(ShovelPatcher));
