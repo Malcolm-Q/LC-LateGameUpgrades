@@ -125,6 +125,37 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+
+        [field: DataMember] public SyncedEntry<string> ALUMINIUM_COILS_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> BACK_MUSCLES_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> BARGAIN_CONNECTIONS_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> BEEKEEPER_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> BETTER_SCANNER_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> CHARGING_BOOSTER_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> DISCOMBOBULATOR_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> EFFICIENT_ENGINES_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> HUNTER_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> LITHIUM_BATTERIES_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> MARKET_INFLUENCE_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> NIGHT_VISION_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> PROTEIN_POWDER_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> BIGGER_LUNGS_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> CLIMBING_GLOVES_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> SHUTTER_BATTERIES_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> QUANTUM_DISRUPTOR_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> RUNNING_SHOES_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> STIMPACK_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> STRONG_LEGS_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> FAST_ENCRYPTION_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> DROP_POD_THRUSTERS_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> LETHAL_DEALS_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> LIGHTNING_ROD_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> LOCKSMITH_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> MALWARE_BROADCASTER_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> SICK_BEATS_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> SIGURD_ACCESS_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> WALKIE_GPS_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<bool> OVERRIDE_UPGRADE_NAMES {  get; set; }
         [field: DataMember] public SyncedEntry<string> ALUMINIUM_COILS_PRICES {  get; set; }
         [field: DataMember] public SyncedEntry<int> ALUMINIUM_COILS_INITIAL_COOLDOWN_DECREASE {  get; set; }
         [field: DataMember] public SyncedEntry<int> ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_DECREASE { get; set; }
@@ -344,6 +375,42 @@ namespace MoreShipUpgrades.Misc
             KEEP_UPGRADES_AFTER_FIRED_CUTSCENE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.KEEP_UPGRADES_AFTER_FIRED_KEY, LGUConstants.KEEP_UPGRADES_AFTER_FIRED_DEFAULT, LGUConstants.KEEP_UPGRADES_AFTER_FIRED_DESCRIPTION);
             SHOW_UPGRADES_CHAT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SHOW_UPGRADES_CHAT_KEY, LGUConstants.SHOW_UPGRADES_CHAT_DEFAULT, LGUConstants.SHOW_UPGRADES_CHAT_DESCRIPTION);
             SALE_APPLY_ONCE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SALE_APPLY_ONCE_KEY, LGUConstants.SALE_APPLY_ONCE_DEFAULT, LGUConstants.SALE_APPLY_ONCE_DESCRIPTION);
+
+            #endregion
+
+            #region Override Names
+
+            topSection = LGUConstants.OVERRIDE_NAMES_SECTION;
+            OVERRIDE_UPGRADE_NAMES              = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.OVERRIDE_NAMES_ENABLED_KEY, LGUConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LGUConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
+            ALUMINIUM_COILS_OVERRIDE_NAME       = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ALUMINIUM_COILS_OVERRIDE_NAME_KEY, AluminiumCoils.UPGRADE_NAME);
+            BACK_MUSCLES_OVERRIDE_NAME          = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BACK_MUSCLES_OVERRIDE_NAME_KEY, BackMuscles.UPGRADE_NAME);
+            BARGAIN_CONNECTIONS_OVERRIDE_NAME   = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BARGAIN_CONNECTIONS_OVERRIDE_NAME_KEY, BargainConnections.UPGRADE_NAME);
+            BEEKEEPER_OVERRIDE_NAME             = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BEEKEEPER_OVERRIDE_NAME_KEY, Beekeeper.UPGRADE_NAME);
+            BETTER_SCANNER_OVERRIDE_NAME        = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BETTER_SCANNER_OVERRIDE_NAME_KEY, BetterScanner.UPGRADE_NAME);
+            CHARGING_BOOSTER_OVERRIDE_NAME      = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.CHARGING_BOOSTER_OVERRIDE_NAME_KEY, ChargingBooster.UPGRADE_NAME);
+            DISCOMBOBULATOR_OVERRIDE_NAME       = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DISCOMBOBULATOR_OVERRIDE_NAME_KEY, Discombobulator.UPGRADE_NAME);
+            EFFICIENT_ENGINES_OVERRIDE_NAME     = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.EFFICIENT_ENGINES_OVERRIDE_NAME_KEY, EfficientEngines.UPGRADE_NAME);
+            HUNTER_OVERRIDE_NAME                = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.HUNTER_OVERRIDE_NAME_KEY, Hunter.UPGRADE_NAME);
+            LITHIUM_BATTERIES_OVERRIDE_NAME     = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.LITHIUM_BATTERIES_OVERRIDE_NAME_KEY, LithiumBatteries.UPGRADE_NAME);
+            MARKET_INFLUENCE_OVERRIDE_NAME      = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MARKET_INFLUENCE_OVERRIDE_NAME_KEY, MarketInfluence.UPGRADE_NAME);
+            NIGHT_VISION_OVERRIDE_NAME          = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.NIGHT_VISION_OVERRIDE_NAME_KEY, NightVision.UPGRADE_NAME);
+            PROTEIN_POWDER_OVERRIDE_NAME        = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.PROTEIN_POWDER_OVERRIDE_NAME_KEY, ProteinPowder.UPGRADE_NAME);
+            BIGGER_LUNGS_OVERRIDE_NAME          = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BIGGER_LUNGS_OVERRIDE_NAME_KEY, BiggerLungs.UPGRADE_NAME);
+            CLIMBING_GLOVES_OVERRIDE_NAME       = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.CLIMBING_GLOVES_OVERRIDE_NAME_KEY, ClimbingGloves.UPGRADE_NAME);
+            SHUTTER_BATTERIES_OVERRIDE_NAME     = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SHUTTER_BATTERIES_OVERRIDE_NAME_KEY, DoorsHydraulicsBattery.UPGRADE_NAME);
+            QUANTUM_DISRUPTOR_OVERRIDE_NAME     = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.QUANTUM_DISRUPTOR_OVERRIDE_NAME_KEY, QuantumDisruptor.UPGRADE_NAME);
+            RUNNING_SHOES_OVERRIDE_NAME         = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.RUNNING_SHOES_OVERRIDE_NAME_KEY, RunningShoes.UPGRADE_NAME);
+            STIMPACK_OVERRIDE_NAME              = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.STIMPACK_OVERRIDE_NAME_KEY, Stimpack.UPGRADE_NAME);
+            STRONG_LEGS_OVERRIDE_NAME           = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.STRONG_LEGS_OVERRIDE_NAME_KEY, StrongLegs.UPGRADE_NAME);
+            FAST_ENCRYPTION_OVERRIDE_NAME       = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.FAST_ENCRYPTION_OVERRIDE_NAME_KEY, FastEncryption.UPGRADE_NAME);
+            DROP_POD_THRUSTERS_OVERRIDE_NAME    = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DROP_POD_THRUSTERS_OVERRIDE_NAME_KEY, FasterDropPod.UPGRADE_NAME);
+            LETHAL_DEALS_OVERRIDE_NAME          = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.LETHAL_DEALS_OVERRIDE_NAME_KEY, LethalDeals.UPGRADE_NAME);
+            LIGHTNING_ROD_OVERRIDE_NAME         = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.LIGHTNING_ROD_OVERRIDE_NAME_KEY, LightningRod.UPGRADE_NAME);
+            LOCKSMITH_OVERRIDE_NAME             = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.LOCKSMITH_OVERRIDE_NAME_KEY, LockSmith.UPGRADE_NAME);
+            MALWARE_BROADCASTER_OVERRIDE_NAME   = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MALWARE_BROADCASTER_OVERRIDE_NAME_KEY, MalwareBroadcaster.UPGRADE_NAME);
+            SICK_BEATS_OVERRIDE_NAME            = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SICK_BEATS_OVERRIDE_NAME_KEY, SickBeats.UPGRADE_NAME);
+            SIGURD_ACCESS_OVERRIDE_NAME         = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SIGURD_ACCESS_OVERRIDE_NAME_KEY, Sigurd.UPGRADE_NAME);
+            WALKIE_GPS_OVERRIDE_NAME            = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.WALKIE_GPS_OVERRIDE_NAME_KEY, WalkieGPS.UPGRADE_NAME);
 
             #endregion
 

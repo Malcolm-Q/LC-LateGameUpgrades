@@ -16,7 +16,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             " it might also result in fewer wet sock incidents and consequent trenchfoot. After all, who knows how many people have walked in {1} shoes?\n\n";
         void Awake()
         {
-            upgradeName = UPGRADE_NAME;
+            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.RUNNING_SHOES_OVERRIDE_NAME : UPGRADE_NAME;
             logger = new LguLogger(UPGRADE_NAME);
             changingAttribute = GameAttribute.PLAYER_MOVEMENT_SPEED;
             initialValue = UpgradeBus.Instance.PluginConfiguration.MOVEMENT_SPEED_UNLOCK.Value;

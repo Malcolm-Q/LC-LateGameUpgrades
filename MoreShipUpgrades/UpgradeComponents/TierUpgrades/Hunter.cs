@@ -98,7 +98,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         void Awake()
         {
-            upgradeName = UPGRADE_NAME;
+            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.HUNTER_OVERRIDE_NAME : UPGRADE_NAME;
             Instance = this;
         }
 

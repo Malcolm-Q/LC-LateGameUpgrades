@@ -27,7 +27,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         public const string INCREMENTAL_DESCRIPTION = $"Incremental battery boost for the doors' lock after purchase";
         void Awake()
         {
-            upgradeName = UPGRADE_NAME;
+            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.SHUTTER_BATTERIES_OVERRIDE_NAME : UPGRADE_NAME;
             logger = new LguLogger(upgradeName);
             changingAttribute = GameAttribute.SHIP_DOOR_BATTERY;
             initialValue = UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_INITIAL.Value;

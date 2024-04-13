@@ -88,6 +88,47 @@ namespace MoreShipUpgrades.Misc.Util
 
         #endregion
 
+        #region Name Overrides
+        internal const string OVERRIDE_NAMES_SECTION = "Name Overrides";
+
+        internal const string OVERRIDE_NAMES_ENABLED_KEY = "Override Upgrade Names";
+        internal const bool OVERRIDE_NAMES_ENABLED_DEFAULT = false;
+        internal const string OVERRIDE_NAMES_ENABLED_DESCRIPTION = "When enabled, replaces the names of each upgrades with the ones defined in this section";
+
+        internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
+
+        internal static readonly string ALUMINIUM_COILS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, AluminiumCoils.UPGRADE_NAME);
+        internal static readonly string BACK_MUSCLES_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, BackMuscles.UPGRADE_NAME);
+        internal static readonly string BARGAIN_CONNECTIONS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, BargainConnections.UPGRADE_NAME);
+        internal static readonly string BEEKEEPER_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, Beekeeper.UPGRADE_NAME);
+        internal static readonly string BETTER_SCANNER_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, BetterScanner.UPGRADE_NAME);
+        internal static readonly string CHARGING_BOOSTER_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ChargingBooster.UPGRADE_NAME);
+        internal static readonly string DISCOMBOBULATOR_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, Discombobulator.UPGRADE_NAME);
+        internal static readonly string EFFICIENT_ENGINES_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, EfficientEngines.UPGRADE_NAME);
+        internal static readonly string HUNTER_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, Hunter.UPGRADE_NAME);
+        internal static readonly string LITHIUM_BATTERIES_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, LithiumBatteries.UPGRADE_NAME);
+        internal static readonly string MARKET_INFLUENCE_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, MarketInfluence.UPGRADE_NAME);
+        internal static readonly string NIGHT_VISION_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, NightVision.UPGRADE_NAME);
+        internal static readonly string PROTEIN_POWDER_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ProteinPowder.UPGRADE_NAME);
+        internal static readonly string BIGGER_LUNGS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, BiggerLungs.UPGRADE_NAME);
+        internal static readonly string CLIMBING_GLOVES_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ClimbingGloves.UPGRADE_NAME);
+        internal static readonly string SHUTTER_BATTERIES_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, DoorsHydraulicsBattery.UPGRADE_NAME);
+        internal static readonly string QUANTUM_DISRUPTOR_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, QuantumDisruptor.UPGRADE_NAME);
+        internal static readonly string RUNNING_SHOES_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, RunningShoes.UPGRADE_NAME);
+        internal static readonly string STIMPACK_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, Stimpack.UPGRADE_NAME);
+        internal static readonly string STRONG_LEGS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, StrongLegs.UPGRADE_NAME);
+        internal static readonly string FAST_ENCRYPTION_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, FastEncryption.UPGRADE_NAME);
+        internal static readonly string DROP_POD_THRUSTERS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, FasterDropPod.UPGRADE_NAME);
+        internal static readonly string LETHAL_DEALS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, LethalDeals.UPGRADE_NAME);
+        internal static readonly string LIGHTNING_ROD_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, LightningRod.UPGRADE_NAME);
+        internal static readonly string LOCKSMITH_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, LockSmith.UPGRADE_NAME);
+        internal static readonly string MALWARE_BROADCASTER_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, MalwareBroadcaster.UPGRADE_NAME);
+        internal static readonly string SICK_BEATS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, SickBeats.UPGRADE_NAME);
+        internal static readonly string SIGURD_ACCESS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, Sigurd.UPGRADE_NAME);
+        internal static readonly string WALKIE_GPS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, WalkieGPS.UPGRADE_NAME);
+
+        #endregion
+
         #region Contracts
         internal const string CONTRACTS_SECTION = "Contracts";
 

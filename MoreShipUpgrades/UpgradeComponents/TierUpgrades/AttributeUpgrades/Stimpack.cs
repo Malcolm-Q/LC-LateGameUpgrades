@@ -40,7 +40,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 
         void Awake()
         {
-            upgradeName = UPGRADE_NAME;
+            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.STIMPACK_OVERRIDE_NAME : UPGRADE_NAME;
             logger = new LguLogger(UPGRADE_NAME);
             Instance = this;
             changingAttribute = GameAttribute.PLAYER_HEALTH;

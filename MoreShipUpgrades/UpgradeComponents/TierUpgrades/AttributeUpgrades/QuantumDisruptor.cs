@@ -13,7 +13,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         internal const string PRICES_DEFAULT = "1200,1500,1800";
         void Awake()
         {
-            upgradeName = UPGRADE_NAME;
+            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_OVERRIDE_NAME : UPGRADE_NAME;
             logger = new LguLogger(UPGRADE_NAME);
             changingAttribute = GameAttribute.TIME_GLOBAL_TIME_MULTIPLIER;
             initialValue = UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER.Value;

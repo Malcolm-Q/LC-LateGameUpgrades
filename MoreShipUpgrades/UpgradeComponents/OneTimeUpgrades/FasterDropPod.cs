@@ -11,7 +11,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
         internal override void Start()
         {
-            upgradeName = UPGRADE_NAME;
+            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.DROP_POD_THRUSTERS_OVERRIDE_NAME : UPGRADE_NAME;
             base.Start();
         }
 
