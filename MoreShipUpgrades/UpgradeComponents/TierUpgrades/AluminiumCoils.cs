@@ -15,7 +15,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         internal const string DEFAULT_PRICES = "600, 800, 1000";
         internal override void Start()
         {
-            upgradeName = UPGRADE_NAME;
+            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_OVERRIDE_NAME : UPGRADE_NAME;
             base.Start();
         }
         public static float ApplyDifficultyDecrease(float defaultDifficulty)

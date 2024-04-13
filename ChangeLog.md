@@ -1,3 +1,7 @@
+## V 3.5.5 - 2024-04-13
+- Fixed Beekeeper not affecting Butler's Hornet's damage.
+- Implemented "Name Override" configuration where you can change the name of the upgrades to your liking.
+
 ## V 3.5.4 - 2024-04-11
 - Implemented "Aluminium Coils" tier upgrade which provides several buffs to the zap gun item such as:
      - Reduced cooldown usage after failing its minigame

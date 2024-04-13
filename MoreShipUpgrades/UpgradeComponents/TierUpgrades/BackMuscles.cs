@@ -21,7 +21,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             " Most of the phone numbers don't work anymore.\n\n";
         void Awake()
         {
-            upgradeName = UPGRADE_NAME;
+            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_OVERRIDE_NAME : UPGRADE_NAME;
             Instance = this;
         }
         public override void Increment()

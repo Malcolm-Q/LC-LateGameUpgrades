@@ -18,7 +18,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         private static LguLogger logger = new LguLogger(UPGRADE_NAME);
         internal override void Start()
         {
-            upgradeName = UPGRADE_NAME;
+            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.BETTER_SCANNER_OVERRIDE_NAME : UPGRADE_NAME;
             base.Start();
         }
 

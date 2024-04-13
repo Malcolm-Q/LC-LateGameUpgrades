@@ -15,7 +15,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             " 'weight & balance personalization', and similar nigh-meaningless corpo-tech jargon. All of it is expensive.\n\n";
         void Awake()
         {
-            upgradeName = UPGRADE_NAME;
+            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.STRONG_LEGS_OVERRIDE_NAME : UPGRADE_NAME;
             logger = new LguLogger(UPGRADE_NAME);
             changingAttribute = GameAttribute.PLAYER_JUMP_FORCE;
             initialValue = UpgradeBus.Instance.PluginConfiguration.JUMP_FORCE_UNLOCK.Value;

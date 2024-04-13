@@ -17,19 +17,39 @@ using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using HarmonyLib;
-using MoreShipUpgrades.Patches.NetworkManager;
 
 namespace MoreShipUpgrades.Managers
 {
+    /// <summary>
+    /// Manager which handles Lategame Upgrades saving and upgrade purchases
+    /// </summary>
     public class LguStore : NetworkBehaviour
     {
         public static LguStore Instance { get; internal set; }
+        /// <summary>
+        /// Client's Lategame Upgrades save data
+        /// </summary>
         public SaveInfo SaveInfo { get; internal set; }
+        /// <summary>
+        /// Lategame upgrades saves of all connected players
+        /// </summary>
         public LguSave LguSave { get; internal set; }
+        /// <summary>
+        /// Old save format of Lategame Upgrades
+        /// </summary>
         public LGUSaveV1 oldSave;
+        /// <summary>
+        /// Player identifier of the client
+        /// </summary>
         private ulong playerID = 0;
         static LguLogger logger = new LguLogger(nameof(LguStore));
+        /// <summary>
+        /// Key used to store Lategame Upgrades relevant data
+        /// </summary>
         const string saveDataKey = "LGU_SAVE_DATA";
+        /// <summary>
+        /// Wether this client already received the save from host client or not
+        /// </summary>
         private bool receivedSave;
 
         private void Start()
@@ -47,11 +67,18 @@ namespace MoreShipUpgrades.Managers
                 StartCoroutine(WaitForConfigSync());
             }
         }
+        /// <summary>
+        /// Waits for set amount of time before reconstructing necessary components from the configuration received by host
+        /// </summary>
+        /// <returns></returns>
         IEnumerator WaitForConfigSync()
         {
             yield return new WaitForSeconds(2.5f);
             UpgradeBus.Instance.Reconstruct();
         }
+        /// <summary>
+        /// Retrieves the save file relevant to Lategame Upgrades to retrieve the data of the player's upgrades and other attributes saved
+        /// </summary>
         void FetchLGUSaveFile()
         {
             string saveFile = GameNetworkManager.Instance.currentSaveFileName;
@@ -75,13 +102,18 @@ namespace MoreShipUpgrades.Managers
                 LguSave = new LguSave();
             }
         }
-
+        /// <summary>
+        /// Remote Procedure Call used by clients to notify the server to save everyone's state into the save file
+        /// </summary>
         [ServerRpc(RequireOwnership = false)]
         public void ServerSaveFileServerRpc()
         {
             ServerSaveFile();
         }
 
+        /// <summary>
+        /// Stores Lategame Upgrades' relevant save data into the game's current save file.
+        /// </summary>
         void ServerSaveFile()
         {
             string saveFile = GameNetworkManager.Instance.currentSaveFileName;
@@ -89,13 +121,20 @@ namespace MoreShipUpgrades.Managers
             ES3.Save(key: saveDataKey, value: json, filePath: saveFile);
         }
 
+        /// <summary>
+        /// Remove Procedure Call used by clients to notify the server to update a client's save with provided save data
+        /// </summary>
+        /// <param name="id">Identifier of the client we wish to update the save of</param>
+        /// <param name="json">Save data of the client to replace with the current one</param>
         [ServerRpc(RequireOwnership = false)]
         public void UpdateLGUSaveServerRpc(ulong id, string json)
         {
             LguSave.playerSaves[id] = JsonConvert.DeserializeObject<SaveInfo>(json);
             logger.LogInfo($"Received and updated save info for client: {id}");
         }
-
+        /// <summary>
+        /// Spawns all relevant upgrade and command managers into the scene
+        /// </summary>
         public void HandleSpawns()
         {
             int i = 0;
@@ -119,7 +158,9 @@ namespace MoreShipUpgrades.Managers
             intern.hideFlags = HideFlags.HideAndDontSave;
             insurance.GetComponent<NetworkObject>().Spawn();
         }
-
+        /// <summary>
+        /// Remote Procedure Call used by clients to notify the server that the game's current run has reached its end and must reset Lategame Upgrade's upgrades and other attributes to default
+        /// </summary>
         [ServerRpc(RequireOwnership = false)]
         public void PlayersFiredServerRpc()
         {
@@ -131,6 +172,9 @@ namespace MoreShipUpgrades.Managers
             ES3.Save(key: saveDataKey, value: json, filePath: saveFile);
         }
 
+        /// <summary>
+        /// Remote Procedure Call used by server to notify the clients to reset their Lategame Upgrade's stats to default and clear any save relevant data
+        /// </summary>
         [ClientRpc]
         private void ResetUpgradeBusClientRpc()
         {
@@ -140,6 +184,9 @@ namespace MoreShipUpgrades.Managers
             SaveInfo = new SaveInfo();
         }
 
+        /// <summary>
+        /// Remote Procedure Call used by clients to notify the server to share the host's current save file to other clients in the current game session.
+        /// </summary>
         [ServerRpc(RequireOwnership = false)]
         public void ShareSaveServerRpc()
         {
@@ -147,6 +194,10 @@ namespace MoreShipUpgrades.Managers
             ShareSaveClientRpc(json);
         }
 
+        /// <summary>
+        /// Remote Procedure Call used by server to notify the clients to use the provided save file as the save file of the current game session.
+        /// </summary>
+        /// <param name="json">Structure which contains Lategame Upgrade's relevant save data</param>
         [ClientRpc]
         public void ShareSaveClientRpc(string json)
         {
@@ -175,22 +226,42 @@ namespace MoreShipUpgrades.Managers
                 UpdateUpgradeBus();
             }
         }
-
+        /// <summary>
+        /// Remote Procedure Call used by clients to notify the server to change the current amount of credits in the current game session to the provided amount
+        /// </summary>
+        /// <param name="credits">New amount of credits to set on the current game session</param>
         [ServerRpc(RequireOwnership = false)]
         public void SyncCreditsServerRpc(int credits)
         {
             logger.LogInfo($"Request to sync credits to ${credits} received, calling ClientRpc...");
             SyncCreditsClientRpc(credits);
         }
-
+        /// <summary>
+        /// Remote Procedure Call used by server to notify the clients to change the current amount of credits in the current game session to the provided amount
+        /// </summary>
+        /// <param name="newCredits">New amount of credits to set on the current game session</param>
         [ClientRpc]
         public void SyncCreditsClientRpc(int newCredits)
+        {
+            SyncCredits(newCredits);
+        }
+
+        /// <summary>
+        /// Changes the current amount of credits in the current game session to the provided amount
+        /// </summary>
+        /// <param name="newCredits">New amount of credits to set on the current game session</param>
+        void SyncCredits(int newCredits)
         {
             logger.LogInfo($"Credits have been synced to ${newCredits}");
             Terminal terminal = UpgradeBus.Instance.GetTerminal();
             terminal.groupCredits = newCredits;
         }
 
+        /// <summary>
+        /// Remote Procedure Call used by the clients to notify the server that a new player has joined the current game session and to save its data as the one provided
+        /// </summary>
+        /// <param name="id">Identifier of the client that joined the game session for the first time</param>
+        /// <param name="json">Lategame Upgrade's relevant save data associated with the new client</param>
         [ServerRpc(RequireOwnership =false)]
         private void RegisterNewPlayerServerRpc(ulong id, string json)
         {

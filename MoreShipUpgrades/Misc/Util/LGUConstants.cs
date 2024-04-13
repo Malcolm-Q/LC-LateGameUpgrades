@@ -88,6 +88,47 @@ namespace MoreShipUpgrades.Misc.Util
 
         #endregion
 
+        #region Name Overrides
+        internal const string OVERRIDE_NAMES_SECTION = "Name Overrides";
+
+        internal const string OVERRIDE_NAMES_ENABLED_KEY = "Override Upgrade Names";
+        internal const bool OVERRIDE_NAMES_ENABLED_DEFAULT = false;
+        internal const string OVERRIDE_NAMES_ENABLED_DESCRIPTION = "When enabled, replaces the names of each upgrades with the ones defined in this section";
+
+        internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
+
+        internal static readonly string ALUMINIUM_COILS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, AluminiumCoils.UPGRADE_NAME);
+        internal static readonly string BACK_MUSCLES_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, BackMuscles.UPGRADE_NAME);
+        internal static readonly string BARGAIN_CONNECTIONS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, BargainConnections.UPGRADE_NAME);
+        internal static readonly string BEEKEEPER_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, Beekeeper.UPGRADE_NAME);
+        internal static readonly string BETTER_SCANNER_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, BetterScanner.UPGRADE_NAME);
+        internal static readonly string CHARGING_BOOSTER_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ChargingBooster.UPGRADE_NAME);
+        internal static readonly string DISCOMBOBULATOR_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, Discombobulator.UPGRADE_NAME);
+        internal static readonly string EFFICIENT_ENGINES_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, EfficientEngines.UPGRADE_NAME);
+        internal static readonly string HUNTER_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, Hunter.UPGRADE_NAME);
+        internal static readonly string LITHIUM_BATTERIES_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, LithiumBatteries.UPGRADE_NAME);
+        internal static readonly string MARKET_INFLUENCE_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, MarketInfluence.UPGRADE_NAME);
+        internal static readonly string NIGHT_VISION_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, NightVision.UPGRADE_NAME);
+        internal static readonly string PROTEIN_POWDER_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ProteinPowder.UPGRADE_NAME);
+        internal static readonly string BIGGER_LUNGS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, BiggerLungs.UPGRADE_NAME);
+        internal static readonly string CLIMBING_GLOVES_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ClimbingGloves.UPGRADE_NAME);
+        internal static readonly string SHUTTER_BATTERIES_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, DoorsHydraulicsBattery.UPGRADE_NAME);
+        internal static readonly string QUANTUM_DISRUPTOR_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, QuantumDisruptor.UPGRADE_NAME);
+        internal static readonly string RUNNING_SHOES_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, RunningShoes.UPGRADE_NAME);
+        internal static readonly string STIMPACK_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, Stimpack.UPGRADE_NAME);
+        internal static readonly string STRONG_LEGS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, StrongLegs.UPGRADE_NAME);
+        internal static readonly string FAST_ENCRYPTION_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, FastEncryption.UPGRADE_NAME);
+        internal static readonly string DROP_POD_THRUSTERS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, FasterDropPod.UPGRADE_NAME);
+        internal static readonly string LETHAL_DEALS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, LethalDeals.UPGRADE_NAME);
+        internal static readonly string LIGHTNING_ROD_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, LightningRod.UPGRADE_NAME);
+        internal static readonly string LOCKSMITH_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, LockSmith.UPGRADE_NAME);
+        internal static readonly string MALWARE_BROADCASTER_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, MalwareBroadcaster.UPGRADE_NAME);
+        internal static readonly string SICK_BEATS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, SickBeats.UPGRADE_NAME);
+        internal static readonly string SIGURD_ACCESS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, Sigurd.UPGRADE_NAME);
+        internal static readonly string WALKIE_GPS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, WalkieGPS.UPGRADE_NAME);
+
+        #endregion
+
         #region Contracts
         internal const string CONTRACTS_SECTION = "Contracts";
 
@@ -962,6 +1003,44 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string SCANNER_LEVEL_REQUIRED = "Upgrade Better Scanner to level 2 to use this command\nEnter `info better scanner` to check upgrades.\n\n";
 
+        internal const string CONTRACT_CANCEL_FAIL = "You must have accepted a contract to execute this command...\n\n";
+        internal const string CONTRACT_CANCEL_CONFIRM_PROMPT = "Type CONFIRM to cancel your current contract. There will be no refunds.\n\n";
+        internal const string CONTRACT_FAIL = "Not possible to provide a contract due to configuration having it disabled.\n\n";
+
+        internal const string EXTEND_DEADLINE_USAGE = "You need to specify how many days you wish to extend the deadline for: \"extend deadline <days>\"\n\n";
+        internal const string EXTEND_DEADLINE_PARSING_ERROR_FORMAT = "Invalid value ({0}) inserted to extend the deadline.\n\n";
+        internal const string EXTEND_DEADLINE_NOT_ENOUGH_CREDITS_FORMAT = "Not enough credits to purchase the proposed deadline extension.\n Total price: {0}\n Current credits: {1}\n\n";
+
+        internal const string BRUTEFORCE_USAGE = "Enter a valid address for a device to connect to!\n\n";
+
+        internal const string CONTRACT_CANCEL_CONFIRM_PROMPT_FAIL = "Failed to confirm user's input. Invalidated cancel contract request.\n\n";
+        internal const string CONTRACT_CANCEL_CONFIRM_PROMPT_SUCCESS = "Cancelling contract...\n\n";
+
+        internal const string CONTRACT_SPECIFY_CONFIRM_PROMPT_FAIL = "Failed to confirm user's input. Invalidated specified moon contract request.\n\n";
+        internal const string CONTRACT_SPECIFY_CONFIRM_PROMPT_SUCCESS_FORMAT = "A {0} contract has been accepted for {1}!{2}";
+
+        internal const string WEATHER_SPECIFY_CONFIRM_PROMPT_FAIL = "Failed to confirm user's input. Invalidated specified weather probe request.\n\n";
+        internal const string WEATHER_SPECIFY_CONFIRM_PROMPT_SUCCESS_FORMAT = "A probe has been sent to {0} to change the weather to {1}.\n\n{2} credits have been pulled from your balance.\n\n";
+
+        internal const string WEATHER_PROBE_USAGE = "Probe <moonName> [weatherType]\n\nmoonName: Name of a moon\nweatherType: Name of a weather allowed in the level\n\n";
+        internal const string WEATHER_PROBE_ONLY_IN_ORBIT = "You can only send out weather probes while in orbit.\n\n";
+        internal const string WEATHER_PROBE_NOT_ENOUGH_CREDITS_FORMAT = "You do not have enough credits to purchase a weather probe.\nPrice: {0}\nCurrent credits: {1}\n\n";
+        internal const string WEATHER_PROBE_MOON_NOT_FOUND_FORMAT = "No moon was found that has an occurence of selected input ({0}).\n\n";
+        internal const string WEATHER_PROBE_SAME_WEATHER_FORMAT = "The provided moon ({0}) already has the selected weather ({1}).\n\n";
+        internal const string WEATHER_PROBE_SUCCESS_FORMAT = "A probe has been sent to {0} to change the weather to {1}.\n\n{2} credits have been pulled from your balance.\n\n";
+
+        internal const string WEATHER_PROBE_SPECIFY_NOT_ENOUGH_CREDITS_FORMAT = "Not enough credits to purchase a weather probe with specified weather.\nPrice: {0}\nCurrent credits: {1}\n\n";
+        internal const string WEATHER_PROBE_SPECIFY_INVALID_WEATHER = "An invalid weather was selected to probe for the moon.\n\n";
+        internal const string WEATHER_PROBE_SPECIFY_SUCCESS_FORMAT = "Type CONFIRM if you wish to have {0} with {1} for the cost of {2} Company Credits.\n\n";
+
+        internal const string SCRAP_INSURANCE_ALREADY_PURCHASED = "You already purchased insurance to protect your scrap belongings.\n\n";
+        internal const string SCRAP_INSURANCE_ONLY_IN_ORBIT = "You can only acquire insurance while in orbit.\n\n";
+        internal const string SCRAP_INSURANCE_NOT_ENOUGH_CREDITS_FORMAT = "Not enough credits to purchase Scrap Insurance.\nPrice: {0}\nCurrent credits: {1}\n\n";
+        internal const string SCRAP_INSURANCE_SUCCESS = "Scrap Insurance has been activated.\nIn case of a team wipe in your next trip, your scrap will be preserved.\n\n";
+
+        internal const string LOOKUP_NOT_IN_CONTRACT = "YOU MUST BE IN A DEFUSAL CONTRACT TO USE THIS COMMAND!\n\n";
+        internal const string LOOKUP_USAGE = "YOU MUST ENTER A SERIAL NUMBER TO LOOK UP!\n\n";
+        internal const string LOOKUP_CUT_WIRES_FORMAT = "CUT THE WIRES IN THE FOLLOWING ORDER:\n\n{0}\n\n";
         #endregion
 
         #region Chat Notifications

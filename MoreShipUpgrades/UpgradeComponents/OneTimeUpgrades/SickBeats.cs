@@ -23,7 +23,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
         void Awake()
         {
-            upgradeName = UPGRADE_NAME;
+            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.SICK_BEATS_OVERRIDE_NAME : UPGRADE_NAME;
             Instance = this;
         }
         internal override void Start()

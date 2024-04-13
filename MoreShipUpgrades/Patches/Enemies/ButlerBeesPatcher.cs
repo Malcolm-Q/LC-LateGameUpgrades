@@ -12,7 +12,7 @@ using System.Text;
 namespace MoreShipUpgrades.Patches.Enemies
 {
     [HarmonyPatch(typeof(ButlerBeesEnemyAI))]
-    internal class ButlerBeesPatcher
+    internal static class ButlerBeesPatcher
     {
         [HarmonyTranspiler]
         [HarmonyPatch(nameof(ButlerBeesEnemyAI.OnCollideWithPlayer))]
@@ -21,8 +21,7 @@ namespace MoreShipUpgrades.Patches.Enemies
             MethodInfo beeReduceDamage = typeof(Beekeeper).GetMethod(nameof(Beekeeper.CalculateBeeDamage));
             List<CodeInstruction> codes = instructions.ToList();
             int index = 0;
-            Tools.FindInteger(ref index, ref codes, 40, beeReduceDamage, errorMessage: "Couldn't find the damage number applied to the player when colliding");
-            Tools.FindInteger(ref index, ref codes, 20, beeReduceDamage, errorMessage: "Couldn't find the damage number applied to the player when colliding");
+            Tools.FindInteger(ref index, ref codes, 10, beeReduceDamage, errorMessage: "Couldn't find the damage number applied to the player when colliding");
             return codes.AsEnumerable();
         }
     }

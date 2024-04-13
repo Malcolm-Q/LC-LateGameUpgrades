@@ -12,7 +12,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         internal override void Start()
         {
-            upgradeName = UPGRADE_NAME;
+            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_OVERRIDE_NAME : UPGRADE_NAME;
             base.Start();
         }
         public static int GetGuaranteedPercentageSale(int defaultPercentage, int maxValue)

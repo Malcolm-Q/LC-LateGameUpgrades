@@ -19,7 +19,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             " Also comes with a weekly issuance of alkaline pills to partially inoculate {0} against Circuit Bee Venom.\n\n";
         void Awake()
         {
-            upgradeName = UPGRADE_NAME;
+            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.BEEKEEPER_OVERRIDE_NAME : UPGRADE_NAME;
             Instance = this;
         }
 

@@ -9,7 +9,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         const int GUARANTEED_ITEMS_AMOUNT = 1;
         void Awake()
         {
-            upgradeName = UPGRADE_NAME;
+            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.LETHAL_DEALS_OVERRIDE_NAME : UPGRADE_NAME;
         }
         public static int GetLethalDealsGuaranteedItems(int amount)
         {
