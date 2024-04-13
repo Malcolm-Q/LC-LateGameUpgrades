@@ -330,6 +330,7 @@ namespace MoreShipUpgrades.Misc
 
         #endregion
 
+        #region Configuration Bindings
         public PluginConfig(ConfigFile cfg) : base(Metadata.GUID)
         {
             ConfigManager.Register(this);
@@ -884,6 +885,8 @@ namespace MoreShipUpgrades.Misc
             SCRAP_WHEELBARROW_PLAY_NOISE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Plays noises for players with Shopping Cart Item", true, "If false, it will just not play the sounds, it will still attract monsters to noise");
             InitialSyncCompleted += PluginConfig_InitialSyncCompleted;
         }
+
+        #endregion
 
         private void PluginConfig_InitialSyncCompleted(object sender, EventArgs e)
         {

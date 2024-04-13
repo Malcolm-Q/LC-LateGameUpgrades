@@ -67,7 +67,11 @@ namespace MoreShipUpgrades.Managers
         {
             Instance = this;
         }
-
+        /// <summary>
+        /// Remote procedure call used by clients to notify the server to update the current contract details to provided ones
+        /// </summary>
+        /// <param name="contractLvl">Moon of the new contract</param>
+        /// <param name="contractType">Type of the new contract</param>
         [ServerRpc(RequireOwnership = false)]
         internal void ReqSyncContractDetailsServerRpc(string contractLvl, int contractType)
         {
@@ -75,6 +79,11 @@ namespace MoreShipUpgrades.Managers
             logger.LogInfo("Syncing contract details on all clients...");
         }
 
+        /// <summary>
+        /// Remote procedure call used by server to notify the clients to update the current contract details to provided ones
+        /// </summary>
+        /// <param name="contractLvl">Moon of the new contract</param>
+        /// <param name="contractType">Type of the new contract</param>
         [ClientRpc]
         internal void SyncContractDetailsClientRpc(string contractLvl = "None", int contractType = -1)
         {
@@ -88,7 +97,11 @@ namespace MoreShipUpgrades.Managers
             fakeBombOrders = new Dictionary<string, List<string>>();
             logger.LogInfo($"New contract details received. level: {contractLvl}, type: {contractType}");
         }
-
+        /// <summary>
+        /// Searches through the available moons whose name contains a substring that matches the provided string
+        /// </summary>
+        /// <param name="moon">Name of a supposed moon</param>
+        /// <returns>Full name of the moon if found any occurences, otherwise the name of the last contract moon</returns>
         internal static string GetSpecifiedLevel(string moon)
         {
             string lvl = Instance.contractLevel;
@@ -102,6 +115,10 @@ namespace MoreShipUpgrades.Managers
             }
             return lvl;
         }
+        /// <summary>
+        /// Searches through the available moons and picks an element out of the list that satisfies the criteria
+        /// </summary>
+        /// <returns>A moon that satifies the criteria, otherwise the name of the last contract moon</returns>
         internal static string RandomLevel()
         {
             string lvl = Instance.contractLevel;
@@ -160,6 +177,9 @@ namespace MoreShipUpgrades.Managers
             Instance.contractLevel = lvl;
             return lvl;
         }
+        /// <summary>
+        /// Resets the manager's current state to default
+        /// </summary>
         internal void ResetAllValues()
         {
             contractType = "None";

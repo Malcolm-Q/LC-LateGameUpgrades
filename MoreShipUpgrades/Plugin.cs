@@ -37,7 +37,6 @@ using MoreShipUpgrades.Patches.PlayerController;
 using MoreShipUpgrades.Patches.RoundComponents;
 using MoreShipUpgrades.Patches.TerminalComponents;
 using MoreShipUpgrades.Input;
-using com.github.zehsteam;
 
 namespace MoreShipUpgrades
 {
