@@ -1,3 +1,8 @@
+## V 3.6.0 - 2024-04-??
+- Fixed overriding upgrade names leading to a couple of unpredicted behaviour.
+- Fixed Data Contract's Laptop help info showing "ls, mv, mv" rather than "ls, cd, mv", leading to people not know about the ``cd`` command
+- Implemented "Deeper Pockets" upgrade which provides additional two-handed item carry capacity to the player, treating them like one-handed items til the last carryable two-handed.
+
 ## V 3.5.5 - 2024-04-13
 - Fixed Beekeeper not affecting Butler's Hornet's damage.
 - Implemented "Name Override" configuration where you can change the name of the upgrades to your liking.
