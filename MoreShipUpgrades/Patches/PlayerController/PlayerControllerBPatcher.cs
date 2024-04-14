@@ -165,6 +165,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             if (twoHandedCount < maxTwoHandedCount)
             {
                 player.twoHanded = false;
+                HUDManager.Instance.holdingTwoHandedItem.enabled = false;
             }
         }
         static void WheelbarrowUnparenting(GrabbableObject heldObject)
