@@ -17,7 +17,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 
         void Awake()
         {
-            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_OVERRIDE_NAME : UPGRADE_NAME;
+            upgradeName = UPGRADE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_OVERRIDE_NAME;
             logger = new LguLogger(UPGRADE_NAME);
             changingAttribute = GameAttribute.PLAYER_SPRINT_TIME;
             initialValue = UpgradeBus.Instance.PluginConfiguration.SPRINT_TIME_INCREASE_UNLOCK.Value;

@@ -24,7 +24,8 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         public int timesStruck;
         void Awake()
         {
-            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.LOCKSMITH_OVERRIDE_NAME : UPGRADE_NAME;
+            upgradeName = UPGRADE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.LOCKSMITH_OVERRIDE_NAME;
             instance = this;
         }
         internal override void Start()

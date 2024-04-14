@@ -324,6 +324,7 @@ namespace MoreShipUpgrades.Managers
             SetupClimbingGlovesTerminalNode();
             SetupLithiumBatteriesTerminalNode();
             SetupAluminiumCoilsTerminalNode();
+            SetupDeeperPocketsTerminalNode();
             terminalNodes.Sort();
         }
         void SetupEfficientEnginesNode()
@@ -590,6 +591,15 @@ namespace MoreShipUpgrades.Managers
                                                 ParseUpgradePrices(PluginConfiguration.ALUMINIUM_COILS_PRICES.Value),
                                                 PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.ALUMINIUM_COILS_OVERRIDE_NAME : "");
         }
+        void SetupDeeperPocketsTerminalNode()
+        {
+            SetupMultiplePurchasableTerminalNode(DeepPockets.UPGRADE_NAME,
+                                                PluginConfiguration.SHARED_UPGRADES || !PluginConfiguration.DEEPER_POCKETS_INDIVIDUAL,
+                                                PluginConfiguration.DEEPER_POCKETS_ENABLED,
+                                                PluginConfiguration.DEEPER_POCKETS_PRICE,
+                                                ParseUpgradePrices(PluginConfiguration.DEEPER_POCKETS_PRICES),
+                                                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.DEEPER_POCKETS_OVERRIDE_NAME : "");
+        }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can be purchased multiple times
         /// </summary>
@@ -610,7 +620,7 @@ namespace MoreShipUpgrades.Managers
             GameObject multiPerk = AssetBundleHandler.GetPerkGameObject(upgradeName) ;
             if (!multiPerk) return null;
 
-            IndividualUpgrades.Add(overrideName != "" ? overrideName : upgradeName, shareStatus);
+            IndividualUpgrades.Add(upgradeName, shareStatus);
 
             if (!enabled) return null;
 
@@ -618,7 +628,7 @@ namespace MoreShipUpgrades.Managers
             string moreInfo = infoString;
             if (multiPerk.GetComponent<BaseUpgrade>() is IUpgradeWorldBuilding component) moreInfo += component.GetWorldBuildingText(shareStatus) + "\n";
 
-            CustomTerminalNode node = new TierTerminalNode(overrideName != "" ? overrideName:  upgradeName, initialPrice, infoString, multiPerk, prices, prices.Length, moreInfo);
+            CustomTerminalNode node = new TierTerminalNode(overrideName != "" ? overrideName:  upgradeName, initialPrice, infoString, multiPerk, prices, prices.Length, moreInfo, upgradeName);
             terminalNodes.Add(node);
             return node;
         }
@@ -646,7 +656,7 @@ namespace MoreShipUpgrades.Managers
             string moreInfo = info;
             if (oneTimeUpgrade.GetComponent<BaseUpgrade>() is IUpgradeWorldBuilding component) moreInfo += component.GetWorldBuildingText(shareStatus) + "\n";
 
-            CustomTerminalNode node = new OneTimeTerminalNode(overrideName != "" ? overrideName : upgradeName, price, info, oneTimeUpgrade, moreInfo);
+            CustomTerminalNode node = new OneTimeTerminalNode(overrideName != "" ? overrideName : upgradeName, price, info, oneTimeUpgrade, moreInfo, upgradeName);
             terminalNodes.Add(node);
         }
         private string SetupUpgradeInfo(BaseUpgrade upgrade = null, bool shareStatus = false, int price = -1, int[] incrementalPrices = null)

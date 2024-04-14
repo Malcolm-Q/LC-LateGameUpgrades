@@ -22,7 +22,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             " Said document contains no mention of whatever it might be that it was included in the Ship's design to discombobulate.\n\n";
         void Awake()
         {
-            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_OVERRIDE_NAME : UPGRADE_NAME;
+            upgradeName = UPGRADE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_OVERRIDE_NAME;
             instance = this;
         }
 

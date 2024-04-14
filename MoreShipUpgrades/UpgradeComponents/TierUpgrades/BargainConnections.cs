@@ -10,7 +10,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         internal const string PRICES_DEFAULT = "225,300,375";
         internal override void Start()
         {
-            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.BARGAIN_CONNECTIONS_OVERRIDE_NAME : UPGRADE_NAME;
+            upgradeName = UPGRADE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.BARGAIN_CONNECTIONS_OVERRIDE_NAME;
             base.Start();
         }
         public static int GetBargainConnectionsAdditionalItems(int defaultAmountItems)

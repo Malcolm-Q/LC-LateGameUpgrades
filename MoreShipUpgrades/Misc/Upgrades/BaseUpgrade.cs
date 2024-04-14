@@ -17,6 +17,11 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// Name of the upgrade
         /// </summary>
         protected string upgradeName = "Base Upgrade";
+
+        /// <summary>
+        /// Overriden name of the upgrade
+        /// </summary>
+        protected string overridenUpgradeName;
         #endregion
         #region Constants
         public const string INDIVIDUAL_SECTION = "Individual Purchase";
@@ -40,7 +45,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
         {
             UpgradeBus.Instance.activeUpgrades[upgradeName] = true;
             if (!UpgradeBus.Instance.PluginConfiguration.SHOW_UPGRADES_CHAT.LocalValue) return;
-            ShowUpgradeNotification(LGUConstants.UPGRADE_UNLOADED_NOTIFICATION_DEFAULT_COLOR, $"{upgradeName} is active!");
+            ShowUpgradeNotification(LGUConstants.UPGRADE_UNLOADED_NOTIFICATION_DEFAULT_COLOR, $"{(UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? overridenUpgradeName : upgradeName)} is active!");
         }
         /// <summary>
         /// Function responsible to insert this upgrade's gameObject into the UpgradeBus' list of gameObjects for handling
@@ -56,7 +61,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
         {
             UpgradeBus.Instance.activeUpgrades[upgradeName] = false;
             if (!UpgradeBus.Instance.PluginConfiguration.SHOW_UPGRADES_CHAT.LocalValue) return;
-            ShowUpgradeNotification(LGUConstants.UPGRADE_LOADED_NOTIFICATION_DEFAULT_COLOR, $"{upgradeName} has been disabled!");
+            ShowUpgradeNotification(LGUConstants.UPGRADE_LOADED_NOTIFICATION_DEFAULT_COLOR, $"{(UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? overridenUpgradeName : upgradeName)} has been disabled!");
         }
         /// <summary>
         /// Shows a notification for when an upgrade is loaded or unloaded from the player

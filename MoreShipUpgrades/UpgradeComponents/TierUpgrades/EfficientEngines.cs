@@ -11,7 +11,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         internal const string DEFAULT_PRICES = "600, 750, 900";
         void Awake()
         {
-            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.EFFICIENT_ENGINES_OVERRIDE_NAME : UPGRADE_NAME;
+            upgradeName = UPGRADE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.EFFICIENT_ENGINES_OVERRIDE_NAME;
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {

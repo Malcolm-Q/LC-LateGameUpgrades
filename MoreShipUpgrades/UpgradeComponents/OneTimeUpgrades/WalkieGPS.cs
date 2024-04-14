@@ -15,7 +15,8 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         private Text x, y, z, time;
         void Awake()
         {
-            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.WALKIE_GPS_OVERRIDE_NAME : UPGRADE_NAME;
+            upgradeName = UPGRADE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.WALKIE_GPS_OVERRIDE_NAME;
             instance = this;
         }
         internal override void Start()

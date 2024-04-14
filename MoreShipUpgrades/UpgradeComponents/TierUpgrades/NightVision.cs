@@ -35,7 +35,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         void Awake()
         {
             Instance = this;
-            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.NIGHT_VISION_OVERRIDE_NAME : UPGRADE_NAME;
+            upgradeName = UPGRADE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.NIGHT_VISION_OVERRIDE_NAME;
             nightVisionPrefab = AssetBundleHandler.GetItemObject("Night Vision").spawnPrefab;
         }
         internal override void Start()

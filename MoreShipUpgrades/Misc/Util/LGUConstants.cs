@@ -97,6 +97,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string DEEPER_POCKETS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, DeepPockets.UPGRADE_NAME);
         internal static readonly string ALUMINIUM_COILS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, AluminiumCoils.UPGRADE_NAME);
         internal static readonly string BACK_MUSCLES_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, BackMuscles.UPGRADE_NAME);
         internal static readonly string BARGAIN_CONNECTIONS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, BargainConnections.UPGRADE_NAME);
@@ -377,6 +378,25 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Deeper Pockets
+
+        internal const string DEEPER_POCKETS_ENABLED_KEY = "Enable Deeper Pockets Upgrade";
+        internal const bool DEEPER_POCKETS_ENABLED_DEFAULT = true;
+        internal const string DEEPER_POCKETS_ENABLED_DESCRIPTION = "Tier upgrade which allows the player to carry more than one two handed item in their inventory";
+
+        internal const string DEEPER_POCKETS_PRICE_KEY = "Price of Deeper Pockets Upgrade";
+        internal const int DEEPER_POCKETS_PRICE_DEFAULT = 500;
+
+        internal const string DEEPER_POCKETS_INITIAL_TWO_HANDED_AMOUNT_KEY = "Initial carry capacity increase";
+        internal const int DEEPER_POCKETS_INITIAL_TWO_HANDED_AMOUNT_DEFAULT = 1;
+        internal const string DEEPER_POCKETS_INITIAL_TWO_HANDED_AMOUNT_DESCRIPTION = "The amount of two handed carry capacity increased to the player when first buying the upgrade";
+
+        internal const string DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_KEY = "Incremental carry capacity increase";
+        internal const int DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_DEFAULT = 1;
+        internal const string DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_DESCRIPTION = "The amount of two handed carry capacity increased to the player when increase the upgrade level";
+
+        #endregion 
 
         #region Aluminium Coils
 

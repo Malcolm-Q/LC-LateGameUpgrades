@@ -12,7 +12,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         internal const string DEFAULT_PRICES = "200,250,300";
         void Awake()
         {
-            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.CLIMBING_GLOVES_OVERRIDE_NAME : UPGRADE_NAME;
+            upgradeName = UPGRADE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.CLIMBING_GLOVES_OVERRIDE_NAME;
             logger = new LguLogger(UPGRADE_NAME);
             changingAttribute = GameAttribute.PLAYER_CLIMB_SPEED;
             initialValue = UpgradeBus.Instance.PluginConfiguration.INITIAL_CLIMBING_SPEED_BOOST.Value;

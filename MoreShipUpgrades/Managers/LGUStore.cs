@@ -438,7 +438,7 @@ namespace MoreShipUpgrades.Managers
         {
             foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
             {
-                if (node.Name == name)
+                if (node.OriginalName == name)
                 {
                     node.Unlocked = true;
                     if (increment) { node.CurrentUpgrade++; }

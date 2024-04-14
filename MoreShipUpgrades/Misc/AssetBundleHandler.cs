@@ -117,6 +117,7 @@ namespace MoreShipUpgrades.Misc
             { ClimbingGloves.UPGRADE_NAME, upgrades+"ClimbingGloves.prefab" },
             { LithiumBatteries.UPGRADE_NAME, upgrades+"LithiumBatteries.prefab" },
             { AluminiumCoils.UPGRADE_NAME, upgrades+"AluminiumCoils.prefab" },
+            { DeepPockets.UPGRADE_NAME, upgrades+"DeeperPockets.prefab" },
 
             { "Advanced Portable Tele", storeItems+"TpButtonAdv.asset" },
             { "Portable Tele", storeItems+"TpButton.asset" },

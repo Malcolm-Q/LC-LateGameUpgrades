@@ -180,13 +180,13 @@ namespace MoreShipUpgrades.Misc
                 LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits - price);
                 if (!customNode.Unlocked)
                 {
-                    LguStore.Instance.HandleUpgrade(customNode.Name);
+                    LguStore.Instance.HandleUpgrade(customNode.OriginalName);
                     if (customNode.MaxUpgrade != 0) { displayText = $"You Upgraded {customNode.Name} to level {customNode.CurrentUpgrade + 1}  \n\n"; }
                     else { displayText = $"You Purchased {customNode.Name}  \n\n"; }
                 }
                 else if (customNode.Unlocked && customNode.MaxUpgrade > customNode.CurrentUpgrade)
                 {
-                    LguStore.Instance.HandleUpgrade(customNode.Name, true);
+                    LguStore.Instance.HandleUpgrade(customNode.OriginalName, true);
                     displayText = $"You Upgraded {customNode.Name} to level {customNode.CurrentUpgrade + 1} \n\n";
                 }
                 if (customNode.salePerc != 1f && UpgradeBus.Instance.PluginConfiguration.SALE_APPLY_ONCE.Value) customNode.salePerc = 1f;

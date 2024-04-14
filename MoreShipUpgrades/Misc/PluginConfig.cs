@@ -22,7 +22,7 @@ namespace MoreShipUpgrades.Misc
     public class PluginConfig : SyncedConfig<PluginConfig>
     {
         #region Enabled
-
+        [field: DataMember] public SyncedEntry<bool> DEEPER_POCKETS_ENABLED {  get; set; }
         [field: DataMember] public SyncedEntry<bool> ALUMINIUM_COILS_ENABLED {  get; set; }
         [field: DataMember] public SyncedEntry<bool> CHARGING_BOOSTER_ENABLED { get; set; }
         [field: DataMember] public SyncedEntry<bool> MARKET_INFLUENCE_ENABLED { get; set; }
@@ -62,6 +62,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Individual
+        [field: DataMember] public SyncedEntry<bool> DEEPER_POCKETS_INDIVIDUAL {  get; set; }
         [field: DataMember] public SyncedEntry<bool> ALUMINIUM_COILS_INDIVIDUAL { get; set; }
         [field: DataMember] public SyncedEntry<bool> BEEKEEPER_INDIVIDUAL { get; set; }
         [field: DataMember] public SyncedEntry<bool> PROTEIN_INDIVIDUAL { get; set; }
@@ -82,6 +83,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Initial Prices
+        [field: DataMember] public SyncedEntry<int> DEEPER_POCKETS_PRICE {  get; set; }
         [field: DataMember] public SyncedEntry<int> ALUMINIUM_COILS_PRICE { get; set; }
         [field: DataMember] public SyncedEntry<int> CLIMBING_GLOVES_PRICE {  get; set; }
         [field: DataMember] public SyncedEntry<int> WEATHER_PROBE_PRICE {  get; set; }
@@ -125,7 +127,10 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
-
+        [field: DataMember] public SyncedEntry<string> DEEPER_POCKETS_OVERRIDE_NAME { get; set; }
+        [field: DataMember] public SyncedEntry<string> DEEPER_POCKETS_PRICES { get; set; }
+        [field: DataMember] public SyncedEntry<int> DEEPER_POCKETS_INITIAL_TWO_HANDED_ITEMS {  get; set; }
+        [field: DataMember] public SyncedEntry<int> DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_ITEMS { get; set; }
         [field: DataMember] public SyncedEntry<string> ALUMINIUM_COILS_OVERRIDE_NAME { get; set; }
         [field: DataMember] public SyncedEntry<string> BACK_MUSCLES_OVERRIDE_NAME { get; set; }
         [field: DataMember] public SyncedEntry<string> BARGAIN_CONNECTIONS_OVERRIDE_NAME { get; set; }
@@ -382,6 +387,7 @@ namespace MoreShipUpgrades.Misc
 
             topSection = LGUConstants.OVERRIDE_NAMES_SECTION;
             OVERRIDE_UPGRADE_NAMES              = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.OVERRIDE_NAMES_ENABLED_KEY, LGUConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LGUConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
+            DEEPER_POCKETS_OVERRIDE_NAME        = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DEEPER_POCKETS_OVERRIDE_NAME_KEY, DeepPockets.UPGRADE_NAME);
             ALUMINIUM_COILS_OVERRIDE_NAME       = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ALUMINIUM_COILS_OVERRIDE_NAME_KEY, AluminiumCoils.UPGRADE_NAME);
             BACK_MUSCLES_OVERRIDE_NAME          = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BACK_MUSCLES_OVERRIDE_NAME_KEY, BackMuscles.UPGRADE_NAME);
             BARGAIN_CONNECTIONS_OVERRIDE_NAME   = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BARGAIN_CONNECTIONS_OVERRIDE_NAME_KEY, BargainConnections.UPGRADE_NAME);
@@ -505,6 +511,18 @@ namespace MoreShipUpgrades.Misc
             #endregion
 
             #region Upgrades
+
+            #region Deeper Pockets
+
+            topSection = DeepPockets.UPGRADE_NAME;
+            DEEPER_POCKETS_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DEEPER_POCKETS_ENABLED_KEY, LGUConstants.DEEPER_POCKETS_ENABLED_DEFAULT, LGUConstants.DEEPER_POCKETS_ENABLED_DESCRIPTION);
+            DEEPER_POCKETS_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            DEEPER_POCKETS_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DEEPER_POCKETS_PRICE_KEY, LGUConstants.DEEPER_POCKETS_PRICE_DEFAULT);
+            DEEPER_POCKETS_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, DeepPockets.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
+            DEEPER_POCKETS_INITIAL_TWO_HANDED_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DEEPER_POCKETS_INITIAL_TWO_HANDED_AMOUNT_KEY, LGUConstants.DEEPER_POCKETS_INITIAL_TWO_HANDED_AMOUNT_DEFAULT, LGUConstants.DEEPER_POCKETS_INITIAL_TWO_HANDED_AMOUNT_DESCRIPTION);
+            DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_KEY, LGUConstants.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_DEFAULT, LGUConstants.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_DESCRIPTION);
+
+            #endregion
 
             #region Aluminium Coils
 

@@ -39,7 +39,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         internal override void Start()
         {
-            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.PROTEIN_POWDER_OVERRIDE_NAME : UPGRADE_NAME;
+            upgradeName = UPGRADE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.PROTEIN_POWDER_OVERRIDE_NAME;
             base.Start();
         }
 

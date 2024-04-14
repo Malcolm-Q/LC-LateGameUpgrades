@@ -11,7 +11,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         internal override void Start()
         {
-            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.LITHIUM_BATTERIES_OVERRIDE_NAME : UPGRADE_NAME;
+            upgradeName = UPGRADE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.LITHIUM_BATTERIES_OVERRIDE_NAME;
             base.Start();
         }
         public static float GetChargeRateMultiplier(float defaultChargeRate)

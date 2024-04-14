@@ -9,7 +9,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
     {
         const string DELIMITER = "//";
         const string UNLOCKED_TEXT = "UNLOCKED";
-        public OneTimeTerminalNode(string name, int unlockPrice, string description, GameObject prefab, string simplifiedDescription = "") : base(name, unlockPrice, description, prefab, simplifiedDescription: simplifiedDescription)
+        public OneTimeTerminalNode(string name, int unlockPrice, string description, GameObject prefab, string simplifiedDescription = "", string originalName = "") : base(name, unlockPrice, description, prefab, simplifiedDescription: simplifiedDescription, originalName: originalName)
         {
 
         }
