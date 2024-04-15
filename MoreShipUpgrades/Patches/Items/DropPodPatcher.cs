@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using System.Collections.Generic;
@@ -30,6 +31,7 @@ namespace MoreShipUpgrades.Patches.Items
         [HarmonyPrefix]
         static void ShipLandedAnimationEventPrefix(ItemDropship __instance)
         {
+            if (!BaseUpgrade.GetActiveUpgrade(FasterDropPod.UPGRADE_NAME)) return;
             while(orderedItems.Count > 0 && __instance.itemsToDeliver.Count < MAXIMUM_ALLOWED_DELIVERED_ITEMS)
             {
                 __instance.itemsToDeliver.Add(orderedItems[0]);
