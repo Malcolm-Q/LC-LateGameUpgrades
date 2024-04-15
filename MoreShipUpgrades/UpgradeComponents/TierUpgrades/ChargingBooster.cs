@@ -1,6 +1,7 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.Items.RadarBooster;
 using System.Linq;
 using Unity.Netcode;
@@ -8,7 +9,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class ChargingBooster : TierUpgrade
+    internal class ChargingBooster : TierUpgrade, IServerSync
     {
         internal const string UPGRADE_NAME = "Charging Booster";
         internal static ChargingBooster Instance { get; private set; }

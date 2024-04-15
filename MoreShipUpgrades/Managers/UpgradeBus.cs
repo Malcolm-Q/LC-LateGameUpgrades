@@ -326,6 +326,7 @@ namespace MoreShipUpgrades.Managers
             SetupAluminiumCoilsTerminalNode();
             SetupDeeperPocketsTerminalNode();
             SetupReinforcedBootsTerminalNode();
+            SetupLandingThrustersTerminalNode();
             terminalNodes.Sort();
         }
         void SetupReinforcedBootsTerminalNode()
@@ -609,6 +610,15 @@ namespace MoreShipUpgrades.Managers
                                                 PluginConfiguration.DEEPER_POCKETS_PRICE,
                                                 ParseUpgradePrices(PluginConfiguration.DEEPER_POCKETS_PRICES),
                                                 PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.DEEPER_POCKETS_OVERRIDE_NAME : "");
+        }
+        void SetupLandingThrustersTerminalNode()
+        {
+            SetupMultiplePurchasableTerminalNode(LandingThrusters.UPGRADE_NAME,
+                                                shareStatus: true,
+                                                PluginConfiguration.LANDING_THRUSTERS_ENABLED,
+                                                PluginConfiguration.LANDING_THRUSTERS_PRICE,
+                                                ParseUpgradePrices(PluginConfiguration.LANDING_THRUSTERS_PRICES),
+                                                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.LANDING_THRUSTERS_OVERRIDE_NAME : "");
         }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can be purchased multiple times

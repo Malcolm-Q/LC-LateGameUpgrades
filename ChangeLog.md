@@ -1,7 +1,10 @@
 ## V 3.6.0 - 2024-04-??
 - Fixed overriding upgrade names leading to a couple of unpredicted behaviour.
 - Fixed Data Contract's Laptop help info showing "ls, mv, mv" rather than "ls, cd, mv", leading to people not know about the ``cd`` command
+- Fixed a patch being applied incorrectly which was used to sync weathers to people joining after the probe.
 - Implemented "Deeper Pockets" upgrade which provides additional two-handed item carry capacity to the player, treating them like one-handed items til the last carryable two-handed.
+- Implemented "Landing Thrusters" upgrade which makes the ship land and/or depart faster between moons.
+- Separated "Strong Legs" fall damage mitigation into its own tier upgrade.
 
 ## V 3.5.5 - 2024-04-13
 - Fixed Beekeeper not affecting Butler's Hornet's damage.

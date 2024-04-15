@@ -693,9 +693,13 @@ namespace MoreShipUpgrades
             SetupAluminiumCoils();
             SetupDeeperPockets();
             SetupReinforcedBoots();
+            SetupLandingThrusters();
             mls.LogInfo("Upgrades have been setup");
         }
-
+        void SetupLandingThrusters()
+        {
+            SetupGenericPerk<LandingThrusters>(LandingThrusters.UPGRADE_NAME);
+        }
         private void SetupSickBeats()
         {
             SetupGenericPerk<SickBeats>(SickBeats.UPGRADE_NAME);

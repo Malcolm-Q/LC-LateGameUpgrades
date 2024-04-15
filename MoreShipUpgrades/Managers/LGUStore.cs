@@ -421,14 +421,14 @@ namespace MoreShipUpgrades.Managers
             logger.LogInfo("Applying loaded upgrades...");
             foreach (CustomTerminalNode customNode in UpgradeBus.Instance.terminalNodes)
             {
-                bool activeUpgrade = UpgradeBus.Instance.activeUpgrades.GetValueOrDefault(customNode.Name, false);
-                int upgradeLevel = UpgradeBus.Instance.upgradeLevels.GetValueOrDefault(customNode.Name, 0);
+                bool activeUpgrade = UpgradeBus.Instance.activeUpgrades.GetValueOrDefault(customNode.OriginalName, false);
+                int upgradeLevel = UpgradeBus.Instance.upgradeLevels.GetValueOrDefault(customNode.OriginalName, 0);
                 customNode.Unlocked = activeUpgrade;
                 customNode.CurrentUpgrade = upgradeLevel;
-                BaseUpgrade comp = UpgradeBus.Instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>();
+                BaseUpgrade comp = UpgradeBus.Instance.UpgradeObjects[customNode.OriginalName].GetComponent<BaseUpgrade>();
                 bool free = comp.CanInitializeOnStart();
                 if (activeUpgrade || free) comp.Load();
-                if (customNode.Name == NightVision.UPGRADE_NAME || free)
+                if (customNode.OriginalName == NightVision.UPGRADE_NAME || free)
                 {
                     customNode.Unlocked = true;
                 }

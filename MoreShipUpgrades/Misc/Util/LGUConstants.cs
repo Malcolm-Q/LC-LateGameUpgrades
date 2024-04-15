@@ -97,6 +97,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string LANDING_THRUSTERS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, LandingThrusters.UPGRADE_NAME);
         internal static readonly string REINFORCED_BOOTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ReinforcedBoots.UPGRADE_NAME);
         internal static readonly string DEEPER_POCKETS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, DeepPockets.UPGRADE_NAME);
         internal static readonly string ALUMINIUM_COILS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, AluminiumCoils.UPGRADE_NAME);
@@ -379,6 +380,33 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Landing Thrusters
+
+        internal const string LANDING_THRUSTERS_ENABLED_KEY = $"Enable {LandingThrusters.UPGRADE_NAME} Upgrade";
+        internal const bool LANDING_THRUSTERS_ENABLED_DEFAULT = true;
+        internal const string LANDING_THRUSTERS_ENABLED_DESCRIPTION = "Tier upgrade which increases the speed of the ship landing and departing between moons";
+
+        internal const string LANDING_THURSTERS_PRICE_KEY = $"Price of {LandingThrusters.UPGRADE_NAME} Upgrade";
+        internal const int LANDING_THRUSTERS_PRICE_DEFAULT = 300;
+
+        internal const string LANDING_THRUSTERS_INITIAL_SPEED_INCREASE_KEY = "Initial speed increase";
+        internal const int LANDING_THRUSTERS_INITIAL_SPEED_INCREASE_DEFAULT = 25;
+        internal const string LANDING_THRUSTERS_INITIAL_SPEED_INCREASE_DESCRIPTION = "Initial amount (%) to increment to the ship speed when first purchasing the upgrade";
+
+        internal const string LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE_KEY = "Incremental speed increase";
+        internal const int LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE_DEFAULT = 25;
+        internal const string LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE_DESCRIPTION = "Incremental amount (%) to increment to the ship speed on further purchases of the upgrade";
+
+        internal const string LANDING_THRUSTERS_AFFECT_LANDING_KEY = "Affect landing sequence speed";
+        internal const bool LANDING_THRUSTERS_AFFECT_LANDING_DEFAULT = true;
+        internal const string LANDING_THRUSTERS_AFFECT_LANDING_DESCRIPTION = "If true, the effect will be applied on the ship speed when landing on a moon";
+
+        internal const string LANDING_THRUSTERS_AFFECT_DEPARTING_KEY = "Affect departing sequence speed";
+        internal const bool LANDING_THRUSTERS_AFFECT_DEPARTING_DEFAULT = true;
+        internal const string LANDING_THRUSTERS_AFFECT_DEPARTING_DESCRIPTION = "If true, the effect will be applied on the ship speed when departing from a moon";
+
+        #endregion
 
         #region Reinforced Boots
 
