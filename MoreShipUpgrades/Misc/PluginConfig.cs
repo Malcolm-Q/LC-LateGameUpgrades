@@ -22,6 +22,7 @@ namespace MoreShipUpgrades.Misc
     public class PluginConfig : SyncedConfig<PluginConfig>
     {
         #region Enabled
+        [field: DataMember] public SyncedEntry<bool> REINFORCED_BOOTS_ENABLED {  get; set; }
         [field: DataMember] public SyncedEntry<bool> DEEPER_POCKETS_ENABLED {  get; set; }
         [field: DataMember] public SyncedEntry<bool> ALUMINIUM_COILS_ENABLED {  get; set; }
         [field: DataMember] public SyncedEntry<bool> CHARGING_BOOSTER_ENABLED { get; set; }
@@ -62,6 +63,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Individual
+        [field: DataMember] public SyncedEntry<bool> REINFORCED_BOOTS_INDIVIDUAL {  get; set; }
         [field: DataMember] public SyncedEntry<bool> DEEPER_POCKETS_INDIVIDUAL {  get; set; }
         [field: DataMember] public SyncedEntry<bool> ALUMINIUM_COILS_INDIVIDUAL { get; set; }
         [field: DataMember] public SyncedEntry<bool> BEEKEEPER_INDIVIDUAL { get; set; }
@@ -83,6 +85,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Initial Prices
+        [field: DataMember] public SyncedEntry<int> REINFORCED_BOOTS_PRICE {  get; set; }
         [field: DataMember] public SyncedEntry<int> DEEPER_POCKETS_PRICE {  get; set; }
         [field: DataMember] public SyncedEntry<int> ALUMINIUM_COILS_PRICE { get; set; }
         [field: DataMember] public SyncedEntry<int> CLIMBING_GLOVES_PRICE {  get; set; }
@@ -127,6 +130,10 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: DataMember] public SyncedEntry<string> REINFORCED_BOOTS_OVERRIDE_NAME {  get; set; }
+        [field: DataMember] public SyncedEntry<string> REINFORCED_BOOTS_PRICES {  get; set; }
+        [field: DataMember] public SyncedEntry<int> REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION {  get; set; }
+        [field: DataMember] public SyncedEntry<int> REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION { get; set; }
         [field: DataMember] public SyncedEntry<string> DEEPER_POCKETS_OVERRIDE_NAME { get; set; }
         [field: DataMember] public SyncedEntry<string> DEEPER_POCKETS_PRICES { get; set; }
         [field: DataMember] public SyncedEntry<int> DEEPER_POCKETS_INITIAL_TWO_HANDED_ITEMS {  get; set; }
@@ -275,7 +282,6 @@ namespace MoreShipUpgrades.Misc
         [field: DataMember] public SyncedEntry<int> DISCOMBOBULATOR_DAMAGE_LEVEL { get; set; }
         [field: DataMember] public SyncedEntry<int> DISCOMBOBULATOR_INITIAL_DAMAGE { get; set; }
         [field: DataMember] public SyncedEntry<int> DISCOMBOBULATOR_DAMAGE_INCREASE { get; set; }
-        [field: DataMember] public SyncedEntry<float> STRONG_LEGS_REDUCE_FALL_DAMAGE_MULTIPLIER { get; set; }
         [field: DataMember] public SyncedEntry<bool> KEEP_UPGRADES_AFTER_FIRED_CUTSCENE { get; set; }
         [field: DataMember] public SyncedEntry<int> CONTRACT_BUG_REWARD { get; set; }
         [field: DataMember] public SyncedEntry<int> CONTRACT_EXOR_REWARD { get; set; }
@@ -387,6 +393,7 @@ namespace MoreShipUpgrades.Misc
 
             topSection = LGUConstants.OVERRIDE_NAMES_SECTION;
             OVERRIDE_UPGRADE_NAMES              = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.OVERRIDE_NAMES_ENABLED_KEY, LGUConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LGUConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
+            REINFORCED_BOOTS_OVERRIDE_NAME      = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.REINFORCED_BOOTS_OVERRIDE_NAME_KEY, ReinforcedBoots.UPGRADE_NAME);
             DEEPER_POCKETS_OVERRIDE_NAME        = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DEEPER_POCKETS_OVERRIDE_NAME_KEY, DeepPockets.UPGRADE_NAME);
             ALUMINIUM_COILS_OVERRIDE_NAME       = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ALUMINIUM_COILS_OVERRIDE_NAME_KEY, AluminiumCoils.UPGRADE_NAME);
             BACK_MUSCLES_OVERRIDE_NAME          = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BACK_MUSCLES_OVERRIDE_NAME_KEY, BackMuscles.UPGRADE_NAME);
@@ -511,6 +518,19 @@ namespace MoreShipUpgrades.Misc
             #endregion
 
             #region Upgrades
+
+            #region Reinforced Boots
+
+            topSection = ReinforcedBoots.UPGRADE_NAME;
+            REINFORCED_BOOTS_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.REINFORCED_BOOTS_ENABLED_KEY, LGUConstants.REINFORCED_BOOTS_ENABLED_DEFAULT, LGUConstants.REINFORCED_BOOTS_ENABLED_DESCRIPTION);
+            REINFORCED_BOOTS_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            REINFORCED_BOOTS_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.REINFORCED_BOOTS_PRICE_KEY, LGUConstants.REINFORCED_BOOTS_PRICE_DEFAULT);
+            REINFORCED_BOOTS_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, ReinforcedBoots.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
+            REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION_KEY, LGUConstants.REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION_DEFAULT, LGUConstants.REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION_DESCRIPTION);
+            REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION_KEY, LGUConstants.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION_DEFAULT, LGUConstants.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION_DESCRIPTION);
+
+
+            #endregion
 
             #region Deeper Pockets
 
@@ -844,7 +864,6 @@ namespace MoreShipUpgrades.Misc
             JUMP_FORCE_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.STRONG_LEGS_INCREMENTAL_JUMP_FORCE_KEY, LGUConstants.STRONG_LEGS_INCREMENTAL_JUMP_FORCE_DEFAULT, LGUConstants.STRONG_LEGS_INCREMENTAL_JUMP_FORCE_DESCRIPTION);
             STRONG_LEGS_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, StrongLegs.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             STRONG_LEGS_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            STRONG_LEGS_REDUCE_FALL_DAMAGE_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.STRONG_LEGS_FALL_DAMAGE_MITIGATION_KEY, LGUConstants.STRONG_LEGS_FALL_DAMAGE_MITIGATION_DEFAULT, LGUConstants.STRONG_LEGS_FALL_DAMAGE_MITIGATION_DESCRIPTION);
 
             #endregion
 

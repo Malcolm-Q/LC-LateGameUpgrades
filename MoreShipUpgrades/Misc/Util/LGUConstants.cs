@@ -97,6 +97,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string REINFORCED_BOOTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ReinforcedBoots.UPGRADE_NAME);
         internal static readonly string DEEPER_POCKETS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, DeepPockets.UPGRADE_NAME);
         internal static readonly string ALUMINIUM_COILS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, AluminiumCoils.UPGRADE_NAME);
         internal static readonly string BACK_MUSCLES_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, BackMuscles.UPGRADE_NAME);
@@ -378,6 +379,25 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Reinforced Boots
+
+        internal const string REINFORCED_BOOTS_ENABLED_KEY = $"Enable {ReinforcedBoots.UPGRADE_NAME} Upgrade";
+        internal const bool REINFORCED_BOOTS_ENABLED_DEFAULT = true;
+        internal const string REINFORCED_BOOTS_ENABLED_DESCRIPTION = "Tier upgrade which reduces the damage taken when falling from great heights";
+
+        internal const string REINFORCED_BOOTS_PRICE_KEY = $"Price of {ReinforcedBoots.UPGRADE_NAME} Upgrade";
+        internal const int REINFORCED_BOOTS_PRICE_DEFAULT = 250;
+
+        internal const string REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION_KEY = "Initial damage reduction";
+        internal const int REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION_DEFAULT = 25;
+        internal const string REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION_DESCRIPTION = "Percentage of the damage taken from great height falls mitigated when purchased the upgrade for the first time";
+
+        internal const string REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION_KEY = "Incremental damage reduction";
+        internal const int REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION_DEFAULT = 10;
+        internal const string REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION_DESCRIPTION = "Percentage of the damage taken from great height falls mitigated in further purchases of the upgrade";
+
+        #endregion
 
         #region Deeper Pockets
 
@@ -905,10 +925,6 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string STRONG_LEGS_INCREMENTAL_JUMP_FORCE_KEY = "Jump Force Increment";
         internal const float STRONG_LEGS_INCREMENTAL_JUMP_FORCE_DEFAULT = 0.75f;
         internal const string STRONG_LEGS_INCREMENTAL_JUMP_FORCE_DESCRIPTION = "How much the above value is increased on upgrade.";
-
-        internal const string STRONG_LEGS_FALL_DAMAGE_MITIGATION_KEY = "Damage mitigation when falling";
-        internal const float STRONG_LEGS_FALL_DAMAGE_MITIGATION_DEFAULT = 0.5f;
-        internal const string STRONG_LEGS_FALL_DAMAGE_MITIGATION_DESCRIPTION = "Multiplier applied on fall damage that you wish to ignore when reached max level";
 
         #endregion
 

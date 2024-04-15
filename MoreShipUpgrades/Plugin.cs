@@ -692,6 +692,7 @@ namespace MoreShipUpgrades
             SetupLithiumBatteries();
             SetupAluminiumCoils();
             SetupDeeperPockets();
+            SetupReinforcedBoots();
             mls.LogInfo("Upgrades have been setup");
         }
 
@@ -833,6 +834,10 @@ namespace MoreShipUpgrades
         void SetupDeeperPockets()
         {
             SetupGenericPerk<DeepPockets>(DeepPockets.UPGRADE_NAME);
+        }
+        void SetupReinforcedBoots()
+        {
+            SetupGenericPerk<ReinforcedBoots>(ReinforcedBoots.UPGRADE_NAME);
         }
         /// <summary>
         /// Generic function where it adds a script (specificed through the type) into an GameObject asset 

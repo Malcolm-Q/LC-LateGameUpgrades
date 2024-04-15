@@ -325,7 +325,17 @@ namespace MoreShipUpgrades.Managers
             SetupLithiumBatteriesTerminalNode();
             SetupAluminiumCoilsTerminalNode();
             SetupDeeperPocketsTerminalNode();
+            SetupReinforcedBootsTerminalNode();
             terminalNodes.Sort();
+        }
+        void SetupReinforcedBootsTerminalNode()
+        {
+            SetupMultiplePurchasableTerminalNode(ReinforcedBoots.UPGRADE_NAME,
+                                                PluginConfiguration.SHARED_UPGRADES || !PluginConfiguration.REINFORCED_BOOTS_INDIVIDUAL,
+                                                PluginConfiguration.REINFORCED_BOOTS_ENABLED,
+                                                PluginConfiguration.REINFORCED_BOOTS_PRICE,
+                                                ParseUpgradePrices(PluginConfiguration.REINFORCED_BOOTS_PRICES),
+                                                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.REINFORCED_BOOTS_OVERRIDE_NAME : "");
         }
         void SetupEfficientEnginesNode()
         {

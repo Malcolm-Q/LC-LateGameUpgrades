@@ -22,11 +22,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             initialValue = UpgradeBus.Instance.PluginConfiguration.JUMP_FORCE_UNLOCK.Value;
             incrementalValue = UpgradeBus.Instance.PluginConfiguration.JUMP_FORCE_INCREMENT.Value;
         }
-        public static int ReduceFallDamage(int defaultValue)
-        {
-            if (!(GetActiveUpgrade(UPGRADE_NAME) && GetUpgradeLevel(UPGRADE_NAME) == UpgradeBus.Instance.PluginConfiguration.STRONG_LEGS_UPGRADE_PRICES.Value.Split(',').Length)) return defaultValue;
-            return (int)(defaultValue * (1.0f - UpgradeBus.Instance.PluginConfiguration.STRONG_LEGS_REDUCE_FALL_DAMAGE_MULTIPLIER.Value));
-        }
         public string GetWorldBuildingText(bool shareStatus = false)
         {
             return string.Format(WORLD_BUILDING_TEXT, shareStatus ? "proprietary pressure-assisted kneebraces to your crew" : "a proprietary pressure-assisted kneebrace");

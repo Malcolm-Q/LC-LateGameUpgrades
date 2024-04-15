@@ -110,10 +110,11 @@ namespace MoreShipUpgrades.Patches.PlayerController
         [HarmonyPatch(nameof(PlayerControllerB.PlayerHitGroundEffects))]
         static IEnumerable<CodeInstruction> PlayerHitGroundEffectsTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo reduceFallDamageMethod = typeof(StrongLegs).GetMethod(nameof(StrongLegs.ReduceFallDamage));
+            MethodInfo reduceFallDamageMethod = typeof(ReinforcedBoots).GetMethod(nameof(ReinforcedBoots.ReduceFallDamage));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
             Tools.FindInteger(ref index, ref codes, findValue: 100, addCode: reduceFallDamageMethod, errorMessage: "Couldn't find 100 fall damage");
+            Tools.FindInteger(ref index, ref codes, findValue: 80, addCode: reduceFallDamageMethod, errorMessage: "Couldn't find 80 fall damage");
             Tools.FindInteger(ref index, ref codes, findValue: 50, addCode: reduceFallDamageMethod, errorMessage: "Couldn't find 50 fall damage");
             Tools.FindInteger(ref index, ref codes, findValue: 30, addCode: reduceFallDamageMethod, errorMessage: "Couldn't find 30 fall damage");
 
