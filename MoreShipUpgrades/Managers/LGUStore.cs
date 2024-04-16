@@ -393,7 +393,7 @@ namespace MoreShipUpgrades.Managers
             if(!GameNetworkManager.Instance.disableSteam)
             {
                 int tries = 0;
-                while (playerID == 0 && tries < 10)
+                while (playerID == 0 && tries < 30)
                 {
                     tries++;
                     PlayerControllerB player = UpgradeBus.Instance.GetLocalPlayer();
