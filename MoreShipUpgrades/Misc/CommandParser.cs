@@ -72,6 +72,7 @@ namespace MoreShipUpgrades.Misc
         private static TerminalNode ExecuteModInformation()
         {
             string displayText = "Late Game Upgrades\n\nType `lategame store` or `lgu` to view upgrades.\n\nMost of the mod is configurable via the config file in `BepInEx/config/`.";
+            displayText += "\n\nType `lategame commands` to see all commands related to upgrades";
             displayText += "\n\nUse the info command to get info about an item. EX: `info beekeeper`.";
             displayText += "\n\nYou must type the exact name of the upgrade (case insensitve).";
             displayText += "\n\nTo force wipe an lgu save file type `reset lgu`. (will only wipe the clients save).";
@@ -464,6 +465,7 @@ namespace MoreShipUpgrades.Misc
             switch (secondWord)
             {
                 case "store": return UpgradeBus.Instance.ConstructNode();
+                case "commands": return ExecuteLGUCommands();
                 default: return ExecuteModInformation();
             }
         }
@@ -774,6 +776,19 @@ namespace MoreShipUpgrades.Misc
             }
             HUDManager.Instance.chatText.text = "";
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Effected enemies are no longer stunned!</color>";
+        }
+
+        private static TerminalNode ExecuteLGUCommands()
+        {
+            string displayText = "Late Game Commands\n\n";
+            displayText += HelpTerminalNode.HandleHelpExtendDeadline();
+            displayText += HelpTerminalNode.HandleHelpInterns();
+            displayText += HelpTerminalNode.HandleHelpContract();
+            displayText += HelpTerminalNode.HandleHelpDiscombobulator();
+            displayText += HelpTerminalNode.HandleHelpScrapInsurance();
+            displayText += HelpTerminalNode.HandleHelpWeatherProbe();
+            displayText += "\n\n";
+            return DisplayTerminalMessage(displayText);
         }
     }
 }

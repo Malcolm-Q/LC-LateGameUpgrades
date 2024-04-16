@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using CSync.Lib;
+using HarmonyLib;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.UI;
@@ -16,6 +17,8 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
     [HarmonyPatch(typeof(Terminal))]
     internal static class TerminalPatcher
     {
+        private static LguLogger logger = new LguLogger("TerminalPatcher");
+
         [HarmonyPostfix]
         [HarmonyPatch(nameof(Terminal.Start))]
         static void StartPostfix()

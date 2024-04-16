@@ -22,68 +22,80 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         /// <summary>
         /// Prepares the "help" terminal node to add information related to LGU-related commands such as "Scrap Insurance", "Interns", etc.
         /// </summary>
-        internal static void SetupLGUHelpCommand()
+        internal static void SetupLGUHelpCommand(TerminalNode helpNode = null)
         {
-            TerminalNode helpNode = LguTerminalNode.GetHelpTerminalNode();
+            if (helpNode == null)
+            {
+                helpNode = LguTerminalNode.GetHelpTerminalNode();
+            }
+
             if (startingIndex != -1 && endingIndex != -1) helpNode.displayText = helpNode.displayText.Remove(startingIndex, endingIndex - startingIndex);
             startingIndex = helpNode.displayText.Length;
             helpNode.displayText += ">LATEGAME\nDisplays information related with Lategame-Upgrades mod\n\n";
-            helpNode.displayText += ">LGU / LATEGAME STORE\nDisplays the purchaseable upgrades from Lategame store.\n\n";
-            HandleHelpExtendDeadline(ref helpNode);
-            HandleHelpInterns(ref helpNode);
-            HandleHelpContract(ref helpNode);
-            HandleHelpDiscombobulator(ref helpNode);
-            HandleHelpScrapInsurance(ref helpNode);
-            HandleHelpWeatherProbe(ref helpNode);
             endingIndex = helpNode.displayText.Length;
         }
-        static void HandleHelpWeatherProbe(ref TerminalNode helpNode)
+        public static string HandleHelpWeatherProbe()
         {
-            LguTerminalNode.UpdateTextToNode(ref helpNode, string.Format(WEATHER_PROBE_HELP_COMMAND, UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE.Value, UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE.Value), UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_ENABLED.Value);
+            if(UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_ENABLED.Value)
+            {
+                return string.Format(WEATHER_PROBE_HELP_COMMAND, UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE.Value, UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE.Value);
+            }
+            return "";
         }
         /// <summary>
         /// Adds information related to the "Scrap Insurance" command to the given terminal node
         /// </summary>
-        /// <param name="helpNode">Terminal node we wish to add the information on</param>
-        static void HandleHelpScrapInsurance(ref TerminalNode helpNode)
+        public static string HandleHelpScrapInsurance()
         {
-            LguTerminalNode.UpdateTextToNode(ref helpNode, string.Format(SCRAP_INSURANCE_COMMAND, UpgradeBus.Instance.PluginConfiguration.SCRAP_INSURANCE_PRICE.Value), UpgradeBus.Instance.PluginConfiguration.SCRAP_INSURANCE_ENABLED.Value);
+            if(UpgradeBus.Instance.PluginConfiguration.SCRAP_INSURANCE_ENABLED.Value)
+            {
+                return string.Format(SCRAP_INSURANCE_COMMAND, UpgradeBus.Instance.PluginConfiguration.SCRAP_INSURANCE_PRICE.Value);
+            }
+            return "";
         }
         /// <summary>
         /// Adds information related to the Discombobulator's commands to the given terminal node
         /// </summary>
-        /// <param name="helpNode">Terminal node we wish to add the information on</param>
-        static void HandleHelpDiscombobulator(ref TerminalNode helpNode)
+        public static string HandleHelpDiscombobulator()
         {
-            bool enabled = UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_ENABLED.Value;
-            LguTerminalNode.UpdateTextToNode(ref helpNode, ATK_HELP_COMMAND, enabled);
-            LguTerminalNode.UpdateTextToNode(ref helpNode, CD_HELP_COMMAND, enabled);
+            if(UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_ENABLED.Value)
+            {
+                return ATK_HELP_COMMAND + CD_HELP_COMMAND;
+            }
+            return "";
         }
         /// <summary>
         /// Adds information related to the contract's commands to the given terminal node
         /// </summary>
-        /// <param name="helpNode">Terminal node we wish to add the information on</param>
-        static void HandleHelpContract(ref TerminalNode helpNode)
+        public static string HandleHelpContract()
         {
-            bool enabled = UpgradeBus.Instance.PluginConfiguration.CONTRACTS_ENABLED.Value;
-            LguTerminalNode.UpdateTextToNode(ref helpNode, string.Format(CONTRACT_HELP_COMMAND, UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value, UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value), enabled);
-            LguTerminalNode.UpdateTextToNode(ref helpNode, INFO_CONTRACT_HELP_COMMAND, enabled);
+            if(UpgradeBus.Instance.PluginConfiguration.CONTRACTS_ENABLED.Value)
+            {
+                return string.Format(CONTRACT_HELP_COMMAND + INFO_CONTRACT_HELP_COMMAND, UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value, UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value);
+            }
+            return "";
         }
         /// <summary>
         /// Adds information related to the intern's command to the given terminal node
         /// </summary>
-        /// <param name="helpNode">Terminal node we wish to add the information on</param>
-        static void HandleHelpInterns(ref TerminalNode helpNode)
+        public static string HandleHelpInterns()
         {
-            LguTerminalNode.UpdateTextToNode(ref helpNode, string.Format(INTERNS_HELP_COMMAND, UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value), UpgradeBus.Instance.PluginConfiguration.INTERN_ENABLED.Value);
+            if(UpgradeBus.Instance.PluginConfiguration.INTERN_ENABLED.Value)
+            {
+                return string.Format(INTERNS_HELP_COMMAND, UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value);
+            }
+            return "";
         }
         /// <summary>
         /// Adds information related to the Extend Deadline's command to the given terminal node
         /// </summary>
-        /// <param name="helpNode">Terminal node we wish to add the information on</param>
-        static void HandleHelpExtendDeadline(ref TerminalNode helpNode)
+        public static string HandleHelpExtendDeadline()
         {
-            LguTerminalNode.UpdateTextToNode(ref helpNode, string.Format(EXTEND_HELP_COMMAND, UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_PRICE.Value), UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_ENABLED.Value);
+            if(UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_ENABLED.Value)
+            {
+                return string.Format(EXTEND_HELP_COMMAND, UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_PRICE.Value);
+            }
+            return "";
         }
     }
 }
