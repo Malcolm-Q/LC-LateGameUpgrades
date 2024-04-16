@@ -429,11 +429,11 @@ namespace MoreShipUpgrades.Misc.Util
 
         #region Deeper Pockets
 
-        internal const string DEEPER_POCKETS_ENABLED_KEY = "Enable Deeper Pockets Upgrade";
+        internal const string DEEPER_POCKETS_ENABLED_KEY = $"Enable {DeepPockets.UPGRADE_NAME} Upgrade";
         internal const bool DEEPER_POCKETS_ENABLED_DEFAULT = true;
         internal const string DEEPER_POCKETS_ENABLED_DESCRIPTION = "Tier upgrade which allows the player to carry more than one two handed item in their inventory";
 
-        internal const string DEEPER_POCKETS_PRICE_KEY = "Price of Deeper Pockets Upgrade";
+        internal const string DEEPER_POCKETS_PRICE_KEY = $"Price of {DeepPockets.UPGRADE_NAME} Upgrade";
         internal const int DEEPER_POCKETS_PRICE_DEFAULT = 500;
 
         internal const string DEEPER_POCKETS_INITIAL_TWO_HANDED_AMOUNT_KEY = "Initial carry capacity increase";
@@ -448,11 +448,11 @@ namespace MoreShipUpgrades.Misc.Util
 
         #region Aluminium Coils
 
-        internal const string ALUMINIUM_COILS_ENABLED_KEY = "Enable Aluminium Coils Upgrade";
+        internal const string ALUMINIUM_COILS_ENABLED_KEY = $"Enable {AluminiumCoils.UPGRADE_NAME} Upgrade";
         internal const bool ALUMINIUM_COILS_ENABLED_DEFAULT = true;
         internal const string ALUMINIUM_COILS_ENABLED_DESCRIPTION = "Tier upgrade which reduces the zap gun minigame's difficulty, making it easier to manage.";
 
-        internal const string ALUMINIUM_COILS_PRICE_KEY = "Price of Aluminium Coils upgrade";
+        internal const string ALUMINIUM_COILS_PRICE_KEY = $"Price of {AluminiumCoils.UPGRADE_NAME} upgrade";
         internal const int ALUMINIUM_COILS_PRICE_DEFAULT = 750;
 
         internal const string ALUMINIUM_COILS_INITIAL_DIFFICULTY_MULTIPLIER_KEY = "Initial multiplier applied to the minigame difficulty multiplier (%)";
@@ -487,11 +487,11 @@ namespace MoreShipUpgrades.Misc.Util
 
         #region Back Muscles
 
-        internal const string BACK_MUSCLES_ENABLED_KEY = "Enable Back Muscles Upgrade";
+        internal const string BACK_MUSCLES_ENABLED_KEY = $"Enable {BackMuscles.UPGRADE_NAME} Upgrade";
         internal const bool BACK_MUSCLES_ENABLED_DEFAULT = true;
         internal const string BACK_MUSCLES_ENABLED_DESCRIPTION = "Reduce carry weight";
 
-        internal const string BACK_MUSCLES_PRICE_KEY = "Price of Back Muscles Upgrade";
+        internal const string BACK_MUSCLES_PRICE_KEY = $"Price of {BackMuscles.UPGRADE_NAME} Upgrade";
         internal const int BACK_MUSCLES_PRICE_DEFAULT = 715;
 
         internal const string BACK_MUSCLES_INITIAL_WEIGHT_MULTIPLIER_KEY = "Carry Weight Multiplier";
@@ -725,7 +725,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const bool EFFICIENT_ENGINES_ENABLED_DEFAULT = true;
         internal const string EFFICIENT_ENGINES_ENABLED_DESCRIPTION = "Tier upgrade which applies a discount on moon routing prices for cheaper travels";
 
-        internal const string EFFICIENT_ENGINES_PRICE_KEY = "Price of Efficient Engines";
+        internal const string EFFICIENT_ENGINES_PRICE_KEY = $"Price of {EfficientEngines.UPGRADE_NAME}";
         internal const int EFFICIENT_ENGINES_PRICE_DEFAULT = 450;
 
         internal const string EFFICIENT_ENGINES_INITIAL_MULTIPLIER_KEY = "Initial discount applied to moon routing (%)";
@@ -760,11 +760,11 @@ namespace MoreShipUpgrades.Misc.Util
 
         #region Lithium Batteries
 
-        internal const string LITHIUM_BATTERIES_ENABLED_KEY = "Enable Lithium Batteries Upgrade";
+        internal const string LITHIUM_BATTERIES_ENABLED_KEY = $"Enable {LithiumBatteries.UPGRADE_NAME} Upgrade";
         internal const bool LITHIUM_BATTERIES_ENABLED_DEFAULT = true;
         internal const string LITHIUM_BATTERIES_ENABLED_DESCRIPTION = "Tier upgrade which decreases the rate of battery consumed when using the item";
 
-        internal const string LITHIUM_BATTERIES_PRICE_KEY = "Price of Lithium Batteries upgrade";
+        internal const string LITHIUM_BATTERIES_PRICE_KEY = $"Price of {LithiumBatteries.UPGRADE_NAME} upgrade";
         internal const int LITHIUM_BATTERIES_PRICE_DEFAULT = 100;
 
         internal const string LITHIUM_BATTERIES_INITIAL_MULTIPLIER_KEY = "Initial multiplier applied to the use rate of the battery (%)";
