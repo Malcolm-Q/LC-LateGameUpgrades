@@ -23,7 +23,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         const string HELP_NOUN = "help";
         const string INFO_VERB = "info";
         const string SHOVEL_NOUN = "shovel";
-        static Terminal GetTerminal()
+        public static Terminal GetTerminal()
         {
             if (terminal == null) terminal = UpgradeBus.Instance.GetTerminal();
             return terminal;
