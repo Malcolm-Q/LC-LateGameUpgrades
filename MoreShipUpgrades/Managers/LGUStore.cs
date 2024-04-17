@@ -355,6 +355,7 @@ namespace MoreShipUpgrades.Managers
                     logger.LogInfo($"{playerID} Was not found in save dictionary! Creating new save for ID.");
                     SaveInfo = new SaveInfo();
                     RegisterNewPlayerServerRpc(playerID, JsonConvert.SerializeObject(SaveInfo));
+                    StartCoroutine(WaitForUpgradeObject());
                     return;
                 }
                 SaveInfo = LguSave.playerSaves[playerID];
@@ -399,7 +400,7 @@ namespace MoreShipUpgrades.Managers
                     PlayerControllerB player = UpgradeBus.Instance.GetLocalPlayer();
                     if (player == null) continue;
                     playerID = player.playerSteamId;
-                    yield return new WaitForSeconds(0.5f);
+                    yield return new WaitForSeconds(1f);
                 }
             }
             
@@ -434,6 +435,7 @@ namespace MoreShipUpgrades.Managers
                 }
             }
         }
+
         void UpdateUpgrades(string name, bool increment = false)
         {
             foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
