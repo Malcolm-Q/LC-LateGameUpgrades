@@ -2,6 +2,7 @@
 - Fixed overriding upgrade names leading to a couple of unpredicted behaviour.
 - Fixed Data Contract's Laptop help info showing "ls, mv, mv" rather than "ls, cd, mv", leading to people not know about the ``cd`` command
 - Fixed a patch being applied incorrectly which was used to sync weathers to people joining after the probe.
+- Fixed upgrades configured to be free not being applied on new saves
 - Implemented "Deeper Pockets" upgrade which provides additional two-handed item carry capacity to the player, treating them like one-handed items til the last carryable two-handed.
 - Implemented "Landing Thrusters" upgrade which makes the ship land and/or depart faster between moons.
 - Separated "Strong Legs" fall damage mitigation into its own tier upgrade.
