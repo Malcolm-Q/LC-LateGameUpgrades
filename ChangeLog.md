@@ -24,6 +24,7 @@
 - Fixed Data Contract's Laptop help info showing "ls, mv, mv" rather than "ls, cd, mv", leading to people not know about the ``cd`` command
 - Fixed a patch being applied incorrectly which was used to sync weathers to people joining after the probe.
 - Fixed upgrades configured to be free not being applied on new saves
+- Fixed radar icon appearing on the terminal due to contract items (being invisible when relevant contract is not active) by just straight out deleting them.
 
 </details>
 </details>
