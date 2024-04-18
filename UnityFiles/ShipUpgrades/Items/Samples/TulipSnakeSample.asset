@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c30496d6ae6d6f907456e10a94e01ec6, type: 3}
   m_Name: TulipSnakeSample
   m_EditorClassIdentifier: 
-  itemId: 60101
+  itemId: 60102
   itemName: Tulip Snake Sample
   spawnPositionTypes: []
   twoHanded: 0
