@@ -391,13 +391,12 @@ namespace MoreShipUpgrades.Managers
         
         private IEnumerator WaitForSteamID()
         {
-            if(!GameNetworkManager.Instance.disableSteam)
+            yield return new WaitWhile(() => GameNetworkManager.Instance.localPlayerController == null);
+            if (!GameNetworkManager.Instance.disableSteam)
             {
-                // This is a very scary loop as you can get stuck here if you never manage to the steamId out of the player controller that isn't 0.
                 while (playerID == 0)
                 {
-                    PlayerControllerB player = UpgradeBus.Instance.GetLocalPlayer();
-                    if (player == null) continue;
+                    PlayerControllerB player = GameNetworkManager.Instance.localPlayerController;
                     playerID = player.playerSteamId;
                     yield return new WaitForSeconds(1f);
                 }
