@@ -19,6 +19,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Contracts
             if (ContractManager.Instance.contractType != contractType || StartOfRound.Instance.currentLevel.PlanetName != ContractManager.Instance.contractLevel)
             {
                 gameObject.SetActive(false);
+                Destroy(gameObject);
                 return;
             }
             logger.LogInfo($"{contractType}-{name} spawned and activated.");
