@@ -14,19 +14,6 @@ namespace MoreShipUpgrades.Managers
         {
             Instance = this;
         }
-        internal void SetupSpawnableItems()
-        {
-            foreach (GameObject sample in Instance.samplePrefabs.Values)
-            {
-                Item item = sample.GetComponent<PhysicsProp>().itemProperties;
-                if (!StartOfRound.Instance.allItemsList.itemsList.Contains(item))
-                {
-                    StartOfRound.Instance.allItemsList.itemsList.Add(item);
-                }
-
-                logger.LogDebug($"{item.itemName} component initiated...");
-            }
-        }
         internal void SpawnSample(string name, Vector3 position)
         {
             GameObject go = Instantiate(samplePrefabs[name], position + Vector3.up, Quaternion.identity);

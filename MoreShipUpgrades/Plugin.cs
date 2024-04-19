@@ -37,6 +37,8 @@ using MoreShipUpgrades.Patches.PlayerController;
 using MoreShipUpgrades.Patches.RoundComponents;
 using MoreShipUpgrades.Patches.TerminalComponents;
 using MoreShipUpgrades.Input;
+using MoreShipUpgrades.API;
+using UnityEngine.Profiling;
 
 namespace MoreShipUpgrades
 {
@@ -387,16 +389,11 @@ namespace MoreShipUpgrades
             foreach (string creatureName in AssetBundleHandler.samplePaths.Keys)
             {
                 Item sample = AssetBundleHandler.GetItemObject(creatureName);
-                MonsterSample sampleScript = sample.spawnPrefab.AddComponent<MonsterSample>();
-                sampleScript.grabbable = true;
-                sampleScript.grabbableToEnemies = true;
-                sampleScript.itemProperties = sample;
-                sampleScript.itemProperties.minValue = MINIMUM_VALUES[creatureName];
-                sampleScript.itemProperties.maxValue = MAXIMUM_VALUES[creatureName];
-                sample.spawnPrefab.AddComponent<ScrapValueSyncer>();
-                LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(sample.spawnPrefab);
-                SpawnItemManager.Instance.samplePrefabs.Add(creatureName, sample.spawnPrefab);
+                sample.minValue = MINIMUM_VALUES[creatureName];
+                sample.maxValue = MAXIMUM_VALUES[creatureName];
+                API.HunterSamples.RegisterSampleItem(sample, creatureName, registerNetworkPrefab: true, grabbableToEnemies: true);
             }
+
         }
         private void SetupTeleporterButtons()
         {

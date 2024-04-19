@@ -1,4 +1,5 @@
-﻿using MoreShipUpgrades.Managers;
+﻿using MoreShipUpgrades.API;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
@@ -62,7 +63,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                     {
                         if (levels.ContainsKey(fullName))
                         {
-                            logger.LogError("{fullName} appears twice is samples config! Appearing now as {monster}");
+                            logger.LogError($"{fullName} appears twice in samples config! Appearing now as {monster}");
                         }
                         else
                         {
@@ -72,9 +73,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                     }
                     else
                     {
-                        logger.LogError("Unrecognized enemy name: {monster}");
+                        logger.LogError($"Unrecognized enemy name: {monster}");
                     }
                 }
+            }
+            foreach (string moddedMonster in HunterSamples.moddedLevels.Keys)
+            {
+                levels[moddedMonster] = HunterSamples.moddedLevels[moddedMonster];
+                monsterNames[moddedMonster.ToLower()] = moddedMonster;
             }
         }
 

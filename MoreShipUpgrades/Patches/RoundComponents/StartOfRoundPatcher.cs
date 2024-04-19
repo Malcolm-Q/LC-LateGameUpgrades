@@ -31,7 +31,6 @@ namespace MoreShipUpgrades.Patches.RoundComponents
                 refStore.GetComponent<NetworkObject>().Spawn();
                 logger.LogDebug("LguStore component initiated...");
             }
-            SpawnItemManager.Instance.SetupSpawnableItems();
         }
         [HarmonyPrefix]
         [HarmonyPatch(nameof(StartOfRound.playersFiredGameOver))]
