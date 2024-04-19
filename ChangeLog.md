@@ -8,6 +8,9 @@
 	- This is due credits now being saved where as before it wasn't (which would lead to an exploit of buying upgrade/leaving/rejoining)
 - Implemented "Deeper Pockets" upgrade which provides additional two-handed item carry capacity to the player, treating them like one-handed items til the last carryable two-handed.
 - Implemented "Landing Thrusters" upgrade which makes the ship land and/or depart faster between moons.
+- Added samples for Forest Keeper, Manticoli and Tulip Snake enemies.
+- Added API for registering custom samples to the Hunter upgrade for custom/modded enemies.
+	- This way, mods will only require to register their respective sample and LGU will do the spawning for them when an enemy is killed.
 
 </details>
 
@@ -25,6 +28,7 @@
 - Fixed a patch being applied incorrectly which was used to sync weathers to people joining after the probe.
 - Fixed upgrades configured to be free not being applied on new saves
 - Fixed radar icon appearing on the terminal due to contract items (being invisible when relevant contract is not active) by just straight out deleting them.
+- Fixed player not loading their LGU save when leaving and rejoining the same save.
 
 </details>
 </details>

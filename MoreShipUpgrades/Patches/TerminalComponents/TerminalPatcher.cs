@@ -18,8 +18,6 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
     [HarmonyPatch(typeof(Terminal))]
     internal static class TerminalPatcher
     {
-        private static LguLogger logger = new LguLogger("TerminalPatcher");
-
         [HarmonyPostfix]
         [HarmonyPatch(nameof(Terminal.Start))]
         static void StartPostfix(Terminal __instance)
