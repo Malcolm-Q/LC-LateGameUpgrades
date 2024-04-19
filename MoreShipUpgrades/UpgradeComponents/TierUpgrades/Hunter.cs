@@ -62,7 +62,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                     {
                         if (levels.ContainsKey(fullName))
                         {
-                            logger.LogError("{fullName} appears twice is samples config! Appearing now as {monster}");
+                            logger.LogError($"{fullName} appears twice is samples config! Appearing now as {monster}");
                         }
                         else
                         {
@@ -72,7 +72,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                     }
                     else
                     {
-                        logger.LogError("Unrecognized enemy name: {monster}");
+                        logger.LogError($"Unrecognized enemy name: {monster}");
                     }
                 }
             }
