@@ -327,6 +327,12 @@ namespace MoreShipUpgrades.Misc
         [field: DataMember] public SyncedEntry<int> BABOON_HAWK_SAMPLE_MAXIMUM_VALUE { get; set; }
         [field: DataMember] public SyncedEntry<int> THUMPER_SAMPLE_MINIMUM_VALUE { get; set; }
         [field: DataMember] public SyncedEntry<int> THUMPER_SAMPLE_MAXIMUM_VALUE { get; set; }
+        [field: DataMember] public SyncedEntry<int> FOREST_KEEPER_SAMPLE_MINIMUM_VALUE { get; set; }
+        [field: DataMember] public SyncedEntry<int> FOREST_KEEPER_SAMPLE_MAXIMUM_VALUE { get; set; }
+        [field: DataMember] public SyncedEntry<int> MANTICOIL_SAMPLE_MINIMUM_VALUE { get; set; }
+        [field: DataMember] public SyncedEntry<int> MANTICOIL_SAMPLE_MAXIMUM_VALUE { get; set; }
+        [field: DataMember] public SyncedEntry<int> TULIP_SNAKE_SAMPLE_MINIMUM_VALUE { get; set; }
+        [field: DataMember] public SyncedEntry<int> TULIP_SNAKE_SAMPLE_MAXIMUM_VALUE { get; set; }
         [field: DataMember] public SyncedEntry<int> CONTRACT_GHOST_SPAWN { get; set; }
         [field: DataMember] public SyncedEntry<string> WHEELBARROW_RESTRICTION_MODE { get; set; }
         [field: DataMember] public SyncedEntry<int> WHEELBARROW_MAXIMUM_AMOUNT_ITEMS { get; set; }
@@ -983,6 +989,15 @@ namespace MoreShipUpgrades.Misc
             BABOON_HAWK_SAMPLE_MAXIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Maximum scrap value of a Baboon Hawk sample", 115, "");
             THUMPER_SAMPLE_MINIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Minimum scrap value of a Half sample", 80, "");
             THUMPER_SAMPLE_MAXIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Maximum scrap value of a Half sample", 125, "");
+
+            FOREST_KEEPER_SAMPLE_MINIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Minimum scrap value of a Forest Keeper sample", 80, "");
+            FOREST_KEEPER_SAMPLE_MAXIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Maximum scrap value of a Forest Keeper sample", 125, "");
+
+            MANTICOIL_SAMPLE_MINIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Minimum scrap value of a Manticoil sample", 80, "");
+            MANTICOIL_SAMPLE_MAXIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Maximum scrap value of a Manticoil sample", 125, "");
+
+            TULIP_SNAKE_SAMPLE_MINIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Minimum scrap value of a Tulip Snake sample", 80, "");
+            TULIP_SNAKE_SAMPLE_MAXIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Maximum scrap value of a Tulip Snake sample", 125, "");
 
             topSection = "Wheelbarrow";
             WHEELBARROW_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable the Wheelbarrow Item", true, "Allows you to buy a wheelbarrow to carry items outside of your inventory");
