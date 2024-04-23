@@ -32,6 +32,7 @@
 - Fixed Sick Beats defense attribute not being applied correctly (since its release)
 - Fixed error spam when booted in the void (due to player controller not being initialized correctly)
     - This does not mean that booting in the void was because of the wheelbarrow, it just means that it would error spam as of consequence of the player's controllers not being initialized correctly.
+- Fixed Interns not working correctly when Stimpack is deactivated in the configuration.
 
 </details>
 </details>

@@ -1,4 +1,5 @@
 ﻿using GameNetcodeStuff;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using Unity.Netcode;
@@ -47,8 +48,12 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
         private void ReviveTargetedPlayerClientRpc()
         {
             PlayerControllerB player = StartOfRound.Instance.mapScreen.targetedPlayer;
-            bool playerRegistered = Stimpack.Instance.playerHealthLevels.ContainsKey(player.playerSteamId);
-            int health = playerRegistered ? Stimpack.GetHealthFromPlayer(100, player.playerSteamId) : 100;
+            int health = 100;
+            if (UpgradeBus.Instance.PluginConfiguration.PLAYER_HEALTH_ENABLED)
+            {
+                bool playerRegistered = Stimpack.Instance.playerHealthLevels.ContainsKey(player.playerSteamId);
+                health = playerRegistered ? Stimpack.GetHealthFromPlayer(100, player.playerSteamId) : 100;
+            }
             player.ResetPlayerBloodObjects(player.isPlayerDead);
 
             if (player.isPlayerDead || player.isPlayerControlled)
