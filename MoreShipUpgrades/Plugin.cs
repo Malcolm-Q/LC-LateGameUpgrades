@@ -174,28 +174,6 @@ namespace MoreShipUpgrades
         {
             harmony.PatchAll(typeof(StormyWeather));
         }
-        // I don't even know if modsync is still used but here we are.
-        public void sendModInfo()
-        {
-            foreach (var plugin in Chainloader.PluginInfos.Where(plugin => plugin.Value.Metadata.GUID.Contains("ModSync")))
-            {
-                try
-                {
-                    List<string> list = new List<string>
-                    {
-                        "malco",
-                        "LateGameUpgrades"
-                    };
-                    plugin.Value.Instance.BroadcastMessage("getModInfo", list, UnityEngine.SendMessageOptions.DontRequireReceiver);
-                }
-                catch (Exception e)
-                {
-                    // ignore mod if error, removing dependency
-                    mls.LogDebug($"Failed to send info to ModSync, go yell at Minx for {e.StackTrace}");
-                }
-            }
-
-        }
 
         private void SetupContractMapObjects(ref AssetBundle bundle)
         {

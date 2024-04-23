@@ -414,6 +414,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         {
             if (!UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_ENABLED.Value && !UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_ENABLED.Value) return defaultValue;
             PlayerControllerB player = UpgradeBus.Instance.GetLocalPlayer();
+            if (player == null) return defaultValue;
             if (!player.isHoldingObject) return defaultValue;
             if (player.currentlyHeldObjectServer is not WheelbarrowScript) return defaultValue;
             if (player.thisController.velocity.magnitude <= 5.0f) return defaultValue;
@@ -423,6 +424,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         {
             if (!UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_ENABLED.Value && !UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_ENABLED.Value) return defaultValue;
             PlayerControllerB player = UpgradeBus.Instance.GetLocalPlayer();
+            if (player == null) return defaultValue;
             if (!player.isHoldingObject) return defaultValue;
             if (player.currentlyHeldObjectServer is not WheelbarrowScript) return defaultValue;
             if (player.thisController.velocity.magnitude <= 5.0f) return defaultValue;

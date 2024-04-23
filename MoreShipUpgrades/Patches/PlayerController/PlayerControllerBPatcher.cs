@@ -63,7 +63,8 @@ namespace MoreShipUpgrades.Patches.PlayerController
             {
                 if (codes[i].opcode == OpCodes.Ldarg_1)
                 {
-                    codes[i] = new CodeInstruction(OpCodes.Ldarg_1, boomboxDefenseMethod);
+                    codes.Insert(i+1, new CodeInstruction(OpCodes.Call, boomboxDefenseMethod));
+                    continue;
                 }
                 if (!(codes[i].opcode == OpCodes.Ldc_I4_S && codes[i].operand.ToString() == "100")) continue;
                 if (!(codes[i + 1] != null && codes[i + 1].opcode == OpCodes.Call && codes[i + 1].operand.ToString() == "Int32 Clamp(Int32, Int32, Int32)")) continue;

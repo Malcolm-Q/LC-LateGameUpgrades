@@ -29,6 +29,9 @@
 - Fixed upgrades configured to be free not being applied on new saves
 - Fixed radar icon appearing on the terminal due to contract items (being invisible when relevant contract is not active) by just straight out deleting them.
 - Fixed player not loading their LGU save when leaving and rejoining the same save.
+- Fixed Sick Beats defense attribute not being applied correctly (since its release)
+- Fixed error spam when booted in the void (due to player controller not being initialized correctly)
+    - This does not mean that booting in the void was because of the wheelbarrow, it just means that it would error spam as of consequence of the player's controllers not being initialized correctly.
 
 </details>
 </details>

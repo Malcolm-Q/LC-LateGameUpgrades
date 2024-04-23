@@ -1,6 +1,7 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Items;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,15 +22,13 @@ namespace MoreShipUpgrades.API
         /// </summary>
         /// <param name="sampleItem">Item properties of a sample to be registered unto the Hunter upgrade</param>
         /// <param name="monster">Script of the enemy that spawns the sample when killed.</param>
+        /// <param name="hunterLevel">Level of Hunter upgrade for the sample to s</param>
         /// <param name="registerNetworkPrefab">Wether to register the prefab to the Network Manager or not</param>
         /// <param name="grabbableToEnemies">Wether the enemies will be capable of holding this item or not</param>
         public static void RegisterSample(Item sampleItem, EnemyAI monster, int hunterLevel, bool registerNetworkPrefab = false, bool grabbableToEnemies = true)
         {
-            if (monster == null)
-            {
-                Plugin.mls.LogError($"Script of the enemy was not provided to pull the name of its type.");
-                return;
-            }
+            if (!CheckConditionsForRegister(monster)) return;
+
             RegisterSample(sampleItem, monster.enemyType, hunterLevel, registerNetworkPrefab, grabbableToEnemies);
         }
         /// <summary>
@@ -43,15 +42,13 @@ namespace MoreShipUpgrades.API
         /// </summary>
         /// <param name="sampleItem">Item properties of a sample to be registered unto the Hunter upgrade</param>
         /// <param name="monsterType">Type of the enemy to retrieve its name.</param>
+        /// <param name="hunterLevel">Level of Hunter upgrade for the sample to s</param>
         /// <param name="registerNetworkPrefab">Wether to register the prefab to the Network Manager or not</param>
         /// <param name="grabbableToEnemies">Wether the enemies will be capable of holding this item or not</param>
         public static void RegisterSample(Item sampleItem, EnemyType monsterType, int hunterLevel, bool registerNetworkPrefab = false, bool grabbableToEnemies = true)
         {
-            if (monsterType == null)
-            {
-                Plugin.mls.LogError($"An enemy type must be provided to know what monster will spawn the sample when killed.");
-                return;
-            }
+            if (!CheckConditionsForRegister(monsterType)) return;
+
             RegisterSample(sampleItem, monsterType.enemyName, hunterLevel, registerNetworkPrefab, grabbableToEnemies);
         }
         /// <summary>
@@ -65,36 +62,156 @@ namespace MoreShipUpgrades.API
         /// </summary>
         /// <param name="sampleItem">Item properties of a sample to be registered unto the Hunter upgrade</param>
         /// <param name="monsterName">Name of the enemy that spawns the sample when killed.</param>
+        /// <param name="hunterLevel">Level of Hunter upgrade for the sample to s</param>
         /// <param name="registerNetworkPrefab">Wether to register the prefab to the Network Manager or not</param>
         /// <param name="grabbableToEnemies">Wether the enemies will be capable of holding this item or not</param>
         public static void RegisterSample(Item sampleItem, string monsterName, int hunterLevel, bool registerNetworkPrefab = false, bool grabbableToEnemies = true)
         {
+            if (!CheckConditionsForRegister(ref sampleItem, ref monsterName, ref hunterLevel)) return;
+
+            RegisterSampleItem(sampleItem, monsterName, registerNetworkPrefab, grabbableToEnemies);
+            moddedLevels.Add(monsterName, hunterLevel-1);
+        }
+        /// <summary>
+        /// Generic register where you can specify what grabbableObject component you wish to add to the item registered as a sample and will use the provided arguments into its script behaviour.
+        /// <para></para>
+        /// Three components will be added to the provided item:
+        /// <para></para>
+        /// A "SampleComponent" component which focuses on picking a scrap value between your item properties' minimum and maximum value.
+        /// <para></para>
+        /// A "ScrapValueSyncer" component which ensures that all clients will see the same scrap value on the item
+        /// <para></para>
+        /// Your "GrabbableObject" derived component so that you do your own logic on the item
+        /// </summary>
+        /// <typeparam name="T">Type of "GrabbableObject" component to be inserted into the registered item</typeparam>
+        /// <param name="sampleItem">Item properties of a sample to be registered unto the Hunter upgrade</param>
+        /// <param name="monster">Script of the enemy that spawns the sample when killed.</param>
+        /// <param name="hunterLevel">Level of Hunter upgrade for the sample to s</param>
+        /// <param name="registerNetworkPrefab">Wether to register the prefab to the Network Manager or not</param>
+        public static void RegisterSample<T>(Item sampleItem, EnemyAI monster, int hunterLevel, bool registerNetworkPrefab = false) where T : GrabbableObject
+        {
+            if (!CheckConditionsForRegister(monster)) return;
+
+            RegisterSample<T>(sampleItem, monster.enemyType, hunterLevel, registerNetworkPrefab);
+        }
+
+        /// <summary>
+        /// Generic register where you can specify what grabbableObject component you wish to add to the item registered as a sample and will use the provided arguments into its script behaviour.
+        /// <para></para>
+        /// Three components will be added to the provided item:
+        /// <para></para>
+        /// A "SampleComponent" component which focuses on picking a scrap value between your item properties' minimum and maximum value.
+        /// <para></para>
+        /// A "ScrapValueSyncer" component which ensures that all clients will see the same scrap value on the item
+        /// <para></para>
+        /// Your "GrabbableObject" derived component so that you do your own logic on the item
+        /// </summary>
+        /// <typeparam name="T">Type of "GrabbableObject" component to be inserted into the registered item</typeparam>
+        /// <param name="sampleItem">Item properties of a sample to be registered unto the Hunter upgrade</param>
+        /// <param name="monsterType">Type of the enemy to retrieve its name.</param>
+        /// <param name="hunterLevel">Level of Hunter upgrade for the sample to s</param>
+        /// <param name="registerNetworkPrefab">Wether to register the prefab to the Network Manager or not</param>
+        public static void RegisterSample<T>(Item sampleItem, EnemyType monsterType, int hunterLevel, bool registerNetworkPrefab = false) where T : GrabbableObject
+        {
+            if (!CheckConditionsForRegister(monsterType)) return;
+
+            RegisterSample<T>(sampleItem, monsterType.enemyName, hunterLevel, registerNetworkPrefab);
+        }
+
+        /// <summary>
+        /// Generic register where you can specify what grabbableObject component you wish to add to the item registered as a sample and will use the provided arguments into its script behaviour.
+        /// <para></para>
+        /// Three components will be added to the provided item:
+        /// <para></para>
+        /// A "SampleComponent" component which focuses on picking a scrap value between your item properties' minimum and maximum value.
+        /// <para></para>
+        /// A "ScrapValueSyncer" component which ensures that all clients will see the same scrap value on the item
+        /// <para></para>
+        /// Your "GrabbableObject" derived component so that you do your own logic on the item
+        /// </summary>
+        /// <typeparam name="T">Type of "GrabbableObject" component to be inserted into the registered item</typeparam>
+        /// <param name="sampleItem">Item properties of a sample to be registered unto the Hunter upgrade</param>
+        /// <param name="monsterName">Name of the enemy that spawns the sample when killed.</param>
+        /// <param name="hunterLevel">Level of Hunter upgrade for the sample to s</param>
+        /// <param name="registerNetworkPrefab">Wether to register the prefab to the Network Manager or not</param>
+        public static void RegisterSample<T>(Item sampleItem, string monsterName, int hunterLevel, bool registerNetworkPrefab = false) where T : GrabbableObject
+        {
+            if (!CheckConditionsForRegister(ref sampleItem, ref monsterName, ref hunterLevel)) return;
+
+            RegisterSampleItem<T>(sampleItem, monsterName, registerNetworkPrefab);
+            moddedLevels.Add(monsterName, hunterLevel - 1);
+        }
+
+        internal static void RegisterSampleItem<T>(Item sampleItem, string monsterName, bool registerNetworkPrefab = false) where T : GrabbableObject
+        {
+            GrabbableObject sampleScript = sampleItem.spawnPrefab.AddComponent<T>();
+            sampleScript.grabbable = true;
+            sampleScript.itemProperties = sampleItem;
+            sampleItem.spawnPrefab.AddComponent<SampleComponent>();
+            sampleItem.spawnPrefab.AddComponent<ScrapValueSyncer>();
+            if (registerNetworkPrefab) LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(sampleItem.spawnPrefab);
+            SpawnItemManager.Instance.samplePrefabs.Add(monsterName.ToLower(), sampleItem.spawnPrefab);
+            LethalLib.Modules.Items.RegisterItem(sampleItem);
+            Plugin.mls.LogInfo($"Registed sample for the enemy \"{monsterName}\"...");
+        }
+        internal static void RegisterSampleItem(Item sampleItem, string monsterName, bool registerNetworkPrefab = false, bool grabbableToEnemies = true)
+        {
+            MonsterSample sampleScript = sampleItem.spawnPrefab.AddComponent<MonsterSample>();
+            sampleScript.grabbable = true;
+            sampleScript.grabbableToEnemies = grabbableToEnemies;
+            sampleScript.itemProperties = sampleItem;
+            sampleItem.spawnPrefab.AddComponent<ScrapValueSyncer>();
+            if (registerNetworkPrefab) LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(sampleItem.spawnPrefab);
+            SpawnItemManager.Instance.samplePrefabs.Add(monsterName.ToLower(), sampleItem.spawnPrefab);
+            LethalLib.Modules.Items.RegisterItem(sampleItem);
+            Plugin.mls.LogInfo($"Registed sample for the enemy \"{monsterName}\"...");
+        }
+        static bool CheckConditionsForRegister(EnemyAI monster)
+        {
+            if (monster == null)
+            {
+                Plugin.mls.LogError($"Script of the enemy was not provided to pull the name of its type.");
+                return false;
+            }
+            return true;
+        }
+        static bool CheckConditionsForRegister(EnemyType monsterType)
+        {
+            if (monsterType == null)
+            {
+                Plugin.mls.LogError($"An enemy type must be provided to know what monster will spawn the sample when killed.");
+                return false;
+            }
+            return true;
+        }
+        static bool CheckConditionsForRegister(ref Item sampleItem, ref string monsterName, ref int hunterLevel)
+        {
             if (monsterName == "" || monsterName == null)
             {
                 Plugin.mls.LogError($"A name must be provided in order to spawn the sample. The name must be the one set on the EnemyAI.enemyType.name.");
-                return;
+                return false;
             }
             if (SpawnItemManager.Instance.samplePrefabs.ContainsKey(monsterName))
             {
                 Plugin.mls.LogError($"An enemy was already registered as {monsterName} for its sample generation.");
-                return;
+                return false;
             }
             if (sampleItem == null)
             {
                 Plugin.mls.LogError($"Item properties scriptable object was not provided when registering a custom sample for enemy registered as {monsterName}.");
-                return;
+                return false;
             }
             if (sampleItem.spawnPrefab == null)
             {
                 Plugin.mls.LogError($"Item properties scriptable object does contain a spawn prefab when registering a custom sample for enemy registered as {monsterName}.");
-                return;
+                return false;
             }
             if (sampleItem.itemIcon == null)
             {
                 Plugin.mls.LogWarning($"Provided item properties scriptable object does not have an icon sprite for when it's shown in the inventory.");
                 Plugin.mls.LogWarning($"It will be shown as blank white square when picked up the sample for the enemy \"{monsterName}\"...");
             }
-            if (sampleItem.grabSFX == null || sampleItem.dropSFX == null || sampleItem.pocketSFX == null || sampleItem.throwSFX == null) 
+            if (sampleItem.grabSFX == null || sampleItem.dropSFX == null || sampleItem.pocketSFX == null || sampleItem.throwSFX == null)
             {
                 Plugin.mls.LogWarning($"One or more sounds have been found missing in the provided item properties.");
                 Plugin.mls.LogWarning($"Errors/Warnings related to sounds might be caused by this sample item for the enemy \"{monsterName}\".");
@@ -123,21 +240,13 @@ namespace MoreShipUpgrades.API
                 Plugin.mls.LogWarning($"Defaulting the check to spawn on the ground on the sample item for the enemy \"{monsterName}\"...");
                 sampleItem.itemSpawnsOnGround = true;
             }
-            RegisterSampleItem(sampleItem, monsterName, registerNetworkPrefab, grabbableToEnemies);
-            moddedLevels.Add(monsterName, hunterLevel-1);
-        }
-
-        internal static void RegisterSampleItem(Item sampleItem, string monsterName, bool registerNetworkPrefab = false, bool grabbableToEnemies = true)
-        {
-            MonsterSample sampleScript = sampleItem.spawnPrefab.AddComponent<MonsterSample>();
-            sampleScript.grabbable = true;
-            sampleScript.grabbableToEnemies = grabbableToEnemies;
-            sampleScript.itemProperties = sampleItem;
-            sampleItem.spawnPrefab.AddComponent<ScrapValueSyncer>();
-            if (registerNetworkPrefab) LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(sampleItem.spawnPrefab);
-            SpawnItemManager.Instance.samplePrefabs.Add(monsterName.ToLower(), sampleItem.spawnPrefab);
-            LethalLib.Modules.Items.RegisterItem(sampleItem);
-            Plugin.mls.LogInfo($"Registed sample for the enemy \"{monsterName}\"...");
+            if (hunterLevel <= 0)
+            {
+                Plugin.mls.LogWarning($"Provided hunter level is not valid for sample registration.");
+                Plugin.mls.LogWarning($"Defaulting the hunter level to 1 for the sample item for the enemy \"{monsterName}\"...");
+                hunterLevel = 1;
+            }
+            return true;
         }
     }
 }
