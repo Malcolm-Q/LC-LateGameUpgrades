@@ -4,8 +4,6 @@
 <details>
 <summary> <h3>Additions</h3> </summary>
 
-- Added save point on disconnecting for the host
-	- This is due credits now being saved where as before it wasn't (which would lead to an exploit of buying upgrade/leaving/rejoining)
 - Implemented "Deeper Pockets" upgrade which provides additional two-handed item carry capacity to the player, treating them like one-handed items til the last carryable two-handed.
 - Implemented "Landing Thrusters" upgrade which makes the ship land and/or depart faster between moons.
 - Added samples for Forest Keeper, Manticoli and Tulip Snake enemies.
@@ -17,7 +15,7 @@
 <details>
 <summary> <h3>Changes</h3> </summary>
 
-- Separated "Strong Legs" fall damage mitigation into its own tier upgrade.
+- Separated "Strong Legs" fall damage mitigation into its own tier upgrade (called "Reinforced Boots").
 
 </details>
 <details>
@@ -33,6 +31,7 @@
 - Fixed error spam when booted in the void (due to player controller not being initialized correctly)
     - This does not mean that booting in the void was because of the wheelbarrow, it just means that it would error spam as of consequence of the player's controllers not being initialized correctly.
 - Fixed Interns not working correctly when Stimpack is deactivated in the configuration.
+- Fixed Protein Powder's Critical Hit effect not being applied on certain configurations.
 
 </details>
 </details>

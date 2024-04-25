@@ -37,6 +37,9 @@
     <Reference Include="com.sigurd.csync">
       <HintPath>$(LC_PLUGIN_PATH)\Sigurd-CSync\CSync\com.sigurd.csync.dll</HintPath>
     </Reference>
+    <Reference Include="lethallevelloader">
+      <HintPath>$(LC_PLUGIN_PATH)\IAmBatby-LethalLevelLoader\LethalLevelLoader.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(LC_PATH)\Newtonsoft.Json.dll</HintPath>
     </Reference>

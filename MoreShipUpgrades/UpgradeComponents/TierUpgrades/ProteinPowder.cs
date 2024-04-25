@@ -54,10 +54,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         private static bool TryToCritEnemy()
         {
-            int maximumLevel = UpgradeBus.Instance.PluginConfiguration.PROTEIN_UPGRADE_PRICES.Value.Split(',').Length;
+            string[] prices = UpgradeBus.Instance.PluginConfiguration.PROTEIN_UPGRADE_PRICES.Value.Split(',');
+            int maximumLevel = prices.Length;
             int currentLevel = GetUpgradeLevel(UPGRADE_NAME);
 
-            if (currentLevel != maximumLevel) return false;
+            if (currentLevel != maximumLevel && !(prices.Length == 1 && (prices[0] == "" || prices[0] == "0"))) return false;
 
             return UnityEngine.Random.value < UpgradeBus.Instance.PluginConfiguration.PROTEIN_CRIT_CHANCE.Value;
         }
