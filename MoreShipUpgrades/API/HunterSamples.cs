@@ -70,7 +70,7 @@ namespace MoreShipUpgrades.API
             if (!CheckConditionsForRegister(ref sampleItem, ref monsterName, ref hunterLevel)) return;
 
             RegisterSampleItem(sampleItem, monsterName, registerNetworkPrefab, grabbableToEnemies);
-            moddedLevels.Add(monsterName, hunterLevel-1);
+            if (!moddedLevels.ContainsKey(monsterName)) moddedLevels.Add(monsterName, hunterLevel-1);
         }
         /// <summary>
         /// Generic register where you can specify what grabbableObject component you wish to add to the item registered as a sample and will use the provided arguments into its script behaviour.
@@ -139,7 +139,7 @@ namespace MoreShipUpgrades.API
             if (!CheckConditionsForRegister(ref sampleItem, ref monsterName, ref hunterLevel)) return;
 
             RegisterSampleItem<T>(sampleItem, monsterName, registerNetworkPrefab);
-            moddedLevels.Add(monsterName, hunterLevel - 1);
+            if (!moddedLevels.ContainsKey(monsterName)) moddedLevels.Add(monsterName, hunterLevel - 1);
         }
 
         internal static void RegisterSampleItem<T>(Item sampleItem, string monsterName, bool registerNetworkPrefab = false) where T : GrabbableObject
