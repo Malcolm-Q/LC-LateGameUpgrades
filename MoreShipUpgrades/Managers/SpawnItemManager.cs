@@ -9,14 +9,15 @@ namespace MoreShipUpgrades.Managers
     {
         static LguLogger logger = new(nameof(SpawnItemManager));
         internal static SpawnItemManager Instance { get; private set; }
-        internal Dictionary<string, GameObject> samplePrefabs = new Dictionary<string, GameObject>();
+        internal Dictionary<string, List<GameObject>> samplePrefabs = new Dictionary<string, List<GameObject>>();
         void Awake()
         {
             Instance = this;
         }
         internal void SpawnSample(string name, Vector3 position)
         {
-            GameObject go = Instantiate(samplePrefabs[name], position + Vector3.up, Quaternion.identity);
+            List<GameObject> samples = samplePrefabs[name];
+            GameObject go = Instantiate(samples[Random.Range(0, samples.Count)], position + Vector3.up, Quaternion.identity);
             go.GetComponent<NetworkObject>().Spawn();
         }
 

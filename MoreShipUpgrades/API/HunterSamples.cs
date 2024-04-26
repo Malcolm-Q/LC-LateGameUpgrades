@@ -150,7 +150,8 @@ namespace MoreShipUpgrades.API
             sampleItem.spawnPrefab.AddComponent<SampleComponent>();
             sampleItem.spawnPrefab.AddComponent<ScrapValueSyncer>();
             if (registerNetworkPrefab) LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(sampleItem.spawnPrefab);
-            SpawnItemManager.Instance.samplePrefabs.Add(monsterName.ToLower(), sampleItem.spawnPrefab);
+            if (!SpawnItemManager.Instance.samplePrefabs.ContainsKey(monsterName.ToLower())) SpawnItemManager.Instance.samplePrefabs.Add(monsterName.ToLower(), new List<GameObject>());
+            SpawnItemManager.Instance.samplePrefabs[monsterName.ToLower()].Add(sampleItem.spawnPrefab);
             LethalLib.Modules.Items.RegisterItem(sampleItem);
             Plugin.mls.LogInfo($"Registed sample for the enemy \"{monsterName}\"...");
         }
@@ -162,7 +163,8 @@ namespace MoreShipUpgrades.API
             sampleScript.itemProperties = sampleItem;
             sampleItem.spawnPrefab.AddComponent<ScrapValueSyncer>();
             if (registerNetworkPrefab) LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(sampleItem.spawnPrefab);
-            SpawnItemManager.Instance.samplePrefabs.Add(monsterName.ToLower(), sampleItem.spawnPrefab);
+            if (!SpawnItemManager.Instance.samplePrefabs.ContainsKey(monsterName.ToLower())) SpawnItemManager.Instance.samplePrefabs.Add(monsterName.ToLower(), new List<GameObject>());
+            SpawnItemManager.Instance.samplePrefabs[monsterName.ToLower()].Add(sampleItem.spawnPrefab);
             LethalLib.Modules.Items.RegisterItem(sampleItem);
             Plugin.mls.LogInfo($"Registed sample for the enemy \"{monsterName}\"...");
         }
@@ -189,11 +191,6 @@ namespace MoreShipUpgrades.API
             if (monsterName == "" || monsterName == null)
             {
                 Plugin.mls.LogError($"A name must be provided in order to spawn the sample. The name must be the one set on the EnemyAI.enemyType.name.");
-                return false;
-            }
-            if (SpawnItemManager.Instance.samplePrefabs.ContainsKey(monsterName))
-            {
-                Plugin.mls.LogError($"An enemy was already registered as {monsterName} for its sample generation.");
                 return false;
             }
             if (sampleItem == null)

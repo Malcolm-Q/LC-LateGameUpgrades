@@ -127,10 +127,11 @@ namespace MoreShipUpgrades.Managers
         /// <param name="id">Identifier of the client we wish to update the save of</param>
         /// <param name="json">Save data of the client to replace with the current one</param>
         [ServerRpc(RequireOwnership = false)]
-        public void UpdateLGUSaveServerRpc(ulong id, string json)
+        public void UpdateLGUSaveServerRpc(ulong id, string json, bool saveFile = false)
         {
             LguSave.playerSaves[id] = JsonConvert.DeserializeObject<SaveInfo>(json);
             logger.LogInfo($"Received and updated save info for client: {id}");
+            if (saveFile) ServerSaveFile();
         }
         /// <summary>
         /// Spawns all relevant upgrade and command managers into the scene
@@ -515,8 +516,7 @@ namespace MoreShipUpgrades.Managers
                 }
             }
             SaveInfo = new SaveInfo();
-            UpdateLGUSaveServerRpc(playerID, JsonConvert.SerializeObject(SaveInfo));
-            if (IsHost || IsServer) ServerSaveFile();
+            UpdateLGUSaveServerRpc(playerID, JsonConvert.SerializeObject(SaveInfo), true);
         }
         [ClientRpc]
         public void DestroyHelmetClientRpc(ulong id)
