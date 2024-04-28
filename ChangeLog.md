@@ -34,6 +34,7 @@
     - This does not mean that booting in the void was because of the wheelbarrow, it just means that it would error spam as of consequence of the player's controllers not being initialized correctly.
 - Fixed Interns not working correctly when Stimpack is deactivated in the configuration.
 - Fixed Protein Powder's Critical Hit effect not being applied on certain configurations.
+- Fixed an issue with [LethalLevelLoader](https://github.com/IAmBatby/LethalLevelLoader) due to execution order.
 
 </details>
 </details>
