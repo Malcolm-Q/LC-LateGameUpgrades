@@ -10,6 +10,7 @@
 - Added API for registering custom samples to the Hunter upgrade for custom/modded enemies.
 	- This way, mods will only require to register their respective sample and LGU will do the spawning for them when an enemy is killed.
 	- To allow multiple loot items to be able to spawn on the same monster, I changed the implementation to allow more than one item to be registered on the same enemy.
+	- Weight based system to spawn a given model on kill, default value is 50 (also used in LGU's sample prefabs).
 
 </details>
 
