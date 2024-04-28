@@ -1,5 +1,5 @@
 <details>
-<summary> <h2>V 3.6.0 - 2024-04-??</h2> </summary>
+<summary> <h2>V 3.6.0 - 2024-04-29</h2> </summary>
 
 <details>
 <summary> <h3>Additions</h3> </summary>
