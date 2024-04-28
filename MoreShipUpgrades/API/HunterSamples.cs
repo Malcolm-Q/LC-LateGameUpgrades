@@ -25,11 +25,12 @@ namespace MoreShipUpgrades.API
         /// <param name="hunterLevel">Level of Hunter upgrade for the sample to s</param>
         /// <param name="registerNetworkPrefab">Wether to register the prefab to the Network Manager or not</param>
         /// <param name="grabbableToEnemies">Wether the enemies will be capable of holding this item or not</param>
-        public static void RegisterSample(Item sampleItem, EnemyAI monster, int hunterLevel, bool registerNetworkPrefab = false, bool grabbableToEnemies = true)
+        /// <param name="weight">Weight value associated with the sample to influence the chance of spawning it on enemy kill</param>
+        public static void RegisterSample(Item sampleItem, EnemyAI monster, int hunterLevel, bool registerNetworkPrefab = false, bool grabbableToEnemies = true, double weight = 50)
         {
             if (!CheckConditionsForRegister(monster)) return;
 
-            RegisterSample(sampleItem, monster.enemyType, hunterLevel, registerNetworkPrefab, grabbableToEnemies);
+            RegisterSample(sampleItem, monster.enemyType, hunterLevel, registerNetworkPrefab, grabbableToEnemies, weight);
         }
         /// <summary>
         /// Registers the provided item properties as a custom sample dropped by a monster named by its type when Hunter upgrade is active.
@@ -45,11 +46,12 @@ namespace MoreShipUpgrades.API
         /// <param name="hunterLevel">Level of Hunter upgrade for the sample to s</param>
         /// <param name="registerNetworkPrefab">Wether to register the prefab to the Network Manager or not</param>
         /// <param name="grabbableToEnemies">Wether the enemies will be capable of holding this item or not</param>
-        public static void RegisterSample(Item sampleItem, EnemyType monsterType, int hunterLevel, bool registerNetworkPrefab = false, bool grabbableToEnemies = true)
+        /// <param name="weight">Weight value associated with the sample to influence the chance of spawning it on enemy kill</param>
+        public static void RegisterSample(Item sampleItem, EnemyType monsterType, int hunterLevel, bool registerNetworkPrefab = false, bool grabbableToEnemies = true, double weight = 50)
         {
             if (!CheckConditionsForRegister(monsterType)) return;
 
-            RegisterSample(sampleItem, monsterType.enemyName, hunterLevel, registerNetworkPrefab, grabbableToEnemies);
+            RegisterSample(sampleItem, monsterType.enemyName, hunterLevel, registerNetworkPrefab, grabbableToEnemies, weight);
         }
         /// <summary>
         /// Registers the provided item properties as a custom sample dropped by a monster named by its type when Hunter upgrade is active.
@@ -65,11 +67,12 @@ namespace MoreShipUpgrades.API
         /// <param name="hunterLevel">Level of Hunter upgrade for the sample to s</param>
         /// <param name="registerNetworkPrefab">Wether to register the prefab to the Network Manager or not</param>
         /// <param name="grabbableToEnemies">Wether the enemies will be capable of holding this item or not</param>
-        public static void RegisterSample(Item sampleItem, string monsterName, int hunterLevel, bool registerNetworkPrefab = false, bool grabbableToEnemies = true)
+        /// <param name="weight">Weight value associated with the sample to influence the chance of spawning it on enemy kill</param>
+        public static void RegisterSample(Item sampleItem, string monsterName, int hunterLevel, bool registerNetworkPrefab = false, bool grabbableToEnemies = true, double weight = 50)
         {
-            if (!CheckConditionsForRegister(ref sampleItem, ref monsterName, ref hunterLevel)) return;
+            if (!CheckConditionsForRegister(ref sampleItem, ref monsterName, ref hunterLevel, ref weight)) return;
 
-            RegisterSampleItem(sampleItem, monsterName, registerNetworkPrefab, grabbableToEnemies);
+            RegisterSampleItem(sampleItem, monsterName, registerNetworkPrefab, grabbableToEnemies, weight);
             if (!moddedLevels.ContainsKey(monsterName)) moddedLevels.Add(monsterName, hunterLevel-1);
         }
         /// <summary>
@@ -88,11 +91,12 @@ namespace MoreShipUpgrades.API
         /// <param name="monster">Script of the enemy that spawns the sample when killed.</param>
         /// <param name="hunterLevel">Level of Hunter upgrade for the sample to s</param>
         /// <param name="registerNetworkPrefab">Wether to register the prefab to the Network Manager or not</param>
-        public static void RegisterSample<T>(Item sampleItem, EnemyAI monster, int hunterLevel, bool registerNetworkPrefab = false) where T : GrabbableObject
+        /// <param name="weight">Weight value associated with the sample to influence the chance of spawning it on enemy kill</param>
+        public static void RegisterSample<T>(Item sampleItem, EnemyAI monster, int hunterLevel, bool registerNetworkPrefab = false, double weight = 50) where T : GrabbableObject
         {
             if (!CheckConditionsForRegister(monster)) return;
 
-            RegisterSample<T>(sampleItem, monster.enemyType, hunterLevel, registerNetworkPrefab);
+            RegisterSample<T>(sampleItem, monster.enemyType, hunterLevel, registerNetworkPrefab, weight);
         }
 
         /// <summary>
@@ -111,11 +115,12 @@ namespace MoreShipUpgrades.API
         /// <param name="monsterType">Type of the enemy to retrieve its name.</param>
         /// <param name="hunterLevel">Level of Hunter upgrade for the sample to s</param>
         /// <param name="registerNetworkPrefab">Wether to register the prefab to the Network Manager or not</param>
-        public static void RegisterSample<T>(Item sampleItem, EnemyType monsterType, int hunterLevel, bool registerNetworkPrefab = false) where T : GrabbableObject
+        /// <param name="weight">Weight value associated with the sample to influence the chance of spawning it on enemy kill</param>
+        public static void RegisterSample<T>(Item sampleItem, EnemyType monsterType, int hunterLevel, bool registerNetworkPrefab = false, double weight = 50) where T : GrabbableObject
         {
             if (!CheckConditionsForRegister(monsterType)) return;
 
-            RegisterSample<T>(sampleItem, monsterType.enemyName, hunterLevel, registerNetworkPrefab);
+            RegisterSample<T>(sampleItem, monsterType.enemyName, hunterLevel, registerNetworkPrefab, weight);
         }
 
         /// <summary>
@@ -134,15 +139,16 @@ namespace MoreShipUpgrades.API
         /// <param name="monsterName">Name of the enemy that spawns the sample when killed.</param>
         /// <param name="hunterLevel">Level of Hunter upgrade for the sample to s</param>
         /// <param name="registerNetworkPrefab">Wether to register the prefab to the Network Manager or not</param>
-        public static void RegisterSample<T>(Item sampleItem, string monsterName, int hunterLevel, bool registerNetworkPrefab = false) where T : GrabbableObject
+        /// <param name="weight">Weight value associated with the sample to influence the chance of spawning it on enemy kill</param>
+        public static void RegisterSample<T>(Item sampleItem, string monsterName, int hunterLevel, bool registerNetworkPrefab = false, double weight = 50) where T : GrabbableObject
         {
-            if (!CheckConditionsForRegister(ref sampleItem, ref monsterName, ref hunterLevel)) return;
+            if (!CheckConditionsForRegister(ref sampleItem, ref monsterName, ref hunterLevel, ref weight)) return;
 
-            RegisterSampleItem<T>(sampleItem, monsterName, registerNetworkPrefab);
+            RegisterSampleItem<T>(sampleItem, monsterName, registerNetworkPrefab, weight);
             if (!moddedLevels.ContainsKey(monsterName)) moddedLevels.Add(monsterName, hunterLevel - 1);
         }
 
-        internal static void RegisterSampleItem<T>(Item sampleItem, string monsterName, bool registerNetworkPrefab = false) where T : GrabbableObject
+        internal static void RegisterSampleItem<T>(Item sampleItem, string monsterName, bool registerNetworkPrefab = false, double weight = 50) where T : GrabbableObject
         {
             GrabbableObject sampleScript = sampleItem.spawnPrefab.AddComponent<T>();
             sampleScript.grabbable = true;
@@ -150,12 +156,12 @@ namespace MoreShipUpgrades.API
             sampleItem.spawnPrefab.AddComponent<SampleComponent>();
             sampleItem.spawnPrefab.AddComponent<ScrapValueSyncer>();
             if (registerNetworkPrefab) LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(sampleItem.spawnPrefab);
-            if (!SpawnItemManager.Instance.samplePrefabs.ContainsKey(monsterName.ToLower())) SpawnItemManager.Instance.samplePrefabs.Add(monsterName.ToLower(), new List<GameObject>());
-            SpawnItemManager.Instance.samplePrefabs[monsterName.ToLower()].Add(sampleItem.spawnPrefab);
+            if (!SpawnItemManager.Instance.samplePrefabs.ContainsKey(monsterName.ToLower())) SpawnItemManager.Instance.samplePrefabs.Add(monsterName.ToLower(), new WeightingGroup<GameObject>());
+            SpawnItemManager.Instance.samplePrefabs[monsterName.ToLower()].Add(sampleItem.spawnPrefab, weight);
             LethalLib.Modules.Items.RegisterItem(sampleItem);
             Plugin.mls.LogInfo($"Registed sample for the enemy \"{monsterName}\"...");
         }
-        internal static void RegisterSampleItem(Item sampleItem, string monsterName, bool registerNetworkPrefab = false, bool grabbableToEnemies = true)
+        internal static void RegisterSampleItem(Item sampleItem, string monsterName, bool registerNetworkPrefab = false, bool grabbableToEnemies = true, double weight = 50)
         {
             MonsterSample sampleScript = sampleItem.spawnPrefab.AddComponent<MonsterSample>();
             sampleScript.grabbable = true;
@@ -163,8 +169,8 @@ namespace MoreShipUpgrades.API
             sampleScript.itemProperties = sampleItem;
             sampleItem.spawnPrefab.AddComponent<ScrapValueSyncer>();
             if (registerNetworkPrefab) LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(sampleItem.spawnPrefab);
-            if (!SpawnItemManager.Instance.samplePrefabs.ContainsKey(monsterName.ToLower())) SpawnItemManager.Instance.samplePrefabs.Add(monsterName.ToLower(), new List<GameObject>());
-            SpawnItemManager.Instance.samplePrefabs[monsterName.ToLower()].Add(sampleItem.spawnPrefab);
+            if (!SpawnItemManager.Instance.samplePrefabs.ContainsKey("baboon hawk")) SpawnItemManager.Instance.samplePrefabs.Add("baboon hawk", new WeightingGroup<GameObject>());
+            SpawnItemManager.Instance.samplePrefabs["baboon hawk"].Add(sampleItem.spawnPrefab, weight);
             LethalLib.Modules.Items.RegisterItem(sampleItem);
             Plugin.mls.LogInfo($"Registed sample for the enemy \"{monsterName}\"...");
         }
@@ -186,7 +192,7 @@ namespace MoreShipUpgrades.API
             }
             return true;
         }
-        static bool CheckConditionsForRegister(ref Item sampleItem, ref string monsterName, ref int hunterLevel)
+        static bool CheckConditionsForRegister(ref Item sampleItem, ref string monsterName, ref int hunterLevel, ref double weight)
         {
             if (monsterName == "" || monsterName == null)
             {
@@ -242,6 +248,12 @@ namespace MoreShipUpgrades.API
                 Plugin.mls.LogWarning($"Provided hunter level is not valid for sample registration.");
                 Plugin.mls.LogWarning($"Defaulting the hunter level to 1 for the sample item for the enemy \"{monsterName}\"...");
                 hunterLevel = 1;
+            }
+            if (weight <= 0)
+            {
+                Plugin.mls.LogWarning($"Provided spawn weight is not valid for sample registration.");
+                Plugin.mls.LogWarning($"Defaulting the spawn weight value to 50 for the sample item for the enemy \"{monsterName}\"...");
+                weight = 50;
             }
             return true;
         }

@@ -8,7 +8,6 @@ using MoreShipUpgrades.Managers;
 using System.IO;
 using System.Reflection;
 using MoreShipUpgrades.Misc;
-using BepInEx.Bootstrap;
 using Newtonsoft.Json;
 using LethalLib.Extras;
 using MoreShipUpgrades.UpgradeComponents.Items;
@@ -37,8 +36,6 @@ using MoreShipUpgrades.Patches.PlayerController;
 using MoreShipUpgrades.Patches.RoundComponents;
 using MoreShipUpgrades.Patches.TerminalComponents;
 using MoreShipUpgrades.Input;
-using MoreShipUpgrades.API;
-using UnityEngine.Profiling;
 
 namespace MoreShipUpgrades
 {
