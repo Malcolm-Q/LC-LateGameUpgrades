@@ -40,7 +40,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 
         void Awake()
         {
-            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.STIMPACK_OVERRIDE_NAME : UPGRADE_NAME;
+            upgradeName = UPGRADE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.STIMPACK_OVERRIDE_NAME;
             logger = new LguLogger(UPGRADE_NAME);
             Instance = this;
             changingAttribute = GameAttribute.PLAYER_HEALTH;
@@ -129,6 +130,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             string[] prices = UpgradeBus.Instance.PluginConfiguration.PLAYER_HEALTH_UPGRADE_PRICES.Value.Split(',');
             bool free = UpgradeBus.Instance.PluginConfiguration.PLAYER_HEALTH_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
             return free;
+        }
+        internal new static void RegisterUpgrade()
+        {
+            SetupGenericPerk<Stimpack>(UPGRADE_NAME);
         }
     }
 }

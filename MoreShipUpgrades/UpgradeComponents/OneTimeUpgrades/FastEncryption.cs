@@ -13,7 +13,8 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         const float TRANSMIT_MULTIPLIER = 0.2f;
         void Awake()
         {
-            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.FAST_ENCRYPTION_OVERRIDE_NAME : UPGRADE_NAME;
+            upgradeName = UPGRADE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.FAST_ENCRYPTION_OVERRIDE_NAME;
             instance = this;
         }
         public static int GetLimitOfCharactersTransmit(int defaultLimit, string message)
@@ -35,6 +36,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         internal override bool CanInitializeOnStart()
         {
             return UpgradeBus.Instance.PluginConfiguration.PAGER_PRICE.Value <= 0;
+        }
+        internal new static void RegisterUpgrade()
+        {
+            SetupGenericPerk<FastEncryption>(UPGRADE_NAME);
         }
     }
 }

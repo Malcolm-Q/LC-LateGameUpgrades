@@ -9,6 +9,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
     public abstract class CustomTerminalNode : IComparable
     {
         public string Name {get; set;}
+        public string OriginalName { get; set;}
         public int[] Prices { get; set; }
         public int UnlockPrice { get; set; }
         public string SimplifiedDescription { get; set; }
@@ -21,7 +22,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         public float salePerc { get; set; } = 1f;
 
 
-        public CustomTerminalNode(string name, int unlockPrice, string description, GameObject prefab, int[] prices = null, int maxUpgrade = 0, string simplifiedDescription = "")
+        public CustomTerminalNode(string name, int unlockPrice, string description, GameObject prefab, int[] prices = null, int maxUpgrade = 0, string simplifiedDescription = "", string originalName = "")
         {
             if (prices == null) { prices = new int[0]; }
             Name = name;
@@ -31,6 +32,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
             Prefab = prefab;
             MaxUpgrade = maxUpgrade;
             UnlockPrice = unlockPrice;
+            OriginalName = originalName;
         }
 
         public int CompareTo(object obj)

@@ -97,6 +97,9 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string LANDING_THRUSTERS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, LandingThrusters.UPGRADE_NAME);
+        internal static readonly string REINFORCED_BOOTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ReinforcedBoots.UPGRADE_NAME);
+        internal static readonly string DEEPER_POCKETS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, DeepPockets.UPGRADE_NAME);
         internal static readonly string ALUMINIUM_COILS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, AluminiumCoils.UPGRADE_NAME);
         internal static readonly string BACK_MUSCLES_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, BackMuscles.UPGRADE_NAME);
         internal static readonly string BARGAIN_CONNECTIONS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, BargainConnections.UPGRADE_NAME);
@@ -378,13 +381,78 @@ namespace MoreShipUpgrades.Misc.Util
 
         #region Upgrades
 
+        #region Landing Thrusters
+
+        internal const string LANDING_THRUSTERS_ENABLED_KEY = $"Enable {LandingThrusters.UPGRADE_NAME} Upgrade";
+        internal const bool LANDING_THRUSTERS_ENABLED_DEFAULT = true;
+        internal const string LANDING_THRUSTERS_ENABLED_DESCRIPTION = "Tier upgrade which increases the speed of the ship landing and departing between moons";
+
+        internal const string LANDING_THURSTERS_PRICE_KEY = $"Price of {LandingThrusters.UPGRADE_NAME} Upgrade";
+        internal const int LANDING_THRUSTERS_PRICE_DEFAULT = 300;
+
+        internal const string LANDING_THRUSTERS_INITIAL_SPEED_INCREASE_KEY = "Initial speed increase";
+        internal const int LANDING_THRUSTERS_INITIAL_SPEED_INCREASE_DEFAULT = 25;
+        internal const string LANDING_THRUSTERS_INITIAL_SPEED_INCREASE_DESCRIPTION = "Initial amount (%) to increment to the ship speed when first purchasing the upgrade";
+
+        internal const string LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE_KEY = "Incremental speed increase";
+        internal const int LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE_DEFAULT = 25;
+        internal const string LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE_DESCRIPTION = "Incremental amount (%) to increment to the ship speed on further purchases of the upgrade";
+
+        internal const string LANDING_THRUSTERS_AFFECT_LANDING_KEY = "Affect landing sequence speed";
+        internal const bool LANDING_THRUSTERS_AFFECT_LANDING_DEFAULT = true;
+        internal const string LANDING_THRUSTERS_AFFECT_LANDING_DESCRIPTION = "If true, the effect will be applied on the ship speed when landing on a moon";
+
+        internal const string LANDING_THRUSTERS_AFFECT_DEPARTING_KEY = "Affect departing sequence speed";
+        internal const bool LANDING_THRUSTERS_AFFECT_DEPARTING_DEFAULT = true;
+        internal const string LANDING_THRUSTERS_AFFECT_DEPARTING_DESCRIPTION = "If true, the effect will be applied on the ship speed when departing from a moon";
+
+        #endregion
+
+        #region Reinforced Boots
+
+        internal const string REINFORCED_BOOTS_ENABLED_KEY = $"Enable {ReinforcedBoots.UPGRADE_NAME} Upgrade";
+        internal const bool REINFORCED_BOOTS_ENABLED_DEFAULT = true;
+        internal const string REINFORCED_BOOTS_ENABLED_DESCRIPTION = "Tier upgrade which reduces the damage taken when falling from great heights";
+
+        internal const string REINFORCED_BOOTS_PRICE_KEY = $"Price of {ReinforcedBoots.UPGRADE_NAME} Upgrade";
+        internal const int REINFORCED_BOOTS_PRICE_DEFAULT = 250;
+
+        internal const string REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION_KEY = "Initial damage reduction";
+        internal const int REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION_DEFAULT = 25;
+        internal const string REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION_DESCRIPTION = "Percentage of the damage taken from great height falls mitigated when purchased the upgrade for the first time";
+
+        internal const string REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION_KEY = "Incremental damage reduction";
+        internal const int REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION_DEFAULT = 10;
+        internal const string REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION_DESCRIPTION = "Percentage of the damage taken from great height falls mitigated in further purchases of the upgrade";
+
+        #endregion
+
+        #region Deeper Pockets
+
+        internal const string DEEPER_POCKETS_ENABLED_KEY = $"Enable {DeepPockets.UPGRADE_NAME} Upgrade";
+        internal const bool DEEPER_POCKETS_ENABLED_DEFAULT = true;
+        internal const string DEEPER_POCKETS_ENABLED_DESCRIPTION = "Tier upgrade which allows the player to carry more than one two handed item in their inventory";
+
+        internal const string DEEPER_POCKETS_PRICE_KEY = $"Price of {DeepPockets.UPGRADE_NAME} Upgrade";
+        internal const int DEEPER_POCKETS_PRICE_DEFAULT = 500;
+
+        internal const string DEEPER_POCKETS_INITIAL_TWO_HANDED_AMOUNT_KEY = "Initial carry capacity increase";
+        internal const int DEEPER_POCKETS_INITIAL_TWO_HANDED_AMOUNT_DEFAULT = 1;
+        internal const string DEEPER_POCKETS_INITIAL_TWO_HANDED_AMOUNT_DESCRIPTION = "The amount of two handed carry capacity increased to the player when first buying the upgrade";
+
+        internal const string DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_KEY = "Incremental carry capacity increase";
+        internal const int DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_DEFAULT = 1;
+        internal const string DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_DESCRIPTION = "The amount of two handed carry capacity increased to the player when increase the upgrade level";
+
+        #endregion 
+
         #region Aluminium Coils
 
-        internal const string ALUMINIUM_COILS_ENABLED_KEY = "Enable Aluminium Coils Upgrade";
+        internal const string ALUMINIUM_COILS_ENABLED_KEY = $"Enable {AluminiumCoils.UPGRADE_NAME} Upgrade";
         internal const bool ALUMINIUM_COILS_ENABLED_DEFAULT = true;
         internal const string ALUMINIUM_COILS_ENABLED_DESCRIPTION = "Tier upgrade which reduces the zap gun minigame's difficulty, making it easier to manage.";
 
-        internal const string ALUMINIUM_COILS_PRICE_KEY = "Price of Aluminium Coils upgrade";
+        internal const string ALUMINIUM_COILS_PRICE_KEY = $"Price of {AluminiumCoils.UPGRADE_NAME} upgrade";
         internal const int ALUMINIUM_COILS_PRICE_DEFAULT = 750;
 
         internal const string ALUMINIUM_COILS_INITIAL_DIFFICULTY_MULTIPLIER_KEY = "Initial multiplier applied to the minigame difficulty multiplier (%)";
@@ -419,11 +487,11 @@ namespace MoreShipUpgrades.Misc.Util
 
         #region Back Muscles
 
-        internal const string BACK_MUSCLES_ENABLED_KEY = "Enable Back Muscles Upgrade";
+        internal const string BACK_MUSCLES_ENABLED_KEY = $"Enable {BackMuscles.UPGRADE_NAME} Upgrade";
         internal const bool BACK_MUSCLES_ENABLED_DEFAULT = true;
         internal const string BACK_MUSCLES_ENABLED_DESCRIPTION = "Reduce carry weight";
 
-        internal const string BACK_MUSCLES_PRICE_KEY = "Price of Back Muscles Upgrade";
+        internal const string BACK_MUSCLES_PRICE_KEY = $"Price of {BackMuscles.UPGRADE_NAME} Upgrade";
         internal const int BACK_MUSCLES_PRICE_DEFAULT = 715;
 
         internal const string BACK_MUSCLES_INITIAL_WEIGHT_MULTIPLIER_KEY = "Carry Weight Multiplier";
@@ -657,7 +725,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const bool EFFICIENT_ENGINES_ENABLED_DEFAULT = true;
         internal const string EFFICIENT_ENGINES_ENABLED_DESCRIPTION = "Tier upgrade which applies a discount on moon routing prices for cheaper travels";
 
-        internal const string EFFICIENT_ENGINES_PRICE_KEY = "Price of Efficient Engines";
+        internal const string EFFICIENT_ENGINES_PRICE_KEY = $"Price of {EfficientEngines.UPGRADE_NAME}";
         internal const int EFFICIENT_ENGINES_PRICE_DEFAULT = 450;
 
         internal const string EFFICIENT_ENGINES_INITIAL_MULTIPLIER_KEY = "Initial discount applied to moon routing (%)";
@@ -692,11 +760,11 @@ namespace MoreShipUpgrades.Misc.Util
 
         #region Lithium Batteries
 
-        internal const string LITHIUM_BATTERIES_ENABLED_KEY = "Enable Lithium Batteries Upgrade";
+        internal const string LITHIUM_BATTERIES_ENABLED_KEY = $"Enable {LithiumBatteries.UPGRADE_NAME} Upgrade";
         internal const bool LITHIUM_BATTERIES_ENABLED_DEFAULT = true;
         internal const string LITHIUM_BATTERIES_ENABLED_DESCRIPTION = "Tier upgrade which decreases the rate of battery consumed when using the item";
 
-        internal const string LITHIUM_BATTERIES_PRICE_KEY = "Price of Lithium Batteries upgrade";
+        internal const string LITHIUM_BATTERIES_PRICE_KEY = $"Price of {LithiumBatteries.UPGRADE_NAME} upgrade";
         internal const int LITHIUM_BATTERIES_PRICE_DEFAULT = 100;
 
         internal const string LITHIUM_BATTERIES_INITIAL_MULTIPLIER_KEY = "Initial multiplier applied to the use rate of the battery (%)";
@@ -885,10 +953,6 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string STRONG_LEGS_INCREMENTAL_JUMP_FORCE_KEY = "Jump Force Increment";
         internal const float STRONG_LEGS_INCREMENTAL_JUMP_FORCE_DEFAULT = 0.75f;
         internal const string STRONG_LEGS_INCREMENTAL_JUMP_FORCE_DESCRIPTION = "How much the above value is increased on upgrade.";
-
-        internal const string STRONG_LEGS_FALL_DAMAGE_MITIGATION_KEY = "Damage mitigation when falling";
-        internal const float STRONG_LEGS_FALL_DAMAGE_MITIGATION_DEFAULT = 0.5f;
-        internal const string STRONG_LEGS_FALL_DAMAGE_MITIGATION_DESCRIPTION = "Multiplier applied on fall damage that you wish to ignore when reached max level";
 
         #endregion
 

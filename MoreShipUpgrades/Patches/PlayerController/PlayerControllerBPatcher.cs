@@ -63,7 +63,8 @@ namespace MoreShipUpgrades.Patches.PlayerController
             {
                 if (codes[i].opcode == OpCodes.Ldarg_1)
                 {
-                    codes[i] = new CodeInstruction(OpCodes.Ldarg_1, boomboxDefenseMethod);
+                    codes.Insert(i+1, new CodeInstruction(OpCodes.Call, boomboxDefenseMethod));
+                    continue;
                 }
                 if (!(codes[i].opcode == OpCodes.Ldc_I4_S && codes[i].operand.ToString() == "100")) continue;
                 if (!(codes[i + 1] != null && codes[i + 1].opcode == OpCodes.Call && codes[i + 1].operand.ToString() == "Int32 Clamp(Int32, Int32, Int32)")) continue;
@@ -110,10 +111,11 @@ namespace MoreShipUpgrades.Patches.PlayerController
         [HarmonyPatch(nameof(PlayerControllerB.PlayerHitGroundEffects))]
         static IEnumerable<CodeInstruction> PlayerHitGroundEffectsTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo reduceFallDamageMethod = typeof(StrongLegs).GetMethod(nameof(StrongLegs.ReduceFallDamage));
+            MethodInfo reduceFallDamageMethod = typeof(ReinforcedBoots).GetMethod(nameof(ReinforcedBoots.ReduceFallDamage));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
             Tools.FindInteger(ref index, ref codes, findValue: 100, addCode: reduceFallDamageMethod, errorMessage: "Couldn't find 100 fall damage");
+            Tools.FindInteger(ref index, ref codes, findValue: 80, addCode: reduceFallDamageMethod, errorMessage: "Couldn't find 80 fall damage");
             Tools.FindInteger(ref index, ref codes, findValue: 50, addCode: reduceFallDamageMethod, errorMessage: "Couldn't find 50 fall damage");
             Tools.FindInteger(ref index, ref codes, findValue: 30, addCode: reduceFallDamageMethod, errorMessage: "Couldn't find 30 fall damage");
 
@@ -134,16 +136,50 @@ namespace MoreShipUpgrades.Patches.PlayerController
             return false;
         }
         [HarmonyPostfix]
+        [HarmonyPatch(nameof(PlayerControllerB.SwitchToItemSlot))]
+        [HarmonyPatch(nameof(PlayerControllerB.BeginGrabObject))]
+        static void SwitchToItemSlotPostfix(PlayerControllerB __instance)
+        {
+            DeepPocketsTwoHandedCheck(__instance);
+        }
+
+        [HarmonyPostfix]
         [HarmonyPatch(nameof(PlayerControllerB.GrabObjectClientRpc))]
         static void GrabObjectClientRpcPostfix(PlayerControllerB __instance)
         {
-            if (__instance.currentlyHeldObjectServer == null) return;
+            WheelbarrowUnparenting(__instance.currentlyHeldObjectServer);
+            DeepPocketsTwoHandedCheck(__instance);
+        }
+        static void DeepPocketsTwoHandedCheck(PlayerControllerB player)
+        {
+            if (!player.twoHanded) return;
+            if (!BaseUpgrade.GetActiveUpgrade(DeepPockets.UPGRADE_NAME)) ;
+            int twoHandedCount = 0;
+            int maxTwoHandedCount = 1 + UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_INITIAL_TWO_HANDED_ITEMS + BaseUpgrade.GetUpgradeLevel(DeepPockets.UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_ITEMS;
 
-            WheelbarrowScript wheelbarrow = __instance.currentlyHeldObjectServer.GetComponentInParent<WheelbarrowScript>();
-            if (wheelbarrow == null || __instance.currentlyHeldObjectServer is WheelbarrowScript) return;
+            for(int i = 0; i < player.ItemSlots.Length && twoHandedCount < maxTwoHandedCount; i++)
+            {
+                GrabbableObject item = player.ItemSlots[i];
+                if (item == null) continue;
+                if (!item.itemProperties.twoHanded) continue;
+                twoHandedCount++;
+            }
+            if (twoHandedCount < maxTwoHandedCount)
+            {
+                player.twoHanded = false;
+                HUDManager.Instance.holdingTwoHandedItem.enabled = false;
+            }
+        }
+        static void WheelbarrowUnparenting(GrabbableObject heldObject)
+        {
+
+            if (heldObject == null) return;
+
+            WheelbarrowScript wheelbarrow = heldObject.GetComponentInParent<WheelbarrowScript>();
+            if (wheelbarrow == null || heldObject is WheelbarrowScript) return;
             logger.LogDebug("Removing item's parent to allow placing it back in again");
-            __instance.currentlyHeldObjectServer.transform.SetParent(__instance.currentlyHeldObjectServer.parentObject);
-            __instance.currentlyHeldObjectServer.transform.localScale = __instance.currentlyHeldObjectServer.originalScale;
+            heldObject.transform.SetParent(heldObject.parentObject);
+            heldObject.transform.localScale = heldObject.originalScale;
             wheelbarrow.DecrementStoredItems();
         }
 

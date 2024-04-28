@@ -45,7 +45,8 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         void Awake()
         {
             instance = this;
-            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_OVERRIDE_NAME : UPGRADE_NAME;
+            upgradeName = UPGRADE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_OVERRIDE_NAME;
         }
 
         public static void TryInterceptLightning(ref StormyWeather __instance, ref GrabbableObject ___targetingMetalObject)
@@ -95,6 +96,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         internal override bool CanInitializeOnStart()
         {
             return UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_PRICE.Value <= 0;
+        }
+        internal new static void RegisterUpgrade()
+        {
+            SetupGenericPerk<LightningRod>(UPGRADE_NAME);
         }
     }
 }

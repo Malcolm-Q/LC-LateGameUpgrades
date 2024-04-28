@@ -17,7 +17,8 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
         internal override void Start()
         {
-            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.SIGURD_ACCESS_OVERRIDE_NAME : UPGRADE_NAME;
+            upgradeName = UPGRADE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.SIGURD_ACCESS_OVERRIDE_NAME;
             base.Start();
         }
 
@@ -60,6 +61,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         internal override bool CanInitializeOnStart()
         {
             return (UpgradeBus.Instance.PluginConfiguration.SIGURD_ENABLED.Value || UpgradeBus.Instance.PluginConfiguration.SIGURD_LAST_DAY_ENABLED.Value) && UpgradeBus.Instance.PluginConfiguration.SIGURD_PRICE.Value <= 0;
+        }
+        internal new static void RegisterUpgrade()
+        {
+            SetupGenericPerk<Sigurd>(UPGRADE_NAME);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.Items.RadarBooster;
 using System.Linq;
 using Unity.Netcode;
@@ -8,7 +9,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class ChargingBooster : TierUpgrade
+    internal class ChargingBooster : TierUpgrade, IServerSync
     {
         internal const string UPGRADE_NAME = "Charging Booster";
         internal static ChargingBooster Instance { get; private set; }
@@ -19,7 +20,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         }
         internal override void Start()
         {
-            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_OVERRIDE_NAME : UPGRADE_NAME;
+            upgradeName = UPGRADE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_OVERRIDE_NAME;
             chargeCooldown = UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_COOLDOWN.Value;
             base.Start();
         }
@@ -65,6 +67,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             string[] prices = UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_PRICES.Value.Split(',');
             bool free = UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
             return free;
+        }
+        internal new static void RegisterUpgrade()
+        {
+            SetupGenericPerk<ChargingBooster>(UPGRADE_NAME);
         }
     }
 }

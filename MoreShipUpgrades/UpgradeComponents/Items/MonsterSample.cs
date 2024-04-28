@@ -25,6 +25,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         {
             base.EquipItem();
             ParticleSystem particles = GetComponentInChildren<ParticleSystem>();
+            if (particles == null) return;
             particles.Play();
         }
 
@@ -32,6 +33,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         {
             base.DiscardItem();
             ParticleSystem particles = GetComponentInChildren<ParticleSystem>();
+            if (particles == null) return;
             particles.Stop();
             particles.Clear();
         }
@@ -40,6 +42,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         {
             base.PocketItem();
             ParticleSystem particles = GetComponentInChildren<ParticleSystem>();
+            if (particles == null) return;
             particles.Stop();
             particles.Clear();
         }

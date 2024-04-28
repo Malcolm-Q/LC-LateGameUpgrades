@@ -16,7 +16,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             " it might also result in fewer wet sock incidents and consequent trenchfoot. After all, who knows how many people have walked in {1} shoes?\n\n";
         void Awake()
         {
-            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.RUNNING_SHOES_OVERRIDE_NAME : UPGRADE_NAME;
+            upgradeName = UPGRADE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.RUNNING_SHOES_OVERRIDE_NAME;
             logger = new LguLogger(UPGRADE_NAME);
             changingAttribute = GameAttribute.PLAYER_MOVEMENT_SPEED;
             initialValue = UpgradeBus.Instance.PluginConfiguration.MOVEMENT_SPEED_UNLOCK.Value;
@@ -44,6 +45,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             string[] prices = UpgradeBus.Instance.PluginConfiguration.RUNNING_SHOES_UPGRADE_PRICES.Value.Split(',');
             bool free = UpgradeBus.Instance.PluginConfiguration.RUNNING_SHOES_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
             return free;
+        }
+        internal new static void RegisterUpgrade()
+        {
+            SetupGenericPerk<RunningShoes>(UPGRADE_NAME);
         }
     }
 }

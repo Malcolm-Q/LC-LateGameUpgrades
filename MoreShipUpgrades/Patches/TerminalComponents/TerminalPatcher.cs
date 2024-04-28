@@ -4,6 +4,7 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.UI;
 using MoreShipUpgrades.Misc.Util;
+using MoreShipUpgrades.Patches.Items;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using System.Collections.Generic;
@@ -17,13 +18,12 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
     [HarmonyPatch(typeof(Terminal))]
     internal static class TerminalPatcher
     {
-        private static LguLogger logger = new LguLogger("TerminalPatcher");
-
         [HarmonyPostfix]
         [HarmonyPatch(nameof(Terminal.Start))]
-        static void StartPostfix()
+        static void StartPostfix(Terminal __instance)
         {
             HelpTerminalNode.SetupLGUHelpCommand();
+            DropPodPatcher.orderedItems = __instance.orderedItemsFromTerminal;
         }
         [HarmonyTranspiler]
         [HarmonyPatch(nameof(Terminal.Update))]

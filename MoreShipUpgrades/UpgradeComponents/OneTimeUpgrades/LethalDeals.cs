@@ -9,7 +9,8 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         const int GUARANTEED_ITEMS_AMOUNT = 1;
         void Awake()
         {
-            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.LETHAL_DEALS_OVERRIDE_NAME : UPGRADE_NAME;
+            upgradeName = UPGRADE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.LETHAL_DEALS_OVERRIDE_NAME;
         }
         public static int GetLethalDealsGuaranteedItems(int amount)
         {
@@ -23,6 +24,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         internal override bool CanInitializeOnStart()
         {
             return UpgradeBus.Instance.PluginConfiguration.LETHAL_DEALS_PRICE.Value <= 0;
+        }
+        internal new static void RegisterUpgrade()
+        {
+            SetupGenericPerk<LethalDeals>(UPGRADE_NAME);
         }
     }
 }

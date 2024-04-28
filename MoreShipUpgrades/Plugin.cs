@@ -8,7 +8,6 @@ using MoreShipUpgrades.Managers;
 using System.IO;
 using System.Reflection;
 using MoreShipUpgrades.Misc;
-using BepInEx.Bootstrap;
 using Newtonsoft.Json;
 using LethalLib.Extras;
 using MoreShipUpgrades.UpgradeComponents.Items;
@@ -21,11 +20,7 @@ using MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exorcism;
 using MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exterminator;
 using MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval;
 using MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal;
-using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
-using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using System.Linq;
 using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.Patches.Enemies;
@@ -37,6 +32,8 @@ using MoreShipUpgrades.Patches.PlayerController;
 using MoreShipUpgrades.Patches.RoundComponents;
 using MoreShipUpgrades.Patches.TerminalComponents;
 using MoreShipUpgrades.Input;
+using MoreShipUpgrades.Misc.Upgrades;
+using System.Data.Common;
 
 namespace MoreShipUpgrades
 {
@@ -122,41 +119,78 @@ namespace MoreShipUpgrades
         }
         static void PatchEnemies()
         {
-            harmony.PatchAll(typeof(BaboonBirdAIPatcher));
-            harmony.PatchAll(typeof(ButlerBeesPatcher));
-            harmony.PatchAll(typeof(EnemyAIPatcher));
-            harmony.PatchAll(typeof(EnemyAICollisionDetectPatcher));
-            harmony.PatchAll(typeof(HoarderBugAIPatcher));
-            harmony.PatchAll(typeof(RedLocustBeesPatch));
-            harmony.PatchAll(typeof(SpringManAIPatcher));
+            try
+            {
+                harmony.PatchAll(typeof(BaboonBirdAIPatcher));
+                harmony.PatchAll(typeof(ButlerBeesPatcher));
+                harmony.PatchAll(typeof(EnemyAIPatcher));
+                harmony.PatchAll(typeof(EnemyAICollisionDetectPatcher));
+                harmony.PatchAll(typeof(HoarderBugAIPatcher));
+                harmony.PatchAll(typeof(RedLocustBeesPatch));
+                harmony.PatchAll(typeof(SpringManAIPatcher));
+                mls.LogInfo("Enemies have been patched");
+            } catch (Exception exception)
+            {
+                mls.LogError("An error has occurred patching enemies...");
+                mls.LogError(exception);
+            }
         }
 
         static void PatchHUD()
         {
-            harmony.PatchAll(typeof(HudManagerPatcher));
+            try
+            {
+                harmony.PatchAll(typeof(HudManagerPatcher));
+                mls.LogInfo("HUD has been patched");
+            }
+            catch (Exception exception)
+            {
+                mls.LogError("An error has occurred patching HUD...");
+                mls.LogError(exception);
+            }
         }
 
         static void PatchInteractables()
         {
-            harmony.PatchAll(typeof(DoorLockPatcher));
-            harmony.PatchAll(typeof(InteractTriggerPatcher));
-            harmony.PatchAll(typeof(StartMatchLevelPatcher));
-            harmony.PatchAll(typeof(SteamValveHazardPatch));
+            try
+            {
+                harmony.PatchAll(typeof(DoorLockPatcher));
+                harmony.PatchAll(typeof(InteractTriggerPatcher));
+                harmony.PatchAll(typeof(StartMatchLevelPatcher));
+                harmony.PatchAll(typeof(SteamValveHazardPatch));
+                mls.LogInfo("Interactables have been patched");
+            }
+            catch (Exception exception)
+            {
+                mls.LogError("An error has occurred patching interactables...");
+                mls.LogError(exception);
+            }
         }
 
         static void PatchItems()
         {
-            harmony.PatchAll(typeof(BoomBoxPatcher));
-            harmony.PatchAll(typeof(DropPodPatcher));
-            harmony.PatchAll(typeof(GrabbableObjectPatcher));
-            harmony.PatchAll(typeof(KnifePatcher));
-            harmony.PatchAll(typeof(PatchToolPatcher));
-            harmony.PatchAll(typeof(RadarBoosterPatcher));
-            harmony.PatchAll(typeof(ShovelPatcher));
-            harmony.PatchAll(typeof(WalkiePatcher));
+            try
+            {
+                harmony.PatchAll(typeof(BoomBoxPatcher));
+                harmony.PatchAll(typeof(DropPodPatcher));
+                harmony.PatchAll(typeof(GrabbableObjectPatcher));
+                harmony.PatchAll(typeof(KnifePatcher));
+                harmony.PatchAll(typeof(PatchToolPatcher));
+                harmony.PatchAll(typeof(RadarBoosterPatcher));
+                harmony.PatchAll(typeof(ShovelPatcher));
+                harmony.PatchAll(typeof(WalkiePatcher));
+                mls.LogInfo("Items have been patched");
+            }
+            catch (Exception exception)
+            {
+                mls.LogError("An error has occurred patching items...");
+                mls.LogError(exception);
+            }
         }
         static void PatchVitalComponents()
         {
+            try
+            {
             harmony.PatchAll(typeof(GameNetworkManagerPatcher));
             harmony.PatchAll(typeof(PlayerControllerBPatcher));
             harmony.PatchAll(typeof(RoundManagerPatcher));
@@ -167,32 +201,26 @@ namespace MoreShipUpgrades
             harmony.PatchAll(typeof(TerminalAccessibleObjectPatcher));
             harmony.PatchAll(typeof(TerminalPatcher));
             harmony.PatchAll(typeof(Keybinds));
+            mls.LogInfo("Game managers have been patched");
+            }
+            catch (Exception exception)
+            {
+                mls.LogError("An error has occurred patching the game managers...");
+                mls.LogError(exception);
+            }
         }
         static void PatchWeather()
         {
-            harmony.PatchAll(typeof(StormyWeather));
-        }
-        // I don't even know if modsync is still used but here we are.
-        public void sendModInfo()
-        {
-            foreach (var plugin in Chainloader.PluginInfos.Where(plugin => plugin.Value.Metadata.GUID.Contains("ModSync")))
+            try
             {
-                try
-                {
-                    List<string> list = new List<string>
-                    {
-                        "malco",
-                        "LateGameUpgrades"
-                    };
-                    plugin.Value.Instance.BroadcastMessage("getModInfo", list, UnityEngine.SendMessageOptions.DontRequireReceiver);
-                }
-                catch (Exception e)
-                {
-                    // ignore mod if error, removing dependency
-                    mls.LogDebug($"Failed to send info to ModSync, go yell at Minx for {e.StackTrace}");
-                }
+                harmony.PatchAll(typeof(StormyWeather));
+                mls.LogInfo("Weathers have been patched");
             }
-
+            catch (Exception exception)
+            {
+                mls.LogError("An error has occurred patching weathers...");
+                mls.LogError(exception);
+            }
         }
 
         private void SetupContractMapObjects(ref AssetBundle bundle)
@@ -387,16 +415,11 @@ namespace MoreShipUpgrades
             foreach (string creatureName in AssetBundleHandler.samplePaths.Keys)
             {
                 Item sample = AssetBundleHandler.GetItemObject(creatureName);
-                MonsterSample sampleScript = sample.spawnPrefab.AddComponent<MonsterSample>();
-                sampleScript.grabbable = true;
-                sampleScript.grabbableToEnemies = true;
-                sampleScript.itemProperties = sample;
-                sampleScript.itemProperties.minValue = MINIMUM_VALUES[creatureName];
-                sampleScript.itemProperties.maxValue = MAXIMUM_VALUES[creatureName];
-                sample.spawnPrefab.AddComponent<ScrapValueSyncer>();
-                LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(sample.spawnPrefab);
-                SpawnItemManager.Instance.samplePrefabs.Add(creatureName, sample.spawnPrefab);
+                sample.minValue = MINIMUM_VALUES[creatureName];
+                sample.maxValue = MAXIMUM_VALUES[creatureName];
+                API.HunterSamples.RegisterSampleItem(sample, creatureName, registerNetworkPrefab: true, grabbableToEnemies: true);
             }
+
         }
         private void SetupTeleporterButtons()
         {
@@ -665,192 +688,16 @@ namespace MoreShipUpgrades
         }
         private void SetupPerks()
         {
-            SetupBeekeeper();
-            SetupProteinPowder();
-            SetupBiggerLungs();
-            SetupRunningShoes();
-            SetupStrongLegs();
-            SetupMalwareBroadcaster();
-            SetupNightVisionBattery();
-            SetupDiscombobulator();
-            SetupBetterScanner();
-            SetupWalkieGPS();
-            SetupFasterDropPod();
-            SetupSigurd();
-            SetupBackMuscles();
-            SetupInterns();
-            SetupPager();
-            SetupLightningRod();
-            SetupLocksmith();
-            SetupPlayerHealth();
-            SetupHunter();
-            SetupSickBeats();
-            SetupExtendDeadline();
-            SetupDoorsHydraulicsBattery();
-            SetupScrapInsurance();
-            SetupMarketInfluence();
-            SetupBargainConnections();
-            SetupLethalDeals();
-            SetupQuantumDisruptor();
-            SetupChargingBooster();
-            SetupEfficientEngines();
-            SetupClimbingGloves();
-            SetupLithiumBatteries();
-            SetupAluminiumCoils();
+            Type[] types = Assembly.GetExecutingAssembly().GetTypes();
+            foreach (Type type in types)
+            {
+                if (!type.IsSubclassOf(typeof(BaseUpgrade))) continue;
+                if (type == typeof(OneTimeUpgrade) || type == typeof(TierUpgrade) || type == typeof(GameAttributeTierUpgrade)) continue;
+
+                MethodInfo method = type.GetMethod(nameof(BaseUpgrade.RegisterUpgrade), BindingFlags.Static | BindingFlags.NonPublic);
+                method.Invoke(null, null);
+            }
             mls.LogInfo("Upgrades have been setup");
-        }
-
-        private void SetupSickBeats()
-        {
-            SetupGenericPerk<SickBeats>(SickBeats.UPGRADE_NAME);
-        }
-
-        private void SetupBeekeeper()
-        {
-            SetupGenericPerk<Beekeeper>(Beekeeper.UPGRADE_NAME);
-        }
-        private void SetupHunter()
-        {
-            SetupGenericPerk<Hunter>(Hunter.UPGRADE_NAME);
-        }
-        private void SetupProteinPowder() 
-        {
-            SetupGenericPerk<ProteinPowder>(ProteinPowder.UPGRADE_NAME);
-        }
-        private void SetupBiggerLungs()
-        {
-            SetupGenericPerk<BiggerLungs>(BiggerLungs.UPGRADE_NAME);
-        }
-        private void SetupRunningShoes() 
-        {
-            SetupGenericPerk<RunningShoes>(RunningShoes.UPGRADE_NAME);
-        }
-        private void SetupStrongLegs() 
-        {
-            SetupGenericPerk<StrongLegs>(StrongLegs.UPGRADE_NAME);
-        }
-        private void SetupMalwareBroadcaster()
-        {
-            SetupGenericPerk<MalwareBroadcaster>(MalwareBroadcaster.UPGRADE_NAME);
-        }
-        private void SetupNightVisionBattery() 
-        {
-            SetupGenericPerk<NightVision>(NightVision.UPGRADE_NAME);
-        }
-        private void SetupDiscombobulator()
-        {
-            AudioClip flashSFX = AssetBundleHandler.GetAudioClip("Flashbang");
-            if (flashSFX != null) UpgradeBus.Instance.flashNoise = flashSFX;
-
-            SetupGenericPerk<Discombobulator>(Discombobulator.UPGRADE_NAME);
-        }
-        private void SetupBetterScanner()
-        {
-            SetupGenericPerk<BetterScanner>(BetterScanner.UPGRADE_NAME);
-        }
-        private void SetupWalkieGPS()
-        {
-            SetupGenericPerk<WalkieGPS>(WalkieGPS.UPGRADE_NAME);
-
-        }
-        private void SetupFasterDropPod()
-        {
-            SetupGenericPerk<FasterDropPod>(FasterDropPod.UPGRADE_NAME);
-
-        }
-        private void SetupSigurd()
-        {
-            SetupGenericPerk<Sigurd>(Sigurd.UPGRADE_NAME);
-
-        }
-        private void SetupBackMuscles()
-        {
-            SetupGenericPerk<BackMuscles>(BackMuscles.UPGRADE_NAME);
-        }
-        private void SetupInterns()
-        {
-            SetupGenericPerk<Interns>(Interns.NAME);
-        }
-        private void SetupPager()
-        {
-            SetupGenericPerk<FastEncryption>(FastEncryption.UPGRADE_NAME);
-        }
-        private void SetupLightningRod()
-        {
-            SetupGenericPerk<LightningRod>(LightningRod.UPGRADE_NAME);
-        }
-        private void SetupLocksmith()
-        {
-            SetupGenericPerk<LockSmith>(LockSmith.UPGRADE_NAME);
-        }
-        private void SetupPlayerHealth()
-        {
-            SetupGenericPerk<Stimpack>(Stimpack.UPGRADE_NAME);
-        }
-        private void SetupExtendDeadline()
-        {
-            SetupGenericPerk<ExtendDeadlineScript>(ExtendDeadlineScript.NAME);
-        }
-        private void SetupDoorsHydraulicsBattery()
-        {
-            SetupGenericPerk<DoorsHydraulicsBattery>(DoorsHydraulicsBattery.UPGRADE_NAME);
-        }
-        private void SetupScrapInsurance()
-        {
-            SetupGenericPerk<ScrapInsurance>(ScrapInsurance.COMMAND_NAME);
-        }
-        void SetupMarketInfluence()
-        {
-            SetupGenericPerk<MarketInfluence>(MarketInfluence.UPGRADE_NAME);
-        }
-        void SetupBargainConnections()
-        {
-            SetupGenericPerk<BargainConnections>(BargainConnections.UPGRADE_NAME);
-        }
-        void SetupLethalDeals()
-        {
-            SetupGenericPerk<LethalDeals>(LethalDeals.UPGRADE_NAME);
-        }
-        private void SetupQuantumDisruptor()
-        {
-            SetupGenericPerk<QuantumDisruptor>(QuantumDisruptor.UPGRADE_NAME);
-        }
-        void SetupChargingBooster()
-        {
-            SetupGenericPerk<ChargingBooster>(ChargingBooster.UPGRADE_NAME);
-        }
-        void SetupEfficientEngines()
-        {
-            SetupGenericPerk<EfficientEngines>(EfficientEngines.UPGRADE_NAME);
-        }
-        void SetupClimbingGloves()
-        {
-            SetupGenericPerk<ClimbingGloves>(ClimbingGloves.UPGRADE_NAME);
-        }
-        void SetupLithiumBatteries()
-        {
-            SetupGenericPerk<LithiumBatteries>(LithiumBatteries.UPGRADE_NAME);
-        }
-        void SetupAluminiumCoils()
-        {
-            SetupGenericPerk<AluminiumCoils>(AluminiumCoils.UPGRADE_NAME);
-        }
-        /// <summary>
-        /// Generic function where it adds a script (specificed through the type) into an GameObject asset 
-        /// which is present in a provided asset bundle in a given path and registers it as a network prefab.
-        /// </summary>
-        /// <typeparam name="T"> The script we wish to include into the GameObject asset</typeparam>
-        /// <param name="bundle"> The asset bundle where the asset is located</param>
-        /// <param name="path"> The path to access the asset in the asset bundle</param>
-        private void SetupGenericPerk<T>(string upgradeName) where T : Component
-        {
-            // soon I want to move this to use NetworkPrefabs.CreateNetworkPrefab
-            GameObject perk = AssetBundleHandler.GetPerkGameObject(upgradeName);
-            if (!perk) return;
-
-            perk.AddComponent<T>();
-            perk.hideFlags = HideFlags.HideAndDontSave;
-            NetworkPrefabs.RegisterNetworkPrefab(perk);
         }
     }
 }

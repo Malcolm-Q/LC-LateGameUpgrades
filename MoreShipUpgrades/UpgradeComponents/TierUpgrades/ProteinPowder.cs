@@ -39,7 +39,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         internal override void Start()
         {
-            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.PROTEIN_POWDER_OVERRIDE_NAME : UPGRADE_NAME;
+            upgradeName = UPGRADE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.PROTEIN_POWDER_OVERRIDE_NAME;
             base.Start();
         }
 
@@ -53,10 +54,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         private static bool TryToCritEnemy()
         {
-            int maximumLevel = UpgradeBus.Instance.PluginConfiguration.PROTEIN_UPGRADE_PRICES.Value.Split(',').Length;
+            string[] prices = UpgradeBus.Instance.PluginConfiguration.PROTEIN_UPGRADE_PRICES.Value.Split(',');
+            int maximumLevel = prices.Length;
             int currentLevel = GetUpgradeLevel(UPGRADE_NAME);
 
-            if (currentLevel != maximumLevel) return false;
+            if (currentLevel != maximumLevel && !(prices.Length == 1 && (prices[0] == "" || prices[0] == "0"))) return false;
 
             return UnityEngine.Random.value < UpgradeBus.Instance.PluginConfiguration.PROTEIN_CRIT_CHANCE.Value;
         }
@@ -77,6 +79,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             string[] prices = UpgradeBus.Instance.PluginConfiguration.PROTEIN_UPGRADE_PRICES.Value.Split(',');
             bool free = UpgradeBus.Instance.PluginConfiguration.PROTEIN_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
             return free;
+        }
+        internal new static void RegisterUpgrade()
+        {
+            SetupGenericPerk<ProteinPowder>(UPGRADE_NAME);
         }
     }
 }

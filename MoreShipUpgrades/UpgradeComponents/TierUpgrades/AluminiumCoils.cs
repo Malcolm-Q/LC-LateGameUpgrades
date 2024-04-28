@@ -15,7 +15,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         internal const string DEFAULT_PRICES = "600, 800, 1000";
         internal override void Start()
         {
-            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_OVERRIDE_NAME : UPGRADE_NAME;
+            upgradeName = UPGRADE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_OVERRIDE_NAME;
             base.Start();
         }
         public static float ApplyDifficultyDecrease(float defaultDifficulty)
@@ -74,6 +75,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             string[] prices = UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_PRICES.Value.Split(',');
             bool free = UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
             return free;
+        }
+        internal new static void RegisterUpgrade()
+        {
+            SetupGenericPerk<AluminiumCoils>(UPGRADE_NAME);
         }
     }
 }

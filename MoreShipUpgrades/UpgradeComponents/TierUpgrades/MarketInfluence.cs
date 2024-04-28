@@ -12,7 +12,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         internal override void Start()
         {
-            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_OVERRIDE_NAME : UPGRADE_NAME;
+            upgradeName = UPGRADE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_OVERRIDE_NAME;
             base.Start();
         }
         public static int GetGuaranteedPercentageSale(int defaultPercentage, int maxValue)
@@ -31,6 +32,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             string[] prices = UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_PRICES.Value.Split(',');
             bool free = UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
             return free;
+        }
+        internal new static void RegisterUpgrade()
+        {
+            SetupGenericPerk<MarketInfluence>(UPGRADE_NAME);
         }
     }
 }

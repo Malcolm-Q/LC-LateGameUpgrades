@@ -35,7 +35,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         void Awake()
         {
             Instance = this;
-            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.NIGHT_VISION_OVERRIDE_NAME : UPGRADE_NAME;
+            upgradeName = UPGRADE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.NIGHT_VISION_OVERRIDE_NAME;
             nightVisionPrefab = AssetBundleHandler.GetItemObject("Night Vision").spawnPrefab;
         }
         internal override void Start()
@@ -234,6 +235,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             string[] prices = UpgradeBus.Instance.PluginConfiguration.NIGHT_VISION_UPGRADE_PRICES.Value.Split(',');
             bool free = UpgradeBus.Instance.PluginConfiguration.NIGHT_VISION_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
             return free;
+        }
+        internal new static void RegisterUpgrade()
+        {
+            SetupGenericPerk<NightVision>(UPGRADE_NAME);
         }
     }
 }

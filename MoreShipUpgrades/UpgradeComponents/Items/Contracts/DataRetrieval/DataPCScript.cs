@@ -295,7 +295,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
                 defaultText = gameField.text;
                 return;
             }
-            gameField.text = $"{firstWord} {secondWord} WAS NOT RECOGNIZED AS A COMMAND\n\nCOMMANDS ARE :\nLS\nMV\nMV\n\n{dir}> ";
+            gameField.text = $"{firstWord} {secondWord} WAS NOT RECOGNIZED AS A COMMAND\n\nCOMMANDS ARE :\nLS\nCD\nMV\n\n{dir}> ";
             defaultText = gameField.text;
         }
 

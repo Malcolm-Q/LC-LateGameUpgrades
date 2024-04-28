@@ -52,7 +52,7 @@ namespace MoreShipUpgrades.Managers
         /// </summary>
         private bool receivedSave;
 
-        private void Start()
+        private void Awake()
         {
             Instance = this;
             if (NetworkManager.IsHost)
@@ -127,10 +127,11 @@ namespace MoreShipUpgrades.Managers
         /// <param name="id">Identifier of the client we wish to update the save of</param>
         /// <param name="json">Save data of the client to replace with the current one</param>
         [ServerRpc(RequireOwnership = false)]
-        public void UpdateLGUSaveServerRpc(ulong id, string json)
+        public void UpdateLGUSaveServerRpc(ulong id, string json, bool saveFile = false)
         {
             LguSave.playerSaves[id] = JsonConvert.DeserializeObject<SaveInfo>(json);
             logger.LogInfo($"Received and updated save info for client: {id}");
+            if (saveFile) ServerSaveFile();
         }
         /// <summary>
         /// Spawns all relevant upgrade and command managers into the scene
@@ -355,6 +356,7 @@ namespace MoreShipUpgrades.Managers
                     logger.LogInfo($"{playerID} Was not found in save dictionary! Creating new save for ID.");
                     SaveInfo = new SaveInfo();
                     RegisterNewPlayerServerRpc(playerID, JsonConvert.SerializeObject(SaveInfo));
+                    StartCoroutine(WaitForUpgradeObject());
                     return;
                 }
                 SaveInfo = LguSave.playerSaves[playerID];
@@ -390,16 +392,14 @@ namespace MoreShipUpgrades.Managers
         
         private IEnumerator WaitForSteamID()
         {
-            if(!GameNetworkManager.Instance.disableSteam)
+            yield return new WaitWhile(() => GameNetworkManager.Instance.localPlayerController == null);
+            if (!GameNetworkManager.Instance.disableSteam)
             {
-                int tries = 0;
-                while (playerID == 0 && tries < 10)
+                while (playerID == 0)
                 {
-                    tries++;
-                    PlayerControllerB player = UpgradeBus.Instance.GetLocalPlayer();
-                    if (player == null) continue;
+                    PlayerControllerB player = GameNetworkManager.Instance.localPlayerController;
                     playerID = player.playerSteamId;
-                    yield return new WaitForSeconds(0.5f);
+                    yield return new WaitForSeconds(1f);
                 }
             }
             
@@ -421,24 +421,25 @@ namespace MoreShipUpgrades.Managers
             logger.LogInfo("Applying loaded upgrades...");
             foreach (CustomTerminalNode customNode in UpgradeBus.Instance.terminalNodes)
             {
-                bool activeUpgrade = UpgradeBus.Instance.activeUpgrades.GetValueOrDefault(customNode.Name, false);
-                int upgradeLevel = UpgradeBus.Instance.upgradeLevels.GetValueOrDefault(customNode.Name, 0);
+                bool activeUpgrade = UpgradeBus.Instance.activeUpgrades.GetValueOrDefault(customNode.OriginalName, false);
+                int upgradeLevel = UpgradeBus.Instance.upgradeLevels.GetValueOrDefault(customNode.OriginalName, 0);
                 customNode.Unlocked = activeUpgrade;
                 customNode.CurrentUpgrade = upgradeLevel;
-                BaseUpgrade comp = UpgradeBus.Instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>();
+                BaseUpgrade comp = UpgradeBus.Instance.UpgradeObjects[customNode.OriginalName].GetComponent<BaseUpgrade>();
                 bool free = comp.CanInitializeOnStart();
                 if (activeUpgrade || free) comp.Load();
-                if (customNode.Name == NightVision.UPGRADE_NAME || free)
+                if (customNode.OriginalName == NightVision.UPGRADE_NAME || free)
                 {
                     customNode.Unlocked = true;
                 }
             }
         }
+
         void UpdateUpgrades(string name, bool increment = false)
         {
             foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
             {
-                if (node.Name == name)
+                if (node.OriginalName == name)
                 {
                     node.Unlocked = true;
                     if (increment) { node.CurrentUpgrade++; }
@@ -515,8 +516,7 @@ namespace MoreShipUpgrades.Managers
                 }
             }
             SaveInfo = new SaveInfo();
-            UpdateLGUSaveServerRpc(playerID, JsonConvert.SerializeObject(SaveInfo));
-            if (IsHost || IsServer) ServerSaveFile();
+            UpdateLGUSaveServerRpc(playerID, JsonConvert.SerializeObject(SaveInfo), true);
         }
         [ClientRpc]
         public void DestroyHelmetClientRpc(ulong id)

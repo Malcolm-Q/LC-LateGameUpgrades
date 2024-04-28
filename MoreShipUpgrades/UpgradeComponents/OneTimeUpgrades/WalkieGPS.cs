@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +16,8 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         private Text x, y, z, time;
         void Awake()
         {
-            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.WALKIE_GPS_OVERRIDE_NAME : UPGRADE_NAME;
+            upgradeName = UPGRADE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.WALKIE_GPS_OVERRIDE_NAME;
             instance = this;
         }
         internal override void Start()
@@ -73,6 +75,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         internal override bool CanInitializeOnStart()
         {
             return UpgradeBus.Instance.PluginConfiguration.WALKIE_PRICE.Value <= 0;
+        }
+        internal new static void RegisterUpgrade()
+        {
+            SetupGenericPerk<WalkieGPS>(UPGRADE_NAME);
         }
     }
 }

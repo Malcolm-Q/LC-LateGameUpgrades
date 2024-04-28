@@ -21,7 +21,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             " Most of the phone numbers don't work anymore.\n\n";
         void Awake()
         {
-            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_OVERRIDE_NAME : UPGRADE_NAME;
+            upgradeName = UPGRADE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_OVERRIDE_NAME;
             Instance = this;
         }
         public override void Increment()
@@ -79,6 +80,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             string[] prices = UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_UPGRADE_PRICES.Value.Split(',');
             bool free = UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
             return free;
+        }
+        internal new static void RegisterUpgrade()
+        {
+            SetupGenericPerk<BackMuscles>(UPGRADE_NAME);
         }
     }
 

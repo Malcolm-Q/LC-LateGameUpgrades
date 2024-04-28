@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using BepInEx.Logging;
+using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
@@ -12,7 +13,7 @@ namespace MoreShipUpgrades.Patches.NetworkManager
         static LguLogger logger = new LguLogger(nameof(GameNetworkManagerPatcher));
         [HarmonyPostfix]
         [HarmonyPatch(nameof(GameNetworkManager.Disconnect))]
-        static void ResetUpgradeBus(GameNetworkManager __instance)
+        static void ResetUpgradeBus()
         {
             logger.LogDebug("Resetting the Upgrade Bus due to disconnecting...");
             UpgradeBus.Instance.ResetAllValues();

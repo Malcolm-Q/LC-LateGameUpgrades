@@ -1,4 +1,5 @@
-﻿using MoreShipUpgrades.Managers;
+﻿using MoreShipUpgrades.API;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
@@ -62,7 +63,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                     {
                         if (levels.ContainsKey(fullName))
                         {
-                            logger.LogError("{fullName} appears twice is samples config! Appearing now as {monster}");
+                            logger.LogError($"{fullName} appears twice in samples config! Appearing now as {monster}");
                         }
                         else
                         {
@@ -72,9 +73,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                     }
                     else
                     {
-                        logger.LogError("Unrecognized enemy name: {monster}");
+                        logger.LogError($"Unrecognized enemy name: {monster}");
                     }
                 }
+            }
+            foreach (string moddedMonster in HunterSamples.moddedLevels.Keys)
+            {
+                levels[moddedMonster] = HunterSamples.moddedLevels[moddedMonster];
+                monsterNames[moddedMonster.ToLower()] = moddedMonster;
             }
         }
 
@@ -98,7 +104,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         void Awake()
         {
-            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.HUNTER_OVERRIDE_NAME : UPGRADE_NAME;
+            upgradeName = UPGRADE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.HUNTER_OVERRIDE_NAME;
             Instance = this;
         }
 
@@ -130,6 +137,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             string[] prices = UpgradeBus.Instance.PluginConfiguration.HUNTER_UPGRADE_PRICES.Value.Split(',');
             bool free = UpgradeBus.Instance.PluginConfiguration.HUNTER_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
             return free;
+        }
+        internal new static void RegisterUpgrade()
+        {
+            SetupGenericPerk<Hunter>(UPGRADE_NAME);
         }
     }
 }

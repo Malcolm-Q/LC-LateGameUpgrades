@@ -5,10 +5,12 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -19,7 +21,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
     {
         static LguLogger logger = new LguLogger(nameof(StartOfRoundPatcher));
         [HarmonyPrefix]
-        [HarmonyPatch(nameof(StartOfRound.Start))]
+        [HarmonyPatch(nameof(StartOfRound.Awake))]
         static void InitLguStore(StartOfRound __instance)
         {
             logger.LogDebug("Initiating components...");
@@ -29,7 +31,6 @@ namespace MoreShipUpgrades.Patches.RoundComponents
                 refStore.GetComponent<NetworkObject>().Spawn();
                 logger.LogDebug("LguStore component initiated...");
             }
-            SpawnItemManager.Instance.SetupSpawnableItems();
         }
         [HarmonyPrefix]
         [HarmonyPatch(nameof(StartOfRound.playersFiredGameOver))]
@@ -92,7 +93,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             Tools.FindFloat(ref index, ref codes, findValue: 0.3f, addCode: sigurdChance, errorMessage: "Couldn't find the 0.3 value which is used as buying rate");
             return codes.AsEnumerable();
         }
-        [HarmonyPatch(nameof(StartOfRound.OnPlayerConnectedClientRpc))]
+        [HarmonyPatch(nameof(StartOfRound.SetPlanetsWeather))]
         [HarmonyPostfix]
         static void SetPlanetsWeatherPostfix(StartOfRound __instance)
         {
@@ -106,6 +107,54 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         {
             if (__instance.IsHost || __instance.IsServer) return;
             LguStore.Instance.ShareSaveServerRpc();
+        }
+
+        [HarmonyPatch(nameof(StartOfRound.ShipLeave))]
+        [HarmonyPrefix]
+        static void ShipLeavePrefix(StartOfRound __instance)
+        {
+            if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_ENABLED) return;
+            if (UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_AFFECT_LANDING && !UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_AFFECT_DEPARTING)
+            {
+                __instance.shipAnimator.speed /= LandingThrusters.GetLandingSpeedMultiplier();
+                return;
+            }
+            if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_AFFECT_LANDING && UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_AFFECT_DEPARTING)
+                __instance.shipAnimator.speed *= LandingThrusters.GetLandingSpeedMultiplier();
+
+        }
+        [HarmonyPatch(nameof(StartOfRound.EndOfGame))]
+        [HarmonyPostfix]
+        static void EndOfGamePostfix(StartOfRound __instance)
+        {
+            if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_ENABLED) return;
+            if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_AFFECT_DEPARTING) return;
+
+            __instance.shipAnimator.speed /= LandingThrusters.GetLandingSpeedMultiplier();
+        }
+
+        [HarmonyPatch(nameof(StartOfRound.openingDoorsSequence))]
+        [HarmonyPrefix]
+        static void openingDoorsSequencePrefix(StartOfRound __instance)
+        {
+            if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_ENABLED) return;
+            if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_AFFECT_LANDING) return;
+
+            __instance.shipAnimator.speed *= LandingThrusters.GetLandingSpeedMultiplier();
+        }
+
+        [HarmonyPatch(nameof(StartOfRound.openingDoorsSequence), MethodType.Enumerator)]
+        [HarmonyTranspiler]
+        static IEnumerable<CodeInstruction> openingDoorsSequenceTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo getLandingSpeedMultiplier = typeof(LandingThrusters).GetMethod(nameof(LandingThrusters.GetInteractMutliplier));
+            List<CodeInstruction> codes = instructions.ToList();
+            int index = 0;
+            Tools.FindFloat(ref index, ref codes, findValue: 5f, addCode: getLandingSpeedMultiplier, errorMessage: "Couldn't find the 5f value used on WaitForSeconds");
+            codes.Insert(index+1, new CodeInstruction(OpCodes.Div));
+            Tools.FindFloat(ref index, ref codes, findValue: 10f, addCode: getLandingSpeedMultiplier, errorMessage: "Couldn't find the 10f value used on WaitForSeconds");
+            codes.Insert(index+1, new CodeInstruction(OpCodes.Div));
+            return codes;
         }
     }
 }

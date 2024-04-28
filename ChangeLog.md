@@ -1,17 +1,86 @@
-## V 3.5.5 - 2024-04-13
-- Fixed Beekeeper not affecting Butler's Hornet's damage.
+<details>
+<summary> <h2>V 3.6.0 - 2024-04-29</h2> </summary>
+
+<details>
+<summary> <h3>Additions</h3> </summary>
+
+- Implemented "Deeper Pockets" upgrade which provides additional two-handed item carry capacity to the player, treating them like one-handed items til the last carryable two-handed.
+- Implemented "Landing Thrusters" upgrade which makes the ship land and/or depart faster between moons.
+- Added samples for Forest Keeper, Manticoli and Tulip Snake enemies.
+- Added API for registering custom samples to the Hunter upgrade for custom/modded enemies.
+	- This way, mods will only require to register their respective sample and LGU will do the spawning for them when an enemy is killed.
+	- To allow multiple loot items to be able to spawn on the same monster, I changed the implementation to allow more than one item to be registered on the same enemy.
+	- Weight based system to spawn a given model on kill, default value is 50 (also used in LGU's sample prefabs).
+
+</details>
+
+<details>
+<summary> <h3>Changes</h3> </summary>
+
+- Separated "Strong Legs" fall damage mitigation into its own tier upgrade (called "Reinforced Boots").
+
+</details>
+<details>
+<summary> <h3>Fixes</h3> </summary>
+
+- Fixed overriding upgrade names leading to a couple of unpredicted behaviour.
+- Fixed Data Contract's Laptop help info showing "ls, mv, mv" rather than "ls, cd, mv", leading to people not know about the ``cd`` command
+- Fixed a patch being applied incorrectly which was used to sync weathers to people joining after the probe.
+- Fixed upgrades configured to be free not being applied on new saves
+- Fixed radar icon appearing on the terminal due to contract items (being invisible when relevant contract is not active) by just straight out deleting them.
+- Fixed player not loading their LGU save when leaving and rejoining the same save.
+- Fixed Sick Beats defense attribute not being applied correctly (since its release)
+- Fixed error spam when booted in the void (due to player controller not being initialized correctly)
+    - This does not mean that booting in the void was because of the wheelbarrow, it just means that it would error spam as of consequence of the player's controllers not being initialized correctly.
+- Fixed Interns not working correctly when Stimpack is deactivated in the configuration.
+- Fixed Protein Powder's Critical Hit effect not being applied on certain configurations.
+- Fixed an issue with [LethalLevelLoader](https://github.com/IAmBatby/LethalLevelLoader) due to execution order.
+
+</details>
+</details>
+
+<details>
+<summary> <h2>V 3.5.5 - 2024-04-13</h2> </summary>
+
+<details>
+<summary> <h3>Additions</h3> </summary>
+
 - Implemented "Name Override" configuration where you can change the name of the upgrades to your liking.
 
-## V 3.5.4 - 2024-04-11
+</details>
+
+<details>
+<summary> <h3>Fixes</h3> </summary>
+
+- Fixed Beekeeper not affecting Butler's Hornet's damage.
+
+</details>
+</details>
+
+<details>
+<summary> <h2>V 3.5.4 - 2024-04-11</h2> </summary>
+
+<details>
+<summary> <h3>Additions</h3> </summary>
+
 - Implemented "Aluminium Coils" tier upgrade which provides several buffs to the zap gun item such as:
      - Reduced cooldown usage after failing its minigame
      - Reduced difficulty multiplier used to initialize the minigame's variables
      - Increased stun range
      - Increased stun time on enemies
+
+</details>
+
+<details>
+<summary> <h3>Fixes</h3> </summary>
+
 - Fixed Malware Broadcaster not applying on Spike Roof Traps
 - Fixed monster samples not deactivating the particle system when dropped
 - Fixed an error when shutting down the game.
 - Fixed errors when using Lobby Control due to unity assets' meshes not being readable.
+
+</details>
+</details>
 
 ## V 3.5.3 - 2024-04-04
 - Refined version checking to not load unnecessary types (and possibly lead to errors due to compatibility modes)

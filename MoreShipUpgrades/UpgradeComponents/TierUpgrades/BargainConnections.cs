@@ -10,7 +10,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         internal const string PRICES_DEFAULT = "225,300,375";
         internal override void Start()
         {
-            upgradeName = UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? UpgradeBus.Instance.PluginConfiguration.BARGAIN_CONNECTIONS_OVERRIDE_NAME : UPGRADE_NAME;
+            upgradeName = UPGRADE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.BARGAIN_CONNECTIONS_OVERRIDE_NAME;
             base.Start();
         }
         public static int GetBargainConnectionsAdditionalItems(int defaultAmountItems)
@@ -29,6 +30,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             string[] prices = UpgradeBus.Instance.PluginConfiguration.BARGAIN_CONNECTIONS_PRICES.Value.Split(',');
             bool free = UpgradeBus.Instance.PluginConfiguration.BARGAIN_CONNECTIONS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
             return free;
+        }
+        internal new static void RegisterUpgrade()
+        {
+            SetupGenericPerk<BargainConnections>(UPGRADE_NAME);
         }
     }
 }
