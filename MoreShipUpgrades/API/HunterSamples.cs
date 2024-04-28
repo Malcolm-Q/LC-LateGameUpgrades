@@ -163,14 +163,15 @@ namespace MoreShipUpgrades.API
         }
         internal static void RegisterSampleItem(Item sampleItem, string monsterName, bool registerNetworkPrefab = false, bool grabbableToEnemies = true, double weight = 50)
         {
-            MonsterSample sampleScript = sampleItem.spawnPrefab.AddComponent<MonsterSample>();
+            GrabbableObject sampleScript = sampleItem.spawnPrefab.GetComponent<GrabbableObject>();
+            if (sampleScript == null) sampleScript = sampleItem.spawnPrefab.AddComponent<MonsterSample>();
             sampleScript.grabbable = true;
             sampleScript.grabbableToEnemies = grabbableToEnemies;
             sampleScript.itemProperties = sampleItem;
             sampleItem.spawnPrefab.AddComponent<ScrapValueSyncer>();
             if (registerNetworkPrefab) LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(sampleItem.spawnPrefab);
-            if (!SpawnItemManager.Instance.samplePrefabs.ContainsKey("baboon hawk")) SpawnItemManager.Instance.samplePrefabs.Add("baboon hawk", new WeightingGroup<GameObject>());
-            SpawnItemManager.Instance.samplePrefabs["baboon hawk"].Add(sampleItem.spawnPrefab, weight);
+            if (!SpawnItemManager.Instance.samplePrefabs.ContainsKey(monsterName.ToLower())) SpawnItemManager.Instance.samplePrefabs.Add(monsterName.ToLower(), new WeightingGroup<GameObject>());
+            SpawnItemManager.Instance.samplePrefabs[monsterName.ToLower()].Add(sampleItem.spawnPrefab, weight);
             LethalLib.Modules.Items.RegisterItem(sampleItem);
             Plugin.mls.LogInfo($"Registed sample for the enemy \"{monsterName}\"...");
         }
@@ -248,6 +249,13 @@ namespace MoreShipUpgrades.API
                 Plugin.mls.LogWarning($"Provided hunter level is not valid for sample registration.");
                 Plugin.mls.LogWarning($"Defaulting the hunter level to 1 for the sample item for the enemy \"{monsterName}\"...");
                 hunterLevel = 1;
+            }
+            if (hunterLevel > UpgradeBus.Instance.PluginConfiguration.HUNTER_UPGRADE_PRICES.Value.Split(",").Length)
+            {
+                Plugin.mls.LogWarning($"Provided hunter level is too high for sample registration.");
+                Plugin.mls.LogWarning($"Defaulting the hunter level to the maximum allowed level for the sample item for the enemy \"{monsterName}\"...");
+                Plugin.mls.LogWarning($"This is a configuration error, not a developer error as they cannot predict what is the maximum level Hunter upgrade can be without messing with internals (for now anyways).");
+                hunterLevel = UpgradeBus.Instance.PluginConfiguration.HUNTER_UPGRADE_PRICES.Value.Split(",").Length;
             }
             if (weight <= 0)
             {
