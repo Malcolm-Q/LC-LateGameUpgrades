@@ -132,10 +132,6 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
     * Instead of disabling turrets and landmines; Destroy them.
     * Can enable alternate behaviours - Exploding hazards (default), destroying, or disabling for a longer period.
 
-* __Light Footed - $350__
-    * Enemies have to be closer to hear your footsteps.
-    * Applies to both walking and running.
-
 * __Night Vision - $380__
     * Press Left Alt to toggle night vision.
     * Has self regenerating batery.
@@ -209,6 +205,16 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 	* Decreased difficulty in its minigame
 	* Decreased cooldown time after failing the minigame (stopping zapping the enemy)
 
+* __Landing Thrusters - $300__
+    * Speeds up the ship whenever it's landing/taking off.
+	* Can configure what moments for the upgrade to take effect (only landing/departing or both)
+
+* __Deeper Pockets - $500__
+    * Increases the amount of two-handed items you can carry in your inventory.
+
+* __Reinforced Boots - $250__
+    * Reduces incoming fall damage.
+
 ## Contracts
 * __Defusal Contract__
     * Look around the facility for a ticking bomb. Defuse it before the timer runs out or anyone near it might meet a gruesome fate.
@@ -254,3 +260,7 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 * ``contract [moonName]``
     * Provides a contract for the players to finish on a moon.
     * If provided a ``moonName``, it will give out a contract on specified moon.
+
+## API
+* Hunter
+    * You can register your own items to the Hunter upgrade for them to spawn on enemy kills! Just follow the wiki page associated with ``Hunter API``.
