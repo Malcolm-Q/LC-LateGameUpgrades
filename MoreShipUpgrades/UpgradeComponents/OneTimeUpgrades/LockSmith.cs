@@ -135,5 +135,9 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             return UpgradeBus.Instance.PluginConfiguration.LOCKSMITH_PRICE.Value <= 0;
         }
+        internal new static void RegisterUpgrade()
+        {
+            SetupGenericPerk<LockSmith>(UPGRADE_NAME);
+        }
     }
 }

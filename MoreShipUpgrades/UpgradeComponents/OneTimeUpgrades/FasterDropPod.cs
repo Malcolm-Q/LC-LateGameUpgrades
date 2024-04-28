@@ -40,5 +40,9 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             return UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_PRICE.Value <= 0;
         }
+        internal new static void RegisterUpgrade()
+        {
+            SetupGenericPerk<FasterDropPod>(UPGRADE_NAME);
+        }
     }
 }

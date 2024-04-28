@@ -37,5 +37,9 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             return UpgradeBus.Instance.PluginConfiguration.PAGER_PRICE.Value <= 0;
         }
+        internal new static void RegisterUpgrade()
+        {
+            SetupGenericPerk<FastEncryption>(UPGRADE_NAME);
+        }
     }
 }

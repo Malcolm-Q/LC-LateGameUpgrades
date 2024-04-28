@@ -131,5 +131,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             bool free = UpgradeBus.Instance.PluginConfiguration.PLAYER_HEALTH_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
             return free;
         }
+        internal new static void RegisterUpgrade()
+        {
+            SetupGenericPerk<Stimpack>(UPGRADE_NAME);
+        }
     }
 }

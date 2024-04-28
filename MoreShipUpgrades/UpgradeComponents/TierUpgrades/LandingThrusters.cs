@@ -2,9 +2,6 @@
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
@@ -44,6 +41,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             string[] prices = UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_PRICES.Value.Split(',');
             bool free = UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
             return free;
+        }
+
+        internal new static void RegisterUpgrade()
+        {
+            SetupGenericPerk<LandingThrusters>(UPGRADE_NAME);
         }
     }
 }

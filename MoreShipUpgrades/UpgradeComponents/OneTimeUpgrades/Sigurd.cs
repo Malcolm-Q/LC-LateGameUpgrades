@@ -62,5 +62,9 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             return (UpgradeBus.Instance.PluginConfiguration.SIGURD_ENABLED.Value || UpgradeBus.Instance.PluginConfiguration.SIGURD_LAST_DAY_ENABLED.Value) && UpgradeBus.Instance.PluginConfiguration.SIGURD_PRICE.Value <= 0;
         }
+        internal new static void RegisterUpgrade()
+        {
+            SetupGenericPerk<Sigurd>(UPGRADE_NAME);
+        }
     }
 }

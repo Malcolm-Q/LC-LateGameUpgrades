@@ -25,5 +25,9 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             return UpgradeBus.Instance.PluginConfiguration.LETHAL_DEALS_PRICE.Value <= 0;
         }
+        internal new static void RegisterUpgrade()
+        {
+            SetupGenericPerk<LethalDeals>(UPGRADE_NAME);
+        }
     }
 }

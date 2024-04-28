@@ -71,5 +71,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 UpgradeBus.Instance.PluginConfiguration.BETTER_SCANNER_PRICE2.Value <= 0 &&
                 UpgradeBus.Instance.PluginConfiguration.BETTER_SCANNER_PRICE3.Value <= 0;
         }
+        internal new static void RegisterUpgrade()
+        {
+            SetupGenericPerk<BetterScanner>(UPGRADE_NAME);
+        }
     }
 }

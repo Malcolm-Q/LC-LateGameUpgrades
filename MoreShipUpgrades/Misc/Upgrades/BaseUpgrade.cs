@@ -1,6 +1,7 @@
 ﻿using CSync.Lib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Util;
+using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -97,6 +98,32 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// </summary>
         /// <returns>Wether the upgrade can be loaded immediately upon game being loaded or not</returns>
         internal abstract bool CanInitializeOnStart();
+
+        /// <summary>
+        /// Registers the associated upgrade to the game to be initialized correctly
+        /// <para></para>
+        /// This method is to be overriden by their subclasses through "new"
+        /// </summary>
+        /// <exception cref="NotSupportedException"></exception>
+        internal static void RegisterUpgrade() { throw new NotSupportedException(); }
+
+        /// <summary>
+        /// Generic function where it adds a script (specificed through the type) into an GameObject asset 
+        /// which is present in a provided asset bundle in a given path and registers it as a network prefab.
+        /// </summary>
+        /// <typeparam name="T"> The script we wish to include into the GameObject asset</typeparam>
+        /// <param name="bundle"> The asset bundle where the asset is located</param>
+        /// <param name="path"> The path to access the asset in the asset bundle</param>
+        internal static void SetupGenericPerk<T>(string upgradeName) where T : Component
+        {
+            // soon I want to move this to use NetworkPrefabs.CreateNetworkPrefab
+            GameObject perk = AssetBundleHandler.GetPerkGameObject(upgradeName);
+            if (!perk) return;
+
+            perk.AddComponent<T>();
+            perk.hideFlags = HideFlags.HideAndDontSave;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(perk);
+        }
 
     }
 }
