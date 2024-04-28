@@ -21,7 +21,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
     {
         static LguLogger logger = new LguLogger(nameof(StartOfRoundPatcher));
         [HarmonyPrefix]
-        [HarmonyPatch(nameof(StartOfRound.Start))]
+        [HarmonyPatch(nameof(StartOfRound.Awake))]
         static void InitLguStore(StartOfRound __instance)
         {
             logger.LogDebug("Initiating components...");

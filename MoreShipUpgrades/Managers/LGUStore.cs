@@ -52,7 +52,7 @@ namespace MoreShipUpgrades.Managers
         /// </summary>
         private bool receivedSave;
 
-        private void Start()
+        private void Awake()
         {
             Instance = this;
             if (NetworkManager.IsHost)
