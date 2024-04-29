@@ -1,13 +1,14 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Commands;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.Commands
 {
-    public class Interns : NetworkBehaviour
+    public class Interns : BaseCommand
     {
         internal const string NAME = "Interns";
         public static Interns instance;
@@ -149,7 +150,10 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
                 player.thisPlayerModelLOD2.enabled = true;
             }
         }
-
+        internal static new void RegisterCommand()
+        {
+            SetupGenericCommand<Interns>(NAME);
+        }
 
     }
 }

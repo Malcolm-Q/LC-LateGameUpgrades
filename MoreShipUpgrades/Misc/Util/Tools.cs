@@ -259,5 +259,16 @@ namespace MoreShipUpgrades.Misc.Util
         {
             Landmine.SpawnExplosion(explosionPosition, spawnExplosionEffect, killRange, damageRange, nonLethalDamage, physicsForce, overridePrefab);
         }
+
+        internal static void SetupGameObject<T>(string name) where T : Component
+        {
+            // soon I want to move this to use NetworkPrefabs.CreateNetworkPrefab
+            GameObject gameObject = AssetBundleHandler.GetPerkGameObject(name);
+            if (!gameObject) return;
+
+            gameObject.AddComponent<T>();
+            gameObject.hideFlags = HideFlags.HideAndDontSave;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(gameObject);
+        }
     }
 }

@@ -98,6 +98,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         static void SetPlanetsWeatherPostfix(StartOfRound __instance)
         {
             if (__instance.IsHost || __instance.IsServer) return;
+            if (LguStore.Instance == null) return;
             LguStore.Instance.SyncProbeWeathersServerRpc();
         }
 

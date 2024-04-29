@@ -1,9 +1,10 @@
 ﻿using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Commands;
 using Unity.Netcode;
 
 namespace MoreShipUpgrades.UpgradeComponents.Commands
 {
-    public class ExtendDeadlineScript : NetworkBehaviour
+    public class ExtendDeadlineScript : BaseCommand
     {
         internal const string NAME = "Extend Deadline";
         internal const string ENABLED_SECTION = $"Enable {NAME}";
@@ -30,6 +31,11 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
         public void ExtendDeadlineServerRpc(int days)
         {
             ExtendDeadlineClientRpc(days);
+        }
+
+        internal static new void RegisterCommand()
+        {
+            SetupGenericCommand<ExtendDeadlineScript>(NAME);
         }
     }
 }

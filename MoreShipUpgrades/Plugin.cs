@@ -34,6 +34,8 @@ using MoreShipUpgrades.Patches.TerminalComponents;
 using MoreShipUpgrades.Input;
 using MoreShipUpgrades.Misc.Upgrades;
 using System.Data.Common;
+using MoreShipUpgrades.UpgradeComponents.Commands;
+using MoreShipUpgrades.Misc.Commands;
 
 namespace MoreShipUpgrades
 {
@@ -92,8 +94,8 @@ namespace MoreShipUpgrades
             SetupModStore(ref UpgradeAssets);
 
             SetupItems();
-            
-            SetupPerks();
+            SetupCommands(ref types);
+            SetupPerks(ref types);
 
             SetupContractMapObjects(ref UpgradeAssets);
 
@@ -686,9 +688,8 @@ namespace MoreShipUpgrades
 
             SetupStoreItem(wheelbarrow);
         }
-        private void SetupPerks()
+        private void SetupPerks(ref IEnumerable<Type> types)
         {
-            Type[] types = Assembly.GetExecutingAssembly().GetTypes();
             foreach (Type type in types)
             {
                 if (!type.IsSubclassOf(typeof(BaseUpgrade))) continue;
@@ -699,5 +700,17 @@ namespace MoreShipUpgrades
             }
             mls.LogInfo("Upgrades have been setup");
         }
-    }
+
+        private void SetupCommands(ref IEnumerable<Type> types)
+        {
+            foreach (Type type in types)
+            {
+                if (!type.IsSubclassOf(typeof(BaseCommand))) continue;
+
+                MethodInfo method = type.GetMethod(nameof(BaseCommand.RegisterCommand), BindingFlags.Static | BindingFlags.NonPublic);
+                method.Invoke(null, null);
+            }
+            mls.LogInfo("Commands have been setup");
+        }
+    }   
 }

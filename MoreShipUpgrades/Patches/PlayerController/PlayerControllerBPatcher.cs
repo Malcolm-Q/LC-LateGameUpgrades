@@ -153,7 +153,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         static void DeepPocketsTwoHandedCheck(PlayerControllerB player)
         {
             if (!player.twoHanded) return;
-            if (!BaseUpgrade.GetActiveUpgrade(DeepPockets.UPGRADE_NAME)) ;
+            if (!BaseUpgrade.GetActiveUpgrade(DeepPockets.UPGRADE_NAME)) return;
             int twoHandedCount = 0;
             int maxTwoHandedCount = 1 + UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_INITIAL_TWO_HANDED_ITEMS + BaseUpgrade.GetUpgradeLevel(DeepPockets.UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_ITEMS;
 

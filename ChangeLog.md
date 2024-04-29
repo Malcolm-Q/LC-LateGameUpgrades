@@ -1,4 +1,24 @@
 <details>
+<summary> <h2>V 3.6.2 - 2024-05-??</h2> </summary>
+
+- Fixed ``Deeper Pockets`` upgrade being applied even when not being bought.
+- Fixed commands not working correctly due to not being registered to the network manager.
+- Fixed edgecase of using ``RegisterSampleItem`` when ``Item`` scriptable object's spawn prefab already has a ``GrabbableObject`` component
+
+</details>
+
+<details>
+<summary> <h2>V 3.6.1 - 2024-04-29</h2> </summary>
+
+<details>
+<summary> <h3> Fixes </h3> </summary>
+
+- Bandaiding weather synchronization with a null check due to execution order.
+
+</details>
+</details>
+
+<details>
 <summary> <h2>V 3.6.0 - 2024-04-29</h2> </summary>
 
 <details>
