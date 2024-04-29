@@ -1,9 +1,11 @@
 ﻿using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Commands;
+using System.Xml.Linq;
 using Unity.Netcode;
 
 namespace MoreShipUpgrades.UpgradeComponents.Commands
 {
-    internal class ScrapInsurance : NetworkBehaviour
+    internal class ScrapInsurance : BaseCommand
     {
         internal const string COMMAND_NAME = "Scrap Insurance";
         internal const int DEFAULT_PRICE = 400;
@@ -36,6 +38,11 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
         static void ToggleInsurance(bool enabled)
         {
             insurance = enabled;
+        }
+
+        internal static new void RegisterCommand()
+        {
+            SetupGenericCommand<ScrapInsurance>(COMMAND_NAME);
         }
     }
 }
