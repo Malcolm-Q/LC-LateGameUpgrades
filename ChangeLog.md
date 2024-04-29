@@ -3,6 +3,7 @@
 
 - Fixed ``Deeper Pockets`` upgrade being applied even when not being bought.
 - Fixed commands not working correctly due to not being registered to the network manager.
+- Fixed edgecase of using ``RegisterSampleItem`` when ``Item`` scriptable object's spawn prefab already has a ``GrabbableObject`` component
 
 </details>
 

@@ -165,6 +165,7 @@ namespace MoreShipUpgrades.API
         {
             GrabbableObject sampleScript = sampleItem.spawnPrefab.GetComponent<GrabbableObject>();
             if (sampleScript == null) sampleScript = sampleItem.spawnPrefab.AddComponent<MonsterSample>();
+            else sampleItem.spawnPrefab.AddComponent<SampleComponent>();
             sampleScript.grabbable = true;
             sampleScript.grabbableToEnemies = grabbableToEnemies;
             sampleScript.itemProperties = sampleItem;
