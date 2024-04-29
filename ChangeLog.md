@@ -1,4 +1,15 @@
 <details>
+<summary> <h2>V 3.6.1 - 2024-04-29</h2> </summary>
+
+<details>
+<summary> <h3> Fixes </h3> </summary>
+
+- Bandaiding weather synchronization with a null check due to execution order.
+
+</details>
+</details>
+
+<details>
 <summary> <h2>V 3.6.0 - 2024-04-29</h2> </summary>
 
 <details>
