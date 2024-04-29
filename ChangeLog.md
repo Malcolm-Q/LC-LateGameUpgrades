@@ -1,4 +1,12 @@
 <details>
+<summary> <h2>V 3.6.2 - 2024-05-??</h2> </summary>
+
+- Fixed ``Deeper Pockets`` upgrade being applied even when not being bought.
+- Fixed commands not working correctly due to not being registered to the network manager.
+
+</details>
+
+<details>
 <summary> <h2>V 3.6.1 - 2024-04-29</h2> </summary>
 
 <details>

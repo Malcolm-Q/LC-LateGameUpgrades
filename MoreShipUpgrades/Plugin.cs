@@ -34,6 +34,7 @@ using MoreShipUpgrades.Patches.TerminalComponents;
 using MoreShipUpgrades.Input;
 using MoreShipUpgrades.Misc.Upgrades;
 using System.Data.Common;
+using MoreShipUpgrades.UpgradeComponents.Commands;
 
 namespace MoreShipUpgrades
 {
@@ -92,7 +93,7 @@ namespace MoreShipUpgrades
             SetupModStore(ref UpgradeAssets);
 
             SetupItems();
-            
+            SetupCommands();
             SetupPerks();
 
             SetupContractMapObjects(ref UpgradeAssets);
@@ -698,6 +699,13 @@ namespace MoreShipUpgrades
                 method.Invoke(null, null);
             }
             mls.LogInfo("Upgrades have been setup");
+        }
+
+        private void SetupCommands()
+        {
+            BaseUpgrade.SetupGenericPerk<ExtendDeadlineScript>(ExtendDeadlineScript.NAME);
+            BaseUpgrade.SetupGenericPerk<Interns>(Interns.NAME);
+            BaseUpgrade.SetupGenericPerk<ScrapInsurance>(ScrapInsurance.COMMAND_NAME);
         }
     }
 }
