@@ -156,48 +156,5 @@ namespace MoreShipUpgrades.Misc.UI.Application
             if (node.salePerc != 1f && UpgradeBus.Instance.PluginConfiguration.SALE_APPLY_ONCE.Value) node.salePerc = 1f;
             backAction();
         }
-        public void Confirm(string title, string description, Action confirmAction, Action declineAction, string additionalMessage = "")
-        {
-            CursorMenu cursorMenu = new CursorMenu()
-            {
-                elements =
-                [
-                    new CursorElement()
-                    {
-                        Name = LGUConstants.CONFIRM_PROMPT,
-                        Description = "",
-                        Action = () => { confirmAction(); }
-                    },
-                    new CursorElement()
-                    {
-                        Name = LGUConstants.CANCEL_PROMPT,
-                        Description = "",
-                        Action = () => { declineAction(); }
-                    }
-                ]
-            };
-
-            IScreen screen = new BoxedScreen()
-            {
-                Title = title,
-                elements =
-                [
-                    new TextElement()
-                    {
-                        Text = description
-                    },
-                    new TextElement()
-                    {
-                        Text = " "
-                    },
-                    new TextElement()
-                    {
-                        Text = additionalMessage
-                    },
-                    cursorMenu
-                ]
-            };
-            SwitchScreen(screen, cursorMenu, false, false);
-        }
     }
 }

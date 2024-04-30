@@ -16,7 +16,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             Enum.TryParse(typeof(Restrictions), UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_RESTRICTION_MODE.Value, out object parsedRestriction);
             if (parsedRestriction == null)
             {
-                logger.LogError($"An error occured parsing the restriction mode ({UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_RESTRICTION_MODE}), defaulting to ItemCount");
+                logger.LogWarning($"An error occured parsing the restriction mode ({UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_RESTRICTION_MODE}), defaulting to ItemCount");
                 restriction = Restrictions.ItemCount;
             }
             else restriction = (Restrictions)parsedRestriction;
@@ -27,7 +27,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             playSounds = UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_PLAY_NOISE.Value;
             Random random = new Random(StartOfRound.Instance.randomMapSeed + 45);
             GetComponent<ScrapValueSyncer>().SetScrapValue(random.Next(UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_MINIMUM_VALUE.Value, UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_MAXIMUM_VALUE.Value));
-            logger.LogDebug("Spawned in the scene!");
         }
         protected override void SetupScanNodeProperties()
         {

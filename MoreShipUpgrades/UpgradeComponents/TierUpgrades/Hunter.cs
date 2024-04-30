@@ -42,7 +42,18 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             { "mouthdog", "Eyeless Dog" },
             { "eyeless dog", "Eyeless Dog" },
             { "eyeless", "Eyeless Dog" },
-            { "dog", "Eyeless Dog" }
+            { "dog", "Eyeless Dog" },
+            { "tulip snake", "Tulip Snake" },
+            { "FlowerSnake", "Tulip Snake" },
+            { "Flower Snake", "Tulip Snake" },
+            { "Snake", "Tulip Snake" },
+            { "Forest Giant", "ForestGiant" },
+            { "Forest Keeper", "ForestGiant" },
+            { "ForestGiant", "ForestGiant" },
+            { "ForestKeeper", "ForestGiant" },
+            { "Manticoil", "Manticoil" },
+            { "Manti Coil", "Manticoil" },
+            { "Bird", "Manticoil" },
             };
 
         /**

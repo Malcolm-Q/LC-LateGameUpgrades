@@ -10,6 +10,7 @@ namespace MoreShipUpgrades.Misc.UI
     internal enum ApplicationType
     {
         UpgradeStore,
+        WeatherProbe,
 
     }
     internal class LguInteractiveTerminal : MonoBehaviour
@@ -34,6 +35,11 @@ namespace MoreShipUpgrades.Misc.UI
                 case ApplicationType.UpgradeStore:
                     {
                         mainUpgradeApplication = new UpgradeStoreApplication();
+                        break;
+                    }
+                case ApplicationType.WeatherProbe:
+                    {
+                        mainUpgradeApplication = new WeatherProbeApplication();
                         break;
                     }
                 default:

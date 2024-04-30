@@ -1,13 +1,10 @@
 ﻿using MoreShipUpgrades.Input;
 using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc.UI;
 using MoreShipUpgrades.Misc.UI.Cursor;
 using MoreShipUpgrades.Misc.UI.Page;
 using MoreShipUpgrades.Misc.UI.Screen;
 using MoreShipUpgrades.Misc.Util;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MoreShipUpgrades.Misc.UI.Application
 {
@@ -48,6 +45,49 @@ namespace MoreShipUpgrades.Misc.UI.Application
             string text = currentScreen != null ? currentScreen.GetText(LGUConstants.AVAILABLE_CHARACTERS_PER_LINE) : MainPage.GetText(LGUConstants.AVAILABLE_CHARACTERS_PER_LINE);
             terminal.screenText.text = text;
             terminal.currentText = text;
+        }
+        protected void Confirm(string title, string description, Action confirmAction, Action declineAction, string additionalMessage = "")
+        {
+            CursorMenu cursorMenu = new CursorMenu()
+            {
+                elements =
+                [
+                    new CursorElement()
+                    {
+                        Name = LGUConstants.CONFIRM_PROMPT,
+                        Description = "",
+                        Action = () => { confirmAction(); }
+                    },
+                    new CursorElement()
+                    {
+                        Name = LGUConstants.CANCEL_PROMPT,
+                        Description = "",
+                        Action = () => { declineAction(); }
+                    }
+                ]
+            };
+
+            IScreen screen = new BoxedScreen()
+            {
+                Title = title,
+                elements =
+                [
+                    new TextElement()
+                    {
+                        Text = description
+                    },
+                    new TextElement()
+                    {
+                        Text = " "
+                    },
+                    new TextElement()
+                    {
+                        Text = additionalMessage
+                    },
+                    cursorMenu
+                ]
+            };
+            SwitchScreen(screen, cursorMenu, false, false);
         }
 
         protected void SwitchScreen(IScreen screen, CursorMenu cursorMenu, bool previous, bool enablePage)

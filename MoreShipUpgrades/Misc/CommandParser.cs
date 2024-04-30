@@ -646,7 +646,16 @@ namespace MoreShipUpgrades.Misc
         static TerminalNode ExecuteProbeCommands(string secondWord, string thirdWord, ref Terminal terminal, ref TerminalNode outputNode)
         {
             if (!UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_ENABLED.Value) return outputNode;
-            if (secondWord == "") return DisplayTerminalMessage(LGUConstants.WEATHER_PROBE_USAGE);
+            if (secondWord == "")
+            {
+                GameObject store = Object.Instantiate(GameObject.CreatePrimitive(PrimitiveType.Cube));
+                store.name = "UpgradesStore";
+                Object.Destroy(store.GetComponent<MeshRenderer>());
+                Object.Destroy(store.GetComponent<MeshFilter>());
+                LguInteractiveTerminal component = store.AddComponent<LguInteractiveTerminal>();
+                component.Initialize(ApplicationType.WeatherProbe);
+                return LguTerminalNode.GetHelpTerminalNode();
+            }
             if (!StartOfRound.Instance.inShipPhase) return DisplayTerminalMessage(LGUConstants.WEATHER_PROBE_ONLY_IN_ORBIT);
             if (thirdWord != "") return ExecuteSpecifiedProbeCommand(secondWord, thirdWord, terminal);
             if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE.Value) return DisplayTerminalMessage(string.Format(LGUConstants.WEATHER_PROBE_NOT_ENOUGH_CREDITS_FORMAT, UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE.Value, terminal.groupCredits));
