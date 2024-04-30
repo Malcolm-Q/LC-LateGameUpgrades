@@ -1,27 +1,49 @@
 ﻿using MoreShipUpgrades.Input;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc.UI.Application;
 using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
 
 namespace MoreShipUpgrades.Misc.UI
 {
-    internal class UpgradesStore : MonoBehaviour
+    internal enum ApplicationType
     {
-        static UpgradesStore Instance;
-        MainUpgradeApplication mainUpgradeApplication;
+        UpgradeStore,
+
+    }
+    internal class LguInteractiveTerminal : MonoBehaviour
+    {
+        static LguInteractiveTerminal Instance;
+        LguApplication mainUpgradeApplication;
         Terminal terminalReference;
         TerminalNode lastTerminalNode;
         Color previousCaretColor;
         void Start()
         {
             Instance = this;
-            mainUpgradeApplication = new MainUpgradeApplication();
-            mainUpgradeApplication.Initialization();
             terminalReference = UpgradeBus.Instance.GetTerminal();
             lastTerminalNode = terminalReference.currentNode;
             UpdateInput(false);
             UpdateInputBindings(enable: true);
+        }
+        internal void Initialize(ApplicationType application)
+        {
+            switch(application)
+            {
+                case ApplicationType.UpgradeStore:
+                    {
+                        mainUpgradeApplication = new UpgradeStoreApplication();
+                        break;
+                    }
+                default:
+                    {
+                        mainUpgradeApplication = null;
+                        break;
+                    }
+            }
+            if (mainUpgradeApplication == null) Plugin.mls.LogError("An application was not selected to change the terminal's text.");
+            else mainUpgradeApplication.Initialization();
         }
         void Update()
         {
@@ -57,7 +79,6 @@ namespace MoreShipUpgrades.Misc.UI
                 terminalReference.screenText.caretColor = LGUConstants.Invisible;
             }
         }
-
         void UpdateInputBindings(bool enable = false)
         {
             if (enable) AddInputBindings();

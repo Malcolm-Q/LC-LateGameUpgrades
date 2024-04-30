@@ -626,7 +626,8 @@ namespace MoreShipUpgrades.Misc
                         store.name = "UpgradesStore";
                         Object.Destroy(store.GetComponent<MeshRenderer>());
                         Object.Destroy(store.GetComponent<MeshFilter>());
-                        store.AddComponent<UpgradesStore>();
+                        LguInteractiveTerminal component = store.AddComponent<LguInteractiveTerminal>();
+                        component.Initialize(ApplicationType.UpgradeStore);
                         outputNode = LguTerminalNode.GetHelpTerminalNode();
                         return;
                     }

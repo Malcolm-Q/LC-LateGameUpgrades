@@ -1,6 +1,7 @@
 ﻿using MoreShipUpgrades.Input;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.TerminalNodes;
+using MoreShipUpgrades.Misc.UI;
 using MoreShipUpgrades.Misc.UI.Cursor;
 using MoreShipUpgrades.Misc.UI.Page;
 using MoreShipUpgrades.Misc.UI.Screen;
@@ -8,18 +9,12 @@ using MoreShipUpgrades.Misc.Util;
 using System;
 using UnityEngine;
 
-namespace MoreShipUpgrades.Misc.UI
+namespace MoreShipUpgrades.Misc.UI.Application
 {
-    internal class MainUpgradeApplication
+    internal class UpgradeStoreApplication : LguApplication
     {
 
-        PageCursorElement MainPage;
-
-        IScreen currentScreen;
-        CursorMenu currentCursorMenu;
-        readonly Terminal terminal = UpgradeBus.Instance.GetTerminal();
-
-        public void Initialization()
+        public override void Initialization()
         {
             int lengthPerPage = Mathf.CeilToInt(UpgradeBus.Instance.terminalNodes.Count / 2f);
             int amountPages = Mathf.CeilToInt((float)UpgradeBus.Instance.terminalNodes.Count / lengthPerPage);
@@ -34,7 +29,7 @@ namespace MoreShipUpgrades.Misc.UI
             }
             IScreen[] screens = new IScreen[pagesUpgrades.Length];
             CursorMenu[] cursorMenus = new CursorMenu[pagesUpgrades.Length];
-            for(int i = 0; i < pagesUpgrades.Length; i++)
+            for (int i = 0; i < pagesUpgrades.Length; i++)
             {
                 CustomTerminalNode[] upgrades = pagesUpgrades[i];
                 CursorElement[] elements = new CursorElement[upgrades.Length];
@@ -79,34 +74,6 @@ namespace MoreShipUpgrades.Misc.UI
             };
             currentCursorMenu = MainPage.GetCurrentCursorMenu();
             currentScreen = null;
-        }
-        internal void MoveCursorUp()
-        {
-            currentCursorMenu.Backward();
-        }
-        internal void MoveCursorDown()
-        {
-            currentCursorMenu.Forward();
-        }
-        internal void MovePageUp()
-        {
-            MainPage.PageUp();
-            SwitchScreen(null, MainPage.GetCurrentCursorMenu(), false, true);
-        }
-        internal void MovePageDown()
-        {
-            MainPage.PageDown();
-            SwitchScreen(null, MainPage.GetCurrentCursorMenu(), false, true);
-        }
-        public void Submit()
-        {
-            currentCursorMenu.Execute();
-        }
-        public void UpdateText()
-        {
-            string text = currentScreen != null ? currentScreen.GetText(LGUConstants.AVAILABLE_CHARACTERS_PER_LINE) : MainPage.GetText(LGUConstants.AVAILABLE_CHARACTERS_PER_LINE);
-            terminal.screenText.text = text;
-            terminal.currentText = text;
         }
         void NotEnoughCredits(CustomTerminalNode node, Action backAction)
         {
@@ -231,23 +198,6 @@ namespace MoreShipUpgrades.Misc.UI
                 ]
             };
             SwitchScreen(screen, cursorMenu, false, false);
-        }
-
-        public void SwitchScreen(IScreen screen, CursorMenu cursorMenu, bool previous, bool enablePage)
-        {
-            currentScreen = screen;
-            currentCursorMenu = cursorMenu;
-            if (!previous) cursorMenu.cursorIndex = 0;
-            if (enablePage)
-            {
-                Keybinds.pageUpAction.performed += UpgradesStore.OnUpgradeStorePageUp;
-                Keybinds.pageDownAction.performed += UpgradesStore.OnUpgradeStorePageDown;
-            }
-            else
-            {
-                Keybinds.pageUpAction.performed -= UpgradesStore.OnUpgradeStorePageUp;
-                Keybinds.pageDownAction.performed -= UpgradesStore.OnUpgradeStorePageDown;
-            }
         }
     }
 }

@@ -19,7 +19,7 @@ using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
 namespace MoreShipUpgrades.Misc
 {
     [DataContract]
-    public class PluginConfig : SyncedConfig<PluginConfig>
+    public class PluginConfig : SyncedConfig2<PluginConfig>
     {
         #region Enabled
         [field: DataMember] public SyncedEntry<bool> LANDING_THRUSTERS_ENABLED {  get; set; }
@@ -389,7 +389,6 @@ namespace MoreShipUpgrades.Misc
         #region Configuration Bindings
         public PluginConfig(ConfigFile cfg) : base(Metadata.GUID)
         {
-            ConfigManager.Register(this);
             string topSection;
 
             #region Miscellaneous
@@ -1025,13 +1024,13 @@ namespace MoreShipUpgrades.Misc
             SCRAP_WHEELBARROW_MOVEMENT_SLOPPY = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Sloppiness of the Shopping Cart Item", 2f, "Value multiplied on the player's movement to give the feeling of drifting while carrying the Scrap Wheelbarrow Item");
             SCRAP_WHEELBARROW_PLAY_NOISE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Plays noises for players with Shopping Cart Item", true, "If false, it will just not play the sounds, it will still attract monsters to noise");
             InitialSyncCompleted += PluginConfig_InitialSyncCompleted;
+            ConfigManager.Register(this);
         }
 
         #endregion
 
         private void PluginConfig_InitialSyncCompleted(object sender, EventArgs e)
         {
-            UpgradeBus.Instance.PluginConfiguration = Instance;
             CheckMedkit();
             UpgradeBus.Instance.Reconstruct();
         }

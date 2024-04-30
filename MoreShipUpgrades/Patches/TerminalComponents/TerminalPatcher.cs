@@ -29,7 +29,7 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
         [HarmonyPatch(nameof(Terminal.Update))]
         static IEnumerable<CodeInstruction> UpdateTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo LategameStoreBeingUsed = typeof(UpgradesStore).GetMethod(nameof(UpgradesStore.UpgradeStoreBeingUsed));
+            MethodInfo LategameStoreBeingUsed = typeof(LguInteractiveTerminal).GetMethod(nameof(LguInteractiveTerminal.UpgradeStoreBeingUsed));
             MethodInfo wasPressed = typeof(ButtonControl).GetMethod("get_wasPressedThisFrame");
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
