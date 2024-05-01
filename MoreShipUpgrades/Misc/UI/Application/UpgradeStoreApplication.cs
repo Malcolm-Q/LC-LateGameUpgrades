@@ -1,7 +1,10 @@
-﻿using MoreShipUpgrades.Managers;
+﻿using InteractiveTerminalAPI.UI;
+using InteractiveTerminalAPI.UI.Application;
+using InteractiveTerminalAPI.UI.Cursor;
+using InteractiveTerminalAPI.UI.Screen;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.UI.Cursor;
-using MoreShipUpgrades.Misc.UI.Screen;
 using MoreShipUpgrades.Misc.Util;
 using System;
 

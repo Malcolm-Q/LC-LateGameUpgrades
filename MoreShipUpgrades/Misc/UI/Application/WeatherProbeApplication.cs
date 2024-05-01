@@ -1,8 +1,8 @@
-﻿using LethalLib.Modules;
+﻿using InteractiveTerminalAPI.UI;
+using InteractiveTerminalAPI.UI.Application;
+using InteractiveTerminalAPI.UI.Cursor;
+using InteractiveTerminalAPI.UI.Screen;
 using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc.UI.Cursor;
-using MoreShipUpgrades.Misc.UI.Page;
-using MoreShipUpgrades.Misc.UI.Screen;
 using MoreShipUpgrades.Misc.Util;
 using System;
 using System.Linq;

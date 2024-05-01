@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 
 namespace MoreShipUpgrades.Patches.TerminalComponents
@@ -27,32 +26,12 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
             HelpTerminalNode.SetupLGUHelpCommand();
             DropPodPatcher.orderedItems = __instance.orderedItemsFromTerminal;
         }
-        [HarmonyTranspiler]
-        [HarmonyPatch(nameof(Terminal.Update))]
-        static IEnumerable<CodeInstruction> UpdateTranspiler(IEnumerable<CodeInstruction> instructions)
-        {
-            MethodInfo LategameStoreBeingUsed = typeof(LguInteractiveTerminal).GetMethod(nameof(LguInteractiveTerminal.UpgradeStoreBeingUsed));
-            MethodInfo wasPressed = typeof(ButtonControl).GetMethod("get_wasPressedThisFrame");
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            int index = 0;
-            Tools.FindMethod(ref index, ref codes, wasPressed, LategameStoreBeingUsed, notInstruction: true, andInstruction: true, errorMessage: "Couldn't find field used to check if the terminal is being used");
-            return codes;
-        }
         [HarmonyPostfix]
         [HarmonyPatch(nameof(Terminal.ParsePlayerSentence))]
         static void CustomParser(ref Terminal __instance, ref TerminalNode __result)
         {
             string text = __instance.screenText.text.Substring(__instance.screenText.text.Length - __instance.textAdded);
             CommandParser.ParseLGUCommands(text, ref __instance, ref __result);
-            if (LguInteractiveTerminal.ContainsApplication(text))
-            {
-                GameObject store = Object.Instantiate(GameObject.CreatePrimitive(PrimitiveType.Cube));
-                store.name = "InteractiveTerminal";
-                Object.Destroy(store.GetComponent<MeshRenderer>());
-                Object.Destroy(store.GetComponent<MeshFilter>());
-                LguInteractiveTerminal component = store.AddComponent<LguInteractiveTerminal>();
-                component.Initialize(text);
-            }
         }
 
         [HarmonyTranspiler]

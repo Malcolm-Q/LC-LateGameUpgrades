@@ -464,7 +464,6 @@ namespace MoreShipUpgrades.Misc
         {
             switch (secondWord)
             {
-                case "store": return UpgradeBus.Instance.ConstructNode();
                 case "commands": return ExecuteLGUCommands();
                 default: return ExecuteModInformation();
             }
