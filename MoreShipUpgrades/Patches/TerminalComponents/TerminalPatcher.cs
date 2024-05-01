@@ -3,6 +3,7 @@ using HarmonyLib;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.UI;
+using MoreShipUpgrades.Misc.UI.Application;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.Patches.Items;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
@@ -10,7 +11,7 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
-using UnityEngine.InputSystem;
+using UnityEngine;
 using UnityEngine.InputSystem.Controls;
 
 namespace MoreShipUpgrades.Patches.TerminalComponents
@@ -24,17 +25,6 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
         {
             HelpTerminalNode.SetupLGUHelpCommand();
             DropPodPatcher.orderedItems = __instance.orderedItemsFromTerminal;
-        }
-        [HarmonyTranspiler]
-        [HarmonyPatch(nameof(Terminal.Update))]
-        static IEnumerable<CodeInstruction> UpdateTranspiler(IEnumerable<CodeInstruction> instructions)
-        {
-            MethodInfo LategameStoreBeingUsed = typeof(UpgradesStore).GetMethod(nameof(UpgradesStore.UpgradeStoreBeingUsed));
-            MethodInfo wasPressed = typeof(ButtonControl).GetMethod("get_wasPressedThisFrame");
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            int index = 0;
-            Tools.FindMethod(ref index, ref codes, wasPressed, LategameStoreBeingUsed, notInstruction: true, andInstruction: true, errorMessage: "Couldn't find field used to check if the terminal is being used");
-            return codes;
         }
         [HarmonyPostfix]
         [HarmonyPatch(nameof(Terminal.ParsePlayerSentence))]

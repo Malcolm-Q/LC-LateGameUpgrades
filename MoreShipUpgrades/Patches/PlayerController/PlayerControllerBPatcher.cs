@@ -22,6 +22,13 @@ namespace MoreShipUpgrades.Patches.PlayerController
     {
         static readonly LguLogger logger = new LguLogger(nameof(PlayerControllerBPatcher));
 
+        [HarmonyPostfix]
+        [HarmonyPatch(nameof(PlayerControllerB.Start))]
+        static void StartPostfix(PlayerControllerB __instance)
+        {
+            __instance.gameObject.AddComponent<PlayerManager>();
+        }
+
         [HarmonyPrefix]
         [HarmonyPatch(nameof(PlayerControllerB.KillPlayer))]
         static void DisableUpgradesOnDeath(PlayerControllerB __instance)
@@ -324,7 +331,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             FieldInfo isMenuOpen = typeof(QuickMenuManager).GetField(nameof(QuickMenuManager.isMenuOpen));
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
-            Tools.FindField(ref index, ref codes, findField: isMenuOpen, addCode: carryingWheelbarrow, orInstruction: true, requireInstance: true, errorMessage: "Couldn't find isMenuOpen field");
+            Tools.FindField(ref index, ref codes, findField: isMenuOpen, addCode: carryingWheelbarrow, orInstruction: true, errorMessage: "Couldn't find isMenuOpen field");
             return codes;
         }
     }

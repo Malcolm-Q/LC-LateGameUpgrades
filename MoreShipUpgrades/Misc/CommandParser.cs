@@ -464,7 +464,6 @@ namespace MoreShipUpgrades.Misc
         {
             switch (secondWord)
             {
-                case "store": return UpgradeBus.Instance.ConstructNode();
                 case "commands": return ExecuteLGUCommands();
                 default: return ExecuteModInformation();
             }
@@ -620,16 +619,6 @@ namespace MoreShipUpgrades.Misc
                 case "cd":
                 case "cooldown": outputNode = ExecuteDiscombobulatorCooldown(); return;
                 case "lategame": outputNode = ExecuteLategameCommands(secondWord); return;
-                case "lgu":
-                    {
-                        GameObject store = Object.Instantiate(GameObject.CreatePrimitive(PrimitiveType.Cube));
-                        store.name = "UpgradesStore";
-                        Object.Destroy(store.GetComponent<MeshRenderer>());
-                        Object.Destroy(store.GetComponent<MeshFilter>());
-                        store.AddComponent<UpgradesStore>();
-                        outputNode = LguTerminalNode.GetHelpTerminalNode();
-                        return;
-                    }
                 case "reset": outputNode = ExecuteResetCommands(secondWord, ref outputNode); return;
                 case "forcecredits": outputNode = ExecuteForceCredits(secondWord, ref terminal); return;
                 case "intern":
@@ -645,7 +634,10 @@ namespace MoreShipUpgrades.Misc
         static TerminalNode ExecuteProbeCommands(string secondWord, string thirdWord, ref Terminal terminal, ref TerminalNode outputNode)
         {
             if (!UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_ENABLED.Value) return outputNode;
-            if (secondWord == "") return DisplayTerminalMessage(LGUConstants.WEATHER_PROBE_USAGE);
+            if (secondWord == "")
+            {
+                return DisplayTerminalMessage(LGUConstants.WEATHER_PROBE_USAGE);
+            }
             if (!StartOfRound.Instance.inShipPhase) return DisplayTerminalMessage(LGUConstants.WEATHER_PROBE_ONLY_IN_ORBIT);
             if (thirdWord != "") return ExecuteSpecifiedProbeCommand(secondWord, thirdWord, terminal);
             if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE.Value) return DisplayTerminalMessage(string.Format(LGUConstants.WEATHER_PROBE_NOT_ENOUGH_CREDITS_FORMAT, UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE.Value, terminal.groupCredits));

@@ -33,9 +33,9 @@ using MoreShipUpgrades.Patches.RoundComponents;
 using MoreShipUpgrades.Patches.TerminalComponents;
 using MoreShipUpgrades.Input;
 using MoreShipUpgrades.Misc.Upgrades;
-using System.Data.Common;
-using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.Misc.Commands;
+using MoreShipUpgrades.Misc.UI.Application;
+using InteractiveTerminalAPI.UI;
 
 namespace MoreShipUpgrades
 {
@@ -43,6 +43,7 @@ namespace MoreShipUpgrades
     [BepInDependency("evaisa.lethallib","0.13.0")]
     [BepInDependency("com.sigurd.csync")]
     [BepInDependency("com.rune580.LethalCompanyInputUtils")]
+    [BepInDependency("WhiteSpike.InteractiveTerminalAPI")]
     public class Plugin : BaseUnityPlugin
     {
         internal static readonly Harmony harmony = new(Metadata.GUID);
@@ -101,6 +102,8 @@ namespace MoreShipUpgrades
 
             InputUtils_Compat.Init();
             PatchMainVersion();
+            InteractiveTerminalManager.RegisterApplication<UpgradeStoreApplication>(["lgu", "lategame store"]);
+            InteractiveTerminalManager.RegisterApplication<WeatherProbeApplication>("probe");
 
             mls.LogInfo($"{Metadata.NAME} {Metadata.VERSION} has been loaded successfully.");
         }

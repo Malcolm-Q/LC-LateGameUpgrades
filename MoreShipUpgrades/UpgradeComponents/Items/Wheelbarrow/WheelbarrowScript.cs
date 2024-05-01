@@ -7,17 +7,15 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using System;
 using System.Collections.Generic;
-using System.Xml.Linq;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.LowLevel;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
 {
     abstract class WheelbarrowScript : GrabbableObject
     {
+        internal const float VELOCITY_APPLY_EFFECT_THRESHOLD = 5.0f;
         protected enum Restrictions
         {
             None,
@@ -162,12 +160,10 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         [ClientRpc]
         private void DropAllItemsInWheelbarrowClientRpc()
         {
-            logger.LogDebug("Dropping all items from the wheelbarrow...");
             GrabbableObject[] storedItems = GetComponentsInChildren<GrabbableObject>();
             for(int i = 0; i < storedItems.Length; i++)
             {
                 if (storedItems[i] == this) continue; // Don't drop the wheelbarrow
-                logger.LogDebug($"Dropping {storedItems[i].itemProperties.itemName}");
                 DropItem(ref storedItems[i]);
             }
             UpdateWheelbarrowWeightServerRpc();
@@ -256,6 +252,11 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
                 else trigger.disabledHoverTip = hoverTip;
             }
         }
+        void EnableInteractTriggers(bool enabled)
+        {
+            foreach (InteractTrigger trigger in triggers)
+                trigger.gameObject.SetActive(enabled);
+        }
         private bool CheckWheelbarrowRestrictions()
         {
             if (restriction == Restrictions.None) return false;
@@ -267,11 +268,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             bool itemCountCondition = currentAmountItems >= maximumAmountItems;
             if (weightCondition || itemCountCondition)
             {
-                foreach (InteractTrigger trigger in triggers)
-                {
-                    trigger.interactable = false;
-                    trigger.disabledHoverTip = ALL_FULL_TEXT;
-                }
+                SetInteractTriggers(interactable: false, hoverTip: ALL_FULL_TEXT);
                 return true;
             }
             return false;
@@ -280,11 +277,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         {
             if (totalWeight > 1f + maximumWeightAllowed / 100f)
             {
-                foreach (InteractTrigger trigger in triggers)
-                {
-                    trigger.interactable = false;
-                    trigger.disabledHoverTip = TOO_MUCH_WEIGHT_TEXT;
-                }
+                SetInteractTriggers(interactable: false, hoverTip: TOO_MUCH_WEIGHT_TEXT);
                 return true;
             }
             return false;
@@ -293,23 +286,41 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         {
             if (currentAmountItems >= maximumAmountItems)
             {
-                foreach (InteractTrigger trigger in triggers)
-                {
-                    trigger.interactable = false;
-                    trigger.disabledHoverTip = FULL_TEXT;
-                }
+                SetInteractTriggers(interactable: false, hoverTip: FULL_TEXT);
                 return true;
             }
             return false;
         }
+
+        void UpdatePlayerAttributes(bool grabbing)
+        {
+            if (grabbing)
+            {
+                playerHeldBy.carryWeight -= Mathf.Clamp(BackMuscles.DecreasePossibleWeight(itemProperties.weight - 1f), 0, 10f);
+                playerHeldBy.carryWeight += Mathf.Clamp(BackMuscles.DecreasePossibleWeight(totalWeight - 1f), 0, 10f);
+
+                PlayerManager.instance.SetSensitivityMultiplier(lookSensitivityDrawback);
+                PlayerManager.instance.SetSloppyMultiplier(sloppiness);
+                PlayerManager.instance.SetHoldingWheelbarrow(true);
+            }
+            else
+            {
+                playerHeldBy.carryWeight += Mathf.Clamp(BackMuscles.DecreasePossibleWeight(itemProperties.weight - 1f), 0, 10f);
+                playerHeldBy.carryWeight -= Mathf.Clamp(BackMuscles.DecreasePossibleWeight(totalWeight - 1f), 0, 10f);
+
+                PlayerManager.instance.ResetSensitivityMultiplier();
+                PlayerManager.instance.ResetSloppyMultiplier();
+                PlayerManager.instance.SetHoldingWheelbarrow(false);
+            }
+        }
+
         public override void DiscardItem()
         {
             wheelsNoise.Stop();
             if (playerHeldBy && GameNetworkManager.Instance.localPlayerController == playerHeldBy)
             {
-                logger.LogDebug("Updating player's weight on drop");
-                playerHeldBy.carryWeight += Mathf.Clamp(BackMuscles.DecreasePossibleWeight(itemProperties.weight - 1f), 0, 10f);
-                playerHeldBy.carryWeight -= Mathf.Clamp(BackMuscles.DecreasePossibleWeight(totalWeight - 1f), 0, 10f);
+                UpdatePlayerAttributes(grabbing: false);
+                EnableInteractTriggers(true);
             }
 
             GrabbableObject[] storedItems = GetComponentsInChildren<GrabbableObject>();
@@ -318,21 +329,17 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
                 if (storedItems[i] is WheelbarrowScript) continue;
                 playerHeldBy.SetItemInElevator(playerHeldBy.isInHangarShipRoom, playerHeldBy.isInElevator, storedItems[i]);
             }
-
             base.DiscardItem();
         }
         public override void GrabItem()
         {
             base.GrabItem();
-            if (playerHeldBy.isCrouching && GameNetworkManager.Instance.localPlayerController == playerHeldBy)
-            {
-                playerHeldBy.Crouch(!playerHeldBy.isCrouching);
-            }
             if (playerHeldBy && GameNetworkManager.Instance.localPlayerController == playerHeldBy)
             {
-                logger.LogDebug("Updating player's weight on drop");
-                playerHeldBy.carryWeight -= Mathf.Clamp(BackMuscles.DecreasePossibleWeight(itemProperties.weight - 1f), 0, 10f);
-                playerHeldBy.carryWeight += Mathf.Clamp(BackMuscles.DecreasePossibleWeight(totalWeight - 1f), 0, 10f);
+                UpdatePlayerAttributes(grabbing: true);
+                EnableInteractTriggers(false);
+
+                if (playerHeldBy.isCrouching) playerHeldBy.Crouch(!playerHeldBy.isCrouching);
             }
         }
         /// <summary>
@@ -368,8 +375,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         [ClientRpc]
         private void UpdateWheelbarrowWeightClientRpc()
         {
-            logger.LogDebug(nameof(UpdateWheelbarrowWeightClientRpc));
-            logger.LogDebug(GameNetworkManager.Instance.localPlayerController.playerUsername);
             GrabbableObject[] storedItems = GetComponentsInChildren<GrabbableObject>();
             if (isHeld && playerHeldBy == UpgradeBus.Instance.GetLocalPlayer()) playerHeldBy.carryWeight -= Mathf.Clamp(BackMuscles.DecreasePossibleWeight(totalWeight - 1f), 0f, 10f);
             totalWeight = defaultWeight;
@@ -381,7 +386,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
                 GrabbableObject storedItem = storedItems[i];
                 totalWeight += (storedItem.itemProperties.weight - 1f) * weightReduceMultiplier;
             }
-            logger.LogDebug($"There's currently {(totalWeight - 1f)*100} lbs in the wheelcart");
             if (isHeld && playerHeldBy == UpgradeBus.Instance.GetLocalPlayer()) playerHeldBy.carryWeight += Mathf.Clamp(BackMuscles.DecreasePossibleWeight(totalWeight - 1f), 0f, 10f);
         }
         /// <summary>
@@ -399,13 +403,11 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         }
         private void StoreItemInWheelbarrow(ref PlayerControllerB playerInteractor)
         {
-            logger.LogDebug($"Attempting to store an item from {playerInteractor.playerUsername}");
             Collider triggerCollider = container;
             Vector3 vector = RoundManager.RandomPointInBounds(triggerCollider.bounds);
             vector.y = triggerCollider.bounds.max.y;
             vector.y += playerInteractor.currentlyHeldObjectServer.itemProperties.verticalOffset;
             vector = GetComponent<NetworkObject>().transform.InverseTransformPoint(vector);
-            logger.LogDebug($"Applying vector of ({vector.x},{vector.y},{vector.z})");
             playerInteractor.DiscardHeldObject(placeObject: true, parentObjectTo: GetComponent<NetworkObject>(), placePosition: vector, matchRotationOfParent: false);
             UpdateWheelbarrowWeightServerRpc();
         }
@@ -415,24 +417,20 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             if (!UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_ENABLED.Value && !UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_ENABLED.Value) return defaultValue;
             PlayerControllerB player = UpgradeBus.Instance.GetLocalPlayer();
             if (player == null) return defaultValue;
-            if (!player.isHoldingObject) return defaultValue;
-            if (player.currentlyHeldObjectServer is not WheelbarrowScript) return defaultValue;
-            if (player.thisController.velocity.magnitude <= 5.0f) return defaultValue;
-            return defaultValue * player.currentlyHeldObjectServer.GetComponent<WheelbarrowScript>().GetLookSensitivityDrawback();
+            if (player.thisController.velocity.magnitude <= VELOCITY_APPLY_EFFECT_THRESHOLD) return defaultValue;
+            return defaultValue * PlayerManager.instance.GetSensitivityMultiplier();
         }
         public static float CheckIfPlayerCarryingWheelbarrowMovement(float defaultValue)
         {
             if (!UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_ENABLED.Value && !UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_ENABLED.Value) return defaultValue;
             PlayerControllerB player = UpgradeBus.Instance.GetLocalPlayer();
             if (player == null) return defaultValue;
-            if (!player.isHoldingObject) return defaultValue;
-            if (player.currentlyHeldObjectServer is not WheelbarrowScript) return defaultValue;
-            if (player.thisController.velocity.magnitude <= 5.0f) return defaultValue;
-            return defaultValue * player.currentlyHeldObjectServer.GetComponent<WheelbarrowScript>().GetSloppiness(); ;
+            if (player.thisController.velocity.magnitude <= VELOCITY_APPLY_EFFECT_THRESHOLD) return defaultValue;
+            return defaultValue * PlayerManager.instance.GetSloppyMultiplier();
         }
-        public static bool CheckIfPlayerCarryingWheelbarrow(PlayerControllerB instance)
+        public static bool CheckIfPlayerCarryingWheelbarrow()
         {
-            return instance.isHoldingObject && instance.currentlyHeldObjectServer is WheelbarrowScript;
+            return PlayerManager.instance.GetHoldingWheelbarrow();
         }
 
         public static bool CheckIfItemInWheelbarrow(GrabbableObject item)

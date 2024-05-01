@@ -208,7 +208,7 @@ namespace MoreShipUpgrades.API
             }
             if (sampleItem.spawnPrefab == null)
             {
-                Plugin.mls.LogError($"Item properties scriptable object does contain a spawn prefab when registering a custom sample for enemy registered as {monsterName}.");
+                Plugin.mls.LogError($"Item properties scriptable object does not contain a spawn prefab when registering a custom sample for enemy registered as {monsterName}.");
                 return false;
             }
             if (sampleItem.itemIcon == null)

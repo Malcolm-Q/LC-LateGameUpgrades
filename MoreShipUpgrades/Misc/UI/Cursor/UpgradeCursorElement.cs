@@ -1,4 +1,5 @@
-﻿using MoreShipUpgrades.Misc.TerminalNodes;
+﻿using InteractiveTerminalAPI.UI.Cursor;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Util;
 using System.Text;
 using UnityEngine;
