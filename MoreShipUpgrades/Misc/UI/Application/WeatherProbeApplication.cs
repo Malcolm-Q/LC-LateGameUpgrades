@@ -1,82 +1,49 @@
 ﻿using LethalLib.Modules;
 using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.UI.Cursor;
 using MoreShipUpgrades.Misc.UI.Page;
 using MoreShipUpgrades.Misc.UI.Screen;
 using MoreShipUpgrades.Misc.Util;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using UnityEngine;
 
 namespace MoreShipUpgrades.Misc.UI.Application
 {
-    internal class WeatherProbeApplication : LguApplication
+    internal class WeatherProbeApplication : PageApplication
     {
         public override void Initialization()
         {
             SelectableLevel[] levels = StartOfRound.Instance.levels.Where(x => x.randomWeathers.Length > 0).ToArray();
-            int lengthPerPage = Mathf.CeilToInt(levels.Length / 2f);
-            int amountPages = Mathf.CeilToInt((float)levels.Length / lengthPerPage);
-            SelectableLevel[][] pagesLevels = new SelectableLevel[amountPages][];
-            for (int i = 0; i < amountPages; i++)
-                pagesLevels[i] = new SelectableLevel[lengthPerPage];
-            for (int i = 0; i < levels.Length; i++)
+            (SelectableLevel[][], CursorMenu[], IScreen[]) entries = GetPageEntries(levels);
+
+            SelectableLevel[][] pagesLevels = entries.Item1;
+            CursorMenu[] cursorMenus = entries.Item2;
+            IScreen[] screens = entries.Item3;
+
+            for (int i = 0; i < pagesLevels.Length; i++)
             {
-                int row = i / lengthPerPage;
-                int col = i % lengthPerPage;
-                pagesLevels[row][col] = levels[i];
-            }
-            IScreen[] screens = new IScreen[pagesLevels.Length];
-            CursorMenu[] cursorMenus = new CursorMenu[pagesLevels.Length];
-            for(int i = 0; i < pagesLevels.Length; i++)
-            {
-                Plugin.mls.LogDebug(i);
                 SelectableLevel[] levelList = pagesLevels[i];
                 CursorElement[] elements = new CursorElement[levelList.Length];
-                cursorMenus[i] = new CursorMenu()
-                {
-                    cursorIndex = 0,
-                    elements = elements
-                };
+                cursorMenus[i] = CursorMenu.Create(startingCursorIndex: 0, elements: elements);
                 CursorMenu cursorMenu = cursorMenus[i];
-                screens[i] = new BoxedScreen()
-                {
-                    Title = LGUConstants.MAIN_WEATHER_PROBE_SCREEN_TITLE,
-                    elements =
+                ITextElement[] textElements =
                     [
-                        new TextElement()
-                        {
-                            Text = LGUConstants.MAIN_WEATHER_PROBE_TOP_TEXT,
-                        },
-                        new TextElement()
-                        {
-                            Text = " "
-                        },
+                        TextElement.Create(text: LGUConstants.MAIN_WEATHER_PROBE_TOP_TEXT),
+                        TextElement.Create(text: " "),
                         cursorMenu
-                    ]
-                };
+                    ];
+                screens[i] = BoxedScreen.Create(title: LGUConstants.MAIN_WEATHER_PROBE_SCREEN_TITLE, elements: textElements);
+
                 for (int j = 0; j < levelList.Length; j++)
                 {
                     SelectableLevel level = levelList[j];
                     if (level == null) continue;
-                    elements[j] = new CursorElement()
-                    {
-                        Name = level.PlanetName,
-                        Action = () => SelectedPlanet(level, () => SwitchScreen(null, cursorMenu, true, true))
-                    };
+                    elements[j] = CursorElement.Create(level.PlanetName, action: () => SelectedPlanet(level, PreviousScreen()));
                 }
             }
-            MainPage = new PageCursorElement()
-            {
-                pageIndex = 0,
-                cursorMenus = cursorMenus,
-                elements = screens,
-            };
-            currentCursorMenu = MainPage.GetCurrentCursorMenu();
-            currentScreen = null;
+            currentPage = initialPage;
+            currentCursorMenu = initialPage.GetCurrentCursorMenu();
+            currentScreen = initialPage.GetCurrentScreen();
         }
 
         void SelectedPlanet(SelectableLevel level, Action cancelAction)
@@ -120,7 +87,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
                     Name = weather.weatherType.ToString(),
                     Action = () =>
                     {
-                        Confirm(level.PlanetName, string.Format(LGUConstants.CONFIRM_WEATHER_FORMAT, level.PlanetName, weather.weatherType.ToString(), UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE.Value), () => BeforeChangeWeather(level, weather.weatherType),() => SwitchScreen(screen, cursorMenu, true, true));
+                        Confirm(level.PlanetName, string.Format(LGUConstants.CONFIRM_WEATHER_FORMAT, level.PlanetName, weather.weatherType.ToString(), UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE.Value), () => BeforeChangeWeather(level, weather.weatherType),() => SwitchScreen(screen, cursorMenu, true));
                     }
                 };
 
@@ -132,7 +99,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
                     Name = "Clear",
                     Action = () =>
                     {
-                        Confirm(level.PlanetName, string.Format(LGUConstants.CONFIRM_CLEAR_WEATHER_FORMAT, level.PlanetName, UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_ALWAYS_CLEAR ? UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE.Value : UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE.Value), () => BeforeChangeWeather(level, LevelWeatherType.None), () => SwitchScreen(screen, cursorMenu, true, true));
+                        Confirm(level.PlanetName, string.Format(LGUConstants.CONFIRM_CLEAR_WEATHER_FORMAT, level.PlanetName, UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_ALWAYS_CLEAR ? UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE.Value : UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE.Value), () => BeforeChangeWeather(level, LevelWeatherType.None), () => SwitchScreen(screen, cursorMenu, true));
                     }
                 };
             }
@@ -143,7 +110,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
                     Name = "Random",
                     Action = () =>
                     {
-                        Confirm(level.PlanetName, string.Format(LGUConstants.CONFIRM_RANDOM_WEATHER_FORMAT, level.PlanetName, UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE.Value), () => BeforeRandomizeWeather(level), () => SwitchScreen(screen, cursorMenu, true, true));
+                        Confirm(level.PlanetName, string.Format(LGUConstants.CONFIRM_RANDOM_WEATHER_FORMAT, level.PlanetName, UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE.Value), () => BeforeRandomizeWeather(level), () => SwitchScreen(screen, cursorMenu, true));
                     }
                 };
 
@@ -161,14 +128,14 @@ namespace MoreShipUpgrades.Misc.UI.Application
                     Action = cancelAction
                 };
             }
-            SwitchScreen(screen, cursorMenu, true, false);
+            SwitchScreen(screen, cursorMenu, true);
         }
         void BeforeChangeWeather(SelectableLevel level, LevelWeatherType type)
         {
             int groupCredits = UpgradeBus.Instance.GetTerminal().groupCredits;
             if (groupCredits < UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE)
             {
-                ErrorMessage(level, () => SwitchScreen(null, MainPage.GetCurrentCursorMenu(), true, true), LGUConstants.NOT_ENOUGH_CREDITS_SPECIFIED_PROBE);
+                ErrorMessage(level.PlanetName, PreviousScreen(), LGUConstants.NOT_ENOUGH_CREDITS_SPECIFIED_PROBE);
                 return;
             }
             ChangeWeather(level, type);
@@ -182,7 +149,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
             CursorElement exit = new CursorElement()
             {
                 Name = "Exit",
-                Action = () => SwitchScreen(null, MainPage.GetCurrentCursorMenu(), true, true)
+                Action = PreviousScreen()
             };
             CursorMenu cursorMenu = new CursorMenu()
             {
@@ -203,14 +170,14 @@ namespace MoreShipUpgrades.Misc.UI.Application
                         cursorMenu
                     ]
             };
-            SwitchScreen(screen, cursorMenu, false, false);
+            SwitchScreen(screen, cursorMenu, false);
         }
         void BeforeRandomizeWeather(SelectableLevel level)
         {
             int groupCredits = UpgradeBus.Instance.GetTerminal().groupCredits;
             if (groupCredits < UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE)
             {
-                ErrorMessage(level, () => SwitchScreen(null, MainPage.GetCurrentCursorMenu(), true, true), LGUConstants.NOT_ENOUGH_CREDITS_PROBE);
+                ErrorMessage(level.PlanetName, PreviousScreen(), LGUConstants.NOT_ENOUGH_CREDITS_PROBE);
                 return;
             }
             RandomizeWeather(level);
@@ -224,7 +191,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
             CursorElement exit = new CursorElement()
             {
                 Name = "Exit",
-                Action = () => SwitchScreen(null, MainPage.GetCurrentCursorMenu(), true, true)
+                Action = PreviousScreen()
             };
             CursorMenu cursorMenu = new CursorMenu()
             {
@@ -245,41 +212,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
                         cursorMenu
                     ]
             };
-            SwitchScreen(screen, cursorMenu, false, false);
-        }
-        void ErrorMessage(SelectableLevel level, Action backAction, string error)
-        {
-
-            CursorMenu cursorMenu = new CursorMenu()
-            {
-                cursorIndex = 0,
-                elements =
-                    [
-                        new CursorElement()
-                        {
-                            Name = LGUConstants.GO_BACK_PROMPT,
-                            Description = "",
-                            Action = backAction,
-                        }
-                    ]
-            };
-            IScreen screen = new BoxedScreen()
-            {
-                Title = level.PlanetName,
-                elements =
-                [
-                        new TextElement()
-                        {
-                            Text = error,
-                        },
-                        new TextElement()
-                        {
-                            Text = " ",
-                        },
-                        cursorMenu
-                ]
-            };
-            SwitchScreen(screen, cursorMenu, false, false);
+            SwitchScreen(screen, cursorMenu, false);
         }
     }
 }

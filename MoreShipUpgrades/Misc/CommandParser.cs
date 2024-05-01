@@ -620,17 +620,6 @@ namespace MoreShipUpgrades.Misc
                 case "cd":
                 case "cooldown": outputNode = ExecuteDiscombobulatorCooldown(); return;
                 case "lategame": outputNode = ExecuteLategameCommands(secondWord); return;
-                case "lgu":
-                    {
-                        GameObject store = Object.Instantiate(GameObject.CreatePrimitive(PrimitiveType.Cube));
-                        store.name = "UpgradesStore";
-                        Object.Destroy(store.GetComponent<MeshRenderer>());
-                        Object.Destroy(store.GetComponent<MeshFilter>());
-                        LguInteractiveTerminal component = store.AddComponent<LguInteractiveTerminal>();
-                        component.Initialize(ApplicationType.UpgradeStore);
-                        outputNode = LguTerminalNode.GetHelpTerminalNode();
-                        return;
-                    }
                 case "reset": outputNode = ExecuteResetCommands(secondWord, ref outputNode); return;
                 case "forcecredits": outputNode = ExecuteForceCredits(secondWord, ref terminal); return;
                 case "intern":
@@ -648,13 +637,7 @@ namespace MoreShipUpgrades.Misc
             if (!UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_ENABLED.Value) return outputNode;
             if (secondWord == "")
             {
-                GameObject store = Object.Instantiate(GameObject.CreatePrimitive(PrimitiveType.Cube));
-                store.name = "UpgradesStore";
-                Object.Destroy(store.GetComponent<MeshRenderer>());
-                Object.Destroy(store.GetComponent<MeshFilter>());
-                LguInteractiveTerminal component = store.AddComponent<LguInteractiveTerminal>();
-                component.Initialize(ApplicationType.WeatherProbe);
-                return LguTerminalNode.GetHelpTerminalNode();
+                return DisplayTerminalMessage(LGUConstants.WEATHER_PROBE_USAGE);
             }
             if (!StartOfRound.Instance.inShipPhase) return DisplayTerminalMessage(LGUConstants.WEATHER_PROBE_ONLY_IN_ORBIT);
             if (thirdWord != "") return ExecuteSpecifiedProbeCommand(secondWord, thirdWord, terminal);

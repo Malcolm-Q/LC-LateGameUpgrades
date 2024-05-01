@@ -36,6 +36,8 @@ using MoreShipUpgrades.Misc.Upgrades;
 using System.Data.Common;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.Misc.Commands;
+using MoreShipUpgrades.Misc.UI.Application;
+using MoreShipUpgrades.Misc.UI;
 
 namespace MoreShipUpgrades
 {
@@ -101,6 +103,8 @@ namespace MoreShipUpgrades
 
             InputUtils_Compat.Init();
             PatchMainVersion();
+            LguInteractiveTerminal.RegisterApplication<UpgradeStoreApplication>("lgu");
+            LguInteractiveTerminal.RegisterApplication<WeatherProbeApplication>("probe");
 
             mls.LogInfo($"{Metadata.NAME} {Metadata.VERSION} has been loaded successfully.");
         }

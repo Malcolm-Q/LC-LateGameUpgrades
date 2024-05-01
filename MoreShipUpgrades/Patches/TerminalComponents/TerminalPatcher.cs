@@ -3,6 +3,7 @@ using HarmonyLib;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.UI;
+using MoreShipUpgrades.Misc.UI.Application;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.Patches.Items;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
@@ -10,6 +11,7 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 
@@ -42,6 +44,15 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
         {
             string text = __instance.screenText.text.Substring(__instance.screenText.text.Length - __instance.textAdded);
             CommandParser.ParseLGUCommands(text, ref __instance, ref __result);
+            if (LguInteractiveTerminal.ContainsApplication(text))
+            {
+                GameObject store = Object.Instantiate(GameObject.CreatePrimitive(PrimitiveType.Cube));
+                store.name = "InteractiveTerminal";
+                Object.Destroy(store.GetComponent<MeshRenderer>());
+                Object.Destroy(store.GetComponent<MeshFilter>());
+                LguInteractiveTerminal component = store.AddComponent<LguInteractiveTerminal>();
+                component.Initialize(text);
+            }
         }
 
         [HarmonyTranspiler]

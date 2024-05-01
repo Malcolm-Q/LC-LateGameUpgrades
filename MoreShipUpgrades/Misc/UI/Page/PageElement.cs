@@ -37,5 +37,14 @@ namespace MoreShipUpgrades.Misc.UI.Page
         {
             return elements[pageIndex];
         }
+
+        public static PageElement Create(int startingPageIndex = 0, IScreen[] elements = default)
+        {
+            return new PageElement()
+            {
+                pageIndex = startingPageIndex,
+                elements = elements
+            };
+        }
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using MoreShipUpgrades.Misc.Util;
+﻿using MoreShipUpgrades.Misc.Util;
 
 namespace MoreShipUpgrades.Misc.UI
 {
@@ -11,6 +8,13 @@ namespace MoreShipUpgrades.Misc.UI
         public string GetText(int availableLength)
         {
             return Tools.WrapText(Text, availableLength);
+        }
+        public static TextElement Create(string text = "")
+        {
+            return new TextElement()
+            {
+                Text = text
+            };
         }
     }
 }

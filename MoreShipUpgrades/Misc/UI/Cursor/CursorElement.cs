@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using MoreShipUpgrades.Misc.Util;
 
@@ -18,6 +17,16 @@ namespace MoreShipUpgrades.Misc.UI.Cursor
             if (Description == null || Description == "") return sb.ToString();
             sb.AppendLine().Append(Tools.WrapText(Description, availableLength));
             return sb.ToString();
+        }
+
+        public static CursorElement Create(string name = "", string description = "", Action action = default)
+        {
+            return new CursorElement()
+            {
+                Name = name,
+                Description = description,
+                Action = action
+            };
         }
     }
 }

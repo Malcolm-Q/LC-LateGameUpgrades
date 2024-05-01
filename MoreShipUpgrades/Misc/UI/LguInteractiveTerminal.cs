@@ -1,66 +1,56 @@
-﻿using MoreShipUpgrades.Input;
-using MoreShipUpgrades.Managers;
+﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.UI.Application;
 using MoreShipUpgrades.Misc.Util;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.InputSystem.InputAction;
 
 namespace MoreShipUpgrades.Misc.UI
 {
-    internal enum ApplicationType
-    {
-        UpgradeStore,
-        WeatherProbe,
-
-    }
     internal class LguInteractiveTerminal : MonoBehaviour
     {
-        static LguInteractiveTerminal Instance;
-        LguApplication mainUpgradeApplication;
+        internal static Dictionary<string, Func<TerminalApplication>> registeredApplications = new Dictionary<string, Func<TerminalApplication>> ();
+            public static LguInteractiveTerminal Instance;
+        TerminalApplication mainApplication;
         Terminal terminalReference;
         TerminalNode lastTerminalNode;
         Color previousCaretColor;
+
         void Start()
         {
             Instance = this;
             terminalReference = UpgradeBus.Instance.GetTerminal();
             lastTerminalNode = terminalReference.currentNode;
             UpdateInput(false);
-            UpdateInputBindings(enable: true);
         }
-        internal void Initialize(ApplicationType application)
+        internal void Initialize(string command)
         {
-            switch(application)
+            Func<TerminalApplication> function = registeredApplications.GetValueOrDefault(command, null);
+            if (function == null)
             {
-                case ApplicationType.UpgradeStore:
-                    {
-                        mainUpgradeApplication = new UpgradeStoreApplication();
-                        break;
-                    }
-                case ApplicationType.WeatherProbe:
-                    {
-                        mainUpgradeApplication = new WeatherProbeApplication();
-                        break;
-                    }
-                default:
-                    {
-                        mainUpgradeApplication = null;
-                        break;
-                    }
+                Plugin.mls.LogError("An application was not selected to change the terminal's text.");
+                return;
             }
-            if (mainUpgradeApplication == null) Plugin.mls.LogError("An application was not selected to change the terminal's text.");
-            else mainUpgradeApplication.Initialization();
+            mainApplication = registeredApplications.GetValueOrDefault(command, null).Invoke();
+            if (mainApplication == null)
+            {
+                Plugin.mls.LogError("The selected application doesn't have a valid constructor.");
+                return;
+            }
+
+            mainApplication.Initialization();
+            mainApplication.UpdateInputBindings(enable: true);
         }
         void Update()
         {
             if (terminalReference == null) return;
-            if (mainUpgradeApplication == null) return;
-            mainUpgradeApplication.UpdateText();
+            if (mainApplication == null) return;
+            mainApplication.UpdateText();
         }
 
         void OnDestroy()
         {
-            UpdateInputBindings(enable : false);
+            mainApplication.UpdateInputBindings(enable : false);
             terminalReference.LoadNewNode(lastTerminalNode);
             terminalReference.screenText.interactable = true;
             terminalReference.screenText.ActivateInputField();
@@ -85,78 +75,22 @@ namespace MoreShipUpgrades.Misc.UI
                 terminalReference.screenText.caretColor = LGUConstants.Invisible;
             }
         }
-        void UpdateInputBindings(bool enable = false)
-        {
-            if (enable) AddInputBindings();
-            else RemoveInputBindings();
-        }
-        void AddInputBindings()
-        {
-            Keybinds.cursorUpAction.performed += OnUpgradeStoreCursorUp;
-            Keybinds.cursorDownAction.performed += OnUpgradeStoreCursorDown;
-            Keybinds.cursorExitAction.performed += OnUpgradeStoreCursorExit;
-            Keybinds.pageUpAction.performed += OnUpgradeStorePageUp;
-            Keybinds.pageDownAction.performed += OnUpgradeStorePageDown;
-            Keybinds.storeConfirmAction.performed += OnUpgradeStoreConfirm;
-            terminalReference.playerActions.Movement.OpenMenu.performed -= terminalReference.PressESC;
-        }
-        void RemoveInputBindings()
-        {
-            Keybinds.cursorUpAction.performed -= OnUpgradeStoreCursorUp;
-            Keybinds.cursorDownAction.performed -= OnUpgradeStoreCursorDown;
-            Keybinds.cursorExitAction.performed -= OnUpgradeStoreCursorExit;
-            Keybinds.pageUpAction.performed -= OnUpgradeStorePageUp;
-            Keybinds.pageDownAction.performed -= OnUpgradeStorePageDown;
-            Keybinds.storeConfirmAction.performed -= OnUpgradeStoreConfirm;
-            terminalReference.playerActions.Movement.OpenMenu.performed += terminalReference.PressESC;
-        }
-        void MoveCursorUp()
-        {
-            mainUpgradeApplication.MoveCursorUp();
-        }
-        void MoveCursorDown()
-        {
-            mainUpgradeApplication.MoveCursorDown();
-        }
-        void MovePageUp()
-        {
-            mainUpgradeApplication.MovePageUp();
-        }
-        void MovePageDown()
-        {
-            mainUpgradeApplication.MovePageDown();
-        }
-        void Submit()
-        {
-            mainUpgradeApplication.Submit();
-        }
-        static void OnUpgradeStoreConfirm(CallbackContext context)
-        {
-            Instance.Submit();
-        }
-        static void OnUpgradeStoreCursorUp(CallbackContext context)
-        {
-            Instance.MoveCursorUp();
-        }
-        static void OnUpgradeStoreCursorDown(CallbackContext context)
-        {
-            Instance.MoveCursorDown();
-        }
-        internal static void OnUpgradeStorePageUp(CallbackContext context)
-        {
-            Instance.MovePageUp();
-        }
-        internal static void OnUpgradeStorePageDown(CallbackContext context)
-        {
-            Instance.MovePageDown();
-        }
-        static void OnUpgradeStoreCursorExit(CallbackContext context)
-        {
-            Destroy(Instance);
-        }
         public static bool UpgradeStoreBeingUsed()
         {
             return Instance != null;
+        }
+        public static bool ContainsApplication(string command)
+        {
+            return registeredApplications.ContainsKey(command);
+        }
+        public static void RegisterApplication<T>(string command) where T : TerminalApplication , new()
+        {
+            if (registeredApplications.ContainsKey(command))
+            {
+                Plugin.mls.LogError($"An application has already been registered under the command \"{command}\"");
+                return;
+            }
+            registeredApplications.Add(command, () => new T());
         }
     }
 }

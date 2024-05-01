@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 using MoreShipUpgrades.Misc.Util;
 
 namespace MoreShipUpgrades.Misc.UI.Cursor
 {
     internal class CursorMenu : ITextElement
     {
-        internal const char CURSOR = '>';
 
+        internal char cursorCharacter = '>';
         internal int cursorIndex;
         internal CursorElement[] elements;
 
@@ -47,12 +45,22 @@ namespace MoreShipUpgrades.Misc.UI.Cursor
             {
                 CursorElement element = elements[i];
                 if (element == null) continue;
-                if (i == cursorIndex) sb.Append(CURSOR).Append(LGUConstants.WHITE_SPACE); else sb.Append(LGUConstants.WHITE_SPACE).Append(LGUConstants.WHITE_SPACE);
+                if (i == cursorIndex) sb.Append(cursorCharacter).Append(LGUConstants.WHITE_SPACE); else sb.Append(LGUConstants.WHITE_SPACE).Append(LGUConstants.WHITE_SPACE);
                 string text = element.GetText(availableLength - 2);
                 text = (i == cursorIndex ? string.Format(LGUConstants.SELECTED_CURSOR_ELEMENT_FORMAT, LGUConstants.DEFAULT_BACKGROUND_SELECTED_COLOR, LGUConstants.DEFAULT_TEXT_SELECTED_COLOR, text) : text);
                 sb.Append(Tools.WrapText(text, availableLength, leftPadding: "  ", rightPadding: "", false));
             }
             return sb.ToString();
+        }
+
+        public static CursorMenu Create(int startingCursorIndex = 0, char cursorCharacter = '>', CursorElement[] elements = default)
+        {
+            return new CursorMenu()
+            {
+                cursorIndex = startingCursorIndex,
+                cursorCharacter = cursorCharacter,
+                elements = elements
+            };
         }
     }
 }

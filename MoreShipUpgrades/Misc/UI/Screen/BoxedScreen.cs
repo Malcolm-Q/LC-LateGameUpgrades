@@ -47,5 +47,14 @@ namespace MoreShipUpgrades.Misc.UI.Screen
 
             return sb.ToString();
         }
+
+        public static BoxedScreen Create(string title = "", ITextElement[] elements = default)
+        {
+            return new BoxedScreen()
+            {
+                Title = title,
+                elements = elements
+            };
+        }
     }
 }
