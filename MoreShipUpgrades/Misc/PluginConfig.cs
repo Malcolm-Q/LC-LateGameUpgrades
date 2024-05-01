@@ -969,10 +969,10 @@ namespace MoreShipUpgrades.Misc
             topSection = Hunter.UPGRADE_NAME;
             HUNTER_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable the Hunter upgrade", true, "Collect and sell samples from dead enemies");
             HUNTER_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Hunter price", 700, "Default price for upgrade.");
-            HUNTER_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.PRICES_SECTION, "500,600", BaseUpgrade.PRICES_DESCRIPTION);
+            HUNTER_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.PRICES_SECTION, "500,600,700", BaseUpgrade.PRICES_DESCRIPTION);
             HUNTER_SAMPLE_TIERS = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection,
                                             "Samples dropping at each tier",
-                                            "Hoarding Bug, Centipede-Bunker Spider, Baboon hawk-Flowerman, MouthDog, Crawler",
+                                            "Hoarding Bug, Centipede-Bunker Spider, Baboon hawk, Tulip Snake-Flowerman, MouthDog, Crawler, Manticoil-Forest Giant",
                                             "Specifies at which tier of Hunter do each sample start dropping from. Each tier is separated with a dash ('-') and each list of monsters will be separated with a comma (',')\nSupported Enemies: Hoarding Bug, Centipede (Snare Flea),Bunker Spider, Baboon Hawk, Crawler (Half/Thumper), Flowerman (Bracken) and MouthDog (Eyeless Dog)");
             SNARE_FLEA_SAMPLE_MINIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Minimum scrap value of a Snare Flea sample", 35, "");
             SNARE_FLEA_SAMPLE_MAXIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Maximum scrap value of a Snare Flea sample", 60, "");
