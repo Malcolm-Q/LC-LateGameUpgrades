@@ -1,4 +1,10 @@
 <details>
+<summary> <h2>V 3.6.4 - 2024-05-01</h2> </summary>
+
+- Actually fixed Hunter not dropping new samples due to internals not being updated
+
+</details>
+<details>
 <summary> <h2>V 3.6.3 - 2024-05-01</h2> </summary>
 
 - Fixed Hunter not dropping new samples due to internals not being updated
