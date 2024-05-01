@@ -1,5 +1,14 @@
 <details>
-<summary> <h2>V 3.6.2 - 2024-05-??</h2> </summary>
+<summary> <h2>V 3.6.3 - 2024-05-01</h2> </summary>
+
+- Fixed Hunter not dropping new samples due to internals not being updated
+   - Default has also been updated to account the new samples
+- Added interactive screen for the "Weather Probe" effect prompted through "probe"
+
+</details>
+
+<details>
+<summary> <h2>V 3.6.2 - 2024-04-29</h2> </summary>
 
 - Fixed ``Deeper Pockets`` upgrade being applied even when not being bought.
 - Fixed commands not working correctly due to not being registered to the network manager.
