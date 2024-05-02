@@ -1,4 +1,10 @@
 <details>
+<summary> <h2>V 3.6.5 - 2024-05-??</h2> </summary>
+
+- Fixed interaction between Deeper Pockets and Shopping Cart that would lead to the player being unable to interact.
+
+</details>
+<details>
 <summary> <h2>V 3.6.4 - 2024-05-01</h2> </summary>
 
 - Actually fixed Hunter not dropping new samples due to internals not being updated
