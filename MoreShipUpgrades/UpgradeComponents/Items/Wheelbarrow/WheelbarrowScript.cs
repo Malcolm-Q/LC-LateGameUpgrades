@@ -104,7 +104,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             totalWeight = defaultWeight;
             soundCounter = 0f;
 
-            wheelsNoise = GetComponentInChildren<AudioSource>();
+            wheelsNoise = GetComponent<AudioSource>();
             triggers = GetComponentsInChildren<InteractTrigger>();
             foreach (BoxCollider collider in GetComponentsInChildren<BoxCollider>())
             {
