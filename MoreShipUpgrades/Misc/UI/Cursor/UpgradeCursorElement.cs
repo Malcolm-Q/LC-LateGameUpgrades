@@ -10,7 +10,6 @@ namespace MoreShipUpgrades.Misc.UI.Cursor
     {
         internal CustomTerminalNode Node { get; set; }
 
-
         public override string GetText(int availableLength)
         {
             StringBuilder sb = new StringBuilder();
@@ -28,11 +27,11 @@ namespace MoreShipUpgrades.Misc.UI.Cursor
             {
                 sb.Append(LGUConstants.WHITE_SPACE);
                 sb.Append((Node.Unlocked ? (int)(Node.Prices[Node.CurrentUpgrade] * Node.salePerc) : (int)(Node.UnlockPrice * Node.salePerc)) + "$");
-            }
-            if (Node.salePerc < 1f)
-            {
-                sb.Append(LGUConstants.WHITE_SPACE);
-                sb.Append($"({(1 - Node.salePerc) * 100:F0}% OFF)");
+                if (Node.salePerc < 1f)
+                {
+                    sb.Append(LGUConstants.WHITE_SPACE);
+                    sb.Append($"({(1 - Node.salePerc) * 100:F0}% OFF)");
+                }
             }
             return sb.ToString();
         }
