@@ -90,7 +90,6 @@ namespace MoreShipUpgrades
             gameObject = new GameObject("SpawnItemManager");
             gameObject.AddComponent<SpawnItemManager>();
 
-            UpgradeBus.Instance.version = Metadata.VERSION;
             UpgradeBus.Instance.UpgradeAssets = UpgradeAssets;
             SetupModStore(ref UpgradeAssets);
 
