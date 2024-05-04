@@ -132,6 +132,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: DataMember] public SyncedEntry<int> EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA {  get; set; }
         [field: DataMember] public SyncedEntry<string> LANDING_THRUSTERS_OVERRIDE_NAME {  get; set; }
         [field: DataMember] public SyncedEntry<string> LANDING_THRUSTERS_PRICES {  get; set; }
         [field: DataMember] public SyncedEntry<int> LANDING_THRUSTERS_INITIAL_SPEED_INCREASE {  get; set; }
@@ -912,6 +913,7 @@ namespace MoreShipUpgrades.Misc
             topSection = ExtendDeadlineScript.NAME;
             EXTEND_DEADLINE_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.EXTEND_DEADLINE_ENABLED_KEY, LGUConstants.EXTEND_DEADLINE_ENABLED_DEFAULT, LGUConstants.EXTEND_DEADLINE_ENABLED_DESCRIPTION);
             EXTEND_DEADLINE_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.EXTEND_DEADLINE_PRICE_KEY, LGUConstants.EXTEND_DEADLINE_PRICE_DEFAULT, LGUConstants.EXTEND_DEADLINE_PRICE_DESCRIPTION);
+            EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA_KEY, LGUConstants.EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA_DEFAULT, LGUConstants.EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA_DESCRIPTION);
 
             #endregion
 

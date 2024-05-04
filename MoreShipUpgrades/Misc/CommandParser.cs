@@ -506,10 +506,10 @@ namespace MoreShipUpgrades.Misc
             if (!(int.TryParse(daysString, out int days) && days > 0)) 
                 return DisplayTerminalMessage(string.Format(LGUConstants.EXTEND_DEADLINE_PARSING_ERROR_FORMAT, daysString));
 
-            if (terminal.groupCredits < days * UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_PRICE.Value) 
-                return DisplayTerminalMessage(string.Format(LGUConstants.EXTEND_DEADLINE_NOT_ENOUGH_CREDITS_FORMAT, days * UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_PRICE.Value, terminal.groupCredits));
+            if (terminal.groupCredits < days * ExtendDeadlineScript.GetTotalCost()) 
+                return DisplayTerminalMessage(string.Format(LGUConstants.EXTEND_DEADLINE_NOT_ENOUGH_CREDITS_FORMAT, days * ExtendDeadlineScript.GetTotalCost(), terminal.groupCredits));
 
-            terminal.groupCredits -= days * UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_PRICE.Value;
+            terminal.groupCredits -= days * ExtendDeadlineScript.GetTotalCost();
             LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits);
             ExtendDeadlineScript.instance.ExtendDeadlineServerRpc(days);
 

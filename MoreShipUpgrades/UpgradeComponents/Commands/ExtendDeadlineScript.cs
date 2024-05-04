@@ -1,4 +1,5 @@
-﻿using MoreShipUpgrades.Misc;
+﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Commands;
 using Unity.Netcode;
 
@@ -31,6 +32,11 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
         public void ExtendDeadlineServerRpc(int days)
         {
             ExtendDeadlineClientRpc(days);
+        }
+
+        internal static int GetTotalCost()
+        {
+            return UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_PRICE + UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA * TimeOfDay.Instance.timesFulfilledQuota;
         }
 
         internal static new void RegisterCommand()
