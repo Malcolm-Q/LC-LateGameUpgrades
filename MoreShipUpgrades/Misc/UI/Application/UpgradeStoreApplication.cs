@@ -7,6 +7,7 @@ using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.UI.Cursor;
 using MoreShipUpgrades.Misc.Util;
 using System;
+using System.Xml.Linq;
 
 namespace MoreShipUpgrades.Misc.UI.Application
 {
@@ -24,11 +25,13 @@ namespace MoreShipUpgrades.Misc.UI.Application
             {
                 CustomTerminalNode[] upgrades = pagesUpgrades[i];
                 CursorElement[] elements = new CursorElement[upgrades.Length];
-                cursorMenus[i] = new CursorMenu()
-                {
-                    cursorIndex = 0,
-                    elements = elements
-                };
+                cursorMenus[i] = CursorMenu.Create(startingCursorIndex: 0, elements: elements,
+                    sorting: [
+                        CompareName,
+                        CompareCurrentPrice,
+                        CompareCurrentPriceReversed
+                        ]
+                );
                 CursorMenu cursorMenu = cursorMenus[i];
                 screens[i] = new BoxedScreen()
                 {
@@ -53,13 +56,51 @@ namespace MoreShipUpgrades.Misc.UI.Application
                     elements[j] = new UpgradeCursorElement()
                     {
                         Node = upgrade,
-                        Action = () => BuyUpgrade(upgrade, PreviousScreen())
+                        Action = () => BuyUpgrade(upgrade, PreviousScreen()),
+                        Active = (x) => CanBuyUpgrade(((UpgradeCursorElement)x).Node)
                     };
                 }
             }
             currentPage = initialPage;
             currentCursorMenu = initialPage.GetCurrentCursorMenu();
             currentScreen = initialPage.GetCurrentScreen();
+        }
+        int CompareName(CursorElement cursor1, CursorElement cursor2)
+        {
+            UpgradeCursorElement element = cursor1 as UpgradeCursorElement;
+            UpgradeCursorElement element2 = cursor2 as UpgradeCursorElement;
+            string name1 = element.Node.Name;
+            string name2 = element2.Node.Name;
+            return name1.CompareTo(name2);
+        }
+        int CompareCurrentPriceReversed(CursorElement cursor1, CursorElement cursor2)
+        {
+            UpgradeCursorElement element = cursor1 as UpgradeCursorElement;
+            UpgradeCursorElement element2 = cursor2 as UpgradeCursorElement;
+            int currentPrice1 = element.Node.Unlocked ? element.Node.CurrentUpgrade >= element.Node.MaxUpgrade ? int.MinValue : (int)(element.Node.Prices[element.Node.CurrentUpgrade] * element.Node.salePerc) : (int)(element.Node.UnlockPrice * element.Node.salePerc);
+            int currentPrice2 = element2.Node.Unlocked ? element2.Node.CurrentUpgrade >= element2.Node.MaxUpgrade ? int.MinValue :(int)(element2.Node.Prices[element2.Node.CurrentUpgrade] * element2.Node.salePerc) : (int)(element2.Node.UnlockPrice * element2.Node.salePerc);
+            return currentPrice2.CompareTo(currentPrice1);
+        }
+        int CompareCurrentPrice(CursorElement cursor1, CursorElement cursor2)
+        {
+            UpgradeCursorElement element = cursor1 as UpgradeCursorElement;
+            UpgradeCursorElement element2 = cursor2 as UpgradeCursorElement;
+            int currentPrice1 = element.Node.Unlocked ? element.Node.CurrentUpgrade >=  element.Node.MaxUpgrade ? int.MaxValue : (int)(element.Node.Prices[element.Node.CurrentUpgrade] * element.Node.salePerc) : element.Node.UnlockPrice;
+            int currentPrice2 = element2.Node.Unlocked ? element2.Node.CurrentUpgrade >= element2.Node.MaxUpgrade ? int.MaxValue : (int)(element2.Node.Prices[element2.Node.CurrentUpgrade] * element2.Node.salePerc) : element2.Node.UnlockPrice;
+            return currentPrice1.CompareTo(currentPrice2);
+        }
+        static bool CanBuyUpgrade(CustomTerminalNode node)
+        {
+            bool maxLevel = node.CurrentUpgrade >= node.MaxUpgrade;
+            if (maxLevel && node.Unlocked)
+                return false;
+
+            int groupCredits = UpgradeBus.Instance.GetTerminal().groupCredits;
+            int price = node.Unlocked ? (int)(node.Prices[node.CurrentUpgrade] * node.salePerc) : (int)(node.UnlockPrice * node.salePerc);
+            if (groupCredits < price)
+                return false;
+
+            return true;
         }
         public void BuyUpgrade(CustomTerminalNode node, Action backAction)
         {

@@ -15,6 +15,7 @@ namespace MoreShipUpgrades.Misc.UI.Cursor
             StringBuilder sb = new StringBuilder();
             sb.Append(new string(LGUConstants.WHITE_SPACE, 2));
             string name = Node.Name.Length > LGUConstants.NAME_LENGTH ? Node.Name.Substring(0, LGUConstants.NAME_LENGTH) : Node.Name + new string(LGUConstants.WHITE_SPACE, Mathf.Max(0, LGUConstants.NAME_LENGTH-Node.Name.Length));
+            if (!Active(this)) sb.Append(string.Format(LGUConstants.COLOR_INITIAL_FORMAT, LGUConstants.HEXADECIMAL_GREY));
             sb.Append(name);
 
             int currentLevel = Node.Unlocked ? Node.CurrentUpgrade + 1 : 0;
@@ -33,6 +34,7 @@ namespace MoreShipUpgrades.Misc.UI.Cursor
                     sb.Append($"({(1 - Node.salePerc) * 100:F0}% OFF)");
                 }
             }
+            if (!Active(this)) sb.Append(LGUConstants.COLOR_FINAL_FORMAT);
             return sb.ToString();
         }
     }
