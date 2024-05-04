@@ -4,6 +4,7 @@
 - Fixed item dropship landing cases where it would land faster than the players' ship, leading to the dropship leaving early and not allowing players to grab the purchased items.
 	- When the upgrade is purchased/active, the dropship will wait for the players' ship to land to then check if it can land the item dropship.
 - Fixed interaction between Deeper Pockets and Shopping Cart that would lead to the player being unable to interact.
+- Fixed sales still showing in the upgrade store when the upgrade is already maxed.
 
 </details>
 <details>
