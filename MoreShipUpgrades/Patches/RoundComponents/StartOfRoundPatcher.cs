@@ -73,6 +73,12 @@ namespace MoreShipUpgrades.Patches.RoundComponents
 
             ContractManager.Instance.SyncContractDetailsClientRpc("None", -1);
         }
+        [HarmonyPatch(nameof(StartOfRound.AutoSaveShipData))]
+        [HarmonyPrefix]
+        static void AutoSaveShipDataPrefix()
+        {
+            PlayerManager.instance.ResetUpgradeSpentCredits();
+        }
 
         [HarmonyPatch(nameof(StartOfRound.AutoSaveShipData))]
         [HarmonyPostfix]

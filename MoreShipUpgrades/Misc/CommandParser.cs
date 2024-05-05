@@ -155,65 +155,6 @@ namespace MoreShipUpgrades.Misc
             return DisplayTerminalMessage(string.Format(LGUConstants.LOAD_LGU_FAILURE_FORMAT, playerNameToSearch, csvNames));
         }
 
-        private static TerminalNode ExecuteUpgradeCommand(string text, ref Terminal terminal, ref TerminalNode outputNode)
-        {
-            foreach (CustomTerminalNode customNode in UpgradeBus.Instance.terminalNodes)
-            {
-                if (text.ToLower() == customNode.Name.ToLower() || text.ToLower() == $"buy {customNode.Name.ToLower()}" || text.ToLower() == $"purchase {customNode.Name.ToLower()}") return ExecuteBuyUpgrade(customNode, ref terminal);
-
-                if (text.ToLower() == $"info {customNode.Name.ToLower()}" || text.ToLower() == $"{customNode.Name.ToLower()} info") return DisplayTerminalMessage(customNode.Description + "\n\n");
-
-                if (text.ToLower() == $"unload {customNode.Name.ToLower()}" || text.ToLower() == $"{customNode.Name.ToLower()} unload") return ExecuteUnloadUpgrade(customNode);
-            }
-            return outputNode;
-        }
-
-        private static TerminalNode ExecuteBuyUpgrade(CustomTerminalNode customNode, ref Terminal terminal)
-        {
-            string displayText = null;
-            int price = 0;
-            if (!customNode.Unlocked) { price = (int)(customNode.UnlockPrice * customNode.salePerc); }
-            else if (customNode.MaxUpgrade > customNode.CurrentUpgrade) { price = (int)(customNode.Prices[customNode.CurrentUpgrade] * customNode.salePerc); }
-
-            bool canAfford = terminal.groupCredits >= price;
-            if (canAfford && (!customNode.Unlocked || customNode.MaxUpgrade > customNode.CurrentUpgrade))
-            {
-                LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits - price);
-                if (!customNode.Unlocked)
-                {
-                    LguStore.Instance.HandleUpgrade(customNode.OriginalName);
-                    if (customNode.MaxUpgrade != 0) { displayText = $"You Upgraded {customNode.Name} to level {customNode.CurrentUpgrade + 1}  \n\n"; }
-                    else { displayText = $"You Purchased {customNode.Name}  \n\n"; }
-                }
-                else if (customNode.Unlocked && customNode.MaxUpgrade > customNode.CurrentUpgrade)
-                {
-                    LguStore.Instance.HandleUpgrade(customNode.OriginalName, true);
-                    displayText = $"You Upgraded {customNode.Name} to level {customNode.CurrentUpgrade + 1} \n\n";
-                }
-                if (customNode.salePerc != 1f && UpgradeBus.Instance.PluginConfiguration.SALE_APPLY_ONCE.Value) customNode.salePerc = 1f;
-            }
-            else if (customNode.Unlocked && canAfford)
-            {
-                if (customNode.MaxUpgrade == 0) { displayText = "You already unlocked this upgrade.  \n\n"; }
-                else { displayText = "This upgrade is already max level  \n\n"; }
-            }
-            else
-            {
-                displayText = "You can't afford this item.  \n\n";
-            }
-            return DisplayTerminalMessage(displayText);
-        }
-
-        private static TerminalNode ExecuteUnloadUpgrade(CustomTerminalNode customNode)
-        {
-            logger.LogInfo($"Unload executed, unwinging {customNode.Name} on local client!");
-            UpgradeBus.Instance.UpgradeObjects[customNode.Name].GetComponent<BaseUpgrade>().Unwind();
-            LguStore.Instance.UpdateLGUSaveServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, JsonConvert.SerializeObject(new SaveInfo()));
-            customNode.Unlocked = false;
-            customNode.CurrentUpgrade = 0;
-            return DisplayTerminalMessage(string.Format(LGUConstants.UNLOAD_LGU_SUCCESS_FORMAT, customNode.Name));
-        }
-
         private static TerminalNode ExecuteScanHivesCommand()
         {
             if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage(LGUConstants.SCANNER_LEVEL_REQUIRED);
@@ -274,7 +215,6 @@ namespace MoreShipUpgrades.Misc
             logger.LogInfo($"Scan players command found {alivePlayers.Length} alive players and {deadPlayers.Length} dead players.");
             return DisplayTerminalMessage(stringBuilder.ToString());
         }
-
         private static TerminalNode ExecuteScanEnemiesCommand()
         {
             if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage(LGUConstants.SCANNER_LEVEL_REQUIRED);
@@ -627,40 +567,8 @@ namespace MoreShipUpgrades.Misc
                 case "load": outputNode = ExecuteLoadCommands(secondWord, fullText, ref terminal, ref outputNode); return;
                 case "scan": outputNode = ExecuteScanCommands(secondWord, ref outputNode); return;
                 case "scrap": outputNode = ExecuteScrapCommands(secondWord, ref terminal, ref outputNode); return;
-                case "probe": outputNode = ExecuteProbeCommands(secondWord, thirdWord, ref terminal, ref outputNode); return;
-                default: outputNode = ExecuteUpgradeCommand(fullText, ref terminal, ref outputNode); return;
+                default: return;
             }
-        }
-        static TerminalNode ExecuteProbeCommands(string secondWord, string thirdWord, ref Terminal terminal, ref TerminalNode outputNode)
-        {
-            if (!UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_ENABLED.Value) return outputNode;
-            if (secondWord == "")
-            {
-                return DisplayTerminalMessage(LGUConstants.WEATHER_PROBE_USAGE);
-            }
-            if (!StartOfRound.Instance.inShipPhase) return DisplayTerminalMessage(LGUConstants.WEATHER_PROBE_ONLY_IN_ORBIT);
-            if (thirdWord != "") return ExecuteSpecifiedProbeCommand(secondWord, thirdWord, terminal);
-            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE.Value) return DisplayTerminalMessage(string.Format(LGUConstants.WEATHER_PROBE_NOT_ENOUGH_CREDITS_FORMAT, UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE.Value, terminal.groupCredits));
-
-            (string, LevelWeatherType) selectedWeather = WeatherManager.PickWeather(secondWord);
-            if (selectedWeather.Item1 == null) return DisplayTerminalMessage(string.Format(LGUConstants.WEATHER_PROBE_MOON_NOT_FOUND_FORMAT, secondWord));
-            if (StartOfRound.Instance.levels.First(x => x.PlanetName == selectedWeather.Item1).currentWeather == selectedWeather.Item2) return DisplayTerminalMessage(string.Format(LGUConstants.WEATHER_PROBE_SAME_WEATHER_FORMAT, selectedWeather.Item1, selectedWeather.Item2));
-            terminal.groupCredits -= UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE.Value;
-            LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits);
-            LguStore.Instance.SyncWeatherServerRpc(selectedWeather.Item1, selectedWeather.Item2);
-            return DisplayTerminalMessage(string.Format(LGUConstants.WEATHER_PROBE_SUCCESS_FORMAT, selectedWeather.Item1, selectedWeather.Item2, UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE.Value));
-        }
-        static TerminalNode ExecuteSpecifiedProbeCommand(string secondWord, string thirdWord, Terminal terminal)
-        {
-            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE.Value)
-                return DisplayTerminalMessage(string.Format(LGUConstants.WEATHER_PROBE_SPECIFY_NOT_ENOUGH_CREDITS_FORMAT, UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE.Value, terminal.groupCredits));
-
-            (string, LevelWeatherType) selectedWeather = WeatherManager.PickWeather(secondWord, thirdWord);
-            if (selectedWeather.Item1 == null) return DisplayTerminalMessage(string.Format(LGUConstants.WEATHER_PROBE_MOON_NOT_FOUND_FORMAT, secondWord));
-            if (selectedWeather.Item2 == LevelWeatherType.DustClouds) return DisplayTerminalMessage(LGUConstants.WEATHER_PROBE_SPECIFY_INVALID_WEATHER);
-            if (StartOfRound.Instance.levels.First(x => x.PlanetName == selectedWeather.Item1).currentWeather == selectedWeather.Item2) return DisplayTerminalMessage(string.Format(LGUConstants.WEATHER_PROBE_SAME_WEATHER_FORMAT, selectedWeather.Item1, selectedWeather.Item2));
-            attemptWeatherProbe = selectedWeather;
-            return DisplayTerminalMessage(string.Format(LGUConstants.WEATHER_PROBE_SPECIFY_SUCCESS_FORMAT, selectedWeather.Item1, (selectedWeather.Item2 == LevelWeatherType.None ? "no weather" : $"a {selectedWeather.Item2} weather"), UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE.Value));
         }
         private static TerminalNode ExecuteScrapInsuranceCommand(ref Terminal terminal, ref TerminalNode outputNode)
         {

@@ -27,6 +27,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string HEXADECIMAL_RED = "#FF0000";
         internal const string HEXADECIMAL_WHITE = "#FFFFFF";
         internal const string HEXADECIMAL_GREEN = "#00FF00";
+        internal const string HEXADECIMAL_GREY = "#666666";
 
         #endregion
 
@@ -973,6 +974,10 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region LGU Store Interactive UI
+
+        internal const string COLOR_INITIAL_FORMAT = "<color={0}>";
+        internal const string COLOR_FINAL_FORMAT = "</color>";
+        internal const string DEFAULT_DEACTIVATED_TEXT_COLOUR = HEXADECIMAL_GREY + "55";
 
         #region Main Screen
 
