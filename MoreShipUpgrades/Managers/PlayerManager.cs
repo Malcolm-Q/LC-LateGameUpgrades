@@ -11,6 +11,7 @@ namespace MoreShipUpgrades.Managers
         internal float sensitivityMultiplier = DEFAULT_MULTIPLIER;
         internal float sloppyMultiplier = DEFAULT_MULTIPLIER;
         internal bool holdingWheelbarrow = false;
+        internal int upgradeSpendCredits = 0;
         internal static PlayerManager instance;
         void Start()
         {
@@ -30,6 +31,21 @@ namespace MoreShipUpgrades.Managers
         internal void SetHoldingWheelbarrow(bool holdingWheelbarrow)
         {
             this.holdingWheelbarrow = holdingWheelbarrow;
+        }
+
+        internal void IncreaseUpgradeSpentCredits(int amount)
+        {
+            upgradeSpendCredits += amount;
+        }
+
+        internal void ResetUpgradeSpentCredits()
+        {
+            upgradeSpendCredits = 0;
+        }
+
+        internal int GetUpgradeSpentCredits()
+        {
+            return upgradeSpendCredits;
         }
 
         internal void ResetSensitivityMultiplier()
