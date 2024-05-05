@@ -1,6 +1,11 @@
 <details>
 <summary> <h2>V 3.6.5 - 2024-05-01</h2> </summary>
 
+- Changed the upgrade store to:
+    - Show inactive entries when you don't have enough credits to purchase or they have reached maximum level
+    - Sort the entries by alphabetical and by price (either ascending or descending)
+        - You can sort through ``InteractiveTerminalAPI``'s input binding to sort (default being 'f')
+        - The current sort is displayed on the bottom right of the application screen
 - Fixed item dropship landing cases where it would land faster than the players' ship, leading to the dropship leaving early and not allowing players to grab the purchased items.
 	- When the upgrade is purchased/active, the dropship will wait for the players' ship to land to then check if it can land the item dropship.
 - Fixed interaction between Deeper Pockets and Shopping Cart that would lead to the player being unable to interact.

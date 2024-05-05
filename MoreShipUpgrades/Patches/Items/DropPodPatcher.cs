@@ -41,8 +41,9 @@ namespace MoreShipUpgrades.Patches.Items
             {
                 codes[index].opcode = OpCodes.Brfalse;
                 codes.Insert(index, new CodeInstruction(OpCodes.And));
+                codes.Insert(index, new CodeInstruction(OpCodes.Or));
+                codes.Insert(index, new CodeInstruction(OpCodes.Not));
                 codes.Insert(index, new CodeInstruction(OpCodes.Call, isUpgradeActive));
-                codes.Insert(index, new CodeInstruction(OpCodes.And));
                 codes.Insert(index, new CodeInstruction(OpCodes.Ldfld, shipHasLander));
                 codes.Insert(index, new CodeInstruction(OpCodes.Ldfld, playersManager));
                 codes.Insert(index, new CodeInstruction(OpCodes.Ldarg_0));
