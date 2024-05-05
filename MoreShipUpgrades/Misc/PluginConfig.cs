@@ -146,6 +146,7 @@ namespace MoreShipUpgrades.Misc
         [field: DataMember] public SyncedEntry<string> DEEPER_POCKETS_PRICES { get; set; }
         [field: DataMember] public SyncedEntry<int> DEEPER_POCKETS_INITIAL_TWO_HANDED_ITEMS {  get; set; }
         [field: DataMember] public SyncedEntry<int> DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_ITEMS { get; set; }
+        [field: DataMember] public SyncedEntry<bool> DEEPER_POCKETS_ALLOW_WHEELBARROWS { get; set; }
         [field: DataMember] public SyncedEntry<string> ALUMINIUM_COILS_OVERRIDE_NAME { get; set; }
         [field: DataMember] public SyncedEntry<string> BACK_MUSCLES_OVERRIDE_NAME { get; set; }
         [field: DataMember] public SyncedEntry<string> BARGAIN_CONNECTIONS_OVERRIDE_NAME { get; set; }
@@ -568,6 +569,7 @@ namespace MoreShipUpgrades.Misc
             DEEPER_POCKETS_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, DeepPockets.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
             DEEPER_POCKETS_INITIAL_TWO_HANDED_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DEEPER_POCKETS_INITIAL_TWO_HANDED_AMOUNT_KEY, LGUConstants.DEEPER_POCKETS_INITIAL_TWO_HANDED_AMOUNT_DEFAULT, LGUConstants.DEEPER_POCKETS_INITIAL_TWO_HANDED_AMOUNT_DESCRIPTION);
             DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_KEY, LGUConstants.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_DEFAULT, LGUConstants.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_DESCRIPTION);
+            DEEPER_POCKETS_ALLOW_WHEELBARROWS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DEEPER_POCKETS_ALLOW_WHEELBARROWS_KEY, LGUConstants.DEEPER_POCKETS_ALLOW_WHEELBARROWS_DEFAULT, LGUConstants.DEEPER_POCKETS_ALLOW_WHEELBARROWS_DESCRIPTION);
 
             #endregion
 
