@@ -5,6 +5,7 @@
 	- When the upgrade is purchased/active, the dropship will wait for the players' ship to land to then check if it can land the item dropship.
 - Fixed interaction between Deeper Pockets and Shopping Cart that would lead to the player being unable to interact.
 - Fixed sales still showing in the upgrade store when the upgrade is already maxed.
+- Fixed credits being wasted when bought upgrades and disconnecting after.
 
 </details>
 <details>
