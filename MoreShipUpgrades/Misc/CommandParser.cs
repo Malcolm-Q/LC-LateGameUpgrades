@@ -21,7 +21,6 @@ namespace MoreShipUpgrades.Misc
         private static LguLogger logger = new LguLogger(nameof(CommandParser));
         private static bool attemptCancelContract = false;
         private static string attemptSpecifyContract = null;
-        static (string, LevelWeatherType) attemptWeatherProbe = (null, LevelWeatherType.None);
 
         const string LOAD_LGU_COMMAND = "load lgu";
         public static readonly List<string> contracts = new List<string> { "data", "exterminator", "extraction","exorcism","defusal" };
@@ -516,16 +515,6 @@ namespace MoreShipUpgrades.Misc
             logger.LogInfo($"User accepted a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}");
             return DisplayTerminalMessage(string.Format(LGUConstants.CONTRACT_SPECIFY_CONFIRM_PROMPT_SUCCESS_FORMAT, contracts[i], moon, contractInfos[i]));
         }
-        static TerminalNode CheckConfirmForWeatherProbe(string word, ref Terminal terminal)
-        {
-            (string, LevelWeatherType) selectedWeather = attemptWeatherProbe;
-            attemptWeatherProbe = (null, LevelWeatherType.None);
-            if (word.ToLower() != "confirm") return DisplayTerminalMessage(LGUConstants.WEATHER_SPECIFY_CONFIRM_PROMPT_FAIL);
-            terminal.groupCredits -= UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE.Value;
-            LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits);
-            LguStore.Instance.SyncWeatherServerRpc(selectedWeather.Item1, selectedWeather.Item2);
-            return DisplayTerminalMessage(string.Format(LGUConstants.CONTRACT_SPECIFY_CONFIRM_PROMPT_SUCCESS_FORMAT, selectedWeather.Item1, selectedWeather.Item2, UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE.Value));
-        }
         public static void ParseLGUCommands(string fullText, ref Terminal terminal, ref TerminalNode outputNode)
         {
             string[] textArray = fullText.Split();
@@ -540,11 +529,6 @@ namespace MoreShipUpgrades.Misc
             if (attemptCancelContract)
             {
                 outputNode = CheckConfirmForCancel(firstWord, ref terminal);
-                return;
-            }
-            if (attemptWeatherProbe != (null,LevelWeatherType.None))
-            {
-                outputNode = CheckConfirmForWeatherProbe(firstWord, ref terminal);
                 return;
             }
             switch (firstWord)

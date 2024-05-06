@@ -1,5 +1,5 @@
 <details>
-<summary> <h2>V 3.6.5 - 2024-05-01</h2> </summary>
+<summary> <h2>V 3.6.5 - 2024-05-05</h2> </summary>
 
 - Changed the upgrade store to:
     - Show inactive entries when you don't have enough credits to purchase or they have reached maximum level
