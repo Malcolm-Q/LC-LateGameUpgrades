@@ -41,7 +41,7 @@
       <HintPath>$(LC_PLUGIN_PATH)\IAmBatby-LethalLevelLoader\LethalLevelLoader.dll</HintPath>
     </Reference>
     <Reference Include="InteractiveTerminalAPI">
-      <HintPath>$(LC_PLUGIN_PATH)\InteractiveTerminalAPI\InteractiveTerminalAPI.dll</HintPath>
+      <HintPath>$(LC_PLUGIN_PATH)\WhiteSpike-Interactive_Terminal_API\InteractiveTerminalAPI\InteractiveTerminalAPI.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(LC_PATH)\Newtonsoft.Json.dll</HintPath>

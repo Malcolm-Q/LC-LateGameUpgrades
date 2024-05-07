@@ -43,7 +43,6 @@ namespace MoreShipUpgrades.Managers
         internal Dictionary<string,bool> IndividualUpgrades = new Dictionary<string,bool>();
         internal List<Peeper> coilHeadItems = new List<Peeper>();
         internal AssetBundle UpgradeAssets;
-        internal string version;
 
         internal GameObject helmetModel;
         internal Helmet helmetScript;

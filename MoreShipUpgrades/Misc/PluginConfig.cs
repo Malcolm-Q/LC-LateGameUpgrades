@@ -147,6 +147,7 @@ namespace MoreShipUpgrades.Misc
         [field: DataMember] public SyncedEntry<string> DEEPER_POCKETS_PRICES { get; set; }
         [field: DataMember] public SyncedEntry<int> DEEPER_POCKETS_INITIAL_TWO_HANDED_ITEMS {  get; set; }
         [field: DataMember] public SyncedEntry<int> DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_ITEMS { get; set; }
+        [field: DataMember] public SyncedEntry<bool> DEEPER_POCKETS_ALLOW_WHEELBARROWS { get; set; }
         [field: DataMember] public SyncedEntry<string> ALUMINIUM_COILS_OVERRIDE_NAME { get; set; }
         [field: DataMember] public SyncedEntry<string> BACK_MUSCLES_OVERRIDE_NAME { get; set; }
         [field: DataMember] public SyncedEntry<string> BARGAIN_CONNECTIONS_OVERRIDE_NAME { get; set; }
@@ -569,6 +570,7 @@ namespace MoreShipUpgrades.Misc
             DEEPER_POCKETS_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, DeepPockets.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
             DEEPER_POCKETS_INITIAL_TWO_HANDED_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DEEPER_POCKETS_INITIAL_TWO_HANDED_AMOUNT_KEY, LGUConstants.DEEPER_POCKETS_INITIAL_TWO_HANDED_AMOUNT_DEFAULT, LGUConstants.DEEPER_POCKETS_INITIAL_TWO_HANDED_AMOUNT_DESCRIPTION);
             DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_KEY, LGUConstants.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_DEFAULT, LGUConstants.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_DESCRIPTION);
+            DEEPER_POCKETS_ALLOW_WHEELBARROWS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DEEPER_POCKETS_ALLOW_WHEELBARROWS_KEY, LGUConstants.DEEPER_POCKETS_ALLOW_WHEELBARROWS_DEFAULT, LGUConstants.DEEPER_POCKETS_ALLOW_WHEELBARROWS_DESCRIPTION);
 
             #endregion
 
@@ -971,10 +973,10 @@ namespace MoreShipUpgrades.Misc
             topSection = Hunter.UPGRADE_NAME;
             HUNTER_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable the Hunter upgrade", true, "Collect and sell samples from dead enemies");
             HUNTER_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Hunter price", 700, "Default price for upgrade.");
-            HUNTER_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.PRICES_SECTION, "500,600", BaseUpgrade.PRICES_DESCRIPTION);
+            HUNTER_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.PRICES_SECTION, "500,600,700", BaseUpgrade.PRICES_DESCRIPTION);
             HUNTER_SAMPLE_TIERS = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection,
                                             "Samples dropping at each tier",
-                                            "Hoarding Bug, Centipede-Bunker Spider, Baboon hawk-Flowerman, MouthDog, Crawler",
+                                            "Hoarding Bug, Centipede-Bunker Spider, Baboon hawk, Tulip Snake-Flowerman, MouthDog, Crawler, Manticoil-Forest Giant",
                                             "Specifies at which tier of Hunter do each sample start dropping from. Each tier is separated with a dash ('-') and each list of monsters will be separated with a comma (',')\nSupported Enemies: Hoarding Bug, Centipede (Snare Flea),Bunker Spider, Baboon Hawk, Crawler (Half/Thumper), Flowerman (Bracken) and MouthDog (Eyeless Dog)");
             SNARE_FLEA_SAMPLE_MINIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Minimum scrap value of a Snare Flea sample", 35, "");
             SNARE_FLEA_SAMPLE_MAXIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Maximum scrap value of a Snare Flea sample", 60, "");

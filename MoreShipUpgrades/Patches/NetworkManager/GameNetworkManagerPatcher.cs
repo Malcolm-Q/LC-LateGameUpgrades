@@ -23,5 +23,15 @@ namespace MoreShipUpgrades.Patches.NetworkManager
                 Object.Destroy(upgrade.gameObject);
             }
         }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(nameof(GameNetworkManager.Disconnect))]
+        static void ResetCredits()
+        {
+            if (!GameNetworkManager.Instance.isHostingGame) return;
+            Terminal terminal = UpgradeBus.Instance.GetTerminal();
+            terminal.groupCredits += PlayerManager.instance.upgradeSpendCredits;
+            PlayerManager.instance.ResetUpgradeSpentCredits();
+        }
     }
 }

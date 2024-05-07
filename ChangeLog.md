@@ -1,5 +1,35 @@
 <details>
-<summary> <h2>V 3.6.2 - 2024-05-??</h2> </summary>
+<summary> <h2>V 3.6.5 - 2024-05-05</h2> </summary>
+
+- Changed the upgrade store to:
+    - Show inactive entries when you don't have enough credits to purchase or they have reached maximum level
+    - Sort the entries by alphabetical and by price (either ascending or descending)
+        - You can sort through ``InteractiveTerminalAPI``'s input binding to sort (default being 'f')
+        - The current sort is displayed on the bottom right of the application screen
+- Fixed item dropship landing cases where it would land faster than the players' ship, leading to the dropship leaving early and not allowing players to grab the purchased items.
+	- When the upgrade is purchased/active, the dropship will wait for the players' ship to land to then check if it can land the item dropship.
+- Fixed interaction between Deeper Pockets and Shopping Cart that would lead to the player being unable to interact.
+- Fixed sales still showing in the upgrade store when the upgrade is already maxed.
+- Fixed credits being wasted when bought upgrades and disconnecting after.
+
+</details>
+<details>
+<summary> <h2>V 3.6.4 - 2024-05-01</h2> </summary>
+
+- Actually fixed Hunter not dropping new samples due to internals not being updated
+
+</details>
+<details>
+<summary> <h2>V 3.6.3 - 2024-05-01</h2> </summary>
+
+- Fixed Hunter not dropping new samples due to internals not being updated
+   - Default has also been updated to account the new samples
+- Added interactive screen for the "Weather Probe" effect prompted through "probe"
+
+</details>
+
+<details>
+<summary> <h2>V 3.6.2 - 2024-04-29</h2> </summary>
 
 - Fixed ``Deeper Pockets`` upgrade being applied even when not being bought.
 - Fixed commands not working correctly due to not being registered to the network manager.

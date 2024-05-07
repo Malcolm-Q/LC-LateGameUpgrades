@@ -32,6 +32,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             return Mathf.Clamp(defaultValue - UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_TIMER.Value, 0f, defaultValue);
         }
+        public static bool IsUpgradeActive()
+        {
+            return GetActiveUpgrade(UPGRADE_NAME);
+        }
         public override string GetDisplayInfo(int price = -1)
         {
             return $"${price} - Make the Drop Pod, the ship that deliver items bought on the terminal, land faster.";

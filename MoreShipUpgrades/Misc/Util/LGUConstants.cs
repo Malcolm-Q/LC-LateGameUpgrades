@@ -27,6 +27,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string HEXADECIMAL_RED = "#FF0000";
         internal const string HEXADECIMAL_WHITE = "#FFFFFF";
         internal const string HEXADECIMAL_GREEN = "#00FF00";
+        internal const string HEXADECIMAL_GREY = "#666666";
 
         #endregion
 
@@ -447,6 +448,10 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_KEY = "Incremental carry capacity increase";
         internal const int DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_DEFAULT = 1;
         internal const string DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_DESCRIPTION = "The amount of two handed carry capacity increased to the player when increase the upgrade level";
+
+        internal const string DEEPER_POCKETS_ALLOW_WHEELBARROWS_KEY = "Allow wheelbarrows to be stored in deeper pockets";
+        internal const bool DEEPER_POCKETS_ALLOW_WHEELBARROWS_DEFAULT = true;
+        internal const string DEEPER_POCKETS_ALLOW_WHEELBARROWS_DESCRIPTION = "Whether or not wheelbarrows and shopping carts can be stored in deeper pockets";
 
         #endregion 
 
@@ -977,6 +982,10 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region LGU Store Interactive UI
+
+        internal const string COLOR_INITIAL_FORMAT = "<color={0}>";
+        internal const string COLOR_FINAL_FORMAT = "</color>";
+        internal const string DEFAULT_DEACTIVATED_TEXT_COLOUR = HEXADECIMAL_GREY + "55";
 
         #region Main Screen
 

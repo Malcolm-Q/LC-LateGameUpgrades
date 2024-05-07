@@ -5,6 +5,7 @@ using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
 
 namespace MoreShipUpgrades.Patches.Items
 {
@@ -18,11 +19,36 @@ namespace MoreShipUpgrades.Patches.Items
         {
             MethodInfo upgradedTimer = typeof(FasterDropPod).GetMethod(nameof(FasterDropPod.GetUpgradedTimer));
             MethodInfo initialTimer = typeof(FasterDropPod).GetMethod(nameof(FasterDropPod.GetFirstOrderTimer));
+            MethodInfo isUpgradeActive = typeof(FasterDropPod).GetMethod(nameof(FasterDropPod.IsUpgradeActive));
+            FieldInfo playersManager = typeof(ItemDropship).GetField(nameof(ItemDropship.playersManager), BindingFlags.NonPublic | BindingFlags.Instance);
+            FieldInfo shipHasLander = typeof(StartOfRound).GetField(nameof(StartOfRound.shipHasLanded));
+
             List<CodeInstruction> codes = new(instructions);
             int index = 0;
 
             Tools.FindFloat(ref index, ref codes, findValue: 20, addCode: initialTimer, errorMessage: "Couldn't find the 20 value which is used as first buy ship timer");
             Tools.FindFloat(ref index, ref codes, findValue: 40, addCode: upgradedTimer, errorMessage: "Couldn't find the 40 value which is used as ship timer");
+            bool found = false;
+            for (; index < codes.Count && !found; index++)
+            {
+                if (codes[index].opcode == OpCodes.Ble_Un)
+                {
+                    found = true;
+                    break;
+                }
+            }
+            if (found)
+            {
+                codes[index].opcode = OpCodes.Brfalse;
+                codes.Insert(index, new CodeInstruction(OpCodes.And));
+                codes.Insert(index, new CodeInstruction(OpCodes.Or));
+                codes.Insert(index, new CodeInstruction(OpCodes.Not));
+                codes.Insert(index, new CodeInstruction(OpCodes.Call, isUpgradeActive));
+                codes.Insert(index, new CodeInstruction(OpCodes.Ldfld, shipHasLander));
+                codes.Insert(index, new CodeInstruction(OpCodes.Ldfld, playersManager));
+                codes.Insert(index, new CodeInstruction(OpCodes.Ldarg_0));
+                codes.Insert(index, new CodeInstruction(OpCodes.Cgt));
+            }
             return codes.AsEnumerable();
         }
 

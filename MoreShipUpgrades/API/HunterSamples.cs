@@ -148,6 +148,11 @@ namespace MoreShipUpgrades.API
             if (!moddedLevels.ContainsKey(monsterName)) moddedLevels.Add(monsterName, hunterLevel - 1);
         }
 
+        public static bool IsHunterEnabled()
+        {
+            return UpgradeBus.Instance.PluginConfiguration.HUNTER_ENABLED.Value;
+        }
+
         internal static void RegisterSampleItem<T>(Item sampleItem, string monsterName, bool registerNetworkPrefab = false, double weight = 50) where T : GrabbableObject
         {
             GrabbableObject sampleScript = sampleItem.spawnPrefab.AddComponent<T>();
