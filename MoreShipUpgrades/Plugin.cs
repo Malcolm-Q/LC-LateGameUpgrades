@@ -399,7 +399,7 @@ namespace MoreShipUpgrades
                 { "mouthdog", UpgradeBus.Instance.PluginConfiguration.EYELESS_DOG_SAMPLE_MINIMUM_VALUE.Value },
                 { "baboon hawk", UpgradeBus.Instance.PluginConfiguration.BABOON_HAWK_SAMPLE_MINIMUM_VALUE.Value },
                 { "crawler", UpgradeBus.Instance.PluginConfiguration.THUMPER_SAMPLE_MINIMUM_VALUE.Value },
-                { "forest keeper", UpgradeBus.Instance.PluginConfiguration.FOREST_KEEPER_SAMPLE_MINIMUM_VALUE.Value },
+                { "forestgiant", UpgradeBus.Instance.PluginConfiguration.FOREST_KEEPER_SAMPLE_MINIMUM_VALUE.Value },
                 { "manticoil", UpgradeBus.Instance.PluginConfiguration.MANTICOIL_SAMPLE_MINIMUM_VALUE.Value },
                 { "tulip snake", UpgradeBus.Instance.PluginConfiguration.TULIP_SNAKE_SAMPLE_MINIMUM_VALUE.Value },
             };
@@ -412,7 +412,7 @@ namespace MoreShipUpgrades
                 { "mouthdog", UpgradeBus.Instance.PluginConfiguration.EYELESS_DOG_SAMPLE_MAXIMUM_VALUE.Value },
                 { "baboon hawk", UpgradeBus.Instance.PluginConfiguration.BABOON_HAWK_SAMPLE_MAXIMUM_VALUE.Value },
                 { "crawler", UpgradeBus.Instance.PluginConfiguration.THUMPER_SAMPLE_MAXIMUM_VALUE.Value },
-                { "forest keeper", UpgradeBus.Instance.PluginConfiguration.FOREST_KEEPER_SAMPLE_MAXIMUM_VALUE.Value },
+                { "forestgiant", UpgradeBus.Instance.PluginConfiguration.FOREST_KEEPER_SAMPLE_MAXIMUM_VALUE.Value },
                 { "manticoil", UpgradeBus.Instance.PluginConfiguration.MANTICOIL_SAMPLE_MAXIMUM_VALUE.Value },
                 { "tulip snake", UpgradeBus.Instance.PluginConfiguration.TULIP_SNAKE_SAMPLE_MAXIMUM_VALUE.Value },
             };
