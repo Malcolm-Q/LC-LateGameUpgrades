@@ -26,7 +26,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             base.EquipItem();
             ParticleSystem particles = GetComponentInChildren<ParticleSystem>();
             if (particles == null) return;
-            particles.Play();
+            particles.Play(true);
         }
 
         public override void DiscardItem()
@@ -34,8 +34,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             base.DiscardItem();
             ParticleSystem particles = GetComponentInChildren<ParticleSystem>();
             if (particles == null) return;
-            particles.Stop();
-            particles.Clear();
+            particles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
 
         public override void PocketItem()
@@ -43,8 +42,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             base.PocketItem();
             ParticleSystem particles = GetComponentInChildren<ParticleSystem>();
             if (particles == null) return;
-            particles.Stop();
-            particles.Clear();
+            particles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
     }
 }
