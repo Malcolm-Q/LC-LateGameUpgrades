@@ -56,7 +56,7 @@ namespace MoreShipUpgrades.Misc
             { "mouthdog", sampleItems+ "EyelessDogSample.asset" },
             { "baboon hawk", sampleItems+ "BaboonHawkSample.asset" },
             { "crawler", sampleItems+ "ThumperSample.asset" },
-            { "forest keeper", sampleItems+ "ForestKeeperSample.asset" },
+            { "forestgiant", sampleItems+ "ForestKeeperSample.asset" },
             { "manticoil", sampleItems+ "ManticoilSample.asset" },
             { "tulip snake", sampleItems+ "TulipSnakeSample.asset" },
         };

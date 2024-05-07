@@ -161,6 +161,13 @@ namespace MoreShipUpgrades.Patches.PlayerController
         {
             if (!player.twoHanded) return;
             if (!BaseUpgrade.GetActiveUpgrade(DeepPockets.UPGRADE_NAME)) return;
+
+            if (!UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_ALLOW_WHEELBARROWS)
+            {
+                // No putting wheelbarrows in your deeper pockets
+                if (player.currentlyHeldObjectServer != null && player.currentlyHeldObjectServer is WheelbarrowScript) return;
+                if (player.currentlyHeldObject != null && player.currentlyHeldObject is WheelbarrowScript) return;
+            }
             int twoHandedCount = 0;
             int maxTwoHandedCount = 1 + UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_INITIAL_TWO_HANDED_ITEMS + BaseUpgrade.GetUpgradeLevel(DeepPockets.UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_ITEMS;
 
