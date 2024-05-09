@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using UnityEngine;
 
@@ -22,6 +23,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             {
                 LguStore.Instance.GenerateSales();
             }
+            ExtendDeadlineScript.instance.SetDaysExtended(daysExtended: 0);
         }
 
         [HarmonyPatch(nameof(TimeOfDay.SetBuyingRateForDay))]

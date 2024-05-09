@@ -11,6 +11,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
         internal const string ENABLED_SECTION = $"Enable {NAME}";
         private static LguLogger logger;
         internal static ExtendDeadlineScript instance;
+
+        int daysExtended = 0;
         void Start()
         {
             logger = new LguLogger(NAME);
@@ -25,6 +27,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
             TimeOfDay.Instance.timeUntilDeadline += TimeOfDay.Instance.totalTime * days;
             TimeOfDay.Instance.UpdateProfitQuotaCurrentTime();
             TimeOfDay.Instance.SyncTimeClientRpc(TimeOfDay.Instance.globalTime, (int)TimeOfDay.Instance.timeUntilDeadline);
+            daysExtended += days;
             logger.LogDebug($"Previous time: {before}, new time: {TimeOfDay.Instance.timeUntilDeadline}");
         }
 
@@ -37,6 +40,28 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
         internal static int GetTotalCost()
         {
             return UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_PRICE + UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA * TimeOfDay.Instance.timesFulfilledQuota;
+        }
+
+        internal int GetTotalCostPerDay(int days)
+        {
+            int daysExtended = this.daysExtended;
+            int totalCost = 0;
+            for(int i = 0; i < days; i++)
+            {
+                totalCost += GetTotalCost() + daysExtended * UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY;
+                daysExtended++;
+            }
+            return totalCost;
+        }
+
+        public int GetDaysExtended()
+        {
+            return daysExtended;
+        }
+
+        public void SetDaysExtended(int daysExtended)
+        {
+            this.daysExtended = daysExtended;
         }
 
         internal static new void RegisterCommand()

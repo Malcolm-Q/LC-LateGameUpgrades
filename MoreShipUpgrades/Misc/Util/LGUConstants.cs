@@ -226,6 +226,10 @@ namespace MoreShipUpgrades.Misc.Util
         internal const int EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA_DEFAULT = 0;
         internal const string EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA_DESCRIPTION = "Additional cost added to the Extend Deadline command per every quota completed";
 
+        internal const string EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY_KEY = $"{ExtendDeadlineScript.NAME} Additional Cost per Day";
+        internal const int EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY_DEFAULT = 0;
+        internal const string EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY_DESCRIPTION = "Additional cost added to the Extend Deadline command per every day extended";
+
         #endregion
 
         #region Interns

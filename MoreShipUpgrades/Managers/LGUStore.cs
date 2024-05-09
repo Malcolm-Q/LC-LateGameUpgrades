@@ -379,6 +379,8 @@ namespace MoreShipUpgrades.Managers
 
             UpgradeBus.Instance.SaleData = SaveInfo.SaleData;
 
+            ExtendDeadlineScript.instance.SetDaysExtended(SaveInfo.daysExtended);
+
             if(oldHelmet != UpgradeBus.Instance.wearingHelmet)
             {
                 UpgradeBus.Instance.helmetDesync = true;
@@ -642,6 +644,7 @@ namespace MoreShipUpgrades.Managers
         public string contractLevel = ContractManager.Instance.contractLevel;
         public Dictionary<string, float> SaleData = UpgradeBus.Instance.SaleData;
         public bool wearingHelmet = UpgradeBus.Instance.wearingHelmet;
+        public int daysExtended = ExtendDeadlineScript.instance.GetDaysExtended();
 
         public string Version = "V2";
     }
