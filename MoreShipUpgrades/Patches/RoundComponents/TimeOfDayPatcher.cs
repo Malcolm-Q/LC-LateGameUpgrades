@@ -23,7 +23,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             {
                 LguStore.Instance.GenerateSales();
             }
-            ExtendDeadlineScript.instance.SetDaysExtended(daysExtended: 0);
+            ExtendDeadlineScript.SetDaysExtended(daysExtended: 0);
         }
 
         [HarmonyPatch(nameof(TimeOfDay.SetBuyingRateForDay))]

@@ -114,11 +114,17 @@ namespace MoreShipUpgrades.Managers
         /// <summary>
         /// Stores Lategame Upgrades' relevant save data into the game's current save file.
         /// </summary>
-        void ServerSaveFile()
+        internal void ServerSaveFile()
         {
             string saveFile = GameNetworkManager.Instance.currentSaveFileName;
             string json = JsonConvert.SerializeObject(LguSave);
             ES3.Save(key: saveDataKey, value: json, filePath: saveFile);
+        }
+
+        internal void UpdateServerSave()
+        {
+            LguSave.playerSaves[playerID] = new SaveInfo();
+            ServerSaveFile();
         }
 
         /// <summary>
@@ -379,7 +385,7 @@ namespace MoreShipUpgrades.Managers
 
             UpgradeBus.Instance.SaleData = SaveInfo.SaleData;
 
-            ExtendDeadlineScript.instance.SetDaysExtended(SaveInfo.daysExtended);
+            ExtendDeadlineScript.SetDaysExtended(SaveInfo.daysExtended);
 
             if(oldHelmet != UpgradeBus.Instance.wearingHelmet)
             {
@@ -644,7 +650,7 @@ namespace MoreShipUpgrades.Managers
         public string contractLevel = ContractManager.Instance.contractLevel;
         public Dictionary<string, float> SaleData = UpgradeBus.Instance.SaleData;
         public bool wearingHelmet = UpgradeBus.Instance.wearingHelmet;
-        public int daysExtended = ExtendDeadlineScript.instance.GetDaysExtended();
+        public int daysExtended = UpgradeBus.Instance.daysExtended;
 
         public string Version = "V2";
     }

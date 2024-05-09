@@ -1001,6 +1001,13 @@ namespace MoreShipUpgrades.Misc.Util
 
         #endregion
 
+        #region Extend Deadlien Display
+
+        internal const string NOT_ENOUGH_CREDITS_EXTEND = "Not enough credits to purchase the selected amount of days to extend.";
+        internal const string PURCHASE_EXTEND_DEADLINE_FORMAT = "Do you wish to purchase {0} days to extend the deadline for the cost of {1} credits?";
+
+        #endregion
+
         #region Weather Display
 
         internal const string SELECT_WEATHER_FORMAT = "Select the available weathers for {0}:";

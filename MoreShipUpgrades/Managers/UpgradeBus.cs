@@ -53,6 +53,8 @@ namespace MoreShipUpgrades.Managers
         internal bool helmetDesync;
         internal bool IsBeta = false;
 
+        internal int daysExtended = 0;
+
         void Awake()
         {
             Instance = this;

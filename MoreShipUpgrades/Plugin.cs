@@ -103,6 +103,7 @@ namespace MoreShipUpgrades
             PatchMainVersion();
             InteractiveTerminalManager.RegisterApplication<UpgradeStoreApplication>(["lgu", "lategame store"]);
             InteractiveTerminalManager.RegisterApplication<WeatherProbeApplication>("probe");
+            InteractiveTerminalManager.RegisterApplication<ExtendDeadlineApplication>("extend deadline");
 
             mls.LogInfo($"{Metadata.NAME} {Metadata.VERSION} has been loaded successfully.");
         }
