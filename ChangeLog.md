@@ -3,6 +3,8 @@
 
 - Added configurable incremental price factors to ``Extend Deadline`` per quota and per day extended.
     - Due to this, an interactive UI was made for ``extend deadline`` command where you can select the amount of days you wish to extend and shows the amount of credits you will spend on that amount.
+- Added configurable toggle for Deeper Pockets allowing pocketing wheelbarrows (allowing you to switch between items when carrying a wheelbarrow) or not.
+- Fixed Hunter samples spawning on Manticoils and Tulip Snakes when the transition from day to night happens and the daytime enemies despawned on that transiction.
 
 </details>
 
