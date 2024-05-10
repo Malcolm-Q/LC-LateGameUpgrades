@@ -1,4 +1,12 @@
 <details>
+<summary> <h2> 3.7.0 - 2024-05-??</h2> </summary>
+
+- Added configurable incremental price factors to ``Extend Deadline`` per quota and per day extended.
+    - Due to this, an interactive UI was made for ``extend deadline`` command where you can select the amount of days you wish to extend and shows the amount of credits you will spend on that amount.
+
+</details>
+
+<details>
 <summary> <h2>V 3.6.5 - 2024-05-05</h2> </summary>
 
 - Changed the upgrade store to:
