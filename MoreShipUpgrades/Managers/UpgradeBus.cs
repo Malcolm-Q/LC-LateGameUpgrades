@@ -20,7 +20,7 @@ namespace MoreShipUpgrades.Managers
     public class UpgradeBus : MonoBehaviour
     {
         internal static UpgradeBus Instance { get; set; }
-        internal PluginConfig PluginConfiguration { get; set; }
+        internal LategameConfiguration PluginConfiguration { get; set; }
         internal GameObject IntroScreen { get; set; }
         private static LguLogger logger = new LguLogger(nameof(UpgradeBus));
 

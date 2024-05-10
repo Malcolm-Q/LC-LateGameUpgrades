@@ -19,7 +19,7 @@ using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
 namespace MoreShipUpgrades.Misc
 {
     [DataContract]
-    public class PluginConfig : SyncedConfig2<PluginConfig>
+    public class LategameConfiguration : SyncedConfig2<LategameConfiguration>
     {
         #region Enabled
         [field: DataMember] public SyncedEntry<bool> LANDING_THRUSTERS_ENABLED {  get; set; }
@@ -314,6 +314,8 @@ namespace MoreShipUpgrades.Misc
         [field: DataMember] public SyncedEntry<bool> HELMET_ENABLED { get; set; }
         [field: DataMember] public SyncedEntry<int> HELMET_PRICE { get; set; }
         [field: DataMember] public SyncedEntry<int> HELMET_HITS_BLOCKED { get; set; }
+        [field: DataMember] public SyncedEntry<int> HELMET_DAMAGE_REDUCTION { get; set; }
+        [field: DataMember] public SyncedEntry<string> HELMET_DAMAGE_MITIGATION_MODE {  get; set; }
         [field: DataMember] public SyncedEntry<int> SNARE_FLEA_SAMPLE_MINIMUM_VALUE { get; set; }
         [field: DataMember] public SyncedEntry<int> SNARE_FLEA_SAMPLE_MAXIMUM_VALUE { get; set; }
         [field: DataMember] public SyncedEntry<int> BUNKER_SPIDER_SAMPLE_MINIMUM_VALUE { get; set; }
@@ -388,7 +390,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Configuration Bindings
-        public PluginConfig(ConfigFile cfg) : base(Metadata.GUID)
+        public LategameConfiguration(ConfigFile cfg) : base(Metadata.GUID)
         {
             string topSection;
 
@@ -499,6 +501,8 @@ namespace MoreShipUpgrades.Misc
             HELMET_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.HELMET_ENABLED_KEY, LGUConstants.HELMET_ENABLED_DEFAULT);
             HELMET_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.HELMET_PRICE_KEY, LGUConstants.HELMET_PRICE_DEFAULT);
             HELMET_HITS_BLOCKED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.HELMET_AMOUNT_OF_HITS_KEY, LGUConstants.HELMET_AMOUNT_OF_HITS_DEFAULT);
+            HELMET_DAMAGE_REDUCTION = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.HELMET_DAMAGE_REDUCTION_KEY, LGUConstants.HELMET_DAMAGE_REDUCTION_DEFAULT);
+            HELMET_DAMAGE_MITIGATION_MODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.HELMET_DAMAGE_MITIGATION_MODE_KEY, LGUConstants.HELMET_DAMAGE_MITIGATION_MODE_DEFAULT, LGUConstants.HELMET_DAMAGE_MITIGATION_MODE_DESCRIPTION);
 
             #endregion
 

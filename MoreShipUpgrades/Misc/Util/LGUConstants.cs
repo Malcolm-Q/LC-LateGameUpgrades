@@ -343,6 +343,15 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string HELMET_AMOUNT_OF_HITS_KEY = $"Amount of hits blocked by {Helmet.ITEM_NAME}";
         internal const int HELMET_AMOUNT_OF_HITS_DEFAULT = 3;
+        internal const string HELMET_AMOUNT_OF_HITS_DESCRIPTION = "Only valid when TotalPerHit damage mitigation mode is selected.";
+
+        internal const string HELMET_DAMAGE_REDUCTION_KEY = $"Damage reduction (%) when wearing a {Helmet.ITEM_NAME}";
+        internal const int HELMET_DAMAGE_REDUCTION_DEFAULT = 20;
+        internal const string HELMET_DAMAGE_REDUCTION_DESCRIPTION = "Only valid when PartialTilLowHealth damage mitigation mode is selected.";
+
+        internal const string HELMET_DAMAGE_MITIGATION_MODE_KEY = $"Damage mitigation mode selected when wearing a {Helmet.ITEM_NAME}";
+        internal const string HELMET_DAMAGE_MITIGATION_MODE_DEFAULT = "TotalPerHit";
+        internal const string HELMET_DAMAGE_MITIGATION_MODE_DESCRIPTION = "Accepted Values: TotalPerHit (full immunity and helmet takes hits on durability), PartialTilLowHealth (partial immunity and helmet breaks when low health)";
 
         #endregion
 
