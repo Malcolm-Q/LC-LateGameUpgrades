@@ -51,11 +51,11 @@ namespace MoreShipUpgrades
         AudioClip itemBreak, buttonPressed, error;
         AudioClip[] wheelbarrowSound, shoppingCartSound;
 
-        public new static PluginConfig Config;
+        public new static LategameConfiguration Config;
 
         void Awake()
         {
-            Config = new PluginConfig(base.Config);
+            Config = new LategameConfiguration(base.Config);
 
             // netcode patching stuff
             IEnumerable<Type> types;

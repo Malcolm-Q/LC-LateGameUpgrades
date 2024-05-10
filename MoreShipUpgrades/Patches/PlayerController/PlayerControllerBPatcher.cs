@@ -14,13 +14,13 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
+using MoreShipUpgrades.UpgradeComponents.Items;
 
 namespace MoreShipUpgrades.Patches.PlayerController
 {
     [HarmonyPatch(typeof(PlayerControllerB))]
     internal static class PlayerControllerBPatcher
     {
-        static readonly LguLogger logger = new LguLogger(nameof(PlayerControllerBPatcher));
 
         [HarmonyPostfix]
         [HarmonyPatch(nameof(PlayerControllerB.Start))]
@@ -87,30 +87,14 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
         [HarmonyPrefix]
         [HarmonyPatch(nameof(PlayerControllerB.DamagePlayer))]
-        static bool WeDoALittleReturningFalse(PlayerControllerB __instance)
+        static bool DamagePlayerPrefix(ref PlayerControllerB __instance, ref int damageNumber)
         {
             if (!__instance.IsOwner || __instance.isPlayerDead || !__instance.AllowPlayerDeath()) return true;
             if (UpgradeBus.Instance.wearingHelmet)
             {
-                logger.LogDebug($"Player {__instance.playerUsername} is wearing a helmet, executing helmet logic...");
-                UpgradeBus.Instance.helmetHits--;
-                if (UpgradeBus.Instance.helmetHits <= 0)
-                {
-                    logger.LogDebug("Helmet has ran out of durability, breaking the helmet...");
-                    UpgradeBus.Instance.wearingHelmet = false;
-                    if (__instance.IsHost || __instance.IsServer) LguStore.Instance.DestroyHelmetClientRpc(__instance.playerClientId);
-                    else LguStore.Instance.ReqDestroyHelmetServerRpc(__instance.playerClientId);
-                    if (__instance.IsHost || __instance.IsServer) LguStore.Instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(__instance), "breakWood");
-                    else LguStore.Instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(__instance), "breakWood");
-                }
-                else
-                {
-                    logger.LogDebug($"Helmet still has some durability ({UpgradeBus.Instance.helmetHits}), decreasing it...");
-                    if (__instance.IsHost || __instance.IsServer) LguStore.Instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(__instance), "helmet");
-                    else LguStore.Instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(__instance), "helmet");
-                }
-                return false;
+                Helmet.ExecuteHelmetDamageMitigation(ref __instance, ref damageNumber);
             }
+            if (damageNumber == 0) return false;
             return true;
         }
 
@@ -186,12 +170,10 @@ namespace MoreShipUpgrades.Patches.PlayerController
         }
         static void WheelbarrowUnparenting(GrabbableObject heldObject)
         {
-
             if (heldObject == null) return;
 
             WheelbarrowScript wheelbarrow = heldObject.GetComponentInParent<WheelbarrowScript>();
             if (wheelbarrow == null || heldObject is WheelbarrowScript) return;
-            logger.LogDebug("Removing item's parent to allow placing it back in again");
             heldObject.transform.SetParent(heldObject.parentObject);
             heldObject.transform.localScale = heldObject.originalScale;
             wheelbarrow.DecrementStoredItems();
