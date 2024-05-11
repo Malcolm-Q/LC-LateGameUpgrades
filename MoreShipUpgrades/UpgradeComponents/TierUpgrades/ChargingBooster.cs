@@ -60,7 +60,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_COOLDOWN.Value - ((level+1) * UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE.Value);
             string infoFormat = "LVL {0} - ${1} - Radar boosters will have a recharge cooldown of {2} seconds.\n";
             
-            return $"LVL 0 - ${initialPrice} -  Provides charging stations to the radar boosters. After used, goes on cooldown for {UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_COOLDOWN.Value} seconds\n" + Tools.GenerateInfoForUpgrade(infoFormat, incrementalPrices[0], incrementalPrices.Skip(1).ToArray(), infoFunction);
+            return $"LVL 0 - ${initialPrice} -  Provides charging stations to the radar boosters. After used, goes on cooldown for {UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_COOLDOWN.Value} seconds\n" + Tools.GenerateInfoForUpgrade(infoFormat, incrementalPrices.Length == 0 ? 0 : incrementalPrices[0], incrementalPrices.Skip(1).ToArray(), infoFunction);
         }
         internal override bool CanInitializeOnStart()
         {
