@@ -43,7 +43,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             DamageMitigationMode pickedMode = DamageMitigationMode.TotalPerHit;
             Enum.TryParse(typeof(DamageMitigationMode), UpgradeBus.Instance.PluginConfiguration.HELMET_DAMAGE_MITIGATION_MODE.Value, out object parsedRestriction);
             if (parsedRestriction == null)
-                logger.LogError($"An error occured parsing the restriction mode ({UpgradeBus.Instance.PluginConfiguration.HELMET_DAMAGE_MITIGATION_MODE.Value}), defaulting to TotalPerHit");
+                logger.LogError($"An error occured parsing the damage mitigation mode ({UpgradeBus.Instance.PluginConfiguration.HELMET_DAMAGE_MITIGATION_MODE.Value}), defaulting to TotalPerHit");
             else 
                 pickedMode = (DamageMitigationMode)parsedRestriction;
             switch(pickedMode)
@@ -60,17 +60,12 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             if (UpgradeBus.Instance.helmetHits <= 0)
             {
                 logger.LogDebug("Helmet has ran out of durability, breaking the helmet...");
-                UpgradeBus.Instance.wearingHelmet = false;
-                if (player.IsHost || player.IsServer) LguStore.Instance.DestroyHelmetClientRpc(player.playerClientId);
-                else LguStore.Instance.ReqDestroyHelmetServerRpc(player.playerClientId);
-                if (player.IsHost || player.IsServer) LguStore.Instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(player), "breakWood");
-                else LguStore.Instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(player), "breakWood");
+                BreakHelmet(ref player);
             }
             else
             {
                 logger.LogDebug($"Helmet still has some durability ({UpgradeBus.Instance.helmetHits}), decreasing it...");
-                if (player.IsHost || player.IsServer) LguStore.Instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(player), "helmet");
-                else LguStore.Instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(player), "helmet");
+                HitHelmet(ref player);
             }
             damageNumber = 0;
         }
@@ -78,22 +73,30 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         internal static void ExecuteHelmetPartialMitigation(ref PlayerControllerB player, ref int damageNumber)
         {
             int health = player.health;
-            int updatedHealth = health - Mathf.CeilToInt(damageNumber * ((100f - UpgradeBus.Instance.PluginConfiguration.HELMET_DAMAGE_REDUCTION) / 100f));
+            int updatedHealth = health - Mathf.CeilToInt(damageNumber * Mathf.Clamp((100f - UpgradeBus.Instance.PluginConfiguration.HELMET_DAMAGE_REDUCTION) / 100f, 0f, damageNumber));
             if (updatedHealth > 0)
             {
-                if (player.IsHost || player.IsServer) LguStore.Instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(player), "helmet");
-                else LguStore.Instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(player), "helmet");
+                HitHelmet(ref player);
                 damageNumber = Mathf.CeilToInt(damageNumber * ((100f - UpgradeBus.Instance.PluginConfiguration.HELMET_DAMAGE_REDUCTION) / 100f));
             }
             else
             {
-                UpgradeBus.Instance.wearingHelmet = false;
-                if (player.IsHost || player.IsServer) LguStore.Instance.DestroyHelmetClientRpc(player.playerClientId);
-                else LguStore.Instance.ReqDestroyHelmetServerRpc(player.playerClientId);
-                if (player.IsHost || player.IsServer) LguStore.Instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(player), "breakWood");
-                else LguStore.Instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(player), "breakWood");
+                BreakHelmet(ref player);
                 damageNumber = 0;
             }
+        }
+        internal static void HitHelmet(ref PlayerControllerB player)
+        {
+            if (player.IsHost || player.IsServer) LguStore.Instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(player), "helmet");
+            else LguStore.Instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(player), "helmet");
+        }
+        internal static void BreakHelmet(ref PlayerControllerB player)
+        {
+            UpgradeBus.Instance.wearingHelmet = false;
+            if (player.IsHost || player.IsServer) LguStore.Instance.DestroyHelmetClientRpc(player.playerClientId);
+            else LguStore.Instance.ReqDestroyHelmetServerRpc(player.playerClientId);
+            if (player.IsHost || player.IsServer) LguStore.Instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(player), "breakWood");
+            else LguStore.Instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(player), "breakWood");
         }
     }
 }
