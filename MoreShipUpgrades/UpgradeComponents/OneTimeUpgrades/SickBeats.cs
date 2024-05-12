@@ -67,6 +67,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
         public static int CalculateDefense(int dmg)
         {
+            if (!UpgradeBus.Instance.PluginConfiguration.BEATS_ENABLED.Value) return dmg;
             if (!GetActiveUpgrade(UPGRADE_NAME) || dmg < 0) return dmg; // < 0 check to not hinder healing
             return (int)(dmg * Instance.incomingDamageCoefficient);
         }
