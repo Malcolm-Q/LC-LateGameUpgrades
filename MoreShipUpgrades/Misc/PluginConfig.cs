@@ -132,6 +132,11 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: DataMember] public SyncedEntry<string> QUANTUM_DISRUPTOR_UPGRADE_MODE { get; set; }
+        [field: DataMember] public SyncedEntry<int> QUANTUM_DISRUPTOR_INITIAL_HOURS_REVERT_ON_USE { get; set; }
+        [field: DataMember] public SyncedEntry<int> QUANTUM_DISURPTOR_INCREMENTAL_HOURS_REVERT_ON_USE { get; set; }
+        [field: DataMember] public SyncedEntry<int> QUANTUM_DISRUPTOR_INITIAL_USES { get; set; }
+        [field: DataMember] public SyncedEntry<int> QUANTUM_DISRUPTOR_INCREMENTAL_USES {  get; set; }
         [field: DataMember] public SyncedEntry<string> LANDING_THRUSTERS_OVERRIDE_NAME {  get; set; }
         [field: DataMember] public SyncedEntry<string> LANDING_THRUSTERS_PRICES {  get; set; }
         [field: DataMember] public SyncedEntry<int> LANDING_THRUSTERS_INITIAL_SPEED_INCREASE {  get; set; }

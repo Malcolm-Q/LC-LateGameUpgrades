@@ -72,6 +72,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             if (!__instance.IsHost) return;
 
             ContractManager.Instance.SyncContractDetailsClientRpc("None", -1);
+            QuantumDisruptor.Instance.ResetUsageCounterClientRpc();
         }
         [HarmonyPatch(nameof(StartOfRound.AutoSaveShipData))]
         [HarmonyPrefix]
