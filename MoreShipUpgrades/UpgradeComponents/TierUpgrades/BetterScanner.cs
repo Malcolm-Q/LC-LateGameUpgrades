@@ -75,5 +75,17 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             SetupGenericPerk<BetterScanner>(UPGRADE_NAME);
         }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                configuration.SHARED_UPGRADES.Value || !configuration.BETTER_SCANNER_INDIVIDUAL.Value,
+                                                configuration.BETTER_SCANNER_ENABLED.Value,
+                                                configuration.BETTER_SCANNER_PRICE.Value,
+                                                new int[] { configuration.BETTER_SCANNER_PRICE2.Value, configuration.BETTER_SCANNER_PRICE3.Value },
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.BETTER_SCANNER_OVERRIDE_NAME : ""
+                                                );
+        }
     }
 }

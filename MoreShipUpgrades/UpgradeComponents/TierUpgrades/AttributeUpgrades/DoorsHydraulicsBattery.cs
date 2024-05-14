@@ -50,5 +50,16 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         {
             SetupGenericPerk<DoorsHydraulicsBattery>(UPGRADE_NAME);
         }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                shareStatus: true,
+                                                configuration.DOOR_HYDRAULICS_BATTERY_ENABLED.Value,
+                                                configuration.DOOR_HYDRAULICS_BATTERY_PRICE.Value,
+                                                UpgradeBus.ParseUpgradePrices(configuration.DOOR_HYDRAULICS_BATTERY_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.SHUTTER_BATTERIES_OVERRIDE_NAME : "");
+        }
     }
 }

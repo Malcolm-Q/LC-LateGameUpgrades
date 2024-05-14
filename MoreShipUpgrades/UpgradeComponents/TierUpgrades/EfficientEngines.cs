@@ -1,4 +1,5 @@
 ﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
@@ -38,6 +39,17 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         internal new static void RegisterUpgrade()
         {
             SetupGenericPerk<EfficientEngines>(UPGRADE_NAME);
+        }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                shareStatus: true,
+                                                configuration.EFFICIENT_ENGINES_ENABLED.Value,
+                                                configuration.EFFICIENT_ENGINES_PRICE.Value,
+                                                UpgradeBus.ParseUpgradePrices(configuration.EFFICIENT_ENGINES_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.EFFICIENT_ENGINES_OVERRIDE_NAME : "");
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 
@@ -34,6 +35,17 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         internal new static void RegisterUpgrade()
         {
             SetupGenericPerk<BargainConnections>(UPGRADE_NAME);
+        }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                shareStatus: true,
+                                                configuration.BARGAIN_CONNECTIONS_ENABLED.Value,
+                                                configuration.BARGAIN_CONNECTIONS_PRICE.Value,
+                                                UpgradeBus.ParseUpgradePrices(configuration.BARGAIN_CONNECTIONS_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.BARGAIN_CONNECTIONS_OVERRIDE_NAME : "");
         }
     }
 }

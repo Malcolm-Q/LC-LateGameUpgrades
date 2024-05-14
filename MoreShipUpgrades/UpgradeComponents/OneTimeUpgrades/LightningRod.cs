@@ -101,5 +101,15 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             SetupGenericPerk<LightningRod>(UPGRADE_NAME);
         }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
+                                    shareStatus: true,
+                                    configuration.LIGHTNING_ROD_ENABLED.Value,
+                                    configuration.LIGHTNING_ROD_PRICE.Value,
+                                    configuration.OVERRIDE_UPGRADE_NAMES ? configuration.LIGHTNING_ROD_OVERRIDE_NAME : "");
+        }
     }
 }

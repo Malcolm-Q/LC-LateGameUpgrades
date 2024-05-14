@@ -36,5 +36,16 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         {
             SetupGenericPerk<QuantumDisruptor>(UPGRADE_NAME);
         }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                shareStatus: true,
+                                                configuration.QUANTUM_DISRUPTOR_ENABLED.Value,
+                                                configuration.QUANTUM_DISRUPTOR_PRICE.Value,
+                                                UpgradeBus.ParseUpgradePrices(configuration.QUANTUM_DISRUPTOR_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.QUANTUM_DISRUPTOR_OVERRIDE_NAME : "");
+        }
     }
 }

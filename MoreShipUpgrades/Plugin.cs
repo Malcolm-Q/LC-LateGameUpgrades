@@ -453,6 +453,7 @@ namespace MoreShipUpgrades
             helmScript.grabbable = true;
             helmScript.grabbableToEnemies = true;
             helmet.creditsWorth = UpgradeBus.Instance.PluginConfiguration.HELMET_PRICE.Value;
+            helmet.positionOffset = new Vector3(-0.25f, 0f, 0f);
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(helmet.spawnPrefab);
 
             UpgradeBus.Instance.ItemsToSync.Add("Helmet", helmet);
@@ -697,6 +698,7 @@ namespace MoreShipUpgrades
             {
                 if (!type.IsSubclassOf(typeof(BaseUpgrade))) continue;
                 if (type == typeof(OneTimeUpgrade) || type == typeof(TierUpgrade) || type == typeof(GameAttributeTierUpgrade)) continue;
+                UpgradeBus.Instance.upgradeTypes.Add(type);
 
                 MethodInfo method = type.GetMethod(nameof(BaseUpgrade.RegisterUpgrade), BindingFlags.Static | BindingFlags.NonPublic);
                 method.Invoke(null, null);
@@ -709,6 +711,7 @@ namespace MoreShipUpgrades
             foreach (Type type in types)
             {
                 if (!type.IsSubclassOf(typeof(BaseCommand))) continue;
+                UpgradeBus.Instance.commandTypes.Add(type);
 
                 MethodInfo method = type.GetMethod(nameof(BaseCommand.RegisterCommand), BindingFlags.Static | BindingFlags.NonPublic);
                 method.Invoke(null, null);

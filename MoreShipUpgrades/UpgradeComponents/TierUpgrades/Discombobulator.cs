@@ -98,5 +98,19 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
             SetupGenericPerk<Discombobulator>(UPGRADE_NAME);
         }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            AudioClip flashSFX = AssetBundleHandler.GetAudioClip("Flashbang");
+            if (!flashSFX) return;
+
+            UpgradeBus.Instance.flashNoise = flashSFX;
+            UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                configuration.SHARED_UPGRADES.Value || !configuration.DISCOMBOBULATOR_INDIVIDUAL.Value,
+                                                configuration.DISCOMBOBULATOR_ENABLED.Value,
+                                                configuration.DISCOMBOBULATOR_PRICE.Value,
+                                                UpgradeBus.ParseUpgradePrices(configuration.DISCO_UPGRADE_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.DISCOMBOBULATOR_OVERRIDE_NAME : "");
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
@@ -65,6 +66,16 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         internal new static void RegisterUpgrade()
         {
             SetupGenericPerk<Sigurd>(UPGRADE_NAME);
+        }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
+                                    shareStatus: true,
+                                    configuration.SIGURD_ENABLED.Value || configuration.SIGURD_LAST_DAY_ENABLED.Value,
+                                    configuration.SIGURD_PRICE.Value,
+                                    configuration.OVERRIDE_UPGRADE_NAMES ? configuration.SIGURD_ACCESS_OVERRIDE_NAME : "");
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 
@@ -31,6 +32,17 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         internal new static void RegisterUpgrade()
         {
             SetupGenericPerk<DeepPockets>(UPGRADE_NAME);
+        }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                configuration.SHARED_UPGRADES || !configuration.DEEPER_POCKETS_INDIVIDUAL,
+                                                configuration.DEEPER_POCKETS_ENABLED,
+                                                configuration.DEEPER_POCKETS_PRICE,
+                                                UpgradeBus.ParseUpgradePrices(configuration.DEEPER_POCKETS_PRICES),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.DEEPER_POCKETS_OVERRIDE_NAME : "");
         }
     }
 }

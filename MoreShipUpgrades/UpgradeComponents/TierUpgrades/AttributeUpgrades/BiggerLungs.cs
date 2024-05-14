@@ -73,5 +73,16 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         {
             SetupGenericPerk<BiggerLungs>(UPGRADE_NAME);
         }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                configuration.SHARED_UPGRADES.Value || !configuration.BIGGER_LUNGS_INDIVIDUAL.Value,
+                                                configuration.BIGGER_LUNGS_ENABLED.Value,
+                                                configuration.BIGGER_LUNGS_PRICE.Value,
+                                                UpgradeBus.ParseUpgradePrices(configuration.BIGGER_LUNGS_UPGRADE_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.BIGGER_LUNGS_OVERRIDE_NAME : "");
+        }
     }
 }

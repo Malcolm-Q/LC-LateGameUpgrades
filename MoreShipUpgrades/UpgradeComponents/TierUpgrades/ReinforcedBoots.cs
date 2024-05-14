@@ -1,4 +1,5 @@
 ﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
@@ -36,6 +37,17 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         internal new static void RegisterUpgrade()
         {
             SetupGenericPerk<ReinforcedBoots>(UPGRADE_NAME);
+        }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                configuration.SHARED_UPGRADES || !configuration.REINFORCED_BOOTS_INDIVIDUAL,
+                                                configuration.REINFORCED_BOOTS_ENABLED,
+                                                configuration.REINFORCED_BOOTS_PRICE,
+                                                UpgradeBus.ParseUpgradePrices(configuration.REINFORCED_BOOTS_PRICES),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.REINFORCED_BOOTS_OVERRIDE_NAME : "");
         }
     }
 }

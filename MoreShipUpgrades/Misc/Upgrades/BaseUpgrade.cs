@@ -108,6 +108,14 @@ namespace MoreShipUpgrades.Misc.Upgrades
         internal static void RegisterUpgrade() { throw new NotSupportedException(); }
 
         /// <summary>
+        /// Registers the associated terminal node of the upgrade
+        /// <para></para>
+        /// This method is to be overriden by their subclasses through "new"
+        /// </summary>
+        /// <exception cref="NotSupportedException"></exception>
+        internal static void RegisterTerminalNode() { throw new NotSupportedException(); }
+
+        /// <summary>
         /// Generic function where it adds a script (specificed through the type) into an GameObject asset 
         /// which is present in a provided asset bundle in a given path and registers it as a network prefab.
         /// </summary>

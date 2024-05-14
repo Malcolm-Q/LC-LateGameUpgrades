@@ -1,4 +1,5 @@
 ﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
@@ -71,6 +72,17 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         internal new static void RegisterUpgrade()
         {
             SetupGenericPerk<ChargingBooster>(UPGRADE_NAME);
+        }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                shareStatus: true,
+                                                configuration.CHARGING_BOOSTER_ENABLED.Value,
+                                                configuration.CHARGING_BOOSTER_PRICE.Value,
+                                                UpgradeBus.ParseUpgradePrices(configuration.CHARGING_BOOSTER_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.CHARGING_BOOSTER_OVERRIDE_NAME : "");
         }
     }
 }

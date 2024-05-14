@@ -1,4 +1,5 @@
 ﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using UnityEngine;
 
@@ -47,6 +48,16 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         internal new static void RegisterUpgrade()
         {
             SetupGenericPerk<FasterDropPod>(UPGRADE_NAME);
+        }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
+                                    shareStatus: true,
+                                    configuration.FASTER_DROP_POD_ENABLED.Value,
+                                    configuration.FASTER_DROP_POD_PRICE.Value,
+                                    configuration.OVERRIDE_UPGRADE_NAMES ? configuration.FAST_ENCRYPTION_OVERRIDE_NAME : "");
         }
     }
 }

@@ -36,5 +36,16 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         {
             SetupGenericPerk<ClimbingGloves>(UPGRADE_NAME);
         }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                configuration.SHARED_UPGRADES.Value || !configuration.CLIMBING_GLOVES_INDIVIDUAL.Value,
+                                                configuration.CLIMBING_GLOVES_ENABLED.Value,
+                                                configuration.CLIMBING_GLOVES_PRICE.Value,
+                                                UpgradeBus.ParseUpgradePrices(configuration.CLIMBING_GLOVES_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.CLIMBING_GLOVES_OVERRIDE_NAME : "");
+        }
     }
 }

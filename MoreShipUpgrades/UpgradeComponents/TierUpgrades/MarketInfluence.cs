@@ -1,4 +1,5 @@
 ﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
@@ -36,6 +37,17 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         internal new static void RegisterUpgrade()
         {
             SetupGenericPerk<MarketInfluence>(UPGRADE_NAME);
+        }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                shareStatus: true,
+                                                configuration.MARKET_INFLUENCE_ENABLED.Value,
+                                                configuration.MARKET_INFLUENCE_PRICE.Value,
+                                                UpgradeBus.ParseUpgradePrices(configuration.MARKET_INFLUENCE_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.MARKET_INFLUENCE_OVERRIDE_NAME : "");
         }
     }
 }

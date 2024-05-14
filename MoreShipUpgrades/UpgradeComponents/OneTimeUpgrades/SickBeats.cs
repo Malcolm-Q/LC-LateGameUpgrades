@@ -89,5 +89,16 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             SetupGenericPerk<SickBeats>(UPGRADE_NAME);
         }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            UpgradeBus.Instance.SetupOneTimeTerminalNode(
+                 UPGRADE_NAME,
+                configuration.SHARED_UPGRADES.Value || !configuration.BEATS_INDIVIDUAL.Value,
+                configuration.BEATS_ENABLED.Value,
+                configuration.BEATS_PRICE.Value,
+                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.SICK_BEATS_OVERRIDE_NAME : "");
+        }
     }
 }

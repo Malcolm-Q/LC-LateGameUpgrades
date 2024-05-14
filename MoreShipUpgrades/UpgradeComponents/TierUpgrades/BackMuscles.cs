@@ -85,6 +85,17 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             SetupGenericPerk<BackMuscles>(UPGRADE_NAME);
         }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                configuration.SHARED_UPGRADES.Value || !configuration.BACK_MUSCLES_INDIVIDUAL.Value,
+                                                configuration.BACK_MUSCLES_ENABLED.Value,
+                                                configuration.BACK_MUSCLES_PRICE.Value,
+                                                UpgradeBus.ParseUpgradePrices(configuration.BACK_MUSCLES_UPGRADE_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.BACK_MUSCLES_OVERRIDE_NAME : "");
+        }
     }
 
 }

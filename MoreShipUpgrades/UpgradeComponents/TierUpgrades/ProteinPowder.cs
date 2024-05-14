@@ -84,5 +84,16 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             SetupGenericPerk<ProteinPowder>(UPGRADE_NAME);
         }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                configuration.SHARED_UPGRADES.Value || !configuration.PROTEIN_INDIVIDUAL.Value,
+                                                configuration.PROTEIN_ENABLED.Value,
+                                                configuration.PROTEIN_PRICE.Value,
+                                                UpgradeBus.ParseUpgradePrices(configuration.PROTEIN_UPGRADE_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.PROTEIN_POWDER_OVERRIDE_NAME : "");
+        }
     }
 }

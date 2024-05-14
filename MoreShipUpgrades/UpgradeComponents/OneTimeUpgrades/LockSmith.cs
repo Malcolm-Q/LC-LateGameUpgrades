@@ -1,4 +1,5 @@
 ﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Collections;
@@ -138,6 +139,17 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         internal new static void RegisterUpgrade()
         {
             SetupGenericPerk<LockSmith>(UPGRADE_NAME);
+        }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            UpgradeBus.Instance.
+            SetupOneTimeTerminalNode(UPGRADE_NAME,
+                                    configuration.SHARED_UPGRADES.Value || !configuration.LOCKSMITH_INDIVIDUAL.Value,
+                                    configuration.LOCKSMITH_ENABLED.Value,
+                                    configuration.LOCKSMITH_PRICE.Value,
+                                    configuration.OVERRIDE_UPGRADE_NAMES ? configuration.LOCKSMITH_OVERRIDE_NAME : "");
         }
     }
 }

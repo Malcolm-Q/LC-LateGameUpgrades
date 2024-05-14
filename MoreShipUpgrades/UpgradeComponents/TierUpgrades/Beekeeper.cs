@@ -75,5 +75,17 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             SetupGenericPerk<Beekeeper>(UPGRADE_NAME);
         }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(
+                             UPGRADE_NAME,
+                            configuration.SHARED_UPGRADES.Value || !configuration.BEEKEEPER_INDIVIDUAL.Value,
+                            configuration.BEEKEEPER_ENABLED.Value,
+                            configuration.BEEKEEPER_PRICE.Value,
+                            UpgradeBus.ParseUpgradePrices(configuration.BEEKEEPER_UPGRADE_PRICES.Value),
+                            configuration.OVERRIDE_UPGRADE_NAMES ? configuration.BEEKEEPER_OVERRIDE_NAME : "");
+        }
     }
 }

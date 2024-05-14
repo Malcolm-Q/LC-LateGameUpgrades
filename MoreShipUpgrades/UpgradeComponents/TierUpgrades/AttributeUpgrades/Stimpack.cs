@@ -135,5 +135,16 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         {
             SetupGenericPerk<Stimpack>(UPGRADE_NAME);
         }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                configuration.SHARED_UPGRADES.Value || !configuration.PLAYER_HEALTH_INDIVIDUAL.Value,
+                                                configuration.PLAYER_HEALTH_ENABLED.Value,
+                                                configuration.PLAYER_HEALTH_PRICE.Value,
+                                                UpgradeBus.ParseUpgradePrices(configuration.PLAYER_HEALTH_UPGRADE_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.STIMPACK_OVERRIDE_NAME : "");
+        }
     }
 }

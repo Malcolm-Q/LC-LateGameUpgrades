@@ -1,4 +1,5 @@
 ﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
@@ -28,6 +29,16 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         internal new static void RegisterUpgrade()
         {
             SetupGenericPerk<LethalDeals>(UPGRADE_NAME);
+        }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
+                                    shareStatus: true,
+                                    configuration.LETHAL_DEALS_ENABLED.Value,
+                                    configuration.LETHAL_DEALS_PRICE.Value,
+                                    configuration.OVERRIDE_UPGRADE_NAMES ? configuration.LETHAL_DEALS_OVERRIDE_NAME : "");
         }
     }
 }

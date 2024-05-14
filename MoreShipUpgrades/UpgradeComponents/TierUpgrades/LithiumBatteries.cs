@@ -1,4 +1,5 @@
 ﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 
@@ -39,6 +40,17 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         internal new static void RegisterUpgrade()
         {
             SetupGenericPerk<LithiumBatteries>(UPGRADE_NAME);
+        }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                configuration.SHARED_UPGRADES.Value || !configuration.LITHIUM_BATTERIES_INDIVIDUAL.Value,
+                                                configuration.LITHIUM_BATTERIES_ENABLED.Value,
+                                                configuration.LITHIUM_BATTERIES_PRICE.Value,
+                                                UpgradeBus.ParseUpgradePrices(configuration.LITHIUM_BATTERIES_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.LITHIUM_BATTERIES_OVERRIDE_NAME : "");
         }
     }
 }

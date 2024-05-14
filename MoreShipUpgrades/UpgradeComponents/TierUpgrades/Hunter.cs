@@ -153,5 +153,17 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             SetupGenericPerk<Hunter>(UPGRADE_NAME);
         }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            SetupLevels();
+            UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                shareStatus: true,
+                                                configuration.HUNTER_ENABLED.Value,
+                                                configuration.HUNTER_PRICE.Value,
+                                                UpgradeBus.ParseUpgradePrices(configuration.HUNTER_UPGRADE_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.HUNTER_OVERRIDE_NAME : "");
+        }
     }
 }

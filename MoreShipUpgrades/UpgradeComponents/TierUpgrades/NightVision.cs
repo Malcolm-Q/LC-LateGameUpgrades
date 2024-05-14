@@ -12,6 +12,7 @@ using MoreShipUpgrades.Input;
 using UnityEngine.UI;
 using CSync.Lib;
 using MoreShipUpgrades.Misc.Util;
+using MoreShipUpgrades.Misc.TerminalNodes;
 
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
@@ -239,6 +240,18 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         internal new static void RegisterUpgrade()
         {
             SetupGenericPerk<NightVision>(UPGRADE_NAME);
+        }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            CustomTerminalNode node = UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(NightVision.UPGRADE_NAME,
+                                                configuration.SHARED_UPGRADES.Value || !configuration.NIGHT_VISION_INDIVIDUAL.Value,
+                                                configuration.NIGHT_VISION_ENABLED.Value,
+                                                0,
+                                                UpgradeBus.ParseUpgradePrices(configuration.NIGHT_VISION_UPGRADE_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.NIGHT_VISION_OVERRIDE_NAME : "");
+            if (node != null) node.Unlocked = true;
         }
     }
 }

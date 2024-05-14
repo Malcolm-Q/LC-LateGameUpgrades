@@ -50,5 +50,16 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         {
             SetupGenericPerk<RunningShoes>(UPGRADE_NAME);
         }
+        internal new static void RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                configuration.SHARED_UPGRADES.Value || !configuration.RUNNING_SHOES_INDIVIDUAL.Value,
+                                                configuration.RUNNING_SHOES_ENABLED.Value,
+                                                configuration.RUNNING_SHOES_PRICE.Value,
+                                                UpgradeBus.ParseUpgradePrices(configuration.RUNNING_SHOES_UPGRADE_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.RUNNING_SHOES_OVERRIDE_NAME : "");
+        }
     }
 }
