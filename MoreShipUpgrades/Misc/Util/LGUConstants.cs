@@ -1029,6 +1029,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string WEATHER_CHANGED_FORMAT = "{0}'s weather has changed to {1}. Thank you for your purchase.";
         internal const string NOT_ENOUGH_CREDITS_PROBE = "You do not have enough credits to purchase a randomized weather probe.";
         internal const string NOT_ENOUGH_CREDITS_SPECIFIED_PROBE = "You do not have enough credits to purchase a specified weather probe.";
+        internal const string SAME_WEATHER_FORMAT = "Unable to change {0}'s weather due to already being the selected weather ({1}).";
 
         #endregion
 

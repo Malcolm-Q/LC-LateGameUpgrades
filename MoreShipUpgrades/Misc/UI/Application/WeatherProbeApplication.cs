@@ -2,6 +2,7 @@
 using InteractiveTerminalAPI.UI.Application;
 using InteractiveTerminalAPI.UI.Cursor;
 using InteractiveTerminalAPI.UI.Screen;
+using LethalLib.Modules;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Util;
 using System;
@@ -45,7 +46,6 @@ namespace MoreShipUpgrades.Misc.UI.Application
             currentCursorMenu = initialPage.GetCurrentCursorMenu();
             currentScreen = initialPage.GetCurrentScreen();
         }
-
         void SelectedPlanet(SelectableLevel level, Action cancelAction)
         {
             RandomWeatherWithVariables[] possibleWeathers = level.randomWeathers.Where(x => x.weatherType != level.currentWeather).ToArray();
@@ -87,22 +87,21 @@ namespace MoreShipUpgrades.Misc.UI.Application
                     Name = weather.weatherType.ToString(),
                     Action = () =>
                     {
-                        Confirm(level.PlanetName, string.Format(LGUConstants.CONFIRM_WEATHER_FORMAT, level.PlanetName, weather.weatherType.ToString(), UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE.Value), () => BeforeChangeWeather(level, weather.weatherType),() => SwitchScreen(screen, cursorMenu, true));
-                    }
+                        BeforeChangeWeather(level, weather.weatherType);
+                    },
+                    Active = (x) => CanSelectWeather(level, weather.weatherType, UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE),
                 };
 
             }
-            if (level.currentWeather != LevelWeatherType.None)
+            elements[possibleWeathers.Length] = new CursorElement()
             {
-                elements[possibleWeathers.Length] = new CursorElement()
+                Name = "Clear",
+                Action = () =>
                 {
-                    Name = "Clear",
-                    Action = () =>
-                    {
-                        Confirm(level.PlanetName, string.Format(LGUConstants.CONFIRM_CLEAR_WEATHER_FORMAT, level.PlanetName, UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_ALWAYS_CLEAR ? UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE.Value : UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE.Value), () => BeforeChangeWeather(level, LevelWeatherType.None), () => SwitchScreen(screen, cursorMenu, true));
-                    }
-                };
-            }
+                    BeforeChangeWeather(level, LevelWeatherType.None);
+                },
+                Active = (x) => CanSelectWeather(level, LevelWeatherType.None, UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_ALWAYS_CLEAR ? UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE : UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE),
+            };
             if (!UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_ALWAYS_CLEAR)
             {
                 elements[possibleWeathers.Length + 1] = new CursorElement()
@@ -110,8 +109,9 @@ namespace MoreShipUpgrades.Misc.UI.Application
                     Name = "Random",
                     Action = () =>
                     {
-                        Confirm(level.PlanetName, string.Format(LGUConstants.CONFIRM_RANDOM_WEATHER_FORMAT, level.PlanetName, UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE.Value), () => BeforeRandomizeWeather(level), () => SwitchScreen(screen, cursorMenu, true));
-                    }
+                        BeforeRandomizeWeather(level);
+                    },
+                    Active = (x) => CanSelectRandomWeather(possibleWeathers, UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE),
                 };
 
                 elements[possibleWeathers.Length + 2] = new CursorElement()
@@ -130,6 +130,21 @@ namespace MoreShipUpgrades.Misc.UI.Application
             }
             SwitchScreen(screen, cursorMenu, true);
         }
+        static bool CanSelectRandomWeather(RandomWeatherWithVariables[] weathers, int price)
+        {
+            int groupCredits = UpgradeBus.Instance.GetTerminal().groupCredits;
+            if (price > groupCredits) return false;
+
+            return weathers.Length >= 1;
+        }
+        static bool CanSelectWeather(SelectableLevel level, LevelWeatherType levelWeatherType, int price)
+        {
+            int groupCredits = UpgradeBus.Instance.GetTerminal().groupCredits;
+            if (price > groupCredits) return false;
+
+            bool sameWeather = level.currentWeather == levelWeatherType || (level.overrideWeather && level.overrideWeatherType == levelWeatherType);
+            return !sameWeather;
+        }
         void BeforeChangeWeather(SelectableLevel level, LevelWeatherType type)
         {
             int groupCredits = UpgradeBus.Instance.GetTerminal().groupCredits;
@@ -138,7 +153,16 @@ namespace MoreShipUpgrades.Misc.UI.Application
                 ErrorMessage(level.PlanetName, PreviousScreen(), LGUConstants.NOT_ENOUGH_CREDITS_SPECIFIED_PROBE);
                 return;
             }
-            ChangeWeather(level, type);
+
+            bool sameWeather = level.currentWeather == type || (level.overrideWeather && level.overrideWeatherType == type);
+            if (sameWeather)
+            {
+                ErrorMessage(level.PlanetName, PreviousScreen(), string.Format(LGUConstants.SAME_WEATHER_FORMAT, level.PlanetName, type == LevelWeatherType.None ? "clear" : type));
+                return;
+            }
+            int price = type == LevelWeatherType.None && UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_ALWAYS_CLEAR ? UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE : UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE.Value;
+
+            Confirm(level.PlanetName, string.Format(LGUConstants.CONFIRM_WEATHER_FORMAT, level.PlanetName, type, price), () => ChangeWeather(level, type), PreviousScreen());
         }
         void ChangeWeather(SelectableLevel level, LevelWeatherType weatherType)
         {
@@ -180,7 +204,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
                 ErrorMessage(level.PlanetName, PreviousScreen(), LGUConstants.NOT_ENOUGH_CREDITS_PROBE);
                 return;
             }
-            RandomizeWeather(level);
+            Confirm(level.PlanetName, string.Format(LGUConstants.CONFIRM_RANDOM_WEATHER_FORMAT, level.PlanetName, UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE.Value), () => RandomizeWeather(level), PreviousScreen());
         }
         void RandomizeWeather(SelectableLevel level)
         {

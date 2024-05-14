@@ -4,8 +4,11 @@
 - Added configurable incremental price factors to ``Extend Deadline`` per quota and per day extended.
     - Due to this, an interactive UI was made for ``extend deadline`` command where you can select the amount of days you wish to extend and shows the amount of credits you will spend on that amount.
 - Added configurable toggle for Deeper Pockets allowing pocketing wheelbarrows (allowing you to switch between items when carrying a wheelbarrow) or not.
+- Changed Probe's interactive menu to disable weather entries when conditions are not met (not enough credits or the weather is already in place)
 - Fixed Hunter samples spawning on Manticoils and Tulip Snakes when the transition from day to night happens and the daytime enemies despawned on that transiction.
 - Fixed Sick Beats preventing enemies from damaging the player when disabled.
+- Fixed Helmet's scan node appearing above the item rather than on the item.
+- Fixed Helmet not appearing in the player's hand when held.
 
 </details>
 
