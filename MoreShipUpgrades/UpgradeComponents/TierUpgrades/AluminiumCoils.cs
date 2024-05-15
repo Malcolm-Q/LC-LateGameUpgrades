@@ -54,10 +54,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             System.Func<int, float> cooldownInfo = level => UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_INITIAL_COOLDOWN_DECREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_DECREASE.Value);
             StringBuilder sb = new StringBuilder();
             sb.Append($"LVL {level} - ${price}: Upgrades to zap gun:\n");
-            sb.Append($"- Increases zap gun's range by {(rangeInfo(level) / 13f * 100f):F0}%\n");
-            sb.Append($"- Stun time increased by {stunTimerInfo(level)} seconds\n");
-            sb.Append($"- Decreases the minigame's difficulty by {(difficultyInfo(level)):F0}%\n");
-            sb.Append($"- Decreases the zap gun's cooldown by {cooldownInfo(level):F0}%\n");
+            sb.Append($"- Increases zap gun's range by {(rangeInfo(level-1) / 13f * 100f):F0}%\n");
+            sb.Append($"- Stun time increased by {stunTimerInfo(level-1)} seconds\n");
+            sb.Append($"- Decreases the minigame's difficulty by {(difficultyInfo(level - 1)):F0}%\n");
+            sb.Append($"- Decreases the zap gun's cooldown by {cooldownInfo(level - 1):F0}%\n");
             sb.Append('\n');
             return sb.ToString();
         }

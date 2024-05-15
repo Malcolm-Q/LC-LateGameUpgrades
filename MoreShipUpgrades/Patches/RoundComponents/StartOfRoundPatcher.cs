@@ -72,7 +72,8 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             if (!__instance.IsHost) return;
 
             ContractManager.Instance.SyncContractDetailsClientRpc("None", -1);
-            QuantumDisruptor.Instance.ResetUsageCounterClientRpc();
+            if (!UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_ENABLED) return;
+            QuantumDisruptor.Instance.TryResetValues(QuantumDisruptor.ResetModes.MoonLanding);
         }
         [HarmonyPatch(nameof(StartOfRound.AutoSaveShipData))]
         [HarmonyPrefix]
@@ -163,6 +164,14 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             Tools.FindFloat(ref index, ref codes, findValue: 10f, addCode: getLandingSpeedMultiplier, errorMessage: "Couldn't find the 10f value used on WaitForSeconds");
             codes.Insert(index+1, new CodeInstruction(OpCodes.Div));
             return codes;
+        }
+
+        [HarmonyPatch(nameof(StartOfRound.ChangeLevel))]
+        [HarmonyPostfix]
+        static void ChangeLevelPostfix()
+        {
+            if (!UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_ENABLED) return;
+            QuantumDisruptor.Instance.TryResetValues(QuantumDisruptor.ResetModes.MoonRerouting);
         }
     }
 }
