@@ -132,6 +132,10 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<int> HELMET_DAMAGE_REDUCTION { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> HELMET_DAMAGE_MITIGATION_MODE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA { get; set; }
         [field: SyncedEntryField] public SyncedEntry<QuantumDisruptor.ResetModes> QUANTUM_DISRUPTOR_RESET_MODE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<QuantumDisruptor.UpgradeModes> QUANTUM_DISRUPTOR_UPGRADE_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> QUANTUM_DISRUPTOR_INITIAL_HOURS_REVERT_ON_USE { get; set; }
