@@ -6,7 +6,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
     /// <summary>
     /// Class responsible to handle game attributes such as health, jump force, movement speed, sprint time for the player and ship's battery for keeping the doors closed, along many others
     /// </summary>
-    abstract class GameAttributeTierUpgrade : TierUpgrade
+    public abstract class GameAttributeTierUpgrade : TierUpgrade
     {
         #region Variables
         /// <summary>

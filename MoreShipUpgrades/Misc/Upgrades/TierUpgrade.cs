@@ -6,7 +6,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
     /// <summary>
     /// Class which represents upgrades that can be purchased more than once for additional effects
     /// </summary>
-    abstract class TierUpgrade : BaseUpgrade, ITierUpgradeDisplayInfo
+    public abstract class TierUpgrade : BaseUpgrade, ITierUpgradeDisplayInfo
     {
         #region Overriden Methods
 

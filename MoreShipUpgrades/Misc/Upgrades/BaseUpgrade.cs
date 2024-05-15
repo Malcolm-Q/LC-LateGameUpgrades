@@ -11,7 +11,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
     /// <summary>
     /// Class which represents the many upgrades present in the Lategame Upgrades' store for purchase for extra effects such as attribute increases, new enviromental scenarios and more...
     /// </summary>
-    abstract class BaseUpgrade : NetworkBehaviour
+    public abstract class BaseUpgrade : NetworkBehaviour
     {
         #region Variables
         /// <summary>
@@ -68,7 +68,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// Shows a notification for when an upgrade is loaded or unloaded from the player
         /// </summary>
         /// <param name="message">Message displayed to the player</param>
-        void ShowUpgradeNotification(string colourHex, string message)
+        protected void ShowUpgradeNotification(string colourHex, string message)
         {
             string notification = $"\n<color={colourHex}>{message}</color>";
             HUDManager.Instance.chatText.text += notification;

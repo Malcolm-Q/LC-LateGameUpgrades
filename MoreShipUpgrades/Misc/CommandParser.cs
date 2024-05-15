@@ -7,6 +7,7 @@ using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exorcism;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
@@ -553,8 +554,26 @@ namespace MoreShipUpgrades.Misc
                 case "load": outputNode = ExecuteLoadCommands(secondWord, fullText, ref terminal, ref outputNode); return;
                 case "scan": outputNode = ExecuteScanCommands(secondWord, ref outputNode); return;
                 case "scrap": outputNode = ExecuteScrapCommands(secondWord, ref terminal, ref outputNode); return;
+                case "quantum": ExecuteQuantumCommands(secondWord, ref terminal, ref outputNode); return;
                 default: return;
             }
+        }
+        private static void ExecuteQuantumCommands(string word, ref Terminal terminal, ref TerminalNode outputNode)
+        {
+            if (!UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_ENABLED) return;
+            if (!BaseUpgrade.GetActiveUpgrade(QuantumDisruptor.UPGRADE_NAME))
+            {
+                outputNode = DisplayTerminalMessage("You need \'Quantum Disruptor\' upgrade active to use this command.");
+                return;
+            }
+            (bool, string) canRevert = QuantumDisruptor.Instance.CanRevertTime();
+            if (!canRevert.Item1)
+            {
+                outputNode = DisplayTerminalMessage(canRevert.Item2);
+                return;
+            }
+            if (terminal.IsHost || terminal.IsServer) QuantumDisruptor.Instance.RevertTimeClientRpc();
+            outputNode = DisplayTerminalMessage($"Successfully reverted back current moon's time by {QuantumDisruptor.Instance.hoursToReduce}. You currently have {QuantumDisruptor.Instance.currentUsages} out of {QuantumDisruptor.Instance.availableUsages} usages");
         }
         private static TerminalNode ExecuteScrapInsuranceCommand(ref Terminal terminal, ref TerminalNode outputNode)
         {

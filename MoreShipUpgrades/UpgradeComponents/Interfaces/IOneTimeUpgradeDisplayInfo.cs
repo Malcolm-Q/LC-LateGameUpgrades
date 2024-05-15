@@ -3,7 +3,7 @@
     /// <summary>
     /// Interface for upgrades which are only purchased once so the only factor that can change the info display is the price set for the selected upgrade
     /// </summary>
-    internal interface IOneTimeUpgradeDisplayInfo
+    public interface IOneTimeUpgradeDisplayInfo
     {
         /// <summary>
         /// Shows the info related to the selected upgrade

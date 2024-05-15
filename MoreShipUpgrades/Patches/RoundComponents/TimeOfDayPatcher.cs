@@ -3,6 +3,7 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Patches.RoundComponents
@@ -24,6 +25,8 @@ namespace MoreShipUpgrades.Patches.RoundComponents
                 LguStore.Instance.GenerateSales();
             }
             ExtendDeadlineScript.SetDaysExtended(daysExtended: 0);
+            if (!UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_ENABLED) return;
+            QuantumDisruptor.Instance.TryResetValues(QuantumDisruptor.ResetModes.NewQuota);
         }
 
         [HarmonyPatch(nameof(TimeOfDay.SetBuyingRateForDay))]
