@@ -4,6 +4,8 @@
 - Added configurable incremental price factors to ``Extend Deadline`` per quota and per day extended.
     - Due to this, an interactive UI was made for ``extend deadline`` command where you can select the amount of days you wish to extend and shows the amount of credits you will spend on that amount.
 - Added configurable toggle for Deeper Pockets allowing pocketing wheelbarrows (allowing you to switch between items when carrying a wheelbarrow) or not.
+- Added alternative mode for ``Quantum Disruptor`` upgrade to revert time by x hours and can only be used y times which resets at a given point (per moon landing, routing or new quota).
+- Added alternative mode for ``Helmet`` item to partially mitigate damage and only break when the next hit on the player would kill them.
 - Changed Probe's interactive menu to disable weather entries when conditions are not met (not enough credits or the weather is already in place)
 - Fixed Hunter samples spawning on Manticoils and Tulip Snakes when the transition from day to night happens and the daytime enemies despawned on that transiction.
 - Fixed Sick Beats preventing enemies from damaging the player when disabled.
