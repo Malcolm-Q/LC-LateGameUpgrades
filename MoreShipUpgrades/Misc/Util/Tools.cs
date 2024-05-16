@@ -179,9 +179,9 @@ namespace MoreShipUpgrades.Misc.Util
             return false;
         }
 
-        internal static string GenerateInfoForUpgrade(string infoFormat, int initialPrice, int[] incrementalPrices, Func<int, float> infoFunction)
+        internal static string GenerateInfoForUpgrade(string infoFormat, int initialPrice, int[] incrementalPrices, Func<int, float> infoFunction, bool skipFirst = false)
         {
-            string info = string.Format(infoFormat, 1, initialPrice, infoFunction(0));
+            string info = skipFirst ? "" : string.Format(infoFormat, 1, initialPrice, infoFunction(0));
             for (int i = 0; i < incrementalPrices.Length; i++)
             {
                 float infoResult = infoFunction(i + 1);

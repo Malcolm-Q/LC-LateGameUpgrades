@@ -28,6 +28,7 @@
 - Fixed interaction between Deeper Pockets and Shopping Cart that would lead to the player being unable to interact.
 - Fixed sales still showing in the upgrade store when the upgrade is already maxed.
 - Fixed credits being wasted when bought upgrades and disconnecting after.
+- Fixed some upgrade information texts displaying incorrect values.
 
 </details>
 <details>
