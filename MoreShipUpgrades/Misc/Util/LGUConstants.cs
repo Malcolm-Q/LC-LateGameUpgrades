@@ -276,6 +276,10 @@ namespace MoreShipUpgrades.Misc.Util
 
         #region Items
 
+        internal const string ITEM_SCAN_NODE_KEY_FORMAT = "Enable scan node of {0}";
+        internal const bool ITEM_SCAN_NODE_DEFAULT = true;
+        internal const string ITEM_SCAN_NODE_DESCRIPTION = "Shows a scan node on the item when scanning";
+
         #region Portable Teleporters
 
         internal const string BREAK_CHANCE_KEY = "Chance to break on use";
@@ -299,6 +303,8 @@ namespace MoreShipUpgrades.Misc.Util
         internal const bool ADVANCED_PORTABLE_TELEPORTER_KEEP_ITEMS_DEFAULT = true;
         internal const string ADVANCED_PORTABLE_TELEPORTER_KEEP_ITEMS_DESCRIPTION = KEEP_ITEMS_DESCRIPTION;
 
+        internal static readonly string ADVANCED_PORTABLE_TELEPORTER_SCAN_NODE_KEY = string.Format(ITEM_SCAN_NODE_KEY_FORMAT, AdvancedPortableTeleporter.ITEM_NAME);
+
         #endregion
 
         #region Weak Portable Teleporter
@@ -317,6 +323,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const bool PORTABLE_TELEPORTER_KEEP_ITEMS_DEFAULT = true;
         internal const string PORTABLE_TELEPORTER_KEEP_ITEMS_DESCRIPTION = KEEP_ITEMS_DESCRIPTION;
 
+        internal static readonly string PORTABLE_TELEPORTER_SCAN_NODE_KEY = string.Format(ITEM_SCAN_NODE_KEY_FORMAT, RegularPortableTeleporter.ITEM_NAME);
         #endregion
 
         #endregion
@@ -339,6 +346,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const bool DIVING_KIT_TWO_HANDED_DEFAULT = true;
         internal const string DIVING_KIT_TWO_HANDED_DESCRIPTION = "One or two handed item.";
 
+        internal static readonly string DIVING_KIT_SCAN_NODE_KEY = string.Format(ITEM_SCAN_NODE_KEY_FORMAT, DivingKit.ITEM_NAME);
         #endregion
 
         #region Helmet
@@ -361,6 +369,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string HELMET_DAMAGE_MITIGATION_MODE_DEFAULT = "TotalPerHit";
         internal const string HELMET_DAMAGE_MITIGATION_MODE_DESCRIPTION = "Accepted Values: TotalPerHit (full immunity and helmet takes hits on durability), PartialTilLowHealth (partial immunity and helmet breaks when low health)";
 
+        internal static readonly string HELMET_SCAN_NODE_KEY = string.Format(ITEM_SCAN_NODE_KEY_FORMAT, Helmet.ITEM_NAME);
         #endregion
 
         #region Medkit
@@ -381,6 +390,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const int MEDKIT_USES_DEFAULT = 3;
         internal const string MEDKIT_USES_DESCRIPTION = $"The amount of times the {Medkit.ITEM_NAME} can heal you.";
 
+        internal static readonly string MEDKIT_SCAN_NODE_KEY = string.Format(ITEM_SCAN_NODE_KEY_FORMAT, Medkit.ITEM_NAME);
         #endregion
 
         #region Peeper
@@ -393,6 +403,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const int PEEPER_PRICE_DEFAULT = 500;
         internal const string PEEPER_PRICE_DESCRIPTION = $"Default price to purchase a {Peeper.ITEM_NAME}.";
 
+        internal static readonly string PEEPER_SCAN_NODE_KEY = string.Format(ITEM_SCAN_NODE_KEY_FORMAT, Peeper.ITEM_NAME);
         #endregion
 
         #endregion

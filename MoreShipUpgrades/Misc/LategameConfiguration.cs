@@ -14,6 +14,7 @@ using UnityEngine;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
+using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 
 
 namespace MoreShipUpgrades.Misc
@@ -132,6 +133,14 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<bool> PEEPER_SCAN_NODE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> MEDKIT_SCAN_NODE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> HELMET_SCAN_NODE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> DIVING_KIT_SCAN_NODE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> STORE_WHEELBARROW_SCAN_NODE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> PORTABLE_TELEPORTER_SCAN_NODE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> ADVANCED_PORTABLE_TELEPORTER_SCAN_NODE { get; set; }
+
         [field: SyncedEntryField] public SyncedEntry<int> HELMET_DAMAGE_REDUCTION { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> HELMET_DAMAGE_MITIGATION_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY { get; set; }
@@ -490,6 +499,7 @@ namespace MoreShipUpgrades.Misc
             WEAK_TELE_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.PORTABLE_TELEPORTER_PRICE_KEY, LGUConstants.PORTABLE_TELEPORTER_PRICE_DEFAULT);
             CHANCE_TO_BREAK = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.PORTABLE_TELEPORTER_BREAK_CHANCE_KEY, LGUConstants.PORTABLE_TELEPORTER_BREAK_CHANCE_DEFAULT, LGUConstants.PORTABLE_TELEPORTER_BREAK_CHANCE_DESCRIPTION);
             KEEP_ITEMS_ON_TELE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.PORTABLE_TELEPORTER_KEEP_ITEMS_KEY, LGUConstants.PORTABLE_TELEPORTER_KEEP_ITEMS_DEFAULT, LGUConstants.PORTABLE_TELEPORTER_KEEP_ITEMS_DESCRIPTION);
+            PORTABLE_TELEPORTER_SCAN_NODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.PORTABLE_TELEPORTER_SCAN_NODE_KEY, LGUConstants.ITEM_SCAN_NODE_DEFAULT, LGUConstants.ITEM_SCAN_NODE_DESCRIPTION);
 
             #endregion
 
@@ -500,6 +510,7 @@ namespace MoreShipUpgrades.Misc
             ADVANCED_TELE_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ADVANCED_PORTABLE_TELEPORTER_PRICE_KEY, LGUConstants.ADVANCED_PORTABLE_TELEPORTER_PRICE_DEFAULT);
             ADV_CHANCE_TO_BREAK = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ADVANCED_PORTABLE_TELEPORTER_BREAK_CHANCE_KEY, LGUConstants.ADVANCED_PORTABLE_TELEPORTER_BREAK_CHANCE_DEFAULT, LGUConstants.ADVANCED_PORTABLE_TELEPORTER_BREAK_CHANCE_DESCRIPTION);
             ADV_KEEP_ITEMS_ON_TELE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ADVANCED_PORTABLE_TELEPORTER_KEEP_ITEMS_KEY, LGUConstants.ADVANCED_PORTABLE_TELEPORTER_KEEP_ITEMS_DEFAULT, LGUConstants.ADVANCED_PORTABLE_TELEPORTER_KEEP_ITEMS_DESCRIPTION);
+            ADVANCED_PORTABLE_TELEPORTER_SCAN_NODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ADVANCED_PORTABLE_TELEPORTER_SCAN_NODE_KEY, LGUConstants.ITEM_SCAN_NODE_DEFAULT, LGUConstants.ITEM_SCAN_NODE_DESCRIPTION);
 
             #endregion
 
@@ -511,6 +522,7 @@ namespace MoreShipUpgrades.Misc
             HELMET_HITS_BLOCKED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.HELMET_AMOUNT_OF_HITS_KEY, LGUConstants.HELMET_AMOUNT_OF_HITS_DEFAULT);
             HELMET_DAMAGE_REDUCTION = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.HELMET_DAMAGE_REDUCTION_KEY, LGUConstants.HELMET_DAMAGE_REDUCTION_DEFAULT);
             HELMET_DAMAGE_MITIGATION_MODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.HELMET_DAMAGE_MITIGATION_MODE_KEY, LGUConstants.HELMET_DAMAGE_MITIGATION_MODE_DEFAULT, LGUConstants.HELMET_DAMAGE_MITIGATION_MODE_DESCRIPTION);
+            HELMET_SCAN_NODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.HELMET_SCAN_NODE_KEY, LGUConstants.ITEM_SCAN_NODE_DEFAULT, LGUConstants.ITEM_SCAN_NODE_DESCRIPTION);
 
             #endregion
 
@@ -519,6 +531,7 @@ namespace MoreShipUpgrades.Misc
             topSection = Peeper.ITEM_NAME;
             PEEPER_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.PEEPER_ENABLED_KEY, LGUConstants.PEEPER_ENABLED_DEFAULT, LGUConstants.PEEPER_ENABLED_DESCRIPTION);
             PEEPER_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.PEEPER_PRICE_KEY, LGUConstants.PEEPER_PRICE_DEFAULT, LGUConstants.PEEPER_PRICE_DESCRIPTION);
+            PEEPER_SCAN_NODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.PEEPER_SCAN_NODE_KEY, LGUConstants.ITEM_SCAN_NODE_DEFAULT, LGUConstants.ITEM_SCAN_NODE_DESCRIPTION);
 
             #endregion
 
@@ -529,6 +542,7 @@ namespace MoreShipUpgrades.Misc
             MEDKIT_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MEDKIT_PRICE_KEY, LGUConstants.MEDKIT_PRICE_DEFAULT, LGUConstants.MEDKIT_PRICE_DESCRIPTION);
             MEDKIT_HEAL_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MEDKIT_HEAL_AMOUNT_KEY, LGUConstants.MEDKIT_HEAL_AMOUNT_DEFAULT, LGUConstants.MEDKIT_HEAL_AMOUNT_DESCRIPTION);
             MEDKIT_USES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MEDKIT_USES_KEY, LGUConstants.MEDKIT_USES_DEFAULT, LGUConstants.MEDKIT_USES_DESCRIPTION);
+            MEDKIT_SCAN_NODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MEDKIT_SCAN_NODE_KEY, LGUConstants.ITEM_SCAN_NODE_DEFAULT, LGUConstants.ITEM_SCAN_NODE_DESCRIPTION);
 
             #endregion
 
@@ -539,6 +553,7 @@ namespace MoreShipUpgrades.Misc
             DIVEKIT_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DIVING_KIT_PRICE_KEY, LGUConstants.DIVING_KIT_PRICE_DEFAULT, LGUConstants.DIVING_KIT_PRICE_DESCRIPTION);
             DIVEKIT_WEIGHT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DIVING_KIT_WEIGHT_KEY, LGUConstants.DIVING_KIT_WEIGHT_DEFAULT, LGUConstants.DIVING_KIT_WEIGHT_DESCRIPTION);
             DIVEKIT_TWO_HANDED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DIVING_KIT_TWO_HANDED_KEY, LGUConstants.DIVING_KIT_TWO_HANDED_DEFAULT, LGUConstants.DIVING_KIT_TWO_HANDED_DESCRIPTION);
+            DIVING_KIT_SCAN_NODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DIVING_KIT_SCAN_NODE_KEY, LGUConstants.ITEM_SCAN_NODE_DEFAULT, LGUConstants.ITEM_SCAN_NODE_DESCRIPTION);
 
             #endregion
 
@@ -1033,6 +1048,8 @@ namespace MoreShipUpgrades.Misc
             WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Look sensitivity drawback of the Wheelbarrow Item", 0.4f, "Value multiplied on the player's look sensitivity when moving with the wheelbarrow Item");
             WHEELBARROW_MOVEMENT_SLOPPY = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Sloppiness of the Wheelbarrow Item", 5f, "Value multiplied on the player's movement to give the feeling of drifting while carrying the Wheelbarrow Item");
             WHEELBARROW_PLAY_NOISE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Plays noises for players with Wheelbarrow Item", true, "If false, it will just not play the sounds, it will still attract monsters to noise");
+            STORE_WHEELBARROW_SCAN_NODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, $"Enable scan node of Wheelbarrow", LGUConstants.ITEM_SCAN_NODE_DEFAULT, LGUConstants.ITEM_SCAN_NODE_DESCRIPTION);
+
             SCRAP_WHEELBARROW_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable the Shopping Cart Item", true, "Allows you to scavenge a wheelbarrow in which you can store items on");
             SCRAP_WHEELBARROW_RARITY = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Spawn chance of Shopping Cart Item", 0.1f, "How likely it is to a scrap wheelbarrow item to spawn when landing on a moon. (0.1 = 10%)");
             SCRAP_WHEELBARROW_WEIGHT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Weight of the Shopping Cart Item", 25f, "Weight of the scrap wheelbarrow's without any items in lbs");

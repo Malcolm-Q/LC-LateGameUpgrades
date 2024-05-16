@@ -1,5 +1,6 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
@@ -20,6 +21,14 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         /// </summary>
         private StartOfRound roundInstance;
 
+        bool KeepScanNode
+        {
+            get
+            {
+                return UpgradeBus.Instance.PluginConfiguration.DIVING_KIT_SCAN_NODE;
+            }
+        }
+
         public string GetDisplayInfo()
         {
             string hands = UpgradeBus.Instance.PluginConfiguration.DIVEKIT_TWO_HANDED.Value ? "two" : "one";
@@ -33,6 +42,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             base.Start();
             localPlayer = UpgradeBus.Instance.GetLocalPlayer();
             roundInstance = StartOfRound.Instance;
+            if (!KeepScanNode) LguScanNodeProperties.RemoveScanNode(gameObject);
         }
         /// <summary>
         /// Check if this item is currently grabbed by a player and if it's the local player and if so, reset their drown timer.

@@ -43,6 +43,13 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         /// How much a given instance of the class heals when interacted
         /// </summary>
         protected int healAmount;
+        bool KeepScanNode
+        {
+            get
+            {
+                return UpgradeBus.Instance.PluginConfiguration.MEDKIT_SCAN_NODE;
+            }
+        }
 
         public override void Start()
         {
@@ -51,6 +58,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             maximumUses = UpgradeBus.Instance.PluginConfiguration.MEDKIT_USES.Value;
             healAmount = UpgradeBus.Instance.PluginConfiguration.MEDKIT_HEAL_VALUE.Value;
             base.Start();
+            if (!KeepScanNode) LguScanNodeProperties.RemoveScanNode(gameObject);
         }
         public override void DiscardItem()
         {

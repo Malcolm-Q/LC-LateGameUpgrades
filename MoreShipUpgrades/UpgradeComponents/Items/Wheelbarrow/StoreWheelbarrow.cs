@@ -12,6 +12,13 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         private GameObject wheel;
         private const string ITEM_NAME = "Wheelbarrow";
         private const string ITEM_DESCRIPTION = "Allows carrying multiple items";
+        bool KeepScanNode
+        {
+            get
+            {
+                return UpgradeBus.Instance.PluginConfiguration.STORE_WHEELBARROW_SCAN_NODE;
+            }
+        }
 
         public string GetDisplayInfo()
         {
@@ -39,6 +46,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             sloppiness = UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_MOVEMENT_SLOPPY.Value;
             lookSensitivityDrawback = UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK.Value;
             playSounds = UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_PLAY_NOISE.Value;
+            if (!KeepScanNode) LguScanNodeProperties.RemoveScanNode(gameObject);
         }
 
         public override void Update()

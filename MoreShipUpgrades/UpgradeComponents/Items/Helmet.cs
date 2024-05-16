@@ -18,6 +18,18 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         }
         static readonly LguLogger logger = new LguLogger(nameof(Helmet));
         internal const string ITEM_NAME = "Helmet";
+        bool KeepScanNode
+        {
+            get
+            {
+                return UpgradeBus.Instance.PluginConfiguration.HELMET_SCAN_NODE;
+            }
+        }
+        public override void Start()
+        {
+            base.Start();
+            if (!KeepScanNode) LguScanNodeProperties.RemoveScanNode(gameObject);
+        }
         public override void ItemActivate(bool used, bool buttonDown = true)
         {
             base.ItemActivate(used, buttonDown);
