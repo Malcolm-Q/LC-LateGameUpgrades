@@ -6,6 +6,22 @@ namespace MoreShipUpgrades.API
 {
     internal static class UpgradeApi
     {
+        public static GameObject RegisterOneTimeUpgrade<T>() where T : OneTimeUpgrade
+        {
+            return RegisterUpgrade<T>();
+        }
+        public static void RegisterOneTimeUpgrade<T>(GameObject upgradePrefab, bool registerNetworkPrefab = true) where T : OneTimeUpgrade
+        {
+            RegisterUpgrade<T>(upgradePrefab, registerNetworkPrefab);
+        }
+        public static GameObject RegisterTierUpgrade<T>() where T : TierUpgrade
+        {
+            return RegisterUpgrade<T>();
+        }
+        public static void RegisterTierUpgrade<T>(GameObject upgradePrefab, bool registerNetworkPrefab = true) where T : TierUpgrade
+        {
+            RegisterUpgrade<T>(upgradePrefab, registerNetworkPrefab);
+        }
         public static GameObject RegisterUpgrade<T>() where T : BaseUpgrade
         {
             GameObject prefab = LethalLib.Modules.NetworkPrefabs.CreateNetworkPrefab(typeof(T).Name);

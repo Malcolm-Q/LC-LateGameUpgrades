@@ -7,6 +7,9 @@
 - Added configurable toggle to allow scan nodes on purchased items (Wheelbarrow, Peeper, Helmet, etc..).
 - Added alternative mode for ``Quantum Disruptor`` upgrade to revert time by x hours and can only be used y times which resets at a given point (per moon landing, routing or new quota).
 - Added alternative mode for ``Helmet`` item to partially mitigate damage and only break when the next hit on the player would kill them.
+- Added prototype of Upgrade API to register upgrades outside of this mod.
+    - Early stages of production, will need to use it to know if it works as expected.
+    - If any issues arise from using the API, report them in the github repository.
 - Changed Probe's interactive menu to disable weather entries when conditions are not met (not enough credits or the weather is already in place)
 - Fixed Hunter samples spawning on Manticoils and Tulip Snakes when the transition from day to night happens and the daytime enemies despawned on that transiction.
 - Fixed Sick Beats preventing enemies from damaging the player when disabled.
