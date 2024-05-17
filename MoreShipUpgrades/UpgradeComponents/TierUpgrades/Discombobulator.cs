@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
@@ -102,14 +103,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
             SetupGenericPerk<Discombobulator>(UPGRADE_NAME);
         }
-        public new static void RegisterTerminalNode()
+        public new static CustomTerminalNode RegisterTerminalNode()
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
             AudioClip flashSFX = AssetBundleHandler.GetAudioClip("Flashbang");
-            if (!flashSFX) return;
+            if (!flashSFX) return null;
 
             UpgradeBus.Instance.flashNoise = flashSFX;
-            UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
                                                 configuration.SHARED_UPGRADES.Value || !configuration.DISCOMBOBULATOR_INDIVIDUAL.Value,
                                                 configuration.DISCOMBOBULATOR_ENABLED.Value,
                                                 configuration.DISCOMBOBULATOR_PRICE.Value,

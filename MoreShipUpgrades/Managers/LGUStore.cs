@@ -443,41 +443,35 @@ namespace MoreShipUpgrades.Managers
             }
         }
 
-        void UpdateUpgrades(string name, bool increment = false)
+        void UpdateUpgrades(CustomTerminalNode node, bool increment = false)
         {
-            foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
-            {
-                if (node.OriginalName == name)
-                {
-                    node.Unlocked = true;
-                    if (increment) { node.CurrentUpgrade++; }
-                    logger.LogInfo($"Node found and unlocked (level = {node.CurrentUpgrade})");
-                    break;
-                }
-            }
+            node.Unlocked = true;
+            if (increment) { node.CurrentUpgrade++; }
+            logger.LogInfo($"Node found and unlocked (level = {node.CurrentUpgrade})");
+
             if (!increment)
             {
-                UpgradeBus.Instance.UpgradeObjects[name].GetComponent<BaseUpgrade>().Load();
+                UpgradeBus.Instance.UpgradeObjects[node.OriginalName].GetComponent<BaseUpgrade>().Load();
                 logger.LogInfo($"First purchase, executing BaseUpgrade.load()");
             }
             else
             {
-                UpgradeBus.Instance.UpgradeObjects[name].GetComponent<TierUpgrade>().Increment();
+                UpgradeBus.Instance.UpgradeObjects[node.OriginalName].GetComponent<TierUpgrade>().Increment();
                 logger.LogInfo($"upgrade already unlocked, executing TierUpgrade.Increment()");
             }
             SaveInfo = new SaveInfo();
             UpdateLGUSaveServerRpc(playerID, JsonConvert.SerializeObject(SaveInfo));
         }
-        public void HandleUpgrade(string name, bool increment = false)
+        public void HandleUpgrade(CustomTerminalNode node, bool increment = false)
         {
-            if (UpgradeBus.Instance.IndividualUpgrades[name])
+            if (node.SharedUpgrade)
             {
-                logger.LogInfo($"{name} is registered as a shared upgrade! Calling ServerRpc...");
-                HandleUpgradeServerRpc(name, increment);
+                logger.LogInfo($"{node.OriginalName} is registered as a shared upgrade! Calling ServerRpc...");
+                HandleUpgradeServerRpc(node.OriginalName, increment);
                 return;
             }
-            logger.LogInfo($"{name} is not registered as a shared upgrade! Unlocking on this client only...");
-            UpdateUpgrades(name, increment);
+            logger.LogInfo($"{node.OriginalName} is not registered as a shared upgrade! Unlocking on this client only...");
+            UpdateUpgrades(node, increment);
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -491,7 +485,8 @@ namespace MoreShipUpgrades.Managers
         private void HandleUpgradeClientRpc(string name, bool increment)
         {
             logger.LogInfo($"Received client request to handle shared upgrade for: {name} increment: {increment}");
-            UpdateUpgrades(name, increment);
+            foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
+                if (node.OriginalName == name) UpdateUpgrades(node, increment);
         }
 
         [ClientRpc]

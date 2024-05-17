@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using System.Collections.Generic;
 using UnityEngine;
@@ -86,11 +87,11 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             SetupGenericPerk<SickBeats>(UPGRADE_NAME);
         }
-        public new static void RegisterTerminalNode()
+        public new static CustomTerminalNode RegisterTerminalNode()
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
 
-            UpgradeBus.Instance.SetupOneTimeTerminalNode(
+            return UpgradeBus.Instance.SetupOneTimeTerminalNode(
                  UPGRADE_NAME,
                 configuration.SHARED_UPGRADES.Value || !configuration.BEATS_INDIVIDUAL.Value,
                 configuration.BEATS_ENABLED.Value,

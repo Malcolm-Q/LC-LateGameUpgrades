@@ -36,6 +36,7 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Commands;
 using MoreShipUpgrades.Misc.UI.Application;
 using InteractiveTerminalAPI.UI;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 
 namespace MoreShipUpgrades
 {
@@ -700,7 +701,7 @@ namespace MoreShipUpgrades
                 if (type == typeof(OneTimeUpgrade) || type == typeof(TierUpgrade) || type == typeof(GameAttributeTierUpgrade)) continue;
                 UpgradeBus.Instance.upgradeTypes.Add(type);
 
-                MethodInfo method = type.GetMethod(nameof(BaseUpgrade.RegisterUpgrade), BindingFlags.Static | BindingFlags.NonPublic);
+                MethodInfo method = type.GetMethod(nameof(BaseUpgrade.RegisterUpgrade), BindingFlags.Static | BindingFlags.Public);
                 method.Invoke(null, null);
             }
             mls.LogInfo("Upgrades have been setup");
@@ -713,7 +714,7 @@ namespace MoreShipUpgrades
                 if (!type.IsSubclassOf(typeof(BaseCommand))) continue;
                 UpgradeBus.Instance.commandTypes.Add(type);
 
-                MethodInfo method = type.GetMethod(nameof(BaseCommand.RegisterCommand), BindingFlags.Static | BindingFlags.NonPublic);
+                MethodInfo method = type.GetMethod(nameof(BaseCommand.RegisterCommand), BindingFlags.Static | BindingFlags.Public);
                 method.Invoke(null, null);
             }
             mls.LogInfo("Commands have been setup");

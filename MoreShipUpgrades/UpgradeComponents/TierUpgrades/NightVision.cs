@@ -245,7 +245,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             SetupGenericPerk<NightVision>(UPGRADE_NAME);
         }
-        public new static void RegisterTerminalNode()
+        public new static CustomTerminalNode RegisterTerminalNode()
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
 
@@ -256,6 +256,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                                                 UpgradeBus.ParseUpgradePrices(configuration.NIGHT_VISION_UPGRADE_PRICES.Value),
                                                 configuration.OVERRIDE_UPGRADE_NAMES ? configuration.NIGHT_VISION_OVERRIDE_NAME : "");
             if (node != null) node.Unlocked = true;
+            return node;
         }
     }
 }

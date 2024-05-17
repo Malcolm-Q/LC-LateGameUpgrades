@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using Unity.Netcode;
@@ -98,11 +99,11 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             SetupGenericPerk<LightningRod>(UPGRADE_NAME);
         }
-        public new static void RegisterTerminalNode()
+        public new static CustomTerminalNode RegisterTerminalNode()
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
 
-            UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
+            return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
                                     shareStatus: true,
                                     configuration.LIGHTNING_ROD_ENABLED.Value,
                                     configuration.LIGHTNING_ROD_PRICE.Value,

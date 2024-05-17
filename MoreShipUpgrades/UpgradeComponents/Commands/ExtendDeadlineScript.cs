@@ -66,7 +66,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
             UpgradeBus.Instance.daysExtended = daysExtended;
         }
 
-        internal static new void RegisterCommand()
+        public static new void RegisterCommand()
         {
             SetupGenericCommand<ExtendDeadlineScript>(NAME);
         }

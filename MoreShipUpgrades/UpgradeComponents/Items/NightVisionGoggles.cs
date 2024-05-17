@@ -3,6 +3,7 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using System.Linq;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items
 {
@@ -33,7 +34,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
                 HUDManager.Instance.chatText.text += "<color=#FF0000>Night vision is already active!</color>";
                 return;
             }
-            if (UpgradeBus.Instance.IndividualUpgrades[NightVision.UPGRADE_NAME])
+            if (UpgradeBus.Instance.terminalNodes.First((x) => x.OriginalName == NightVision.UPGRADE_NAME).SharedUpgrade)
             {
                 NightVision.Instance.EnableNightVisionServerRpc();
             }

@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
@@ -51,11 +52,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             SetupGenericPerk<LandingThrusters>(UPGRADE_NAME);
         }
-        public new static void RegisterTerminalNode()
+        public new static CustomTerminalNode RegisterTerminalNode()
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
 
-            UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
                                                 shareStatus: true,
                                                 configuration.LANDING_THRUSTERS_ENABLED,
                                                 configuration.LANDING_THRUSTERS_PRICE,

@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
@@ -64,11 +65,11 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             SetupGenericPerk<Sigurd>(UPGRADE_NAME);
         }
-        public new static void RegisterTerminalNode()
+        public new static CustomTerminalNode RegisterTerminalNode()
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
 
-            UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
+            return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
                                     shareStatus: true,
                                     configuration.SIGURD_ENABLED.Value || configuration.SIGURD_LAST_DAY_ENABLED.Value,
                                     configuration.SIGURD_PRICE.Value,

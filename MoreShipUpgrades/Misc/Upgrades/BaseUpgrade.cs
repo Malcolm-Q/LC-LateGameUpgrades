@@ -1,5 +1,6 @@
 ﻿using CSync.Lib;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Util;
 using System;
 using System.Collections.Generic;
@@ -113,7 +114,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// This method is to be overriden by their subclasses through "new"
         /// </summary>
         /// <exception cref="NotSupportedException"></exception>
-        public static void RegisterTerminalNode() { throw new NotSupportedException(); }
+        public static CustomTerminalNode RegisterTerminalNode() { throw new NotSupportedException(); }
 
         /// <summary>
         /// Generic function where it adds a script (specificed through the type) into an GameObject asset 

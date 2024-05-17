@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
@@ -27,11 +28,11 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             SetupGenericPerk<LethalDeals>(UPGRADE_NAME);
         }
-        public new static void RegisterTerminalNode()
+        public new static CustomTerminalNode RegisterTerminalNode()
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
 
-            UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
+            return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
                                     shareStatus: true,
                                     configuration.LETHAL_DEALS_ENABLED.Value,
                                     configuration.LETHAL_DEALS_PRICE.Value,

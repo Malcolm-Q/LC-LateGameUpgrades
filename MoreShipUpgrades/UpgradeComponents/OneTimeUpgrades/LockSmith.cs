@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Collections;
@@ -137,12 +138,11 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             SetupGenericPerk<LockSmith>(UPGRADE_NAME);
         }
-        public new static void RegisterTerminalNode()
+        public new static CustomTerminalNode RegisterTerminalNode()
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
 
-            UpgradeBus.Instance.
-            SetupOneTimeTerminalNode(UPGRADE_NAME,
+            return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
                                     configuration.SHARED_UPGRADES.Value || !configuration.LOCKSMITH_INDIVIDUAL.Value,
                                     configuration.LOCKSMITH_ENABLED.Value,
                                     configuration.LOCKSMITH_PRICE.Value,

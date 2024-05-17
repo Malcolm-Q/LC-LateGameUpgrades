@@ -150,7 +150,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
                 player.thisPlayerModelLOD2.enabled = true;
             }
         }
-        internal static new void RegisterCommand()
+        public static new void RegisterCommand()
         {
             SetupGenericCommand<Interns>(NAME);
         }

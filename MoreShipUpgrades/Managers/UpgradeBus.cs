@@ -41,7 +41,6 @@ namespace MoreShipUpgrades.Managers
         internal List<CustomTerminalNode> terminalNodes = new List<CustomTerminalNode>();
         internal Dictionary<string, GameObject> UpgradeObjects = new Dictionary<string, GameObject>();
         internal Dictionary<string, Item> ItemsToSync = new Dictionary<string, Item>();
-        internal Dictionary<string,bool> IndividualUpgrades = new Dictionary<string,bool>();
         internal List<Peeper> coilHeadItems = new List<Peeper>();
         internal AssetBundle UpgradeAssets;
 
@@ -263,16 +262,14 @@ namespace MoreShipUpgrades.Managers
         internal void BuildCustomNodes()
         {
             terminalNodes = new List<CustomTerminalNode>();
-            IndividualUpgrades = new Dictionary<string, bool>();
 
             foreach (Type type in upgradeTypes)
             {
-
-                MethodInfo method = type.GetMethod(nameof(BaseUpgrade.RegisterTerminalNode), BindingFlags.Static | BindingFlags.NonPublic);
-                method.Invoke(null, null);
+                MethodInfo method = type.GetMethod(nameof(BaseUpgrade.RegisterTerminalNode), BindingFlags.Static | BindingFlags.Public);
+                CustomTerminalNode node = (CustomTerminalNode)method.Invoke(null, null);
+                terminalNodes.Add(node);
             }
 
-            #pragma warning disable S4158 // Empty list warning, which is not true after executing the invokes above
             terminalNodes.Sort();
         }
         /// <summary>
@@ -295,17 +292,21 @@ namespace MoreShipUpgrades.Managers
             GameObject multiPerk = AssetBundleHandler.GetPerkGameObject(upgradeName) ;
             if (!multiPerk) return null;
 
-            IndividualUpgrades.Add(upgradeName, shareStatus);
-
             if (!enabled) return null;
 
             string infoString = SetupUpgradeInfo(upgrade: multiPerk.GetComponent<BaseUpgrade>(), shareStatus: shareStatus, price: initialPrice, incrementalPrices: prices);
             string moreInfo = infoString;
-            if (multiPerk.GetComponent<BaseUpgrade>() is IUpgradeWorldBuilding component) moreInfo += component.GetWorldBuildingText(shareStatus) + "\n";
+            if (multiPerk.GetComponent<BaseUpgrade>() is IUpgradeWorldBuilding component) moreInfo += "\n\n" + component.GetWorldBuildingText(shareStatus) + "\n";
 
-            CustomTerminalNode node = new TierTerminalNode(overrideName != "" ? overrideName:  upgradeName, initialPrice, infoString, multiPerk, prices, prices.Length, moreInfo, upgradeName);
-            terminalNodes.Add(node);
-            return node;
+            return new TierTerminalNode(
+                name: overrideName != "" ? overrideName : upgradeName,
+                unlockPrice: initialPrice,
+                description: moreInfo,
+                prefab: multiPerk,
+                prices: prices,
+                maxUpgrade: prices.Length,
+                originalName: upgradeName,
+                sharedUpgrade: shareStatus);
         }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can only be bought once
@@ -315,7 +316,7 @@ namespace MoreShipUpgrades.Managers
         /// <param name="enabled"> Wether the upgrade is enabled for gameplay or not</param>
         /// <param name="price"></param>
         /// <param name="info"> The information displayed when checking the upgrade's info</param>
-        internal void SetupOneTimeTerminalNode(string upgradeName,
+        internal CustomTerminalNode SetupOneTimeTerminalNode(string upgradeName,
                                               bool shareStatus,
                                               bool enabled,
                                               int price,
@@ -323,18 +324,22 @@ namespace MoreShipUpgrades.Managers
                                               )
         {
             GameObject oneTimeUpgrade = AssetBundleHandler.GetPerkGameObject(upgradeName);
-            if (!oneTimeUpgrade) return;
-
-            IndividualUpgrades.Add(upgradeName, shareStatus);
-            if (!enabled) return;
+            if (!oneTimeUpgrade) return null;
+            if (!enabled) return null;
             string info = SetupUpgradeInfo(upgrade: oneTimeUpgrade.GetComponent<BaseUpgrade>(), shareStatus: shareStatus, price: price);
             string moreInfo = info;
-            if (oneTimeUpgrade.GetComponent<BaseUpgrade>() is IUpgradeWorldBuilding component) moreInfo += component.GetWorldBuildingText(shareStatus) + "\n";
+            if (oneTimeUpgrade.GetComponent<BaseUpgrade>() is IUpgradeWorldBuilding component) moreInfo += "\n\n" + component.GetWorldBuildingText(shareStatus) + "\n";
 
-            CustomTerminalNode node = new OneTimeTerminalNode(overrideName != "" ? overrideName : upgradeName, price, info, oneTimeUpgrade, moreInfo, upgradeName);
-            terminalNodes.Add(node);
+            return new OneTimeTerminalNode(
+                name: overrideName != "" ? overrideName : upgradeName,
+                unlockPrice: price,
+                description: moreInfo,
+                prefab: oneTimeUpgrade,
+                originalName: upgradeName,
+                sharedUpgrade: shareStatus);
         }
-        private string SetupUpgradeInfo(BaseUpgrade upgrade = null, bool shareStatus = false, int price = -1, int[] incrementalPrices = null)
+
+        public string SetupUpgradeInfo(BaseUpgrade upgrade = null, bool shareStatus = false, int price = -1, int[] incrementalPrices = null)
         {
             string info = "";
             if (upgrade is IOneTimeUpgradeDisplayInfo upgradeInfo) info += upgradeInfo.GetDisplayInfo(price) + "\n";
