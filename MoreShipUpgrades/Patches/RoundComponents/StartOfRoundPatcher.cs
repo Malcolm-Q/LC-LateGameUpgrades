@@ -66,15 +66,19 @@ namespace MoreShipUpgrades.Patches.RoundComponents
 
         [HarmonyPatch(nameof(StartOfRound.ReviveDeadPlayers))]
         [HarmonyPostfix]
-        static void ResetContract(StartOfRound __instance)
+        static void ReviveDeadPlayersPostfix(StartOfRound __instance)
+        {
+            ResetContract(ref __instance);
+            QuantumDisruptor.TryResetQuantum(QuantumDisruptor.ResetModes.MoonLanding);
+        }
+        static void ResetContract(ref StartOfRound __instance)
         {
             if (ContractManager.Instance.contractLevel != RoundManager.Instance.currentLevel.PlanetName) return;
             if (!__instance.IsHost) return;
 
             ContractManager.Instance.SyncContractDetailsClientRpc("None", -1);
-            if (!UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_ENABLED) return;
-            QuantumDisruptor.Instance.TryResetValues(QuantumDisruptor.ResetModes.MoonLanding);
         }
+
         [HarmonyPatch(nameof(StartOfRound.AutoSaveShipData))]
         [HarmonyPrefix]
         static void AutoSaveShipDataPrefix()
@@ -170,8 +174,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         [HarmonyPostfix]
         static void ChangeLevelPostfix()
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_ENABLED) return;
-            QuantumDisruptor.Instance.TryResetValues(QuantumDisruptor.ResetModes.MoonRerouting);
+            QuantumDisruptor.TryResetQuantum(QuantumDisruptor.ResetModes.MoonRerouting);
         }
     }
 }

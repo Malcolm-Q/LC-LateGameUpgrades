@@ -40,17 +40,21 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             string infoFormat = "LVL {0} - ${1} - Increases the door's hydraulic capacity to remain closed by {2} units\n"; // to put in the infoStrings after
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
-        internal override bool CanInitializeOnStart()
+        public override bool CanInitializeOnStart
         {
-            string[] prices = UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_PRICES.Value.Split(',');
-            bool free = UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-            return free;
+            get
+            {
+                string[] prices = UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_PRICES.Value.Split(',');
+                bool free = UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+                return free;
+            }
         }
-        internal new static void RegisterUpgrade()
+
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<DoorsHydraulicsBattery>(UPGRADE_NAME);
         }
-        internal new static void RegisterTerminalNode()
+        public new static void RegisterTerminalNode()
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
 

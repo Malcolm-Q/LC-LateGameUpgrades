@@ -434,7 +434,7 @@ namespace MoreShipUpgrades.Managers
                 customNode.Unlocked = activeUpgrade;
                 customNode.CurrentUpgrade = upgradeLevel;
                 BaseUpgrade comp = UpgradeBus.Instance.UpgradeObjects[customNode.OriginalName].GetComponent<BaseUpgrade>();
-                bool free = comp.CanInitializeOnStart();
+                bool free = comp.CanInitializeOnStart;
                 if (activeUpgrade || free) comp.Load();
                 if (customNode.OriginalName == NightVision.UPGRADE_NAME || free)
                 {

@@ -22,15 +22,12 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             return $"${price} - Guarantees at least one item will be on sale in the store.";
         }
-        internal override bool CanInitializeOnStart()
-        {
-            return UpgradeBus.Instance.PluginConfiguration.LETHAL_DEALS_PRICE.Value <= 0;
-        }
-        internal new static void RegisterUpgrade()
+        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.LETHAL_DEALS_PRICE.Value <= 0;
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<LethalDeals>(UPGRADE_NAME);
         }
-        internal new static void RegisterTerminalNode()
+        public new static void RegisterTerminalNode()
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
 

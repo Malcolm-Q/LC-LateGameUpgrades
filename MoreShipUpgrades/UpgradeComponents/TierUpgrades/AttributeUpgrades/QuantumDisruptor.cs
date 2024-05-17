@@ -144,12 +144,16 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             }
             return string.Empty;
         }
-        internal override bool CanInitializeOnStart()
+        public override bool CanInitializeOnStart
         {
-            string[] prices = UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_PRICES.Value.Split(',');
-            bool free = UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-            return free;
+            get
+            {
+                string[] prices = UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_PRICES.Value.Split(',');
+                bool free = UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+                return free;
+            }
         }
+
         internal (bool, string) CanRevertTime()
         {
             if (CurrentMode != UpgradeModes.RevertTime) return (false, $"This command is not available for selected \'{overridenUpgradeName}\' upgrade.\n");
@@ -173,6 +177,12 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             bool canReset = CurrentMode == UpgradeModes.RevertTime && CurrentResetMode == requestedMode;
             if (canReset) ResetUsageCounterClientRpc();
         }
+        internal static void TryResetQuantum(ResetModes mode)
+        {
+            if (!UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_ENABLED) return;
+            if (!Instance.IsHost) return;
+            Instance.TryResetValues(mode);
+        }
         [ClientRpc]
         internal void RevertTimeClientRpc()
         {
@@ -192,11 +202,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         {
             currentUsages = 0;
         }
-        internal new static void RegisterUpgrade()
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<QuantumDisruptor>(UPGRADE_NAME);
         }
-        internal new static void RegisterTerminalNode()
+        public new static void RegisterTerminalNode()
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
 

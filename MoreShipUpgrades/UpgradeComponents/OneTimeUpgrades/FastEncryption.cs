@@ -33,15 +33,12 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             return $"${price} - The transmitter will write the letters faster and the restriction of characters will be lifted.";
         }
 
-        internal override bool CanInitializeOnStart()
-        {
-            return UpgradeBus.Instance.PluginConfiguration.PAGER_PRICE.Value <= 0;
-        }
-        internal new static void RegisterUpgrade()
+        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.PAGER_PRICE.Value <= 0;
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<FastEncryption>(UPGRADE_NAME);
         }
-        internal new static void RegisterTerminalNode()
+        public new static void RegisterTerminalNode()
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
 

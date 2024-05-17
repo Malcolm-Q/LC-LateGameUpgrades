@@ -93,15 +93,12 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), price, UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_DIST.Value);
         }
-        internal override bool CanInitializeOnStart()
-        {
-            return UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_PRICE.Value <= 0;
-        }
-        internal new static void RegisterUpgrade()
+        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_PRICE.Value <= 0;
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<LightningRod>(UPGRADE_NAME);
         }
-        internal new static void RegisterTerminalNode()
+        public new static void RegisterTerminalNode()
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
 

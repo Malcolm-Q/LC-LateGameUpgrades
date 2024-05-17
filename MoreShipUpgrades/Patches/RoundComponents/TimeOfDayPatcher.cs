@@ -13,7 +13,14 @@ namespace MoreShipUpgrades.Patches.RoundComponents
     {
         [HarmonyPostfix]
         [HarmonyPatch(nameof(TimeOfDay.SyncNewProfitQuotaClientRpc))]
-        static void GenerateNewSales(TimeOfDay __instance)
+        static void SyncNewProfitQuotaClientRpcPostfix(TimeOfDay __instance)
+        {
+            GenerateNewSales(ref __instance);
+            ExtendDeadlineScript.SetDaysExtended(daysExtended: 0);
+            QuantumDisruptor.TryResetQuantum(QuantumDisruptor.ResetModes.NewQuota);
+        }
+
+        static void GenerateNewSales(ref TimeOfDay __instance)
         {
             if (UpgradeBus.Instance.PluginConfiguration.SHARED_UPGRADES.Value && (__instance.IsHost || __instance.IsServer))
             {
@@ -24,9 +31,6 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             {
                 LguStore.Instance.GenerateSales();
             }
-            ExtendDeadlineScript.SetDaysExtended(daysExtended: 0);
-            if (!UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_ENABLED) return;
-            QuantumDisruptor.Instance.TryResetValues(QuantumDisruptor.ResetModes.NewQuota);
         }
 
         [HarmonyPatch(nameof(TimeOfDay.SetBuyingRateForDay))]

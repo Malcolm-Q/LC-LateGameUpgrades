@@ -59,15 +59,12 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             return WORLD_BUILDING_TEXT;
         }
 
-        internal override bool CanInitializeOnStart()
-        {
-            return (UpgradeBus.Instance.PluginConfiguration.SIGURD_ENABLED.Value || UpgradeBus.Instance.PluginConfiguration.SIGURD_LAST_DAY_ENABLED.Value) && UpgradeBus.Instance.PluginConfiguration.SIGURD_PRICE.Value <= 0;
-        }
-        internal new static void RegisterUpgrade()
+        public override bool CanInitializeOnStart => (UpgradeBus.Instance.PluginConfiguration.SIGURD_ENABLED.Value || UpgradeBus.Instance.PluginConfiguration.SIGURD_LAST_DAY_ENABLED.Value) && UpgradeBus.Instance.PluginConfiguration.SIGURD_PRICE.Value <= 0;
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<Sigurd>(UPGRADE_NAME);
         }
-        internal new static void RegisterTerminalNode()
+        public new static void RegisterTerminalNode()
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
 

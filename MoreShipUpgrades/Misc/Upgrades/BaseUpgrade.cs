@@ -80,7 +80,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// </summary>
         /// <param name="upgradeName">Name of the upgrade we wish to check its activity</param>
         /// <returns>The given upgrade is active in the game or not</returns>
-        internal static bool GetActiveUpgrade(string upgradeName)
+        public static bool GetActiveUpgrade(string upgradeName)
         {
             return UpgradeBus.Instance.activeUpgrades.GetValueOrDefault(upgradeName, false);
         }
@@ -90,14 +90,14 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// </summary>
         /// <param name="upgradeName">Name of the upgrade we wish to check the level of</param>
         /// <returns>Currentl level of the upgrade</returns>
-        internal static int GetUpgradeLevel(string upgradeName)
+        public static int GetUpgradeLevel(string upgradeName)
         {
             return UpgradeBus.Instance.upgradeLevels.GetValueOrDefault(upgradeName, 0);
         }
         /// <summary>
         /// </summary>
         /// <returns>Wether the upgrade can be loaded immediately upon game being loaded or not</returns>
-        internal abstract bool CanInitializeOnStart();
+        public abstract bool CanInitializeOnStart { get; }
 
         /// <summary>
         /// Registers the associated upgrade to the game to be initialized correctly
@@ -105,7 +105,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// This method is to be overriden by their subclasses through "new"
         /// </summary>
         /// <exception cref="NotSupportedException"></exception>
-        internal static void RegisterUpgrade() { throw new NotSupportedException(); }
+        public static void RegisterUpgrade() { throw new NotSupportedException(); }
 
         /// <summary>
         /// Registers the associated terminal node of the upgrade
@@ -113,7 +113,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// This method is to be overriden by their subclasses through "new"
         /// </summary>
         /// <exception cref="NotSupportedException"></exception>
-        internal static void RegisterTerminalNode() { throw new NotSupportedException(); }
+        public static void RegisterTerminalNode() { throw new NotSupportedException(); }
 
         /// <summary>
         /// Generic function where it adds a script (specificed through the type) into an GameObject asset 

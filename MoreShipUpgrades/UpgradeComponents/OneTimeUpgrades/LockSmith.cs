@@ -132,15 +132,12 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             return $"${price} - Allows you to pick door locks by completing a minigame.";
         }
-        internal override bool CanInitializeOnStart()
-        {
-            return UpgradeBus.Instance.PluginConfiguration.LOCKSMITH_PRICE.Value <= 0;
-        }
-        internal new static void RegisterUpgrade()
+        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.LOCKSMITH_PRICE.Value <= 0;
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<LockSmith>(UPGRADE_NAME);
         }
-        internal new static void RegisterTerminalNode()
+        public new static void RegisterTerminalNode()
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
 

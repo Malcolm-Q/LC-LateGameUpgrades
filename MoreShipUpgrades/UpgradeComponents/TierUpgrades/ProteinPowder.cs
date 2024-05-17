@@ -74,17 +74,21 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
-        internal override bool CanInitializeOnStart()
+        public override bool CanInitializeOnStart
         {
-            string[] prices = UpgradeBus.Instance.PluginConfiguration.PROTEIN_UPGRADE_PRICES.Value.Split(',');
-            bool free = UpgradeBus.Instance.PluginConfiguration.PROTEIN_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-            return free;
+            get
+            {
+                string[] prices = UpgradeBus.Instance.PluginConfiguration.PROTEIN_UPGRADE_PRICES.Value.Split(',');
+                bool free = UpgradeBus.Instance.PluginConfiguration.PROTEIN_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+                return free;
+            }
         }
-        internal new static void RegisterUpgrade()
+
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<ProteinPowder>(UPGRADE_NAME);
         }
-        internal new static void RegisterTerminalNode()
+        public new static void RegisterTerminalNode()
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
 

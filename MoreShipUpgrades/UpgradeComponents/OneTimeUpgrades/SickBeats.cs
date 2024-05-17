@@ -81,15 +81,12 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             if (UpgradeBus.Instance.PluginConfiguration.BEATS_STAMINA.Value) txt += $"Stamina Drain multiplied by {UpgradeBus.Instance.PluginConfiguration.BEATS_STAMINA_CO.Value}\n";
             return txt;
         }
-        internal override bool CanInitializeOnStart()
-        {
-            return UpgradeBus.Instance.PluginConfiguration.BEATS_PRICE.Value <= 0;
-        }
-        internal new static void RegisterUpgrade()
+        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.BEATS_PRICE.Value <= 0;
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<SickBeats>(UPGRADE_NAME);
         }
-        internal new static void RegisterTerminalNode()
+        public new static void RegisterTerminalNode()
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
 

@@ -65,17 +65,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             return stringBuilder.ToString();
         }
 
-        internal override bool CanInitializeOnStart()
-        {
-            return UpgradeBus.Instance.PluginConfiguration.BETTER_SCANNER_PRICE.Value <= 0 &&
+        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.BETTER_SCANNER_PRICE.Value <= 0 &&
                 UpgradeBus.Instance.PluginConfiguration.BETTER_SCANNER_PRICE2.Value <= 0 &&
                 UpgradeBus.Instance.PluginConfiguration.BETTER_SCANNER_PRICE3.Value <= 0;
-        }
-        internal new static void RegisterUpgrade()
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<BetterScanner>(UPGRADE_NAME);
         }
-        internal new static void RegisterTerminalNode()
+        public new static void RegisterTerminalNode()
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
 

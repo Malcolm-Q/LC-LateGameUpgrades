@@ -41,15 +41,12 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             return $"${price} - Make the Drop Pod, the ship that deliver items bought on the terminal, land faster.";
         }
-        internal override bool CanInitializeOnStart()
-        {
-            return UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_PRICE.Value <= 0;
-        }
-        internal new static void RegisterUpgrade()
+        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_PRICE.Value <= 0;
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<FasterDropPod>(UPGRADE_NAME);
         }
-        internal new static void RegisterTerminalNode()
+        public new static void RegisterTerminalNode()
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
 

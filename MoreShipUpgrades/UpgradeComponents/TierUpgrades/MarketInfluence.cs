@@ -28,17 +28,21 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             string infoFormat = "LVL {0} - ${1} - Guarantees the item sales' percentage to be at least {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
-        internal override bool CanInitializeOnStart()
+        public override bool CanInitializeOnStart
         {
-            string[] prices = UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_PRICES.Value.Split(',');
-            bool free = UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-            return free;
+            get
+            {
+                string[] prices = UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_PRICES.Value.Split(',');
+                bool free = UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+                return free;
+            }
         }
-        internal new static void RegisterUpgrade()
+
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<MarketInfluence>(UPGRADE_NAME);
         }
-        internal new static void RegisterTerminalNode()
+        public new static void RegisterTerminalNode()
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
 
