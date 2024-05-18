@@ -11,7 +11,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Contracts
     {
         public override void Start()    
         {
-            contractType = "extraction";
+            contractType = "Extraction";
             if (GetComponent<Medkit>() == null && GetComponent<GrabbableObject>().isInShipRoom || GetComponent<GrabbableObject>().isInElevator) // Already in the ship, don't make it disappear
             {
                 ExtractPlayerScript scavenger = GetComponent<ExtractPlayerScript>();

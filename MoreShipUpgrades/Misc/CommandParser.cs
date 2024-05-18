@@ -24,7 +24,7 @@ namespace MoreShipUpgrades.Misc
         private static string attemptSpecifyContract = null;
 
         const string LOAD_LGU_COMMAND = "load lgu";
-        public static readonly List<string> contracts = new List<string> { "data", "exterminator", "extraction","exorcism","defusal" };
+        public static readonly List<string> contracts = new List<string> { "Data", "Exterminator", "Extraction","Exorcism","Defusal" };
         public static readonly List<string> contractInfos = new List<string> {
             "\n\nOur systems have detected an active PC somewhere in the facility.\nFind it, use the bruteforce command on the ship terminal with the devices IP to get login credentials, then use the cd, ls, and mv commands to find the .db file (enter `mv survey.db` in the containing folder).\n\n",
             "\n\nIt's been reported that the population of hoarder bugs on this moon have skyrocketed and become aggressive. You must destroy their nest at all costs.\n\n",

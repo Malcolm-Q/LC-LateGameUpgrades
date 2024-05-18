@@ -42,7 +42,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Contracts
                 Vector3 newPosition = spawnVent.floorNode.position + offsetVector;
                 transform.position = newPosition;
             }
-            if (contractType != "exterminator") return;
+            if (contractType != "Exterminator") return;
 
             Tools.SpawnMob("Hoarding bug", transform.position, UpgradeBus.Instance.PluginConfiguration.CONTRACT_BUG_SPAWNS.Value);
         }

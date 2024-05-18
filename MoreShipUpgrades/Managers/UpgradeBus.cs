@@ -194,7 +194,7 @@ namespace MoreShipUpgrades.Managers
             if (!PluginConfiguration.DATA_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
                 logger.LogInfo("Removing data contract");
-                int idx = CommandParser.contracts.IndexOf("data");
+                int idx = CommandParser.contracts.IndexOf("Data");
                 if (idx != -1)
                 {
                     CommandParser.contractInfos.RemoveAt(idx);
@@ -204,7 +204,7 @@ namespace MoreShipUpgrades.Managers
             if (!PluginConfiguration.EXTRACTION_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
                 logger.LogInfo("Removing extraction contract");
-                int idx = CommandParser.contracts.IndexOf("extraction");
+                int idx = CommandParser.contracts.IndexOf("Extraction");
                 if (idx != -1)
                 {
                     CommandParser.contractInfos.RemoveAt(idx);
@@ -214,7 +214,7 @@ namespace MoreShipUpgrades.Managers
             if (!PluginConfiguration.EXORCISM_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
                 logger.LogInfo("Removing exorcism contract");
-                int idx = CommandParser.contracts.IndexOf("exorcism");
+                int idx = CommandParser.contracts.IndexOf("Exorcism");
                 if (idx != -1)
                 {
                     CommandParser.contractInfos.RemoveAt(idx);
@@ -224,7 +224,7 @@ namespace MoreShipUpgrades.Managers
             if (!PluginConfiguration.DEFUSAL_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
                 logger.LogInfo("Removing defusal contract");
-                int idx = CommandParser.contracts.IndexOf("defusal");
+                int idx = CommandParser.contracts.IndexOf("Defusal");
                 if (idx != -1)
                 {
                     CommandParser.contractInfos.RemoveAt(idx);
@@ -241,7 +241,7 @@ namespace MoreShipUpgrades.Managers
                 else
                 {
                     logger.LogInfo("Removing exterminator contract");
-                    int idx = CommandParser.contracts.IndexOf("exterminator");
+                    int idx = CommandParser.contracts.IndexOf("Exterminator");
                     if (idx != -1)
                     {
                         CommandParser.contractInfos.RemoveAt(idx);

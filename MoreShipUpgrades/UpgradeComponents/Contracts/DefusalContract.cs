@@ -6,7 +6,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Contracts
     {
         public override void Start()
         {
-            contractType = "defusal";
+            contractType = "Defusal";
             if (GetComponent<PhysicsProp>().isInShipRoom || GetComponent<PhysicsProp>().isInElevator) // Already in the ship, don't make it disappear
             {
                 BombDefusalScript bomb = GetComponent<BombDefusalScript>();
