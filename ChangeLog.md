@@ -1,6 +1,9 @@
 <details>
 <summary> <h2> 3.7.0 - 2024-05-??</h2> </summary>
 
+<details>
+<summary> <h3> Additions </h3> </summary>
+
 - Added configurable incremental price factors to ``Extend Deadline`` per quota and per day extended.
     - Due to this, an interactive UI was made for ``extend deadline`` command where you can select the amount of days you wish to extend and shows the amount of credits you will spend on that amount.
 - Added interactive UI for contracts accessed through ``contracts`` command where you can select the same command prompts from typing previously.
@@ -10,12 +13,28 @@
 - Added alternative mode for ``Helmet`` item to partially mitigate damage and only break when the next hit on the player would kill them.
 - Added prototype of Upgrade API to register upgrades outside of this mod.
     - Early stages of production, will need to use it to know if it works as expected.
+    - You still have to do your own logic of the upgrade through patches/variable changes. You can access the status of the upgrade through ``BaseUpgrade.GetActiveUpgrade(upgradeName)`` and ``BaseUpgrade.GetUpgradeLevel(upgradeName)``
     - If any issues arise from using the API, report them in the github repository.
+
+</details>
+<details>
+<summary> <h3> Changes </h3> </summary>
+
 - Changed Probe's interactive menu to disable weather entries when conditions are not met (not enough credits or the weather is already in place)
+
+</details>
+
+<details>
+<summary> <h3> Fixes </h3> </summary>
+
 - Fixed Hunter samples spawning on Manticoils and Tulip Snakes when the transition from day to night happens and the daytime enemies despawned on that transiction.
 - Fixed Sick Beats preventing enemies from damaging the player when disabled.
 - Fixed Helmet's scan node appearing above the item rather than on the item.
 - Fixed Helmet not appearing in the player's hand when held.
+- Fixed some Hunter sample models not showing the name of the monster they were generated from.
+- Optimized sample models to not have many (many (many)) vertices which consume unnecessary C/GPU computation power.
+
+</details>
 
 </details>
 
