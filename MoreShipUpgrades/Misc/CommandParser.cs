@@ -7,6 +7,7 @@ using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exorcism;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,10 +22,9 @@ namespace MoreShipUpgrades.Misc
         private static LguLogger logger = new LguLogger(nameof(CommandParser));
         private static bool attemptCancelContract = false;
         private static string attemptSpecifyContract = null;
-        static (string, LevelWeatherType) attemptWeatherProbe = (null, LevelWeatherType.None);
 
         const string LOAD_LGU_COMMAND = "load lgu";
-        public static readonly List<string> contracts = new List<string> { "data", "exterminator", "extraction","exorcism","defusal" };
+        public static readonly List<string> contracts = new List<string> { "Data", "Exterminator", "Extraction","Exorcism","Defusal" };
         public static readonly List<string> contractInfos = new List<string> {
             "\n\nOur systems have detected an active PC somewhere in the facility.\nFind it, use the bruteforce command on the ship terminal with the devices IP to get login credentials, then use the cd, ls, and mv commands to find the .db file (enter `mv survey.db` in the containing folder).\n\n",
             "\n\nIt's been reported that the population of hoarder bugs on this moon have skyrocketed and become aggressive. You must destroy their nest at all costs.\n\n",
@@ -446,10 +446,12 @@ namespace MoreShipUpgrades.Misc
             if (!(int.TryParse(daysString, out int days) && days > 0)) 
                 return DisplayTerminalMessage(string.Format(LGUConstants.EXTEND_DEADLINE_PARSING_ERROR_FORMAT, daysString));
 
-            if (terminal.groupCredits < days * UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_PRICE.Value) 
-                return DisplayTerminalMessage(string.Format(LGUConstants.EXTEND_DEADLINE_NOT_ENOUGH_CREDITS_FORMAT, days * UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_PRICE.Value, terminal.groupCredits));
+            int totalCost = ExtendDeadlineScript.instance.GetTotalCostPerDay(days);
 
-            terminal.groupCredits -= days * UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_PRICE.Value;
+            if (terminal.groupCredits < totalCost) 
+                return DisplayTerminalMessage(string.Format(LGUConstants.EXTEND_DEADLINE_NOT_ENOUGH_CREDITS_FORMAT, totalCost, terminal.groupCredits));
+
+            terminal.groupCredits -= totalCost;
             LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits);
             ExtendDeadlineScript.instance.ExtendDeadlineServerRpc(days);
 
@@ -516,16 +518,6 @@ namespace MoreShipUpgrades.Misc
             logger.LogInfo($"User accepted a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}");
             return DisplayTerminalMessage(string.Format(LGUConstants.CONTRACT_SPECIFY_CONFIRM_PROMPT_SUCCESS_FORMAT, contracts[i], moon, contractInfos[i]));
         }
-        static TerminalNode CheckConfirmForWeatherProbe(string word, ref Terminal terminal)
-        {
-            (string, LevelWeatherType) selectedWeather = attemptWeatherProbe;
-            attemptWeatherProbe = (null, LevelWeatherType.None);
-            if (word.ToLower() != "confirm") return DisplayTerminalMessage(LGUConstants.WEATHER_SPECIFY_CONFIRM_PROMPT_FAIL);
-            terminal.groupCredits -= UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE.Value;
-            LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits);
-            LguStore.Instance.SyncWeatherServerRpc(selectedWeather.Item1, selectedWeather.Item2);
-            return DisplayTerminalMessage(string.Format(LGUConstants.CONTRACT_SPECIFY_CONFIRM_PROMPT_SUCCESS_FORMAT, selectedWeather.Item1, selectedWeather.Item2, UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE.Value));
-        }
         public static void ParseLGUCommands(string fullText, ref Terminal terminal, ref TerminalNode outputNode)
         {
             string[] textArray = fullText.Split();
@@ -542,11 +534,6 @@ namespace MoreShipUpgrades.Misc
                 outputNode = CheckConfirmForCancel(firstWord, ref terminal);
                 return;
             }
-            if (attemptWeatherProbe != (null,LevelWeatherType.None))
-            {
-                outputNode = CheckConfirmForWeatherProbe(firstWord, ref terminal);
-                return;
-            }
             switch (firstWord)
             {
                 case "demon": outputNode = LookupDemon(secondWord, thirdWord); return;
@@ -559,6 +546,7 @@ namespace MoreShipUpgrades.Misc
                 case "cd":
                 case "cooldown": outputNode = ExecuteDiscombobulatorCooldown(); return;
                 case "lategame": outputNode = ExecuteLategameCommands(secondWord); return;
+                case "lgc": outputNode = ExecuteLGUCommands(); return;
                 case "reset": outputNode = ExecuteResetCommands(secondWord, ref outputNode); return;
                 case "forcecredits": outputNode = ExecuteForceCredits(secondWord, ref terminal); return;
                 case "intern":
@@ -567,8 +555,26 @@ namespace MoreShipUpgrades.Misc
                 case "load": outputNode = ExecuteLoadCommands(secondWord, fullText, ref terminal, ref outputNode); return;
                 case "scan": outputNode = ExecuteScanCommands(secondWord, ref outputNode); return;
                 case "scrap": outputNode = ExecuteScrapCommands(secondWord, ref terminal, ref outputNode); return;
+                case "quantum": ExecuteQuantumCommands(secondWord, ref terminal, ref outputNode); return;
                 default: return;
             }
+        }
+        private static void ExecuteQuantumCommands(string word, ref Terminal terminal, ref TerminalNode outputNode)
+        {
+            if (!UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_ENABLED) return;
+            if (!BaseUpgrade.GetActiveUpgrade(QuantumDisruptor.UPGRADE_NAME))
+            {
+                outputNode = DisplayTerminalMessage("You need \'Quantum Disruptor\' upgrade active to use this command.");
+                return;
+            }
+            (bool, string) canRevert = QuantumDisruptor.Instance.CanRevertTime();
+            if (!canRevert.Item1)
+            {
+                outputNode = DisplayTerminalMessage(canRevert.Item2);
+                return;
+            }
+            if (terminal.IsHost || terminal.IsServer) QuantumDisruptor.Instance.RevertTimeClientRpc();
+            outputNode = DisplayTerminalMessage($"Successfully reverted back current moon's time by {QuantumDisruptor.Instance.hoursToReduce}. You currently have {QuantumDisruptor.Instance.currentUsages} out of {QuantumDisruptor.Instance.availableUsages} usages");
         }
         private static TerminalNode ExecuteScrapInsuranceCommand(ref Terminal terminal, ref TerminalNode outputNode)
         {

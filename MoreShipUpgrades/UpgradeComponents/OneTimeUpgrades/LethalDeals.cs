@@ -1,4 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
@@ -21,13 +23,20 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             return $"${price} - Guarantees at least one item will be on sale in the store.";
         }
-        internal override bool CanInitializeOnStart()
-        {
-            return UpgradeBus.Instance.PluginConfiguration.LETHAL_DEALS_PRICE.Value <= 0;
-        }
-        internal new static void RegisterUpgrade()
+        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.LETHAL_DEALS_PRICE.Value <= 0;
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<LethalDeals>(UPGRADE_NAME);
+        }
+        public new static CustomTerminalNode RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
+                                    shareStatus: true,
+                                    configuration.LETHAL_DEALS_ENABLED.Value,
+                                    configuration.LETHAL_DEALS_PRICE.Value,
+                                    configuration.OVERRIDE_UPGRADE_NAMES ? configuration.LETHAL_DEALS_OVERRIDE_NAME : "");
         }
     }
 }

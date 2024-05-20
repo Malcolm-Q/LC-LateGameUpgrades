@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
@@ -33,15 +34,30 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
-        internal override bool CanInitializeOnStart()
+        public override bool CanInitializeOnStart
         {
-            string[] prices = UpgradeBus.Instance.PluginConfiguration.STRONG_LEGS_UPGRADE_PRICES.Value.Split(',');
-            bool free = UpgradeBus.Instance.PluginConfiguration.STRONG_LEGS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-            return free;
+            get
+            {
+                string[] prices = UpgradeBus.Instance.PluginConfiguration.STRONG_LEGS_UPGRADE_PRICES.Value.Split(',');
+                bool free = UpgradeBus.Instance.PluginConfiguration.STRONG_LEGS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+                return free;
+            }
         }
-        internal new static void RegisterUpgrade()
+
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<StrongLegs>(UPGRADE_NAME);
+        }
+        public new static CustomTerminalNode RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                configuration.SHARED_UPGRADES.Value || !configuration.STRONG_LEGS_INDIVIDUAL.Value,
+                                                configuration.STRONG_LEGS_ENABLED.Value,
+                                                configuration.STRONG_LEGS_PRICE.Value,
+                                                UpgradeBus.ParseUpgradePrices(configuration.STRONG_LEGS_UPGRADE_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.STRONG_LEGS_OVERRIDE_NAME : "");
         }
     }
 }

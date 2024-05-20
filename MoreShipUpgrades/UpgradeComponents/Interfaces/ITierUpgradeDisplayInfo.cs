@@ -3,7 +3,7 @@
     /// <summary>
     /// Interface for upgrades which can be purchased multiple times so we have to show each effect whenever a new level is purchased
     /// </summary>
-    internal interface ITierUpgradeDisplayInfo
+    public interface ITierUpgradeDisplayInfo
     {
         /// <summary>
         /// Shows the info related to the selected upgrade

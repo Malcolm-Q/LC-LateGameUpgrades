@@ -17,7 +17,7 @@ namespace MoreShipUpgrades.Misc.Commands
         /// This method is to be overriden by their subclasses through "new"
         /// </summary>
         /// <exception cref="NotSupportedException"></exception>
-        internal static void RegisterCommand() { throw new NotSupportedException(); }
+        public static void RegisterCommand() { throw new NotSupportedException(); }
 
         /// <summary>
         /// Generic function where it adds a script (specificed through the type) into an GameObject asset 

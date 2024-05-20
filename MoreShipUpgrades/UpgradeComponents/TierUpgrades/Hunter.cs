@@ -1,6 +1,7 @@
 ﻿using MoreShipUpgrades.API;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Collections.Generic;
@@ -47,10 +48,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             { "slowersnake", "Tulip Snake" },
             { "flower snake", "Tulip Snake" },
             { "snake", "Tulip Snake" },
-            { "forest giant", "ForestGiant" },
-            { "forest keeper", "ForestGiant" },
-            { "forestgiant", "ForestGiant" },
-            { "forestkeeper", "ForestGiant" },
+            { "forest giant", "Forest Giant" },
+            { "forest keeper", "Forest Giant" },
+            { "forestgiant", "Forest Giant" },
+            { "forestkeeper", "Forest Giant" },
             { "manticoil", "Manticoil" },
             { "manti coil", "Manticoil" },
             { "bird", "Manticoil" },
@@ -143,15 +144,31 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 sb.Append(GetHunterInfo(i + 1, incrementalPrices[i]));
             return sb.ToString();
         }
-        internal override bool CanInitializeOnStart()
+        public override bool CanInitializeOnStart
         {
-            string[] prices = UpgradeBus.Instance.PluginConfiguration.HUNTER_UPGRADE_PRICES.Value.Split(',');
-            bool free = UpgradeBus.Instance.PluginConfiguration.HUNTER_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-            return free;
+            get
+            {
+                string[] prices = UpgradeBus.Instance.PluginConfiguration.HUNTER_UPGRADE_PRICES.Value.Split(',');
+                bool free = UpgradeBus.Instance.PluginConfiguration.HUNTER_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+                return free;
+            }
         }
-        internal new static void RegisterUpgrade()
+
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<Hunter>(UPGRADE_NAME);
+        }
+        public new static CustomTerminalNode RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            SetupLevels();
+            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                shareStatus: true,
+                                                configuration.HUNTER_ENABLED.Value,
+                                                configuration.HUNTER_PRICE.Value,
+                                                UpgradeBus.ParseUpgradePrices(configuration.HUNTER_UPGRADE_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.HUNTER_OVERRIDE_NAME : "");
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Linq;
 using UnityEngine;
@@ -16,12 +17,20 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         /// The Animator component of the instance of the class
         /// </summary>
         private Animator anim;
+        bool KeepScanNode
+        {
+            get
+            {
+                return UpgradeBus.Instance.PluginConfiguration.PEEPER_SCAN_NODE;
+            }
+        }
 
         public override void Start()
         {
             base.Start();
             anim = GetComponent<Animator>();
             UpgradeBus.Instance.coilHeadItems.Add(this);
+            if (!KeepScanNode) LguScanNodeProperties.RemoveScanNode(gameObject);
         }
         public override void Update()
         {

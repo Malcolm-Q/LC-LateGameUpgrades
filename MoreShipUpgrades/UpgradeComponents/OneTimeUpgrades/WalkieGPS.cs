@@ -1,4 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using UnityEngine;
@@ -72,13 +74,20 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             return $"${price} - Displays your location and time when holding a walkie talkie.\nEspecially useful for fog.";
         }
-        internal override bool CanInitializeOnStart()
-        {
-            return UpgradeBus.Instance.PluginConfiguration.WALKIE_PRICE.Value <= 0;
-        }
-        internal new static void RegisterUpgrade()
+        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.WALKIE_PRICE.Value <= 0;
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<WalkieGPS>(UPGRADE_NAME);
+        }
+        public new static CustomTerminalNode RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
+                                    shareStatus: true,
+                                    configuration.WALKIE_ENABLED.Value,
+                                    configuration.WALKIE_PRICE.Value,
+                                    configuration.OVERRIDE_UPGRADE_NAMES ? configuration.WALKIE_GPS_OVERRIDE_NAME : "");
         }
     }
 }

@@ -40,7 +40,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
             insurance = enabled;
         }
 
-        internal static new void RegisterCommand()
+        public static new void RegisterCommand()
         {
             SetupGenericCommand<ScrapInsurance>(COMMAND_NAME);
         }

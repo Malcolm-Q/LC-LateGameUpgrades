@@ -1,5 +1,7 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
@@ -58,13 +60,20 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             return WORLD_BUILDING_TEXT;
         }
 
-        internal override bool CanInitializeOnStart()
-        {
-            return (UpgradeBus.Instance.PluginConfiguration.SIGURD_ENABLED.Value || UpgradeBus.Instance.PluginConfiguration.SIGURD_LAST_DAY_ENABLED.Value) && UpgradeBus.Instance.PluginConfiguration.SIGURD_PRICE.Value <= 0;
-        }
-        internal new static void RegisterUpgrade()
+        public override bool CanInitializeOnStart => (UpgradeBus.Instance.PluginConfiguration.SIGURD_ENABLED.Value || UpgradeBus.Instance.PluginConfiguration.SIGURD_LAST_DAY_ENABLED.Value) && UpgradeBus.Instance.PluginConfiguration.SIGURD_PRICE.Value <= 0;
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<Sigurd>(UPGRADE_NAME);
+        }
+        public new static CustomTerminalNode RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
+                                    shareStatus: true,
+                                    configuration.SIGURD_ENABLED.Value || configuration.SIGURD_LAST_DAY_ENABLED.Value,
+                                    configuration.SIGURD_PRICE.Value,
+                                    configuration.OVERRIDE_UPGRADE_NAMES ? configuration.SIGURD_ACCESS_OVERRIDE_NAME : "");
         }
     }
 }

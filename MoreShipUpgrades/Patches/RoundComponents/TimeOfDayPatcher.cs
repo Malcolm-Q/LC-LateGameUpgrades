@@ -1,7 +1,9 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Patches.RoundComponents
@@ -11,7 +13,14 @@ namespace MoreShipUpgrades.Patches.RoundComponents
     {
         [HarmonyPostfix]
         [HarmonyPatch(nameof(TimeOfDay.SyncNewProfitQuotaClientRpc))]
-        static void GenerateNewSales(TimeOfDay __instance)
+        static void SyncNewProfitQuotaClientRpcPostfix(TimeOfDay __instance)
+        {
+            GenerateNewSales(ref __instance);
+            ExtendDeadlineScript.SetDaysExtended(daysExtended: 0);
+            QuantumDisruptor.TryResetQuantum(QuantumDisruptor.ResetModes.NewQuota);
+        }
+
+        static void GenerateNewSales(ref TimeOfDay __instance)
         {
             if (UpgradeBus.Instance.PluginConfiguration.SHARED_UPGRADES.Value && (__instance.IsHost || __instance.IsServer))
             {

@@ -7,11 +7,10 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
     /// </summary>
     internal static class HelpTerminalNode
     {
-        static int startingIndex = -1;
-        static int endingIndex = -1;
-        const string EXTEND_HELP_COMMAND = ">EXTEND DEADLINE <DAYS>\nExtends the deadline by specified amount. Consumes {0} for each day extended.\n\n";
+        static bool addedHelp = false;
+        const string EXTEND_HELP_COMMAND = ">EXTEND DEADLINE <DAYS>\nExtends the deadline by specified amount. Consumes {0} for each day extended and the price is increased by {1} per every quota fullfilled.\n\n";
         const string INTERNS_HELP_COMMAND = ">INTERNS / INTERN\nRevives the selected player in radar with a new employee. Consumes {0} credits for each revive.\n\n";
-        const string WEATHER_PROBE_HELP_COMMAND = ">PROBE <MOON> [WEATHER]\nSends out a weather probe to the specified moon and changes its current weather.\nIt will cost {0} Company credits for a randomized weather selection or {1} Company Credits when specifying the weather on a given moon.\nIt cannot change to a weather which is not possible to happen on that moon.\n";
+        const string WEATHER_PROBE_HELP_COMMAND = ">PROBE\nSends out a weather probe to the specified moon and changes its current weather.\nIt will cost {0} Company credits for a randomized weather selection or {1} Company Credits when specifying the weather on a given moon.\nIt cannot change to a weather which is not possible to happen on that moon.\n";
 
         const string CONTRACT_HELP_COMMAND = ">CONTRACT [moon]\nGives you a random contract for a scrap item with considerable value and lasts til you leave from assigned planet.\nConsumes {0} credits for each contract and will be unable to get another contract til current has expired.\nIf a moon is specified, it will generate a contract for that moon for the cost of {1} Company credits instead.\n\n";
         const string ATK_HELP_COMMAND = ">ATK / INITATTACK\nStuns nearby enemies for a set period of time. Only applicable when Discombobulator has been purchased\n\n";
@@ -28,11 +27,9 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
             {
                 helpNode = LguTerminalNode.GetHelpTerminalNode();
             }
-
-            if (startingIndex != -1 && endingIndex != -1) helpNode.displayText = helpNode.displayText.Remove(startingIndex, endingIndex - startingIndex);
-            startingIndex = helpNode.displayText.Length;
+            if (addedHelp) return;
             helpNode.displayText += ">LATEGAME\nDisplays information related with Lategame-Upgrades mod\n\n";
-            endingIndex = helpNode.displayText.Length;
+            addedHelp = true;
         }
         public static string HandleHelpWeatherProbe()
         {
@@ -93,7 +90,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         {
             if(UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_ENABLED.Value)
             {
-                return string.Format(EXTEND_HELP_COMMAND, UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_PRICE.Value);
+                return string.Format(EXTEND_HELP_COMMAND, UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_PRICE.Value, UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA.Value);
             }
             return "";
         }

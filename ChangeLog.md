@@ -1,5 +1,46 @@
 <details>
-<summary> <h2>V 3.6.5 - 2024-05-01</h2> </summary>
+<summary> <h2> 3.7.0 - 2024-05-??</h2> </summary>
+
+<details>
+<summary> <h3> Additions </h3> </summary>
+
+- Added configurable incremental price factors to ``Extend Deadline`` per quota and per day extended.
+    - Due to this, an interactive UI was made for ``extend deadline`` command where you can select the amount of days you wish to extend and shows the amount of credits you will spend on that amount.
+- Added interactive UI for contracts accessed through ``contracts`` command where you can select the same command prompts from typing previously.
+- Added configurable toggle for Deeper Pockets allowing pocketing wheelbarrows (allowing you to switch between items when carrying a wheelbarrow) or not.
+- Added configurable toggle to allow scan nodes on purchased items (Wheelbarrow, Peeper, Helmet, etc..).
+- Added alternative mode for ``Quantum Disruptor`` upgrade to revert time by x hours and can only be used y times which resets at a given point (per moon landing, routing or new quota).
+- Added alternative mode for ``Helmet`` item to partially mitigate damage and only break when the next hit on the player would kill them.
+- Added prototype of Upgrade API to register upgrades outside of this mod.
+    - Early stages of production, will need to use it to know if it works as expected.
+    - You still have to do your own logic of the upgrade through patches/variable changes. You can access the status of the upgrade through ``BaseUpgrade.GetActiveUpgrade(upgradeName)`` and ``BaseUpgrade.GetUpgradeLevel(upgradeName)``
+    - If any issues arise from using the API, report them in the github repository.
+
+</details>
+<details>
+<summary> <h3> Changes </h3> </summary>
+
+- Changed Probe's interactive menu to disable weather entries when conditions are not met (not enough credits or the weather is already in place)
+
+</details>
+
+<details>
+<summary> <h3> Fixes </h3> </summary>
+
+- Fixed Hunter samples spawning on Manticoils and Tulip Snakes when the transition from day to night happens and the daytime enemies despawned on that transiction.
+- Fixed Sick Beats preventing enemies from damaging the player when disabled.
+- Fixed Helmet's scan node appearing above the item rather than on the item.
+- Fixed Helmet not appearing in the player's hand when held.
+- Fixed some Hunter sample models not showing the name of the monster they were generated from.
+- Optimized sample models to not have many (many (many)) vertices which consume unnecessary C/GPU computation power.
+- Fixed issue with interacting with Data Contract's PC leading to player being able to move around when interacting with its UI.
+
+</details>
+
+</details>
+
+<details>
+<summary> <h2>V 3.6.5 - 2024-05-05</h2> </summary>
 
 - Changed the upgrade store to:
     - Show inactive entries when you don't have enough credits to purchase or they have reached maximum level
@@ -11,6 +52,7 @@
 - Fixed interaction between Deeper Pockets and Shopping Cart that would lead to the player being unable to interact.
 - Fixed sales still showing in the upgrade store when the upgrade is already maxed.
 - Fixed credits being wasted when bought upgrades and disconnecting after.
+- Fixed some upgrade information texts displaying incorrect values.
 
 </details>
 <details>

@@ -1,4 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
@@ -27,15 +29,30 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             string infoFormat = "LVL {0} - ${1} - Guarantees the item sales' percentage to be at least {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
-        internal override bool CanInitializeOnStart()
+        public override bool CanInitializeOnStart
         {
-            string[] prices = UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_PRICES.Value.Split(',');
-            bool free = UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-            return free;
+            get
+            {
+                string[] prices = UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_PRICES.Value.Split(',');
+                bool free = UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+                return free;
+            }
         }
-        internal new static void RegisterUpgrade()
+
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<MarketInfluence>(UPGRADE_NAME);
+        }
+        public new static CustomTerminalNode RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                shareStatus: true,
+                                                configuration.MARKET_INFLUENCE_ENABLED.Value,
+                                                configuration.MARKET_INFLUENCE_PRICE.Value,
+                                                UpgradeBus.ParseUpgradePrices(configuration.MARKET_INFLUENCE_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.MARKET_INFLUENCE_OVERRIDE_NAME : "");
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Text;
@@ -65,15 +66,24 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             return stringBuilder.ToString();
         }
 
-        internal override bool CanInitializeOnStart()
-        {
-            return UpgradeBus.Instance.PluginConfiguration.BETTER_SCANNER_PRICE.Value <= 0 &&
+        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.BETTER_SCANNER_PRICE.Value <= 0 &&
                 UpgradeBus.Instance.PluginConfiguration.BETTER_SCANNER_PRICE2.Value <= 0 &&
                 UpgradeBus.Instance.PluginConfiguration.BETTER_SCANNER_PRICE3.Value <= 0;
-        }
-        internal new static void RegisterUpgrade()
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<BetterScanner>(UPGRADE_NAME);
+        }
+        public new static CustomTerminalNode RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                configuration.SHARED_UPGRADES.Value || !configuration.BETTER_SCANNER_INDIVIDUAL.Value,
+                                                configuration.BETTER_SCANNER_ENABLED.Value,
+                                                configuration.BETTER_SCANNER_PRICE.Value,
+                                                new int[] { configuration.BETTER_SCANNER_PRICE2.Value, configuration.BETTER_SCANNER_PRICE3.Value },
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.BETTER_SCANNER_OVERRIDE_NAME : ""
+                                                );
         }
     }
 }

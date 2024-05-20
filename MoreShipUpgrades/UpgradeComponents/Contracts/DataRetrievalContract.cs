@@ -8,7 +8,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Contracts
     {
         public override void Start()
         {
-            contractType = "data";
+            contractType = "Data";
             base.Start();
         }
     }

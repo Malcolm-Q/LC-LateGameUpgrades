@@ -29,7 +29,7 @@ MonoBehaviour:
   highestSalePercentage: 0
   maxValue: 75
   minValue: 115
-  spawnPrefab: {fileID: 4101488959962961919, guid: 07e7a21f91bcf014d9c638e9c1786c7c,
+  spawnPrefab: {fileID: 7725355431338732335, guid: 3d9dbcc94bfdc8d4ea4f329f9ad7b6ec,
     type: 3}
   requiresBattery: 0
   batteryUsage: 0
@@ -51,12 +51,12 @@ MonoBehaviour:
   saveItemVariable: 0
   isDefensiveWeapon: 0
   toolTips: []
-  verticalOffset: 0
+  verticalOffset: 0.275
   floorYOffset: 0
   allowDroppingAheadOfPlayer: 0
   restingRotation: {x: 0, y: 0, z: 0}
   rotationOffset: {x: -250, y: 0, z: -90}
-  positionOffset: {x: -0.25, y: 0.15, z: -0.14}
+  positionOffset: {x: 0, y: 0.25, z: -0.15}
   meshOffset: 0
   meshVariants: []
   materialVariants: []

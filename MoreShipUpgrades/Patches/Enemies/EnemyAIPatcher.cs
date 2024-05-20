@@ -13,8 +13,9 @@ namespace MoreShipUpgrades.Patches.Enemies
         private static ulong currentEnemy = 0;
         [HarmonyPostfix]
         [HarmonyPatch(nameof(EnemyAI.KillEnemy))]
-        private static void SpawnSample(EnemyAI __instance)
+        private static void SpawnSample(EnemyAI __instance, bool destroy)
         {
+            if ((__instance is DoublewingAI || __instance is FlowerSnakeEnemy) && destroy) return;
             if (!(__instance.IsServer || __instance.IsHost)) return;
 
             if (currentEnemy == __instance.NetworkObject.NetworkObjectId) return;

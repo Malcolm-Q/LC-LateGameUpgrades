@@ -1,4 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 
@@ -25,15 +27,30 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             string infoFormat = "LVL {0} - ${1} - Increases the amount of items that can be on sale by {2}\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
-        internal override bool CanInitializeOnStart()
+        public override bool CanInitializeOnStart
         {
-            string[] prices = UpgradeBus.Instance.PluginConfiguration.BARGAIN_CONNECTIONS_PRICES.Value.Split(',');
-            bool free = UpgradeBus.Instance.PluginConfiguration.BARGAIN_CONNECTIONS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-            return free;
+            get
+            {
+                string[] prices = UpgradeBus.Instance.PluginConfiguration.BARGAIN_CONNECTIONS_PRICES.Value.Split(',');
+                bool free = UpgradeBus.Instance.PluginConfiguration.BARGAIN_CONNECTIONS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+                return free;
+            }
         }
-        internal new static void RegisterUpgrade()
+
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<BargainConnections>(UPGRADE_NAME);
+        }
+        public new static CustomTerminalNode RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                shareStatus: true,
+                                                configuration.BARGAIN_CONNECTIONS_ENABLED.Value,
+                                                configuration.BARGAIN_CONNECTIONS_PRICE.Value,
+                                                UpgradeBus.ParseUpgradePrices(configuration.BARGAIN_CONNECTIONS_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.BARGAIN_CONNECTIONS_OVERRIDE_NAME : "");
         }
     }
 }

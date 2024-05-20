@@ -12,6 +12,7 @@ using MoreShipUpgrades.Input;
 using UnityEngine.UI;
 using CSync.Lib;
 using MoreShipUpgrades.Misc.Util;
+using MoreShipUpgrades.Misc.TerminalNodes;
 
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
@@ -230,15 +231,32 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 stringBuilder.Append(GetNightVisionInfo(i + 2, incrementalPrices[i]));
             return stringBuilder.ToString();
         }
-        internal override bool CanInitializeOnStart()
+        public override bool CanInitializeOnStart
         {
-            string[] prices = UpgradeBus.Instance.PluginConfiguration.NIGHT_VISION_UPGRADE_PRICES.Value.Split(',');
-            bool free = UpgradeBus.Instance.PluginConfiguration.NIGHT_VISION_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-            return free;
+            get
+            {
+                string[] prices = UpgradeBus.Instance.PluginConfiguration.NIGHT_VISION_UPGRADE_PRICES.Value.Split(',');
+                bool free = UpgradeBus.Instance.PluginConfiguration.NIGHT_VISION_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+                return free;
+            }
         }
-        internal new static void RegisterUpgrade()
+
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<NightVision>(UPGRADE_NAME);
+        }
+        public new static CustomTerminalNode RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            CustomTerminalNode node = UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(NightVision.UPGRADE_NAME,
+                                                configuration.SHARED_UPGRADES.Value || !configuration.NIGHT_VISION_INDIVIDUAL.Value,
+                                                configuration.NIGHT_VISION_ENABLED.Value,
+                                                0,
+                                                UpgradeBus.ParseUpgradePrices(configuration.NIGHT_VISION_UPGRADE_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.NIGHT_VISION_OVERRIDE_NAME : "");
+            if (node != null) node.Unlocked = true;
+            return node;
         }
     }
 }

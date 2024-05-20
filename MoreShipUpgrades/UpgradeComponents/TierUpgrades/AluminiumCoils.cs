@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using System;
@@ -54,10 +55,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             System.Func<int, float> cooldownInfo = level => UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_INITIAL_COOLDOWN_DECREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_DECREASE.Value);
             StringBuilder sb = new StringBuilder();
             sb.Append($"LVL {level} - ${price}: Upgrades to zap gun:\n");
-            sb.Append($"- Increases zap gun's range by {(rangeInfo(level) / 13f * 100f):F0}%\n");
-            sb.Append($"- Stun time increased by {stunTimerInfo(level)} seconds\n");
-            sb.Append($"- Decreases the minigame's difficulty by {(difficultyInfo(level)):F0}%\n");
-            sb.Append($"- Decreases the zap gun's cooldown by {cooldownInfo(level):F0}%\n");
+            sb.Append($"- Increases zap gun's range by {(rangeInfo(level-1) / 13f * 100f):F0}%\n");
+            sb.Append($"- Stun time increased by {stunTimerInfo(level-1)} seconds\n");
+            sb.Append($"- Decreases the minigame's difficulty by {(difficultyInfo(level - 1)):F0}%\n");
+            sb.Append($"- Decreases the zap gun's cooldown by {cooldownInfo(level - 1):F0}%\n");
             sb.Append('\n');
             return sb.ToString();
         }
@@ -70,15 +71,30 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             return sb.ToString();
         }
 
-        internal override bool CanInitializeOnStart()
+        public override bool CanInitializeOnStart
         {
-            string[] prices = UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_PRICES.Value.Split(',');
-            bool free = UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-            return free;
+            get
+            {
+                string[] prices = UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_PRICES.Value.Split(',');
+                bool free = UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+                return free;
+            }
         }
-        internal new static void RegisterUpgrade()
+
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<AluminiumCoils>(UPGRADE_NAME);
+        }
+        public new static CustomTerminalNode RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                configuration.SHARED_UPGRADES.Value || !configuration.ALUMINIUM_COILS_INDIVIDUAL.Value,
+                                                configuration.ALUMINIUM_COILS_ENABLED.Value,
+                                                configuration.ALUMINIUM_COILS_PRICE.Value,
+                                                UpgradeBus.ParseUpgradePrices(configuration.ALUMINIUM_COILS_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.ALUMINIUM_COILS_OVERRIDE_NAME : "");
         }
     }
 }

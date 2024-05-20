@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
@@ -26,15 +27,30 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             string infoFormat = "LVL {0} - ${1} - Increases the speed of climbing ladders by {2} units.\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
-        internal override bool CanInitializeOnStart()
+        public override bool CanInitializeOnStart
         {
-            string[] prices = UpgradeBus.Instance.PluginConfiguration.CLIMBING_GLOVES_PRICES.Value.Split(',');
-            bool free = UpgradeBus.Instance.PluginConfiguration.CLIMBING_GLOVES_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-            return free;
+            get
+            {
+                string[] prices = UpgradeBus.Instance.PluginConfiguration.CLIMBING_GLOVES_PRICES.Value.Split(',');
+                bool free = UpgradeBus.Instance.PluginConfiguration.CLIMBING_GLOVES_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+                return free;
+            }
         }
-        internal new static void RegisterUpgrade()
+
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<ClimbingGloves>(UPGRADE_NAME);
+        }
+        public new static CustomTerminalNode RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                configuration.SHARED_UPGRADES.Value || !configuration.CLIMBING_GLOVES_INDIVIDUAL.Value,
+                                                configuration.CLIMBING_GLOVES_ENABLED.Value,
+                                                configuration.CLIMBING_GLOVES_PRICE.Value,
+                                                UpgradeBus.ParseUpgradePrices(configuration.CLIMBING_GLOVES_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.CLIMBING_GLOVES_OVERRIDE_NAME : "");
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Text;
@@ -63,15 +64,30 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
                 sb.Append(GetBiggerlungsInfo(i + 2, incrementalPrices[i]));
             return sb.ToString();
         }
-        internal override bool CanInitializeOnStart()
+        public override bool CanInitializeOnStart
         {
-            string[] prices = UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_UPGRADE_PRICES.Value.Split(',');
-            bool free = UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-            return free;
+            get
+            {
+                string[] prices = UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_UPGRADE_PRICES.Value.Split(',');
+                bool free = UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+                return free;
+            }
         }
-        internal new static void RegisterUpgrade()
+
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<BiggerLungs>(UPGRADE_NAME);
+        }
+        public new static CustomTerminalNode RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                configuration.SHARED_UPGRADES.Value || !configuration.BIGGER_LUNGS_INDIVIDUAL.Value,
+                                                configuration.BIGGER_LUNGS_ENABLED.Value,
+                                                configuration.BIGGER_LUNGS_PRICE.Value,
+                                                UpgradeBus.ParseUpgradePrices(configuration.BIGGER_LUNGS_UPGRADE_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.BIGGER_LUNGS_OVERRIDE_NAME : "");
         }
     }
 }

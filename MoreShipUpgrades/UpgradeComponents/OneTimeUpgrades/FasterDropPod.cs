@@ -1,4 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using UnityEngine;
 
@@ -40,13 +42,20 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             return $"${price} - Make the Drop Pod, the ship that deliver items bought on the terminal, land faster.";
         }
-        internal override bool CanInitializeOnStart()
-        {
-            return UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_PRICE.Value <= 0;
-        }
-        internal new static void RegisterUpgrade()
+        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_PRICE.Value <= 0;
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<FasterDropPod>(UPGRADE_NAME);
+        }
+        public new static CustomTerminalNode RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
+                                    shareStatus: true,
+                                    configuration.FASTER_DROP_POD_ENABLED.Value,
+                                    configuration.FASTER_DROP_POD_PRICE.Value,
+                                    configuration.OVERRIDE_UPGRADE_NAMES ? configuration.FAST_ENCRYPTION_OVERRIDE_NAME : "");
         }
     }
 }

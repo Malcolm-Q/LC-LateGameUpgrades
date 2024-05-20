@@ -66,13 +66,19 @@ namespace MoreShipUpgrades.Patches.RoundComponents
 
         [HarmonyPatch(nameof(StartOfRound.ReviveDeadPlayers))]
         [HarmonyPostfix]
-        static void ResetContract(StartOfRound __instance)
+        static void ReviveDeadPlayersPostfix(StartOfRound __instance)
+        {
+            ResetContract(ref __instance);
+            QuantumDisruptor.TryResetQuantum(QuantumDisruptor.ResetModes.MoonLanding);
+        }
+        static void ResetContract(ref StartOfRound __instance)
         {
             if (ContractManager.Instance.contractLevel != RoundManager.Instance.currentLevel.PlanetName) return;
             if (!__instance.IsHost) return;
 
             ContractManager.Instance.SyncContractDetailsClientRpc("None", -1);
         }
+
         [HarmonyPatch(nameof(StartOfRound.AutoSaveShipData))]
         [HarmonyPrefix]
         static void AutoSaveShipDataPrefix()
@@ -162,6 +168,13 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             Tools.FindFloat(ref index, ref codes, findValue: 10f, addCode: getLandingSpeedMultiplier, errorMessage: "Couldn't find the 10f value used on WaitForSeconds");
             codes.Insert(index+1, new CodeInstruction(OpCodes.Div));
             return codes;
+        }
+
+        [HarmonyPatch(nameof(StartOfRound.ChangeLevel))]
+        [HarmonyPostfix]
+        static void ChangeLevelPostfix()
+        {
+            QuantumDisruptor.TryResetQuantum(QuantumDisruptor.ResetModes.MoonRerouting);
         }
     }
 }

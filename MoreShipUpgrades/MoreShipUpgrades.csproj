@@ -40,7 +40,7 @@
     <Reference Include="lethallevelloader">
       <HintPath>$(LC_PLUGIN_PATH)\IAmBatby-LethalLevelLoader\LethalLevelLoader.dll</HintPath>
     </Reference>
-    <Reference Include="InteractiveTerminalAPI" Publicize="true">
+    <Reference Include="InteractiveTerminalAPI">
       <HintPath>$(LC_PLUGIN_PATH)\WhiteSpike-Interactive_Terminal_API\InteractiveTerminalAPI\InteractiveTerminalAPI.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">

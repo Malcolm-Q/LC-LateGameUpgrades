@@ -10,8 +10,10 @@ using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 
@@ -20,15 +22,12 @@ namespace MoreShipUpgrades.Managers
     public class UpgradeBus : MonoBehaviour
     {
         internal static UpgradeBus Instance { get; set; }
-        internal PluginConfig PluginConfiguration { get; set; }
-        internal GameObject IntroScreen { get; set; }
+        internal LategameConfiguration PluginConfiguration { get; set; }
         private static LguLogger logger = new LguLogger(nameof(UpgradeBus));
 
         internal Dictionary<string, bool> activeUpgrades = new Dictionary<string, bool>();
         internal Dictionary<string, int> upgradeLevels = new Dictionary<string, int>();
-
         internal bool TPButtonPressed;
-
         internal Dictionary<string, float> SaleData = new Dictionary<string, float>();
 
         internal AudioClip flashNoise;
@@ -37,10 +36,11 @@ namespace MoreShipUpgrades.Managers
 
         internal Dictionary<string, SpawnableMapObjectDef> spawnableMapObjects = new Dictionary<string, SpawnableMapObjectDef>();
         internal Dictionary<string, int> spawnableMapObjectsAmount = new Dictionary<string, int>();
+        internal readonly List<Type> upgradeTypes = new();
+        internal readonly List<Type> commandTypes = new();
         internal List<CustomTerminalNode> terminalNodes = new List<CustomTerminalNode>();
         internal Dictionary<string, GameObject> UpgradeObjects = new Dictionary<string, GameObject>();
         internal Dictionary<string, Item> ItemsToSync = new Dictionary<string, Item>();
-        internal Dictionary<string,bool> IndividualUpgrades = new Dictionary<string,bool>();
         internal List<Peeper> coilHeadItems = new List<Peeper>();
         internal AssetBundle UpgradeAssets;
 
@@ -52,6 +52,8 @@ namespace MoreShipUpgrades.Managers
         internal Dictionary<string, AudioClip> SFX = new Dictionary<string, AudioClip>();
         internal bool helmetDesync;
         internal bool IsBeta = false;
+
+        internal int daysExtended = 0;
 
         void Awake()
         {
@@ -71,20 +73,6 @@ namespace MoreShipUpgrades.Managers
         public HangarShipDoor GetShipDoors()
         {
             return FindObjectOfType<HangarShipDoor>();
-        }
-        public TerminalNode ConstructNode()
-        {
-            modStoreInterface = ScriptableObject.CreateInstance<TerminalNode>();
-            modStoreInterface.clearPreviousText = true;
-            foreach (CustomTerminalNode terminalNode in terminalNodes)
-                modStoreInterface.displayText += terminalNode.GetTerminalNodeText();
-
-            if (modStoreInterface.displayText == "")
-            {
-                modStoreInterface.displayText = "No upgrades available";
-            }
-            modStoreInterface.displayText += "\n\n";
-            return modStoreInterface;
         }
 
         public void ResetAllValues(bool wipeObjRefs = true)
@@ -206,7 +194,7 @@ namespace MoreShipUpgrades.Managers
             if (!PluginConfiguration.DATA_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
                 logger.LogInfo("Removing data contract");
-                int idx = CommandParser.contracts.IndexOf("data");
+                int idx = CommandParser.contracts.IndexOf("Data");
                 if (idx != -1)
                 {
                     CommandParser.contractInfos.RemoveAt(idx);
@@ -216,7 +204,7 @@ namespace MoreShipUpgrades.Managers
             if (!PluginConfiguration.EXTRACTION_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
                 logger.LogInfo("Removing extraction contract");
-                int idx = CommandParser.contracts.IndexOf("extraction");
+                int idx = CommandParser.contracts.IndexOf("Extraction");
                 if (idx != -1)
                 {
                     CommandParser.contractInfos.RemoveAt(idx);
@@ -226,7 +214,7 @@ namespace MoreShipUpgrades.Managers
             if (!PluginConfiguration.EXORCISM_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
                 logger.LogInfo("Removing exorcism contract");
-                int idx = CommandParser.contracts.IndexOf("exorcism");
+                int idx = CommandParser.contracts.IndexOf("Exorcism");
                 if (idx != -1)
                 {
                     CommandParser.contractInfos.RemoveAt(idx);
@@ -236,7 +224,7 @@ namespace MoreShipUpgrades.Managers
             if (!PluginConfiguration.DEFUSAL_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
                 logger.LogInfo("Removing defusal contract");
-                int idx = CommandParser.contracts.IndexOf("defusal");
+                int idx = CommandParser.contracts.IndexOf("Defusal");
                 if (idx != -1)
                 {
                     CommandParser.contractInfos.RemoveAt(idx);
@@ -253,7 +241,7 @@ namespace MoreShipUpgrades.Managers
                 else
                 {
                     logger.LogInfo("Removing exterminator contract");
-                    int idx = CommandParser.contracts.IndexOf("exterminator");
+                    int idx = CommandParser.contracts.IndexOf("Exterminator");
                     if (idx != -1)
                     {
                         CommandParser.contractInfos.RemoveAt(idx);
@@ -275,349 +263,14 @@ namespace MoreShipUpgrades.Managers
         {
             terminalNodes = new List<CustomTerminalNode>();
 
-            IndividualUpgrades = new Dictionary<string, bool>();
+            foreach (Type type in upgradeTypes)
+            {
+                MethodInfo method = type.GetMethod(nameof(BaseUpgrade.RegisterTerminalNode), BindingFlags.Static | BindingFlags.Public);
+                CustomTerminalNode node = (CustomTerminalNode)method.Invoke(null, null);
+                terminalNodes.Add(node);
+            }
 
-            SetupBeekeperTerminalNode();
-
-            SetupProteinPowderTerminalNode();
-
-            SetupBiggerLungsTerminalNode();
-
-            SetupRunningShoesTerminalNode();
-
-            SetupStrongLegsTerminalNode();
-
-            SetupMalwareBroadcasterTerminalNode();
-
-            SetupNightVisionBatteryTerminalNode();
-
-            SetupDiscombobulatorTerminalNode();
-
-            SetupHunterTerminalNode();
-
-            SetupBetterScannerTerminalNode();
-
-            SetupLightningRodTerminalNode();
-
-            SetupWalkieGPSTerminalNode();
-
-            SetupBackMusclesTerminalNode();
-
-            SetupPlayerHealthTerminalNode();
-
-            SetupPagerTerminalNode();
-
-            SetupLocksmithTerminalNode();
-
-            SetupSickBeatsTerminalNode();
-
-            SetupShutterBatteriesTerminalNode();
-            SetupMarketInfluenceTerminalNode();
-            SetupBargainConnectionsTerminalNode();
-            SetupQuantumDisruptorTerminalNode();
-            SetupLethalDealsTerminalNode();
-            SetupFasterDropPodTerminalNode();
-            SetupChargingBoosterTerminalNode();
-            SetupSigurdTerminalNode();
-            SetupEfficientEnginesNode();
-            SetupClimbingGlovesTerminalNode();
-            SetupLithiumBatteriesTerminalNode();
-            SetupAluminiumCoilsTerminalNode();
-            SetupDeeperPocketsTerminalNode();
-            SetupReinforcedBootsTerminalNode();
-            SetupLandingThrustersTerminalNode();
             terminalNodes.Sort();
-        }
-        void SetupReinforcedBootsTerminalNode()
-        {
-            SetupMultiplePurchasableTerminalNode(ReinforcedBoots.UPGRADE_NAME,
-                                                PluginConfiguration.SHARED_UPGRADES || !PluginConfiguration.REINFORCED_BOOTS_INDIVIDUAL,
-                                                PluginConfiguration.REINFORCED_BOOTS_ENABLED,
-                                                PluginConfiguration.REINFORCED_BOOTS_PRICE,
-                                                ParseUpgradePrices(PluginConfiguration.REINFORCED_BOOTS_PRICES),
-                                                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.REINFORCED_BOOTS_OVERRIDE_NAME : "");
-        }
-        void SetupEfficientEnginesNode()
-        {
-            SetupMultiplePurchasableTerminalNode( EfficientEngines.UPGRADE_NAME,
-                                                shareStatus: true,
-                                                PluginConfiguration.EFFICIENT_ENGINES_ENABLED.Value,
-                                                PluginConfiguration.EFFICIENT_ENGINES_PRICE.Value,
-                                                ParseUpgradePrices(PluginConfiguration.EFFICIENT_ENGINES_PRICES.Value),
-                                                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.EFFICIENT_ENGINES_OVERRIDE_NAME : "");
-        }
-        void SetupClimbingGlovesTerminalNode()
-        {
-            SetupMultiplePurchasableTerminalNode( ClimbingGloves.UPGRADE_NAME,
-                                                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.CLIMBING_GLOVES_INDIVIDUAL.Value,
-                                                PluginConfiguration.CLIMBING_GLOVES_ENABLED.Value,
-                                                PluginConfiguration.CLIMBING_GLOVES_PRICE.Value,
-                                                ParseUpgradePrices(PluginConfiguration.CLIMBING_GLOVES_PRICES.Value),
-                                                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.CLIMBING_GLOVES_OVERRIDE_NAME : "");
-        }
-        void SetupMarketInfluenceTerminalNode()
-        {
-            SetupMultiplePurchasableTerminalNode( MarketInfluence.UPGRADE_NAME,
-                                                shareStatus: true,
-                                                PluginConfiguration.MARKET_INFLUENCE_ENABLED.Value,
-                                                PluginConfiguration.MARKET_INFLUENCE_PRICE.Value,
-                                                ParseUpgradePrices(PluginConfiguration.MARKET_INFLUENCE_PRICES.Value),
-                                                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.MARKET_INFLUENCE_OVERRIDE_NAME : "");
-        }
-        void SetupBargainConnectionsTerminalNode()
-        {
-            SetupMultiplePurchasableTerminalNode( BargainConnections.UPGRADE_NAME,
-                                                shareStatus: true,
-                                                PluginConfiguration.BARGAIN_CONNECTIONS_ENABLED.Value,
-                                                PluginConfiguration.BARGAIN_CONNECTIONS_PRICE.Value,
-                                                ParseUpgradePrices(PluginConfiguration.BARGAIN_CONNECTIONS_PRICES.Value),
-                                                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.BARGAIN_CONNECTIONS_OVERRIDE_NAME : "");
-        }
-        void SetupLethalDealsTerminalNode()
-        {
-            SetupOneTimeTerminalNode( LethalDeals.UPGRADE_NAME,
-                                    shareStatus: true,
-                                    PluginConfiguration.LETHAL_DEALS_ENABLED.Value,
-                                    PluginConfiguration.LETHAL_DEALS_PRICE.Value,
-                                    PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.LETHAL_DEALS_OVERRIDE_NAME : "");
-        }
-        private void SetupQuantumDisruptorTerminalNode()
-        {
-            SetupMultiplePurchasableTerminalNode(QuantumDisruptor.UPGRADE_NAME,
-                                                shareStatus: true,
-                                                PluginConfiguration.QUANTUM_DISRUPTOR_ENABLED.Value,
-                                                PluginConfiguration.QUANTUM_DISRUPTOR_PRICE.Value,
-                                                ParseUpgradePrices(PluginConfiguration.QUANTUM_DISRUPTOR_PRICES.Value),
-                                                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.QUANTUM_DISRUPTOR_OVERRIDE_NAME : "");
-        }
-        private void SetupShutterBatteriesTerminalNode()
-        {
-            SetupMultiplePurchasableTerminalNode(DoorsHydraulicsBattery.UPGRADE_NAME,
-                                                shareStatus: true,
-                                                PluginConfiguration.DOOR_HYDRAULICS_BATTERY_ENABLED.Value,
-                                                PluginConfiguration.DOOR_HYDRAULICS_BATTERY_PRICE.Value,
-                                                ParseUpgradePrices(PluginConfiguration.DOOR_HYDRAULICS_BATTERY_PRICES.Value),
-                                                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.SHUTTER_BATTERIES_OVERRIDE_NAME : "");
-        }
-        private void SetupSickBeatsTerminalNode()
-        {
-            SetupOneTimeTerminalNode(
-                 SickBeats.UPGRADE_NAME,
-                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.BEATS_INDIVIDUAL.Value,
-                PluginConfiguration.BEATS_ENABLED.Value,
-                PluginConfiguration.BEATS_PRICE.Value,
-                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.SICK_BEATS_OVERRIDE_NAME : "");
-        }
-
-        private void SetupBeekeperTerminalNode()
-        {
-            SetupMultiplePurchasableTerminalNode(
-                 Beekeeper.UPGRADE_NAME,
-                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.BEEKEEPER_INDIVIDUAL.Value,
-                PluginConfiguration.BEEKEEPER_ENABLED.Value,
-                PluginConfiguration.BEEKEEPER_PRICE.Value,
-                ParseUpgradePrices(PluginConfiguration.BEEKEEPER_UPGRADE_PRICES.Value),
-                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.BEEKEEPER_OVERRIDE_NAME : "");
-        }
-
-        private void SetupProteinPowderTerminalNode() 
-        {
-            SetupMultiplePurchasableTerminalNode( ProteinPowder.UPGRADE_NAME,
-                                                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.PROTEIN_INDIVIDUAL.Value,
-                                                PluginConfiguration.PROTEIN_ENABLED.Value,
-                                                PluginConfiguration.PROTEIN_PRICE.Value,
-                                                ParseUpgradePrices(PluginConfiguration.PROTEIN_UPGRADE_PRICES.Value),
-                                                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.PROTEIN_POWDER_OVERRIDE_NAME : "");
-        }
-        private void SetupBiggerLungsTerminalNode()
-        {
-            SetupMultiplePurchasableTerminalNode( BiggerLungs.UPGRADE_NAME,
-                                                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.BIGGER_LUNGS_INDIVIDUAL.Value,
-                                                PluginConfiguration.BIGGER_LUNGS_ENABLED.Value,
-                                                PluginConfiguration.BIGGER_LUNGS_PRICE.Value,
-                                                ParseUpgradePrices(PluginConfiguration.BIGGER_LUNGS_UPGRADE_PRICES.Value),
-                                                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.BIGGER_LUNGS_OVERRIDE_NAME : "");
-        }
-        private void SetupRunningShoesTerminalNode()
-        {
-            SetupMultiplePurchasableTerminalNode( RunningShoes.UPGRADE_NAME,
-                                                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.RUNNING_SHOES_INDIVIDUAL.Value,
-                                                PluginConfiguration.RUNNING_SHOES_ENABLED.Value,
-                                                PluginConfiguration.RUNNING_SHOES_PRICE.Value,
-                                                ParseUpgradePrices(PluginConfiguration.RUNNING_SHOES_UPGRADE_PRICES.Value),
-                                                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.RUNNING_SHOES_OVERRIDE_NAME : "");
-        }
-        private void SetupStrongLegsTerminalNode()
-        {
-            SetupMultiplePurchasableTerminalNode( StrongLegs.UPGRADE_NAME,
-                                                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.STRONG_LEGS_INDIVIDUAL.Value,
-                                                PluginConfiguration.STRONG_LEGS_ENABLED.Value,
-                                                PluginConfiguration.STRONG_LEGS_PRICE.Value,
-                                                ParseUpgradePrices(PluginConfiguration.STRONG_LEGS_UPGRADE_PRICES.Value),
-                                                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.STRONG_LEGS_OVERRIDE_NAME : "");
-        }
-        private void SetupMalwareBroadcasterTerminalNode()
-        {
-
-            SetupOneTimeTerminalNode( MalwareBroadcaster.UPGRADE_NAME,
-                                    PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.MALWARE_BROADCASTER_INDIVIDUAL.Value,
-                                    PluginConfiguration.MALWARE_BROADCASTER_ENABLED.Value,
-                                    PluginConfiguration.MALWARE_BROADCASTER_PRICE.Value,
-                                    PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.MALWARE_BROADCASTER_OVERRIDE_NAME : "");
-        }
-        private void SetupNightVisionBatteryTerminalNode()
-        {
-            CustomTerminalNode node = SetupMultiplePurchasableTerminalNode( NightVision.UPGRADE_NAME,
-                                                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.NIGHT_VISION_INDIVIDUAL.Value,
-                                                PluginConfiguration.NIGHT_VISION_ENABLED.Value,
-                                                0,
-                                                ParseUpgradePrices(PluginConfiguration.NIGHT_VISION_UPGRADE_PRICES.Value),
-                                                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.NIGHT_VISION_OVERRIDE_NAME : "");
-            if(node != null) node.Unlocked = true;
-        }
-        private void SetupDiscombobulatorTerminalNode()
-        {
-            AudioClip flashSFX = AssetBundleHandler.GetAudioClip("Flashbang");
-            if (!flashSFX) return;
-
-            flashNoise = flashSFX;
-            SetupMultiplePurchasableTerminalNode( Discombobulator.UPGRADE_NAME,
-                                                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.DISCOMBOBULATOR_INDIVIDUAL.Value,
-                                                PluginConfiguration.DISCOMBOBULATOR_ENABLED.Value,
-                                                PluginConfiguration.DISCOMBOBULATOR_PRICE.Value,
-                                                ParseUpgradePrices(PluginConfiguration.DISCO_UPGRADE_PRICES.Value),
-                                                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.DISCOMBOBULATOR_OVERRIDE_NAME : "");
-        }
-        private void SetupHunterTerminalNode()
-        {
-            Hunter.SetupLevels();
-            SetupMultiplePurchasableTerminalNode(Hunter.UPGRADE_NAME,
-                                                shareStatus: true,
-                                                PluginConfiguration.HUNTER_ENABLED.Value,
-                                                PluginConfiguration.HUNTER_PRICE.Value,
-                                                ParseUpgradePrices(PluginConfiguration.HUNTER_UPGRADE_PRICES.Value),
-                                                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.HUNTER_OVERRIDE_NAME : "");
-        }
-        private void SetupBetterScannerTerminalNode()
-        {
-            SetupMultiplePurchasableTerminalNode( BetterScanner.UPGRADE_NAME,
-                                                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.BETTER_SCANNER_INDIVIDUAL.Value,
-                                                PluginConfiguration.BETTER_SCANNER_ENABLED.Value,
-                                                PluginConfiguration.BETTER_SCANNER_PRICE.Value,
-                                                new int[] { PluginConfiguration.BETTER_SCANNER_PRICE2.Value, PluginConfiguration.BETTER_SCANNER_PRICE3.Value },
-                                                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.BETTER_SCANNER_OVERRIDE_NAME : ""
-                                                );
-        }
-        private void SetupLightningRodTerminalNode()
-        {
-            SetupOneTimeTerminalNode( LightningRod.UPGRADE_NAME,
-                                    shareStatus: true,
-                                    PluginConfiguration.LIGHTNING_ROD_ENABLED.Value,
-                                    PluginConfiguration.LIGHTNING_ROD_PRICE.Value,
-                                    PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.LIGHTNING_ROD_OVERRIDE_NAME : "");
-        }
-        private void SetupWalkieGPSTerminalNode()
-        {
-            SetupOneTimeTerminalNode( WalkieGPS.UPGRADE_NAME,
-                                    shareStatus: true,
-                                    PluginConfiguration.WALKIE_ENABLED.Value,
-                                    PluginConfiguration.WALKIE_PRICE.Value,
-                                    PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.WALKIE_GPS_OVERRIDE_NAME : "");
-        }
-        private void SetupBackMusclesTerminalNode()
-        {
-            SetupMultiplePurchasableTerminalNode( BackMuscles.UPGRADE_NAME,
-                                                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.BACK_MUSCLES_INDIVIDUAL.Value,
-                                                PluginConfiguration.BACK_MUSCLES_ENABLED.Value,
-                                                PluginConfiguration.BACK_MUSCLES_PRICE.Value,
-                                                ParseUpgradePrices(PluginConfiguration.BACK_MUSCLES_UPGRADE_PRICES.Value),
-                                                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.BACK_MUSCLES_OVERRIDE_NAME : "");
-        }
-        private void SetupPagerTerminalNode()
-        {
-            SetupOneTimeTerminalNode( FastEncryption.UPGRADE_NAME,
-                                    shareStatus: true,
-                                    PluginConfiguration.PAGER_ENABLED.Value,
-                                    PluginConfiguration.PAGER_PRICE.Value,
-                                    PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.FAST_ENCRYPTION_OVERRIDE_NAME : "");
-        }
-        private void SetupLocksmithTerminalNode()
-        {
-            SetupOneTimeTerminalNode(LockSmith.UPGRADE_NAME,
-                                    PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.LOCKSMITH_INDIVIDUAL.Value,
-                                    PluginConfiguration.LOCKSMITH_ENABLED.Value,
-                                    PluginConfiguration.LOCKSMITH_PRICE.Value,
-                                    PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.LOCKSMITH_OVERRIDE_NAME : "");
-        }
-        private void SetupPlayerHealthTerminalNode()
-        {
-            SetupMultiplePurchasableTerminalNode( Stimpack.UPGRADE_NAME,
-                                                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.PLAYER_HEALTH_INDIVIDUAL.Value,
-                                                PluginConfiguration.PLAYER_HEALTH_ENABLED.Value,
-                                                PluginConfiguration.PLAYER_HEALTH_PRICE.Value,
-                                                ParseUpgradePrices(PluginConfiguration.PLAYER_HEALTH_UPGRADE_PRICES.Value),
-                                                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.STIMPACK_OVERRIDE_NAME : "");
-        }
-        private void SetupFasterDropPodTerminalNode()
-        {
-            SetupOneTimeTerminalNode( FasterDropPod.UPGRADE_NAME,
-                                    shareStatus: true,
-                                    PluginConfiguration.FASTER_DROP_POD_ENABLED.Value,
-                                    PluginConfiguration.FASTER_DROP_POD_PRICE.Value,
-                                    PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.DROP_POD_THRUSTERS_OVERRIDE_NAME : "");
-        }
-        private void SetupSigurdTerminalNode()
-        {
-            SetupOneTimeTerminalNode( Sigurd.UPGRADE_NAME,
-                                    shareStatus: true,
-                                    PluginConfiguration.SIGURD_ENABLED.Value || PluginConfiguration.SIGURD_LAST_DAY_ENABLED.Value,
-                                    PluginConfiguration.SIGURD_PRICE.Value,
-                                    PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.SIGURD_ACCESS_OVERRIDE_NAME : "");
-        }
-        void SetupChargingBoosterTerminalNode()
-        {
-            SetupMultiplePurchasableTerminalNode(ChargingBooster.UPGRADE_NAME,
-                                                shareStatus: true,
-                                                PluginConfiguration.CHARGING_BOOSTER_ENABLED.Value,
-                                                PluginConfiguration.CHARGING_BOOSTER_PRICE.Value,
-                                                ParseUpgradePrices(PluginConfiguration.CHARGING_BOOSTER_PRICES.Value),
-                                                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.CHARGING_BOOSTER_OVERRIDE_NAME : "");
-        }
-        void SetupLithiumBatteriesTerminalNode()
-        {
-            SetupMultiplePurchasableTerminalNode( LithiumBatteries.UPGRADE_NAME,
-                                                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.LITHIUM_BATTERIES_INDIVIDUAL.Value,
-                                                PluginConfiguration.LITHIUM_BATTERIES_ENABLED.Value,
-                                                PluginConfiguration.LITHIUM_BATTERIES_PRICE.Value,
-                                                ParseUpgradePrices(PluginConfiguration.LITHIUM_BATTERIES_PRICES.Value),
-                                                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.LITHIUM_BATTERIES_OVERRIDE_NAME : "");
-        }
-        void SetupAluminiumCoilsTerminalNode()
-        {
-            SetupMultiplePurchasableTerminalNode( AluminiumCoils.UPGRADE_NAME,
-                                                PluginConfiguration.SHARED_UPGRADES.Value || !PluginConfiguration.ALUMINIUM_COILS_INDIVIDUAL.Value,
-                                                PluginConfiguration.ALUMINIUM_COILS_ENABLED.Value,
-                                                PluginConfiguration.ALUMINIUM_COILS_PRICE.Value,
-                                                ParseUpgradePrices(PluginConfiguration.ALUMINIUM_COILS_PRICES.Value),
-                                                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.ALUMINIUM_COILS_OVERRIDE_NAME : "");
-        }
-        void SetupDeeperPocketsTerminalNode()
-        {
-            SetupMultiplePurchasableTerminalNode(DeepPockets.UPGRADE_NAME,
-                                                PluginConfiguration.SHARED_UPGRADES || !PluginConfiguration.DEEPER_POCKETS_INDIVIDUAL,
-                                                PluginConfiguration.DEEPER_POCKETS_ENABLED,
-                                                PluginConfiguration.DEEPER_POCKETS_PRICE,
-                                                ParseUpgradePrices(PluginConfiguration.DEEPER_POCKETS_PRICES),
-                                                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.DEEPER_POCKETS_OVERRIDE_NAME : "");
-        }
-        void SetupLandingThrustersTerminalNode()
-        {
-            SetupMultiplePurchasableTerminalNode(LandingThrusters.UPGRADE_NAME,
-                                                shareStatus: true,
-                                                PluginConfiguration.LANDING_THRUSTERS_ENABLED,
-                                                PluginConfiguration.LANDING_THRUSTERS_PRICE,
-                                                ParseUpgradePrices(PluginConfiguration.LANDING_THRUSTERS_PRICES),
-                                                PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? PluginConfiguration.LANDING_THRUSTERS_OVERRIDE_NAME : "");
         }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can be purchased multiple times
@@ -628,7 +281,7 @@ namespace MoreShipUpgrades.Managers
         /// <param name="initialPrice"> The initial price when purchasing the upgrade for the first time</param>
         /// <param name="prices"> Prices for any subsequent purchases of the upgrade</param>
         /// <param name="infoFormat"> The format of the information displayed when checking the upgrade's info</param>
-        private CustomTerminalNode SetupMultiplePurchasableTerminalNode(string upgradeName,
+        internal CustomTerminalNode SetupMultiplePurchasableTerminalNode(string upgradeName,
                                                         bool shareStatus,
                                                         bool enabled,
                                                         int initialPrice,
@@ -639,17 +292,21 @@ namespace MoreShipUpgrades.Managers
             GameObject multiPerk = AssetBundleHandler.GetPerkGameObject(upgradeName) ;
             if (!multiPerk) return null;
 
-            IndividualUpgrades.Add(upgradeName, shareStatus);
-
             if (!enabled) return null;
 
             string infoString = SetupUpgradeInfo(upgrade: multiPerk.GetComponent<BaseUpgrade>(), shareStatus: shareStatus, price: initialPrice, incrementalPrices: prices);
             string moreInfo = infoString;
-            if (multiPerk.GetComponent<BaseUpgrade>() is IUpgradeWorldBuilding component) moreInfo += component.GetWorldBuildingText(shareStatus) + "\n";
+            if (multiPerk.GetComponent<BaseUpgrade>() is IUpgradeWorldBuilding component) moreInfo += "\n\n" + component.GetWorldBuildingText(shareStatus) + "\n";
 
-            CustomTerminalNode node = new TierTerminalNode(overrideName != "" ? overrideName:  upgradeName, initialPrice, infoString, multiPerk, prices, prices.Length, moreInfo, upgradeName);
-            terminalNodes.Add(node);
-            return node;
+            return new TierTerminalNode(
+                name: overrideName != "" ? overrideName : upgradeName,
+                unlockPrice: initialPrice,
+                description: moreInfo,
+                prefab: multiPerk,
+                prices: prices,
+                maxUpgrade: prices.Length,
+                originalName: upgradeName,
+                sharedUpgrade: shareStatus);
         }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can only be bought once
@@ -659,7 +316,7 @@ namespace MoreShipUpgrades.Managers
         /// <param name="enabled"> Wether the upgrade is enabled for gameplay or not</param>
         /// <param name="price"></param>
         /// <param name="info"> The information displayed when checking the upgrade's info</param>
-        private void SetupOneTimeTerminalNode(string upgradeName,
+        internal CustomTerminalNode SetupOneTimeTerminalNode(string upgradeName,
                                               bool shareStatus,
                                               bool enabled,
                                               int price,
@@ -667,18 +324,22 @@ namespace MoreShipUpgrades.Managers
                                               )
         {
             GameObject oneTimeUpgrade = AssetBundleHandler.GetPerkGameObject(upgradeName);
-            if (!oneTimeUpgrade) return;
-
-            IndividualUpgrades.Add(upgradeName, shareStatus);
-            if (!enabled) return;
+            if (!oneTimeUpgrade) return null;
+            if (!enabled) return null;
             string info = SetupUpgradeInfo(upgrade: oneTimeUpgrade.GetComponent<BaseUpgrade>(), shareStatus: shareStatus, price: price);
             string moreInfo = info;
-            if (oneTimeUpgrade.GetComponent<BaseUpgrade>() is IUpgradeWorldBuilding component) moreInfo += component.GetWorldBuildingText(shareStatus) + "\n";
+            if (oneTimeUpgrade.GetComponent<BaseUpgrade>() is IUpgradeWorldBuilding component) moreInfo += "\n\n" + component.GetWorldBuildingText(shareStatus) + "\n";
 
-            CustomTerminalNode node = new OneTimeTerminalNode(overrideName != "" ? overrideName : upgradeName, price, info, oneTimeUpgrade, moreInfo, upgradeName);
-            terminalNodes.Add(node);
+            return new OneTimeTerminalNode(
+                name: overrideName != "" ? overrideName : upgradeName,
+                unlockPrice: price,
+                description: moreInfo,
+                prefab: oneTimeUpgrade,
+                originalName: upgradeName,
+                sharedUpgrade: shareStatus);
         }
-        private string SetupUpgradeInfo(BaseUpgrade upgrade = null, bool shareStatus = false, int price = -1, int[] incrementalPrices = null)
+
+        public string SetupUpgradeInfo(BaseUpgrade upgrade = null, bool shareStatus = false, int price = -1, int[] incrementalPrices = null)
         {
             string info = "";
             if (upgrade is IOneTimeUpgradeDisplayInfo upgradeInfo) info += upgradeInfo.GetDisplayInfo(price) + "\n";
@@ -690,7 +351,7 @@ namespace MoreShipUpgrades.Managers
         /// </summary>
         /// <param name="upgradePrices">The string which contains the list of prices</param>
         /// <returns>An array of integers with the values that were present in the string</returns>
-        private int[] ParseUpgradePrices(string upgradePrices)
+        internal static int[] ParseUpgradePrices(string upgradePrices)
         {
             string[] priceString = upgradePrices.Split(',').ToArray();
             int[] prices = new int[priceString.Length];

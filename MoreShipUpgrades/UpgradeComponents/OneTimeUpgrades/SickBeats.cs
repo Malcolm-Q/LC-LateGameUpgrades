@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using System.Collections.Generic;
 using UnityEngine;
@@ -67,6 +68,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
         public static int CalculateDefense(int dmg)
         {
+            if (!UpgradeBus.Instance.PluginConfiguration.BEATS_ENABLED.Value) return dmg;
             if (!GetActiveUpgrade(UPGRADE_NAME) || dmg < 0) return dmg; // < 0 check to not hinder healing
             return (int)(dmg * Instance.incomingDamageCoefficient);
         }
@@ -80,13 +82,21 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             if (UpgradeBus.Instance.PluginConfiguration.BEATS_STAMINA.Value) txt += $"Stamina Drain multiplied by {UpgradeBus.Instance.PluginConfiguration.BEATS_STAMINA_CO.Value}\n";
             return txt;
         }
-        internal override bool CanInitializeOnStart()
-        {
-            return UpgradeBus.Instance.PluginConfiguration.BEATS_PRICE.Value <= 0;
-        }
-        internal new static void RegisterUpgrade()
+        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.BEATS_PRICE.Value <= 0;
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<SickBeats>(UPGRADE_NAME);
+        }
+        public new static CustomTerminalNode RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            return UpgradeBus.Instance.SetupOneTimeTerminalNode(
+                 UPGRADE_NAME,
+                configuration.SHARED_UPGRADES.Value || !configuration.BEATS_INDIVIDUAL.Value,
+                configuration.BEATS_ENABLED.Value,
+                configuration.BEATS_PRICE.Value,
+                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.SICK_BEATS_OVERRIDE_NAME : "");
         }
     }
 }

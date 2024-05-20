@@ -1,5 +1,6 @@
 ﻿using CSync.Lib;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Util;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
     /// <summary>
     /// Class which represents the many upgrades present in the Lategame Upgrades' store for purchase for extra effects such as attribute increases, new enviromental scenarios and more...
     /// </summary>
-    abstract class BaseUpgrade : NetworkBehaviour
+    public abstract class BaseUpgrade : NetworkBehaviour
     {
         #region Variables
         /// <summary>
@@ -68,7 +69,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// Shows a notification for when an upgrade is loaded or unloaded from the player
         /// </summary>
         /// <param name="message">Message displayed to the player</param>
-        void ShowUpgradeNotification(string colourHex, string message)
+        protected void ShowUpgradeNotification(string colourHex, string message)
         {
             string notification = $"\n<color={colourHex}>{message}</color>";
             HUDManager.Instance.chatText.text += notification;
@@ -80,7 +81,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// </summary>
         /// <param name="upgradeName">Name of the upgrade we wish to check its activity</param>
         /// <returns>The given upgrade is active in the game or not</returns>
-        internal static bool GetActiveUpgrade(string upgradeName)
+        public static bool GetActiveUpgrade(string upgradeName)
         {
             return UpgradeBus.Instance.activeUpgrades.GetValueOrDefault(upgradeName, false);
         }
@@ -90,14 +91,14 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// </summary>
         /// <param name="upgradeName">Name of the upgrade we wish to check the level of</param>
         /// <returns>Currentl level of the upgrade</returns>
-        internal static int GetUpgradeLevel(string upgradeName)
+        public static int GetUpgradeLevel(string upgradeName)
         {
             return UpgradeBus.Instance.upgradeLevels.GetValueOrDefault(upgradeName, 0);
         }
         /// <summary>
         /// </summary>
         /// <returns>Wether the upgrade can be loaded immediately upon game being loaded or not</returns>
-        internal abstract bool CanInitializeOnStart();
+        public abstract bool CanInitializeOnStart { get; }
 
         /// <summary>
         /// Registers the associated upgrade to the game to be initialized correctly
@@ -105,7 +106,15 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// This method is to be overriden by their subclasses through "new"
         /// </summary>
         /// <exception cref="NotSupportedException"></exception>
-        internal static void RegisterUpgrade() { throw new NotSupportedException(); }
+        public static void RegisterUpgrade() { throw new NotSupportedException(); }
+
+        /// <summary>
+        /// Registers the associated terminal node of the upgrade
+        /// <para></para>
+        /// This method is to be overriden by their subclasses through "new"
+        /// </summary>
+        /// <exception cref="NotSupportedException"></exception>
+        public static CustomTerminalNode RegisterTerminalNode() { throw new NotSupportedException(); }
 
         /// <summary>
         /// Generic function where it adds a script (specificed through the type) into an GameObject asset 

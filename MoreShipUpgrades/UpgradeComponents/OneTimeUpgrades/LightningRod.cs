@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using Unity.Netcode;
@@ -93,13 +94,20 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), price, UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_DIST.Value);
         }
-        internal override bool CanInitializeOnStart()
-        {
-            return UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_PRICE.Value <= 0;
-        }
-        internal new static void RegisterUpgrade()
+        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_PRICE.Value <= 0;
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<LightningRod>(UPGRADE_NAME);
+        }
+        public new static CustomTerminalNode RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
+                                    shareStatus: true,
+                                    configuration.LIGHTNING_ROD_ENABLED.Value,
+                                    configuration.LIGHTNING_ROD_PRICE.Value,
+                                    configuration.OVERRIDE_UPGRADE_NAMES ? configuration.LIGHTNING_ROD_OVERRIDE_NAME : "");
         }
     }
 }

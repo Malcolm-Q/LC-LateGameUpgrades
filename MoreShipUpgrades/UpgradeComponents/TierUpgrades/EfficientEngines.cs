@@ -1,4 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
@@ -29,15 +31,30 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             float discountedPrice = defaultPrice * (1f - ((UpgradeBus.Instance.PluginConfiguration.EFFICIENT_ENGINES_INITIAL_DISCOUNT.Value + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.EFFICIENT_ENGINES_INCREMENTAL_DISCOUNT.Value))/100f));
             return Mathf.CeilToInt(Mathf.Clamp(discountedPrice, 0f, defaultPrice));
         }
-        internal override bool CanInitializeOnStart()
+        public override bool CanInitializeOnStart
         {
-            string[] prices = UpgradeBus.Instance.PluginConfiguration.EFFICIENT_ENGINES_PRICES.Value.Split(',');
-            bool free = UpgradeBus.Instance.PluginConfiguration.EFFICIENT_ENGINES_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-            return free;
+            get
+            {
+                string[] prices = UpgradeBus.Instance.PluginConfiguration.EFFICIENT_ENGINES_PRICES.Value.Split(',');
+                bool free = UpgradeBus.Instance.PluginConfiguration.EFFICIENT_ENGINES_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+                return free;
+            }
         }
-        internal new static void RegisterUpgrade()
+
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<EfficientEngines>(UPGRADE_NAME);
+        }
+        public new static CustomTerminalNode RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                shareStatus: true,
+                                                configuration.EFFICIENT_ENGINES_ENABLED.Value,
+                                                configuration.EFFICIENT_ENGINES_PRICE.Value,
+                                                UpgradeBus.ParseUpgradePrices(configuration.EFFICIENT_ENGINES_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.EFFICIENT_ENGINES_OVERRIDE_NAME : "");
         }
     }
 }

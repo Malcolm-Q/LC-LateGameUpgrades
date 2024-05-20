@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
@@ -40,15 +41,30 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             string infoFormat = "LVL {0} - ${1} - Increases the door's hydraulic capacity to remain closed by {2} units\n"; // to put in the infoStrings after
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
-        internal override bool CanInitializeOnStart()
+        public override bool CanInitializeOnStart
         {
-            string[] prices = UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_PRICES.Value.Split(',');
-            bool free = UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-            return free;
+            get
+            {
+                string[] prices = UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_PRICES.Value.Split(',');
+                bool free = UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+                return free;
+            }
         }
-        internal new static void RegisterUpgrade()
+
+        public new static void RegisterUpgrade()
         {
             SetupGenericPerk<DoorsHydraulicsBattery>(UPGRADE_NAME);
+        }
+        public new static CustomTerminalNode RegisterTerminalNode()
+        {
+            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+
+            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+                                                shareStatus: true,
+                                                configuration.DOOR_HYDRAULICS_BATTERY_ENABLED.Value,
+                                                configuration.DOOR_HYDRAULICS_BATTERY_PRICE.Value,
+                                                UpgradeBus.ParseUpgradePrices(configuration.DOOR_HYDRAULICS_BATTERY_PRICES.Value),
+                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.SHUTTER_BATTERIES_OVERRIDE_NAME : "");
         }
     }
 }

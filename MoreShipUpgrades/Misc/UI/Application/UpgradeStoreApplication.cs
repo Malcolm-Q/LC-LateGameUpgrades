@@ -14,7 +14,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
 {
     internal class UpgradeStoreApplication : PageApplication
     {
-        public override int GetEntriesPerPage<T>(T[] entries)
+        protected override int GetEntriesPerPage<T>(T[] entries)
         {
             return Mathf.CeilToInt(entries.Length / 2.5f);
         }
@@ -149,11 +149,11 @@ namespace MoreShipUpgrades.Misc.UI.Application
             PlayerManager.instance.IncreaseUpgradeSpentCredits(price);
             if (!node.Unlocked)
             {
-                LguStore.Instance.HandleUpgrade(node.OriginalName);
+                LguStore.Instance.HandleUpgrade(node);
             }
             else if (node.Unlocked && node.MaxUpgrade > node.CurrentUpgrade)
             {
-                LguStore.Instance.HandleUpgrade(node.OriginalName, true);
+                LguStore.Instance.HandleUpgrade(node, true);
             }
             if (node.salePerc != 1f && UpgradeBus.Instance.PluginConfiguration.SALE_APPLY_ONCE.Value) node.salePerc = 1f;
             backAction();

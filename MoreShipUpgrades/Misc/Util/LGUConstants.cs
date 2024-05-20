@@ -222,6 +222,14 @@ namespace MoreShipUpgrades.Misc.Util
         internal const int EXTEND_DEADLINE_PRICE_DEFAULT = 800;
         internal const string EXTEND_DEADLINE_PRICE_DESCRIPTION = "Price of each day extension requested in the terminal.";
 
+        internal const string EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA_KEY = $"{ExtendDeadlineScript.NAME} Additional Cost per Quota";
+        internal const int EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA_DEFAULT = 0;
+        internal const string EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA_DESCRIPTION = "Additional cost added to the Extend Deadline command per every quota completed";
+
+        internal const string EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY_KEY = $"{ExtendDeadlineScript.NAME} Additional Cost per Day";
+        internal const int EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY_DEFAULT = 0;
+        internal const string EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY_DESCRIPTION = "Additional cost added to the Extend Deadline command per every day extended";
+
         #endregion
 
         #region Interns
@@ -268,6 +276,10 @@ namespace MoreShipUpgrades.Misc.Util
 
         #region Items
 
+        internal const string ITEM_SCAN_NODE_KEY_FORMAT = "Enable scan node of {0}";
+        internal const bool ITEM_SCAN_NODE_DEFAULT = true;
+        internal const string ITEM_SCAN_NODE_DESCRIPTION = "Shows a scan node on the item when scanning";
+
         #region Portable Teleporters
 
         internal const string BREAK_CHANCE_KEY = "Chance to break on use";
@@ -291,6 +303,8 @@ namespace MoreShipUpgrades.Misc.Util
         internal const bool ADVANCED_PORTABLE_TELEPORTER_KEEP_ITEMS_DEFAULT = true;
         internal const string ADVANCED_PORTABLE_TELEPORTER_KEEP_ITEMS_DESCRIPTION = KEEP_ITEMS_DESCRIPTION;
 
+        internal static readonly string ADVANCED_PORTABLE_TELEPORTER_SCAN_NODE_KEY = string.Format(ITEM_SCAN_NODE_KEY_FORMAT, AdvancedPortableTeleporter.ITEM_NAME);
+
         #endregion
 
         #region Weak Portable Teleporter
@@ -309,6 +323,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const bool PORTABLE_TELEPORTER_KEEP_ITEMS_DEFAULT = true;
         internal const string PORTABLE_TELEPORTER_KEEP_ITEMS_DESCRIPTION = KEEP_ITEMS_DESCRIPTION;
 
+        internal static readonly string PORTABLE_TELEPORTER_SCAN_NODE_KEY = string.Format(ITEM_SCAN_NODE_KEY_FORMAT, RegularPortableTeleporter.ITEM_NAME);
         #endregion
 
         #endregion
@@ -331,6 +346,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const bool DIVING_KIT_TWO_HANDED_DEFAULT = true;
         internal const string DIVING_KIT_TWO_HANDED_DESCRIPTION = "One or two handed item.";
 
+        internal static readonly string DIVING_KIT_SCAN_NODE_KEY = string.Format(ITEM_SCAN_NODE_KEY_FORMAT, DivingKit.ITEM_NAME);
         #endregion
 
         #region Helmet
@@ -343,7 +359,17 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string HELMET_AMOUNT_OF_HITS_KEY = $"Amount of hits blocked by {Helmet.ITEM_NAME}";
         internal const int HELMET_AMOUNT_OF_HITS_DEFAULT = 3;
+        internal const string HELMET_AMOUNT_OF_HITS_DESCRIPTION = "Only valid when TotalPerHit damage mitigation mode is selected.";
 
+        internal const string HELMET_DAMAGE_REDUCTION_KEY = $"Damage reduction (%) when wearing a {Helmet.ITEM_NAME}";
+        internal const int HELMET_DAMAGE_REDUCTION_DEFAULT = 20;
+        internal const string HELMET_DAMAGE_REDUCTION_DESCRIPTION = "Only valid when PartialTilLowHealth damage mitigation mode is selected.";
+
+        internal const string HELMET_DAMAGE_MITIGATION_MODE_KEY = $"Damage mitigation mode selected when wearing a {Helmet.ITEM_NAME}";
+        internal const string HELMET_DAMAGE_MITIGATION_MODE_DEFAULT = "TotalPerHit";
+        internal const string HELMET_DAMAGE_MITIGATION_MODE_DESCRIPTION = "Accepted Values: TotalPerHit (full immunity and helmet takes hits on durability), PartialTilLowHealth (partial immunity and helmet breaks when low health)";
+
+        internal static readonly string HELMET_SCAN_NODE_KEY = string.Format(ITEM_SCAN_NODE_KEY_FORMAT, Helmet.ITEM_NAME);
         #endregion
 
         #region Medkit
@@ -364,6 +390,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const int MEDKIT_USES_DEFAULT = 3;
         internal const string MEDKIT_USES_DESCRIPTION = $"The amount of times the {Medkit.ITEM_NAME} can heal you.";
 
+        internal static readonly string MEDKIT_SCAN_NODE_KEY = string.Format(ITEM_SCAN_NODE_KEY_FORMAT, Medkit.ITEM_NAME);
         #endregion
 
         #region Peeper
@@ -376,6 +403,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const int PEEPER_PRICE_DEFAULT = 500;
         internal const string PEEPER_PRICE_DESCRIPTION = $"Default price to purchase a {Peeper.ITEM_NAME}.";
 
+        internal static readonly string PEEPER_SCAN_NODE_KEY = string.Format(ITEM_SCAN_NODE_KEY_FORMAT, Peeper.ITEM_NAME);
         #endregion
 
         #endregion
@@ -993,6 +1021,13 @@ namespace MoreShipUpgrades.Misc.Util
 
         #endregion
 
+        #region Extend Deadlien Display
+
+        internal const string NOT_ENOUGH_CREDITS_EXTEND = "Not enough credits to purchase the selected amount of days to extend.";
+        internal const string PURCHASE_EXTEND_DEADLINE_FORMAT = "Do you wish to purchase {0} days to extend the deadline for the cost of {1} credits?";
+
+        #endregion
+
         #region Weather Display
 
         internal const string SELECT_WEATHER_FORMAT = "Select the available weathers for {0}:";
@@ -1005,6 +1040,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string WEATHER_CHANGED_FORMAT = "{0}'s weather has changed to {1}. Thank you for your purchase.";
         internal const string NOT_ENOUGH_CREDITS_PROBE = "You do not have enough credits to purchase a randomized weather probe.";
         internal const string NOT_ENOUGH_CREDITS_SPECIFIED_PROBE = "You do not have enough credits to purchase a specified weather probe.";
+        internal const string SAME_WEATHER_FORMAT = "Unable to change {0}'s weather due to already being the selected weather ({1}).";
 
         #endregion
 
