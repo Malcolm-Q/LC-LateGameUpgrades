@@ -267,7 +267,7 @@ namespace MoreShipUpgrades.Managers
             {
                 MethodInfo method = type.GetMethod(nameof(BaseUpgrade.RegisterTerminalNode), BindingFlags.Static | BindingFlags.Public);
                 CustomTerminalNode node = (CustomTerminalNode)method.Invoke(null, null);
-                terminalNodes.Add(node);
+                if (node != null) terminalNodes.Add(node);
             }
 
             terminalNodes.Sort();
