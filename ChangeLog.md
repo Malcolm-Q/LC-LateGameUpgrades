@@ -33,6 +33,7 @@
 - Fixed Helmet not appearing in the player's hand when held.
 - Fixed some Hunter sample models not showing the name of the monster they were generated from.
 - Optimized sample models to not have many (many (many)) vertices which consume unnecessary C/GPU computation power.
+- Fixed issue with interacting with Data Contract's PC leading to player being able to move around when interacting with its UI.
 
 </details>
 

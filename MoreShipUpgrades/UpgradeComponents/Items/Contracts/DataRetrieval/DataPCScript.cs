@@ -122,8 +122,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
                 {
                     InitiateGameServerRpc(new NetworkBehaviourReference(this));
                 }
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
+                SetPlayerInputs(false);
             }
         }
 
@@ -265,7 +264,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
                     if (fileDirs.Contains($"{dir}\\survey.db"))
                     {
                         logger.LogInfo("Minigame completed, spawning loot and exiting...");
-                        GameNetworkManager.Instance.localPlayerController.playerActions.Enable();
+                        SetPlayerInputs(true);
                         if (IsHost || IsServer)
                         {
                             ExitGameClientRpc(new NetworkBehaviourReference(this), true);
@@ -275,7 +274,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
 
                             ExitGameServerRpc(new NetworkBehaviourReference(this), true);
                         }
-                        Cursor.visible = false;
                         return;
                     }
                     else
@@ -359,8 +357,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
             }
             else if (Keyboard.current.escapeKey.wasReleasedThisFrame)
             {
-                Cursor.visible = false;
                 interactable = true;
+                SetPlayerInputs(true);
                 if (IsHost || IsServer)
                 {
                     ExitGameClientRpc(new NetworkBehaviourReference(this), false);
@@ -386,6 +384,13 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
                 gameField.text = defaultText;
                 gameField.caretPosition = defaultText.Length;
             }
+        }
+
+        void SetPlayerInputs(bool enable)
+        {
+            Cursor.visible = !enable;
+            Cursor.lockState = enable ? CursorLockMode.Locked : CursorLockMode.None;
+            interactingPlayer.quickMenuManager.isMenuOpen = !enable;
         }
     }
 }
