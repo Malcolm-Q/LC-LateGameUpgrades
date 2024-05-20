@@ -1,7 +1,7 @@
 <details>
-<summary> <h2> 3.7.1 - 2024-05-??</h2> </summary>
+<summary> <h2> 3.7.1 - 2024-05-20</h2> </summary>
 
-- Fixed issue with upgrades being disabled.
+- Fixed issue with upgrades being disabled leading to crashes/unpredictable behaviour.
 
 </details>
 
