@@ -55,7 +55,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
                                     shareStatus: true,
                                     configuration.FASTER_DROP_POD_ENABLED.Value,
                                     configuration.FASTER_DROP_POD_PRICE.Value,
-                                    configuration.OVERRIDE_UPGRADE_NAMES ? configuration.FAST_ENCRYPTION_OVERRIDE_NAME : "");
+                                    configuration.OVERRIDE_UPGRADE_NAMES ? configuration.DROP_POD_THRUSTERS_OVERRIDE_NAME : "");
         }
     }
 }

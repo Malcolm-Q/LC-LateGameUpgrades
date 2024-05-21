@@ -1,6 +1,13 @@
 <details>
 <summary> <h2> 3.7.1 - 2024-05-20</h2> </summary>
 
+- Fixed upgrade name overrides being misplaced.
+
+</details>
+
+<details>
+<summary> <h2> 3.7.1 - 2024-05-20</h2> </summary>
+
 - Fixed issue with upgrades being disabled leading to crashes/unpredictable behaviour.
 
 </details>
