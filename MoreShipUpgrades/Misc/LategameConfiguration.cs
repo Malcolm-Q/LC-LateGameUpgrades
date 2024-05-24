@@ -394,6 +394,7 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<string> BARGAIN_CONNECTIONS_PRICES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> FASTER_DROP_POD_TIMER { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> FASTER_DROP_POD_INITIAL_TIMER { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<float> FASTER_DROP_POD_LEAVE_TIMER {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> EXTRACTION_CONTRACT_AMOUNT_MEDKITS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_REWARD_QUOTA_MULTIPLIER { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SHOW_UPGRADES_CHAT { get; set; }
@@ -736,6 +737,7 @@ namespace MoreShipUpgrades.Misc
             FASTER_DROP_POD_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DROP_POD_THRUSTERS_PRICE_KEY, LGUConstants.DROP_POD_THRUSTERS_PRICE_DEFAULT, LGUConstants.DROP_POD_THRUSTERS_PRICE_DESCRIPTION);
             FASTER_DROP_POD_TIMER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DROP_POD_THRUSTERS_TIME_DECREASE_KEY, LGUConstants.DROP_POD_THRUSTERS_TIME_DECREASE_DEFAULT);
             FASTER_DROP_POD_INITIAL_TIMER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DROP_POD_THRUSTERS_FIRST_TIME_DECREASE_KEY, LGUConstants.DROP_POD_THRUSTERS_FIRST_TIME_DECREASE_DEFAULT);
+            FASTER_DROP_POD_LEAVE_TIMER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DROP_POD_THRUSTERS_LEAVE_TIMER_KEY, LGUConstants.DROP_POD_THRUSTERS_LEAVE_TIMER_DEFAULT, LGUConstants.DROP_POD_THRUSTERS_LEAVE_TIMER_DESCRIPTION);
 
             #endregion
 

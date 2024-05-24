@@ -750,6 +750,10 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string DROP_POD_THRUSTERS_FIRST_TIME_DECREASE_KEY = "Time decrement on the timer used for the first ever item delivery";
         internal const float DROP_POD_THRUSTERS_FIRST_TIME_DECREASE_DEFAULT = 10f;
 
+        internal const string DROP_POD_THRUSTERS_LEAVE_TIMER_KEY = "Time for item dropship to exit";
+        internal const float DROP_POD_THRUSTERS_LEAVE_TIMER_DEFAULT = 0f;
+        internal const string DROP_POD_THRUSTERS_LEAVE_TIMER_DESCRIPTION = "How long (in seconds) the item drop ship stays after being opened";
+
         #endregion
 
         #region Efficient Engines

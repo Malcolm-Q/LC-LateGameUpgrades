@@ -34,6 +34,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             return Mathf.Clamp(defaultValue - UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_TIMER.Value, 0f, defaultValue);
         }
+        public static bool CanLeaveEarly(float shipTimer)
+        {
+            return shipTimer > UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_LEAVE_TIMER.Value;
+        }
         public static bool IsUpgradeActive()
         {
             return GetActiveUpgrade(UPGRADE_NAME);
