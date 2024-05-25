@@ -1,5 +1,7 @@
-﻿using MoreShipUpgrades.Misc;
+﻿using MoreShipUpgrades.Compat;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Commands;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -96,6 +98,8 @@ namespace MoreShipUpgrades.Managers
             }
             fakeBombOrders = new Dictionary<string, List<string>>();
             logger.LogInfo($"New contract details received. level: {contractLvl}, type: {contractType}");
+            LguStore.Instance.SaveInfo = new SaveInfo();
+            LguStore.Instance.UpdateLGUSaveServerRpc(LguStore.Instance.playerID, JsonConvert.SerializeObject(LguStore.Instance.SaveInfo), true);
         }
         /// <summary>
         /// Searches through the available moons whose name contains a substring that matches the provided string
