@@ -1,4 +1,11 @@
 <details>
+<summary> <h2> 3.7.2 - 2024-05-20</h2> </summary>
+
+- Fixed contract purchase not being synced to all clients present in the session when it's made.
+- Possibly fixed the contract saving issue not being executed properly.
+
+</details>
+<details>
 <summary> <h2> 3.7.1 - 2024-05-20</h2> </summary>
 
 - Fixed upgrade name overrides being misplaced.
