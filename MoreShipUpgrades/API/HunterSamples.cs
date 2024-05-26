@@ -161,8 +161,8 @@ namespace MoreShipUpgrades.API
             sampleItem.spawnPrefab.AddComponent<SampleComponent>();
             sampleItem.spawnPrefab.AddComponent<ScrapValueSyncer>();
             if (registerNetworkPrefab) LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(sampleItem.spawnPrefab);
-            if (!SpawnItemManager.Instance.samplePrefabs.ContainsKey(monsterName.ToLower())) SpawnItemManager.Instance.samplePrefabs.Add(monsterName.ToLower(), new WeightingGroup<GameObject>());
-            SpawnItemManager.Instance.samplePrefabs[monsterName.ToLower()].Add(sampleItem.spawnPrefab, weight);
+            if (!ItemManager.Instance.samplePrefabs.ContainsKey(monsterName.ToLower())) ItemManager.Instance.samplePrefabs.Add(monsterName.ToLower(), new WeightingGroup<GameObject>());
+            ItemManager.Instance.samplePrefabs[monsterName.ToLower()].Add(sampleItem.spawnPrefab, weight);
             LethalLib.Modules.Items.RegisterItem(sampleItem);
             Plugin.mls.LogInfo($"Registed sample for the enemy \"{monsterName}\"...");
         }
@@ -176,8 +176,8 @@ namespace MoreShipUpgrades.API
             sampleScript.itemProperties = sampleItem;
             sampleItem.spawnPrefab.AddComponent<ScrapValueSyncer>();
             if (registerNetworkPrefab) LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(sampleItem.spawnPrefab);
-            if (!SpawnItemManager.Instance.samplePrefabs.ContainsKey(monsterName.ToLower())) SpawnItemManager.Instance.samplePrefabs.Add(monsterName.ToLower(), new WeightingGroup<GameObject>());
-            SpawnItemManager.Instance.samplePrefabs[monsterName.ToLower()].Add(sampleItem.spawnPrefab, weight);
+            if (!ItemManager.Instance.samplePrefabs.ContainsKey(monsterName.ToLower())) ItemManager.Instance.samplePrefabs.Add(monsterName.ToLower(), new WeightingGroup<GameObject>());
+            ItemManager.Instance.samplePrefabs[monsterName.ToLower()].Add(sampleItem.spawnPrefab, weight);
             LethalLib.Modules.Items.RegisterItem(sampleItem);
             Plugin.mls.LogInfo($"Registed sample for the enemy \"{monsterName}\"...");
         }

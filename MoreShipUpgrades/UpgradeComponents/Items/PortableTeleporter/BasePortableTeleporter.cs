@@ -1,5 +1,6 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using System.Collections;
 using System.Linq;
 using Unity.Netcode;
@@ -12,7 +13,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
     /// Base class which represents an item with the ability of teleporting the player back to the ship through vanila teleport
     /// when activated
     /// </summary>
-    internal class BasePortableTeleporter : GrabbableObject
+    internal class BasePortableTeleporter : LategameItem
     {
         /// <summary>
         /// Sounds played when interacting with the portable teleporter
@@ -173,6 +174,63 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
         private void ChangeTPButtonPressedClientRpc()
         {
             UpgradeBus.Instance.TPButtonPressed = true;
+        }
+
+        public static new void LoadItem()
+        {
+            // Teleporter Button SFX
+            AudioClip itemBreak = AssetBundleHandler.GetAudioClip("Break");
+            AudioClip error = AssetBundleHandler.GetAudioClip("Error");
+            AudioClip buttonPressed = AssetBundleHandler.GetAudioClip("Button Press");
+
+            if (itemBreak == null || error == null || buttonPressed == null) return;
+
+            SetupRegularTeleporterButton(itemBreak, error, buttonPressed);
+            SetupAdvancedTeleporterButton(itemBreak, error, buttonPressed);
+        }
+        private static void SetupRegularTeleporterButton(AudioClip itemBreak, AudioClip error, AudioClip buttonPressed)
+        {
+            Item regularPortableTeleporter = AssetBundleHandler.GetItemObject("Portable Tele");
+            if (regularPortableTeleporter == null) return;
+
+            regularPortableTeleporter.itemName = "Portable Tele";
+            regularPortableTeleporter.itemId = 492012;
+            RegularPortableTeleporter regularTeleportScript = regularPortableTeleporter.spawnPrefab.AddComponent<RegularPortableTeleporter>();
+            regularTeleportScript.itemProperties = regularPortableTeleporter;
+            regularTeleportScript.grabbable = true;
+            regularTeleportScript.grabbableToEnemies = true;
+            regularTeleportScript.ItemBreak = itemBreak;
+            regularTeleportScript.useCooldown = 2f;
+            regularTeleportScript.error = error;
+            regularTeleportScript.buttonPress = buttonPressed;
+            regularPortableTeleporter.creditsWorth = UpgradeBus.Instance.PluginConfiguration.WEAK_TELE_PRICE.Value;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(regularPortableTeleporter.spawnPrefab);
+
+            UpgradeBus.Instance.ItemsToSync.Add("Tele", regularPortableTeleporter);
+
+            ItemManager.SetupStoreItem(regularPortableTeleporter);
+        }
+        private static void SetupAdvancedTeleporterButton(AudioClip itemBreak, AudioClip error, AudioClip buttonPressed)
+        {
+            Item advancedPortableTeleporter = AssetBundleHandler.GetItemObject("Advanced Portable Tele");
+            if (advancedPortableTeleporter == null) return;
+
+            advancedPortableTeleporter.creditsWorth = UpgradeBus.Instance.PluginConfiguration.ADVANCED_TELE_PRICE.Value;
+            advancedPortableTeleporter.itemName = "Advanced Portable Tele";
+            advancedPortableTeleporter.itemId = 492013;
+            AdvancedPortableTeleporter advancedTeleportScript = advancedPortableTeleporter.spawnPrefab.AddComponent<AdvancedPortableTeleporter>();
+            advancedTeleportScript.itemProperties = advancedPortableTeleporter;
+            advancedTeleportScript.grabbable = true;
+            advancedTeleportScript.useCooldown = 2f;
+            advancedTeleportScript.grabbableToEnemies = true;
+            advancedTeleportScript.ItemBreak = itemBreak;
+            advancedTeleportScript.error = error;
+            advancedTeleportScript.buttonPress = buttonPressed;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(advancedPortableTeleporter.spawnPrefab);
+
+            UpgradeBus.Instance.ItemsToSync.Add("AdvTele", advancedPortableTeleporter);
+
+            ItemManager.SetupStoreItem(advancedPortableTeleporter);
         }
     }
 }

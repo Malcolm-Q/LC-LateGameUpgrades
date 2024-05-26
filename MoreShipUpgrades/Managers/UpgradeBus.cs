@@ -38,6 +38,7 @@ namespace MoreShipUpgrades.Managers
         internal Dictionary<string, int> spawnableMapObjectsAmount = new Dictionary<string, int>();
         internal readonly List<Type> upgradeTypes = new();
         internal readonly List<Type> commandTypes = new();
+        internal readonly List<Type> itemTypes = new();
         internal List<CustomTerminalNode> terminalNodes = new List<CustomTerminalNode>();
         internal Dictionary<string, GameObject> UpgradeObjects = new Dictionary<string, GameObject>();
         internal Dictionary<string, Item> ItemsToSync = new Dictionary<string, Item>();

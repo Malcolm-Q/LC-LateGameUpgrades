@@ -1,5 +1,7 @@
 ﻿using GameNetcodeStuff;
 using LethalCompanyInputUtils.Api;
+using LethalLib.Extras;
+using LethalLib.Modules;
 using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.Input;
 using MoreShipUpgrades.Managers;
@@ -13,7 +15,7 @@ using UnityEngine.InputSystem;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
 {
-    abstract class WheelbarrowScript : GrabbableObject
+    abstract class WheelbarrowScript : LategameItem
     {
         internal const float VELOCITY_APPLY_EFFECT_THRESHOLD = 5.0f;
         protected enum Restrictions
@@ -437,6 +439,73 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         {
             if (item == null) return false;
             return item.GetComponentInParent<WheelbarrowScript>() != null;
+        }
+
+        public static new void LoadItem()
+        {
+            AudioClip[] wheelbarrowSound = AssetBundleHandler.GetAudioClipList("Wheelbarrow Sound", 4);
+            AudioClip[] shoppingCartSound = AssetBundleHandler.GetAudioClipList("Scrap Wheelbarrow Sound", 4);
+            SetupStoreWheelbarrow(wheelbarrowSound);
+            SetupScrapWheelbarrow(shoppingCartSound);
+        }
+        private static void SetupScrapWheelbarrow(AudioClip[] shoppingCartSound)
+        {
+            Item wheelbarrow = AssetBundleHandler.GetItemObject("Scrap Wheelbarrow");
+            if (wheelbarrow == null) return;
+            wheelbarrow.itemId = 492018;
+            wheelbarrow.minValue = UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_MINIMUM_VALUE.Value;
+            wheelbarrow.maxValue = UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_MAXIMUM_VALUE.Value;
+            wheelbarrow.twoHanded = true;
+            wheelbarrow.twoHandedAnimation = true;
+            wheelbarrow.grabAnim = "HoldJetpack";
+            wheelbarrow.floorYOffset = -90;
+            wheelbarrow.positionOffset = new Vector3(0f, -1.7f, 0.35f);
+            wheelbarrow.allowDroppingAheadOfPlayer = true;
+            wheelbarrow.isConductiveMetal = true;
+            wheelbarrow.isScrap = true;
+            wheelbarrow.weight = 0.99f + (UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_WEIGHT.Value / 100f);
+            wheelbarrow.canBeGrabbedBeforeGameStart = true;
+            ScrapWheelbarrow barrowScript = wheelbarrow.spawnPrefab.AddComponent<ScrapWheelbarrow>();
+            barrowScript.itemProperties = wheelbarrow;
+            barrowScript.wheelsClip = shoppingCartSound;
+            wheelbarrow.spawnPrefab.AddComponent<ScrapValueSyncer>();
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
+            LethalLib.Modules.Items.RegisterItem(wheelbarrow);
+            Utilities.FixMixerGroups(wheelbarrow.spawnPrefab);
+            int amountToSpawn = UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_ENABLED.Value ? 1 : 0;
+
+            AnimationCurve curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe((1f - UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_RARITY.Value), amountToSpawn), new Keyframe(1, amountToSpawn));
+            SpawnableMapObjectDef mapObjDef = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
+            mapObjDef.spawnableMapObject = new SpawnableMapObject();
+            mapObjDef.spawnableMapObject.prefabToSpawn = wheelbarrow.spawnPrefab;
+            MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
+        }
+        private static void SetupStoreWheelbarrow(AudioClip[] wheelbarrowSound)
+        {
+            Item wheelbarrow = AssetBundleHandler.GetItemObject("Store Wheelbarrow");
+            if (wheelbarrow == null) return;
+
+            wheelbarrow.itemId = 492019;
+            wheelbarrow.creditsWorth = UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_PRICE.Value;
+            wheelbarrow.twoHanded = true;
+            wheelbarrow.twoHandedAnimation = true;
+            wheelbarrow.grabAnim = "HoldJetpack";
+            wheelbarrow.floorYOffset = -90;
+            wheelbarrow.verticalOffset = 0.3f;
+            wheelbarrow.positionOffset = new Vector3(0f, -0.7f, 1.4f);
+            wheelbarrow.allowDroppingAheadOfPlayer = true;
+            wheelbarrow.isConductiveMetal = true;
+            wheelbarrow.weight = 0.99f + (UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_WEIGHT.Value / 100f);
+            wheelbarrow.canBeGrabbedBeforeGameStart = true;
+            StoreWheelbarrow barrowScript = wheelbarrow.spawnPrefab.AddComponent<StoreWheelbarrow>();
+            barrowScript.itemProperties = wheelbarrow;
+            barrowScript.wheelsClip = wheelbarrowSound;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
+            Utilities.FixMixerGroups(wheelbarrow.spawnPrefab);
+
+            UpgradeBus.Instance.ItemsToSync.Add("Wheel", wheelbarrow);
+
+            ItemManager.SetupStoreItem(wheelbarrow);
         }
     }
 }

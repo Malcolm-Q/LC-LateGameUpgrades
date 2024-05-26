@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items
 {
-    public class Helmet : GrabbableObject, IDisplayInfo
+    public class Helmet : LategameItem, IDisplayInfo
     {
         internal enum DamageMitigationMode
         {
@@ -109,6 +109,27 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             else LguStore.Instance.ReqDestroyHelmetServerRpc(player.playerClientId);
             if (player.IsHost || player.IsServer) LguStore.Instance.PlayAudioOnPlayerClientRpc(new NetworkBehaviourReference(player), "breakWood");
             else LguStore.Instance.ReqPlayAudioOnPlayerServerRpc(new NetworkBehaviourReference(player), "breakWood");
+        }
+
+        public static new void LoadItem()
+        {
+            Item helmet = AssetBundleHandler.GetItemObject("HelmetItem");
+            UpgradeBus.Instance.helmetModel = AssetBundleHandler.GetPerkGameObject("HelmetModel");
+            if (helmet == null) return;
+
+            UpgradeBus.Instance.SFX.Add("helmet", AssetBundleHandler.GetAudioClip("HelmetHit"));
+            UpgradeBus.Instance.SFX.Add("breakWood", AssetBundleHandler.GetAudioClip("breakWood"));
+
+            Helmet helmScript = helmet.spawnPrefab.AddComponent<Helmet>();
+            helmScript.itemProperties = helmet;
+            helmScript.grabbable = true;
+            helmScript.grabbableToEnemies = true;
+            helmet.creditsWorth = UpgradeBus.Instance.PluginConfiguration.HELMET_PRICE.Value;
+            helmet.positionOffset = new Vector3(-0.25f, 0f, 0f);
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(helmet.spawnPrefab);
+
+            UpgradeBus.Instance.ItemsToSync.Add("Helmet", helmet);
+            ItemManager.SetupStoreItem(helmet);
         }
     }
 }

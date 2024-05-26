@@ -1,5 +1,8 @@
-﻿using MoreShipUpgrades.Managers;
+﻿using LethalLib.Extras;
+using LethalLib.Modules;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.Contracts;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using Unity.Netcode;
@@ -11,7 +14,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
     /// <summary>
     /// Logical class which represents an item that can heal the player when activated
     /// </summary>
-    internal class Medkit : GrabbableObject, IDisplayInfo
+    internal class Medkit : LategameItem, IDisplayInfo
     {
         internal const string ITEM_NAME = "Medkit";
         /// <summary>
@@ -142,6 +145,49 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             return $"MEDKIT - ${UpgradeBus.Instance.PluginConfiguration.MEDKIT_PRICE.Value}\n\n" +
                 $"Left click to heal yourself for {UpgradeBus.Instance.PluginConfiguration.MEDKIT_HEAL_VALUE.Value} health.\n" +
                 $"Can be used {UpgradeBus.Instance.PluginConfiguration.MEDKIT_USES.Value} times.";
+        }
+
+        public static new void LoadItem()
+        {
+            AudioClip errorUse = AssetBundleHandler.GetAudioClip("Error");
+            AudioClip buttonPressed = AssetBundleHandler.GetAudioClip("Button Press");
+            Item MedKitItem = AssetBundleHandler.GetItemObject("Medkit");
+            if (MedKitItem == null) return;
+            AnimationCurve curve = new AnimationCurve(new Keyframe(0f, UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value), new Keyframe(1f, UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value));
+
+            MedKitItem.creditsWorth = UpgradeBus.Instance.PluginConfiguration.MEDKIT_PRICE.Value;
+            MedKitItem.itemId = 492016;
+            Medkit medScript = MedKitItem.spawnPrefab.AddComponent<Medkit>();
+            medScript.itemProperties = MedKitItem;
+            medScript.grabbable = true;
+            medScript.useCooldown = 2f;
+            medScript.grabbableToEnemies = true;
+            medScript.error = errorUse;
+            medScript.use = buttonPressed;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(MedKitItem.spawnPrefab);
+
+            ItemManager.SetupStoreItem(MedKitItem);
+
+            Item MedKitMapItem = AssetBundleHandler.GetItemObject("MedkitMapItem");
+            if (MedKitMapItem == null) return;
+            Medkit medMapScript = MedKitMapItem.spawnPrefab.AddComponent<Medkit>();
+            MedKitMapItem.spawnPrefab.AddComponent<ExtractionContract>();
+            medMapScript.itemProperties = MedKitMapItem;
+            medMapScript.grabbable = true;
+            medMapScript.useCooldown = 2f;
+            medMapScript.grabbableToEnemies = true;
+            medMapScript.error = errorUse;
+            medMapScript.use = buttonPressed;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(MedKitMapItem.spawnPrefab);
+
+            SpawnableMapObjectDef mapObjDef = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
+            mapObjDef.spawnableMapObject = new SpawnableMapObject();
+            mapObjDef.spawnableMapObject.prefabToSpawn = MedKitMapItem.spawnPrefab;
+            MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
+            UpgradeBus.Instance.spawnableMapObjects["MedkitMapItem"] = mapObjDef;
+            UpgradeBus.Instance.spawnableMapObjectsAmount["MedkitMapItem"] = UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value;
+
+            UpgradeBus.Instance.ItemsToSync.Add("Medkit", MedKitItem);
         }
     }
 }

@@ -1,11 +1,17 @@
-﻿using MoreShipUpgrades.Compat;
+﻿using LethalLib.Extras;
+using LethalLib.Modules;
 using MoreShipUpgrades.Misc;
-using MoreShipUpgrades.UpgradeComponents.Commands;
+using MoreShipUpgrades.UpgradeComponents.Contracts;
+using MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal;
+using MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval;
+using MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exorcism;
+using MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exterminator;
+using MoreShipUpgrades.UpgradeComponents.Items.Contracts.Extraction;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -188,6 +194,143 @@ namespace MoreShipUpgrades.Managers
         {
             contractType = "None";
             contractLevel = "None";
+        }
+        internal static void SetupContractMapObjects(ref AssetBundle bundle)
+        {
+            AnimationCurve curve = new AnimationCurve(new Keyframe(0, 1), new Keyframe(1, 1)); // always spawn 1
+
+            SetupScavContract(ref bundle, curve);
+            SetupExterminatorContract(curve);
+            SetupDataContract(curve);
+            SetupExorcismContract(curve);
+            SetupBombContract(curve);
+        }
+
+        static void SetupBombContract(AnimationCurve curve)
+        {
+            Item bomb = AssetBundleHandler.GetItemObject("Bomb");
+            bomb.spawnPrefab.AddComponent<ScrapValueSyncer>();
+            bomb.isConductiveMetal = false;
+            DefusalContract coNest = bomb.spawnPrefab.AddComponent<DefusalContract>();
+            coNest.SetPosition = true;
+
+            BombDefusalScript bombScript = bomb.spawnPrefab.AddComponent<BombDefusalScript>();
+            bombScript.snip = AssetBundleHandler.GetAudioClip("Bomb Cut");
+            bombScript.tick = AssetBundleHandler.GetAudioClip("Bomb Tick");
+
+            RegisterSpawnableContractObject(bomb, curve);
+        }
+
+        const int MAXIMUM_RITUAL_ITEMS = 5;
+        static void SetupExorcismContract(AnimationCurve curve)
+        {
+            Item contractLoot = AssetBundleHandler.GetItemObject("Demon Tome");
+            contractLoot.spawnPrefab.AddComponent<ScrapValueSyncer>();
+            Items.RegisterItem(contractLoot);
+            Utilities.FixMixerGroups(contractLoot.spawnPrefab);
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(contractLoot.spawnPrefab);
+
+            Item mainItem = AssetBundleHandler.GetItemObject("Pentagram");
+
+            for (int i = 0; i < MAXIMUM_RITUAL_ITEMS; i++)
+            {
+                Item exorItem = AssetBundleHandler.GetItemObject("RitualItem" + i);
+                exorItem.spawnPrefab.AddComponent<ExorcismContract>();
+                RegisterSpawnableContractObject(exorItem, new AnimationCurve(new Keyframe(0, 3), new Keyframe(1, 3)));
+            }
+
+            ExorcismContract co = mainItem.spawnPrefab.AddComponent<ExorcismContract>();
+            co.SetPosition = true;
+
+            PentagramScript pentScript = mainItem.spawnPrefab.AddComponent<PentagramScript>();
+            pentScript.loot = contractLoot.spawnPrefab;
+            pentScript.chant = AssetBundleHandler.GetAudioClip("Ritual Fail");
+            pentScript.portal = AssetBundleHandler.GetAudioClip("Ritual Success");
+
+            RegisterSpawnableContractObject(mainItem, curve);
+        }
+
+        static void RegisterSpawnableContractObject(Item item, AnimationCurve curve)
+        {
+            Utilities.FixMixerGroups(item.spawnPrefab);
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(item.spawnPrefab);
+            Items.RegisterItem(item);
+
+            SpawnableMapObjectDef mapObjDefBug = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
+            mapObjDefBug.spawnableMapObject = new SpawnableMapObject();
+            mapObjDefBug.spawnableMapObject.prefabToSpawn = item.spawnPrefab;
+            MapObjects.RegisterMapObject(mapObjDefBug, Levels.LevelTypes.All, (level) => curve);
+        }
+
+
+        static void SetupExterminatorContract(AnimationCurve curve)
+        {
+            Item bugLoot = AssetBundleHandler.GetItemObject("HoardingBugEggsLoot");
+            bugLoot.spawnPrefab.AddComponent<ScrapValueSyncer>();
+            Items.RegisterItem(bugLoot);
+            Utilities.FixMixerGroups(bugLoot.spawnPrefab);
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(bugLoot.spawnPrefab);
+
+            Item nest = AssetBundleHandler.GetItemObject("HoardingBugEggs");
+
+            ExterminatorContract coNest = nest.spawnPrefab.AddComponent<ExterminatorContract>();
+            coNest.SetPosition = true;
+
+            BugNestScript nestScript = nest.spawnPrefab.AddComponent<BugNestScript>();
+            nestScript.loot = bugLoot.spawnPrefab;
+
+            RegisterSpawnableContractObject(nest, curve);
+        }
+
+        static void SetupScavContract(ref AssetBundle bundle, AnimationCurve curve)
+        {
+            Item scav = AssetBundleHandler.GetItemObject("Scavenger");
+            if (scav == null) return;
+
+            scav.weight = UpgradeBus.Instance.PluginConfiguration.CONTRACT_EXTRACT_WEIGHT.Value;
+            ExtractionContract co = scav.spawnPrefab.AddComponent<ExtractionContract>();
+            co.SetPosition = true;
+
+            ExtractPlayerScript extractScript = scav.spawnPrefab.AddComponent<ExtractPlayerScript>();
+            scav.spawnPrefab.AddComponent<ScrapValueSyncer>();
+            TextAsset scavAudioPaths = AssetBundleHandler.GetGenericAsset<TextAsset>("Scavenger Sounds");
+            Dictionary<string, string[]> scavAudioDict = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(scavAudioPaths.text);
+            ExtractPlayerScript.clipDict.Add("lost", CreateAudioClipArray(scavAudioDict["lost"], ref bundle));
+            ExtractPlayerScript.clipDict.Add("heal", CreateAudioClipArray(scavAudioDict["heal"], ref bundle));
+            ExtractPlayerScript.clipDict.Add("safe", CreateAudioClipArray(scavAudioDict["safe"], ref bundle));
+            ExtractPlayerScript.clipDict.Add("held", CreateAudioClipArray(scavAudioDict["held"], ref bundle));
+
+            RegisterSpawnableContractObject(scav, curve);
+        }
+
+        static void SetupDataContract(AnimationCurve curve)
+        {
+            Item dataLoot = AssetBundleHandler.GetItemObject("Floppy Disk");
+            dataLoot.spawnPrefab.AddComponent<ScrapValueSyncer>();
+            Items.RegisterItem(dataLoot);
+            Utilities.FixMixerGroups(dataLoot.spawnPrefab);
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(dataLoot.spawnPrefab);
+
+            Item pc = AssetBundleHandler.GetItemObject("Laptop");
+
+            DataRetrievalContract coPC = pc.spawnPrefab.AddComponent<DataRetrievalContract>();
+            coPC.SetPosition = true;
+
+            DataPCScript dataScript = pc.spawnPrefab.AddComponent<DataPCScript>();
+            dataScript.error = AssetBundleHandler.GetAudioClip("Laptop Error");
+            dataScript.startup = AssetBundleHandler.GetAudioClip("Laptop Start");
+            dataScript.loot = dataLoot.spawnPrefab;
+
+            RegisterSpawnableContractObject(pc, curve);
+        }
+        private static AudioClip[] CreateAudioClipArray(string[] paths, ref AssetBundle bundle)
+        {
+            AudioClip[] clips = new AudioClip[paths.Length];
+            for (int i = 0; i < paths.Length; i++)
+            {
+                clips[i] = AssetBundleHandler.TryLoadAudioClipAsset(ref bundle, paths[i]);
+            }
+            return clips;
         }
     }
 }

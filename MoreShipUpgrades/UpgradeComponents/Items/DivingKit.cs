@@ -9,7 +9,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
     /// <summary>
     /// <para>Item which allows players holding the item to breath underwater, however their vision will be blocked by the model as it will be placed on their head.</para>
     /// </summary>
-    internal class DivingKit : GrabbableObject, IDisplayInfo
+    internal class DivingKit : LategameItem, IDisplayInfo
     {
         internal const string ITEM_NAME = "Diving Kit";
         /// <summary>
@@ -54,6 +54,27 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
                 roundInstance.drowningTimer = 1f;
             }
             base.Update();
+        }
+
+        public static new void LoadItem()
+        {
+            Item DiveItem = AssetBundleHandler.GetItemObject("Diving Kit");
+            if (DiveItem == null) return;
+
+            DiveItem.creditsWorth = UpgradeBus.Instance.PluginConfiguration.DIVEKIT_PRICE.Value;
+            DiveItem.itemId = 492015;
+            DiveItem.twoHanded = UpgradeBus.Instance.PluginConfiguration.DIVEKIT_TWO_HANDED.Value;
+            DiveItem.weight = UpgradeBus.Instance.PluginConfiguration.DIVEKIT_WEIGHT.Value;
+            DiveItem.itemSpawnsOnGround = true;
+            DivingKit diveScript = DiveItem.spawnPrefab.AddComponent<DivingKit>();
+            diveScript.itemProperties = DiveItem;
+            diveScript.grabbable = true;
+            diveScript.grabbableToEnemies = true;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(DiveItem.spawnPrefab);
+
+            UpgradeBus.Instance.ItemsToSync.Add("Dive", DiveItem);
+
+            ItemManager.SetupStoreItem(DiveItem);
         }
     }
 }
