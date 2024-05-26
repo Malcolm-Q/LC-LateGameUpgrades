@@ -48,8 +48,6 @@ namespace MoreShipUpgrades
     public class Plugin : BaseUnityPlugin
     {
         internal static readonly ManualLogSource mls = BepInEx.Logging.Logger.CreateLogSource(Metadata.NAME);
-        AudioClip itemBreak, buttonPressed, error;
-        AudioClip[] wheelbarrowSound, shoppingCartSound;
 
         public new static LategameConfiguration Config;
 

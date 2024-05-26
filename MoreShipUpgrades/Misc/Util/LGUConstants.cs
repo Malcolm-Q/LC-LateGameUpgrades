@@ -903,6 +903,36 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER_KEY = $"How slower time will go by when incrementing the {QuantumDisruptor.UPGRADE_NAME} level";
         internal const float QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER_DEFAULT = 0.1f;
 
+        internal const string QUANTUM_DISRUPTOR_UPGRADE_MODE_KEY = $"Mode of {QuantumDisruptor.UPGRADE_NAME}";
+        internal const QuantumDisruptor.UpgradeModes QUANTUM_DISRUPTOR_UPGRADE_MODE_DEFAULT = QuantumDisruptor.UpgradeModes.SlowdownTime;
+        internal const string QUANTUM_DISRUPTOR_UPGRADE_MODE_DESCRIPTION = "Applied mode when purchasing the upgrade.\n" +
+            "Supported modes: SlowdownTime (makes the time go slower in moons), RevertTime (command prompt which reverts hours when executed, maximum usages per moon).";
+
+        internal const string QUANTUM_DISRUPTOR_RESET_MODE_KEY = $"Reset Time of {QuantumDisruptor.UPGRADE_NAME} current usages";
+        internal const QuantumDisruptor.ResetModes QUANTUM_DISRUPTOR_RESET_MODE_DEFAULT = QuantumDisruptor.ResetModes.MoonLanding;
+        internal const string QUANTUM_DISRUPTOR_RESET_MODE_DESCRIPTION = "Reset mode of when the current counter of usages reset to use the ability. Only applied when RevertTime mode is selected.\n" +
+            "Supported Values: MoonLanding (reset counter per each moon landing), MoonRerouting (reset counter per each moon routing), NewQuota (reset counter per each new quota)";
+
+        internal const string QUANTUM_DISRUPTOR_USES_DESCRIPTION = "Amount of times you can execute the quantum command. Only applied when RevertTime mode is selected";
+
+        internal const string QUANTUM_DISRUPTOR_INITIAL_USES_KEY = $"Initial amount of usages of {QuantumDisruptor.UPGRADE_NAME}";
+        internal const int QUANTUM_DISRUPTOR_INITIAL_USES_DEFAULT = 1;
+        internal const string QUANTUM_DISRUPTOR_INITIAL_USES_DESCRIPTION = QUANTUM_DISRUPTOR_USES_DESCRIPTION;
+
+        internal const string QUANTUM_DISRUPTOR_INCREMENTAL_USES_KEY = $"Incremental amount of usages of {QuantumDisruptor.UPGRADE_NAME}";
+        internal const int QUANTUM_DISRUPTOR_INCREMENTAL_USES_DEFAULT = 1;
+        internal const string QUANTUM_DISRUPTOR_INCREMENTAL_USES_DESCRIPTION = QUANTUM_DISRUPTOR_USES_DESCRIPTION;
+
+        internal const string QUANTUM_DISRUPTOR_HOURS_REVERT_DESCRIPTION = "Amount of hours to revert when executing the quantum command. Only applied when RevertTime mode is selected";
+
+        internal const string QUANTUM_DISRUPTOR_INITIAL_HOURS_ON_REVERT_KEY = $"Initial amount of hours reverted from {QuantumDisruptor.UPGRADE_NAME}";
+        internal const int QUANTUM_DISRUPTOR_INITIAL_HOURS_ON_REVERT_DEFAULT = 1;
+        internal const string QUANTUM_DISRUPTOR_INITIAL_HOURS_ON_REVERT_DESCRIPTION = QUANTUM_DISRUPTOR_HOURS_REVERT_DESCRIPTION;
+
+        internal const string QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_ON_REVERT_KEY = $"Incremental amount of hours reverted from {QuantumDisruptor.UPGRADE_NAME}";
+        internal const int QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_ON_REVERT_DEFAULT = 1;
+        internal const string QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_ON_REVERT_DESCRIPTION = QUANTUM_DISRUPTOR_HOURS_REVERT_DESCRIPTION;
+
         #endregion
 
         #region Sick Beats
