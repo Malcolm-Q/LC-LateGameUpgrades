@@ -123,6 +123,7 @@ namespace MoreShipUpgrades.Misc
             { DeepPockets.UPGRADE_NAME, upgrades+"DeeperPockets.prefab" },
             { ReinforcedBoots.UPGRADE_NAME, upgrades+"ReinforcedBoots.prefab" },
             { LandingThrusters.UPGRADE_NAME, upgrades+"LandingThrusters.prefab" },
+            { ScavengerInstincts.UPGRADE_NAME, upgrades+"ScavengerInstincts.prefab" },
 
             { "Advanced Portable Tele", storeItems+"TpButtonAdv.asset" },
             { "Portable Tele", storeItems+"TpButton.asset" },
