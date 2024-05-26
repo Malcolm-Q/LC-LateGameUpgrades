@@ -418,14 +418,14 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string SCAVENGER_INSTINCTS_ENABLED_DESCRIPTION = "Tier upgrade which increases the amount of scrap that can spawn on a given level.";
 
         internal const string SCAVENGER_INSTINCTS_PRICE_KEY = $"Price of {ScavengerInstincts.UPGRADE_NAME} Upgrade";
-        internal const int SCAVENGER_INSTINCTS_PRICE_DEFAULT = 600;
+        internal const int SCAVENGER_INSTINCTS_PRICE_DEFAULT = 800;
 
         internal const string SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE_KEY = "Initial amount of scrap spawn increase";
         internal const int SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE_DEFAULT = 4;
         internal const string SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE_DESCRIPTION = "The amount of additional scrap that can spawn in a given level when first purchased";
 
         internal const string SCAVENGER_INSTINCTS_INCREMENTAL_AMOUNT_SCRAP_INCREASE_KEY = "Incremental amount of scrap spawn increase";
-        internal const int SCAVENGER_INSTINCTS_INCREMENTAL_AMOUNT_SCRAP_INCREASE_DEFAULT = 4;
+        internal const int SCAVENGER_INSTINCTS_INCREMENTAL_AMOUNT_SCRAP_INCREASE_DEFAULT = 2;
         internal const string SCAVENGER_INSTINCTS_INCREMENTAL_AMOUNT_SCRAP_INCREASE_DESCRIPTION = "The amount of additional scrap that can spawn in a given level on further purchases";
 
         #endregion

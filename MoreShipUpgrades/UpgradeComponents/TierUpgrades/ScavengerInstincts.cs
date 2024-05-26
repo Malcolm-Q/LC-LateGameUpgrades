@@ -13,7 +13,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
     internal class ScavengerInstincts : TierUpgrade
     {
         internal const string UPGRADE_NAME = "Scavenger Instincts";
-        internal const string DEFAULT_PRICES = "600,750,800,900";
+        internal const string DEFAULT_PRICES = "800,1000,1200,1400";
 
         void Awake()
         {
@@ -38,7 +38,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
             System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUN_SCRAP_INCREASE.Value);
-            string infoFormat = "LVL {0} - ${1} - Increases the possible amount of scrap spawns by {2} additional items.\n";
+            string infoFormat = "LVL {0} - ${1} - Increases the average amount of scrap spawns by {2} additional items.\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
         public new static void RegisterUpgrade()
