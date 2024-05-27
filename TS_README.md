@@ -215,6 +215,12 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 * __Reinforced Boots - $250__
     * Reduces incoming fall damage.
 
+* __Scavenger Instincts - $800__
+    * Increases the average amount of scrap it can spawn in a given level.
+
+* __Mechanical Arms - $300__
+    * Increases the player's interaction range with items and interactables.
+
 ## Contracts
 * __Defusal Contract__
     * Look around the facility for a ticking bomb. Defuse it before the timer runs out or anyone near it might meet a gruesome fate.
