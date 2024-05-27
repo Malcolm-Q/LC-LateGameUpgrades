@@ -23,6 +23,7 @@ namespace MoreShipUpgrades.Misc
     public class LategameConfiguration : SyncedConfig2<LategameConfiguration>
     {
         #region Enabled
+        [field: SyncedEntryField] public SyncedEntry<bool> MECHANICAL_ARMS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SCAVENGER_INSTINCTS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> LANDING_THRUSTERS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> REINFORCED_BOOTS_ENABLED {  get; set; }
@@ -66,6 +67,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Individual
+        [field: SyncedEntryField] public SyncedEntry<bool> MECHANICAL_ARMS_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> REINFORCED_BOOTS_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> DEEPER_POCKETS_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> ALUMINIUM_COILS_INDIVIDUAL { get; set; }
@@ -88,6 +90,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Initial Prices
+        [field: SyncedEntryField] public SyncedEntry<int> MECHANICAL_ARMS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SCAVENGER_INSTINCTS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> LANDING_THRUSTERS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> REINFORCED_BOOTS_PRICE {  get; set; }
@@ -135,6 +138,10 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<string> MECHANICAL_ARMS_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<float> MECHANICAL_ARMS_INITIAL_RANGE_INCREASE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<float> MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> MECHANICAL_ARMS_OVERRIDE_NAME {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> SCAVENGER_INSTINCTS_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> SCAVENGER_INSTINCTS_PRICES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE { get; set; }
@@ -433,6 +440,7 @@ namespace MoreShipUpgrades.Misc
 
             topSection = LGUConstants.OVERRIDE_NAMES_SECTION;
             OVERRIDE_UPGRADE_NAMES              = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.OVERRIDE_NAMES_ENABLED_KEY, LGUConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LGUConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
+            MECHANICAL_ARMS_OVERRIDE_NAME       = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MECHANICAL_ARMS_OVERRIDE_NAME_KEY, MechanicalArms.UPGRADE_NAME);
             SCAVENGER_INSTINCTS_OVERRIDE_NAME   = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SCAVENGER_INSTINCTS_OVERRIDE_NAME_KEY, ScavengerInstincts.UPGRADE_NAME);
             LANDING_THRUSTERS_OVERRIDE_NAME     = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.LANDING_THRUSTERS_OVERRIDE_NAME_KEY, LandingThrusters.UPGRADE_NAME);
             REINFORCED_BOOTS_OVERRIDE_NAME      = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.REINFORCED_BOOTS_OVERRIDE_NAME_KEY, ReinforcedBoots.UPGRADE_NAME);
@@ -568,6 +576,18 @@ namespace MoreShipUpgrades.Misc
             #endregion
 
             #region Upgrades
+
+            #region Mechanical Arms
+
+            topSection = MechanicalArms.UPGRADE_NAME;
+            MECHANICAL_ARMS_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MECHANICAL_ARMS_ENABLED_KEY, LGUConstants.MECHANICAL_ARMS_ENABLED_DEFAULT, LGUConstants.MECHANICAL_ARMS_ENABLED_DESCRIPTION);
+            MECHANICAL_ARMS_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            MECHANICAL_ARMS_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MECHANICAL_ARMS_PRICE_KEY, LGUConstants.MECHANICAL_ARMS_PRICE_DEFAULT);
+            MECHANICAL_ARMS_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, MechanicalArms.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            MECHANICAL_ARMS_INITIAL_RANGE_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MECHANICAL_ARMS_INITIAL_RANGE_INCREASE_KEY, LGUConstants.MECHANICAL_ARMS_INITIAL_RANGE_INCREASE_DEFAULT, LGUConstants.MECHANICAL_ARMS_INITIAL_RANGE_INCREASE_DESCRIPTION);
+            MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE_KEY, LGUConstants.MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE_DEFAULT, LGUConstants.MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE_DESCRIPTION);
+
+            #endregion
 
             #region Scavenger Instincts
             topSection = ScavengerInstincts.UPGRADE_NAME;

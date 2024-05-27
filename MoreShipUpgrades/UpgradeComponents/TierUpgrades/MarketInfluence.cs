@@ -3,11 +3,12 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class MarketInfluence : TierUpgrade
+    internal class MarketInfluence : TierUpgrade, IServerSync
     {
         internal const string UPGRADE_NAME = "Market Influence";
         internal const string PRICES_DEFAULT = "200,350,500";

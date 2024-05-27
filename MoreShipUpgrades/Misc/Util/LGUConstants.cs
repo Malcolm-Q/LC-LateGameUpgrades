@@ -98,6 +98,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string MECHANICAL_ARMS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, MechanicalArms.UPGRADE_NAME);
         internal static readonly string SCAVENGER_INSTINCTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ScavengerInstincts.UPGRADE_NAME);
         internal static readonly string LANDING_THRUSTERS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, LandingThrusters.UPGRADE_NAME);
         internal static readonly string REINFORCED_BOOTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ReinforcedBoots.UPGRADE_NAME);
@@ -410,6 +411,25 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Mechanical Arms
+
+        internal const string MECHANICAL_ARMS_ENABLED_KEY = $"Enable {MechanicalArms.UPGRADE_NAME} Upgrade";
+        internal const bool MECHANICAL_ARMS_ENABLED_DEFAULT = true;
+        internal const string MECHANICAL_ARMS_ENABLED_DESCRIPTION = "Tier upgrade which increases the range of interacting with objects (both grabbing and interacting such as open or close a door)";
+
+        internal const string MECHANICAL_ARMS_PRICE_KEY = $"Price of {MechanicalArms.UPGRADE_NAME} Upgrade";
+        internal const int MECHANICAL_ARMS_PRICE_DEFAULT = 300;
+
+        internal const string MECHANICAL_ARMS_INITIAL_RANGE_INCREASE_KEY = "Initial range increase";
+        internal const float MECHANICAL_ARMS_INITIAL_RANGE_INCREASE_DEFAULT = 1f;
+        internal const string MECHANICAL_ARMS_INITIAL_RANGE_INCREASE_DESCRIPTION = "Amount of interaction range increased (in Unity units) when first purchasing the upgrade";
+
+        internal const string MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE_KEY = "Incremental range increase";
+        internal const float MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE_DEFAULT = 1f;
+        internal const string MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE_DESCRIPTION = "Amount of interaction range increased (in Unity units) on further purchases of the upgrade";
+
+        #endregion
 
         #region Scavenger Instincts
 

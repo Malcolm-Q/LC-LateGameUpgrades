@@ -124,6 +124,7 @@ namespace MoreShipUpgrades.Misc
             { ReinforcedBoots.UPGRADE_NAME, upgrades+"ReinforcedBoots.prefab" },
             { LandingThrusters.UPGRADE_NAME, upgrades+"LandingThrusters.prefab" },
             { ScavengerInstincts.UPGRADE_NAME, upgrades+"ScavengerInstincts.prefab" },
+            { MechanicalArms.UPGRADE_NAME, upgrades+"MechanicalArms.prefab" },
 
             { "Advanced Portable Tele", storeItems+"TpButtonAdv.asset" },
             { "Portable Tele", storeItems+"TpButton.asset" },

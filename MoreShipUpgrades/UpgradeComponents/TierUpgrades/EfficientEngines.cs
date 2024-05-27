@@ -3,11 +3,12 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class EfficientEngines : TierUpgrade
+    internal class EfficientEngines : TierUpgrade, IServerSync
     {
         internal const string UPGRADE_NAME = "Efficient Engines";
         internal const string DEFAULT_PRICES = "600, 750, 900";

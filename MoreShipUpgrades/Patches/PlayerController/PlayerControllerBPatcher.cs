@@ -323,5 +323,18 @@ namespace MoreShipUpgrades.Patches.PlayerController
             Tools.FindField(ref index, ref codes, findField: isMenuOpen, addCode: carryingWheelbarrow, orInstruction: true, errorMessage: "Couldn't find isMenuOpen field");
             return codes;
         }
+
+        [HarmonyPatch(nameof(PlayerControllerB.BeginGrabObject))]
+        [HarmonyPatch(nameof(PlayerControllerB.SetHoverTipAndCurrentInteractTrigger))]
+        [HarmonyTranspiler]
+        static IEnumerable<CodeInstruction> SetGrabDistanceTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            FieldInfo grabDistance = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.grabDistance));
+            MethodInfo getIncreasedRange = typeof(MechanicalArms).GetMethod(nameof(MechanicalArms.GetIncreasedGrabDistance));
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            int index = 0;
+            Tools.FindField(ref index, ref codes, findField: grabDistance, addCode: getIncreasedRange, errorMessage: "Couldn't find the grab distance field");
+            return codes;
+        }
     }
 }

@@ -418,7 +418,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         {
             if (!UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_ENABLED.Value && !UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_ENABLED.Value) return defaultValue;
             PlayerControllerB player = UpgradeBus.Instance.GetLocalPlayer();
-            if (player == null) return defaultValue;
+            if (player == null || player.thisController == null) return defaultValue;
             if (player.thisController.velocity.magnitude <= VELOCITY_APPLY_EFFECT_THRESHOLD) return defaultValue;
             return defaultValue * PlayerManager.instance.GetSensitivityMultiplier();
         }
@@ -426,7 +426,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         {
             if (!UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_ENABLED.Value && !UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_ENABLED.Value) return defaultValue;
             PlayerControllerB player = UpgradeBus.Instance.GetLocalPlayer();
-            if (player == null) return defaultValue;
+            if (player == null || player.thisController == null) return defaultValue;
             if (player.thisController.velocity.magnitude <= VELOCITY_APPLY_EFFECT_THRESHOLD) return defaultValue;
             return defaultValue * PlayerManager.instance.GetSloppyMultiplier();
         }
