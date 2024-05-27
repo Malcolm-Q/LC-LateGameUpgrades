@@ -3,10 +3,11 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    class BargainConnections : TierUpgrade
+    class BargainConnections : TierUpgrade, IServerSync
     {
         internal const string UPGRADE_NAME = "Bargain Connections";
         internal const string PRICES_DEFAULT = "225,300,375";

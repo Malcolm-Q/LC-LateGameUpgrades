@@ -41,7 +41,7 @@ namespace MoreShipUpgrades.Managers
         /// <summary>
         /// Player identifier of the client
         /// </summary>
-        private ulong playerID = 0;
+        internal ulong playerID = 0;
         static LguLogger logger = new LguLogger(nameof(LguStore));
         /// <summary>
         /// Key used to store Lategame Upgrades relevant data
@@ -119,6 +119,7 @@ namespace MoreShipUpgrades.Managers
             string saveFile = GameNetworkManager.Instance.currentSaveFileName;
             string json = JsonConvert.SerializeObject(LguSave);
             ES3.Save(key: saveDataKey, value: json, filePath: saveFile);
+            PlayerManager.instance.ResetUpgradeSpentCredits();
         }
 
         internal void UpdateServerSave()

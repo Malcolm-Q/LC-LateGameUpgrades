@@ -34,6 +34,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             return Mathf.Clamp(defaultValue - UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_TIMER.Value, 0f, defaultValue);
         }
+        public static bool CanLeaveEarly(float shipTimer)
+        {
+            return shipTimer > UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_LEAVE_TIMER.Value;
+        }
         public static bool IsUpgradeActive()
         {
             return GetActiveUpgrade(UPGRADE_NAME);
@@ -55,7 +59,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
                                     shareStatus: true,
                                     configuration.FASTER_DROP_POD_ENABLED.Value,
                                     configuration.FASTER_DROP_POD_PRICE.Value,
-                                    configuration.OVERRIDE_UPGRADE_NAMES ? configuration.FAST_ENCRYPTION_OVERRIDE_NAME : "");
+                                    configuration.OVERRIDE_UPGRADE_NAMES ? configuration.DROP_POD_THRUSTERS_OVERRIDE_NAME : "");
         }
     }
 }

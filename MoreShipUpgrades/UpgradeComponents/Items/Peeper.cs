@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items
 {
-    public class Peeper : GrabbableObject, IDisplayInfo
+    public class Peeper : LategameItem, IDisplayInfo
     {
         internal const string ITEM_NAME = "Peeper";
         /// <summary>
@@ -69,6 +69,27 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         public string GetDisplayInfo()
         {
             return "Looks at coil heads, don't lose it";
+        }
+
+        public static new void LoadItem()
+        {
+            Item Peeper = AssetBundleHandler.GetItemObject("Peeper");
+            if (Peeper == null) return;
+
+            Peeper.creditsWorth = UpgradeBus.Instance.PluginConfiguration.PEEPER_PRICE.Value;
+            Peeper.twoHanded = false;
+            Peeper.itemId = 492017;
+            Peeper.twoHandedAnimation = false;
+            Peeper.spawnPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+            Peeper peepScript = Peeper.spawnPrefab.AddComponent<Peeper>();
+            peepScript.itemProperties = Peeper;
+            peepScript.grabbable = true;
+            peepScript.grabbableToEnemies = true;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(Peeper.spawnPrefab);
+
+            UpgradeBus.Instance.ItemsToSync.Add("Peeper", Peeper);
+
+            ItemManager.SetupStoreItem(Peeper);
         }
     }
 }

@@ -18,10 +18,13 @@ namespace MoreShipUpgrades.Patches.Items
         static IEnumerable<CodeInstruction> UpdateTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo upgradedTimer = typeof(FasterDropPod).GetMethod(nameof(FasterDropPod.GetUpgradedTimer));
+            MethodInfo canLeaveEarly = typeof(FasterDropPod).GetMethod(nameof(FasterDropPod.CanLeaveEarly));
             MethodInfo initialTimer = typeof(FasterDropPod).GetMethod(nameof(FasterDropPod.GetFirstOrderTimer));
             MethodInfo isUpgradeActive = typeof(FasterDropPod).GetMethod(nameof(FasterDropPod.IsUpgradeActive));
             FieldInfo playersManager = typeof(ItemDropship).GetField(nameof(ItemDropship.playersManager), BindingFlags.NonPublic | BindingFlags.Instance);
             FieldInfo shipHasLander = typeof(StartOfRound).GetField(nameof(StartOfRound.shipHasLanded));
+            FieldInfo shipTimer = typeof(ItemDropship).GetField(nameof(ItemDropship.shipTimer));
+            FieldInfo shipDoorsOpened = typeof(ItemDropship).GetField(nameof(ItemDropship.shipDoorsOpened));
 
             List<CodeInstruction> codes = new(instructions);
             int index = 0;
@@ -46,6 +49,29 @@ namespace MoreShipUpgrades.Patches.Items
                 codes.Insert(index, new CodeInstruction(OpCodes.Call, isUpgradeActive));
                 codes.Insert(index, new CodeInstruction(OpCodes.Ldfld, shipHasLander));
                 codes.Insert(index, new CodeInstruction(OpCodes.Ldfld, playersManager));
+                codes.Insert(index, new CodeInstruction(OpCodes.Ldarg_0));
+                codes.Insert(index, new CodeInstruction(OpCodes.Cgt));
+            }
+            found = false;
+            for (; index < codes.Count && !found; index++)
+            {
+                if (codes[index].opcode == OpCodes.Ble_Un)
+                {
+                    found = true;
+                    break;
+                }
+            }
+            if (found)
+            {
+                codes[index].opcode = OpCodes.Brfalse;
+                codes.Insert(index, new CodeInstruction(OpCodes.Or));
+                codes.Insert(index, new CodeInstruction(OpCodes.And));
+                codes.Insert(index, new CodeInstruction(OpCodes.And));
+                codes.Insert(index, new CodeInstruction(OpCodes.Ldfld, shipDoorsOpened));
+                codes.Insert(index, new CodeInstruction(OpCodes.Ldarg_0));
+                codes.Insert(index, new CodeInstruction(OpCodes.Call, isUpgradeActive));
+                codes.Insert(index, new CodeInstruction(OpCodes.Call, canLeaveEarly));
+                codes.Insert(index, new CodeInstruction(OpCodes.Ldfld, shipTimer));
                 codes.Insert(index, new CodeInstruction(OpCodes.Ldarg_0));
                 codes.Insert(index, new CodeInstruction(OpCodes.Cgt));
             }

@@ -23,6 +23,8 @@ namespace MoreShipUpgrades.Misc
     public class LategameConfiguration : SyncedConfig2<LategameConfiguration>
     {
         #region Enabled
+        [field: SyncedEntryField] public SyncedEntry<bool> MECHANICAL_ARMS_ENABLED {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> SCAVENGER_INSTINCTS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> LANDING_THRUSTERS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> REINFORCED_BOOTS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> DEEPER_POCKETS_ENABLED {  get; set; }
@@ -65,6 +67,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Individual
+        [field: SyncedEntryField] public SyncedEntry<bool> MECHANICAL_ARMS_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> REINFORCED_BOOTS_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> DEEPER_POCKETS_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> ALUMINIUM_COILS_INDIVIDUAL { get; set; }
@@ -87,6 +90,8 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Initial Prices
+        [field: SyncedEntryField] public SyncedEntry<int> MECHANICAL_ARMS_PRICE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> SCAVENGER_INSTINCTS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> LANDING_THRUSTERS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> REINFORCED_BOOTS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> DEEPER_POCKETS_PRICE {  get; set; }
@@ -133,6 +138,14 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<string> MECHANICAL_ARMS_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<float> MECHANICAL_ARMS_INITIAL_RANGE_INCREASE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<float> MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> MECHANICAL_ARMS_OVERRIDE_NAME {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> SCAVENGER_INSTINCTS_OVERRIDE_NAME { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> SCAVENGER_INSTINCTS_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> SCAVENGER_INSTINCTS_INCREMENTAL_AMOUN_SCRAP_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> PEEPER_SCAN_NODE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> MEDKIT_SCAN_NODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> HELMET_SCAN_NODE { get; set; }
@@ -394,6 +407,7 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<string> BARGAIN_CONNECTIONS_PRICES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> FASTER_DROP_POD_TIMER { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> FASTER_DROP_POD_INITIAL_TIMER { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<float> FASTER_DROP_POD_LEAVE_TIMER {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> EXTRACTION_CONTRACT_AMOUNT_MEDKITS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_REWARD_QUOTA_MULTIPLIER { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SHOW_UPGRADES_CHAT { get; set; }
@@ -426,6 +440,8 @@ namespace MoreShipUpgrades.Misc
 
             topSection = LGUConstants.OVERRIDE_NAMES_SECTION;
             OVERRIDE_UPGRADE_NAMES              = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.OVERRIDE_NAMES_ENABLED_KEY, LGUConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LGUConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
+            MECHANICAL_ARMS_OVERRIDE_NAME       = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MECHANICAL_ARMS_OVERRIDE_NAME_KEY, MechanicalArms.UPGRADE_NAME);
+            SCAVENGER_INSTINCTS_OVERRIDE_NAME   = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SCAVENGER_INSTINCTS_OVERRIDE_NAME_KEY, ScavengerInstincts.UPGRADE_NAME);
             LANDING_THRUSTERS_OVERRIDE_NAME     = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.LANDING_THRUSTERS_OVERRIDE_NAME_KEY, LandingThrusters.UPGRADE_NAME);
             REINFORCED_BOOTS_OVERRIDE_NAME      = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.REINFORCED_BOOTS_OVERRIDE_NAME_KEY, ReinforcedBoots.UPGRADE_NAME);
             DEEPER_POCKETS_OVERRIDE_NAME        = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DEEPER_POCKETS_OVERRIDE_NAME_KEY, DeepPockets.UPGRADE_NAME);
@@ -560,6 +576,28 @@ namespace MoreShipUpgrades.Misc
             #endregion
 
             #region Upgrades
+
+            #region Mechanical Arms
+
+            topSection = MechanicalArms.UPGRADE_NAME;
+            MECHANICAL_ARMS_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MECHANICAL_ARMS_ENABLED_KEY, LGUConstants.MECHANICAL_ARMS_ENABLED_DEFAULT, LGUConstants.MECHANICAL_ARMS_ENABLED_DESCRIPTION);
+            MECHANICAL_ARMS_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            MECHANICAL_ARMS_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MECHANICAL_ARMS_PRICE_KEY, LGUConstants.MECHANICAL_ARMS_PRICE_DEFAULT);
+            MECHANICAL_ARMS_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, MechanicalArms.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            MECHANICAL_ARMS_INITIAL_RANGE_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MECHANICAL_ARMS_INITIAL_RANGE_INCREASE_KEY, LGUConstants.MECHANICAL_ARMS_INITIAL_RANGE_INCREASE_DEFAULT, LGUConstants.MECHANICAL_ARMS_INITIAL_RANGE_INCREASE_DESCRIPTION);
+            MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE_KEY, LGUConstants.MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE_DEFAULT, LGUConstants.MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE_DESCRIPTION);
+
+            #endregion
+
+            #region Scavenger Instincts
+            topSection = ScavengerInstincts.UPGRADE_NAME;
+            SCAVENGER_INSTINCTS_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SCAVENGER_INSTINCTS_ENABLED_KEY, LGUConstants.SCAVENGER_INSTINCTS_ENABLED_DEFAULT, LGUConstants.SCAVENGER_INSTINCTS_ENABLED_DESCRIPTION);
+            SCAVENGER_INSTINCTS_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SCAVENGER_INSTINCTS_PRICE_KEY, LGUConstants.SCAVENGER_INSTINCTS_PRICE_DEFAULT);
+            SCAVENGER_INSTINCTS_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, ScavengerInstincts.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
+            SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE_KEY, LGUConstants.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE_DEFAULT, LGUConstants.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE_DESCRIPTION);
+            SCAVENGER_INSTINCTS_INCREMENTAL_AMOUN_SCRAP_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUNT_SCRAP_INCREASE_KEY, LGUConstants.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUNT_SCRAP_INCREASE_DEFAULT, LGUConstants.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUNT_SCRAP_INCREASE_DESCRIPTION);
+
+            #endregion
 
             #region Landing Thrusters
 
@@ -736,6 +774,7 @@ namespace MoreShipUpgrades.Misc
             FASTER_DROP_POD_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DROP_POD_THRUSTERS_PRICE_KEY, LGUConstants.DROP_POD_THRUSTERS_PRICE_DEFAULT, LGUConstants.DROP_POD_THRUSTERS_PRICE_DESCRIPTION);
             FASTER_DROP_POD_TIMER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DROP_POD_THRUSTERS_TIME_DECREASE_KEY, LGUConstants.DROP_POD_THRUSTERS_TIME_DECREASE_DEFAULT);
             FASTER_DROP_POD_INITIAL_TIMER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DROP_POD_THRUSTERS_FIRST_TIME_DECREASE_KEY, LGUConstants.DROP_POD_THRUSTERS_FIRST_TIME_DECREASE_DEFAULT);
+            FASTER_DROP_POD_LEAVE_TIMER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DROP_POD_THRUSTERS_LEAVE_TIMER_KEY, LGUConstants.DROP_POD_THRUSTERS_LEAVE_TIMER_DEFAULT, LGUConstants.DROP_POD_THRUSTERS_LEAVE_TIMER_DESCRIPTION);
 
             #endregion
 
@@ -842,12 +881,12 @@ namespace MoreShipUpgrades.Misc
             QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER_KEY, LGUConstants.QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER_DEFAULT);
             QUANTUM_DISRUPTOR_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, QuantumDisruptor.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
 
-            QUANTUM_DISRUPTOR_RESET_MODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, $"Reset Time of {QuantumDisruptor.UPGRADE_NAME} current usages", QuantumDisruptor.ResetModes.MoonLanding, "Reset mode of when the current counter of usages reset to use the ability. Only applied when RevertTime mode is selected.\nSupported Values: MoonLanding (reset counter per each moon landing), MoonRerouting (reset counter per each moon routing), NewQuota (reset counter per each new quota)");
-            QUANTUM_DISRUPTOR_UPGRADE_MODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, $"Mode of {QuantumDisruptor.UPGRADE_NAME}", QuantumDisruptor.UpgradeModes.SlowdownTime, "Applied mode when purchasing the upgrade.\nSupported modes: SlowdownTime (makes the time go slower in moons), RevertTime (command prompt which reverts hours when executed, maximum usages per moon).");
-            QUANTUM_DISRUPTOR_INITIAL_USES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, $"Initial amount of usages of {QuantumDisruptor.UPGRADE_NAME}", 1, "Amount of times you can execute the quantum command. Only applied when RevertTime mode is selected");
-            QUANTUM_DISRUPTOR_INCREMENTAL_USES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, $"Incremental amount of usages of {QuantumDisruptor.UPGRADE_NAME}", 1, "Amount of times you can execute the quantum command. Only applied when RevertTime mode is selected");
-            QUANTUM_DISRUPTOR_INITIAL_HOURS_REVERT_ON_USE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, $"Initial amount of hours reverted from {QuantumDisruptor.UPGRADE_NAME}", 1, "Amount of hours to revert when executing the quantum command. Only applied when RevertTime mode is selected");
-            QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_REVERT_ON_USE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, $"Incremental amount of hours reverted from {QuantumDisruptor.UPGRADE_NAME}", 1, "Amount of hours to revert when executing the quantum command. Only applied when RevertTime mode is selected");
+            QUANTUM_DISRUPTOR_RESET_MODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.QUANTUM_DISRUPTOR_RESET_MODE_KEY, LGUConstants.QUANTUM_DISRUPTOR_RESET_MODE_DEFAULT, LGUConstants.QUANTUM_DISRUPTOR_RESET_MODE_DESCRIPTION);
+            QUANTUM_DISRUPTOR_UPGRADE_MODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.QUANTUM_DISRUPTOR_UPGRADE_MODE_KEY, LGUConstants.QUANTUM_DISRUPTOR_UPGRADE_MODE_DEFAULT, LGUConstants.QUANTUM_DISRUPTOR_UPGRADE_MODE_DESCRIPTION);
+            QUANTUM_DISRUPTOR_INITIAL_USES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.QUANTUM_DISRUPTOR_INITIAL_USES_KEY, LGUConstants.QUANTUM_DISRUPTOR_INITIAL_USES_DEFAULT, LGUConstants.QUANTUM_DISRUPTOR_INITIAL_USES_DESCRIPTION);
+            QUANTUM_DISRUPTOR_INCREMENTAL_USES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.QUANTUM_DISRUPTOR_INCREMENTAL_USES_KEY, LGUConstants.QUANTUM_DISRUPTOR_INCREMENTAL_USES_DEFAULT, LGUConstants.QUANTUM_DISRUPTOR_INCREMENTAL_USES_DESCRIPTION);
+            QUANTUM_DISRUPTOR_INITIAL_HOURS_REVERT_ON_USE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.QUANTUM_DISRUPTOR_INITIAL_HOURS_ON_REVERT_KEY, LGUConstants.QUANTUM_DISRUPTOR_INITIAL_HOURS_ON_REVERT_DEFAULT, LGUConstants.QUANTUM_DISRUPTOR_INITIAL_HOURS_ON_REVERT_DESCRIPTION);
+            QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_REVERT_ON_USE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_ON_REVERT_KEY, LGUConstants.QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_ON_REVERT_DEFAULT, LGUConstants.QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_ON_REVERT_DESCRIPTION);
 
             #endregion
 

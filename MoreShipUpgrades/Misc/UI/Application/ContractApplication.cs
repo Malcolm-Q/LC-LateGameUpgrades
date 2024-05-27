@@ -241,6 +241,9 @@ namespace MoreShipUpgrades.Misc.UI.Application
             }
             ContractManager.Instance.contractType = CommandParser.contracts[i];
             ContractManager.Instance.contractLevel = level.PlanetName;
+
+            if (terminal.IsHost || terminal.IsServer) ContractManager.Instance.SyncContractDetailsClientRpc(ContractManager.Instance.contractLevel, i);
+            else ContractManager.Instance.ReqSyncContractDetailsServerRpc(ContractManager.Instance.contractLevel, i);
             ErrorMessage(MAIN_MENU_TITLE, backAction, $"A {ContractManager.Instance.contractType} contract has been accepted on the moon {ContractManager.Instance.contractLevel}! {CommandParser.contractInfos[i]}");
         }
 
@@ -269,6 +272,8 @@ namespace MoreShipUpgrades.Misc.UI.Application
             }
             ContractManager.Instance.contractType = CommandParser.contracts[i];
             ContractManager.RandomLevel();
+            if (terminal.IsHost || terminal.IsServer) ContractManager.Instance.SyncContractDetailsClientRpc(ContractManager.Instance.contractLevel, i);
+            else ContractManager.Instance.ReqSyncContractDetailsServerRpc(ContractManager.Instance.contractLevel, i);
             ErrorMessage(MAIN_MENU_TITLE, backAction, $"A {ContractManager.Instance.contractType} contract has been accepted on the moon {ContractManager.Instance.contractLevel}! {CommandParser.contractInfos[i]}");
         }
 

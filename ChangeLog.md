@@ -1,5 +1,24 @@
 <details>
-<summary> <h2> 3.7.0 - 2024-05-??</h2> </summary>
+<summary> <h2> 3.7.2 - 2024-05-27</h2> </summary>
+
+- Added tier upgrade 'Scavenger Instincts' which increase the average amount of scrap it can spawn in a given level.
+- Added tier upgrade 'Mechanical Arms' which increase the interaction range of the players (both grabbing items and opening/closing doors as example).
+- Added configuration for item dropship leaving x seconds (default being zero) after being opened for their items when "Drop Pod Thrusters" upgrade is active.
+- Fixed contract purchase not being synced to all clients present in the session when it's made.
+- Possibly fixed the contract saving not being executed properly.
+- Fixed upgrade name overrides being misplaced.
+
+</details>
+
+<details>
+<summary> <h2> 3.7.1 - 2024-05-20</h2> </summary>
+
+- Fixed issue with upgrades being disabled leading to crashes/unpredictable behaviour.
+
+</details>
+
+<details>
+<summary> <h2> 3.7.0 - 2024-05-20</h2> </summary>
 
 <details>
 <summary> <h3> Additions </h3> </summary>

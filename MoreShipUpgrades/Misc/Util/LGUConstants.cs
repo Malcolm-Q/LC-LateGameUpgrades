@@ -98,6 +98,8 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string MECHANICAL_ARMS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, MechanicalArms.UPGRADE_NAME);
+        internal static readonly string SCAVENGER_INSTINCTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ScavengerInstincts.UPGRADE_NAME);
         internal static readonly string LANDING_THRUSTERS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, LandingThrusters.UPGRADE_NAME);
         internal static readonly string REINFORCED_BOOTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ReinforcedBoots.UPGRADE_NAME);
         internal static readonly string DEEPER_POCKETS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, DeepPockets.UPGRADE_NAME);
@@ -409,6 +411,44 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Mechanical Arms
+
+        internal const string MECHANICAL_ARMS_ENABLED_KEY = $"Enable {MechanicalArms.UPGRADE_NAME} Upgrade";
+        internal const bool MECHANICAL_ARMS_ENABLED_DEFAULT = true;
+        internal const string MECHANICAL_ARMS_ENABLED_DESCRIPTION = "Tier upgrade which increases the range of interacting with objects (both grabbing and interacting such as open or close a door)";
+
+        internal const string MECHANICAL_ARMS_PRICE_KEY = $"Price of {MechanicalArms.UPGRADE_NAME} Upgrade";
+        internal const int MECHANICAL_ARMS_PRICE_DEFAULT = 300;
+
+        internal const string MECHANICAL_ARMS_INITIAL_RANGE_INCREASE_KEY = "Initial range increase";
+        internal const float MECHANICAL_ARMS_INITIAL_RANGE_INCREASE_DEFAULT = 1f;
+        internal const string MECHANICAL_ARMS_INITIAL_RANGE_INCREASE_DESCRIPTION = "Amount of interaction range increased (in Unity units) when first purchasing the upgrade";
+
+        internal const string MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE_KEY = "Incremental range increase";
+        internal const float MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE_DEFAULT = 1f;
+        internal const string MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE_DESCRIPTION = "Amount of interaction range increased (in Unity units) on further purchases of the upgrade";
+
+        #endregion
+
+        #region Scavenger Instincts
+
+        internal const string SCAVENGER_INSTINCTS_ENABLED_KEY = $"Enable {ScavengerInstincts.UPGRADE_NAME} Upgrade";
+        internal const bool SCAVENGER_INSTINCTS_ENABLED_DEFAULT = true;
+        internal const string SCAVENGER_INSTINCTS_ENABLED_DESCRIPTION = "Tier upgrade which increases the amount of scrap that can spawn on a given level.";
+
+        internal const string SCAVENGER_INSTINCTS_PRICE_KEY = $"Price of {ScavengerInstincts.UPGRADE_NAME} Upgrade";
+        internal const int SCAVENGER_INSTINCTS_PRICE_DEFAULT = 800;
+
+        internal const string SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE_KEY = "Initial amount of scrap spawn increase";
+        internal const int SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE_DEFAULT = 4;
+        internal const string SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE_DESCRIPTION = "The amount of additional scrap that can spawn in a given level when first purchased";
+
+        internal const string SCAVENGER_INSTINCTS_INCREMENTAL_AMOUNT_SCRAP_INCREASE_KEY = "Incremental amount of scrap spawn increase";
+        internal const int SCAVENGER_INSTINCTS_INCREMENTAL_AMOUNT_SCRAP_INCREASE_DEFAULT = 2;
+        internal const string SCAVENGER_INSTINCTS_INCREMENTAL_AMOUNT_SCRAP_INCREASE_DESCRIPTION = "The amount of additional scrap that can spawn in a given level on further purchases";
+
+        #endregion
 
         #region Landing Thrusters
 
@@ -750,6 +790,10 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string DROP_POD_THRUSTERS_FIRST_TIME_DECREASE_KEY = "Time decrement on the timer used for the first ever item delivery";
         internal const float DROP_POD_THRUSTERS_FIRST_TIME_DECREASE_DEFAULT = 10f;
 
+        internal const string DROP_POD_THRUSTERS_LEAVE_TIMER_KEY = "Time for item dropship to exit";
+        internal const float DROP_POD_THRUSTERS_LEAVE_TIMER_DEFAULT = 0f;
+        internal const string DROP_POD_THRUSTERS_LEAVE_TIMER_DESCRIPTION = "How long (in seconds) the item drop ship stays after being opened";
+
         #endregion
 
         #region Efficient Engines
@@ -898,6 +942,36 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER_KEY = $"How slower time will go by when incrementing the {QuantumDisruptor.UPGRADE_NAME} level";
         internal const float QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER_DEFAULT = 0.1f;
+
+        internal const string QUANTUM_DISRUPTOR_UPGRADE_MODE_KEY = $"Mode of {QuantumDisruptor.UPGRADE_NAME}";
+        internal const QuantumDisruptor.UpgradeModes QUANTUM_DISRUPTOR_UPGRADE_MODE_DEFAULT = QuantumDisruptor.UpgradeModes.SlowdownTime;
+        internal const string QUANTUM_DISRUPTOR_UPGRADE_MODE_DESCRIPTION = "Applied mode when purchasing the upgrade.\n" +
+            "Supported modes: SlowdownTime (makes the time go slower in moons), RevertTime (command prompt which reverts hours when executed, maximum usages per moon).";
+
+        internal const string QUANTUM_DISRUPTOR_RESET_MODE_KEY = $"Reset Time of {QuantumDisruptor.UPGRADE_NAME} current usages";
+        internal const QuantumDisruptor.ResetModes QUANTUM_DISRUPTOR_RESET_MODE_DEFAULT = QuantumDisruptor.ResetModes.MoonLanding;
+        internal const string QUANTUM_DISRUPTOR_RESET_MODE_DESCRIPTION = "Reset mode of when the current counter of usages reset to use the ability. Only applied when RevertTime mode is selected.\n" +
+            "Supported Values: MoonLanding (reset counter per each moon landing), MoonRerouting (reset counter per each moon routing), NewQuota (reset counter per each new quota)";
+
+        internal const string QUANTUM_DISRUPTOR_USES_DESCRIPTION = "Amount of times you can execute the quantum command. Only applied when RevertTime mode is selected";
+
+        internal const string QUANTUM_DISRUPTOR_INITIAL_USES_KEY = $"Initial amount of usages of {QuantumDisruptor.UPGRADE_NAME}";
+        internal const int QUANTUM_DISRUPTOR_INITIAL_USES_DEFAULT = 1;
+        internal const string QUANTUM_DISRUPTOR_INITIAL_USES_DESCRIPTION = QUANTUM_DISRUPTOR_USES_DESCRIPTION;
+
+        internal const string QUANTUM_DISRUPTOR_INCREMENTAL_USES_KEY = $"Incremental amount of usages of {QuantumDisruptor.UPGRADE_NAME}";
+        internal const int QUANTUM_DISRUPTOR_INCREMENTAL_USES_DEFAULT = 1;
+        internal const string QUANTUM_DISRUPTOR_INCREMENTAL_USES_DESCRIPTION = QUANTUM_DISRUPTOR_USES_DESCRIPTION;
+
+        internal const string QUANTUM_DISRUPTOR_HOURS_REVERT_DESCRIPTION = "Amount of hours to revert when executing the quantum command. Only applied when RevertTime mode is selected";
+
+        internal const string QUANTUM_DISRUPTOR_INITIAL_HOURS_ON_REVERT_KEY = $"Initial amount of hours reverted from {QuantumDisruptor.UPGRADE_NAME}";
+        internal const int QUANTUM_DISRUPTOR_INITIAL_HOURS_ON_REVERT_DEFAULT = 1;
+        internal const string QUANTUM_DISRUPTOR_INITIAL_HOURS_ON_REVERT_DESCRIPTION = QUANTUM_DISRUPTOR_HOURS_REVERT_DESCRIPTION;
+
+        internal const string QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_ON_REVERT_KEY = $"Incremental amount of hours reverted from {QuantumDisruptor.UPGRADE_NAME}";
+        internal const int QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_ON_REVERT_DEFAULT = 1;
+        internal const string QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_ON_REVERT_DESCRIPTION = QUANTUM_DISRUPTOR_HOURS_REVERT_DESCRIPTION;
 
         #endregion
 

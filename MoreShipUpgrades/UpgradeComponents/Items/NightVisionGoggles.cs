@@ -4,10 +4,11 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using System.Linq;
+using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items
 {
-    internal class NightVisionGoggles : GrabbableObject, IItemWorldBuilding, IDisplayInfo
+    internal class NightVisionGoggles : LategameItem, IItemWorldBuilding, IDisplayInfo
     {
         internal const string WORLD_BUILDING_TEXT = "Very old military surplus phosphor lens modules, retrofitted for compatibility with modern Company-issued helmets" +
             " and offered to employees of The Company on a subscription plan. The base package comes with cheap batteries, but premium subscriptions offer regular issuances" +
@@ -43,6 +44,26 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
                 UpgradeBus.Instance.UpgradeObjects[NightVision.UPGRADE_NAME].GetComponent<NightVision>().EnableOnClient();
             }
             playerHeldBy.DespawnHeldObject();
+        }
+
+        public static new void LoadItem()
+        {
+            Item nightVisionItem = AssetBundleHandler.GetItemObject("Night Vision");
+            if (nightVisionItem == null) return;
+
+            nightVisionItem.creditsWorth = UpgradeBus.Instance.PluginConfiguration.NIGHT_VISION_PRICE.Value;
+            nightVisionItem.spawnPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+            nightVisionItem.itemId = 492014;
+            NightVisionGoggles visScript = nightVisionItem.spawnPrefab.AddComponent<NightVisionGoggles>();
+            visScript.itemProperties = nightVisionItem;
+            visScript.grabbable = true;
+            visScript.useCooldown = 2f;
+            visScript.grabbableToEnemies = true;
+            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(nightVisionItem.spawnPrefab);
+
+            UpgradeBus.Instance.ItemsToSync.Add("Night", nightVisionItem);
+
+            ItemManager.SetupStoreItem(nightVisionItem);
         }
     }
 }

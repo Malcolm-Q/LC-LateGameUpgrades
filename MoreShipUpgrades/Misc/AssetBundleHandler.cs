@@ -123,6 +123,8 @@ namespace MoreShipUpgrades.Misc
             { DeepPockets.UPGRADE_NAME, upgrades+"DeeperPockets.prefab" },
             { ReinforcedBoots.UPGRADE_NAME, upgrades+"ReinforcedBoots.prefab" },
             { LandingThrusters.UPGRADE_NAME, upgrades+"LandingThrusters.prefab" },
+            { ScavengerInstincts.UPGRADE_NAME, upgrades+"ScavengerInstincts.prefab" },
+            { MechanicalArms.UPGRADE_NAME, upgrades+"MechanicalArms.prefab" },
 
             { "Advanced Portable Tele", storeItems+"TpButtonAdv.asset" },
             { "Portable Tele", storeItems+"TpButton.asset" },
@@ -195,6 +197,15 @@ namespace MoreShipUpgrades.Misc
                 logger.LogError($"An error has occurred trying to load asset from {path}");
             }
             return result;
+        }
+        internal static AudioClip[] GetAudioClipList(string name, int length)
+        {
+            AudioClip[] array = new AudioClip[length];
+            for (int i = 0; i < length; i++)
+            {
+                array[i] = GetAudioClip($"{name} {i}");
+            }
+            return array;
         }
 
         /// <summary>

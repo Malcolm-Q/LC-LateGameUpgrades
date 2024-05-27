@@ -26,7 +26,7 @@ namespace MoreShipUpgrades.Patches.Enemies
             if (BaseUpgrade.GetActiveUpgrade(Hunter.UPGRADE_NAME) && Hunter.CanHarvest(name))
             {
                 logger.LogDebug($"Spawning sample for {name}");
-                SpawnItemManager.Instance.SpawnSample(name.ToLower(), __instance.transform.position);
+                ItemManager.Instance.SpawnSample(name.ToLower(), __instance.transform.position);
             }
         }
     }
