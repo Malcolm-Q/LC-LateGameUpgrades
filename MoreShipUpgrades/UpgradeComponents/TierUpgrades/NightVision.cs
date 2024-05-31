@@ -10,14 +10,14 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using MoreShipUpgrades.Input;
 using UnityEngine.UI;
-using CSync.Lib;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.Misc.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class NightVision : TierUpgrade
+    internal class NightVision : TierUpgrade, IPlayerSync
     {
         float nightBattery;
         PlayerControllerB client;
@@ -119,7 +119,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         }
 
         private void TurnOn()
-        {
+    {
             nightVisColor = client.nightVision.color;
             nightVisRange = client.nightVision.range;
             nightVisIntensity = client.nightVision.intensity;
@@ -145,7 +145,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public override void Load()
         {
             base.Load();
-            EnableOnClient(false);
+            EnableOnClient();
         }
         public override void Unwind()
         {
@@ -174,12 +174,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             go.GetComponent<NetworkObject>().Spawn();
             logger.LogInfo("Request to spawn night vision goggles received.");
         }
-        public void EnableOnClient(bool save = true)
+        public void EnableOnClient()
         {
             if (client == null) { client = GameNetworkManager.Instance.localPlayerController; }
             transform.GetChild(0).gameObject.SetActive(true);
             UpgradeBus.Instance.activeUpgrades[UPGRADE_NAME] = true;
-            if (save) { LguStore.Instance.UpdateLGUSaveServerRpc(client.playerSteamId, JsonConvert.SerializeObject(new SaveInfo())); }
             HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Press {Keybinds.NvgAction.GetBindingDisplayString()} to toggle Night Vision!!!</color>";
         }
 
@@ -192,7 +191,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
             transform.GetChild(0).gameObject.SetActive(false);
             UpgradeBus.Instance.activeUpgrades[UPGRADE_NAME] = false;
-            LguStore.Instance.UpdateLGUSaveServerRpc(client.playerSteamId, JsonConvert.SerializeObject(new SaveInfo()));
             client = null;
         }
 
@@ -257,6 +255,12 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                                                 configuration.OVERRIDE_UPGRADE_NAMES ? configuration.NIGHT_VISION_OVERRIDE_NAME : "");
             if (node != null) node.Unlocked = true;
             return node;
+        }
+
+        public void ResetPlayerAttribute()
+        {
+            if (client == null) return;
+            DisableOnClient();
         }
     }
 }

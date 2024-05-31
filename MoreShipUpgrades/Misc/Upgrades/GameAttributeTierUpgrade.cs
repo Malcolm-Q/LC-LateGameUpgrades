@@ -1,12 +1,13 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.Misc.Upgrades
 {
     /// <summary>
     /// Class responsible to handle game attributes such as health, jump force, movement speed, sprint time for the player and ship's battery for keeping the doors closed, along many others
     /// </summary>
-    public abstract class GameAttributeTierUpgrade : TierUpgrade
+    public abstract class GameAttributeTierUpgrade : TierUpgrade, IPlayerSync
     {
         #region Variables
         /// <summary>
@@ -248,6 +249,11 @@ namespace MoreShipUpgrades.Misc.Upgrades
         {
             UnloadUpgradeAttribute();
             base.Unwind();
+        }
+
+        public void ResetPlayerAttribute()
+        {
+            UnloadUpgradeAttribute();
         }
         #endregion
     }

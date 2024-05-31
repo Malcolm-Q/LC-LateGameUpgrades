@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 {
-    internal class RunningShoes : GameAttributeTierUpgrade, IUpgradeWorldBuilding, IPlayerSync
+    internal class RunningShoes : GameAttributeTierUpgrade, IUpgradeWorldBuilding
     {
         public const string UPGRADE_NAME = "Running Shoes";
         public static string PRICES_DEFAULT = "500,750,1000";

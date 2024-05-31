@@ -11,7 +11,7 @@ using Unity.Netcode;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 {
-    internal class Stimpack : GameAttributeTierUpgrade, IUpgradeWorldBuilding, IPlayerSync
+    internal class Stimpack : GameAttributeTierUpgrade, IUpgradeWorldBuilding
     {
 
         internal Dictionary<ulong, int> playerHealthLevels = new Dictionary<ulong, int>();

@@ -7,7 +7,7 @@ using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 {
-    internal class StrongLegs : GameAttributeTierUpgrade, IUpgradeWorldBuilding, IPlayerSync
+    internal class StrongLegs : GameAttributeTierUpgrade, IUpgradeWorldBuilding
     {
         public const string UPGRADE_NAME = "Strong Legs";
         public static string PRICES_DEFAULT = "150,190,250";

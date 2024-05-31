@@ -110,7 +110,11 @@ namespace MoreShipUpgrades.Managers
             if (player == null) return; // Disconnecting the game
 
             logger.LogDebug($"Resetting {player.playerUsername}'s attributes");
-            UpgradeObjects.Values.Where(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>() is IPlayerSync).Do(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute());
+            IPlayerSync[] upgrades = UpgradeObjects.Values.Select(upgrade => upgrade.GetComponent<BaseUpgrade>()).Where(upgrade => upgrade is IPlayerSync).Cast<IPlayerSync>().ToArray();
+            foreach (IPlayerSync upgrade in upgrades)
+            {
+                upgrade.ResetPlayerAttribute();
+            }
         }
 
         internal void LoadSales()

@@ -7,7 +7,7 @@ using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 {
-    internal class ClimbingGloves : GameAttributeTierUpgrade, IPlayerSync
+    internal class ClimbingGloves : GameAttributeTierUpgrade
     {
         internal const string UPGRADE_NAME = "Climbing Gloves";
         internal const string DEFAULT_PRICES = "200,250,300";
