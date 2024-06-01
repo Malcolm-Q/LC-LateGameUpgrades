@@ -483,7 +483,7 @@ namespace MoreShipUpgrades.Managers
         }
 
         [ClientRpc]
-        private void HandleUpgradeClientRpc(string name, bool increment)
+        public void HandleUpgradeClientRpc(string name, bool increment)
         {
             logger.LogInfo($"Received client request to handle shared upgrade for: {name} increment: {increment}");
             foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)

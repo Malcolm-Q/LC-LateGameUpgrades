@@ -89,12 +89,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
 
-            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+            CustomTerminalNode node = UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
                                                 configuration.SHARED_UPGRADES.Value || !configuration.ALUMINIUM_COILS_INDIVIDUAL.Value,
                                                 configuration.ALUMINIUM_COILS_ENABLED.Value,
                                                 configuration.ALUMINIUM_COILS_PRICE.Value,
                                                 UpgradeBus.ParseUpgradePrices(configuration.ALUMINIUM_COILS_PRICES.Value),
                                                 configuration.OVERRIDE_UPGRADE_NAMES ? configuration.ALUMINIUM_COILS_OVERRIDE_NAME : "");
+            CollectionUpgradeManager.AddCollectionUpgrade(node, ["apparatus"]);
+            return node;
         }
     }
 }
