@@ -19,7 +19,7 @@ namespace MoreShipUpgrades.Patches.Interactables
             FieldInfo scrapValue = typeof(GrabbableObject).GetField(nameof(GrabbableObject.scrapValue));
             FieldInfo itemsOnCounter = typeof(DepositItemsDesk).GetField(nameof(DepositItemsDesk.itemsOnCounter));
 
-            MethodInfo checkCollectionScrap = typeof(CollectionUpgradeManager).GetMethod(nameof(CollectionUpgradeManager.CheckCollectionScrap));
+            MethodInfo checkCollectionScrap = typeof(ItemProgressionManager).GetMethod(nameof(ItemProgressionManager.CheckCollectionScrap));
 
             int index = 0;
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);

@@ -419,11 +419,34 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<bool> WEATHER_PROBE_ALWAYS_CLEAR {  get; set; }
 
         #endregion
+        [field: SyncedEntryField] public SyncedEntry<bool> ALTERNATIVE_ITEM_PROGRESSION { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<ItemProgressionManager.CollectionModes> ITEM_PROGRESSION_MODE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<float> ITEM_PROGRESSION_CONTRIBUTION_MULTIPLIER { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<float> SCRAP_UPGRADE_CHANCE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<ItemProgressionManager.ChancePerScrapModes> SCRAP_UPGRADE_CHANCE_MODE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_BLACKLISTED_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_COLLECTION_UPGRADES { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> COLLECTION_UPGRADES_SHOP_VISIBLE { get; set; }
 
         #region Configuration Bindings
         public LategameConfiguration(ConfigFile cfg) : base(Metadata.GUID)
         {
             string topSection;
+
+            topSection = "_Item Progression Route_";
+            ALTERNATIVE_ITEM_PROGRESSION = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Enable Item Progression", false, "Alternative Item Progression\nIf true, items retrieved can be used for ship upgrades.");
+            ITEM_PROGRESSION_MODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Item Progression Mode", ItemProgressionManager.CollectionModes.CustomScrap, "Item Progression Mode\nSupported Modes: \n" +
+                                                                                                                                                                            "CustomScrap: Specified scrap will contribute towards the level of the associated upgrade.\n" +
+                                                                                                                                                                            "UniqueScrap: All scrap  will contribute towards the level of a random assigned upgrade\n" +
+                                                                                                                                                                            "NearestValue: At the end of each Quota, grant a random upgrade worth the nearest total scrap collected, rounded down.\n" +
+                                                                                                                                                                            "ChancePerScrap: For each scrap sold, run a configured chance to receive a random/cheap/lowest tier upgrade.\n" +
+                                                                                                                                                                            "Apparatice: Always receive an upgrade when an apparatus has been successfully sold.");
+            ITEM_PROGRESSION_CONTRIBUTION_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Item Progression Multiplier", 0.85f, "Item Progression Contribution Multiplier\nThe multiplier for scrap's value contribution towards an upgrade.");
+            SCRAP_UPGRADE_CHANCE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Scrap Upgrade Chance", 0.05f, "Upgrade Chance Calculation\nOnly used if Item Progression Mode is set to ChancePerScrap.\nX -> (X * 100) %");
+            SCRAP_UPGRADE_CHANCE_MODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Upgrade Chance Priority", ItemProgressionManager.ChancePerScrapModes.LowestLevel, "Upgrade Chance Priority\nOnly used if Item Progression Mode is set to ChancePerScrap.\nAcceptable Values:\nRandom: Pick a random upgrade to apply.\nCheapest: Pick the cheapest upgrade to apply.\nLowest Tier: Pick the upgrade with the lowest level to apply.");
+            ITEM_PROGRESSION_BLACKLISTED_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Blacklisted Items", "Clipboard", "Blacklisted items for Item Progression.\nThese items will NOT contribute towards ANY upgrade");
+            ITEM_PROGRESSION_COLLECTION_UPGRADES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Collection Items", "Chemical Jug:Efficient Engines, Hive:Beekeeper", "Items that can be set to confer a TEMPORARY upgrade as long as the specified item remains on the ship.");
+            COLLECTION_UPGRADES_SHOP_VISIBLE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Collection Upgrades Disabled in Shop", true, "Collection Upgrades disabled in Lategame Upgrades store.\nYou cannot buy upgrades marked as Collection Upgrades from the store.");
 
             #region Miscellaneous
 
@@ -1107,6 +1130,8 @@ namespace MoreShipUpgrades.Misc
         }
 
         #endregion
+
+
 
         private void PluginConfig_InitialSyncCompleted(object sender, EventArgs e)
         {

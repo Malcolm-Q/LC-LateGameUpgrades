@@ -43,5 +43,12 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
             CustomTerminalNode other = obj as CustomTerminalNode;
             return Name.CompareTo(other.Name);
         }
+
+        public int GetCurrentPrice()
+        {
+            if (!Unlocked) return UnlockPrice;
+            if (CurrentUpgrade >= MaxUpgrade) return int.MaxValue;
+            return Prices[CurrentUpgrade];
+        }
     }
 }
