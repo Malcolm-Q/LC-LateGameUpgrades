@@ -298,8 +298,8 @@ namespace MoreShipUpgrades.Managers
             }
             if (saveInfo.doorsHydraulicsBattery)
             {
-                UpgradeBus.Instance.activeUpgrades[DoorsHydraulicsBattery.UPGRADE_NAME] = saveInfo.doorsHydraulicsBattery;
-                UpgradeBus.Instance.upgradeLevels[DoorsHydraulicsBattery.UPGRADE_NAME] = saveInfo.doorsHydraulicsBatteryLevel;
+                UpgradeBus.Instance.activeUpgrades[ShutterBatteries.UPGRADE_NAME] = saveInfo.doorsHydraulicsBattery;
+                UpgradeBus.Instance.upgradeLevels[ShutterBatteries.UPGRADE_NAME] = saveInfo.doorsHydraulicsBatteryLevel;
             }
             if (saveInfo.hunter)
             {

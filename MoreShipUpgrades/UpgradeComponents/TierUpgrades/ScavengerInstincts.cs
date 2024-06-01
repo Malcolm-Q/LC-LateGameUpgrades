@@ -2,16 +2,12 @@
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
-using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class ScavengerInstincts : TierUpgrade, IServerSync
+    internal class ScavengerInstincts : TierUpgrade
     {
         internal const string UPGRADE_NAME = "Scavenger Instincts";
         internal const string DEFAULT_PRICES = "800,1000,1200,1400";

@@ -4,10 +4,11 @@ using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
+using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 {
-    internal class StrongLegs : GameAttributeTierUpgrade, IUpgradeWorldBuilding
+    internal class StrongLegs : TierUpgrade, IUpgradeWorldBuilding
     {
         public const string UPGRADE_NAME = "Strong Legs";
         public static string PRICES_DEFAULT = "150,190,250";
@@ -18,10 +19,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         {
             upgradeName = UPGRADE_NAME;
             overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.STRONG_LEGS_OVERRIDE_NAME;
-            logger = new LguLogger(UPGRADE_NAME);
-            changingAttribute = GameAttribute.PLAYER_JUMP_FORCE;
-            initialValue = UpgradeBus.Instance.PluginConfiguration.JUMP_FORCE_UNLOCK.Value;
-            incrementalValue = UpgradeBus.Instance.PluginConfiguration.JUMP_FORCE_INCREMENT.Value;
         }
         public string GetWorldBuildingText(bool shareStatus = false)
         {
@@ -42,6 +39,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
                 bool free = UpgradeBus.Instance.PluginConfiguration.STRONG_LEGS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
                 return free;
             }
+        }
+        public static float GetAdditionalJumpForce(float defaultValue)
+        {
+            if (!UpgradeBus.Instance.PluginConfiguration.STRONG_LEGS_ENABLED) return defaultValue;
+            if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
+            float additionalValue = UpgradeBus.Instance.PluginConfiguration.JUMP_FORCE_UNLOCK + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.JUMP_FORCE_INCREMENT;
+            return Mathf.Clamp(defaultValue + additionalValue, defaultValue, float.MaxValue);
         }
 
         public new static void RegisterUpgrade()

@@ -4,10 +4,11 @@ using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
+using UnityEngine;
 
-namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
+namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class ClimbingGloves : GameAttributeTierUpgrade
+    internal class ClimbingGloves : TierUpgrade
     {
         internal const string UPGRADE_NAME = "Climbing Gloves";
         internal const string DEFAULT_PRICES = "200,250,300";
@@ -15,10 +16,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         {
             upgradeName = UPGRADE_NAME;
             overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.CLIMBING_GLOVES_OVERRIDE_NAME;
-            logger = new LguLogger(UPGRADE_NAME);
-            changingAttribute = GameAttribute.PLAYER_CLIMB_SPEED;
-            initialValue = UpgradeBus.Instance.PluginConfiguration.INITIAL_CLIMBING_SPEED_BOOST.Value;
-            incrementalValue = UpgradeBus.Instance.PluginConfiguration.INCREMENTAL_CLIMBING_SPEED_BOOST.Value;
         }
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
@@ -35,6 +32,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
                 bool free = UpgradeBus.Instance.PluginConfiguration.CLIMBING_GLOVES_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
                 return free;
             }
+        }
+        public static float GetAdditionalClimbingSpeed(float defaultValue)
+        {
+            if (!UpgradeBus.Instance.PluginConfiguration.CLIMBING_GLOVES_ENABLED) return defaultValue;
+            if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
+            float additionalValue = UpgradeBus.Instance.PluginConfiguration.INITIAL_CLIMBING_SPEED_BOOST + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.INCREMENTAL_CLIMBING_SPEED_BOOST;
+            return Mathf.Clamp(defaultValue + additionalValue, defaultValue, float.MaxValue);
         }
 
         public new static void RegisterUpgrade()

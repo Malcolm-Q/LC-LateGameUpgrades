@@ -460,7 +460,7 @@ namespace MoreShipUpgrades.Misc
             PROTEIN_POWDER_OVERRIDE_NAME        = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.PROTEIN_POWDER_OVERRIDE_NAME_KEY, ProteinPowder.UPGRADE_NAME);
             BIGGER_LUNGS_OVERRIDE_NAME          = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BIGGER_LUNGS_OVERRIDE_NAME_KEY, BiggerLungs.UPGRADE_NAME);
             CLIMBING_GLOVES_OVERRIDE_NAME       = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.CLIMBING_GLOVES_OVERRIDE_NAME_KEY, ClimbingGloves.UPGRADE_NAME);
-            SHUTTER_BATTERIES_OVERRIDE_NAME     = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SHUTTER_BATTERIES_OVERRIDE_NAME_KEY, DoorsHydraulicsBattery.UPGRADE_NAME);
+            SHUTTER_BATTERIES_OVERRIDE_NAME     = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SHUTTER_BATTERIES_OVERRIDE_NAME_KEY, ShutterBatteries.UPGRADE_NAME);
             QUANTUM_DISRUPTOR_OVERRIDE_NAME     = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.QUANTUM_DISRUPTOR_OVERRIDE_NAME_KEY, QuantumDisruptor.UPGRADE_NAME);
             RUNNING_SHOES_OVERRIDE_NAME         = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.RUNNING_SHOES_OVERRIDE_NAME_KEY, RunningShoes.UPGRADE_NAME);
             STIMPACK_OVERRIDE_NAME              = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.STIMPACK_OVERRIDE_NAME_KEY, Stimpack.UPGRADE_NAME);
@@ -905,12 +905,12 @@ namespace MoreShipUpgrades.Misc
 
             #region Shutter Batteries
 
-            topSection = DoorsHydraulicsBattery.UPGRADE_NAME;
-            DOOR_HYDRAULICS_BATTERY_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, DoorsHydraulicsBattery.ENABLED_SECTION, true, DoorsHydraulicsBattery.ENABLED_DESCRIPTION);
-            DOOR_HYDRAULICS_BATTERY_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, DoorsHydraulicsBattery.PRICE_SECTION, DoorsHydraulicsBattery.PRICE_DEFAULT, "");
-            DOOR_HYDRAULICS_BATTERY_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, DoorsHydraulicsBattery.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            DOOR_HYDRAULICS_BATTERY_INITIAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, DoorsHydraulicsBattery.INITIAL_SECTION, DoorsHydraulicsBattery.INITIAL_DEFAULT, DoorsHydraulicsBattery.INITIAL_DESCRIPTION);
-            DOOR_HYDRAULICS_BATTERY_INCREMENTAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, DoorsHydraulicsBattery.INCREMENTAL_SECTION, DoorsHydraulicsBattery.INCREMENTAL_DEFAULT, DoorsHydraulicsBattery.INCREMENTAL_DESCRIPTION);
+            topSection = ShutterBatteries.UPGRADE_NAME;
+            DOOR_HYDRAULICS_BATTERY_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, ShutterBatteries.ENABLED_SECTION, true, ShutterBatteries.ENABLED_DESCRIPTION);
+            DOOR_HYDRAULICS_BATTERY_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, ShutterBatteries.PRICE_SECTION, ShutterBatteries.PRICE_DEFAULT, "");
+            DOOR_HYDRAULICS_BATTERY_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, ShutterBatteries.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            DOOR_HYDRAULICS_BATTERY_INITIAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, ShutterBatteries.INITIAL_SECTION, ShutterBatteries.INITIAL_DEFAULT, ShutterBatteries.INITIAL_DESCRIPTION);
+            DOOR_HYDRAULICS_BATTERY_INCREMENTAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, ShutterBatteries.INCREMENTAL_SECTION, ShutterBatteries.INCREMENTAL_DEFAULT, ShutterBatteries.INCREMENTAL_DESCRIPTION);
 
             #endregion
 

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class LandingThrusters : TierUpgrade, IServerSync
+    internal class LandingThrusters : TierUpgrade
     {
         internal const string UPGRADE_NAME = "Landing Thrusters";
         internal const string DEFAULT_PRICES = "250,450,650";

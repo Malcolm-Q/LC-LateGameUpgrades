@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class EfficientEngines : TierUpgrade, IServerSync
+    internal class EfficientEngines : TierUpgrade
     {
         internal const string UPGRADE_NAME = "Efficient Engines";
         internal const string DEFAULT_PRICES = "600, 750, 900";

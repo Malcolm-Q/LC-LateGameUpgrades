@@ -72,6 +72,7 @@ namespace MoreShipUpgrades.Managers
             try
             {
                 harmony.PatchAll(typeof(DoorLockPatcher));
+                harmony.PatchAll(typeof(HangarShipDoorPatcher));
                 harmony.PatchAll(typeof(InteractTriggerPatcher));
                 harmony.PatchAll(typeof(StartMatchLevelPatcher));
                 harmony.PatchAll(typeof(SteamValveHazardPatch));

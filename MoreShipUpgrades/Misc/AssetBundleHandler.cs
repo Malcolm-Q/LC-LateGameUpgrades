@@ -106,7 +106,7 @@ namespace MoreShipUpgrades.Misc
             { LockSmith.UPGRADE_NAME, upgrades+"LockSmith.prefab" },
             { Stimpack.UPGRADE_NAME, upgrades+"PlayerHealth.prefab" },
             { ExtendDeadlineScript.NAME, commands+"ExtendDeadline.prefab" },
-            { DoorsHydraulicsBattery.UPGRADE_NAME, upgrades+"DoorsHydraulicsBattery.prefab" },
+            { ShutterBatteries.UPGRADE_NAME, upgrades+"DoorsHydraulicsBattery.prefab" },
             { ScrapInsurance.COMMAND_NAME, commands+"ScrapInsurance.prefab" },
             { MarketInfluence.UPGRADE_NAME, upgrades+"MarketInfluence.prefab" },
             { BargainConnections.UPGRADE_NAME, upgrades+"BargainConnections.prefab" },

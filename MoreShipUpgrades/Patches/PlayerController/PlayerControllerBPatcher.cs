@@ -237,16 +237,18 @@ namespace MoreShipUpgrades.Patches.PlayerController
         {
             MethodInfo biggerLungsRegenMethod = typeof(BiggerLungs).GetMethod(nameof(BiggerLungs.ApplyPossibleIncreasedStaminaRegen));
             MethodInfo sickBeatsRegenMethod = typeof(SickBeats).GetMethod(nameof(SickBeats.ApplyPossibleIncreasedStaminaRegen));
+            MethodInfo additionalSprintTime = typeof(BiggerLungs).GetMethod(nameof(BiggerLungs.GetAdditionalStaminaTime));
+
+            FieldInfo sprintTime = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.sprintTime));
+
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
-            Tools.FindMul(ref index, ref codes, skip: true, errorMessage: "Couldn't skip first mul instruction");
-            Tools.FindMul(ref index, ref codes, skip: true, errorMessage: "Couldn't skip second mul instruction");
-            Tools.FindMul(ref index, ref codes, skip: true, errorMessage: "Couldn't skip third mul instruction");
-            Tools.FindMul(ref index, ref codes, skip: true, errorMessage: "Couldn't skip fourth mul instruction");
-            Tools.FindMul(ref index, ref codes, skip: true, errorMessage: "Couldn't skip fifth mul instruction");
-            Tools.FindMul(ref index, ref codes, skip: true, errorMessage: "Couldn't skip sixth mul instruction");
+            Tools.FindField(ref index, ref codes, findField: sprintTime, addCode: additionalSprintTime, errorMessage: "Couldn't find the first occurence of sprintTime field");
+            Tools.FindField(ref index, ref codes, findField: sprintTime, addCode: additionalSprintTime, errorMessage: "Couldn't find the second occurence of sprintTime field");
+            Tools.FindField(ref index, ref codes, findField: sprintTime, addCode: additionalSprintTime, errorMessage: "Couldn't find the third occurence of sprintTime field");
             Tools.FindMul(ref index, ref codes, addCode: biggerLungsRegenMethod, errorMessage: "Couldn't find first mul instruction to include our regen method from Bigger Lungs");
             codes.Insert(index + 1, new CodeInstruction(OpCodes.Call, sickBeatsRegenMethod));
+            Tools.FindField(ref index, ref codes, findField: sprintTime, addCode: additionalSprintTime, errorMessage: "Couldn't find the fourth occurence of sprintTime field");
             Tools.FindMul(ref index, ref codes, addCode: biggerLungsRegenMethod, errorMessage: "Couldn't find second mul instruction to include our regen method from Bigger Lungs");
             codes.Insert(index + 1, new CodeInstruction(OpCodes.Call, sickBeatsRegenMethod));
             return codes;
@@ -298,17 +300,46 @@ namespace MoreShipUpgrades.Patches.PlayerController
             return codes;
         }
 
+        [HarmonyPatch(nameof(PlayerControllerB.PlayerJump), MethodType.Enumerator)]
+        [HarmonyTranspiler]
+        static IEnumerable<CodeInstruction> PlayerJumpTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo additionalJumpForce = typeof(StrongLegs).GetMethod(nameof(StrongLegs.GetAdditionalJumpForce));
+            FieldInfo jumpForce = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.jumpForce));
+
+
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            int index = 0;
+
+            Tools.FindField(ref index, ref codes, findField: jumpForce, addCode: additionalJumpForce, errorMessage: "Couldn't find first occurence of jump force field");
+            Tools.FindField(ref index, ref codes, findField: jumpForce, addCode: additionalJumpForce, errorMessage: "Couldn't find second occurence of jump force field");
+            return codes;
+        }
+
+
         [HarmonyPatch(nameof(PlayerControllerB.Update))] // We're all going to die
         [HarmonyTranspiler] // Just kidding
         static IEnumerable<CodeInstruction> UpdateTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo reduceMovement = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrowMovement));
+            MethodInfo additionalMovement = typeof(RunningShoes).GetMethod(nameof(RunningShoes.GetAdditionalMovementSpeed));
+            MethodInfo additionalClimbSpeed = typeof(ClimbingGloves).GetMethod(nameof(ClimbingGloves.GetAdditionalClimbingSpeed));
+            MethodInfo additionalJumpForce = typeof(StrongLegs).GetMethod(nameof(StrongLegs.GetAdditionalJumpForce));
+
             FieldInfo carryWeight = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.carryWeight));
+            FieldInfo movementSpeed = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.movementSpeed));
+            FieldInfo climbSpeed = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.climbSpeed));
+            FieldInfo jumpForce = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.jumpForce));
+
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
+            Tools.FindField(ref index, ref codes, findField: movementSpeed, addCode: additionalMovement, errorMessage: "Couldn't find first occurence of movement speed field");
+            Tools.FindField(ref index, ref codes, findField: movementSpeed, addCode: additionalMovement, errorMessage: "Couldn't find second occurence of movement speed field");
             Tools.FindField(ref index, ref codes, findField: carryWeight, skip: true, errorMessage: "Couldn't find ignore first occurence");
             Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: reduceMovement, errorMessage: "Couldn't find second occurence");
             Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: reduceMovement, errorMessage: "Couldn't find third occurence");
+            Tools.FindField(ref index, ref codes, findField: jumpForce, addCode: additionalJumpForce, errorMessage: "Couldn't find occurence of jump force field");
+            Tools.FindField(ref index, ref codes, findField: climbSpeed, addCode: additionalClimbSpeed, errorMessage: "Couldn't find occurence of climb speed field");
             return codes;
         }
 
