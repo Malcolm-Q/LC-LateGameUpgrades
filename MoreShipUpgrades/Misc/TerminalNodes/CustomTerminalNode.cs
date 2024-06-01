@@ -1,7 +1,9 @@
-﻿using System;
+﻿using MoreShipUpgrades.Managers;
+using System;
 using System.Security.Policy;
 using Unity.Netcode;
 using UnityEngine;
+using static Unity.Audio.Handle;
 
 namespace MoreShipUpgrades.Misc.TerminalNodes
 {
@@ -46,9 +48,9 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
 
         public int GetCurrentPrice()
         {
-            if (!Unlocked) return UnlockPrice;
+            if (!Unlocked) return (int)((UnlockPrice - ItemProgressionManager.GetCurrentContribution(this)) * salePerc);
             if (CurrentUpgrade >= MaxUpgrade) return int.MaxValue;
-            return Prices[CurrentUpgrade];
+            return (int)((Prices[CurrentUpgrade] - ItemProgressionManager.GetCurrentContribution(this)) * salePerc);
         }
     }
 }

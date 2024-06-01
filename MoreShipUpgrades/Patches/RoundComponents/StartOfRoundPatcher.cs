@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using Unity.Netcode;
 using UnityEngine;
+using static MoreShipUpgrades.Managers.ItemProgressionManager;
 
 namespace MoreShipUpgrades.Patches.RoundComponents
 {
@@ -30,6 +31,19 @@ namespace MoreShipUpgrades.Patches.RoundComponents
                 GameObject refStore = Object.Instantiate(UpgradeBus.Instance.modStorePrefab);
                 refStore.GetComponent<NetworkObject>().Spawn();
                 logger.LogDebug("LguStore component initiated...");
+            }
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(nameof(StartOfRound.LoadShipGrabbableItems))]
+        static void LoadShipGrabbableItemsPrefix(StartOfRound __instance)
+        {
+            if (!__instance.IsServer) return;
+
+            if (CurrentCollectionMode == CollectionModes.UniqueScrap && UpgradeBus.Instance.scrapToCollectionUpgrade.Count != __instance.allItemsList.itemsList.Count)
+            {
+                AssignRandomScrapToUpgrades();
+                LguStore.Instance.ServerSaveFile();
             }
         }
         [HarmonyPrefix]

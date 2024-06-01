@@ -17,6 +17,8 @@ using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using HarmonyLib;
+using static MoreShipUpgrades.Managers.ItemProgressionManager;
+using MoreShipUpgrades.Misc.Util;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -51,6 +53,7 @@ namespace MoreShipUpgrades.Managers
         /// Wether this client already received the save from host client or not
         /// </summary>
         private bool receivedSave;
+        internal bool alreadyReceivedScrapToUpgrade = false;
 
         private void Awake()
         {
@@ -200,6 +203,23 @@ namespace MoreShipUpgrades.Managers
         {
             string json = JsonConvert.SerializeObject(LguSave);
             ShareSaveClientRpc(json);
+            List<StringContainer> scraps = new();
+            List<StringContainer> upgrades = new();
+            foreach (KeyValuePair<string, string> pair in UpgradeBus.Instance.scrapToCollectionUpgrade)
+            {
+                scraps.Add(new StringContainer() { SomeText = pair.Key});
+                upgrades.Add(new StringContainer() { SomeText = pair.Value });
+            }
+            SetScrapToUpgradeDictionaryClientRpc(scraps.ToArray(), upgrades.ToArray());
+        }
+
+        [ClientRpc]
+        internal void SetScrapToUpgradeDictionaryClientRpc(StringContainer[] scraps, StringContainer[] upgrades)
+        {
+            if (alreadyReceivedScrapToUpgrade) return;
+            for(int i = 0; i < scraps.Length; i++)
+                AddScrapToUpgrade(upgrades[i].SomeText, scraps[i].SomeText);
+            alreadyReceivedScrapToUpgrade = true;
         }
 
         /// <summary>
@@ -372,6 +392,9 @@ namespace MoreShipUpgrades.Managers
             bool oldHelmet = UpgradeBus.Instance.wearingHelmet;
             UpgradeBus.Instance.activeUpgrades = SaveInfo.activeUpgrades;
             UpgradeBus.Instance.upgradeLevels = SaveInfo.upgradeLevels;
+            UpgradeBus.Instance.discoveredItems = SaveInfo.discoveredItems;
+            UpgradeBus.Instance.contributionValues = SaveInfo.contributedValues;
+            UpgradeBus.Instance.scrapToCollectionUpgrade = SaveInfo.scrapToUpgrade;
 
             if (oldSave != null && oldSave.playerSaves.ContainsKey(playerID))
             {
@@ -444,7 +467,7 @@ namespace MoreShipUpgrades.Managers
             }
         }
 
-        void UpdateUpgrades(CustomTerminalNode node, bool increment = false)
+        internal void UpdateUpgrades(CustomTerminalNode node, bool increment = false)
         {
             node.Unlocked = true;
             if (increment) { node.CurrentUpgrade++; }
@@ -460,6 +483,7 @@ namespace MoreShipUpgrades.Managers
                 UpgradeBus.Instance.UpgradeObjects[node.OriginalName].GetComponent<TierUpgrade>().Increment();
                 logger.LogInfo($"upgrade already unlocked, executing TierUpgrade.Increment()");
             }
+            SetContributionValue(node.OriginalName, 0);
             SaveInfo = new SaveInfo();
             UpdateLGUSaveServerRpc(playerID, JsonConvert.SerializeObject(SaveInfo));
         }
@@ -485,6 +509,14 @@ namespace MoreShipUpgrades.Managers
         [ClientRpc]
         public void HandleUpgradeClientRpc(string name, bool increment)
         {
+            logger.LogInfo($"Received client request to handle shared upgrade for: {name} increment: {increment}");
+            foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
+                if (node.OriginalName == name) UpdateUpgrades(node, increment);
+        }
+        [ClientRpc]
+        public void HandleUpgradeForNoHostClientRpc(string name, bool increment)
+        {
+            if (IsHost) return;
             logger.LogInfo($"Received client request to handle shared upgrade for: {name} increment: {increment}");
             foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
                 if (node.OriginalName == name) UpdateUpgrades(node, increment);
@@ -616,6 +648,18 @@ namespace MoreShipUpgrades.Managers
             SyncWeather(level, selectedWeather);
         }
 
+        [ClientRpc]
+        internal void SetContributionValueClientRpc(string key, int value)
+        {
+            SetContributionValue(key, value);
+        }
+
+        [ClientRpc]
+        internal void DiscoverItemClientRpc(string scrapName)
+        {
+            DiscoverScrap(scrapName);
+        }
+
         internal void SyncWeather(string level, LevelWeatherType selectedWeather)
         {
             SelectableLevel[] availableLevels = StartOfRound.Instance.levels;
@@ -640,6 +684,9 @@ namespace MoreShipUpgrades.Managers
     {
         public Dictionary<string, bool> activeUpgrades = UpgradeBus.Instance.activeUpgrades;
         public Dictionary<string, int> upgradeLevels = UpgradeBus.Instance.upgradeLevels;
+        public Dictionary<string, string> scrapToUpgrade = UpgradeBus.Instance.scrapToCollectionUpgrade;
+        public Dictionary<string, int> contributedValues = UpgradeBus.Instance.contributionValues;
+        public List<string> discoveredItems = UpgradeBus.Instance.discoveredItems;
 
         public bool TPButtonPressed = UpgradeBus.Instance.TPButtonPressed;
         public string contractType = ContractManager.Instance.contractType;
