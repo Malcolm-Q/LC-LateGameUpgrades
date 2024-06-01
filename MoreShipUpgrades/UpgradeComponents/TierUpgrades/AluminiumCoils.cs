@@ -95,7 +95,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                                                 configuration.ALUMINIUM_COILS_PRICE.Value,
                                                 UpgradeBus.ParseUpgradePrices(configuration.ALUMINIUM_COILS_PRICES.Value),
                                                 configuration.OVERRIDE_UPGRADE_NAMES ? configuration.ALUMINIUM_COILS_OVERRIDE_NAME : "");
-            ItemProgressionManager.AddCollectionUpgrade(node, ["apparatus"]);
+            ItemProgressionManager.AddUpgrade(node, ["apparatus"]);
             return node;
         }
     }

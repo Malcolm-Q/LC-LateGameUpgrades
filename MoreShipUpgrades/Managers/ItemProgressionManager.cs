@@ -49,26 +49,56 @@ namespace MoreShipUpgrades.Managers
         }
         public static void CheckCollectionScrap(GrabbableObject scrapItem)
         {
+            if (!UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_ITEM_PROGRESSION) return;
+
             string scrapName = scrapItem.itemProperties.itemName.ToLower();
-            if (IsBlacklisted(scrapName)) return;
             switch (CurrentCollectionMode)
             {
                 case CollectionModes.Apparatice:
                     {
                         if (scrapName != "apparatus") break;
 
-                        CustomTerminalNode randomNode = PickRandomCollectionUpgrade();
+                        CustomTerminalNode randomNode = PickRandomUpgrade();
                         LguStore.Instance.HandleUpgradeClientRpc(randomNode.OriginalName, randomNode.Unlocked);
                         break;
                     }
                 case CollectionModes.ChancePerScrap:
                     {
                         if (UnityEngine.Random.Range(0, 1) >= ConfiguredChancePerScrapValue) break;
-                        CustomTerminalNode node = SelectChancePerScrapCollectionUpgrade();
+                        CustomTerminalNode node = SelectChancePerScrapUpgrade();
                         LguStore.Instance.HandleUpgradeClientRpc(node.OriginalName, node.Unlocked);
                         break;
                     }
             }
+        }
+
+        public static void CheckNewQuota(int fullfilledQuota)
+        {
+            if (!LguStore.Instance.IsServer || !UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_ITEM_PROGRESSION) return;
+
+            switch(CurrentCollectionMode)
+            {
+                case CollectionModes.NearestValue:
+                    {
+                        CustomTerminalNode node = SelectNearestValueUpgrade(fullfilledQuota);
+                        if (node == null) return; // No upgrades had a price below the fullfilled quota
+                        LguStore.Instance.HandleUpgradeClientRpc(node.OriginalName, node.Unlocked);
+                        break;
+                    }
+            }
+        }
+
+        public static CustomTerminalNode SelectNearestValueUpgrade(int fullfilledQuota)
+        {
+            CustomTerminalNode currentNode = null;
+            int currentDelta = int.MaxValue;
+            foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
+            {
+                int price = node.GetCurrentPrice();
+                int delta = fullfilledQuota - price;
+                if (delta > 0 && delta < currentDelta) currentNode = node;
+            }
+            return currentNode;
         }
 
         private static bool IsBlacklisted(string scrapName)
@@ -76,26 +106,26 @@ namespace MoreShipUpgrades.Managers
             return blacklistedItems.Contains(scrapName);
         }
 
-        public static CustomTerminalNode PickRandomCollectionUpgrade()
+        public static CustomTerminalNode PickRandomUpgrade()
         {
-            return scrapToCollectionUpgrade.Keys.ToArray()[UnityEngine.Random.Range(0, scrapToCollectionUpgrade.Count)];
+            return UpgradeBus.Instance.terminalNodes.ToArray()[UnityEngine.Random.Range(0, UpgradeBus.Instance.terminalNodes.Count)];
         }
 
-        public static void AddCollectionUpgrade(CustomTerminalNode node, List<string> scrapNames)
+        public static void AddUpgrade(CustomTerminalNode node, List<string> scrapNames)
         {
             scrapToCollectionUpgrade.Add(node, scrapNames);
         }
 
-        public static void AddCollectionUpgrade(CustomTerminalNode node, string scrapName)
+        public static void AddUpgrade(CustomTerminalNode node, string scrapName)
         {
-            if (!scrapToCollectionUpgrade.ContainsKey(node)) AddCollectionUpgrade(node, new List<string>());
+            if (!scrapToCollectionUpgrade.ContainsKey(node)) AddUpgrade(node, new List<string>());
             scrapToCollectionUpgrade[node].Add(scrapName);
         }
 
-        public static CustomTerminalNode SelectChancePerScrapCollectionUpgrade()
+        public static CustomTerminalNode SelectChancePerScrapUpgrade()
         {
             CustomTerminalNode node = null;
-            foreach (CustomTerminalNode randomNode in scrapToCollectionUpgrade.Keys)
+            foreach (CustomTerminalNode randomNode in UpgradeBus.Instance.terminalNodes)
             {
                 if (node == null)
                 {
