@@ -71,14 +71,16 @@ namespace MoreShipUpgrades.Managers
                         if (scrapName != "apparatus") break;
 
                         CustomTerminalNode randomNode = PickRandomUpgrade();
-                        LguStore.Instance.HandleUpgradeClientRpc(randomNode.OriginalName, randomNode.Unlocked);
+                        LguStore.Instance.HandleUpgradeForNoHostClientRpc(randomNode.OriginalName, randomNode.Unlocked);
+                        LguStore.Instance.UpdateUpgrades(randomNode, randomNode.Unlocked);
                         break;
                     }
                 case CollectionModes.ChancePerScrap:
                     {
                         if (UnityEngine.Random.Range(0, 1) >= ConfiguredChancePerScrapValue) break;
                         CustomTerminalNode node = SelectChancePerScrapUpgrade();
-                        LguStore.Instance.HandleUpgradeClientRpc(node.OriginalName, node.Unlocked);
+                        LguStore.Instance.HandleUpgradeForNoHostClientRpc(node.OriginalName, node.Unlocked);
+                        LguStore.Instance.UpdateUpgrades(node, node.Unlocked);
                         break;
                     }
                 case CollectionModes.UniqueScrap:
@@ -94,7 +96,6 @@ namespace MoreShipUpgrades.Managers
                         {
                             LguStore.Instance.HandleUpgradeForNoHostClientRpc(assignedUpgrade.OriginalName, assignedUpgrade.Unlocked);
                             LguStore.Instance.UpdateUpgrades(assignedUpgrade, assignedUpgrade.Unlocked);
-                            LguStore.Instance.SetContributionValueClientRpc(assignedUpgrade.OriginalName, contributed - currentPrice);
                             contributed -= currentPrice;
                             currentPrice = assignedUpgrade.GetCurrentPrice();
                         }

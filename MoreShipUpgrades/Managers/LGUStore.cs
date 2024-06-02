@@ -19,6 +19,7 @@ using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using HarmonyLib;
 using static MoreShipUpgrades.Managers.ItemProgressionManager;
 using MoreShipUpgrades.Misc.Util;
+using System.Text;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -94,6 +95,7 @@ namespace MoreShipUpgrades.Managers
                 File.Delete(filePath);
             }
             string json = (string)ES3.Load(key: saveDataKey, defaultValue: null, filePath: saveFile);
+            File.WriteAllText(filePath, json);
             if (json != null)
             {
                 logger.LogInfo($"Loading save file for slot {saveNum}.");
@@ -137,9 +139,9 @@ namespace MoreShipUpgrades.Managers
         /// <param name="id">Identifier of the client we wish to update the save of</param>
         /// <param name="json">Save data of the client to replace with the current one</param>
         [ServerRpc(RequireOwnership = false)]
-        public void UpdateLGUSaveServerRpc(ulong id, string json, bool saveFile = false)
+        public void UpdateLGUSaveServerRpc(ulong id, byte[] json, bool saveFile = false)
         {
-            LguSave.playerSaves[id] = JsonConvert.DeserializeObject<SaveInfo>(json);
+            LguSave.playerSaves[id] = JsonConvert.DeserializeObject<SaveInfo>(Encoding.ASCII.GetString(json));
             logger.LogInfo($"Received and updated save info for client: {id}");
             if (saveFile) ServerSaveFile();
         }
@@ -202,7 +204,7 @@ namespace MoreShipUpgrades.Managers
         public void ShareSaveServerRpc()
         {
             string json = JsonConvert.SerializeObject(LguSave);
-            ShareSaveClientRpc(json);
+            ShareSaveClientRpc(Encoding.ASCII.GetBytes(json));
             List<StringContainer> scraps = new();
             List<StringContainer> upgrades = new();
             foreach (KeyValuePair<string, string> pair in UpgradeBus.Instance.scrapToCollectionUpgrade)
@@ -227,7 +229,7 @@ namespace MoreShipUpgrades.Managers
         /// </summary>
         /// <param name="json">Structure which contains Lategame Upgrade's relevant save data</param>
         [ClientRpc]
-        public void ShareSaveClientRpc(string json)
+        public void ShareSaveClientRpc(byte[] json)
         {
             if (receivedSave)
             {
@@ -240,7 +242,7 @@ namespace MoreShipUpgrades.Managers
             {
                 upgrade.Register();
             }
-            LguSave = JsonConvert.DeserializeObject<LguSave>(json);
+            LguSave = JsonConvert.DeserializeObject<LguSave>(Encoding.ASCII.GetString(json));
             List<ulong> saves = LguSave.playerSaves.Keys.ToList();
             if(UpgradeBus.Instance.PluginConfiguration.SHARED_UPGRADES.Value && saves.Count > 0)
             {
@@ -291,9 +293,9 @@ namespace MoreShipUpgrades.Managers
         /// <param name="id">Identifier of the client that joined the game session for the first time</param>
         /// <param name="json">Lategame Upgrade's relevant save data associated with the new client</param>
         [ServerRpc(RequireOwnership =false)]
-        private void RegisterNewPlayerServerRpc(ulong id, string json)
+        private void RegisterNewPlayerServerRpc(ulong id, byte[] json)
         {
-            LguSave.playerSaves.Add(id,JsonConvert.DeserializeObject<SaveInfo>(json));
+            LguSave.playerSaves.Add(id,JsonConvert.DeserializeObject<SaveInfo>(Encoding.ASCII.GetString(json)));
         }
         /// <summary>
         /// Method to get old data from json and store in the new dictionaries
@@ -382,7 +384,7 @@ namespace MoreShipUpgrades.Managers
                 {
                     logger.LogInfo($"{playerID} Was not found in save dictionary! Creating new save for ID.");
                     SaveInfo = new SaveInfo();
-                    RegisterNewPlayerServerRpc(playerID, JsonConvert.SerializeObject(SaveInfo));
+                    RegisterNewPlayerServerRpc(playerID, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(SaveInfo)));
                     StartCoroutine(WaitForUpgradeObject());
                     return;
                 }
@@ -485,7 +487,7 @@ namespace MoreShipUpgrades.Managers
             }
             SetContributionValue(node.OriginalName, 0);
             SaveInfo = new SaveInfo();
-            UpdateLGUSaveServerRpc(playerID, JsonConvert.SerializeObject(SaveInfo));
+            UpdateLGUSaveServerRpc(playerID, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(SaveInfo)));
         }
         public void HandleUpgrade(CustomTerminalNode node, bool increment = false)
         {
@@ -552,7 +554,7 @@ namespace MoreShipUpgrades.Managers
                 }
             }
             SaveInfo = new SaveInfo();
-            UpdateLGUSaveServerRpc(playerID, JsonConvert.SerializeObject(SaveInfo), true);
+            UpdateLGUSaveServerRpc(playerID, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(SaveInfo)), true);
         }
         [ClientRpc]
         public void DestroyHelmetClientRpc(ulong id)

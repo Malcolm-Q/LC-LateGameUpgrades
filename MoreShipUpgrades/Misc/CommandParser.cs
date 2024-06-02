@@ -90,7 +90,7 @@ namespace MoreShipUpgrades.Misc
                 SaveInfo saveInfo = new SaveInfo();
                 ulong id = GameNetworkManager.Instance.localPlayerController.playerSteamId;
                 LguStore.Instance.SaveInfo = saveInfo;
-                LguStore.Instance.UpdateLGUSaveServerRpc(id, JsonConvert.SerializeObject(saveInfo));
+                LguStore.Instance.UpdateLGUSaveServerRpc(id, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(saveInfo)));
                 return DisplayTerminalMessage(LGUConstants.LGU_SAVE_WIPED);
             }
             else

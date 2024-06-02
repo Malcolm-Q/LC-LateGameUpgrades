@@ -10,6 +10,7 @@ using MoreShipUpgrades.UpgradeComponents.Items.Contracts.Extraction;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -105,7 +106,7 @@ namespace MoreShipUpgrades.Managers
             fakeBombOrders = new Dictionary<string, List<string>>();
             logger.LogInfo($"New contract details received. level: {contractLvl}, type: {contractType}");
             LguStore.Instance.SaveInfo = new SaveInfo();
-            LguStore.Instance.UpdateLGUSaveServerRpc(LguStore.Instance.playerID, JsonConvert.SerializeObject(LguStore.Instance.SaveInfo), true);
+            LguStore.Instance.UpdateLGUSaveServerRpc(LguStore.Instance.playerID, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(LguStore.Instance.SaveInfo)), true);
         }
         /// <summary>
         /// Searches through the available moons whose name contains a substring that matches the provided string
