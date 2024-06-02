@@ -33,7 +33,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 return free;
             }
         }
-
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static void RegisterUpgrade()
         {
             SetupGenericPerk<DeepPockets>(UPGRADE_NAME);

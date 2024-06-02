@@ -42,6 +42,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             }
         }
 
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.EFFICIENT_ENGINES_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static void RegisterUpgrade()
         {
             SetupGenericPerk<EfficientEngines>(UPGRADE_NAME);

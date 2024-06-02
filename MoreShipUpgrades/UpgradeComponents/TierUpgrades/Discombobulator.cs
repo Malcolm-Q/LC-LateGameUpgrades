@@ -96,7 +96,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 return free;
             }
         }
-
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static void RegisterUpgrade()
         {
             UpgradeBus.Instance.flashNoise = AssetBundleHandler.GetAudioClip("Flashbang");

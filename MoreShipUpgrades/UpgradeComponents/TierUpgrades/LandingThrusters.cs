@@ -48,6 +48,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             }
         }
 
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static void RegisterUpgrade()
         {
             SetupGenericPerk<LandingThrusters>(UPGRADE_NAME);

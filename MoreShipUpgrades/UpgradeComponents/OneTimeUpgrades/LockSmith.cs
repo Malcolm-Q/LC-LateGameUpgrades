@@ -134,6 +134,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             return $"${price} - Allows you to pick door locks by completing a minigame.";
         }
         public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.LOCKSMITH_PRICE.Value <= 0;
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.LOCKSMITH_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static void RegisterUpgrade()
         {
             SetupGenericPerk<LockSmith>(UPGRADE_NAME);

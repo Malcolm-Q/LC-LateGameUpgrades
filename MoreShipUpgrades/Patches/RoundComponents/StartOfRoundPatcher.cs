@@ -40,11 +40,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         {
             if (!__instance.IsServer) return;
 
-            if (CurrentCollectionMode == CollectionModes.UniqueScrap && UpgradeBus.Instance.scrapToCollectionUpgrade.Count != __instance.allItemsList.itemsList.Count)
-            {
-                AssignRandomScrapToUpgrades();
-                LguStore.Instance.ServerSaveFile();
-            }
+            AssignScrapToUpgrades();
         }
         [HarmonyPrefix]
         [HarmonyPatch(nameof(StartOfRound.playersFiredGameOver))]

@@ -3,6 +3,7 @@ using MoreShipUpgrades.Misc.Upgrades;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using UnityEngine;
 using static Unity.Audio.Handle;
@@ -83,8 +84,26 @@ namespace MoreShipUpgrades.Managers
                         LguStore.Instance.UpdateUpgrades(node, node.Unlocked);
                         break;
                     }
+                case CollectionModes.CustomScrap:
                 case CollectionModes.UniqueScrap:
                     {
+                        if (!UpgradeBus.Instance.scrapToCollectionUpgrade.ContainsKey(scrapName))
+                        {
+                            Plugin.mls.LogInfo($"{scrapName} from ItemProperties was not found in the dictionary, looking through scan node...");
+                            ScanNodeProperties node = scrapItem.GetComponentInChildren<ScanNodeProperties>();
+                            if (node == null)
+                            {
+                                Plugin.mls.LogWarning($"{scrapName} doesn't have a scan node, skipping...");
+                                return;
+                            }
+                            scrapName = node.headerText.ToLower().Trim();
+                            if (!UpgradeBus.Instance.scrapToCollectionUpgrade.ContainsKey(scrapName))
+                            {
+                                Plugin.mls.LogWarning($"{scrapName} from Scan Node was not found in the dictionary.");
+                                return;
+                            }
+                        }
+                        if (IsBlacklisted(scrapName)) break;
                         int scrapValue = scrapItem.scrapValue;
                         scrapValue = Mathf.CeilToInt(StartOfRound.Instance.companyBuyingRate * scrapValue);
                         scrapValue = Mathf.CeilToInt(ConfiguredItemContributionMultiplier * scrapValue);
@@ -144,16 +163,41 @@ namespace MoreShipUpgrades.Managers
             return UpgradeBus.Instance.terminalNodes.ToArray()[UnityEngine.Random.Range(0, UpgradeBus.Instance.terminalNodes.Count)];
         }
 
-        public static void AssignRandomScrapToUpgrades()
+        public static void AssignScrapToUpgrades()
         {
-            AllItemsList allItemsList = StartOfRound.Instance.allItemsList;
-            foreach (Item item in allItemsList.itemsList)
+
+            switch(CurrentCollectionMode)
             {
-                string itemName = item.itemName.ToLower();
-                if (UpgradeBus.Instance.scrapToCollectionUpgrade.ContainsKey(itemName)) continue;
-                CustomTerminalNode node = PickRandomUpgrade();
-                AddScrapToUpgrade(ref node, itemName);
+                case CollectionModes.UniqueScrap:
+                    {
+                        AllItemsList allItemsList = StartOfRound.Instance.allItemsList;
+                        if (UpgradeBus.Instance.scrapToCollectionUpgrade.Count == allItemsList.itemsList.Count) return;
+
+                        foreach (Item item in allItemsList.itemsList)
+                        {
+                            string itemName = item.itemName.ToLower();
+                            if (UpgradeBus.Instance.scrapToCollectionUpgrade.ContainsKey(itemName)) continue;
+                            CustomTerminalNode node = PickRandomUpgrade();
+                            AddScrapToUpgrade(ref node, itemName);
+                        }
+                        break;
+                    }
+                case CollectionModes.CustomScrap:
+                    {
+                        UpgradeBus.Instance.scrapToCollectionUpgrade.Clear();
+                        foreach (Type type in UpgradeBus.Instance.upgradeTypes)
+                        {
+                            MethodInfo method = type.GetMethod(nameof(BaseUpgrade.RegisterScrapToUpgrade), BindingFlags.Static | BindingFlags.Public);
+                            (string, string[]) pair = ((string, string[]))method.Invoke(null, null);
+                            string upgradeName = pair.Item1;
+                            string[] scrapItems = pair.Item2;
+                            foreach (string scrapItem in scrapItems)
+                                AddScrapToUpgrade(upgradeName, scrapItem.ToLower().Trim());
+                        }
+                        break;
+                    }
             }
+            LguStore.Instance.ServerSaveFile();
         }
 
         public static void AddScrapToUpgrade(ref CustomTerminalNode node, List<string> scrapNames)

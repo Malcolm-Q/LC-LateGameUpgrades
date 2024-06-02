@@ -241,6 +241,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             }
         }
 
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.NIGHT_VISION_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static void RegisterUpgrade()
         {
             SetupGenericPerk<NightVision>(UPGRADE_NAME);

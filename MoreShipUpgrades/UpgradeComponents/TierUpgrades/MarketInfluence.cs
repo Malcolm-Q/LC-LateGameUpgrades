@@ -40,6 +40,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             }
         }
 
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static void RegisterUpgrade()
         {
             SetupGenericPerk<MarketInfluence>(UPGRADE_NAME);

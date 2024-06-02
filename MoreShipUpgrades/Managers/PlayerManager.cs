@@ -13,7 +13,7 @@ namespace MoreShipUpgrades.Managers
         internal bool holdingWheelbarrow = false;
         internal int upgradeSpendCredits = 0;
         internal static PlayerManager instance;
-        void Start()
+        void Awake()
         {
             instance = this;
         }
