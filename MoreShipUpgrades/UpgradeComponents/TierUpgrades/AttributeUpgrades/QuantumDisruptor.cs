@@ -7,10 +7,11 @@ using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System;
 using System.Text;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 {
-    public class QuantumDisruptor : GameAttributeTierUpgrade, IServerSync
+    public class QuantumDisruptor : TierUpgrade, IServerSync
     {
         public enum UpgradeModes
         {
@@ -49,10 +50,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             Instance = this;
             upgradeName = UPGRADE_NAME;
             overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_OVERRIDE_NAME;
-            logger = new LguLogger(UPGRADE_NAME);
-            changingAttribute = GameAttribute.TIME_GLOBAL_TIME_MULTIPLIER;
-            initialValue = UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER.Value;
-            incrementalValue = UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER.Value;
         }
 
         public override void Unwind()
@@ -103,6 +100,16 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
                         break;
                     }
             }
+        }
+
+        public static float GetGlobalSpeedMultiplier(float defaultValue)
+        {
+            if (!UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_ENABLED) return defaultValue;
+            if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
+            if (CurrentMode != UpgradeModes.SlowdownTime) return defaultValue;
+
+            float additionalValue = UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER;
+            return Mathf.Clamp(defaultValue - additionalValue, 0.01f, defaultValue);
         }
 
         string GetQuantumDisruptorRevertInfo(int level, int price)

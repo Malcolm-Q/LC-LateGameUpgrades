@@ -6,7 +6,7 @@ using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
-namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
+namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
     internal class StrongLegs : TierUpgrade, IUpgradeWorldBuilding
     {
