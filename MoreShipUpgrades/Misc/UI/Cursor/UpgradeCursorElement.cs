@@ -27,7 +27,7 @@ namespace MoreShipUpgrades.Misc.UI.Cursor
             if (remainingLevels > 0)
             {
                 sb.Append(LGUConstants.WHITE_SPACE);
-                sb.Append((Node.Unlocked ? (int)(Node.Prices[Node.CurrentUpgrade] * Node.salePerc) : (int)(Node.UnlockPrice * Node.salePerc)) + "$");
+                sb.Append(Node.GetCurrentPrice() + "$");
                 if (Node.salePerc < 1f)
                 {
                     sb.Append(LGUConstants.WHITE_SPACE);

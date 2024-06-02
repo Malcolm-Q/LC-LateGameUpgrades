@@ -90,6 +90,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             SetupGenericPerk<BackMuscles>(UPGRADE_NAME);
         }
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;

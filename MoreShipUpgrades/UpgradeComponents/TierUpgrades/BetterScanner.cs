@@ -73,6 +73,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             SetupGenericPerk<BetterScanner>(UPGRADE_NAME);
         }
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.BETTER_SCANNER_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;

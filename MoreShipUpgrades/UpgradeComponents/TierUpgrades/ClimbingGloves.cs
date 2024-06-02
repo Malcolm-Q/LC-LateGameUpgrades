@@ -41,6 +41,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             return Mathf.Clamp(defaultValue + additionalValue, defaultValue, float.MaxValue);
         }
 
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.CLIMBING_GLOVES_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static void RegisterUpgrade()
         {
             SetupGenericPerk<ClimbingGloves>(UPGRADE_NAME);

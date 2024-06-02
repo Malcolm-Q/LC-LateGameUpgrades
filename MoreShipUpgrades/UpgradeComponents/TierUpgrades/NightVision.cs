@@ -139,7 +139,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public override void Increment()
         {
             base.Increment();
-            LguStore.Instance.UpdateLGUSaveServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, JsonConvert.SerializeObject(new SaveInfo()));
+            LguStore.Instance.UpdateLGUSaveServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(new SaveInfo())));
         }
 
         public override void Load()
@@ -179,6 +179,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             if (client == null) { client = GameNetworkManager.Instance.localPlayerController; }
             transform.GetChild(0).gameObject.SetActive(true);
             UpgradeBus.Instance.activeUpgrades[UPGRADE_NAME] = true;
+            if (save) { LguStore.Instance.UpdateLGUSaveServerRpc(client.playerSteamId, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(new SaveInfo()))); }
             HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Press {Keybinds.NvgAction.GetBindingDisplayString()} to toggle Night Vision!!!</color>";
         }
 
@@ -191,6 +192,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
             transform.GetChild(0).gameObject.SetActive(false);
             UpgradeBus.Instance.activeUpgrades[UPGRADE_NAME] = false;
+            LguStore.Instance.UpdateLGUSaveServerRpc(client.playerSteamId, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(new SaveInfo())));
             client = null;
         }
 
@@ -239,6 +241,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             }
         }
 
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.NIGHT_VISION_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static void RegisterUpgrade()
         {
             SetupGenericPerk<NightVision>(UPGRADE_NAME);

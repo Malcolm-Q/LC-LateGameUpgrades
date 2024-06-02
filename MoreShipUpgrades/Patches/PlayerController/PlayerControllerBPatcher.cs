@@ -23,7 +23,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
     {
 
         [HarmonyPostfix]
-        [HarmonyPatch(nameof(PlayerControllerB.Start))]
+        [HarmonyPatch(nameof(PlayerControllerB.Awake))]
         static void StartPostfix(PlayerControllerB __instance)
         {
             __instance.gameObject.AddComponent<PlayerManager>();

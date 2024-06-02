@@ -63,6 +63,14 @@ namespace MoreShipUpgrades.Misc.Util
 
         #region Plugin Configuration
 
+        #region Item Progression
+
+        internal const string ITEM_PROGRESSION_ITEMS_KEY = "Contribution Items";
+        internal const string ITEM_PROGRESSION_ITEMS_DEFAULT = "";
+        internal const string ITEM_PROGRESSION_ITEMS_DESCRIPTION = "Items that when sold contribute to the purchase of the upgrade. Either the scan node's name or ItemProperties.itemName can be inserted here";
+
+        #endregion
+
         #region Miscellaneous
 
         internal const string MISCELLANEOUS_SECTION = "_Misc_";

@@ -27,6 +27,10 @@ namespace MoreShipUpgrades.Managers
 
         internal Dictionary<string, bool> activeUpgrades = new Dictionary<string, bool>();
         internal Dictionary<string, int> upgradeLevels = new Dictionary<string, int>();
+        internal Dictionary<string, string> scrapToCollectionUpgrade = new Dictionary<string, string>();
+        internal Dictionary<string, int> contributionValues = new Dictionary<string, int>();
+        internal List<string> discoveredItems = new List<string>();
+
         internal bool TPButtonPressed;
         internal Dictionary<string, float> SaleData = new Dictionary<string, float>();
 
@@ -103,6 +107,10 @@ namespace MoreShipUpgrades.Managers
 
             foreach (string key in upgradeLevels.Keys.ToList())
                 upgradeLevels[key] = 0;
+
+            discoveredItems.Clear();
+            scrapToCollectionUpgrade.Clear();
+            contributionValues.Clear();
         }
         private void ResetPlayerAttributes()
         {
@@ -276,6 +284,7 @@ namespace MoreShipUpgrades.Managers
             }
 
             terminalNodes.Sort();
+            ItemProgressionManager.InitializeContributionValues();
         }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can be purchased multiple times

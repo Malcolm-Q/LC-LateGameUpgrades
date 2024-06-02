@@ -48,6 +48,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             return Mathf.Clamp(defaultValue + additionalValue, defaultValue, float.MaxValue);
         }
 
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.STRONG_LEGS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static void RegisterUpgrade()
         {
             SetupGenericPerk<StrongLegs>(UPGRADE_NAME);

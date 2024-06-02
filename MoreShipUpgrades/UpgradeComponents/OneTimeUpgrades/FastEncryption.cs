@@ -37,6 +37,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         }
 
         public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.PAGER_PRICE.Value <= 0;
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.FAST_ENCRYPTION_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static void RegisterUpgrade()
         {
             SetupGenericPerk<FastEncryption>(UPGRADE_NAME);

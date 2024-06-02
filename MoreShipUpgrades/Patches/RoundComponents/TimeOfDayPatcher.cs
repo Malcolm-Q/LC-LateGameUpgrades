@@ -45,6 +45,15 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             if (random.Next(0, 100) < Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.SIGURD_CHANCE.Value, 0, 100))
                 StartOfRound.Instance.companyBuyingRate += (UpgradeBus.Instance.PluginConfiguration.SIGURD_PERCENT.Value / 100);
         }
+
+        [HarmonyPatch(nameof(TimeOfDay.SetNewProfitQuota))]
+        [HarmonyPrefix]
+        static void SetNewProfitQuotaPrefix(TimeOfDay __instance)
+        {
+            if (!__instance.IsHost) return;
+
+            ItemProgressionManager.CheckNewQuota(__instance.quotaFulfilled);
+        }
     }
 
 }

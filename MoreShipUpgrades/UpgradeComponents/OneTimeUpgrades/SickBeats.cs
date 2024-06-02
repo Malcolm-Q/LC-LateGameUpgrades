@@ -83,6 +83,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             return txt;
         }
         public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.BEATS_PRICE.Value <= 0;
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.SICK_BEATS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static void RegisterUpgrade()
         {
             SetupGenericPerk<SickBeats>(UPGRADE_NAME);

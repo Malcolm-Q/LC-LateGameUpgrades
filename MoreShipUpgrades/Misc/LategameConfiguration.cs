@@ -419,11 +419,64 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<bool> WEATHER_PROBE_ALWAYS_CLEAR {  get; set; }
 
         #endregion
+        [field: SyncedEntryField] public SyncedEntry<bool> ALTERNATIVE_ITEM_PROGRESSION { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<ItemProgressionManager.CollectionModes> ITEM_PROGRESSION_MODE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<float> ITEM_PROGRESSION_CONTRIBUTION_MULTIPLIER { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<float> SCRAP_UPGRADE_CHANCE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<ItemProgressionManager.ChancePerScrapModes> SCRAP_UPGRADE_CHANCE_MODE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_BLACKLISTED_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> ALUMINIUM_COILS_ITEM_PROGRESSION_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> BACK_MUSCLES_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> BARGAIN_CONNECTIONS_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> BEEKEEPER_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> BETTER_SCANNER_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> CHARGING_BOOSTER_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> DEEPER_POCKETS_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> DISCOMBOBULATOR_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> EFFICIENT_ENGINES_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> HUNTER_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> LANDING_THRUSTERS_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> LITHIUM_BATTERIES_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> MARKET_INFLUENCE_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> MECHANICAL_ARMS_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> NIGHT_VISION_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> PROTEIN_POWDER_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> REINFORCED_BOOTS_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> SCAVENGER_INSTINCTS_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> BIGGER_LUNGS_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> CLIMBING_GLOVES_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> SHUTTER_BATTERIES_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> QUANTUM_DISRUPTOR_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> RUNNING_SHOES_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> STIMPACK_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> STRONG_LEGS_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> FAST_ENCRYPTION_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> DROP_POD_THRUSTERS_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> LETHAL_DEALS_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> LIGHTNING_ROD_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> LOCKSMITH_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> MALWARE_BROADCASTER_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> SICK_BEATS_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> SIGURD_ACCESS_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> WALKIE_GPS_ITEM_PROGRESSION_ITEMS { get; set; }
 
         #region Configuration Bindings
         public LategameConfiguration(ConfigFile cfg) : base(Metadata.GUID)
         {
             string topSection;
+
+            topSection = "_Item Progression Route_";
+            ALTERNATIVE_ITEM_PROGRESSION = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Enable Item Progression", false, "Alternative Item Progression\nIf true, items retrieved can be used for ship upgrades.");
+            ITEM_PROGRESSION_MODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Item Progression Mode", ItemProgressionManager.CollectionModes.CustomScrap, "Item Progression Mode\nSupported Modes: \n" +
+                                                                                                                                                                            "CustomScrap: Specified scrap will contribute towards the level of the associated upgrade.\n" +
+                                                                                                                                                                            "UniqueScrap: All scrap (specifications will be ignored) will contribute towards the level of a random assigned upgrade\n" +
+                                                                                                                                                                            "NearestValue: At the end of each Quota, grant a random upgrade worth the nearest total scrap collected, rounded down.\n" +
+                                                                                                                                                                            "ChancePerScrap: For each scrap sold, run a configured chance to receive a random/cheap/lowest tier upgrade.\n" +
+                                                                                                                                                                            "Apparatice: Always receive an upgrade when an apparatus has been successfully sold.");
+            ITEM_PROGRESSION_CONTRIBUTION_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Item Progression Multiplier", 0.85f, "Item Progression Contribution Multiplier\nThe multiplier for scrap's value contribution towards an upgrade.");
+            SCRAP_UPGRADE_CHANCE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Scrap Upgrade Chance", 0.05f, "Upgrade Chance Calculation\nOnly used if Item Progression Mode is set to ChancePerScrap.\nX -> (X * 100) %");
+            SCRAP_UPGRADE_CHANCE_MODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Upgrade Chance Priority", ItemProgressionManager.ChancePerScrapModes.LowestLevel, "Upgrade Chance Priority\nOnly used if Item Progression Mode is set to ChancePerScrap.\nAcceptable Values:\nRandom: Pick a random upgrade to apply.\nCheapest: Pick the cheapest upgrade to apply.\nLowest Tier: Pick the upgrade with the lowest level to apply.");
+            ITEM_PROGRESSION_BLACKLISTED_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Blacklisted Items", "Clipboard", "Blacklisted items for Item Progression.\nOnly used if Item Progression Mode is set to UniqueScrap. These items will NOT contribute towards ANY upgrade");
 
             #region Miscellaneous
 
@@ -586,7 +639,7 @@ namespace MoreShipUpgrades.Misc
             MECHANICAL_ARMS_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, MechanicalArms.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             MECHANICAL_ARMS_INITIAL_RANGE_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MECHANICAL_ARMS_INITIAL_RANGE_INCREASE_KEY, LGUConstants.MECHANICAL_ARMS_INITIAL_RANGE_INCREASE_DEFAULT, LGUConstants.MECHANICAL_ARMS_INITIAL_RANGE_INCREASE_DESCRIPTION);
             MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE_KEY, LGUConstants.MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE_DEFAULT, LGUConstants.MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE_DESCRIPTION);
-
+            MECHANICAL_ARMS_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
             #endregion
 
             #region Scavenger Instincts
@@ -596,6 +649,7 @@ namespace MoreShipUpgrades.Misc
             SCAVENGER_INSTINCTS_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, ScavengerInstincts.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
             SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE_KEY, LGUConstants.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE_DEFAULT, LGUConstants.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE_DESCRIPTION);
             SCAVENGER_INSTINCTS_INCREMENTAL_AMOUN_SCRAP_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUNT_SCRAP_INCREASE_KEY, LGUConstants.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUNT_SCRAP_INCREASE_DEFAULT, LGUConstants.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUNT_SCRAP_INCREASE_DESCRIPTION);
+            SCAVENGER_INSTINCTS_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -609,6 +663,7 @@ namespace MoreShipUpgrades.Misc
             LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE_KEY, LGUConstants.LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE_DEFAULT, LGUConstants.LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE_DESCRIPTION);
             LANDING_THRUSTERS_AFFECT_LANDING = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.LANDING_THRUSTERS_AFFECT_LANDING_KEY, LGUConstants.LANDING_THRUSTERS_AFFECT_LANDING_DEFAULT, LGUConstants.LANDING_THRUSTERS_AFFECT_LANDING_DESCRIPTION);
             LANDING_THRUSTERS_AFFECT_DEPARTING = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.LANDING_THRUSTERS_AFFECT_DEPARTING_KEY, LGUConstants.LANDING_THRUSTERS_AFFECT_DEPARTING_DEFAULT, LGUConstants.LANDING_THRUSTERS_AFFECT_DEPARTING_DESCRIPTION);
+            LANDING_THRUSTERS_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -621,6 +676,7 @@ namespace MoreShipUpgrades.Misc
             REINFORCED_BOOTS_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, ReinforcedBoots.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
             REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION_KEY, LGUConstants.REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION_DEFAULT, LGUConstants.REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION_DESCRIPTION);
             REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION_KEY, LGUConstants.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION_DEFAULT, LGUConstants.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION_DESCRIPTION);
+            REINFORCED_BOOTS_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
 
             #endregion
@@ -635,6 +691,7 @@ namespace MoreShipUpgrades.Misc
             DEEPER_POCKETS_INITIAL_TWO_HANDED_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DEEPER_POCKETS_INITIAL_TWO_HANDED_AMOUNT_KEY, LGUConstants.DEEPER_POCKETS_INITIAL_TWO_HANDED_AMOUNT_DEFAULT, LGUConstants.DEEPER_POCKETS_INITIAL_TWO_HANDED_AMOUNT_DESCRIPTION);
             DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_KEY, LGUConstants.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_DEFAULT, LGUConstants.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_DESCRIPTION);
             DEEPER_POCKETS_ALLOW_WHEELBARROWS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DEEPER_POCKETS_ALLOW_WHEELBARROWS_KEY, LGUConstants.DEEPER_POCKETS_ALLOW_WHEELBARROWS_DEFAULT, LGUConstants.DEEPER_POCKETS_ALLOW_WHEELBARROWS_DESCRIPTION);
+            DEEPER_POCKETS_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -653,6 +710,7 @@ namespace MoreShipUpgrades.Misc
             ALUMINIUM_COILS_INCREMENTAL_RANGE_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ALUMINIUM_COILS_INCREMENTAL_RANGE_KEY, LGUConstants.ALUMINIUM_COILS_INCREMENTAL_RANGE_DEFAULT);
             ALUMINIUM_COILS_INITIAL_COOLDOWN_DECREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ALUMINIUM_COILS_INITIAL_COOLDOWN_KEY, LGUConstants.ALUMINIUM_COILS_INITIAL_COOLDOWN_DEFAULT, LGUConstants.ALUMINIUM_COILS_INITIAL_COOLDOWN_DESCRIPTION);
             ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_DECREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_KEY, LGUConstants.ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_DEFAULT, LGUConstants.ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_DESCRIPTION);
+            ALUMINIUM_COILS_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -665,6 +723,7 @@ namespace MoreShipUpgrades.Misc
             CARRY_WEIGHT_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BACK_MUSCLES_INCREMENTAL_WEIGHT_MULTIPLIER_KEY, LGUConstants.BACK_MUSCLES_INCREMENTAL_WEIGHT_MULTIPLIER_DEFAULT, LGUConstants.BACK_MUSCLES_INCREMENTAL_WEIGHT_MULTIPLIER_DESCRIPTION);
             BACK_MUSCLES_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, BackMuscles.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             BACK_MUSCLES_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            BACK_MUSCLES_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Contribution Items", "", "Items that when sold contribute to the purchase of the upgrade. Either the scan node's name or ItemProperties.itemName can be inserted here");
 
             #endregion
 
@@ -676,6 +735,7 @@ namespace MoreShipUpgrades.Misc
             BARGAIN_CONNECTIONS_INITIAL_ITEM_AMOUNT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BARGAIN_CONNECTIONS_INITIAL_AMOUNT_KEY, LGUConstants.BARGAIN_CONNECTIONS_INITIAL_AMOUNT_DEFAULT);
             BARGAIN_CONNECTIONS_INCREMENTAL_ITEM_AMOUNT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BARGAIN_CONNECTIONS_INCREMENTAL_AMOUNT_KEY, LGUConstants.BARGAIN_CONNECTIONS_INCREMENTAL_AMOUNT_DEFAULT);
             BARGAIN_CONNECTIONS_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, BargainConnections.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            BARGAIN_CONNECTIONS_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -689,6 +749,7 @@ namespace MoreShipUpgrades.Misc
             BEEKEEPER_DAMAGE_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BEEKEEPER_DAMAGE_MULTIPLIER_KEY, LGUConstants.BEEKEEPER_DAMAGE_MULTIPLIER_DEFAULT, LGUConstants.BEEKEEPER_DAMAGE_MULTIPLIER_DESCRIPTION);
             BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BEEKEEPER_DAMAGE_INCREMENTAL_MULTIPLIER_KEY, LGUConstants.BEEKEEPER_DAMAGE_INCREMENTAL_MULTIPLIER_DEFAULT, LGUConstants.BEEKEEPER_DAMAGE_INCREMENTAL_MULTIPLIER_DESCRIPTION);
             BEEKEEPER_HIVE_VALUE_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BEEKEEPER_HIVE_MULTIPLIER_KEY, LGUConstants.BEEKEEPER_HIVE_MULTIPLIER_DEFAULT, LGUConstants.BEEKEEPER_HIVE_MULTIPLIER_DESCRIPTION);
+            BEEKEEPER_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -704,6 +765,7 @@ namespace MoreShipUpgrades.Misc
             BETTER_SCANNER_PRICE3 = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BETTER_SCANNER_THIRD_TIER_PRICE_KEY, LGUConstants.BETTER_SCANNER_THIRD_TIER_PRICE_DEFAULT, LGUConstants.BETTER_SCANNER_THIRD_TIER_PRICE_DESCRIPTION);
             BETTER_SCANNER_ENEMIES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BETTER_SCANNER_ENEMIES_THROUGH_WALLS_KEY, LGUConstants.BETTER_SCANNER_ENEMIES_THROUGH_WALLS_DEFAULT, LGUConstants.BETTER_SCANNER_ENEMIES_THROUGH_WALLS_DESCRIPTION);
             VERBOSE_ENEMIES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BETTER_SCANNER_VERBOSE_ENEMIES_KEY, LGUConstants.BETTER_SCANNER_VERBOSE_ENEMIES_DEFAULT, LGUConstants.BETTER_SCANNER_VERBOSE_ENEMIES_DESCRIPTION);
+            BETTER_SCANNER_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -722,6 +784,7 @@ namespace MoreShipUpgrades.Misc
             BIGGER_LUNGS_JUMP_STAMINA_APPLY_LEVEL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BIGGER_LUNGS_JUMP_STAMINA_DECREASE_APPLY_LEVEL_KEY, LGUConstants.BIGGER_LUNGS_JUMP_STAMINA_DECREASE_APPLY_LEVEL_DEFAULT, LGUConstants.BIGGER_LUNGS_JUMP_STAMINA_DECREASE_APPLY_LEVEL_DESCRIPTION);
             BIGGER_LUNGS_JUMP_STAMINA_COST_DECREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BIGGER_LUNGS_INITIAL_JUMP_STAMINA_DECREASE_KEY, LGUConstants.BIGGER_LUNGS_INITIAL_JUMP_STAMINA_DECREASE_DEFAULT, LGUConstants.BIGGER_LUNGS_INITIAL_JUMP_STAMINA_DECREASE_DESCRIPTION);
             BIGGER_LUNGS_JUMP_STAMINA_COST_INCREMENTAL_DECREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BIGGER_LUNGS_INCREMENTAL_JUMP_STAMINA_DECREASE_KEY, LGUConstants.BIGGER_LUNGS_INCREMENTAL_JUMP_STAMINA_DECREASE_DEFAULT, LGUConstants.BIGGER_LUNGS_INCREMENTAL_JUMP_STAMINA_DECREASE_DESCRIPTION);
+            BIGGER_LUNGS_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -734,9 +797,10 @@ namespace MoreShipUpgrades.Misc
             CHARGING_BOOSTER_COOLDOWN = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.CHARGING_BOOSTER_COOLDOWN_KEY, LGUConstants.CHARGING_BOOSTER_COOLDOWN_DEFAULT);
             CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE_KEY, LGUConstants.CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE_DEFAULT);
             CHARGING_BOOSTER_CHARGE_PERCENTAGE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.CHARGING_BOOSTER_CHARGE_PERCENTAGE_KEY, LGUConstants.CHARGING_BOOSTER_CHARGE_PERCENTAGE_DEFAULT);
+            CHARGING_BOOSTER_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
-                
+
             #region Climbing Gloves
 
             topSection = ClimbingGloves.UPGRADE_NAME;
@@ -746,6 +810,7 @@ namespace MoreShipUpgrades.Misc
             CLIMBING_GLOVES_PRICES              = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, ClimbingGloves.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
             INITIAL_CLIMBING_SPEED_BOOST        = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.CLIMBING_GLOVES_INITIAL_MULTIPLIER_KEY, LGUConstants.CLIMBING_GLOVES_INITIAL_MULTIPLIER_DEFAULT, LGUConstants.CLIMBING_GLOVES_INITIAL_MULTIPLIER_DESCRIPTION);
             INCREMENTAL_CLIMBING_SPEED_BOOST    = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.CLIMBING_GLOVES_INCREMENTAL_MULTIPLIER_KEY, LGUConstants.CLIMBING_GLOVES_INCREMENTAL_MULTIPLIER_DEFAULT);
+            CLIMBING_GLOVES_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -764,6 +829,7 @@ namespace MoreShipUpgrades.Misc
             DISCOMBOBULATOR_DAMAGE_LEVEL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DISCOMBOBULATOR_APPLY_DAMAGE_LEVEL_KEY, LGUConstants.DISCOMBOBULATOR_APPLY_DAMAGE_LEVEL_DEFAULT, LGUConstants.DISCOMBOBULATOR_APPLY_DAMAGE_LEVEL_DESCRIPTION);
             DISCOMBOBULATOR_INITIAL_DAMAGE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DISCOMBOBULATOR_INITIAL_DAMAGE_KEY, LGUConstants.DISCOMBOBULATOR_INITIAL_DAMAGE_DEFAULT, LGUConstants.DISCOMBOBULATOR_INITIAL_DAMAGE_DESCRIPTION);
             DISCOMBOBULATOR_DAMAGE_INCREASE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DISCOMBOBULATOR_INCREMENTAL_DAMAGE_KEY, LGUConstants.DISCOMBOBULATOR_INCREMENTAL_DAMAGE_DEFAULT, LGUConstants.DISCOMBOBULATOR_INCREMENTAL_DAMAGE_DESCRIPTION);
+            DISCOMBOBULATOR_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -775,6 +841,7 @@ namespace MoreShipUpgrades.Misc
             FASTER_DROP_POD_TIMER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DROP_POD_THRUSTERS_TIME_DECREASE_KEY, LGUConstants.DROP_POD_THRUSTERS_TIME_DECREASE_DEFAULT);
             FASTER_DROP_POD_INITIAL_TIMER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DROP_POD_THRUSTERS_FIRST_TIME_DECREASE_KEY, LGUConstants.DROP_POD_THRUSTERS_FIRST_TIME_DECREASE_DEFAULT);
             FASTER_DROP_POD_LEAVE_TIMER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.DROP_POD_THRUSTERS_LEAVE_TIMER_KEY, LGUConstants.DROP_POD_THRUSTERS_LEAVE_TIMER_DEFAULT, LGUConstants.DROP_POD_THRUSTERS_LEAVE_TIMER_DESCRIPTION);
+            DROP_POD_THRUSTERS_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -786,6 +853,7 @@ namespace MoreShipUpgrades.Misc
             EFFICIENT_ENGINES_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, EfficientEngines.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
             EFFICIENT_ENGINES_INITIAL_DISCOUNT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.EFFICIENT_ENGINES_INITIAL_MULTIPLIER_KEY, LGUConstants.EFFICIENT_ENGINES_INITIAL_MULTIPLIER_DEFAULT);
             EFFICIENT_ENGINES_INCREMENTAL_DISCOUNT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.EFFICIENT_ENGINES_INCREMENTAL_MULTIPLIER_KEY, LGUConstants.EFFICIENT_ENGINES_INCREMENTAL_MULTIPLIER_DEFAULT);
+            EFFICIENT_ENGINES_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -794,6 +862,7 @@ namespace MoreShipUpgrades.Misc
             topSection = FastEncryption.UPGRADE_NAME;
             PAGER_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.FAST_ENCRYPTION_ENABLED_KEY, LGUConstants.FAST_ENCRYPTION_ENABLED_DEFAULT, LGUConstants.FAST_ENCRYPTION_ENABLED_DESCRIPTION);
             PAGER_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.FAST_ENCRYPTION_PRICE_KEY, LGUConstants.FAST_ENCRYPTION_PRICE_DEFAULT);
+            FAST_ENCRYPTION_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -802,6 +871,7 @@ namespace MoreShipUpgrades.Misc
             topSection = LethalDeals.UPGRADE_NAME;
             LETHAL_DEALS_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.LETHAL_DEALS_ENABLED_KEY, LGUConstants.LETHAL_DEALS_ENABLED_DEFAULT, LGUConstants.LETHAL_DEALS_ENABLED_DESCRIPTION);
             LETHAL_DEALS_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.LETHAL_DEALS_PRICE_KEY, LGUConstants.LETHAL_DEALS_PRICE_DEFAULT);
+            LETHAL_DEALS_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -812,6 +882,7 @@ namespace MoreShipUpgrades.Misc
             LIGHTNING_ROD_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LightningRod.PRICE_SECTION, LightningRod.PRICE_DEFAULT);
             LIGHTNING_ROD_ACTIVE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LightningRod.ACTIVE_SECTION, LightningRod.ACTIVE_DEFAULT, LightningRod.ACTIVE_DESCRIPTION);
             LIGHTNING_ROD_DIST = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LightningRod.DIST_SECTION, LightningRod.DIST_DEFAULT, LightningRod.DIST_DESCRIPTION);
+            LIGHTNING_ROD_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -824,6 +895,7 @@ namespace MoreShipUpgrades.Misc
             LITHIUM_BATTERIES_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, LithiumBatteries.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             LITHIUM_BATTERIES_INITIAL_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.LITHIUM_BATTERIES_INITIAL_MULTIPLIER_KEY, LGUConstants.LITHIUM_BATTERIES_INITIAL_MULTIPLIER_DEFAULT, LGUConstants.LITHIUM_BATTERIES_INITIAL_MULTIPLIER_DESCRIPTION);
             LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER_KEY, LGUConstants.LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER_DEFAULT, LGUConstants.LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER_DESCRIPTION);
+            LITHIUM_BATTERIES_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -833,6 +905,7 @@ namespace MoreShipUpgrades.Misc
             LOCKSMITH_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.LOCKSMITH_ENABLED_KEY, LGUConstants.LOCKSMITH_ENABLED_DEFAULT, LGUConstants.LOCKSMITH_ENABLED_DESCRIPTION);
             LOCKSMITH_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.LOCKSMITH_PRICE_KEY, LGUConstants.LOCKSMITH_PRICE_DEFAULT, LGUConstants.LOCKSMITH_PRICE_DESCRIPTION);
             LOCKSMITH_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            LOCKSMITH_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -845,6 +918,7 @@ namespace MoreShipUpgrades.Misc
             DISARM_TIME = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MALWARE_BROADCASTER_DISARM_TIME_KEY, LGUConstants.MALWARE_BROADCASTER_DISARM_TIME_DEFAULT, LGUConstants.MALWARE_BROADCASTER_DISARM_TIME_DESCRIPTION);
             EXPLODE_TRAP = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MALWARE_BROADCASTER_EXPLODE_TRAPS_KEY, LGUConstants.MALWARE_BROADCASTER_EXPLODE_TRAPS_DEFAULT, LGUConstants.MALWARE_BROADCASTER_EXPLODE_TRAPS_DESCRIPTION);
             MALWARE_BROADCASTER_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            MALWARE_BROADCASTER_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -856,6 +930,7 @@ namespace MoreShipUpgrades.Misc
             MARKET_INFLUENCE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, MarketInfluence.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             MARKET_INFLUENCE_INITIAL_PERCENTAGE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MARKET_INFLUENCE_INITIAL_PERCENTAGE_KEY, LGUConstants.MARKET_INFLUENCE_INITIAL_PERCENTAGE_DEFAULT);
             MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE_KEY, LGUConstants.MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE_DEFAULT);
+            MARKET_INFLUENCE_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -869,6 +944,7 @@ namespace MoreShipUpgrades.Misc
             PROTEIN_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
             PROTEIN_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, ProteinPowder.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             PROTEIN_CRIT_CHANCE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, ProteinPowder.CRIT_CHANCE_SECTION, ProteinPowder.CRIT_CHANCE_DEFAULT, ProteinPowder.CRIT_CHANCE_DESCRIPTION);
+            PROTEIN_POWDER_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -887,6 +963,7 @@ namespace MoreShipUpgrades.Misc
             QUANTUM_DISRUPTOR_INCREMENTAL_USES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.QUANTUM_DISRUPTOR_INCREMENTAL_USES_KEY, LGUConstants.QUANTUM_DISRUPTOR_INCREMENTAL_USES_DEFAULT, LGUConstants.QUANTUM_DISRUPTOR_INCREMENTAL_USES_DESCRIPTION);
             QUANTUM_DISRUPTOR_INITIAL_HOURS_REVERT_ON_USE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.QUANTUM_DISRUPTOR_INITIAL_HOURS_ON_REVERT_KEY, LGUConstants.QUANTUM_DISRUPTOR_INITIAL_HOURS_ON_REVERT_DEFAULT, LGUConstants.QUANTUM_DISRUPTOR_INITIAL_HOURS_ON_REVERT_DESCRIPTION);
             QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_REVERT_ON_USE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_ON_REVERT_KEY, LGUConstants.QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_ON_REVERT_DEFAULT, LGUConstants.QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_ON_REVERT_DESCRIPTION);
+            QUANTUM_DISRUPTOR_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -900,6 +977,7 @@ namespace MoreShipUpgrades.Misc
             RUNNING_SHOES_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, BiggerLungs.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             RUNNING_SHOES_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
             NOISE_REDUCTION = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.RUNNING_SHOES_NOISE_REDUCTION_KEY, LGUConstants.RUNNING_SHOES_NOISE_REDUCTION_DEFAULT, LGUConstants.RUNNING_SHOES_NOISE_REDUCTION_DESCRIPTION);
+            RUNNING_SHOES_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -911,6 +989,7 @@ namespace MoreShipUpgrades.Misc
             DOOR_HYDRAULICS_BATTERY_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, ShutterBatteries.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             DOOR_HYDRAULICS_BATTERY_INITIAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, ShutterBatteries.INITIAL_SECTION, ShutterBatteries.INITIAL_DEFAULT, ShutterBatteries.INITIAL_DESCRIPTION);
             DOOR_HYDRAULICS_BATTERY_INCREMENTAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, ShutterBatteries.INCREMENTAL_SECTION, ShutterBatteries.INCREMENTAL_DEFAULT, ShutterBatteries.INCREMENTAL_DESCRIPTION);
+            SHUTTER_BATTERIES_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -929,6 +1008,7 @@ namespace MoreShipUpgrades.Misc
             BEATS_DMG_INC = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SICK_BEATS_ADDITIONAL_DAMAGE_KEY, LGUConstants.SICK_BEATS_ADDITIONAL_DAMAGE_DEFAULT);
             BEATS_SPEED_INC = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SICK_BEATS_ADDITIONAL_SPEED_KEY, LGUConstants.SICK_BEATS_ADDITIONAL_SPEED_DEFAULT);
             BEATS_RADIUS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SICK_BEATS_EFFECT_RADIUS_KEY, LGUConstants.SICK_BEATS_EFFECT_RADIUS_DEFAULT, LGUConstants.SICK_BEATS_EFFECT_RADIUS_DESCRIPTION);
+            SICK_BEATS_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -942,6 +1022,7 @@ namespace MoreShipUpgrades.Misc
             SIGURD_LAST_DAY_CHANCE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SIGURD_ACCESS_CHANCE_LAST_DAY_KEY, LGUConstants.SIGURD_ACCESS_CHANCE_LAST_DAY_DEFAULT);
             SIGURD_PERCENT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SIGURD_ACCESS_ADDITIONAL_PERCENT_KEY, LGUConstants.SIGURD_ACCESS_ADDITIONAL_PERCENT_DEFAULT);
             SIGURD_LAST_DAY_PERCENT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SIGURD_ACCESS_ADDITIONAL_PERCENT_LAST_DAY_KEY, LGUConstants.SIGURD_ACCESS_ADDITIONAL_PERCENT_LAST_DAY_DEFAULT);
+            SIGURD_ACCESS_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -954,6 +1035,7 @@ namespace MoreShipUpgrades.Misc
             PLAYER_HEALTH_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, Stimpack.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, Stimpack.ADDITIONAL_HEALTH_UNLOCK_SECTION, Stimpack.ADDITIONAL_HEALTH_UNLOCK_DEFAULT, Stimpack.ADDITIONAL_HEALTH_UNLOCK_DESCRIPTION);
             PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, Stimpack.ADDITIONAL_HEALTH_INCREMENT_SECTION, Stimpack.ADDITIONAL_HEALTH_INCREMENT_DEFAULT, Stimpack.ADDITIONAL_HEALTH_INCREMENT_DESCRIPTION);
+            STIMPACK_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -966,6 +1048,7 @@ namespace MoreShipUpgrades.Misc
             JUMP_FORCE_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.STRONG_LEGS_INCREMENTAL_JUMP_FORCE_KEY, LGUConstants.STRONG_LEGS_INCREMENTAL_JUMP_FORCE_DEFAULT, LGUConstants.STRONG_LEGS_INCREMENTAL_JUMP_FORCE_DESCRIPTION);
             STRONG_LEGS_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, StrongLegs.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             STRONG_LEGS_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            STRONG_LEGS_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -975,6 +1058,7 @@ namespace MoreShipUpgrades.Misc
             WALKIE_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.WALKIE_GPS_ENABLED_KEY, LGUConstants.WALKIE_GPS_ENABLED_DEFAULT, LGUConstants.WALKIE_GPS_ENABLED_DESCRIPTION);
             WALKIE_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.WALKIE_GPS_PRICE_KEY, LGUConstants.WALKIE_GPS_PRICE_DEFAULT, LGUConstants.WALKIE_GPS_PRICE_DESCRIPTION);
             WALKIE_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            WALKIE_GPS_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
@@ -1042,6 +1126,7 @@ namespace MoreShipUpgrades.Misc
             NIGHT_VISION_DROP_ON_DEATH = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Drop Night Vision item on Death", true, "If true, when you die and lose night vision upon death, you will drop the night vision goggles on your body.");
             NIGHT_VISION_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.PRICES_SECTION, NightVision.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             NIGHT_VISION_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            NIGHT_VISION_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             topSection = Hunter.UPGRADE_NAME;
             HUNTER_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable the Hunter upgrade", true, "Collect and sell samples from dead enemies");
@@ -1074,6 +1159,7 @@ namespace MoreShipUpgrades.Misc
 
             TULIP_SNAKE_SAMPLE_MINIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Minimum scrap value of a Tulip Snake sample", 80, "");
             TULIP_SNAKE_SAMPLE_MAXIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Maximum scrap value of a Tulip Snake sample", 125, "");
+            HUNTER_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             topSection = "Wheelbarrow";
             WHEELBARROW_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable the Wheelbarrow Item", true, "Allows you to buy a wheelbarrow to carry items outside of your inventory");
@@ -1107,6 +1193,8 @@ namespace MoreShipUpgrades.Misc
         }
 
         #endregion
+
+
 
         private void PluginConfig_InitialSyncCompleted(object sender, EventArgs e)
         {

@@ -71,6 +71,7 @@ namespace MoreShipUpgrades.Managers
         {
             try
             {
+                harmony.PatchAll(typeof(DepositItemsDeskPatcher));
                 harmony.PatchAll(typeof(DoorLockPatcher));
                 harmony.PatchAll(typeof(HangarShipDoorPatcher));
                 harmony.PatchAll(typeof(InteractTriggerPatcher));

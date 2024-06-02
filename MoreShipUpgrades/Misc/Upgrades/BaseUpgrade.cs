@@ -117,6 +117,17 @@ namespace MoreShipUpgrades.Misc.Upgrades
         public static CustomTerminalNode RegisterTerminalNode() { throw new NotSupportedException(); }
 
         /// <summary>
+        /// Registers the scrap associated with the upgrade relevant for Item Progression mode
+        /// <para></para>
+        /// This method is to be overriden by their subclasses through "new"
+        /// </summary>
+        /// <exception cref="NotSupportedException"></exception>
+        public static (string,string[]) RegisterScrapToUpgrade()
+        {
+            throw new NotSupportedException();
+        }
+
+        /// <summary>
         /// Generic function where it adds a script (specificed through the type) into an GameObject asset 
         /// which is present in a provided asset bundle in a given path and registers it as a network prefab.
         /// </summary>

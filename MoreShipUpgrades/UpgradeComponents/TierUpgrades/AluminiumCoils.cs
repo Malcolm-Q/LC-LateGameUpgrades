@@ -85,16 +85,22 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             SetupGenericPerk<AluminiumCoils>(UPGRADE_NAME);
         }
+
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
 
-            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+            CustomTerminalNode node = UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
                                                 configuration.SHARED_UPGRADES.Value || !configuration.ALUMINIUM_COILS_INDIVIDUAL.Value,
                                                 configuration.ALUMINIUM_COILS_ENABLED.Value,
                                                 configuration.ALUMINIUM_COILS_PRICE.Value,
                                                 UpgradeBus.ParseUpgradePrices(configuration.ALUMINIUM_COILS_PRICES.Value),
                                                 configuration.OVERRIDE_UPGRADE_NAMES ? configuration.ALUMINIUM_COILS_OVERRIDE_NAME : "");
+            return node;
         }
     }
 }
