@@ -419,6 +419,8 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<bool> WEATHER_PROBE_ALWAYS_CLEAR {  get; set; }
 
         #endregion
+
+        #region Item Progression
         [field: SyncedEntryField] public SyncedEntry<bool> ALTERNATIVE_ITEM_PROGRESSION { get; set; }
         [field: SyncedEntryField] public SyncedEntry<ItemProgressionManager.CollectionModes> ITEM_PROGRESSION_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> ITEM_PROGRESSION_CONTRIBUTION_MULTIPLIER { get; set; }
@@ -459,6 +461,8 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<string> SICK_BEATS_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> SIGURD_ACCESS_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> WALKIE_GPS_ITEM_PROGRESSION_ITEMS { get; set; }
+
+        #endregion
 
         #region Configuration Bindings
         public LategameConfiguration(ConfigFile cfg) : base(Metadata.GUID)
@@ -1154,11 +1158,11 @@ namespace MoreShipUpgrades.Misc
             FOREST_KEEPER_SAMPLE_MINIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Minimum scrap value of a Forest Keeper sample", 80, "");
             FOREST_KEEPER_SAMPLE_MAXIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Maximum scrap value of a Forest Keeper sample", 125, "");
 
-            MANTICOIL_SAMPLE_MINIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Minimum scrap value of a Manticoil sample", 80, "");
-            MANTICOIL_SAMPLE_MAXIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Maximum scrap value of a Manticoil sample", 125, "");
+            MANTICOIL_SAMPLE_MINIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Minimum scrap value of a Manticoil sample", 40, "");
+            MANTICOIL_SAMPLE_MAXIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Maximum scrap value of a Manticoil sample", 75, "");
 
-            TULIP_SNAKE_SAMPLE_MINIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Minimum scrap value of a Tulip Snake sample", 80, "");
-            TULIP_SNAKE_SAMPLE_MAXIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Maximum scrap value of a Tulip Snake sample", 125, "");
+            TULIP_SNAKE_SAMPLE_MINIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Minimum scrap value of a Tulip Snake sample", 30, "");
+            TULIP_SNAKE_SAMPLE_MAXIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Maximum scrap value of a Tulip Snake sample", 50, "");
             HUNTER_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             topSection = "Wheelbarrow";

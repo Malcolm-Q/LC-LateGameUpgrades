@@ -58,7 +58,59 @@ namespace MoreShipUpgrades.Managers
                 return UpgradeBus.Instance.PluginConfiguration.ITEM_PROGRESSION_CONTRIBUTION_MULTIPLIER;
             }
         }
-        
+        static void ExecuteApparaticeLogic(string scrapName)
+        {
+            if (scrapName != "apparatus") return;
+
+            CustomTerminalNode randomNode = PickRandomUpgrade();
+            LguStore.Instance.HandleUpgradeForNoHostClientRpc(randomNode.OriginalName, randomNode.Unlocked);
+            LguStore.Instance.UpdateUpgrades(randomNode, randomNode.Unlocked);
+        }
+
+        static void ExecuteChancerPerScrapLogic()
+        {
+            if (UnityEngine.Random.Range(0, 1) >= ConfiguredChancePerScrapValue) return;
+            CustomTerminalNode node = SelectChancePerScrapUpgrade();
+            LguStore.Instance.HandleUpgradeForNoHostClientRpc(node.OriginalName, node.Unlocked);
+            LguStore.Instance.UpdateUpgrades(node, node.Unlocked);
+        }
+
+        static void ExecuteSpecificScrapLogic(GrabbableObject scrapItem, string scrapName)
+        {
+            if (!UpgradeBus.Instance.scrapToCollectionUpgrade.ContainsKey(scrapName))
+            {
+                Plugin.mls.LogInfo($"{scrapName} from ItemProperties was not found in the dictionary, looking through scan node...");
+                ScanNodeProperties node = scrapItem.GetComponentInChildren<ScanNodeProperties>();
+                if (node == null)
+                {
+                    Plugin.mls.LogWarning($"{scrapName} doesn't have a scan node, skipping...");
+                    return;
+                }
+                scrapName = node.headerText.ToLower().Trim();
+                if (!UpgradeBus.Instance.scrapToCollectionUpgrade.ContainsKey(scrapName))
+                {
+                    Plugin.mls.LogWarning($"{scrapName} from Scan Node was not found in the dictionary.");
+                    return;
+                }
+            }
+            if (IsBlacklisted(scrapName)) return;
+            int scrapValue = scrapItem.scrapValue;
+            scrapValue = Mathf.CeilToInt(StartOfRound.Instance.companyBuyingRate * scrapValue);
+            scrapValue = Mathf.CeilToInt(ConfiguredItemContributionMultiplier * scrapValue);
+            CustomTerminalNode assignedUpgrade = GetCustomTerminalNode(UpgradeBus.Instance.scrapToCollectionUpgrade[scrapName]);
+            int contributed = UpgradeBus.Instance.contributionValues[assignedUpgrade.OriginalName];
+            int currentPrice = assignedUpgrade.GetCurrentPrice();
+            contributed += scrapValue;
+            while (contributed > currentPrice)
+            {
+                LguStore.Instance.HandleUpgradeForNoHostClientRpc(assignedUpgrade.OriginalName, assignedUpgrade.Unlocked);
+                LguStore.Instance.UpdateUpgrades(assignedUpgrade, assignedUpgrade.Unlocked);
+                contributed -= currentPrice;
+                currentPrice = assignedUpgrade.GetCurrentPrice();
+            }
+            LguStore.Instance.SetContributionValueClientRpc(assignedUpgrade.OriginalName, contributed);
+        }
+
         public static void CheckCollectionScrap(GrabbableObject scrapItem)
         {
             if (!UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_ITEM_PROGRESSION) return;
@@ -69,61 +121,22 @@ namespace MoreShipUpgrades.Managers
             {
                 case CollectionModes.Apparatice:
                     {
-                        if (scrapName != "apparatus") break;
-
-                        CustomTerminalNode randomNode = PickRandomUpgrade();
-                        LguStore.Instance.HandleUpgradeForNoHostClientRpc(randomNode.OriginalName, randomNode.Unlocked);
-                        LguStore.Instance.UpdateUpgrades(randomNode, randomNode.Unlocked);
+                        ExecuteApparaticeLogic(scrapName);
                         break;
                     }
                 case CollectionModes.ChancePerScrap:
                     {
-                        if (UnityEngine.Random.Range(0, 1) >= ConfiguredChancePerScrapValue) break;
-                        CustomTerminalNode node = SelectChancePerScrapUpgrade();
-                        LguStore.Instance.HandleUpgradeForNoHostClientRpc(node.OriginalName, node.Unlocked);
-                        LguStore.Instance.UpdateUpgrades(node, node.Unlocked);
+                        ExecuteChancerPerScrapLogic();
                         break;
                     }
                 case CollectionModes.CustomScrap:
                 case CollectionModes.UniqueScrap:
                     {
-                        if (!UpgradeBus.Instance.scrapToCollectionUpgrade.ContainsKey(scrapName))
-                        {
-                            Plugin.mls.LogInfo($"{scrapName} from ItemProperties was not found in the dictionary, looking through scan node...");
-                            ScanNodeProperties node = scrapItem.GetComponentInChildren<ScanNodeProperties>();
-                            if (node == null)
-                            {
-                                Plugin.mls.LogWarning($"{scrapName} doesn't have a scan node, skipping...");
-                                return;
-                            }
-                            scrapName = node.headerText.ToLower().Trim();
-                            if (!UpgradeBus.Instance.scrapToCollectionUpgrade.ContainsKey(scrapName))
-                            {
-                                Plugin.mls.LogWarning($"{scrapName} from Scan Node was not found in the dictionary.");
-                                return;
-                            }
-                        }
-                        if (IsBlacklisted(scrapName)) break;
-                        int scrapValue = scrapItem.scrapValue;
-                        scrapValue = Mathf.CeilToInt(StartOfRound.Instance.companyBuyingRate * scrapValue);
-                        scrapValue = Mathf.CeilToInt(ConfiguredItemContributionMultiplier * scrapValue);
-                        CustomTerminalNode assignedUpgrade = GetCustomTerminalNode(UpgradeBus.Instance.scrapToCollectionUpgrade[scrapName]);
-                        int contributed = UpgradeBus.Instance.contributionValues[assignedUpgrade.OriginalName];
-                        int currentPrice = assignedUpgrade.GetCurrentPrice();
-                        contributed += scrapValue;
-                        while (contributed > currentPrice)
-                        {
-                            LguStore.Instance.HandleUpgradeForNoHostClientRpc(assignedUpgrade.OriginalName, assignedUpgrade.Unlocked);
-                            LguStore.Instance.UpdateUpgrades(assignedUpgrade, assignedUpgrade.Unlocked);
-                            contributed -= currentPrice;
-                            currentPrice = assignedUpgrade.GetCurrentPrice();
-                        }
-                        LguStore.Instance.SetContributionValueClientRpc(assignedUpgrade.OriginalName, contributed);
+                        ExecuteSpecificScrapLogic(scrapItem, scrapName);
                         break;
                     }
             }
         }
-
         public static void CheckNewQuota(int fullfilledQuota)
         {
             if (!LguStore.Instance.IsServer || !UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_ITEM_PROGRESSION) return;
@@ -162,38 +175,45 @@ namespace MoreShipUpgrades.Managers
         {
             return UpgradeBus.Instance.terminalNodes.ToArray()[UnityEngine.Random.Range(0, UpgradeBus.Instance.terminalNodes.Count)];
         }
+        static void AssignRandomScrap()
+        {
+            AllItemsList allItemsList = StartOfRound.Instance.allItemsList;
+            if (UpgradeBus.Instance.scrapToCollectionUpgrade.Count == allItemsList.itemsList.Count) return;
+
+            foreach (Item item in allItemsList.itemsList)
+            {
+                string itemName = item.itemName.ToLower();
+                if (UpgradeBus.Instance.scrapToCollectionUpgrade.ContainsKey(itemName)) continue;
+                CustomTerminalNode node = PickRandomUpgrade();
+                AddScrapToUpgrade(ref node, itemName);
+            }
+        }
+        static void AssignConfiguredScrap()
+        {
+            UpgradeBus.Instance.scrapToCollectionUpgrade.Clear();
+            foreach (Type type in UpgradeBus.Instance.upgradeTypes)
+            {
+                MethodInfo method = type.GetMethod(nameof(BaseUpgrade.RegisterScrapToUpgrade), BindingFlags.Static | BindingFlags.Public);
+                (string, string[]) pair = ((string, string[]))method.Invoke(null, null);
+                string upgradeName = pair.Item1;
+                string[] scrapItems = pair.Item2;
+                foreach (string scrapItem in scrapItems)
+                    AddScrapToUpgrade(upgradeName, scrapItem.ToLower().Trim());
+            }
+        }
 
         public static void AssignScrapToUpgrades()
         {
-
             switch(CurrentCollectionMode)
             {
                 case CollectionModes.UniqueScrap:
                     {
-                        AllItemsList allItemsList = StartOfRound.Instance.allItemsList;
-                        if (UpgradeBus.Instance.scrapToCollectionUpgrade.Count == allItemsList.itemsList.Count) return;
-
-                        foreach (Item item in allItemsList.itemsList)
-                        {
-                            string itemName = item.itemName.ToLower();
-                            if (UpgradeBus.Instance.scrapToCollectionUpgrade.ContainsKey(itemName)) continue;
-                            CustomTerminalNode node = PickRandomUpgrade();
-                            AddScrapToUpgrade(ref node, itemName);
-                        }
+                        AssignRandomScrap();
                         break;
                     }
                 case CollectionModes.CustomScrap:
                     {
-                        UpgradeBus.Instance.scrapToCollectionUpgrade.Clear();
-                        foreach (Type type in UpgradeBus.Instance.upgradeTypes)
-                        {
-                            MethodInfo method = type.GetMethod(nameof(BaseUpgrade.RegisterScrapToUpgrade), BindingFlags.Static | BindingFlags.Public);
-                            (string, string[]) pair = ((string, string[]))method.Invoke(null, null);
-                            string upgradeName = pair.Item1;
-                            string[] scrapItems = pair.Item2;
-                            foreach (string scrapItem in scrapItems)
-                                AddScrapToUpgrade(upgradeName, scrapItem.ToLower().Trim());
-                        }
+                        AssignConfiguredScrap();
                         break;
                     }
             }
@@ -218,37 +238,43 @@ namespace MoreShipUpgrades.Managers
             else UpgradeBus.Instance.scrapToCollectionUpgrade.Add(scrapName, upgradeName);
         }
 
+        static void SelectTerminalNode(ref CustomTerminalNode selectedNode, CustomTerminalNode possibleNode)
+        {
+            if (selectedNode == null)
+            {
+                selectedNode = possibleNode;
+                return;
+            }
+            switch (CurrentChancePerScrapMode)
+            {
+                case ChancePerScrapModes.Random:
+                    {
+                        if (UnityEngine.Random.Range(0, 1) > 0.5) selectedNode = possibleNode;
+                        break;
+                    }
+                case ChancePerScrapModes.LowestLevel:
+                    {
+                        if (selectedNode.Unlocked && 
+                            (!possibleNode.Unlocked || selectedNode.MaxUpgrade <= selectedNode.CurrentUpgrade || selectedNode.CurrentUpgrade > possibleNode.CurrentUpgrade && possibleNode.MaxUpgrade <= possibleNode.CurrentUpgrade))
+                            selectedNode = possibleNode;
+                        break;
+                    }
+                case ChancePerScrapModes.Cheapest:
+                    {
+                        int nodePrice = selectedNode.GetCurrentPrice();
+                        int randomNodePrice = possibleNode.GetCurrentPrice();
+                        if (nodePrice > randomNodePrice) selectedNode = possibleNode;
+                        break;
+                    }
+            }
+        }
+
         public static CustomTerminalNode SelectChancePerScrapUpgrade()
         {
             CustomTerminalNode node = null;
             foreach (CustomTerminalNode randomNode in UpgradeBus.Instance.terminalNodes)
             {
-                if (node == null)
-                {
-                    node = randomNode;
-                    continue;
-                }
-                switch (CurrentChancePerScrapMode)
-                {
-                    case ChancePerScrapModes.Random:
-                        {
-                            if (UnityEngine.Random.Range(0, 1) > 0.5) node = randomNode;
-                            break;
-                        }
-                    case ChancePerScrapModes.LowestLevel:
-                        {
-                        if (node.Unlocked && (!randomNode.Unlocked || node.MaxUpgrade <= node.CurrentUpgrade || node.CurrentUpgrade > randomNode.CurrentUpgrade && randomNode.MaxUpgrade <= randomNode.CurrentUpgrade))
-                            node = randomNode;
-                        break;
-                        }
-                    case ChancePerScrapModes.Cheapest:
-                        {
-                            int nodePrice = node.GetCurrentPrice();
-                            int randomNodePrice = randomNode.GetCurrentPrice();
-                            if (nodePrice > randomNodePrice) node = randomNode;
-                            break;
-                        }
-                }
+                SelectTerminalNode(ref node, randomNode);
             }
             return node;
         }

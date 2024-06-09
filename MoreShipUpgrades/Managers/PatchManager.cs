@@ -10,8 +10,6 @@ using MoreShipUpgrades.Patches.PlayerController;
 using MoreShipUpgrades.Patches.RoundComponents;
 using MoreShipUpgrades.Patches.TerminalComponents;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MoreShipUpgrades.Managers
 {

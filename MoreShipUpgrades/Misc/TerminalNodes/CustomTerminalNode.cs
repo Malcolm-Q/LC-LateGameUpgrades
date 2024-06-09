@@ -25,7 +25,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         public float salePerc { get; set; } = 1f;
 
 
-        public CustomTerminalNode(string name, int unlockPrice, string description, GameObject prefab, int[] prices = null, int maxUpgrade = 0, string originalName = "", bool sharedUpgrade = false)
+        protected CustomTerminalNode(string name, int unlockPrice, string description, GameObject prefab, int[] prices = null, int maxUpgrade = 0, string originalName = "", bool sharedUpgrade = false)
         {
             if (prices == null) { prices = new int[0]; }
             Name = name;
