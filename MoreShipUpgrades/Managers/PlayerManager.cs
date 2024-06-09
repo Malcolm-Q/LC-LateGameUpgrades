@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -50,11 +47,11 @@ namespace MoreShipUpgrades.Managers
 
         internal void ResetSensitivityMultiplier()
         {
-            this.sensitivityMultiplier = DEFAULT_MULTIPLIER;
+            sensitivityMultiplier = DEFAULT_MULTIPLIER;
         }
         internal void ResetSloppyMultiplier()
         {
-            this.sloppyMultiplier = DEFAULT_MULTIPLIER;
+            sloppyMultiplier = DEFAULT_MULTIPLIER;
         }
 
         public float GetSensitivityMultiplier()

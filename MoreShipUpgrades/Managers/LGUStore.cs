@@ -119,12 +119,12 @@ namespace MoreShipUpgrades.Managers
         /// <summary>
         /// Stores Lategame Upgrades' relevant save data into the game's current save file.
         /// </summary>
-        internal void ServerSaveFile()
+        internal void ServerSaveFile(bool resetCredits = true)
         {
             string saveFile = GameNetworkManager.Instance.currentSaveFileName;
             string json = JsonConvert.SerializeObject(LguSave);
             ES3.Save(key: saveDataKey, value: json, filePath: saveFile);
-            PlayerManager.instance.ResetUpgradeSpentCredits();
+            if (resetCredits) PlayerManager.instance.ResetUpgradeSpentCredits();
         }
 
         internal void UpdateServerSave()
@@ -394,9 +394,9 @@ namespace MoreShipUpgrades.Managers
             bool oldHelmet = UpgradeBus.Instance.wearingHelmet;
             UpgradeBus.Instance.activeUpgrades = SaveInfo.activeUpgrades;
             UpgradeBus.Instance.upgradeLevels = SaveInfo.upgradeLevels;
-            UpgradeBus.Instance.discoveredItems = SaveInfo.discoveredItems;
-            UpgradeBus.Instance.contributionValues = SaveInfo.contributedValues;
-            UpgradeBus.Instance.scrapToCollectionUpgrade = SaveInfo.scrapToUpgrade;
+            UpgradeBus.Instance.discoveredItems = LguSave.discoveredItems;
+            UpgradeBus.Instance.contributionValues = LguSave.contributedValues;
+            UpgradeBus.Instance.scrapToCollectionUpgrade = LguSave.scrapToUpgrade;
 
             if (oldSave != null && oldSave.playerSaves.ContainsKey(playerID))
             {
@@ -686,11 +686,7 @@ namespace MoreShipUpgrades.Managers
     {
         public Dictionary<string, bool> activeUpgrades = UpgradeBus.Instance.activeUpgrades;
         public Dictionary<string, int> upgradeLevels = UpgradeBus.Instance.upgradeLevels;
-        public Dictionary<string, string> scrapToUpgrade = UpgradeBus.Instance.scrapToCollectionUpgrade;
-        public Dictionary<string, int> contributedValues = UpgradeBus.Instance.contributionValues;
-        public List<string> discoveredItems = UpgradeBus.Instance.discoveredItems;
 
-        public bool TPButtonPressed = UpgradeBus.Instance.TPButtonPressed;
         public string contractType = ContractManager.Instance.contractType;
         public string contractLevel = ContractManager.Instance.contractLevel;
         public Dictionary<string, float> SaleData = UpgradeBus.Instance.SaleData;
@@ -704,5 +700,8 @@ namespace MoreShipUpgrades.Managers
     public class LguSave
     {
         public Dictionary<ulong, SaveInfo> playerSaves = [];
+        public Dictionary<string, string> scrapToUpgrade = UpgradeBus.Instance.scrapToCollectionUpgrade;
+        public Dictionary<string, int> contributedValues = UpgradeBus.Instance.contributionValues;
+        public List<string> discoveredItems = UpgradeBus.Instance.discoveredItems;
     }
 }

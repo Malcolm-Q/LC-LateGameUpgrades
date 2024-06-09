@@ -7,6 +7,7 @@ using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exorcism;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
@@ -616,7 +617,7 @@ namespace MoreShipUpgrades.Misc
 
         private static TerminalNode DefuseBombCommand(string secondWord)
         {
-            if(ContractManager.Instance.contractLevel != StartOfRound.Instance.currentLevel.PlanetName || ContractManager.Instance.contractType != "defusal")
+            if(ContractManager.Instance.contractLevel != StartOfRound.Instance.currentLevel.PlanetName || ContractManager.Instance.contractType != "Defusal")
             {
                 return DisplayTerminalMessage(LGUConstants.LOOKUP_NOT_IN_CONTRACT);
             }

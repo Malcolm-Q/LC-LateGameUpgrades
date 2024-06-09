@@ -1,7 +1,7 @@
 <details>
 <summary> 3.8.0 - 2024-06-?? </summary>
 
-- Implemented an alternative "Item Progression" mode where you can acquire upgrades based on the items you sell rather than using credits to buy them.
+- Implemented an alternative "Item Progression" mode where you can acquire upgrades based on the items you sell alongside using credits to purchase them.
   - CustomScrap: Each upgrade has a configuration option where you specifiy the several items that will contribute to the upgrade.
     - Each item contribute through their scrap value sold multiplied by a configurable multiplier for contribution.
     - When the items are sold and if they contribute to an upgrade, they will be displayed in the upgrade's screen display under "Discovered Items"
@@ -19,6 +19,9 @@
 
 - Refactored game attribute relevant upgrades (Running Shoes, Bigger Lungs, etc.) such as the effects are not cancelled when other mod is setting some value to the same variables they are interacting with.
   - This means that any mods that requires to know the full value of the attribute variables, they no longer can just check the variable as the increments are added separately.
+
+- Fixed issue with Defusal contract's ``Lookup`` command not working due to string manipulation.
+- Fixed NRE being thrown due to PlayerManager not being initialized before relevant code is executed.
 
 </details>
 
