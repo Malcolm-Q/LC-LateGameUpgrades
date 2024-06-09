@@ -9,7 +9,7 @@ using System.Text;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
+namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
     public class QuantumDisruptor : TierUpgrade, IServerSync
     {
@@ -92,8 +92,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
                 case UpgradeModes.SlowdownTime: base.Load(); break;
                 case UpgradeModes.RevertTime:
                     {
-                        availableUsages = UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INITIAL_USES.Value + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INCREMENTAL_USES);
-                        hoursToReduce = UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INITIAL_HOURS_REVERT_ON_USE.Value + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_REVERT_ON_USE);
+                        availableUsages = UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INITIAL_USES.Value + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INCREMENTAL_USES;
+                        hoursToReduce = UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INITIAL_HOURS_REVERT_ON_USE.Value + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_REVERT_ON_USE;
                         UpgradeBus.Instance.activeUpgrades[upgradeName] = true;
                         if (!UpgradeBus.Instance.PluginConfiguration.SHOW_UPGRADES_CHAT.LocalValue) return;
                         ShowUpgradeNotification(LGUConstants.UPGRADE_UNLOADED_NOTIFICATION_DEFAULT_COLOR, $"{(UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? overridenUpgradeName : upgradeName)} is active!");
@@ -114,8 +114,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 
         string GetQuantumDisruptorRevertInfo(int level, int price)
         {
-            Func<int, float> infoFunctionUsages = level => (UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INITIAL_USES.Value + level * UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INCREMENTAL_USES.Value);
-            Func<int, float> infoFunctionHours = level => (UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INITIAL_HOURS_REVERT_ON_USE.Value + level * UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_REVERT_ON_USE.Value);
+            Func<int, float> infoFunctionUsages = level => UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INITIAL_USES.Value + level * UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INCREMENTAL_USES.Value;
+            Func<int, float> infoFunctionHours = level => UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INITIAL_HOURS_REVERT_ON_USE.Value + level * UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_REVERT_ON_USE.Value;
             string resetString = string.Empty;
             switch (CurrentResetMode)
             {
@@ -133,7 +133,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            switch(CurrentMode)
+            switch (CurrentMode)
             {
                 case UpgradeModes.SlowdownTime:
                     {
@@ -172,7 +172,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             globalTime -= TimeOfDay.Instance.lengthOfHours * hoursToReduce;
             if (globalTime < 0) return (false, "This command cannot be executed due to the new time being before you started landing on the moon (Leads to negative time).\n");
             string resetString = string.Empty;
-            switch(CurrentResetMode)
+            switch (CurrentResetMode)
             {
                 case ResetModes.MoonLanding: resetString = "Come back to orbit"; break;
                 case ResetModes.MoonRerouting: resetString = "Route to a different moon"; break;
