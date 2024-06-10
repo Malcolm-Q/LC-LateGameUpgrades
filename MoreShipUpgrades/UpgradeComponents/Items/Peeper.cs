@@ -37,7 +37,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             base.Update();
             SetActive(!isHeld && !isHeldByEnemy);
         }
-        
         private void SetActive(bool enable)
         {
             Active = enable;
@@ -87,7 +86,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             peepScript.grabbableToEnemies = true;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(Peeper.spawnPrefab);
 
-            UpgradeBus.Instance.ItemsToSync.Add("Peeper", Peeper);
+            UpgradeBus.Instance.ItemsToSync.Add(ITEM_NAME, Peeper);
 
             ItemManager.SetupStoreItem(Peeper);
         }

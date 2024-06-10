@@ -22,6 +22,7 @@
 
 - Fixed issue with Defusal contract's ``Lookup`` command not working due to string manipulation.
 - Fixed NRE being thrown due to PlayerManager not being initialized before relevant code is executed.
+- Fixed issue with Locksmith not locking your movement, leading to happy accidents happening.
 
 </details>
 

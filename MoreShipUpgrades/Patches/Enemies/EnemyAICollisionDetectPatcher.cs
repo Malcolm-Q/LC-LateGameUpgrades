@@ -1,10 +1,8 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
-using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
 namespace MoreShipUpgrades.Patches.Enemies
 {
@@ -17,7 +15,7 @@ namespace MoreShipUpgrades.Patches.Enemies
         {
             MethodInfo ApplyIncreasedStunTimer = typeof(AluminiumCoils).GetMethod(nameof(AluminiumCoils.ApplyIncreasedStunTimer));
             int index = 0;
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            List<CodeInstruction> codes = new(instructions);
             Tools.FindFloat(ref index, ref codes, findValue: 0.25f, addCode: ApplyIncreasedStunTimer, errorMessage: "Couldn't find the minimum current end strength cap");
             return codes;
         }

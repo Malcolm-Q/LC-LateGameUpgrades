@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MoreShipUpgrades.Misc.Util;
 
 namespace MoreShipUpgrades.UpgradeComponents.Contracts
 {
@@ -8,7 +6,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Contracts
     {
         public override void Start()
         {
-            contractType = "Exterminator";
+            contractType = LGUConstants.EXTERMINATOR_CONTRACT_NAME;
             base.Start();
         }
     }

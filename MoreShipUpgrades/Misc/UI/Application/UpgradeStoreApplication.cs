@@ -169,7 +169,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
             {
                 LguStore.Instance.HandleUpgrade(node, true);
             }
-            if (node.salePerc != 1f && UpgradeBus.Instance.PluginConfiguration.SALE_APPLY_ONCE.Value) node.salePerc = 1f;
+            if (node.SalePercentage != 1f && UpgradeBus.Instance.PluginConfiguration.SALE_APPLY_ONCE.Value) node.SalePercentage = 1f;
             backAction();
         }
     }

@@ -16,7 +16,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             " There are only three 'unique' issues, and each issue only has one or two pieces of actual useful information in it. The rest of the magazine is just ads" +
             " for The Company's other offerings. There is an extra fee for cancelling a subscription of 'Stuff Finders' before terminating your employment." +
             " The useful information always comes in the form of an unlabelled service key or Ship terminal hyperlink.\n\n";
-        private static LguLogger logger = new LguLogger(UPGRADE_NAME);
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
@@ -27,13 +26,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public static void AddScannerNodeToValve(ref SteamValveHazard steamValveHazard)
         {
             if (!GetActiveUpgrade(UPGRADE_NAME)) return;
-            logger.LogDebug("Inserting a Scan Node on a broken steam valve...");
             LguScanNodeProperties.AddGeneralScanNode(objectToAddScanNode: steamValveHazard.gameObject, header: "Bursted Steam Valve", subText: "Fix it to get rid of the steam", minRange: 3);
         }
 
         public static void RemoveScannerNodeFromValve(ref SteamValveHazard steamValveHazard)
         {
-            logger.LogDebug("Removing the Scan Node from a fixed steam valve...");
             LguScanNodeProperties.RemoveScanNode(steamValveHazard.gameObject);
         }
         public static string GetBetterScannerInfo(int level, int price)
@@ -85,7 +82,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                                                 configuration.SHARED_UPGRADES.Value || !configuration.BETTER_SCANNER_INDIVIDUAL.Value,
                                                 configuration.BETTER_SCANNER_ENABLED.Value,
                                                 configuration.BETTER_SCANNER_PRICE.Value,
-                                                new int[] { configuration.BETTER_SCANNER_PRICE2.Value, configuration.BETTER_SCANNER_PRICE3.Value },
+                                                [ configuration.BETTER_SCANNER_PRICE2.Value, configuration.BETTER_SCANNER_PRICE3.Value],
                                                 configuration.OVERRIDE_UPGRADE_NAMES ? configuration.BETTER_SCANNER_OVERRIDE_NAME : ""
                                                 );
         }

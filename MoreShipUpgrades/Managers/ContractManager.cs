@@ -19,13 +19,13 @@ namespace MoreShipUpgrades.Managers
     internal class ContractManager : NetworkBehaviour
     {
         #region Static Variables
-        static LguLogger logger = new LguLogger(nameof(ContractManager));
+        static readonly LguLogger logger = new(nameof(ContractManager));
         internal static ContractManager Instance {get; set; }
         /// <summary>
         /// Terminal node for "route" commands used to select the available moons for contract placements
         /// </summary>
         private static TerminalKeyword routeKeyword;
-        internal readonly static Dictionary<string, LevelWeatherType> probedWeathers = new Dictionary<string, LevelWeatherType>();
+        internal readonly static Dictionary<string, LevelWeatherType> probedWeathers = [];
         #endregion
         #region Variables
         #region Selected Contract
@@ -40,7 +40,7 @@ namespace MoreShipUpgrades.Managers
         /// <summary>
         /// Index of the last picked contract type
         /// </summary>
-        internal int lastContractIndex = -1;
+        internal int lastContractIndex = UNDEFINED_INDEX;
         #endregion
         #region Data Contract
         /// <summary>
@@ -60,17 +60,19 @@ namespace MoreShipUpgrades.Managers
         /// <summary>
         /// Possible combinations of triggering the bomb to activate on wrong wire sequence
         /// </summary>
-        internal Dictionary<string, List<string>> fakeBombOrders = new Dictionary<string, List<string>>();
+        internal Dictionary<string, List<string>> fakeBombOrders = [];
         /// <summary>
         /// The correct combination to defuse the bomb for loot
         /// </summary>
-        internal List<string> bombOrder = new List<string>();
+        internal List<string> bombOrder = [];
         /// <summary>
         /// Serial number associated with the bomb item
         /// </summary>
         internal string SerialNumber;
         #endregion
         #endregion
+
+        const int UNDEFINED_INDEX = -1;
 
         void Awake()
         {
@@ -94,16 +96,19 @@ namespace MoreShipUpgrades.Managers
         /// <param name="contractLvl">Moon of the new contract</param>
         /// <param name="contractType">Type of the new contract</param>
         [ClientRpc]
-        internal void SyncContractDetailsClientRpc(string contractLvl = "None", int contractType = -1)
+        internal void SyncContractDetailsClientRpc(string contractLvl = "None", int contractType = UNDEFINED_INDEX)
         {
             contractLevel = contractLvl;
-            if (contractType == -1) this.contractType = "None";
+            if (contractType == UNDEFINED_INDEX)
+            {
+                this.contractType = "None";
+            }
             else
             {
                 this.contractType = CommandParser.contracts[contractType];
                 lastContractIndex = contractType;
             }
-            fakeBombOrders = new Dictionary<string, List<string>>();
+            fakeBombOrders = [];
             logger.LogInfo($"New contract details received. level: {contractLvl}, type: {contractType}");
             LguStore.Instance.SaveInfo = new SaveInfo();
             LguStore.Instance.UpdateLGUSaveServerRpc(LguStore.Instance.playerID, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(LguStore.Instance.SaveInfo)), true);
@@ -198,7 +203,7 @@ namespace MoreShipUpgrades.Managers
         }
         internal static void SetupContractMapObjects(ref AssetBundle bundle)
         {
-            AnimationCurve curve = new AnimationCurve(new Keyframe(0, 1), new Keyframe(1, 1)); // always spawn 1
+            AnimationCurve curve = new(new Keyframe(0, 1), new Keyframe(1, 1)); // always spawn 1
 
             SetupScavContract(ref bundle, curve);
             SetupExterminatorContract(curve);
@@ -258,12 +263,12 @@ namespace MoreShipUpgrades.Managers
             Items.RegisterItem(item);
 
             SpawnableMapObjectDef mapObjDefBug = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
-            mapObjDefBug.spawnableMapObject = new SpawnableMapObject();
-            mapObjDefBug.spawnableMapObject.prefabToSpawn = item.spawnPrefab;
-            MapObjects.RegisterMapObject(mapObjDefBug, Levels.LevelTypes.All, (level) => curve);
+            mapObjDefBug.spawnableMapObject = new SpawnableMapObject
+            {
+                prefabToSpawn = item.spawnPrefab
+            };
+            MapObjects.RegisterMapObject(mapObjDefBug, Levels.LevelTypes.All, (_) => curve);
         }
-
-
         static void SetupExterminatorContract(AnimationCurve curve)
         {
             Item bugLoot = AssetBundleHandler.GetItemObject("HoardingBugEggsLoot");
@@ -292,7 +297,7 @@ namespace MoreShipUpgrades.Managers
             ExtractionContract co = scav.spawnPrefab.AddComponent<ExtractionContract>();
             co.SetPosition = true;
 
-            ExtractPlayerScript extractScript = scav.spawnPrefab.AddComponent<ExtractPlayerScript>();
+            scav.spawnPrefab.AddComponent<ExtractPlayerScript>();
             scav.spawnPrefab.AddComponent<ScrapValueSyncer>();
             TextAsset scavAudioPaths = AssetBundleHandler.GetGenericAsset<TextAsset>("Scavenger Sounds");
             Dictionary<string, string[]> scavAudioDict = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(scavAudioPaths.text);

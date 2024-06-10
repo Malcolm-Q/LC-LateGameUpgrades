@@ -18,9 +18,8 @@ namespace MoreShipUpgrades.Misc.UI.Cursor
             if (!Active(this)) sb.Append(string.Format(LGUConstants.COLOR_INITIAL_FORMAT, LGUConstants.HEXADECIMAL_GREY));
             sb.Append(name);
 
-            int currentLevel = Node.Unlocked ? Node.CurrentUpgrade + 1 : 0;
-            int remainingLevels = Node.Unlocked ? 0 : 1;
-            remainingLevels += Node.MaxUpgrade != 0 ? Mathf.Max(0, Node.MaxUpgrade - Node.CurrentUpgrade) : 0;
+            int currentLevel = Node.GetCurrentLevel();
+            int remainingLevels = Node.GetRemainingLevels();
             string levels = new string(LGUConstants.FILLED_LEVEL, currentLevel) + new string(LGUConstants.EMPTY_LEVEL, remainingLevels) + new string(LGUConstants.WHITE_SPACE, Mathf.Max(0, LGUConstants.LEVEL_LENGTH - currentLevel - remainingLevels));
             sb.Append(LGUConstants.WHITE_SPACE);
             sb.Append(levels);
@@ -28,10 +27,10 @@ namespace MoreShipUpgrades.Misc.UI.Cursor
             {
                 sb.Append(LGUConstants.WHITE_SPACE);
                 sb.Append(Node.GetCurrentPrice() + "$");
-                if (Node.salePerc < 1f)
+                if (Node.SalePercentage < 1f)
                 {
                     sb.Append(LGUConstants.WHITE_SPACE);
-                    sb.Append($"({(1 - Node.salePerc) * 100:F0}% OFF)");
+                    sb.Append($"({(1 - Node.SalePercentage) * 100:F0}% OFF)");
                 }
             }
             if (!Active(this)) sb.Append(LGUConstants.COLOR_FINAL_FORMAT);

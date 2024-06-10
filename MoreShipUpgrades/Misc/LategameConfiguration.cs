@@ -14,7 +14,6 @@ using UnityEngine;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
-using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 
 
 namespace MoreShipUpgrades.Misc

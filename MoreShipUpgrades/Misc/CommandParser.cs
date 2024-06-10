@@ -1,13 +1,11 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.TerminalNodes;
-using MoreShipUpgrades.Misc.UI;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exorcism;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,7 +22,7 @@ namespace MoreShipUpgrades.Misc
         private static string attemptSpecifyContract = null;
 
         const string LOAD_LGU_COMMAND = "load lgu";
-        public static readonly List<string> contracts = new List<string> { "Data", "Exterminator", "Extraction","Exorcism","Defusal" };
+        public static readonly List<string> contracts = new List<string> { LGUConstants.DATA_CONTRACT_NAME, LGUConstants.EXTERMINATOR_CONTRACT_NAME, LGUConstants.EXTRACTION_CONTRACT_NAME,LGUConstants.EXORCISM_CONTRACT_NAME,LGUConstants.DEFUSAL_CONTRACT_NAME };
         public static readonly List<string> contractInfos = new List<string> {
             "\n\nOur systems have detected an active PC somewhere in the facility.\nFind it, use the bruteforce command on the ship terminal with the devices IP to get login credentials, then use the cd, ls, and mv commands to find the .db file (enter `mv survey.db` in the containing folder).\n\n",
             "\n\nIt's been reported that the population of hoarder bugs on this moon have skyrocketed and become aggressive. You must destroy their nest at all costs.\n\n",
@@ -617,7 +615,7 @@ namespace MoreShipUpgrades.Misc
 
         private static TerminalNode DefuseBombCommand(string secondWord)
         {
-            if(ContractManager.Instance.contractLevel != StartOfRound.Instance.currentLevel.PlanetName || ContractManager.Instance.contractType != "Defusal")
+            if(ContractManager.Instance.contractLevel != StartOfRound.Instance.currentLevel.PlanetName || ContractManager.Instance.contractType != LGUConstants.DEFUSAL_CONTRACT_NAME)
             {
                 return DisplayTerminalMessage(LGUConstants.LOOKUP_NOT_IN_CONTRACT);
             }

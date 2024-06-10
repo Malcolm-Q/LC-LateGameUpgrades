@@ -45,7 +45,7 @@ namespace MoreShipUpgrades.Managers
         /// Player identifier of the client
         /// </summary>
         internal ulong playerID = 0;
-        static LguLogger logger = new LguLogger(nameof(LguStore));
+        static readonly LguLogger logger = new(nameof(LguStore));
         /// <summary>
         /// Key used to store Lategame Upgrades relevant data
         /// </summary>
@@ -94,7 +94,7 @@ namespace MoreShipUpgrades.Managers
                 oldSave = JsonConvert.DeserializeObject<LGUSaveV1>(tempJson);
                 File.Delete(filePath);
             }
-            string json = (string)ES3.Load(key: saveDataKey, defaultValue: null, filePath: saveFile);
+            string json = (string)ES3.Load(key: saveDataKey, filePath: saveFile, defaultValue: null);
             File.WriteAllText(filePath, json);
             if (json != null)
             {
@@ -205,14 +205,14 @@ namespace MoreShipUpgrades.Managers
         {
             string json = JsonConvert.SerializeObject(LguSave);
             ShareSaveClientRpc(Encoding.ASCII.GetBytes(json));
-            List<StringContainer> scraps = new();
-            List<StringContainer> upgrades = new();
+            List<StringContainer> scraps = [];
+            List<StringContainer> upgrades = [];
             foreach (KeyValuePair<string, string> pair in UpgradeBus.Instance.scrapToCollectionUpgrade)
             {
                 scraps.Add(new StringContainer() { SomeText = pair.Key});
                 upgrades.Add(new StringContainer() { SomeText = pair.Value });
             }
-            SetScrapToUpgradeDictionaryClientRpc(scraps.ToArray(), upgrades.ToArray());
+            SetScrapToUpgradeDictionaryClientRpc([.. scraps], [.. upgrades]);
         }
 
         [ClientRpc]
@@ -243,7 +243,7 @@ namespace MoreShipUpgrades.Managers
                 upgrade.Register();
             }
             LguSave = JsonConvert.DeserializeObject<LguSave>(Encoding.ASCII.GetString(json));
-            List<ulong> saves = LguSave.playerSaves.Keys.ToList();
+            List<ulong> saves = [.. LguSave.playerSaves.Keys];
             if(UpgradeBus.Instance.PluginConfiguration.SHARED_UPGRADES.Value && saves.Count > 0)
             {
                 ulong steamID = LguSave.playerSaves.Keys.ToList<ulong>()[0];
@@ -338,7 +338,7 @@ namespace MoreShipUpgrades.Managers
                 UpgradeBus.Instance.activeUpgrades[Stimpack.UPGRADE_NAME] = saveInfo.playerHealth;
                 UpgradeBus.Instance.upgradeLevels[Stimpack.UPGRADE_NAME] = saveInfo.playerHealthLevel;
             }
-            if (saveInfo.proteinPowder) 
+            if (saveInfo.proteinPowder)
             {
                 UpgradeBus.Instance.activeUpgrades[ProteinPowder.UPGRADE_NAME] = saveInfo.proteinPowder;
                 UpgradeBus.Instance.upgradeLevels[ProteinPowder.UPGRADE_NAME] = saveInfo.proteinLevel;
@@ -406,7 +406,6 @@ namespace MoreShipUpgrades.Managers
 
             ContractManager.Instance.contractLevel = SaveInfo.contractLevel;
             ContractManager.Instance.contractType = SaveInfo.contractType;
-            
             UpgradeBus.Instance.wearingHelmet = SaveInfo.wearingHelmet;
 
             UpgradeBus.Instance.SaleData = SaveInfo.SaleData;
@@ -423,7 +422,6 @@ namespace MoreShipUpgrades.Managers
 
             StartCoroutine(WaitForUpgradeObject());
         }
-        
         private IEnumerator WaitForSteamID()
         {
             yield return new WaitWhile(() => GameNetworkManager.Instance.localPlayerController == null);
@@ -436,7 +434,7 @@ namespace MoreShipUpgrades.Managers
                     yield return new WaitForSeconds(1f);
                 }
             }
-            
+
             if (playerID != 0)
             {
                 logger.LogInfo($"Loading SteamID: {playerID}");
@@ -478,12 +476,12 @@ namespace MoreShipUpgrades.Managers
             if (!increment)
             {
                 UpgradeBus.Instance.UpgradeObjects[node.OriginalName].GetComponent<BaseUpgrade>().Load();
-                logger.LogInfo($"First purchase, executing BaseUpgrade.load()");
+                logger.LogInfo("First purchase, executing BaseUpgrade.load()");
             }
             else
             {
                 UpgradeBus.Instance.UpgradeObjects[node.OriginalName].GetComponent<TierUpgrade>().Increment();
-                logger.LogInfo($"upgrade already unlocked, executing TierUpgrade.Increment()");
+                logger.LogInfo("upgrade already unlocked, executing TierUpgrade.Increment()");
             }
             SetContributionValue(node.OriginalName, 0);
             SaveInfo = new SaveInfo();
@@ -535,22 +533,22 @@ namespace MoreShipUpgrades.Managers
             if (seed == -1) seed = UnityEngine.Random.Range(0, 999999);
             logger.LogInfo($"Generating sales with seed: {seed} on this client...");
             UnityEngine.Random.InitState(seed);
-            UpgradeBus.Instance.SaleData = new Dictionary<string, float>();
+            UpgradeBus.Instance.SaleData = [];
             foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
             {
                 if (UnityEngine.Random.value > UpgradeBus.Instance.PluginConfiguration.SALE_PERC.Value)
                 {
-                    node.salePerc = UnityEngine.Random.Range(0.60f, 0.90f);
-                    logger.LogInfo($"Set sale percentage to: {node.salePerc} for {node.Name}.");
+                    node.SalePercentage = UnityEngine.Random.Range(0.60f, 0.90f);
+                    logger.LogInfo($"Set sale percentage to: {node.SalePercentage} for {node.Name}.");
                 }
                 else
                 {
-                    node.salePerc = 1f;
+                    node.SalePercentage = 1f;
                 }
                 if (IsHost || IsServer)
                 {
                     logger.LogInfo("Saving node into save");
-                    UpgradeBus.Instance.SaleData.Add(node.Name, node.salePerc);
+                    UpgradeBus.Instance.SaleData.Add(node.Name, node.SalePercentage);
                 }
             }
             SaveInfo = new SaveInfo();
@@ -566,7 +564,7 @@ namespace MoreShipUpgrades.Managers
             }
 
             GameObject player = StartOfRound.Instance.allPlayerObjects[(int)id];
-            if (player == null) 
+            if (player == null)
             {
                 logger.LogError("Player is with helmet is null!");
                 return;
@@ -595,7 +593,7 @@ namespace MoreShipUpgrades.Managers
             netRef.TryGet(out NetworkObject obj);
             if (obj == null || obj.IsOwner)
             {
-                if (obj == null) logger.LogError("Failed to resolve network object ref in SpawnAndMoveHelmetClientRpc!"); 
+                if (obj == null) logger.LogError("Failed to resolve network object ref in SpawnAndMoveHelmetClientRpc!");
                 else logger.LogInfo("This client owns the helmet, skipping cosmetic instantiation.");
                 return;
             }
@@ -635,7 +633,7 @@ namespace MoreShipUpgrades.Managers
         [ClientRpc]
         internal void ResetShipAttributesClientRpc()
         {
-            logger.LogDebug($"Resetting the ship's attributes");
+            logger.LogDebug("Resetting the ship's attributes");
             UpgradeBus.Instance.UpgradeObjects.Values.Where(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>() is IServerSync).Do(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute());
         }
         [ServerRpc(RequireOwnership = false)]

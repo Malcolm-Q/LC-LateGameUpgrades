@@ -2,15 +2,12 @@
 using MoreShipUpgrades.Misc.Upgrades;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using UnityEngine;
-using static Unity.Audio.Handle;
 
 namespace MoreShipUpgrades.Managers
 {
-    public class ItemProgressionManager
+    public static class ItemProgressionManager
     {
         public enum CollectionModes
         {
@@ -27,9 +24,8 @@ namespace MoreShipUpgrades.Managers
             Cheapest,
             LowestLevel,
         }
-        static List<string> blacklistedItems = new List<string>();
-
-        static Dictionary<string, int> contributedRecently = new Dictionary<string, int>();
+        static readonly List<string> blacklistedItems = [];
+        static readonly Dictionary<string, int> contributedRecently = [];
         internal static CollectionModes CurrentCollectionMode
         {
             get
@@ -161,7 +157,11 @@ namespace MoreShipUpgrades.Managers
             {
                 int price = node.GetCurrentPrice();
                 int delta = fullfilledQuota - price;
-                if (delta > 0 && delta < currentDelta) currentNode = node;
+                if (delta > 0 && delta < currentDelta)
+                {
+                    currentDelta = delta;
+                    currentNode = node;
+                }
             }
             return currentNode;
         }
@@ -228,14 +228,12 @@ namespace MoreShipUpgrades.Managers
 
         public static void AddScrapToUpgrade(ref CustomTerminalNode node, string scrapName)
         {
-            if (UpgradeBus.Instance.scrapToCollectionUpgrade.ContainsKey(scrapName)) UpgradeBus.Instance.scrapToCollectionUpgrade[scrapName] = node.OriginalName;
-            else UpgradeBus.Instance.scrapToCollectionUpgrade.Add(scrapName, node.OriginalName);
+            UpgradeBus.Instance.scrapToCollectionUpgrade[scrapName] = node.OriginalName;
         }
 
         public static void AddScrapToUpgrade(string upgradeName, string scrapName)
         {
-            if (UpgradeBus.Instance.scrapToCollectionUpgrade.ContainsKey(scrapName)) UpgradeBus.Instance.scrapToCollectionUpgrade[scrapName] = upgradeName;
-            else UpgradeBus.Instance.scrapToCollectionUpgrade.Add(scrapName, upgradeName);
+            UpgradeBus.Instance.scrapToCollectionUpgrade[scrapName] = upgradeName;
         }
 
         static void SelectTerminalNode(ref CustomTerminalNode selectedNode, CustomTerminalNode possibleNode)
@@ -254,9 +252,12 @@ namespace MoreShipUpgrades.Managers
                     }
                 case ChancePerScrapModes.LowestLevel:
                     {
-                        if (selectedNode.Unlocked && 
-                            (!possibleNode.Unlocked || selectedNode.MaxUpgrade <= selectedNode.CurrentUpgrade || selectedNode.CurrentUpgrade > possibleNode.CurrentUpgrade && possibleNode.MaxUpgrade <= possibleNode.CurrentUpgrade))
+                        if (selectedNode.Unlocked &&
+                            (!possibleNode.Unlocked || selectedNode.MaxUpgrade <= selectedNode.CurrentUpgrade || (selectedNode.CurrentUpgrade > possibleNode.CurrentUpgrade && possibleNode.MaxUpgrade <= possibleNode.CurrentUpgrade)))
+
+                        {
                             selectedNode = possibleNode;
+                        }
                         break;
                     }
                 case ChancePerScrapModes.Cheapest:
@@ -289,8 +290,7 @@ namespace MoreShipUpgrades.Managers
         internal static void SetContributionValue(string key, int value)
         {
             UpgradeBus.Instance.contributionValues[key] = value;
-            if (!contributedRecently.ContainsKey(key)) contributedRecently.Add(key, value);
-            else contributedRecently[key] = value;
+            contributedRecently[key] = value;
         }
         internal static int GetCurrentContribution(CustomTerminalNode node)
         {
@@ -299,7 +299,7 @@ namespace MoreShipUpgrades.Managers
 
         internal static List<string> GetDiscoveredItems(CustomTerminalNode node)
         {
-            List<string> result = new();
+            List<string> result = [];
             foreach (KeyValuePair<string, string> pair in UpgradeBus.Instance.scrapToCollectionUpgrade)
             {
                 string nodeName = pair.Value;

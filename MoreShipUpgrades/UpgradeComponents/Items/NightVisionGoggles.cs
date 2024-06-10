@@ -10,6 +10,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
 {
     internal class NightVisionGoggles : LategameItem, IItemWorldBuilding, IDisplayInfo
     {
+        internal const string ITEM_NAME = "Night Vision Goggles";
         internal const string WORLD_BUILDING_TEXT = "Very old military surplus phosphor lens modules, retrofitted for compatibility with modern Company-issued helmets" +
             " and offered to employees of The Company on a subscription plan. The base package comes with cheap batteries, but premium subscriptions offer regular issuances" +
             " of higher-quality energy solutions, ranging from hobby grade to industrial application power banks. The modules also come with DRM that prevents the user from improvising" +
@@ -61,7 +62,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             visScript.grabbableToEnemies = true;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(nightVisionItem.spawnPrefab);
 
-            UpgradeBus.Instance.ItemsToSync.Add("Night", nightVisionItem);
+            UpgradeBus.Instance.ItemsToSync.Add(ITEM_NAME, nightVisionItem);
 
             ItemManager.SetupStoreItem(nightVisionItem);
         }

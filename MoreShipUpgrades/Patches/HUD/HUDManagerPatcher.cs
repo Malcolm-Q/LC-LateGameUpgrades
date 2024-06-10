@@ -7,9 +7,7 @@ using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using UnityEngine;
@@ -21,7 +19,7 @@ namespace MoreShipUpgrades.Patches.HUD
     {
         [HarmonyPostfix]
         [HarmonyPatch(nameof(HUDManager.MeetsScanNodeRequirements))]
-        static void alterReqs(ScanNodeProperties node, ref bool __result, PlayerControllerB playerScript)
+        static void MeetsScanNodeRequirementsPostFix(ScanNodeProperties node, ref bool __result, PlayerControllerB playerScript)
         {
             if (node != null && node.GetComponentInParent<WheelbarrowScript>() != null && node.headerText != "Shopping Cart" && node.headerText != "Wheelbarrow") { __result = false; return; }
             if (!BaseUpgrade.GetActiveUpgrade(BetterScanner.UPGRADE_NAME)) { return; }
@@ -45,7 +43,7 @@ namespace MoreShipUpgrades.Patches.HUD
         {
             FieldInfo allPlayersDead = typeof(StartOfRound).GetField(nameof(StartOfRound.allPlayersDead));
             MethodInfo scrapInsuranceStatus = typeof(ScrapInsurance).GetMethod(nameof(ScrapInsurance.GetScrapInsuranceStatus));
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            List<CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindField(ref index, ref codes, findField: allPlayersDead, addCode: scrapInsuranceStatus, notInstruction: true, andInstruction: true, errorMessage: "Couldn't find all players dead field");
             return codes;
@@ -55,7 +53,7 @@ namespace MoreShipUpgrades.Patches.HUD
         static IEnumerable<CodeInstruction> UseSignalTranslatorServerRpcTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo newLimitCharactersTransmit = typeof(FastEncryption).GetMethod(nameof(FastEncryption.GetLimitOfCharactersTransmit));
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            List<CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindInteger(ref index, ref codes, findValue: 12, skip: true, errorMessage: "Couldn't find the 12 value which is used as character limit");
             codes.Insert(index, new CodeInstruction(OpCodes.Call, newLimitCharactersTransmit));
@@ -67,7 +65,7 @@ namespace MoreShipUpgrades.Patches.HUD
         static IEnumerable<CodeInstruction> UseSignalTranslatorClientRpcTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo newLimitCharactersTransmit = typeof(FastEncryption).GetMethod(nameof(FastEncryption.GetLimitOfCharactersTransmit));
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            List<CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindInteger(ref index, ref codes, findValue: 10, skip: true, errorMessage: "Couldn't find the 10 value which is used as character limit");
             codes.Insert(index, new CodeInstruction(OpCodes.Call, newLimitCharactersTransmit));
@@ -80,7 +78,7 @@ namespace MoreShipUpgrades.Patches.HUD
         static IEnumerable<CodeInstruction> DisplaySignalTranslatorMessageTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo multiplierSignalTimer = typeof(FastEncryption).GetMethod(nameof(FastEncryption.GetMultiplierOnSignalTextTimer));
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            List<CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindFloat(ref index, ref codes, findValue: 0.5f, addCode: multiplierSignalTimer, errorMessage: "Couldn't find the 0.5f value which is used in enumerator wait timer");
             Tools.FindFloat(ref index, ref codes, findValue: 0.7f, addCode: multiplierSignalTimer, errorMessage: "Couldn't find the 0.5f value which is used in enumerator wait timer");

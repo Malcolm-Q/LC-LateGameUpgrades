@@ -42,6 +42,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
         public bool CanTryInterceptLightning { get; internal set; }
         public bool LightningIntercepted { get; internal set; }
+        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_PRICE.Value <= 0;
 
         void Awake()
         {
@@ -94,7 +95,6 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), price, UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_DIST.Value);
         }
-        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_PRICE.Value <= 0;
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
             return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_ITEM_PROGRESSION_ITEMS.Value.Split(","));

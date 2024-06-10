@@ -1,7 +1,6 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
-using MoreShipUpgrades.Patches.PlayerController;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System;
 using Unity.Netcode;
@@ -16,7 +15,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             TotalPerHit,
             PartialTilLowHealth,
         }
-        static readonly LguLogger logger = new LguLogger(nameof(Helmet));
+        static readonly LguLogger logger = new(nameof(Helmet));
         internal const string ITEM_NAME = "Helmet";
         bool KeepScanNode
         {
@@ -56,7 +55,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             Enum.TryParse(typeof(DamageMitigationMode), UpgradeBus.Instance.PluginConfiguration.HELMET_DAMAGE_MITIGATION_MODE.Value, out object parsedRestriction);
             if (parsedRestriction == null)
                 logger.LogError($"An error occured parsing the damage mitigation mode ({UpgradeBus.Instance.PluginConfiguration.HELMET_DAMAGE_MITIGATION_MODE.Value}), defaulting to TotalPerHit");
-            else 
+            else
                 pickedMode = (DamageMitigationMode)parsedRestriction;
             switch(pickedMode)
             {
@@ -128,7 +127,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             helmet.positionOffset = new Vector3(-0.25f, 0f, 0f);
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(helmet.spawnPrefab);
 
-            UpgradeBus.Instance.ItemsToSync.Add("Helmet", helmet);
+            UpgradeBus.Instance.ItemsToSync.Add(ITEM_NAME, helmet);
             ItemManager.SetupStoreItem(helmet);
         }
     }

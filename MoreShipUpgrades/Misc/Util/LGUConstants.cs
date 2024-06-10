@@ -1258,5 +1258,15 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string UPGRADE_UNLOADED_NOTIFICATION_DEFAULT_COLOR = HEXADECIMAL_RED;
 
         #endregion
+
+        #region Contracts
+
+        internal const string DEFUSAL_CONTRACT_NAME = "Defusal";
+        internal const string EXTRACTION_CONTRACT_NAME = "Extraction";
+        internal const string DATA_CONTRACT_NAME = "Data";
+        internal const string EXTERMINATOR_CONTRACT_NAME = "Exterminator";
+        internal const string EXORCISM_CONTRACT_NAME = "Exorcism";
+
+        #endregion
     }
 }

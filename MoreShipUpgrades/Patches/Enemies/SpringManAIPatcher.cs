@@ -10,7 +10,6 @@ namespace MoreShipUpgrades.Patches.Enemies
     [HarmonyPatch(typeof(SpringManAI))]
     internal static class SpringManAIPatcher
     {
-        private static LguLogger logger = new LguLogger(nameof(SpringManAIPatcher));
         [HarmonyPrefix]
         [HarmonyPatch(nameof(SpringManAI.DoAIInterval))]
         static void DoAllIntervalPrefix(ref SpringManAI __instance)
@@ -26,7 +25,7 @@ namespace MoreShipUpgrades.Patches.Enemies
             MethodInfo positionMethod = typeof(UnityEngine.Transform).GetMethod("get_position");
 
             bool foundStopMovementFlag = false;
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            List<CodeInstruction> codes = new(instructions);
             for (int i = 1; i < codes.Count && !foundStopMovementFlag; i++)
             {
                 if (codes[i - 1].opcode != OpCodes.Ldc_I4_0) continue;
@@ -40,9 +39,7 @@ namespace MoreShipUpgrades.Patches.Enemies
 
                 foundStopMovementFlag = true;
             }
-            if (!foundStopMovementFlag) logger.LogError("Could not find the attribution of flag that stops movement");
             return codes;
         }
     }
-
 }

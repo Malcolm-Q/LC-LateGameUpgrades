@@ -5,7 +5,7 @@ namespace MoreShipUpgrades.Misc
     /// <summary>
     /// Handler that's responsible to manipulate the game's scan node properties (which are displayed when right-clicking which displays several nodes with information such as scrap value or description of the items)
     /// </summary>
-    internal class LguScanNodeProperties
+    internal static class LguScanNodeProperties
     {
         /// <summary>
         /// Enumerator used to describe each node type used by the game

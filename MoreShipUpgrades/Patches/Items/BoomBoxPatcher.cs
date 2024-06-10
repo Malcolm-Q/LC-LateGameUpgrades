@@ -15,4 +15,3 @@ namespace MoreShipUpgrades.Patches.Items
         }
     }
 }
-    

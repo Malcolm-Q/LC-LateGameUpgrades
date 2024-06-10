@@ -9,8 +9,8 @@ namespace MoreShipUpgrades.Patches.Enemies
     [HarmonyPatch(typeof(EnemyAI))]
     internal static class EnemyAIPatcher
     {
-        private static LguLogger logger = new LguLogger(nameof(EnemyAIPatcher));
-        private static ulong currentEnemy = 0;
+        static readonly LguLogger logger = new(nameof(EnemyAIPatcher));
+        static ulong currentEnemy = 0;
         [HarmonyPostfix]
         [HarmonyPatch(nameof(EnemyAI.KillEnemy))]
         private static void SpawnSample(EnemyAI __instance, bool destroy)
@@ -30,5 +30,4 @@ namespace MoreShipUpgrades.Patches.Enemies
             }
         }
     }
-
 }

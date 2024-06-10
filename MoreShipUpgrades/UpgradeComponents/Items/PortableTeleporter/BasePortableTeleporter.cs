@@ -39,7 +39,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
         {
             base.Start();
             audio = GetComponent<AudioSource>();
-            
         }
 
         /// <summary>
@@ -89,7 +88,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
         private int SearchForPlayerInRadar()
         {
             int thisPlayersIndex = -1;
-            for (int i = 0; i < StartOfRound.Instance.mapScreen.radarTargets.Count(); i++)
+            for (int i = 0; i < StartOfRound.Instance.mapScreen.radarTargets.Count; i++)
             {
                 if (StartOfRound.Instance.mapScreen.radarTargets[i].transform.gameObject.GetComponent<PlayerControllerB>() != playerHeldBy) continue;
 
@@ -206,7 +205,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
             regularPortableTeleporter.creditsWorth = UpgradeBus.Instance.PluginConfiguration.WEAK_TELE_PRICE.Value;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(regularPortableTeleporter.spawnPrefab);
 
-            UpgradeBus.Instance.ItemsToSync.Add("Tele", regularPortableTeleporter);
+            UpgradeBus.Instance.ItemsToSync.Add(RegularPortableTeleporter.ITEM_NAME, regularPortableTeleporter);
 
             ItemManager.SetupStoreItem(regularPortableTeleporter);
         }
@@ -228,7 +227,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
             advancedTeleportScript.buttonPress = buttonPressed;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(advancedPortableTeleporter.spawnPrefab);
 
-            UpgradeBus.Instance.ItemsToSync.Add("AdvTele", advancedPortableTeleporter);
+            UpgradeBus.Instance.ItemsToSync.Add(AdvancedPortableTeleporter.ITEM_NAME, advancedPortableTeleporter);
 
             ItemManager.SetupStoreItem(advancedPortableTeleporter);
         }

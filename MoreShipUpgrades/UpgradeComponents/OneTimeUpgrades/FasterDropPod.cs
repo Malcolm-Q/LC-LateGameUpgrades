@@ -10,6 +10,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
     {
         public const string UPGRADE_NAME = "Drop Pod Thrusters";
         public static FasterDropPod Instance;
+        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_PRICE.Value <= 0;
 
         internal override void Start()
         {
@@ -46,7 +47,6 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             return $"${price} - Make the Drop Pod, the ship that deliver items bought on the terminal, land faster.";
         }
-        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_PRICE.Value <= 0;
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
             return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.DROP_POD_THRUSTERS_ITEM_PROGRESSION_ITEMS.Value.Split(","));

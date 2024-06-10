@@ -1,11 +1,9 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Util;
-using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Text;
 
 namespace MoreShipUpgrades.Patches.Interactables
 {
@@ -22,7 +20,7 @@ namespace MoreShipUpgrades.Patches.Interactables
             MethodInfo checkCollectionScrap = typeof(ItemProgressionManager).GetMethod(nameof(ItemProgressionManager.CheckCollectionScrap));
 
             int index = 0;
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            List<CodeInstruction> codes = new(instructions);
             Tools.FindField(ref index, ref codes, findField: scrapValue, skip: true);
             codes.Insert(index, new CodeInstruction(OpCodes.Call, checkCollectionScrap));
             codes.Insert(index, new CodeInstruction(OpCodes.Callvirt, codes[index - 2].operand));

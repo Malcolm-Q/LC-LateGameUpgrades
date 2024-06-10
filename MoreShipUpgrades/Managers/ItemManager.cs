@@ -10,9 +10,8 @@ namespace MoreShipUpgrades.Managers
 {
     internal class ItemManager : NetworkBehaviour
     {
-        static LguLogger logger = new(nameof(ItemManager));
         internal static ItemManager Instance { get; private set; }
-        internal Dictionary<string, WeightingGroup<GameObject>> samplePrefabs = new Dictionary<string, WeightingGroup<GameObject>>();
+        internal Dictionary<string, WeightingGroup<GameObject>> samplePrefabs = [];
         void Awake()
         {
             Instance = this;

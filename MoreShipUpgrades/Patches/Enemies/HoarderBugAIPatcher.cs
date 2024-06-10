@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc.Util;
 
 namespace MoreShipUpgrades.Patches.Enemies
 {
@@ -10,7 +11,7 @@ namespace MoreShipUpgrades.Patches.Enemies
         [HarmonyPatch(nameof(HoarderBugAI.IsHoarderBugAngry))]
         private static void MakeHoarderBugSwarmAngry(ref bool __result)
         {
-            if (ContractManager.Instance.contractType != "Exterminator") return;
+            if (ContractManager.Instance.contractType != LGUConstants.EXTERMINATOR_CONTRACT_NAME) return;
 
             if (ContractManager.Instance.contractLevel == RoundManager.Instance.currentLevel.PlanetName)
             {
@@ -18,5 +19,4 @@ namespace MoreShipUpgrades.Patches.Enemies
             }
         }
     }
-
 }

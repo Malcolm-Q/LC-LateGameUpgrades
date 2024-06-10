@@ -33,7 +33,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         {
             string hands = UpgradeBus.Instance.PluginConfiguration.DIVEKIT_TWO_HANDED.Value ? "two" : "one";
             return $"DIVING KIT - ${UpgradeBus.Instance.PluginConfiguration.DIVEKIT_PRICE.Value}\n\n" +
-                $"Breath underwater.\n" +
+                "Breath underwater.\n" +
                 $"Weights {Mathf.RoundToInt((UpgradeBus.Instance.PluginConfiguration.DIVEKIT_WEIGHT.Value - 1) * 100)} lbs and is {hands} handed.";
         }
 
@@ -72,7 +72,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             diveScript.grabbableToEnemies = true;
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(DiveItem.spawnPrefab);
 
-            UpgradeBus.Instance.ItemsToSync.Add("Dive", DiveItem);
+            UpgradeBus.Instance.ItemsToSync.Add(ITEM_NAME, DiveItem);
 
             ItemManager.SetupStoreItem(DiveItem);
         }

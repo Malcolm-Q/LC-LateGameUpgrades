@@ -1,8 +1,6 @@
 ﻿using GameNetcodeStuff;
-using LethalCompanyInputUtils.Api;
 using LethalLib.Extras;
 using LethalLib.Modules;
-using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.Input;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
@@ -25,7 +23,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             ItemCount,
             All,
         }
-        private static LguLogger logger = new LguLogger(nameof(WheelbarrowScript));
         protected Restrictions restriction;
         private System.Random randomNoise;
         /// <summary>
@@ -115,9 +112,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
                 container = collider;
                 break;
             }
-            if (wheelsNoise == null) logger.LogError($"Couldn't find {nameof(AudioSource)} component in the prefab...");
-            if (container == null) logger.LogError($"Couldn't find {nameof(BoxCollider)} component in the prefab...");
-            if (triggers == null) logger.LogError($"Couldn't find {nameof(InteractTrigger)} components in the prefab...");
             foreach (InteractTrigger trigger in triggers)
             {
                 trigger.onInteract.AddListener(InteractWheelbarrow);
@@ -125,10 +119,12 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
                 trigger.interactCooldown = false;
                 trigger.cooldownTime = 0;
             }
-            checkMethods = new Dictionary<Restrictions, Func<bool>>();
-            checkMethods[Restrictions.ItemCount] = CheckWheelbarrowItemCountRestriction;
-            checkMethods[Restrictions.TotalWeight] = CheckWheelbarrowWeightRestriction;
-            checkMethods[Restrictions.All] = CheckWheelbarrowAllRestrictions;
+            checkMethods = new Dictionary<Restrictions, Func<bool>>
+            {
+                [Restrictions.ItemCount] = CheckWheelbarrowItemCountRestriction,
+                [Restrictions.TotalWeight] = CheckWheelbarrowWeightRestriction,
+                [Restrictions.All] = CheckWheelbarrowAllRestrictions
+            };
 
             SetupItemAttributes();
         }
@@ -215,8 +211,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             if (soundCounter < 2.0f) return;
             soundCounter = 0f;
             int index = randomNoise.Next(0, wheelsClip.Length);
-            
-            
             if (playSounds) wheelsNoise.PlayOneShot(wheelsClip[index], 0.2f);
             if (playSounds) WalkieTalkie.TransmitOneShotAudio(wheelsNoise, wheelsClip[index], 0.2f);
             RoundManager.Instance.PlayAudibleNoise(transform.position, noiseRange, 0.8f, 0, isInElevator && StartOfRound.Instance.hangarDoorsClosed);
@@ -266,7 +260,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         }
         private bool CheckWheelbarrowAllRestrictions()
         {
-            bool weightCondition = totalWeight > 1f + maximumWeightAllowed / 100f;
+            bool weightCondition = totalWeight > (1f + maximumWeightAllowed) / 100f;
             bool itemCountCondition = currentAmountItems >= maximumAmountItems;
             if (weightCondition || itemCountCondition)
             {
@@ -277,7 +271,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         }
         private bool CheckWheelbarrowWeightRestriction()
         {
-            if (totalWeight > 1f + maximumWeightAllowed / 100f)
+            if (totalWeight > (1f + maximumWeightAllowed) / 100f)
             {
                 SetInteractTriggers(interactable: false, hoverTip: TOO_MUCH_WEIGHT_TEXT);
                 return true;
@@ -400,7 +394,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             if (playerInteractor.isHoldingObject)
             {
                 StoreItemInWheelbarrow(ref playerInteractor);
-                return;
             }
         }
         private void StoreItemInWheelbarrow(ref PlayerControllerB playerInteractor)
@@ -474,11 +467,13 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             Utilities.FixMixerGroups(wheelbarrow.spawnPrefab);
             int amountToSpawn = UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_ENABLED.Value ? 1 : 0;
 
-            AnimationCurve curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe((1f - UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_RARITY.Value), amountToSpawn), new Keyframe(1, amountToSpawn));
+            AnimationCurve curve = new(new Keyframe(0, 0), new Keyframe(1f - UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_RARITY.Value, amountToSpawn), new Keyframe(1, amountToSpawn));
             SpawnableMapObjectDef mapObjDef = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
-            mapObjDef.spawnableMapObject = new SpawnableMapObject();
-            mapObjDef.spawnableMapObject.prefabToSpawn = wheelbarrow.spawnPrefab;
-            MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (level) => curve);
+            mapObjDef.spawnableMapObject = new SpawnableMapObject
+            {
+                prefabToSpawn = wheelbarrow.spawnPrefab
+            };
+            MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (_) => curve);
         }
         private static void SetupStoreWheelbarrow(AudioClip[] wheelbarrowSound)
         {
@@ -503,7 +498,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(wheelbarrow.spawnPrefab);
             Utilities.FixMixerGroups(wheelbarrow.spawnPrefab);
 
-            UpgradeBus.Instance.ItemsToSync.Add("Wheel", wheelbarrow);
+            UpgradeBus.Instance.ItemsToSync.Add(StoreWheelbarrow.ITEM_NAME, wheelbarrow);
 
             ItemManager.SetupStoreItem(wheelbarrow);
         }

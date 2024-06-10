@@ -18,12 +18,13 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             " for bypassing The Company's proprietary Low-Tech Manual Security Doors' security system. Comes with an 'all-nines-notched' key, a rubber gasket, and a plastic handle on a metal rod {1}.\n\n";
         public static LockSmith instance;
 
-        private List<GameObject> pins;
-        private readonly List<int> order = new List<int> { 0, 1, 2, 3, 4 };
-        private int currentPin = 0;
-        public DoorLock currentDoor = null;
-        private bool canPick = false;
+        List<GameObject> pins;
+        readonly List<int> order = [0, 1, 2, 3, 4];
+        int currentPin;
+        public DoorLock currentDoor;
+        bool canPick;
         public int timesStruck;
+        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.LOCKSMITH_PRICE.Value <= 0;
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
@@ -47,24 +48,40 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             pin4.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(() => StrikePin(3));
             pin5.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(() => StrikePin(4));
 
-            pins = new List<GameObject> { pin1, pin2, pin3, pin4, pin5 };
+            pins = [ pin1, pin2, pin3, pin4, pin5 ];
         }
 
         void Update()
         {
             if (!Keyboard.current[Key.Escape].wasPressedThisFrame) return;
             if (!transform.GetChild(0).gameObject.activeInHierarchy) return;
-            transform.GetChild(0).gameObject.SetActive(false);
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
+            ToggleLocksmithUI(false);
         }
 
-        public void BeginLockPick()
+        public void BeginLockPick(DoorLock door)
         {
-            transform.GetChild(0).gameObject.SetActive(true);
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
+            currentDoor = door;
+            timesStruck = 0;
+            ToggleLocksmithUI(true);
 
+            SelectMinigame();
+        }
+        void ToggleLocksmithUI(bool toggle)
+        {
+            if (toggle)
+            {
+                Cursor.lockState = CursorLockMode.None;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+            Cursor.visible = toggle;
+            transform.GetChild(0).gameObject.SetActive(toggle);
+            GameNetworkManager.Instance.localPlayerController.quickMenuManager.isMenuOpen = toggle;
+        }
+        void SelectMinigame()
+        {
             canPick = false;
             currentPin = 0;
             for (int i = 0; i < pins.Count; i++)
@@ -81,7 +98,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             timesStruck++;
             if (i != order[currentPin])
             {
-                BeginLockPick();
+                SelectMinigame();
                 RoundManager.Instance.PlayAudibleNoise(currentDoor.transform.position, 30f, 0.65f, timesStruck, false, 0);
                 return;
             }
@@ -89,9 +106,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             pins[i].transform.localPosition = new Vector3(pins[i].transform.localPosition.x, 35f, pins[i].transform.localPosition.z);
             if (currentPin == 5)
             {
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-                transform.GetChild(0).gameObject.SetActive(false);
+                ToggleLocksmithUI(false);
                 currentDoor.UnlockDoorSyncWithServer();
             }
             RoundManager.Instance.PlayAudibleNoise(currentDoor.transform.position, 10f, 0.65f, timesStruck, false, 0);
@@ -99,15 +114,13 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         void RandomizeListOrder<T>(List<T> list)
         {
             int n = list.Count;
-            System.Random rng = new System.Random();
+            System.Random rng = new();
 
             while (n > 1)
             {
                 n--;
                 int k = rng.Next(n + 1);
-                T value = list[k];
-                list[k] = list[n];
-                list[n] = value;
+                (list[n], list[k]) = (list[k], list[n]);
             }
         }
 
@@ -133,7 +146,6 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             return $"${price} - Allows you to pick door locks by completing a minigame.";
         }
-        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.LOCKSMITH_PRICE.Value <= 0;
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
             return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.LOCKSMITH_ITEM_PROGRESSION_ITEMS.Value.Split(","));

@@ -10,8 +10,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
     class SickBeats : OneTimeUpgrade
     {
-
-        internal List<BoomboxItem> boomBoxes = new List<BoomboxItem>();
+        internal List<BoomboxItem> boomBoxes = [];
         internal float staminaDrainCoefficient = 1f;
         internal float incomingDamageCoefficient = 1f;
         internal int damageBoost;
@@ -20,7 +19,6 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
         public const string UPGRADE_NAME = "Sick Beats";
         internal static SickBeats Instance;
-        static LguLogger logger = new LguLogger(UPGRADE_NAME);
 
         void Awake()
         {
