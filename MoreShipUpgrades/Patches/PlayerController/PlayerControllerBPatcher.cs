@@ -321,6 +321,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         [HarmonyTranspiler] // Just kidding
         static IEnumerable<CodeInstruction> UpdateTranspiler(IEnumerable<CodeInstruction> instructions)
         {
+            MethodInfo reduceCarryLoss = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreaseCarryLoss));
             MethodInfo reduceMovement = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrowMovement));
             MethodInfo additionalMovement = typeof(RunningShoes).GetMethod(nameof(RunningShoes.GetAdditionalMovementSpeed));
             MethodInfo additionalClimbSpeed = typeof(ClimbingGloves).GetMethod(nameof(ClimbingGloves.GetAdditionalClimbingSpeed));
@@ -335,9 +336,9 @@ namespace MoreShipUpgrades.Patches.PlayerController
             int index = 0;
             Tools.FindField(ref index, ref codes, findField: movementSpeed, addCode: additionalMovement, errorMessage: "Couldn't find first occurence of movement speed field");
             Tools.FindField(ref index, ref codes, findField: movementSpeed, addCode: additionalMovement, errorMessage: "Couldn't find second occurence of movement speed field");
-            Tools.FindField(ref index, ref codes, findField: carryWeight, skip: true, errorMessage: "Couldn't find ignore first occurence");
-            Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: reduceMovement, errorMessage: "Couldn't find second occurence");
-            Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: reduceMovement, errorMessage: "Couldn't find third occurence");
+            Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: reduceCarryLoss, errorMessage: "Couldn't find first carryWeight occurence");
+            Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: reduceMovement, errorMessage: "Couldn't find second carryWeight occurence");
+            Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: reduceMovement, errorMessage: "Couldn't find third carryWeight occurence");
             Tools.FindField(ref index, ref codes, findField: jumpForce, addCode: additionalJumpForce, errorMessage: "Couldn't find occurence of jump force field");
             Tools.FindField(ref index, ref codes, findField: climbSpeed, addCode: additionalClimbSpeed, errorMessage: "Couldn't find occurence of climb speed field");
             return codes;

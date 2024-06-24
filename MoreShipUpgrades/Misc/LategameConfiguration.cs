@@ -137,6 +137,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<BackMuscles.UpgradeMode> BACK_MUSCLES_UPGRADE_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> MECHANICAL_ARMS_PRICES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> MECHANICAL_ARMS_INITIAL_RANGE_INCREASE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE { get; set; }
@@ -727,6 +728,7 @@ namespace MoreShipUpgrades.Misc
             BACK_MUSCLES_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, BackMuscles.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             BACK_MUSCLES_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
             BACK_MUSCLES_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Contribution Items", "", "Items that when sold contribute to the purchase of the upgrade. Either the scan node's name or ItemProperties.itemName can be inserted here");
+            BACK_MUSCLES_UPGRADE_MODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BACK_MUSCLES_UPGRADE_MODE_KEY , LGUConstants.BACK_MUSCLES_UPGRADE_MODE_DEFAULT, LGUConstants.BACK_MUSCLES_UPGRADE_MODE_DESCRIPTION);
 
             #endregion
 

@@ -52,7 +52,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         public int GetCurrentLevel()
         {
             if (!Unlocked) return 0;
-            return Mathf.Clamp(1 + CurrentUpgrade, 1, MaxUpgrade);
+            return Mathf.Clamp(CurrentUpgrade, 0, MaxUpgrade) + 1;
         }
 
         public int GetRemainingLevels()

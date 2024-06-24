@@ -583,6 +583,12 @@ namespace MoreShipUpgrades.Misc.Util
         internal const float BACK_MUSCLES_INCREMENTAL_WEIGHT_MULTIPLIER_DEFAULT = 0.1f;
         internal const string BACK_MUSCLES_INCREMENTAL_WEIGHT_MULTIPLIER_DESCRIPTION = "Each upgrade subtracts this from the above coefficient.";
 
+        internal const string BACK_MUSCLES_UPGRADE_MODE_KEY = $"Upgrade Mode for {BackMuscles.UPGRADE_NAME}";
+        internal const BackMuscles.UpgradeMode BACK_MUSCLES_UPGRADE_MODE_DEFAULT = BackMuscles.UpgradeMode.ReduceWeight;
+        internal const string BACK_MUSCLES_UPGRADE_MODE_DESCRIPTION = "Applied mode when purchasing the upgrade:\n" +
+            "ReduceWeight (Reduces the overall weight of items when grabbed), " +
+            "ReduceCarryInfluence (Reduces the carry weight influence when sprinting)";
+
         #endregion
 
         #region Bargain Connections

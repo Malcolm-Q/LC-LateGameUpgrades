@@ -94,6 +94,9 @@ namespace MoreShipUpgrades.Managers
             if (PluginConfiguration.BACK_MUSCLES_ENABLED.Value) BackMuscles.Instance.alteredWeight = 1f;
             if (wipeObjRefs) {
                 UpgradeObjects = [];
+                discoveredItems.Clear();
+                scrapToCollectionUpgrade.Clear();
+                contributionValues.Clear();
             }
             foreach(CustomTerminalNode node in terminalNodes)
             {
@@ -108,9 +111,6 @@ namespace MoreShipUpgrades.Managers
             foreach (string key in upgradeLevels.Keys.ToList())
                 upgradeLevels[key] = 0;
 
-            discoveredItems.Clear();
-            scrapToCollectionUpgrade.Clear();
-            contributionValues.Clear();
         }
         private void ResetPlayerAttributes()
         {

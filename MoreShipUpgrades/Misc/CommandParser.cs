@@ -562,7 +562,7 @@ namespace MoreShipUpgrades.Misc
             if (!UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_ENABLED) return;
             if (!BaseUpgrade.GetActiveUpgrade(QuantumDisruptor.UPGRADE_NAME))
             {
-                outputNode = DisplayTerminalMessage("You need \'Quantum Disruptor\' upgrade active to use this command.");
+                outputNode = DisplayTerminalMessage("You need \'Quantum Disruptor\' upgrade active to use this command.\n");
                 return;
             }
             (bool, string) canRevert = QuantumDisruptor.Instance.CanRevertTime();
@@ -572,7 +572,7 @@ namespace MoreShipUpgrades.Misc
                 return;
             }
             if (terminal.IsHost || terminal.IsServer) QuantumDisruptor.Instance.RevertTimeClientRpc();
-            outputNode = DisplayTerminalMessage($"Successfully reverted back current moon's time by {QuantumDisruptor.Instance.hoursToReduce}. You currently have {QuantumDisruptor.Instance.currentUsages} out of {QuantumDisruptor.Instance.availableUsages} usages");
+            outputNode = DisplayTerminalMessage($"Successfully reverted back current moon's time by {QuantumDisruptor.Instance.hoursToReduce}. You currently have {QuantumDisruptor.Instance.currentUsages} out of {QuantumDisruptor.Instance.availableUsages} usages.\n");
         }
         private static TerminalNode ExecuteScrapInsuranceCommand(ref Terminal terminal, ref TerminalNode outputNode)
         {
