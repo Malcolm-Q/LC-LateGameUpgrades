@@ -60,20 +60,20 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             if (!UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_ENABLED) return defaultWeight;
             if (CurrentUpgradeMode != UpgradeMode.ReduceCarryInfluence) return defaultWeight;
-            return DecreaseValue(defaultWeight);
+            return DecreaseValue(defaultWeight, 1f);
         }
 
-        public static float DecreaseValue(float defaultWeight)
+        public static float DecreaseValue(float defaultWeight, float lowerBound)
         {
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultWeight;
-            return Mathf.Max(defaultWeight * UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_REDUCTION.Value - (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_INCREMENT.Value), 1f);
+            return Mathf.Max(defaultWeight * UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_REDUCTION.Value - (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_INCREMENT.Value), lowerBound);
         }
 
         public static float DecreasePossibleWeight(float defaultWeight)
         {
             if (!UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_ENABLED) return defaultWeight;
             if (CurrentUpgradeMode != UpgradeMode.ReduceWeight) return defaultWeight;
-            return DecreaseValue(defaultWeight);
+            return DecreaseValue(defaultWeight, 0f);
         }
 
         public static void UpdatePlayerWeight()
