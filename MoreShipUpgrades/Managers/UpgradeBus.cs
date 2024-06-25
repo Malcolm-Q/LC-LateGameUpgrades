@@ -27,7 +27,7 @@ namespace MoreShipUpgrades.Managers
 
         internal Dictionary<string, bool> activeUpgrades = [];
         internal Dictionary<string, int> upgradeLevels = [];
-        internal Dictionary<string, string> scrapToCollectionUpgrade = [];
+        internal Dictionary<string, List<string>> scrapToCollectionUpgrade = [];
         internal Dictionary<string, int> contributionValues = [];
         internal List<string> discoveredItems = [];
 

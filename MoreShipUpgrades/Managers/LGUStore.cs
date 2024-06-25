@@ -207,10 +207,13 @@ namespace MoreShipUpgrades.Managers
             ShareSaveClientRpc(Encoding.ASCII.GetBytes(json));
             List<StringContainer> scraps = [];
             List<StringContainer> upgrades = [];
-            foreach (KeyValuePair<string, string> pair in UpgradeBus.Instance.scrapToCollectionUpgrade)
+            foreach (KeyValuePair<string, List<string>> pair in UpgradeBus.Instance.scrapToCollectionUpgrade)
             {
-                scraps.Add(new StringContainer() { SomeText = pair.Key});
-                upgrades.Add(new StringContainer() { SomeText = pair.Value });
+                foreach (string upgradeName in pair.Value)
+                {
+                    scraps.Add(new StringContainer() { SomeText = pair.Key });
+                    upgrades.Add(new StringContainer() { SomeText = upgradeName });
+                }
             }
             SetScrapToUpgradeDictionaryClientRpc([.. scraps], [.. upgrades]);
         }
@@ -698,7 +701,7 @@ namespace MoreShipUpgrades.Managers
     public class LguSave
     {
         public Dictionary<ulong, SaveInfo> playerSaves = [];
-        public Dictionary<string, string> scrapToUpgrade = UpgradeBus.Instance.scrapToCollectionUpgrade;
+        public Dictionary<string, List<string>> scrapToUpgrade = UpgradeBus.Instance.scrapToCollectionUpgrade;
         public Dictionary<string, int> contributedValues = UpgradeBus.Instance.contributionValues;
         public List<string> discoveredItems = UpgradeBus.Instance.discoveredItems;
     }
