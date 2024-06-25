@@ -15,7 +15,7 @@ namespace MoreShipUpgrades.Patches.Items
         {
             MethodInfo GetChargeOnUse = typeof(LithiumBatteries).GetMethod(nameof(LithiumBatteries.GetChargeRateMultiplier));
             FieldInfo batteryUsage = typeof(Item).GetField(nameof(Item.batteryUsage));
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            List<CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindField(ref index, ref codes, batteryUsage, GetChargeOnUse, errorMessage: "Couldn't find the field which is used to drain the item's battery on use");
             return codes;
@@ -26,7 +26,7 @@ namespace MoreShipUpgrades.Patches.Items
         {
             MethodInfo GetChargeRate = typeof(LithiumBatteries).GetMethod(nameof(LithiumBatteries.GetChargeRateMultiplier));
             FieldInfo batteryUsage = typeof(Item).GetField(nameof(Item.batteryUsage));
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            List<CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindField(ref index, ref codes, batteryUsage, skip: true, errorMessage: "Couldn't find the field which is used to drain the item's battery passively");
             Tools.FindDiv(ref index, ref codes, GetChargeRate, errorMessage: "Couldn't find the field which is used to drain the item's battery passively");

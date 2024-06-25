@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -13,7 +10,7 @@ namespace MoreShipUpgrades.Managers
         internal bool holdingWheelbarrow = false;
         internal int upgradeSpendCredits = 0;
         internal static PlayerManager instance;
-        void Start()
+        void Awake()
         {
             instance = this;
         }
@@ -50,11 +47,11 @@ namespace MoreShipUpgrades.Managers
 
         internal void ResetSensitivityMultiplier()
         {
-            this.sensitivityMultiplier = DEFAULT_MULTIPLIER;
+            sensitivityMultiplier = DEFAULT_MULTIPLIER;
         }
         internal void ResetSloppyMultiplier()
         {
-            this.sloppyMultiplier = DEFAULT_MULTIPLIER;
+            sloppyMultiplier = DEFAULT_MULTIPLIER;
         }
 
         public float GetSensitivityMultiplier()

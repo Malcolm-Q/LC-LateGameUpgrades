@@ -1,6 +1,5 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
-using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,35 +7,13 @@ using MoreShipUpgrades.Managers;
 using System.IO;
 using System.Reflection;
 using MoreShipUpgrades.Misc;
-using Newtonsoft.Json;
-using LethalLib.Extras;
 using MoreShipUpgrades.UpgradeComponents.Items;
-using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
-using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
-using LethalLib.Modules;
-using MoreShipUpgrades.UpgradeComponents.Contracts;
-using MoreShipUpgrades.UpgradeComponents.Items.Contracts.Extraction;
-using MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exorcism;
-using MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exterminator;
-using MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval;
-using MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal;
-using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Linq;
 using MoreShipUpgrades.Compat;
-using MoreShipUpgrades.Patches.Enemies;
-using MoreShipUpgrades.Patches.HUD;
-using MoreShipUpgrades.Patches.Interactables;
-using MoreShipUpgrades.Patches.Items;
-using MoreShipUpgrades.Patches.NetworkManager;
-using MoreShipUpgrades.Patches.PlayerController;
-using MoreShipUpgrades.Patches.RoundComponents;
-using MoreShipUpgrades.Patches.TerminalComponents;
-using MoreShipUpgrades.Input;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Commands;
 using MoreShipUpgrades.Misc.UI.Application;
 using InteractiveTerminalAPI.UI;
-using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 
 namespace MoreShipUpgrades
 {
@@ -96,7 +73,7 @@ namespace MoreShipUpgrades
             SetupPerks(ref types);
 
             ContractManager.SetupContractMapObjects(ref UpgradeAssets);
-            InputUtils_Compat.Init();
+            InputUtilsCompat.Init();
             PatchManager.PatchMainVersion();
 
             InteractiveTerminalManager.RegisterApplication<UpgradeStoreApplication>(["lgu", "lategame store"]);

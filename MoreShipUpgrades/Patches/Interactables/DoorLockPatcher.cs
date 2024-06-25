@@ -30,9 +30,7 @@ namespace MoreShipUpgrades.Patches.Interactables
             if (!__instance.isLocked) return true;
             if (LockSmith.instance.gameObject.transform.GetChild(0).gameObject.activeInHierarchy) return true;
 
-            LockSmith.instance.currentDoor = __instance;
-            LockSmith.instance.BeginLockPick();
-            LockSmith.instance.timesStruck = 0;
+            LockSmith.instance.BeginLockPick(__instance);
             return false;
         }
     }

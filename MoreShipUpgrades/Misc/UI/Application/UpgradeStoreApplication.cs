@@ -2,11 +2,13 @@
 using InteractiveTerminalAPI.UI.Application;
 using InteractiveTerminalAPI.UI.Cursor;
 using InteractiveTerminalAPI.UI.Screen;
+using LethalLib.Modules;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.UI.Cursor;
 using MoreShipUpgrades.Misc.Util;
 using System;
+using System.Collections.Generic;
 using System.Xml.Linq;
 using UnityEngine;
 
@@ -99,8 +101,8 @@ namespace MoreShipUpgrades.Misc.UI.Application
             if (cursor2 == null) return -1;
             UpgradeCursorElement element = cursor1 as UpgradeCursorElement;
             UpgradeCursorElement element2 = cursor2 as UpgradeCursorElement;
-            int currentPrice1 = element.Node.Unlocked ? element.Node.CurrentUpgrade >= element.Node.MaxUpgrade ? int.MinValue : (int)(element.Node.Prices[element.Node.CurrentUpgrade] * element.Node.salePerc) : (int)(element.Node.UnlockPrice * element.Node.salePerc);
-            int currentPrice2 = element2.Node.Unlocked ? element2.Node.CurrentUpgrade >= element2.Node.MaxUpgrade ? int.MinValue :(int)(element2.Node.Prices[element2.Node.CurrentUpgrade] * element2.Node.salePerc) : (int)(element2.Node.UnlockPrice * element2.Node.salePerc);
+            int currentPrice1 = element.Node.Unlocked && element.Node.CurrentUpgrade >= element.Node.MaxUpgrade ? int.MinValue : element.Node.GetCurrentPrice();
+            int currentPrice2 = element2.Node.Unlocked && element2.Node.CurrentUpgrade >= element2.Node.MaxUpgrade ? int.MinValue : element2.Node.GetCurrentPrice();
             return currentPrice2.CompareTo(currentPrice1);
         }
         int CompareCurrentPrice(CursorElement cursor1, CursorElement cursor2)
@@ -109,8 +111,8 @@ namespace MoreShipUpgrades.Misc.UI.Application
             if (cursor2 == null) return -1;
             UpgradeCursorElement element = cursor1 as UpgradeCursorElement;
             UpgradeCursorElement element2 = cursor2 as UpgradeCursorElement;
-            int currentPrice1 = element.Node.Unlocked ? element.Node.CurrentUpgrade >=  element.Node.MaxUpgrade ? int.MaxValue : (int)(element.Node.Prices[element.Node.CurrentUpgrade] * element.Node.salePerc) : (int)(element.Node.UnlockPrice * element.Node.salePerc);
-            int currentPrice2 = element2.Node.Unlocked ? element2.Node.CurrentUpgrade >= element2.Node.MaxUpgrade ? int.MaxValue : (int)(element2.Node.Prices[element2.Node.CurrentUpgrade] * element2.Node.salePerc) : (int)(element2.Node.UnlockPrice * element2.Node.salePerc);
+            int currentPrice1 = element.Node.Unlocked && element.Node.CurrentUpgrade >= element.Node.MaxUpgrade ? int.MaxValue : element.Node.GetCurrentPrice();
+            int currentPrice2 = element2.Node.Unlocked && element2.Node.CurrentUpgrade >= element2.Node.MaxUpgrade ? int.MaxValue : element2.Node.GetCurrentPrice();
             return currentPrice1.CompareTo(currentPrice2);
         }
         static bool CanBuyUpgrade(CustomTerminalNode node)
@@ -120,7 +122,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
                 return false;
 
             int groupCredits = UpgradeBus.Instance.GetTerminal().groupCredits;
-            int price = node.Unlocked ? (int)(node.Prices[node.CurrentUpgrade] * node.salePerc) : (int)(node.UnlockPrice * node.salePerc);
+            int price = node.GetCurrentPrice();
             if (groupCredits < price)
                 return false;
 
@@ -135,13 +137,25 @@ namespace MoreShipUpgrades.Misc.UI.Application
                 ErrorMessage(node.Name, node.Description, backAction, LGUConstants.REACHED_MAX_LEVEL);
                 return;
             }
-            int price = node.Unlocked ? (int)(node.Prices[node.CurrentUpgrade] * node.salePerc) : (int)(node.UnlockPrice * node.salePerc);
+            int price = node.GetCurrentPrice();
             if (groupCredits < price)
             {
                 ErrorMessage(node.Name, node.Description, backAction, LGUConstants.NOT_ENOUGH_CREDITS);
                 return;
             }
-            Confirm(node.Name, node.Description, () => PurchaseUpgrade(node, price, backAction), backAction, string.Format(LGUConstants.PURCHASE_UPGRADE_FORMAT, price));
+            string discoveredItems = string.Empty;
+            List<string> items = ItemProgressionManager.GetDiscoveredItems(node);
+            if (items.Count > 0)
+            {
+                discoveredItems = "\n\nDiscovered items: ";
+                for (int i = 0; i < items.Count; i++)
+                {
+                    string item = items[i];
+                    discoveredItems += item;
+                    if (i < items.Count - 1) discoveredItems += ", ";
+                }
+            }
+            Confirm(node.Name, node.Description + discoveredItems, () => PurchaseUpgrade(node, price, backAction), backAction, string.Format(LGUConstants.PURCHASE_UPGRADE_FORMAT, price));
         }
         void PurchaseUpgrade(CustomTerminalNode node, int price, Action backAction)
         {
@@ -155,7 +169,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
             {
                 LguStore.Instance.HandleUpgrade(node, true);
             }
-            if (node.salePerc != 1f && UpgradeBus.Instance.PluginConfiguration.SALE_APPLY_ONCE.Value) node.salePerc = 1f;
+            if (node.SalePercentage != 1f && UpgradeBus.Instance.PluginConfiguration.SALE_APPLY_ONCE.Value) node.SalePercentage = 1f;
             backAction();
         }
     }

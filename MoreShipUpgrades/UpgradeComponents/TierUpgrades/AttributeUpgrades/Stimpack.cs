@@ -11,7 +11,7 @@ using Unity.Netcode;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 {
-    internal class Stimpack : GameAttributeTierUpgrade, IUpgradeWorldBuilding, IPlayerSync
+    internal class Stimpack : GameAttributeTierUpgrade, IUpgradeWorldBuilding
     {
 
         internal Dictionary<ulong, int> playerHealthLevels = new Dictionary<ulong, int>();
@@ -136,6 +136,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             }
         }
 
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.STIMPACK_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static void RegisterUpgrade()
         {
             SetupGenericPerk<Stimpack>(UPGRADE_NAME);

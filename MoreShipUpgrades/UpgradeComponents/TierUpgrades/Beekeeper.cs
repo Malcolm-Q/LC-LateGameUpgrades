@@ -75,7 +75,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 return free;
             }
         }
-
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.BEEKEEPER_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static void RegisterUpgrade()
         {
             SetupGenericPerk<Beekeeper>(UPGRADE_NAME);

@@ -1,21 +1,21 @@
 ﻿using GameNetcodeStuff;
-using HarmonyLib;
 using LethalLib.Extras;
 using LethalLib.Modules;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.Items;
+using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
+using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -23,26 +23,30 @@ namespace MoreShipUpgrades.Managers
     {
         internal static UpgradeBus Instance { get; set; }
         internal LategameConfiguration PluginConfiguration { get; set; }
-        private static LguLogger logger = new LguLogger(nameof(UpgradeBus));
+        static readonly LguLogger logger = new(nameof(UpgradeBus));
 
-        internal Dictionary<string, bool> activeUpgrades = new Dictionary<string, bool>();
-        internal Dictionary<string, int> upgradeLevels = new Dictionary<string, int>();
+        internal Dictionary<string, bool> activeUpgrades = [];
+        internal Dictionary<string, int> upgradeLevels = [];
+        internal Dictionary<string, string> scrapToCollectionUpgrade = [];
+        internal Dictionary<string, int> contributionValues = [];
+        internal List<string> discoveredItems = [];
+
         internal bool TPButtonPressed;
-        internal Dictionary<string, float> SaleData = new Dictionary<string, float>();
+        internal Dictionary<string, float> SaleData = [];
 
         internal AudioClip flashNoise;
         internal GameObject modStorePrefab;
         internal TerminalNode modStoreInterface;
 
-        internal Dictionary<string, SpawnableMapObjectDef> spawnableMapObjects = new Dictionary<string, SpawnableMapObjectDef>();
-        internal Dictionary<string, int> spawnableMapObjectsAmount = new Dictionary<string, int>();
-        internal readonly List<Type> upgradeTypes = new();
-        internal readonly List<Type> commandTypes = new();
-        internal readonly List<Type> itemTypes = new();
-        internal List<CustomTerminalNode> terminalNodes = new List<CustomTerminalNode>();
-        internal Dictionary<string, GameObject> UpgradeObjects = new Dictionary<string, GameObject>();
-        internal Dictionary<string, Item> ItemsToSync = new Dictionary<string, Item>();
-        internal List<Peeper> coilHeadItems = new List<Peeper>();
+        internal Dictionary<string, SpawnableMapObjectDef> spawnableMapObjects = [];
+        internal Dictionary<string, int> spawnableMapObjectsAmount = [];
+        internal readonly List<Type> upgradeTypes = [];
+        internal readonly List<Type> commandTypes = [];
+        internal readonly List<Type> itemTypes = [];
+        internal List<CustomTerminalNode> terminalNodes = [];
+        internal Dictionary<string, GameObject> UpgradeObjects = [];
+        internal Dictionary<string, Item> ItemsToSync = [];
+        internal List<Peeper> coilHeadItems = [];
         internal AssetBundle UpgradeAssets;
 
         internal GameObject helmetModel;
@@ -50,7 +54,7 @@ namespace MoreShipUpgrades.Managers
         internal bool wearingHelmet = false;
         internal int helmetHits = 0;
 
-        internal Dictionary<string, AudioClip> SFX = new Dictionary<string, AudioClip>();
+        internal Dictionary<string, AudioClip> SFX = [];
         internal bool helmetDesync;
         internal bool IsBeta = false;
 
@@ -89,7 +93,10 @@ namespace MoreShipUpgrades.Managers
             if (PluginConfiguration.DISCOMBOBULATOR_ENABLED.Value) Discombobulator.instance.flashCooldown = 0f;
             if (PluginConfiguration.BACK_MUSCLES_ENABLED.Value) BackMuscles.Instance.alteredWeight = 1f;
             if (wipeObjRefs) {
-                UpgradeObjects = new Dictionary<string, GameObject>();
+                UpgradeObjects = [];
+                discoveredItems.Clear();
+                scrapToCollectionUpgrade.Clear();
+                contributionValues.Clear();
             }
             foreach(CustomTerminalNode node in terminalNodes)
             {
@@ -103,6 +110,7 @@ namespace MoreShipUpgrades.Managers
 
             foreach (string key in upgradeLevels.Keys.ToList())
                 upgradeLevels[key] = 0;
+
         }
         private void ResetPlayerAttributes()
         {
@@ -110,7 +118,10 @@ namespace MoreShipUpgrades.Managers
             if (player == null) return; // Disconnecting the game
 
             logger.LogDebug($"Resetting {player.playerUsername}'s attributes");
-            UpgradeObjects.Values.Where(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>() is IPlayerSync).Do(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute());
+            foreach (IPlayerSync upgrade in UpgradeObjects.Values.Select(upgrade => upgrade.GetComponent<BaseUpgrade>()).OfType<IPlayerSync>().ToArray())
+            {
+                upgrade.ResetPlayerAttribute();
+            }
         }
 
         internal void LoadSales()
@@ -123,71 +134,40 @@ namespace MoreShipUpgrades.Managers
             foreach(CustomTerminalNode node in terminalNodes)
             {
                 if (!SaleData.ContainsKey(node.Name)) continue;
-                node.salePerc = SaleData[node.Name];
-                if(node.salePerc != 1f)
+                node.SalePercentage = SaleData[node.Name];
+                if(node.SalePercentage != 1f)
                 {
-                    logger.LogInfo($"Loaded sale of {node.salePerc} for {node.Name}.");
+                    logger.LogInfo($"Loaded sale of {node.SalePercentage} for {node.Name}.");
                 }
+            }
+        }
+
+        internal void AlterStoreItem(string itemName, bool configuredEnable, int configuredPrice)
+        {
+            Item storeItem = ItemsToSync[itemName];
+            if (!configuredEnable)
+            {
+                Items.RemoveShopItem(storeItem);
+                logger.LogInfo($"Removing {itemName} from store.");
+                return;
+            }
+            if (storeItem.creditsWorth != configuredPrice)
+            {
+                logger.LogInfo($"Changing {itemName}'s price from {storeItem.creditsWorth} to {configuredPrice}");
+                Items.UpdateShopItemPrice(storeItem, configuredPrice);
             }
         }
 
         internal void AlterStoreItems()
         {
-            if (!PluginConfiguration.PEEPER_ENABLED.Value)
-            {
-                Items.RemoveShopItem(ItemsToSync["Peeper"]);
-                logger.LogInfo("Removing Peeper from store.");
-            }
-            else if (ItemsToSync["Peeper"].creditsWorth != PluginConfiguration.PEEPER_PRICE.Value) Items.UpdateShopItemPrice(ItemsToSync["Peeper"], PluginConfiguration.PEEPER_PRICE.Value);
-
-            if (!PluginConfiguration.HELMET_ENABLED.Value)
-            {
-                logger.LogInfo("Removing helmet from store.");
-                Items.RemoveShopItem(ItemsToSync["Helmet"]);
-            }
-            else if (ItemsToSync["Helmet"].creditsWorth != PluginConfiguration.HELMET_PRICE.Value) Items.UpdateShopItemPrice(ItemsToSync["Helmet"], PluginConfiguration.HELMET_PRICE.Value);
-
-            if (!PluginConfiguration.DIVEKIT_ENABLED.Value)
-            {
-                logger.LogInfo("Removing divekit from store.");
-                Items.RemoveShopItem(ItemsToSync["Dive"]);
-            }
-            else if (ItemsToSync["Dive"].creditsWorth != PluginConfiguration.DIVEKIT_PRICE.Value) Items.UpdateShopItemPrice(ItemsToSync["Dive"], PluginConfiguration.DIVEKIT_PRICE.Value);
-
-            if (!PluginConfiguration.ADVANCED_TELE_ENABLED.Value)
-            {
-                logger.LogInfo("Removing AdvTele from store.");
-                Items.RemoveShopItem(ItemsToSync["AdvTele"]);
-            }
-            else if (ItemsToSync["AdvTele"].creditsWorth != PluginConfiguration.ADVANCED_TELE_PRICE.Value) Items.UpdateShopItemPrice(ItemsToSync["AdvTele"], PluginConfiguration.ADVANCED_TELE_PRICE.Value);
-
-            if (!PluginConfiguration.WEAK_TELE_ENABLED.Value)
-            {
-                logger.LogInfo("Removing Tele from store.");
-                Items.RemoveShopItem(ItemsToSync["Tele"]);
-            }
-            else if (ItemsToSync["Tele"].creditsWorth != PluginConfiguration.WEAK_TELE_PRICE.Value) Items.UpdateShopItemPrice(ItemsToSync["Tele"], PluginConfiguration.WEAK_TELE_PRICE.Value);
-
-            if (!PluginConfiguration.MEDKIT_ENABLED.Value)
-            {
-                logger.LogInfo("Removing Medkit from store.");
-                Items.RemoveShopItem(ItemsToSync["Medkit"]);
-            }
-            else if (ItemsToSync["Medkit"].creditsWorth != PluginConfiguration.MEDKIT_PRICE.Value) Items.UpdateShopItemPrice(ItemsToSync["Medkit"], PluginConfiguration.MEDKIT_PRICE.Value);
-
-            if (!PluginConfiguration.NIGHT_VISION_ENABLED.Value)
-            {
-                logger.LogInfo("Removing Night Vision from store.");
-                Items.RemoveShopItem(ItemsToSync["Night"]);
-            }
-            else if (ItemsToSync["Night"].creditsWorth != PluginConfiguration.NIGHT_VISION_PRICE.Value) Items.UpdateShopItemPrice(ItemsToSync["Night"], PluginConfiguration.NIGHT_VISION_PRICE.Value);
-
-            if (!PluginConfiguration.WHEELBARROW_ENABLED.Value)
-            {
-                logger.LogInfo("Removing Wheelbarrow from store.");
-                Items.RemoveShopItem(ItemsToSync["Wheel"]);
-            }
-            else if (ItemsToSync["Wheel"].creditsWorth != PluginConfiguration.WHEELBARROW_PRICE.Value) Items.UpdateShopItemPrice(ItemsToSync["Wheel"], PluginConfiguration.WHEELBARROW_PRICE.Value);
+            AlterStoreItem(Peeper.ITEM_NAME, PluginConfiguration.PEEPER_ENABLED, PluginConfiguration.PEEPER_PRICE);
+            AlterStoreItem(Helmet.ITEM_NAME, PluginConfiguration.HELMET_ENABLED, PluginConfiguration.HELMET_PRICE);
+            AlterStoreItem(DivingKit.ITEM_NAME, PluginConfiguration.DIVEKIT_ENABLED, PluginConfiguration.DIVEKIT_PRICE);
+            AlterStoreItem(AdvancedPortableTeleporter.ITEM_NAME, PluginConfiguration.ADVANCED_TELE_ENABLED, PluginConfiguration.ADVANCED_TELE_PRICE);
+            AlterStoreItem(RegularPortableTeleporter.ITEM_NAME, PluginConfiguration.WEAK_TELE_ENABLED, PluginConfiguration.WEAK_TELE_PRICE);
+            AlterStoreItem(Medkit.ITEM_NAME, PluginConfiguration.MEDKIT_ENABLED, PluginConfiguration.MEDKIT_PRICE);
+            AlterStoreItem(NightVisionGoggles.ITEM_NAME, PluginConfiguration.NIGHT_VISION_ENABLED, PluginConfiguration.NIGHT_VISION_PRICE);
+            AlterStoreItem(StoreWheelbarrow.ITEM_NAME, PluginConfiguration.WHEELBARROW_ENABLED, PluginConfiguration.WHEELBARROW_PRICE);
         }
 
         void SyncAvailableContracts()
@@ -195,7 +175,7 @@ namespace MoreShipUpgrades.Managers
             if (!PluginConfiguration.DATA_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
                 logger.LogInfo("Removing data contract");
-                int idx = CommandParser.contracts.IndexOf("Data");
+                int idx = CommandParser.contracts.IndexOf(LGUConstants.DATA_CONTRACT_NAME);
                 if (idx != -1)
                 {
                     CommandParser.contractInfos.RemoveAt(idx);
@@ -205,7 +185,7 @@ namespace MoreShipUpgrades.Managers
             if (!PluginConfiguration.EXTRACTION_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
                 logger.LogInfo("Removing extraction contract");
-                int idx = CommandParser.contracts.IndexOf("Extraction");
+                int idx = CommandParser.contracts.IndexOf(LGUConstants.EXTRACTION_CONTRACT_NAME);
                 if (idx != -1)
                 {
                     CommandParser.contractInfos.RemoveAt(idx);
@@ -215,7 +195,7 @@ namespace MoreShipUpgrades.Managers
             if (!PluginConfiguration.EXORCISM_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
                 logger.LogInfo("Removing exorcism contract");
-                int idx = CommandParser.contracts.IndexOf("Exorcism");
+                int idx = CommandParser.contracts.IndexOf(LGUConstants.EXORCISM_CONTRACT_NAME);
                 if (idx != -1)
                 {
                     CommandParser.contractInfos.RemoveAt(idx);
@@ -225,7 +205,7 @@ namespace MoreShipUpgrades.Managers
             if (!PluginConfiguration.DEFUSAL_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
                 logger.LogInfo("Removing defusal contract");
-                int idx = CommandParser.contracts.IndexOf("Defusal");
+                int idx = CommandParser.contracts.IndexOf(LGUConstants.DEFUSAL_CONTRACT_NAME);
                 if (idx != -1)
                 {
                     CommandParser.contractInfos.RemoveAt(idx);
@@ -242,7 +222,7 @@ namespace MoreShipUpgrades.Managers
                 else
                 {
                     logger.LogInfo("Removing exterminator contract");
-                    int idx = CommandParser.contracts.IndexOf("Exterminator");
+                    int idx = CommandParser.contracts.IndexOf(LGUConstants.EXTERMINATOR_CONTRACT_NAME);
                     if (idx != -1)
                     {
                         CommandParser.contractInfos.RemoveAt(idx);
@@ -262,7 +242,7 @@ namespace MoreShipUpgrades.Managers
         }
         internal void BuildCustomNodes()
         {
-            terminalNodes = new List<CustomTerminalNode>();
+            terminalNodes = [];
 
             foreach (Type type in upgradeTypes)
             {
@@ -272,6 +252,7 @@ namespace MoreShipUpgrades.Managers
             }
 
             terminalNodes.Sort();
+            ItemProgressionManager.InitializeContributionValues();
         }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can be purchased multiple times
@@ -281,7 +262,6 @@ namespace MoreShipUpgrades.Managers
         /// <param name="enabled"> Wether the upgrade is enabled for gameplay or not</param>
         /// <param name="initialPrice"> The initial price when purchasing the upgrade for the first time</param>
         /// <param name="prices"> Prices for any subsequent purchases of the upgrade</param>
-        /// <param name="infoFormat"> The format of the information displayed when checking the upgrade's info</param>
         internal CustomTerminalNode SetupMultiplePurchasableTerminalNode(string upgradeName,
                                                         bool shareStatus,
                                                         bool enabled,
@@ -295,8 +275,7 @@ namespace MoreShipUpgrades.Managers
 
             if (!enabled) return null;
 
-            string infoString = SetupUpgradeInfo(upgrade: multiPerk.GetComponent<BaseUpgrade>(), shareStatus: shareStatus, price: initialPrice, incrementalPrices: prices);
-            string moreInfo = infoString;
+            string moreInfo = SetupUpgradeInfo(upgrade: multiPerk.GetComponent<BaseUpgrade>(), price: initialPrice, incrementalPrices: prices);
             if (multiPerk.GetComponent<BaseUpgrade>() is IUpgradeWorldBuilding component) moreInfo += "\n\n" + component.GetWorldBuildingText(shareStatus) + "\n";
 
             return new TierTerminalNode(
@@ -316,7 +295,6 @@ namespace MoreShipUpgrades.Managers
         /// <param name="shareStatus"> Wether the upgrade is shared through all players or only for the player who purchased it</param>
         /// <param name="enabled"> Wether the upgrade is enabled for gameplay or not</param>
         /// <param name="price"></param>
-        /// <param name="info"> The information displayed when checking the upgrade's info</param>
         internal CustomTerminalNode SetupOneTimeTerminalNode(string upgradeName,
                                               bool shareStatus,
                                               bool enabled,
@@ -327,7 +305,7 @@ namespace MoreShipUpgrades.Managers
             GameObject oneTimeUpgrade = AssetBundleHandler.GetPerkGameObject(upgradeName);
             if (!oneTimeUpgrade) return null;
             if (!enabled) return null;
-            string info = SetupUpgradeInfo(upgrade: oneTimeUpgrade.GetComponent<BaseUpgrade>(), shareStatus: shareStatus, price: price);
+            string info = SetupUpgradeInfo(upgrade: oneTimeUpgrade.GetComponent<BaseUpgrade>(), price: price);
             string moreInfo = info;
             if (oneTimeUpgrade.GetComponent<BaseUpgrade>() is IUpgradeWorldBuilding component) moreInfo += "\n\n" + component.GetWorldBuildingText(shareStatus) + "\n";
 
@@ -340,7 +318,7 @@ namespace MoreShipUpgrades.Managers
                 sharedUpgrade: shareStatus);
         }
 
-        public string SetupUpgradeInfo(BaseUpgrade upgrade = null, bool shareStatus = false, int price = -1, int[] incrementalPrices = null)
+        public string SetupUpgradeInfo(BaseUpgrade upgrade = null, int price = -1, int[] incrementalPrices = null)
         {
             string info = "";
             if (upgrade is IOneTimeUpgradeDisplayInfo upgradeInfo) info += upgradeInfo.GetDisplayInfo(price) + "\n";
@@ -354,7 +332,7 @@ namespace MoreShipUpgrades.Managers
         /// <returns>An array of integers with the values that were present in the string</returns>
         internal static int[] ParseUpgradePrices(string upgradePrices)
         {
-            string[] priceString = upgradePrices.Split(',').ToArray();
+            string[] priceString = [.. upgradePrices.Split(',')];
             int[] prices = new int[priceString.Length];
 
             for (int i = 0; i < priceString.Length; i++)
@@ -367,10 +345,9 @@ namespace MoreShipUpgrades.Managers
                 {
                     logger.LogWarning($"Invalid upgrade price submitted: {prices[i]}");
                     prices[i] = -1;
-
                 }
             }
-            if (prices.Length == 1 && prices[0] == -1) { prices = new int[0]; }
+            if (prices.Length == 1 && prices[0] == -1) { prices = []; }
             return prices;
         }
     }

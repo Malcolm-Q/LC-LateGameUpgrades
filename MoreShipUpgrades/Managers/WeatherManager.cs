@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -21,7 +20,10 @@ namespace MoreShipUpgrades.Managers
                     LevelWeatherType newSelectedWeather = allowedWeathers[UnityEngine.Random.Range(0, allowedWeathers.Length)];
                     return (level.PlanetName, newSelectedWeather);
                 }
-                else return (level.PlanetName, LevelWeatherType.None);
+                else
+                {
+                    return (level.PlanetName, LevelWeatherType.None);
+                }
             }
             else
             {

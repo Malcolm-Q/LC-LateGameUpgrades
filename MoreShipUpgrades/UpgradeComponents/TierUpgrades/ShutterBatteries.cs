@@ -3,12 +3,12 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
-using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System;
+using UnityEngine;
 
-namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
+namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class DoorsHydraulicsBattery : GameAttributeTierUpgrade, IServerSync
+    internal class ShutterBatteries : TierUpgrade
     {
         public const string UPGRADE_NAME = "Shutter Batteries";
         public const string PRICES_DEFAULT = "200,300,400";
@@ -30,10 +30,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         {
             upgradeName = UPGRADE_NAME;
             overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.SHUTTER_BATTERIES_OVERRIDE_NAME;
-            logger = new LguLogger(upgradeName);
-            changingAttribute = GameAttribute.SHIP_DOOR_BATTERY;
-            initialValue = UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_INITIAL.Value;
-            incrementalValue = UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_INCREMENTAL.Value;
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
@@ -50,10 +46,21 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
                 return free;
             }
         }
+        public static float GetAdditionalDoorTime(float defaultValue)
+        {
+            if (!UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_ENABLED) return defaultValue;
+            if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
+            float additionalValue = UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_INITIAL + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_INCREMENTAL;
+            return Mathf.Clamp(defaultValue + additionalValue, defaultValue, float.MaxValue);
+        }
 
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.SHUTTER_BATTERIES_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static void RegisterUpgrade()
         {
-            SetupGenericPerk<DoorsHydraulicsBattery>(UPGRADE_NAME);
+            SetupGenericPerk<ShutterBatteries>(UPGRADE_NAME);
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {

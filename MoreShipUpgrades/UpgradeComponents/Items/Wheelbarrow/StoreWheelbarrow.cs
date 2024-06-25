@@ -8,10 +8,10 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
 {
     internal class StoreWheelbarrow : WheelbarrowScript, IDisplayInfo
     {
-        private static LguLogger logger = new LguLogger(nameof(StoreWheelbarrow));
+        static readonly LguLogger logger = new(nameof(StoreWheelbarrow));
         private GameObject wheel;
-        private const string ITEM_NAME = "Wheelbarrow";
-        private const string ITEM_DESCRIPTION = "Allows carrying multiple items";
+        internal const string ITEM_NAME = "Wheelbarrow";
+        internal const string ITEM_DESCRIPTION = "Allows carrying multiple items";
         bool KeepScanNode
         {
             get
@@ -40,7 +40,10 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
                 logger.LogError($"An error occured parsing the restriction mode ({UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_RESTRICTION_MODE}), defaulting to ItemCount");
                 restriction = Restrictions.ItemCount;
             }
-            else restriction = (Restrictions)parsedRestriction;
+            else
+            {
+                restriction = (Restrictions)parsedRestriction;
+            }
             maximumWeightAllowed = UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED.Value;
             noiseRange = UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_NOISE_RANGE.Value;
             sloppiness = UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_MOVEMENT_SLOPPY.Value;

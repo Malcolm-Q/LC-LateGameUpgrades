@@ -11,18 +11,15 @@ namespace MoreShipUpgrades.UpgradeComponents.Contracts
     internal class ContractObject : NetworkBehaviour
     {
         protected string contractType = null;
-        static LguLogger logger = new LguLogger(nameof(ContractObject));
         public bool SetPosition = false;
         public virtual void Start()
         {
-            if (contractType == null) { logger.LogWarning($"contractType was not set on {gameObject.name}!"); }
             if (ContractManager.Instance.contractType != contractType || StartOfRound.Instance.currentLevel.PlanetName != ContractManager.Instance.contractLevel)
             {
                 gameObject.SetActive(false);
                 Destroy(gameObject);
                 return;
             }
-            logger.LogInfo($"{contractType}-{name} spawned and activated.");
             if (SetPosition && IsHost)
             {
                 // make sure physicsprop is disabled if using this!
@@ -42,7 +39,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Contracts
                 Vector3 newPosition = spawnVent.floorNode.position + offsetVector;
                 transform.position = newPosition;
             }
-            if (contractType != "Exterminator") return;
+            if (contractType != LGUConstants.EXTERMINATOR_CONTRACT_NAME) return;
 
             Tools.SpawnMob("Hoarding bug", transform.position, UpgradeBus.Instance.PluginConfiguration.CONTRACT_BUG_SPAWNS.Value);
         }

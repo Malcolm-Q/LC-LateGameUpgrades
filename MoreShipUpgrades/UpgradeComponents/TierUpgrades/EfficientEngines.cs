@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class EfficientEngines : TierUpgrade, IServerSync
+    internal class EfficientEngines : TierUpgrade
     {
         internal const string UPGRADE_NAME = "Efficient Engines";
         internal const string DEFAULT_PRICES = "600, 750, 900";
@@ -42,6 +42,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             }
         }
 
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.EFFICIENT_ENGINES_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static void RegisterUpgrade()
         {
             SetupGenericPerk<EfficientEngines>(UPGRADE_NAME);

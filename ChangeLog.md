@@ -1,4 +1,35 @@
 <details>
+<summary> 3.8.0 - 2024-06-25 </summary>
+
+- Implemented an alternative "Item Progression" mode where you can acquire upgrades based on the items you sell alongside using credits to purchase them.
+  - CustomScrap: Each upgrade has a configuration option where you specifiy the several items that will contribute to the upgrade.
+    - Each item contribute through their scrap value sold multiplied by a configurable multiplier for contribution.
+    - When the items are sold and if they contribute to an upgrade, they will be displayed in the upgrade's screen display under "Discovered Items"
+  - UniqueScrap: All items present in the game will be attributed to an upgrade, ignoring item specification configurations.
+    - Each item contribute through their scrap value sold multiplied by a configurable multiplier for contribution.
+    - When the items are sold and if they contribute to an upgrade, they will be displayed in the upgrade's screen display under "Discovered Items"
+  - NearestValue: Whenever a quota is met, it will purchase the upgrade closest to the met quota value.
+    - The quota value is rounded down meaning if there are no upgrades with a price lower than the quota, it will not purchase any upgrade.
+  - ChancePerScrap: Whenever a scrap item is sold to the company, it will roll a value between 0 and 1 and checks if it's lower than the configured value for chance
+    - If it meets the criteria, it will pick an upgrade to purchase based on the criteria of randomenss:
+      - Random: Pure random and does not take any consideration of what the upgrades have.
+      - Cheapest: Picks the upgrade with the lowest price to purchase.
+      - Lowest Tier: Picks the upgrade with the lowest level to purchase.
+  - Apparatice: Whenever an apparatus is sold, a random upgrade will be purchased.
+
+- Implemented alternative mode for Back Muscles as it will only reduce the speed debuff of the carry weight on the player. The stamina debuff will still apply in this mode.
+
+- Refactored game attribute relevant upgrades (Running Shoes, Bigger Lungs, etc.) such as the effects are not cancelled when other mod is setting some value to the same variables they are interacting with.
+  - This means that any mods that requires to know the full value of the attribute variables, they no longer can just check the variable as the increments are added separately.
+
+- Fixed issue with Defusal contract's ``Lookup`` command not working due to string manipulation.
+- Fixed NRE being thrown due to PlayerManager not being initialized before relevant code is executed.
+- Fixed issue with Locksmith not locking your movement, leading to happy accidents happening.
+- Fixed issue with Quantum Disruptor leading to consuming extra days from deadline due to lack of resetting in the deadline.
+
+</details>
+
+<details>
 <summary> <h2> 3.7.2 - 2024-05-27</h2> </summary>
 
 - Added tier upgrade 'Scavenger Instincts' which increase the average amount of scrap it can spawn in a given level.

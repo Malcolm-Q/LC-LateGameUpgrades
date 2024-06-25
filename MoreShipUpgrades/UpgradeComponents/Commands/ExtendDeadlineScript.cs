@@ -41,7 +41,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
 
         internal static int GetTotalCost()
         {
-            return UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_PRICE + UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA * TimeOfDay.Instance.timesFulfilledQuota;
+            return UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_PRICE + (UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA * TimeOfDay.Instance.timesFulfilledQuota);
         }
 
         internal int GetTotalCostPerDay(int days)
@@ -50,7 +50,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
             int totalCost = 0;
             for(int i = 0; i < days; i++)
             {
-                totalCost += GetTotalCost() + daysExtended * UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY;
+                totalCost += GetTotalCost() + (daysExtended * UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY);
                 daysExtended++;
             }
             return totalCost;

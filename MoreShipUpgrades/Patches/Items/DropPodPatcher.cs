@@ -32,7 +32,7 @@ namespace MoreShipUpgrades.Patches.Items
             Tools.FindFloat(ref index, ref codes, findValue: 20, addCode: initialTimer, errorMessage: "Couldn't find the 20 value which is used as first buy ship timer");
             Tools.FindFloat(ref index, ref codes, findValue: 40, addCode: upgradedTimer, errorMessage: "Couldn't find the 40 value which is used as ship timer");
             bool found = false;
-            for (; index < codes.Count && !found; index++)
+            for (; index < codes.Count; index++)
             {
                 if (codes[index].opcode == OpCodes.Ble_Un)
                 {
@@ -53,7 +53,7 @@ namespace MoreShipUpgrades.Patches.Items
                 codes.Insert(index, new CodeInstruction(OpCodes.Cgt));
             }
             found = false;
-            for (; index < codes.Count && !found; index++)
+            for (; index < codes.Count; index++)
             {
                 if (codes[index].opcode == OpCodes.Ble_Un)
                 {

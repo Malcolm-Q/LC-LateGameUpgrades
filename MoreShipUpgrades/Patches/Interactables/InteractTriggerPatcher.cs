@@ -1,6 +1,5 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
-using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
@@ -11,10 +10,9 @@ namespace MoreShipUpgrades.Patches.Interactables
     [HarmonyPatch(typeof(InteractTrigger))]
     internal static class InteractTriggerPatcher
     {
-        private static LguLogger logger = new LguLogger(nameof(InteractTriggerPatcher));
         [HarmonyPrefix]
         [HarmonyPatch(nameof(InteractTrigger.OnTriggerEnter))]
-        private static bool pickDoor(InteractTrigger __instance, Collider other)
+        private static bool OnTriggerEnterPrefix(InteractTrigger __instance, Collider other)
         {
             if (!BaseUpgrade.GetActiveUpgrade(LockSmith.UPGRADE_NAME)) { return true; }
             PlayerControllerB player = other.gameObject.GetComponent<PlayerControllerB>();
@@ -25,11 +23,7 @@ namespace MoreShipUpgrades.Patches.Interactables
             if (!door.isLocked) { return true; }
             if (LockSmith.instance.gameObject.transform.GetChild(0).gameObject.activeInHierarchy) return true;
 
-
-            logger.LogDebug("Starting lockpicking minigame...");
-            LockSmith.instance.currentDoor = door;
-            LockSmith.instance.BeginLockPick();
-            LockSmith.instance.timesStruck = 0;
+            LockSmith.instance.BeginLockPick(door);
             return false;
         }
     }

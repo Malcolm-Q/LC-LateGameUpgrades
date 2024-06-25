@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class ChargingBooster : TierUpgrade, IServerSync
+    internal class ChargingBooster : TierUpgrade
     {
         internal const string UPGRADE_NAME = "Charging Booster";
         internal static ChargingBooster Instance { get; private set; }
@@ -73,7 +73,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 return free;
             }
         }
-
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static void RegisterUpgrade()
         {
             SetupGenericPerk<ChargingBooster>(UPGRADE_NAME);

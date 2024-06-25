@@ -2,16 +2,12 @@
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
-using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class ScavengerInstincts : TierUpgrade, IServerSync
+    internal class ScavengerInstincts : TierUpgrade
     {
         internal const string UPGRADE_NAME = "Scavenger Instincts";
         internal const string DEFAULT_PRICES = "800,1000,1200,1400";
@@ -41,6 +37,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUN_SCRAP_INCREASE.Value);
             string infoFormat = "LVL {0} - ${1} - Increases the average amount of scrap spawns by {2} additional items.\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+        }
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.SCAVENGER_INSTINCTS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {

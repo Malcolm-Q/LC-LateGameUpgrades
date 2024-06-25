@@ -2,5 +2,6 @@
 {
     internal interface IPlayerSync
     {
+        void ResetPlayerAttribute();
     }
 }

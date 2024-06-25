@@ -34,7 +34,7 @@ namespace MoreShipUpgrades.Misc.Util
             if (!found) logger.LogError(errorMessage);
             index++;
         }
-        public static int FindLocalField(int index, ref List<CodeInstruction> codes, int localIndex, object addCode, bool skip = false, bool store = false, bool requireInstance = false, string errorMessage = "Not found")
+        public static void FindLocalField(ref int index, ref List<CodeInstruction> codes, int localIndex, object addCode = null, bool skip = false, bool store = false, bool requireInstance = false, string errorMessage = "Not found")
         {
             bool found = false;
             for (; index < codes.Count; index++)
@@ -47,7 +47,7 @@ namespace MoreShipUpgrades.Misc.Util
                 break;
             }
             if (!found) logger.LogError(errorMessage);
-            return index + 1;
+            index++;
         }
         public static void FindString(ref int index, ref List<CodeInstruction> codes, string findValue, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
         {

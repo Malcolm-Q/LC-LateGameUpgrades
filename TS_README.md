@@ -35,7 +35,7 @@ If using v45 - downgrade to v2.8.6
 
 Feel free to [create a pull request](https://github.com/Malcolm-Q/LC-LateGameUpgrades) and help with the mod.
 
-Anyone who contributes in any way is greatly appreciated. People willing to contribute 3D models are needed.
+Anyone who contributes in any way is greatly appreciated.
 
 ## Credit
 - GitHub Contributors
@@ -214,6 +214,12 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 
 * __Reinforced Boots - $250__
     * Reduces incoming fall damage.
+
+* __Scavenger Instincts - $800__
+    * Increases the average amount of scrap it can spawn in a given level.
+
+* __Mechanical Arms - $300__
+    * Increases the player's interaction range with items and interactables.
 
 ## Contracts
 * __Defusal Contract__

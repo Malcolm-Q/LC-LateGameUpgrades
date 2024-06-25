@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -30,6 +31,19 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             int index = 0;
             Tools.FindFloat(ref index, ref codes, findValue: 0.3f, addCode: sigurdChance, errorMessage: "Couldn't find the 0.3 value which is used as buying rate");
             return codes.AsEnumerable();
+        }
+
+        [HarmonyPatch(nameof(TimeOfDay.MoveGlobalTime))]
+        [HarmonyTranspiler]
+        static IEnumerable<CodeInstruction> MoveGlobalTimeTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo getGlobalSpeedMultiplier = typeof(QuantumDisruptor).GetMethod(nameof(QuantumDisruptor.GetGlobalSpeedMultiplier));
+            FieldInfo globalSpeedMultiplier = typeof(TimeOfDay).GetField(nameof(TimeOfDay.globalTimeSpeedMultiplier));
+
+            List<CodeInstruction> codes = new(instructions);
+            int index = 0;
+            Tools.FindField(ref index, ref codes, findField: globalSpeedMultiplier, addCode: getGlobalSpeedMultiplier, errorMessage: "Couldn't find occurence of global speed multiplier field");
+            return codes;
         }
     }
 }

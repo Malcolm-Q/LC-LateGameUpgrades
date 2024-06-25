@@ -63,6 +63,14 @@ namespace MoreShipUpgrades.Misc.Util
 
         #region Plugin Configuration
 
+        #region Item Progression
+
+        internal const string ITEM_PROGRESSION_ITEMS_KEY = "Contribution Items";
+        internal const string ITEM_PROGRESSION_ITEMS_DEFAULT = "";
+        internal const string ITEM_PROGRESSION_ITEMS_DESCRIPTION = "Items that when sold contribute to the purchase of the upgrade. Either the scan node's name or ItemProperties.itemName can be inserted here";
+
+        #endregion
+
         #region Miscellaneous
 
         internal const string MISCELLANEOUS_SECTION = "_Misc_";
@@ -118,7 +126,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal static readonly string PROTEIN_POWDER_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ProteinPowder.UPGRADE_NAME);
         internal static readonly string BIGGER_LUNGS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, BiggerLungs.UPGRADE_NAME);
         internal static readonly string CLIMBING_GLOVES_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ClimbingGloves.UPGRADE_NAME);
-        internal static readonly string SHUTTER_BATTERIES_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, DoorsHydraulicsBattery.UPGRADE_NAME);
+        internal static readonly string SHUTTER_BATTERIES_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ShutterBatteries.UPGRADE_NAME);
         internal static readonly string QUANTUM_DISRUPTOR_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, QuantumDisruptor.UPGRADE_NAME);
         internal static readonly string RUNNING_SHOES_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, RunningShoes.UPGRADE_NAME);
         internal static readonly string STIMPACK_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, Stimpack.UPGRADE_NAME);
@@ -574,6 +582,12 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string BACK_MUSCLES_INCREMENTAL_WEIGHT_MULTIPLIER_KEY = "Carry Weight Increment";
         internal const float BACK_MUSCLES_INCREMENTAL_WEIGHT_MULTIPLIER_DEFAULT = 0.1f;
         internal const string BACK_MUSCLES_INCREMENTAL_WEIGHT_MULTIPLIER_DESCRIPTION = "Each upgrade subtracts this from the above coefficient.";
+
+        internal const string BACK_MUSCLES_UPGRADE_MODE_KEY = $"Upgrade Mode for {BackMuscles.UPGRADE_NAME}";
+        internal const BackMuscles.UpgradeMode BACK_MUSCLES_UPGRADE_MODE_DEFAULT = BackMuscles.UpgradeMode.ReduceWeight;
+        internal const string BACK_MUSCLES_UPGRADE_MODE_DESCRIPTION = "Applied mode when purchasing the upgrade:\n" +
+            "ReduceWeight (Reduces the overall weight of items when grabbed), " +
+            "ReduceCarryInfluence (Reduces the carry weight influence when sprinting)";
 
         #endregion
 
@@ -1248,6 +1262,16 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string UPGRADE_LOADED_NOTIFICATION_DEFAULT_COLOR = HEXADECIMAL_RED;
         internal const string UPGRADE_UNLOADED_NOTIFICATION_DEFAULT_COLOR = HEXADECIMAL_RED;
+
+        #endregion
+
+        #region Contracts
+
+        internal const string DEFUSAL_CONTRACT_NAME = "Defusal";
+        internal const string EXTRACTION_CONTRACT_NAME = "Extraction";
+        internal const string DATA_CONTRACT_NAME = "Data";
+        internal const string EXTERMINATOR_CONTRACT_NAME = "Exterminator";
+        internal const string EXORCISM_CONTRACT_NAME = "Exorcism";
 
         #endregion
     }

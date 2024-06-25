@@ -40,10 +40,10 @@ namespace MoreShipUpgrades.Input
         [HarmonyPrefix]
         public static void AddToKeybindMenu()
         {
-            Asset = InputUtils_Compat.Asset;
+            Asset = InputUtilsCompat.Asset;
             ActionMap = Asset.actionMaps[0];
-            WheelbarrowAction = InputUtils_Compat.WheelbarrowKey;
-            NvgAction = InputUtils_Compat.NvgKey;
+            WheelbarrowAction = InputUtilsCompat.WheelbarrowKey;
+            NvgAction = InputUtilsCompat.NvgKey;
         }
         /// <summary>
         /// Turn on relevant control bindings when starting a game

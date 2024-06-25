@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    class BackMuscles : TierUpgrade, IUpgradeWorldBuilding
+    public class BackMuscles : TierUpgrade, IUpgradeWorldBuilding
     {
         internal float alteredWeight = 1f;
         internal static BackMuscles Instance;
@@ -20,6 +20,19 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             " Highly valued by all employees of The Company for their combination of miraculous health-preserving benefits and artificial, intentionally-implemented scarcity." +
             " Sardonically called the 'Back Muscles Upgrade' by some. Comes with a user manual, which mostly contains minimalistic ads for girdle maintenance contractors." +
             " Most of the phone numbers don't work anymore.\n\n";
+
+        public enum UpgradeMode
+        {
+            ReduceWeight,
+            ReduceCarryInfluence,
+        }
+        public static UpgradeMode CurrentUpgradeMode
+        {
+            get
+            {
+                return UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_UPGRADE_MODE;
+            }
+        }
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
@@ -43,13 +56,29 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             UpdatePlayerWeight();
         }
 
-        public static float DecreasePossibleWeight(float defaultWeight)
+        public static float DecreaseCarryLoss(float defaultWeight)
+        {
+            if (!UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_ENABLED) return defaultWeight;
+            if (CurrentUpgradeMode != UpgradeMode.ReduceCarryInfluence) return defaultWeight;
+            return DecreaseValue(defaultWeight);
+        }
+
+        public static float DecreaseValue(float defaultWeight)
         {
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultWeight;
-            return defaultWeight * (UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_REDUCTION.Value - GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_INCREMENT.Value);
+            return Mathf.Max(defaultWeight * UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_REDUCTION.Value - (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_INCREMENT.Value), 1f);
         }
+
+        public static float DecreasePossibleWeight(float defaultWeight)
+        {
+            if (!UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_ENABLED) return defaultWeight;
+            if (CurrentUpgradeMode != UpgradeMode.ReduceWeight) return defaultWeight;
+            return DecreaseValue(defaultWeight);
+        }
+
         public static void UpdatePlayerWeight()
         {
+            if (CurrentUpgradeMode != UpgradeMode.ReduceWeight) return;
             PlayerControllerB player = GameNetworkManager.Instance.localPlayerController;
             if (player.ItemSlots.Length <= 0) return;
 
@@ -89,6 +118,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public new static void RegisterUpgrade()
         {
             SetupGenericPerk<BackMuscles>(UPGRADE_NAME);
+        }
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {

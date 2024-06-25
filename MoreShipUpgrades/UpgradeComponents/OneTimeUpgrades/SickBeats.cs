@@ -10,8 +10,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
     class SickBeats : OneTimeUpgrade
     {
-
-        internal List<BoomboxItem> boomBoxes = new List<BoomboxItem>();
+        internal List<BoomboxItem> boomBoxes = [];
         internal float staminaDrainCoefficient = 1f;
         internal float incomingDamageCoefficient = 1f;
         internal int damageBoost;
@@ -20,7 +19,6 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
         public const string UPGRADE_NAME = "Sick Beats";
         internal static SickBeats Instance;
-        static LguLogger logger = new LguLogger(UPGRADE_NAME);
 
         void Awake()
         {
@@ -83,6 +81,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             return txt;
         }
         public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.BEATS_PRICE.Value <= 0;
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.SICK_BEATS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static void RegisterUpgrade()
         {
             SetupGenericPerk<SickBeats>(UPGRADE_NAME);

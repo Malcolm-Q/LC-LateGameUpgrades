@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class MarketInfluence : TierUpgrade, IServerSync
+    internal class MarketInfluence : TierUpgrade
     {
         internal const string UPGRADE_NAME = "Market Influence";
         internal const string PRICES_DEFAULT = "200,350,500";
@@ -40,6 +40,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             }
         }
 
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static void RegisterUpgrade()
         {
             SetupGenericPerk<MarketInfluence>(UPGRADE_NAME);

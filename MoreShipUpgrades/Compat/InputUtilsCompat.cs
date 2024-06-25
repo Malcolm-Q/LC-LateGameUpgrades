@@ -6,7 +6,7 @@ namespace MoreShipUpgrades.Compat
     /// <summary>
     /// Class responsible for compatibility with LethalCompany_InputUtils mod
     /// </summary>
-    public static class InputUtils_Compat
+    public static class InputUtilsCompat
     {
         /// <summary>
         /// Asset used to store all the input bindings defined for our controls

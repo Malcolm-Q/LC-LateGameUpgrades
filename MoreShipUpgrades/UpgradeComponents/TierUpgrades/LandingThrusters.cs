@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class LandingThrusters : TierUpgrade, IServerSync
+    internal class LandingThrusters : TierUpgrade
     {
         internal const string UPGRADE_NAME = "Landing Thrusters";
         internal const string DEFAULT_PRICES = "250,450,650";
@@ -48,6 +48,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             }
         }
 
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static void RegisterUpgrade()
         {
             SetupGenericPerk<LandingThrusters>(UPGRADE_NAME);

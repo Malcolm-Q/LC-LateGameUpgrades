@@ -18,5 +18,4 @@ namespace MoreShipUpgrades.Patches.Interactables
             ContractManager.probedWeathers.Clear();
         }
     }
-
 }

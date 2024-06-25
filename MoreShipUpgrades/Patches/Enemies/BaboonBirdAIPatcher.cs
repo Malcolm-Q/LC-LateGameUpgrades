@@ -13,7 +13,7 @@ namespace MoreShipUpgrades.Patches.Enemies
         [HarmonyTranspiler]
         private static IEnumerable<CodeInstruction> DoLOSCheckTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            List<CodeInstruction> codes = new(instructions);
             int index = 0;
             PatchCheckItemInWheelbarrow(ref index, ref codes);
             return codes;

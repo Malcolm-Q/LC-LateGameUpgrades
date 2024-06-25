@@ -7,9 +7,9 @@ using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System;
 using UnityEngine;
 
-namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
+namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class RunningShoes : GameAttributeTierUpgrade, IUpgradeWorldBuilding, IPlayerSync
+    internal class RunningShoes : TierUpgrade, IUpgradeWorldBuilding
     {
         public const string UPGRADE_NAME = "Running Shoes";
         public static string PRICES_DEFAULT = "500,750,1000";
@@ -19,10 +19,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         {
             upgradeName = UPGRADE_NAME;
             overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.RUNNING_SHOES_OVERRIDE_NAME;
-            logger = new LguLogger(UPGRADE_NAME);
-            changingAttribute = GameAttribute.PLAYER_MOVEMENT_SPEED;
-            initialValue = UpgradeBus.Instance.PluginConfiguration.MOVEMENT_SPEED_UNLOCK.Value;
-            incrementalValue = UpgradeBus.Instance.PluginConfiguration.MOVEMENT_INCREMENT.Value;
         }
         public static float ApplyPossibleReducedNoiseRange(float defaultValue)
         {
@@ -41,6 +37,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
+
+        public static float GetAdditionalMovementSpeed(float defaultValue)
+        {
+            if (!UpgradeBus.Instance.PluginConfiguration.RUNNING_SHOES_ENABLED) return defaultValue;
+            if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
+            float additionalValue = UpgradeBus.Instance.PluginConfiguration.MOVEMENT_SPEED_UNLOCK + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.MOVEMENT_INCREMENT);
+            return Mathf.Clamp(defaultValue + additionalValue, defaultValue, float.MaxValue);
+        }
+
         public override bool CanInitializeOnStart
         {
             get
@@ -51,6 +56,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             }
         }
 
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.RUNNING_SHOES_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static void RegisterUpgrade()
         {
             SetupGenericPerk<RunningShoes>(UPGRADE_NAME);

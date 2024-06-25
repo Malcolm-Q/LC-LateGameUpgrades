@@ -9,6 +9,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
     {
         public const string UPGRADE_NAME = "Lethal Deals";
         const int GUARANTEED_ITEMS_AMOUNT = 1;
+        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.LETHAL_DEALS_PRICE.Value <= 0;
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
@@ -23,7 +24,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             return $"${price} - Guarantees at least one item will be on sale in the store.";
         }
-        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.LETHAL_DEALS_PRICE.Value <= 0;
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.LETHAL_DEALS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static void RegisterUpgrade()
         {
             SetupGenericPerk<LethalDeals>(UPGRADE_NAME);

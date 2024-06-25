@@ -10,8 +10,6 @@ using MoreShipUpgrades.Patches.PlayerController;
 using MoreShipUpgrades.Patches.RoundComponents;
 using MoreShipUpgrades.Patches.TerminalComponents;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -71,7 +69,9 @@ namespace MoreShipUpgrades.Managers
         {
             try
             {
+                harmony.PatchAll(typeof(DepositItemsDeskPatcher));
                 harmony.PatchAll(typeof(DoorLockPatcher));
+                harmony.PatchAll(typeof(HangarShipDoorPatcher));
                 harmony.PatchAll(typeof(InteractTriggerPatcher));
                 harmony.PatchAll(typeof(StartMatchLevelPatcher));
                 harmony.PatchAll(typeof(SteamValveHazardPatch));

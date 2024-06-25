@@ -3,7 +3,7 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Patches.RoundComponents
@@ -44,6 +44,15 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             System.Random random = new(StartOfRound.Instance.randomMapSeed);
             if (random.Next(0, 100) < Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.SIGURD_CHANCE.Value, 0, 100))
                 StartOfRound.Instance.companyBuyingRate += (UpgradeBus.Instance.PluginConfiguration.SIGURD_PERCENT.Value / 100);
+        }
+
+        [HarmonyPatch(nameof(TimeOfDay.SetNewProfitQuota))]
+        [HarmonyPrefix]
+        static void SetNewProfitQuotaPrefix(TimeOfDay __instance)
+        {
+            if (!__instance.IsHost) return;
+
+            ItemProgressionManager.CheckNewQuota(__instance.quotaFulfilled);
         }
     }
 

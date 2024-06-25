@@ -111,9 +111,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
             logger.LogDebug($"{monsterName} cannot be harvested at any level");
             return false;
-
         }
-
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
@@ -138,7 +136,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             sb.Append(GetHunterInfo(0, initialPrice));
             for (int i = 0; i < maxLevels; i++)
                 sb.Append(GetHunterInfo(i + 1, incrementalPrices[i]));
@@ -149,11 +147,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             get
             {
                 string[] prices = UpgradeBus.Instance.PluginConfiguration.HUNTER_UPGRADE_PRICES.Value.Split(',');
-                bool free = UpgradeBus.Instance.PluginConfiguration.HUNTER_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+                bool free = UpgradeBus.Instance.PluginConfiguration.HUNTER_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
                 return free;
             }
         }
 
+        public new static (string, string[]) RegisterScrapToUpgrade()
+        {
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.HUNTER_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+        }
         public new static void RegisterUpgrade()
         {
             SetupGenericPerk<Hunter>(UPGRADE_NAME);
