@@ -35,7 +35,7 @@ If using v45 - downgrade to v2.8.6
 
 Feel free to [create a pull request](https://github.com/Malcolm-Q/LC-LateGameUpgrades) and help with the mod.
 
-Anyone who contributes in any way is greatly appreciated. People willing to contribute 3D models are needed.
+Anyone who contributes in any way is greatly appreciated.
 
 ## Credit
 - GitHub Contributors
