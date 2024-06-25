@@ -1,5 +1,5 @@
 <details>
-<summary> 3.8.0 - 2024-06-?? </summary>
+<summary> 3.8.0 - 2024-06-25 </summary>
 
 - Implemented an alternative "Item Progression" mode where you can acquire upgrades based on the items you sell alongside using credits to purchase them.
   - CustomScrap: Each upgrade has a configuration option where you specifiy the several items that will contribute to the upgrade.
