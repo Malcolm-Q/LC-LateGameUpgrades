@@ -41,6 +41,9 @@ namespace MoreShipUpgrades.Patches.PlayerController
             if (__instance != UpgradeBus.Instance.GetLocalPlayer()) return;
             if (!BaseUpgrade.GetActiveUpgrade(NightVision.UPGRADE_NAME)) return;
 
+            Plugin.mls.LogDebug($"Player that died: {__instance.playerUsername}");
+            Plugin.mls.LogDebug($"Local player we are deactivating to: {UpgradeBus.Instance.GetLocalPlayer().playerUsername}");
+
             UpgradeBus.Instance.UpgradeObjects[NightVision.UPGRADE_NAME].GetComponent<NightVision>().DisableOnClient();
             if (!UpgradeBus.Instance.PluginConfiguration.NIGHT_VISION_DROP_ON_DEATH.Value) return;
             NightVision.Instance.SpawnNightVisionItemOnDeathServerRpc(__instance.transform.position);
