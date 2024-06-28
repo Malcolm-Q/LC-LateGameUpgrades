@@ -1,4 +1,20 @@
 <details>
+<summary> 3.8.2 - 2024-06-26 </summary>
+
+- Implemented another Back Muscles alternative mode where you can reduce the carry weight's influence on stamina consumption when running.
+- Added info for Back Muscles alternative modes.
+
+</details>
+
+<details>
+<summary> 3.8.1 - 2024-06-25 </summary>
+
+- Fixed issue with Back Muscles leading to additional 100lb being added to the player due to negative weight countermeasures.
+- Added configurability of allowing items being assigned to multiple upgrades.
+
+</details>
+
+<details>
 <summary> 3.8.0 - 2024-06-25 </summary>
 
 - Implemented an alternative "Item Progression" mode where you can acquire upgrades based on the items you sell alongside using credits to purchase them.

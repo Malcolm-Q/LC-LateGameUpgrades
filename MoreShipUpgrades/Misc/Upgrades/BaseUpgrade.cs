@@ -127,13 +127,6 @@ namespace MoreShipUpgrades.Misc.Upgrades
             throw new NotSupportedException();
         }
 
-        /// <summary>
-        /// Generic function where it adds a script (specificed through the type) into an GameObject asset 
-        /// which is present in a provided asset bundle in a given path and registers it as a network prefab.
-        /// </summary>
-        /// <typeparam name="T"> The script we wish to include into the GameObject asset</typeparam>
-        /// <param name="bundle"> The asset bundle where the asset is located</param>
-        /// <param name="path"> The path to access the asset in the asset bundle</param>
         internal static void SetupGenericPerk<T>(string upgradeName) where T : Component
         {
             Tools.SetupGameObject<T>(upgradeName);

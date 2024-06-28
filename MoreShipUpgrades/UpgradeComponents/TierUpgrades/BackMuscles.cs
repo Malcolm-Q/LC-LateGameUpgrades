@@ -25,6 +25,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             ReduceWeight,
             ReduceCarryInfluence,
+            ReduceCarryStrain,
         }
         public static UpgradeMode CurrentUpgradeMode
         {
@@ -55,25 +56,27 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             base.Unwind();
             UpdatePlayerWeight();
         }
+        public static float DecreaseStrain(float defaultWeight)
+        {
+            return DecreaseValue(defaultWeight, UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_ENABLED, UpgradeMode.ReduceCarryStrain, 1f);
+        }
 
         public static float DecreaseCarryLoss(float defaultWeight)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_ENABLED) return defaultWeight;
-            if (CurrentUpgradeMode != UpgradeMode.ReduceCarryInfluence) return defaultWeight;
-            return DecreaseValue(defaultWeight, 1f);
-        }
-
-        public static float DecreaseValue(float defaultWeight, float lowerBound)
-        {
-            if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultWeight;
-            return Mathf.Max(defaultWeight * UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_REDUCTION.Value - (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_INCREMENT.Value), lowerBound);
+            return DecreaseValue(defaultWeight, UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_ENABLED, UpgradeMode.ReduceCarryInfluence, 1f);
         }
 
         public static float DecreasePossibleWeight(float defaultWeight)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_ENABLED) return defaultWeight;
-            if (CurrentUpgradeMode != UpgradeMode.ReduceWeight) return defaultWeight;
-            return DecreaseValue(defaultWeight, 0f);
+            return DecreaseValue(defaultWeight, UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_ENABLED, UpgradeMode.ReduceWeight, 0f);
+        }
+
+        public static float DecreaseValue(float defaultWeight, bool enabled, UpgradeMode intendedMode, float lowerBound)
+        {
+            if (!enabled) return defaultWeight;
+            if (CurrentUpgradeMode != intendedMode) return defaultWeight;
+            if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultWeight;
+            return Mathf.Max(defaultWeight * (UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_REDUCTION.Value - (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_INCREMENT.Value)), lowerBound);
         }
 
         public static void UpdatePlayerWeight()
@@ -102,7 +105,30 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
             Func<int, float> infoFunction = level => (UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_REDUCTION.Value - (level * UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_INCREMENT.Value)) * 100;
-            string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
+            string infoFormat;
+            switch(CurrentUpgradeMode)
+            {
+                case UpgradeMode.ReduceWeight:
+                    {
+                        infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
+                        break;
+                    }
+                case UpgradeMode.ReduceCarryInfluence:
+                    {
+                        infoFormat = "LVL {0} - ${1} - Reduces the weight's influence on player's running speed by {2}%\n";
+                        break;
+                    }
+                case UpgradeMode.ReduceCarryStrain:
+                    {
+                        infoFormat = "LVL {0} - ${1} - Reduces the weight's influence on player's stamina consumption while running by {2}%\n";
+                        break;
+                    }
+                default:
+                    {
+                        infoFormat = "Undefined";
+                        break;
+                    }
+            }
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
         public override bool CanInitializeOnStart

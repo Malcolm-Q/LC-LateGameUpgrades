@@ -587,7 +587,8 @@ namespace MoreShipUpgrades.Misc.Util
         internal const BackMuscles.UpgradeMode BACK_MUSCLES_UPGRADE_MODE_DEFAULT = BackMuscles.UpgradeMode.ReduceWeight;
         internal const string BACK_MUSCLES_UPGRADE_MODE_DESCRIPTION = "Applied mode when purchasing the upgrade:\n" +
             "ReduceWeight (Reduces the overall weight of items when grabbed), " +
-            "ReduceCarryInfluence (Reduces the carry weight influence when sprinting)";
+            "ReduceCarryInfluence (Reduces the carry weight influence when sprinting), " +
+            "ReduceStrain (Reduces the carry weight influence on stamina consumption when running),";
 
         #endregion
 
