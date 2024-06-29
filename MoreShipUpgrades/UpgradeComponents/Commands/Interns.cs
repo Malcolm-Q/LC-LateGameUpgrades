@@ -71,7 +71,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
                     player.isInElevator = false;
                     player.isInHangarShipRoom = false;
                     player.isInsideFactory = true;
-                    player.wasInElevatorLastFrame = false;
                     StartOfRound.Instance.SetPlayerObjectExtrapolate(false);
                     player.setPositionOfDeadPlayer = false;
                     player.helmetLight.enabled = false;

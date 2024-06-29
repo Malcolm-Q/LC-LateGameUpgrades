@@ -55,7 +55,7 @@ namespace MoreShipUpgrades.Patches.Items
             found = false;
             for (; index < codes.Count; index++)
             {
-                if (codes[index].opcode == OpCodes.Ble_Un)
+                if (codes[index].opcode == OpCodes.Ble_Un && codes[index-1].opcode == OpCodes.Ldc_R4 && (float)codes[index-1].operand == 30f)
                 {
                     found = true;
                     break;
