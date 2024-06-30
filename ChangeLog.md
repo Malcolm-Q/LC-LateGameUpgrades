@@ -4,6 +4,7 @@
 - Implemented another Back Muscles alternative mode where you can reduce the carry weight's influence on stamina consumption when running.
 - Added info for Back Muscles alternative modes.
 - Fixed issue with v55 release related to item drop ship no longer leaving after getting the items.
+- Fixed issue with wheelbarrow weight calculation giving wrong results due to misplacement of parentheses.
 
 </details>
 
