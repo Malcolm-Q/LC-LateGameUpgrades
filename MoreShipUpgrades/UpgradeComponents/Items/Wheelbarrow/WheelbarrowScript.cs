@@ -13,10 +13,10 @@ using UnityEngine.InputSystem;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
 {
-    abstract class WheelbarrowScript : LategameItem
+    public abstract class WheelbarrowScript : LategameItem
     {
         internal const float VELOCITY_APPLY_EFFECT_THRESHOLD = 5.0f;
-        protected enum Restrictions
+        public enum Restrictions
         {
             None,
             TotalWeight,

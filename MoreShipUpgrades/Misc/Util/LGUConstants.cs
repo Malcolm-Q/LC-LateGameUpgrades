@@ -3,13 +3,10 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
+using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
-using System;
-using System.Diagnostics;
-using System.Numerics;
-using System.Xml.Linq;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Misc.Util
@@ -64,6 +61,46 @@ namespace MoreShipUpgrades.Misc.Util
         #region Plugin Configuration
 
         #region Item Progression
+
+        internal const string ITEM_PROGRESSION_SECTION = "_Item Progression Route_";
+
+        internal const string ALTERNATIVE_ITEM_PROGRESSION_KEY = "Enable Item Progression";
+        internal const bool ALTERNATIVE_ITEM_PROGRESSION_DEFAULT = false;
+        internal const string ALTERNATIVE_ITEM_PROGRESSION_DESCRIPTION = "Alternative Item Progression\n" +
+                                                                        "If true, items retrieved can be used for ship upgrades.";
+
+        internal const string ITEM_PROGRESSION_MODE_KEY = "Item Progression Mode";
+        internal const ItemProgressionManager.CollectionModes ITEM_PROGRESSION_MODE_DEFAULT = ItemProgressionManager.CollectionModes.CustomScrap;
+        internal const string ITEM_PROGRESSION_MODE_DESCRIPTION = "Item Progression Mode\n" +
+                                                                "Supported Modes: \n" +
+                                                                "CustomScrap: Specified scrap will contribute towards the level of the associated upgrade.\n" +
+                                                                "UniqueScrap: All scrap (specifications will be ignored) will contribute towards the level of a random assigned upgrade\n" +
+                                                                "NearestValue: At the end of each Quota, grant a random upgrade worth the nearest total scrap collected, rounded down.\n" +
+                                                                "ChancePerScrap: For each scrap sold, run a configured chance to receive a random/cheap/lowest tier upgrade.\n" +
+                                                                "Apparatice: Always receive an upgrade when an apparatus has been successfully sold.";
+
+        internal const string ITEM_PROGRESSION_CONTRIBUTION_MULTIPLIER_KEY = "Item Progression Multiplier";
+        internal const float ITEM_PROGRESSION_CONTRIBUTION_MULTIPLIER_DEFAULT = 0.85f;
+        internal const string ITEM_PROGRESSION_CONTRIBUTION_MULTIPLIER_DESCRIPTION = "Item Progression Contribution Multiplier\n" +
+                                                                                    "The multiplier for scrap's value contribution towards an upgrade.";
+
+        internal const string SCRAP_UPGRADE_CHANCE_KEY = "Scrap Upgrade Chance";
+        internal const float SCRAP_UPGRADE_CHANCE_DEFAULT = 0.05f;
+        internal const string SCRAP_UPGRADE_CHANCE_DESCRIPTION = "Upgrade Chance Calculation\n" +
+                                                                "Only used if Item Progression Mode is set to ChancePerScrap.\n" +
+                                                                "X -> (X * 100) %";
+
+        internal const string SCRAP_UPGRADE_MODE_KEY = "Upgrade Chance Priority";
+        internal const ItemProgressionManager.ChancePerScrapModes SCRAP_UPGRADE_MODE_DEFAULT = ItemProgressionManager.ChancePerScrapModes.LowestLevel;
+        internal const string SCRAP_UPGRADE_MODE_DESCRIPTION = "Upgrade Chance Priority\n" +
+                                                            "Only used if Item Progression Mode is set to ChancePerScrap.\n" +
+                                                            "Acceptable Values:\nRandom: Pick a random upgrade to apply.\n" +
+                                                            "Cheapest: Pick the cheapest upgrade to apply.\n" +
+                                                            "Lowest Tier: Pick the upgrade with the lowest level to apply.";
+
+        internal const string ITEM_PROGRESSION_BLACKLISTED_ITEMS_KEY = "Blacklisted Items";
+        internal const string ITEM_PROGRESSION_BLACKLISTED_ITEMS_DEFAULT = "Clipboard";
+        internal const string ITEM_PROGRESSION_BLACKLISTED_ITEMS_DESCRIPTION = "Blacklisted items for Item Progression.\nOnly used if Item Progression Mode is set to UniqueScrap. These items will NOT contribute towards ANY upgrade";
 
         internal const string ITEM_PROGRESSION_ITEMS_KEY = "Contribution Items";
         internal const string ITEM_PROGRESSION_ITEMS_DEFAULT = "";
@@ -414,6 +451,113 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string PEEPER_PRICE_DESCRIPTION = $"Default price to purchase a {Peeper.ITEM_NAME}.";
 
         internal static readonly string PEEPER_SCAN_NODE_KEY = string.Format(ITEM_SCAN_NODE_KEY_FORMAT, Peeper.ITEM_NAME);
+        #endregion
+
+        #region Shopping Cart
+
+        internal const string SCRAP_WHEELBARROW_ENABLED_KEY = $"Enable the {ScrapWheelbarrow.ITEM_NAME} Item";
+        internal const bool SCRAP_WHEELBARROW_ENABLED_DEFAULT = true;
+        internal const string SCRAP_WHEELBARROW_ENABLED_DESCRIPTION = "Allows you to scavenge a shopping cart in which you can store items on";
+
+        internal const string SCRAP_WHEELBARROW_RARITY_KEY = $"Spawn Chance of the {ScrapWheelbarrow.ITEM_NAME} Item";
+        internal const float SCRAP_WHEELBARROW_RARITY_DEFAULT = 0.1f;
+        internal const string SCRAP_WHEELBARROW_RARITY_DESCRIPTION = $"How likely it is for a {ScrapWheelbarrow.ITEM_NAME} item to spawn when landing on a moon. (0.1 = 10%)";
+
+        internal const string SCRAP_WHEELBARROW_WEIGHT_KEY = $"Weight of the {ScrapWheelbarrow.ITEM_NAME} Item";
+        internal const float SCRAP_WHEELBARROW_WEIGHT_DEFAULT = 25f;
+        internal const string SCRAP_WHEELBARROW_WEIGHT_DESCRIPTION = $"Weight of the {ScrapWheelbarrow.ITEM_NAME} without any items in lbs";
+
+        internal const string SCRAP_WHEELBARROW_RESTRICTION_MODE_KEY = $"Restrictions on the {ScrapWheelbarrow.ITEM_NAME} Item";
+        internal const WheelbarrowScript.Restrictions SCRAP_WHEELBARROW_RESTRICTION_MODE_DEFAULT = WheelbarrowScript.Restrictions.ItemCount;
+        internal const string SCRAP_WHEELBARROW_RESTRICTION_MODE_DESCRIPTION = $"Restriction applied when trying to insert an item on the {ScrapWheelbarrow.ITEM_NAME}.\n" +
+                                                                        $"Supported values: None, ItemCount, TotalWeight, All";
+
+        internal const string SCRAP_WHEELBARROW_MINIMUM_VALUE_KEY = $"Minimum scrap value of {ScrapWheelbarrow.ITEM_NAME}";
+        internal const int SCRAP_WHEELBARROW_MINIMUM_VALUE_DEFAULT = 50;
+        internal const string SCRAP_WHEELBARROW_MINIMUM_VALUE_DESCRIPTION = "Lower boundary of the scrap's possible value";
+
+        internal const string SCRAP_WHEELBARROW_MAXIMUM_VALUE_KEY = $"Maximum scrap value of {ScrapWheelbarrow.ITEM_NAME}";
+        internal const int SCRAP_WHEELBARROW_MAXIMUM_VALUE_DEFAULT = 100;
+        internal const string SCRAP_WHEELBARROW_MAXIMUM_VALUE_DESCRIPTION = "Higher boundary of the scrap's possible value";
+
+        internal const string SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_KEY = $"Maximum amount of weight for {ScrapWheelbarrow.ITEM_NAME}";
+        internal const float SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_DEFAULT = 100f;
+        internal const string SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_DESCRIPTION = $"How much weight (in lbs and after weight reduction multiplier is applied on the stored items) a {ScrapWheelbarrow.ITEM_NAME} can carry in items before it is considered full.";
+
+        internal const string SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_KEY = $"Maximum amount of items for {ScrapWheelbarrow.ITEM_NAME}";
+        internal const int SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_DEFAULT = 6;
+        internal const string SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_DESCRIPTION = $"Amount of items allowed before the {ScrapWheelbarrow.ITEM_NAME} is considered full";
+
+        internal const string SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER_KEY = $"Weight reduction multiplier for {ScrapWheelbarrow.ITEM_NAME}";
+        internal const float SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER_DEFAULT = 0.5f;
+        internal const string SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MUTLIPLIER_DESCRIPTION = $"How much an item's weight will be ignored to the {ScrapWheelbarrow.ITEM_NAME}'s total weight";
+
+        internal const string SCRAP_WHEELBARROW_NOISE_RANGE_KEY = $"Noise range of the {ScrapWheelbarrow.ITEM_NAME} Item";
+        internal const float SCRAP_WHEELBARROW_NOISE_RANGE_DEFAULT = 14f;
+        internal const string SCRAP_WHEELBARROW_NOISE_RANGE_DESCRIPTION = $"How far the {ScrapWheelbarrow.ITEM_NAME} sound propagates to nearby enemies when in movement";
+
+        internal const string SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_KEY = $"Look sensitivity drawback of the {ScrapWheelbarrow.ITEM_NAME} Item";
+        internal const float SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_DEFAULT = 0.4f;
+        internal const string SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_DESCRIPTION = $"Value multiplied on the player's look sensitivity when moving with the {ScrapWheelbarrow.ITEM_NAME} Item";
+
+        internal const string SCRAP_WHEELBARROW_MOVEMENT_SLOPPY_KEY = $"Sloppiness of the {ScrapWheelbarrow.ITEM_NAME} Item";
+        internal const float SCRAP_WHEELBARROW_MOVEMENT_SLOPPY_DEFAULT = 5f;
+        internal const string SCRAP_WHEELBARROW_MOVEMENT_SLOPPY_DESCRIPTION = $"Value multiplied on the player's movement to give the feeling of drifting while carrying the {ScrapWheelbarrow.ITEM_NAME} Item";
+
+        internal const string SCRAP_WHEELBARROW_PLAY_NOISE_KEY = $"Plays noises for players with {ScrapWheelbarrow.ITEM_NAME} Item";
+        internal const bool SCRAP_WHEELBARROW_PLAY_NOISE_DEFAULT = true;
+        internal const string SCRAP_WHEELBARROW_PLAY_NOISE_DESCRIPTION = "If false, it will just not play the sounds, it will still attract monsters to noise";
+
+        #endregion
+
+        #region Wheelbarrow
+
+        internal const string WHEELBARROW_ENABLED_KEY = $"Enable the {StoreWheelbarrow.ITEM_NAME} Item";
+        internal const bool WHEELBARROW_ENABLED_DEFAULT = true;
+        internal const string WHEELBARROW_ENABLED_DESCRIPTION = "Allows you to buy a wheelbarrow to carry items outside of your inventory";
+
+        internal const string WHEELBARROW_PRICE_KEY = $"Price of the {StoreWheelbarrow.ITEM_NAME} Item";
+        internal const int WHEELBARROW_PRICE_DEFAULT = 400;
+        internal const string WHEELBARROW_PRICE_DESCRIPTION = $"Price of the {StoreWheelbarrow.ITEM_NAME} in the store";
+
+        internal const string WHEELBARROW_WEIGHT_KEY = $"Weight of the {StoreWheelbarrow.ITEM_NAME} Item";
+        internal const float WHEELBARROW_WEIGHT_DEFAULT = 30f;
+        internal const string WHEELBARROW_WEIGHT_DESCRIPTION = $"Weight of the {StoreWheelbarrow.ITEM_NAME} without any items in lbs";
+
+        internal const string WHEELBARROW_RESTRICTION_MODE_KEY = $"Restrictions on the {StoreWheelbarrow.ITEM_NAME} Item";
+        internal const WheelbarrowScript.Restrictions WHEELBARROW_RESTRICTION_MODE_DEFAULT = WheelbarrowScript.Restrictions.ItemCount;
+        internal const string WHEELBARROW_RESTRICTION_MODE_DESCRIPTION = $"Restriction applied when trying to insert an item on the {StoreWheelbarrow.ITEM_NAME}.\n" +
+                                                                        $"Supported values: None, ItemCount, TotalWeight, All";
+
+        internal const string WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_KEY = $"Maximum amount of weight for {StoreWheelbarrow.ITEM_NAME}";
+        internal const float WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_DEFAULT = 100f;
+        internal const string WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_DESCRIPTION = $"How much weight (in lbs and after weight reduction multiplier is applied on the stored items) a {StoreWheelbarrow.ITEM_NAME} can carry in items before it is considered full.";
+
+        internal const string WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_KEY = $"Maximum amount of items for {StoreWheelbarrow.ITEM_NAME}";
+        internal const int WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_DEFAULT = 4;
+        internal const string WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_DESCRIPTION = $"Amount of items allowed before the {StoreWheelbarrow.ITEM_NAME} is considered full";
+
+        internal const string WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER_KEY = $"Weight reduction multiplier for {StoreWheelbarrow.ITEM_NAME}";
+        internal const float WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER_DEFAULT = 0.7f;
+        internal const string WHEELBARROW_WEIGHT_REDUCTION_MUTLIPLIER_DESCRIPTION = $"How much an item's weight will be ignored to the {StoreWheelbarrow.ITEM_NAME}'s total weight";
+
+        internal const string WHEELBARROW_NOISE_RANGE_KEY = $"Noise range of the {StoreWheelbarrow.ITEM_NAME} Item";
+        internal const float WHEELBARROW_NOISE_RANGE_DEFAULT = 14f;
+        internal const string WHEELBARROW_NOISE_RANGE_DESCRIPTION = $"How far the {StoreWheelbarrow.ITEM_NAME} sound propagates to nearby enemies when in movement";
+
+        internal const string WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_KEY = $"Look sensitivity drawback of the {StoreWheelbarrow.ITEM_NAME} Item";
+        internal const float WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_DEFAULT = 0.4f;
+        internal const string WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_DESCRIPTION = $"Value multiplied on the player's look sensitivity when moving with the {StoreWheelbarrow.ITEM_NAME} Item";
+
+        internal const string WHEELBARROW_MOVEMENT_SLOPPY_KEY = $"Sloppiness of the {StoreWheelbarrow.ITEM_NAME} Item";
+        internal const float WHEELBARROW_MOVEMENT_SLOPPY_DEFAULT = 5f;
+        internal const string WHEELBARROW_MOVEMENT_SLOPPY_DESCRIPTION = $"Value multiplied on the player's movement to give the feeling of drifting while carrying the {StoreWheelbarrow.ITEM_NAME} Item";
+
+        internal const string WHEELBARROW_PLAY_NOISE_KEY = $"Plays noises for players with {StoreWheelbarrow.ITEM_NAME} Item";
+        internal const bool WHEELBARROW_PLAY_NOISE_DEFAULT = true;
+        internal const string WHEELBARROW_PLAY_NOISE_DESCRIPTION = "If false, it will just not play the sounds, it will still attract monsters to noise";
+
+        internal static readonly string STORE_WHEELBARROW_SCAN_NODE_KEY = string.Format(ITEM_SCAN_NODE_KEY_FORMAT, StoreWheelbarrow.ITEM_NAME);
         #endregion
 
         #endregion

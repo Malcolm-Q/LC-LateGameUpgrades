@@ -15,6 +15,15 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             " and offered to employees of The Company on a subscription plan. The base package comes with cheap batteries, but premium subscriptions offer regular issuances" +
             " of higher-quality energy solutions, ranging from hobby grade to industrial application power banks. The modules also come with DRM that prevents the user from improvising" +
             " with other kinds of batteries.";
+
+        protected override bool KeepScanNode
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         public string GetDisplayInfo()
         {
             string grantStatus = UpgradeBus.Instance.PluginConfiguration.NIGHT_VISION_INDIVIDUAL.Value || !UpgradeBus.Instance.PluginConfiguration.SHARED_UPGRADES.Value ? "one" : "all";

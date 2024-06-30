@@ -17,7 +17,7 @@ using InteractiveTerminalAPI.UI;
 
 namespace MoreShipUpgrades
 {
-    [BepInEx.BepInPlugin(Metadata.GUID,Metadata.NAME,Metadata.VERSION)]
+    [BepInPlugin(Metadata.GUID,Metadata.NAME,Metadata.VERSION)]
     [BepInDependency("evaisa.lethallib","0.13.0")]
     [BepInDependency("com.sigurd.csync")]
     [BepInDependency("com.rune580.LethalCompanyInputUtils")]
@@ -26,12 +26,9 @@ namespace MoreShipUpgrades
     {
         internal static readonly ManualLogSource mls = BepInEx.Logging.Logger.CreateLogSource(Metadata.NAME);
 
-        public new static LategameConfiguration Config;
-
         void Awake()
         {
-            Config = new LategameConfiguration(base.Config);
-
+            LategameConfiguration config = new LategameConfiguration(Config);
             // netcode patching stuff
             IEnumerable<Type> types;
             try
@@ -66,6 +63,7 @@ namespace MoreShipUpgrades
             gameObject.AddComponent<ItemManager>();
 
             UpgradeBus.Instance.UpgradeAssets = UpgradeAssets;
+            UpgradeBus.Instance.SetConfiguration(config);
             SetupModStore(ref UpgradeAssets);
 
             SetupItems(ref types);
@@ -87,8 +85,6 @@ namespace MoreShipUpgrades
         private void SetupModStore(ref AssetBundle bundle)
         {
             GameObject modStore = AssetBundleHandler.TryLoadGameObjectAsset(ref bundle, "Assets/ShipUpgrades/LguStore.prefab");
-            if (modStore == null) return;
-
             modStore.AddComponent<ContractManager>();
             modStore.AddComponent<LguStore>();
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(modStore);

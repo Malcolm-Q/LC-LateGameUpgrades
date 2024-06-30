@@ -6,27 +6,30 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
 {
     internal class ScrapWheelbarrow : WheelbarrowScript
     {
-        static LguLogger logger = new LguLogger(nameof(ScrapWheelbarrow));
-        const string ITEM_NAME = "Shopping Cart";
+        internal const string ITEM_NAME = "Shopping Cart";
+
+        protected override bool KeepScanNode
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         public override void Start()
         {
             base.Start();
-            maximumAmountItems = UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS.Value;
-            weightReduceMultiplier = UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER.Value;
-            Enum.TryParse(typeof(Restrictions), UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_RESTRICTION_MODE.Value, out object parsedRestriction);
-            if (parsedRestriction == null)
-            {
-                logger.LogWarning($"An error occured parsing the restriction mode ({UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_RESTRICTION_MODE}), defaulting to ItemCount");
-                restriction = Restrictions.ItemCount;
-            }
-            else restriction = (Restrictions)parsedRestriction;
-            maximumWeightAllowed = UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED.Value;
-            noiseRange = UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_NOISE_RANGE.Value;
-            sloppiness = UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_MOVEMENT_SLOPPY.Value;
-            lookSensitivityDrawback = UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK.Value;
-            playSounds = UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_PLAY_NOISE.Value;
+            LategameConfiguration config = UpgradeBus.Instance.PluginConfiguration;
+            maximumAmountItems = config.SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS.Value;
+            weightReduceMultiplier = config.SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER.Value;
+            restriction = config.SCRAP_WHEELBARROW_RESTRICTION_MODE;
+            maximumWeightAllowed = config.SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED.Value;
+            noiseRange = config.SCRAP_WHEELBARROW_NOISE_RANGE.Value;
+            sloppiness = config.SCRAP_WHEELBARROW_MOVEMENT_SLOPPY.Value;
+            lookSensitivityDrawback = config.SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK.Value;
+            playSounds = config.SCRAP_WHEELBARROW_PLAY_NOISE.Value;
             Random random = new Random(StartOfRound.Instance.randomMapSeed + 45);
-            GetComponent<ScrapValueSyncer>().SetScrapValue(random.Next(UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_MINIMUM_VALUE.Value, UpgradeBus.Instance.PluginConfiguration.SCRAP_WHEELBARROW_MAXIMUM_VALUE.Value));
+            GetComponent<ScrapValueSyncer>().SetScrapValue(random.Next(config.SCRAP_WHEELBARROW_MINIMUM_VALUE.Value, config.SCRAP_WHEELBARROW_MAXIMUM_VALUE.Value));
         }
         protected override void SetupScanNodeProperties()
         {

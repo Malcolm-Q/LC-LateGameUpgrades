@@ -14,6 +14,7 @@ using UnityEngine;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
+using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 
 
 namespace MoreShipUpgrades.Misc
@@ -367,7 +368,7 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<int> TULIP_SNAKE_SAMPLE_MINIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> TULIP_SNAKE_SAMPLE_MAXIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_GHOST_SPAWN { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> WHEELBARROW_RESTRICTION_MODE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<WheelbarrowScript.Restrictions> WHEELBARROW_RESTRICTION_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> WHEELBARROW_MAXIMUM_AMOUNT_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER { get; set; }
@@ -376,7 +377,7 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<float> WHEELBARROW_MOVEMENT_SLOPPY { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> WHEELBARROW_NOISE_RANGE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> WHEELBARROW_PLAY_NOISE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> SCRAP_WHEELBARROW_RESTRICTION_MODE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<WheelbarrowScript.Restrictions> SCRAP_WHEELBARROW_RESTRICTION_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER { get; set; }
@@ -469,18 +470,17 @@ namespace MoreShipUpgrades.Misc
         {
             string topSection;
 
-            topSection = "_Item Progression Route_";
-            ALTERNATIVE_ITEM_PROGRESSION = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Enable Item Progression", false, "Alternative Item Progression\nIf true, items retrieved can be used for ship upgrades.");
-            ITEM_PROGRESSION_MODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Item Progression Mode", ItemProgressionManager.CollectionModes.CustomScrap, "Item Progression Mode\nSupported Modes: \n" +
-                                                                                                                                                                            "CustomScrap: Specified scrap will contribute towards the level of the associated upgrade.\n" +
-                                                                                                                                                                            "UniqueScrap: All scrap (specifications will be ignored) will contribute towards the level of a random assigned upgrade\n" +
-                                                                                                                                                                            "NearestValue: At the end of each Quota, grant a random upgrade worth the nearest total scrap collected, rounded down.\n" +
-                                                                                                                                                                            "ChancePerScrap: For each scrap sold, run a configured chance to receive a random/cheap/lowest tier upgrade.\n" +
-                                                                                                                                                                            "Apparatice: Always receive an upgrade when an apparatus has been successfully sold.");
-            ITEM_PROGRESSION_CONTRIBUTION_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Item Progression Multiplier", 0.85f, "Item Progression Contribution Multiplier\nThe multiplier for scrap's value contribution towards an upgrade.");
-            SCRAP_UPGRADE_CHANCE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Scrap Upgrade Chance", 0.05f, "Upgrade Chance Calculation\nOnly used if Item Progression Mode is set to ChancePerScrap.\nX -> (X * 100) %");
-            SCRAP_UPGRADE_CHANCE_MODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Upgrade Chance Priority", ItemProgressionManager.ChancePerScrapModes.LowestLevel, "Upgrade Chance Priority\nOnly used if Item Progression Mode is set to ChancePerScrap.\nAcceptable Values:\nRandom: Pick a random upgrade to apply.\nCheapest: Pick the cheapest upgrade to apply.\nLowest Tier: Pick the upgrade with the lowest level to apply.");
-            ITEM_PROGRESSION_BLACKLISTED_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Blacklisted Items", "Clipboard", "Blacklisted items for Item Progression.\nOnly used if Item Progression Mode is set to UniqueScrap. These items will NOT contribute towards ANY upgrade");
+            #region Item Progression
+
+            topSection = LGUConstants.ITEM_PROGRESSION_SECTION;
+            ALTERNATIVE_ITEM_PROGRESSION = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ALTERNATIVE_ITEM_PROGRESSION_KEY, LGUConstants.ALTERNATIVE_ITEM_PROGRESSION_DEFAULT, LGUConstants.ALTERNATIVE_ITEM_PROGRESSION_DESCRIPTION);
+            ITEM_PROGRESSION_MODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_MODE_KEY, LGUConstants.ITEM_PROGRESSION_MODE_DEFAULT, LGUConstants.ITEM_PROGRESSION_MODE_DESCRIPTION);
+            ITEM_PROGRESSION_CONTRIBUTION_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_CONTRIBUTION_MULTIPLIER_KEY, LGUConstants.ITEM_PROGRESSION_CONTRIBUTION_MULTIPLIER_DEFAULT, LGUConstants.ITEM_PROGRESSION_CONTRIBUTION_MULTIPLIER_DESCRIPTION);
+            SCRAP_UPGRADE_CHANCE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SCRAP_UPGRADE_CHANCE_KEY, LGUConstants.SCRAP_UPGRADE_CHANCE_DEFAULT, LGUConstants.SCRAP_UPGRADE_CHANCE_DESCRIPTION);
+            SCRAP_UPGRADE_CHANCE_MODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SCRAP_UPGRADE_MODE_KEY, LGUConstants.SCRAP_UPGRADE_MODE_DEFAULT, LGUConstants.SCRAP_UPGRADE_MODE_DESCRIPTION);
+            ITEM_PROGRESSION_BLACKLISTED_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_BLACKLISTED_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_BLACKLISTED_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_BLACKLISTED_ITEMS_DESCRIPTION);
+
+            #endregion 
 
             #region Miscellaneous
 
@@ -630,6 +630,40 @@ namespace MoreShipUpgrades.Misc
 
             #endregion
 
+            #region Wheelbarrow
+
+            topSection = StoreWheelbarrow.ITEM_NAME;
+            WHEELBARROW_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.WHEELBARROW_ENABLED_KEY, LGUConstants.WHEELBARROW_ENABLED_DEFAULT, LGUConstants.WHEELBARROW_ENABLED_DESCRIPTION);
+            WHEELBARROW_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.WHEELBARROW_PRICE_KEY, LGUConstants.WHEELBARROW_PRICE_DEFAULT, LGUConstants.WHEELBARROW_PRICE_DESCRIPTION);
+            WHEELBARROW_WEIGHT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.WHEELBARROW_WEIGHT_KEY, LGUConstants.WHEELBARROW_WEIGHT_DEFAULT, LGUConstants.WHEELBARROW_WEIGHT_DESCRIPTION);
+            WHEELBARROW_RESTRICTION_MODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.WHEELBARROW_RESTRICTION_MODE_KEY, LGUConstants.WHEELBARROW_RESTRICTION_MODE_DEFAULT, LGUConstants.WHEELBARROW_RESTRICTION_MODE_DESCRIPTION);
+            WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_KEY, LGUConstants.WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_DEFAULT, LGUConstants.WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_DESCRIPTION);
+            WHEELBARROW_MAXIMUM_AMOUNT_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_KEY, LGUConstants.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_DEFAULT, LGUConstants.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_DESCRIPTION);
+            WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER_KEY, LGUConstants.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER_DEFAULT, LGUConstants.WHEELBARROW_WEIGHT_REDUCTION_MUTLIPLIER_DESCRIPTION);
+            WHEELBARROW_NOISE_RANGE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.WHEELBARROW_NOISE_RANGE_KEY, LGUConstants.WHEELBARROW_NOISE_RANGE_DEFAULT, LGUConstants.WHEELBARROW_NOISE_RANGE_DESCRIPTION);
+            WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_KEY, LGUConstants.WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_DEFAULT, LGUConstants.WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_DESCRIPTION);
+            WHEELBARROW_MOVEMENT_SLOPPY = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.WHEELBARROW_MOVEMENT_SLOPPY_KEY, LGUConstants.WHEELBARROW_MOVEMENT_SLOPPY_DEFAULT, LGUConstants.WHEELBARROW_MOVEMENT_SLOPPY_DESCRIPTION);
+            WHEELBARROW_PLAY_NOISE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.WHEELBARROW_PLAY_NOISE_KEY, LGUConstants.WHEELBARROW_PLAY_NOISE_DEFAULT, LGUConstants.WHEELBARROW_PLAY_NOISE_DESCRIPTION);
+            STORE_WHEELBARROW_SCAN_NODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.STORE_WHEELBARROW_SCAN_NODE_KEY, LGUConstants.ITEM_SCAN_NODE_DEFAULT, LGUConstants.ITEM_SCAN_NODE_DESCRIPTION);
+
+            #endregion
+            #region Shopping Cart
+            topSection = ScrapWheelbarrow.ITEM_NAME;
+            SCRAP_WHEELBARROW_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SCRAP_WHEELBARROW_ENABLED_KEY, LGUConstants.SCRAP_WHEELBARROW_ENABLED_DEFAULT, LGUConstants.SCRAP_WHEELBARROW_ENABLED_DESCRIPTION);
+            SCRAP_WHEELBARROW_RARITY = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SCRAP_WHEELBARROW_RARITY_KEY, LGUConstants.SCRAP_WHEELBARROW_RARITY_DEFAULT, LGUConstants.SCRAP_WHEELBARROW_RARITY_DESCRIPTION);
+            SCRAP_WHEELBARROW_WEIGHT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SCRAP_WHEELBARROW_WEIGHT_KEY, LGUConstants.SCRAP_WHEELBARROW_WEIGHT_DEFAULT, LGUConstants.SCRAP_WHEELBARROW_WEIGHT_DESCRIPTION);
+            SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_KEY, LGUConstants.SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_DEFAULT, LGUConstants.SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_DESCRIPTION);
+            SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER_KEY, LGUConstants.SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER_DEFAULT, LGUConstants.SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MUTLIPLIER_DESCRIPTION);
+            SCRAP_WHEELBARROW_MINIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SCRAP_WHEELBARROW_MINIMUM_VALUE_KEY, LGUConstants.SCRAP_WHEELBARROW_MINIMUM_VALUE_DEFAULT, LGUConstants.SCRAP_WHEELBARROW_MINIMUM_VALUE_DESCRIPTION);
+            SCRAP_WHEELBARROW_MAXIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SCRAP_WHEELBARROW_MAXIMUM_VALUE_KEY, LGUConstants.SCRAP_WHEELBARROW_MAXIMUM_VALUE_DEFAULT, LGUConstants.SCRAP_WHEELBARROW_MAXIMUM_VALUE_DESCRIPTION);
+            SCRAP_WHEELBARROW_RESTRICTION_MODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SCRAP_WHEELBARROW_RESTRICTION_MODE_KEY, LGUConstants.SCRAP_WHEELBARROW_RESTRICTION_MODE_DEFAULT, LGUConstants.SCRAP_WHEELBARROW_RESTRICTION_MODE_DESCRIPTION);
+            SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_KEY, LGUConstants.SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_DEFAULT, LGUConstants.SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_DESCRIPTION);
+            SCRAP_WHEELBARROW_NOISE_RANGE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SCRAP_WHEELBARROW_NOISE_RANGE_KEY, LGUConstants.SCRAP_WHEELBARROW_NOISE_RANGE_DEFAULT, LGUConstants.SCRAP_WHEELBARROW_NOISE_RANGE_DESCRIPTION);
+            SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_KEY, LGUConstants.SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_DEFAULT, LGUConstants.SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_DESCRIPTION);
+            SCRAP_WHEELBARROW_MOVEMENT_SLOPPY = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SCRAP_WHEELBARROW_MOVEMENT_SLOPPY_KEY, LGUConstants.SCRAP_WHEELBARROW_MOVEMENT_SLOPPY_DEFAULT, LGUConstants.SCRAP_WHEELBARROW_MOVEMENT_SLOPPY_DESCRIPTION);
+            SCRAP_WHEELBARROW_PLAY_NOISE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.SCRAP_WHEELBARROW_PLAY_NOISE_KEY, LGUConstants.SCRAP_WHEELBARROW_PLAY_NOISE_DEFAULT, LGUConstants.SCRAP_WHEELBARROW_PLAY_NOISE_DESCRIPTION);
+            
+            #endregion
             #endregion
 
             #region Upgrades
@@ -727,7 +761,7 @@ namespace MoreShipUpgrades.Misc
             CARRY_WEIGHT_INCREMENT = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BACK_MUSCLES_INCREMENTAL_WEIGHT_MULTIPLIER_KEY, LGUConstants.BACK_MUSCLES_INCREMENTAL_WEIGHT_MULTIPLIER_DEFAULT, LGUConstants.BACK_MUSCLES_INCREMENTAL_WEIGHT_MULTIPLIER_DESCRIPTION);
             BACK_MUSCLES_UPGRADE_PRICES = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.PRICES_SECTION, BackMuscles.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             BACK_MUSCLES_INDIVIDUAL = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            BACK_MUSCLES_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Contribution Items", "", "Items that when sold contribute to the purchase of the upgrade. Either the scan node's name or ItemProperties.itemName can be inserted here");
+            BACK_MUSCLES_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
             BACK_MUSCLES_UPGRADE_MODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.BACK_MUSCLES_UPGRADE_MODE_KEY , LGUConstants.BACK_MUSCLES_UPGRADE_MODE_DEFAULT, LGUConstants.BACK_MUSCLES_UPGRADE_MODE_DESCRIPTION);
 
             #endregion
@@ -1166,33 +1200,6 @@ namespace MoreShipUpgrades.Misc
             TULIP_SNAKE_SAMPLE_MAXIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, "Maximum scrap value of a Tulip Snake sample", 50, "");
             HUNTER_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LGUConstants.ITEM_PROGRESSION_ITEMS_KEY, LGUConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LGUConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
-            topSection = "Wheelbarrow";
-            WHEELBARROW_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable the Wheelbarrow Item", true, "Allows you to buy a wheelbarrow to carry items outside of your inventory");
-            WHEELBARROW_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Price of the Wheelbarrow Item", 400, "Price of the Wheelbarrow in the store");
-            WHEELBARROW_WEIGHT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Weight of the Wheelbarrow Item", 30f, "Weight of the wheelbarrow without any items in lbs");
-            WHEELBARROW_RESTRICTION_MODE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Restrictions on the Wheelbarrow Item", "ItemCount", "Restriction applied when trying to insert an item on the wheelbarrow.\nSupported values: None, ItemCount, TotalWeight, All");
-            WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Maximum amount of weight", 100f, "How much weight (in lbs and after weight reduction multiplier is applied on the stored items) a wheelbarrow can carry in items before it is considered full.");
-            WHEELBARROW_MAXIMUM_AMOUNT_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Maximum amount of items", 4, "Amount of items allowed before the wheelbarrow is considered full");
-            WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Weight reduction multiplier", 0.7f, "How much an item's weight will be ignored to the wheelbarrow's total weight");
-            WHEELBARROW_NOISE_RANGE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Noise range of the Wheelbarrow Item", 14f, "How far the wheelbarrow sound propagates to nearby enemies when in movement");
-            WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Look sensitivity drawback of the Wheelbarrow Item", 0.4f, "Value multiplied on the player's look sensitivity when moving with the wheelbarrow Item");
-            WHEELBARROW_MOVEMENT_SLOPPY = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Sloppiness of the Wheelbarrow Item", 5f, "Value multiplied on the player's movement to give the feeling of drifting while carrying the Wheelbarrow Item");
-            WHEELBARROW_PLAY_NOISE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Plays noises for players with Wheelbarrow Item", true, "If false, it will just not play the sounds, it will still attract monsters to noise");
-            STORE_WHEELBARROW_SCAN_NODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, $"Enable scan node of Wheelbarrow", LGUConstants.ITEM_SCAN_NODE_DEFAULT, LGUConstants.ITEM_SCAN_NODE_DESCRIPTION);
-
-            SCRAP_WHEELBARROW_ENABLED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Enable the Shopping Cart Item", true, "Allows you to scavenge a wheelbarrow in which you can store items on");
-            SCRAP_WHEELBARROW_RARITY = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Spawn chance of Shopping Cart Item", 0.1f, "How likely it is to a scrap wheelbarrow item to spawn when landing on a moon. (0.1 = 10%)");
-            SCRAP_WHEELBARROW_WEIGHT = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Weight of the Shopping Cart Item", 25f, "Weight of the scrap wheelbarrow's without any items in lbs");
-            SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Maximum amount of items for Shopping Cart", 6, "Amount of items allowed before the scrap wheelbarrow is considered full");
-            SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Weight reduction multiplier for Shopping Cart", 0.5f, "How much an item's weight will be ignored to the scrap wheelbarrow's total weight");
-            SCRAP_WHEELBARROW_MINIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Minimum scrap value of Shopping Cart", 50, "Lower boundary of the scrap's possible value");
-            SCRAP_WHEELBARROW_MAXIMUM_VALUE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Maximum scrap value of Shopping Cart", 100, "Higher boundary of the scrap's possible value");
-            SCRAP_WHEELBARROW_RESTRICTION_MODE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Restrictions on the Shopping Cart Item", "ItemCount", "Restriction applied when trying to insert an item on the scrap wheelbarrow.\nSupported values: None, ItemCount, TotalWeight, All");
-            SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Maximum amount of weight for Shopping Cart", 100f, "How much weight (in lbs and after weight reduction multiplier is applied on the stored items) a scrap wheelbarrow can carry in items before it is considered full.");
-            SCRAP_WHEELBARROW_NOISE_RANGE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Noise range of the Shopping Cart Item", 18f, "How far the scrap wheelbarrow sound propagates to nearby enemies when in movement");
-            SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Look sensitivity drawback of the Shopping Cart Item", 0.8f, "Value multiplied on the player's look sensitivity when moving with the Scrap wheelbarrow Item");
-            SCRAP_WHEELBARROW_MOVEMENT_SLOPPY = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Sloppiness of the Shopping Cart Item", 2f, "Value multiplied on the player's movement to give the feeling of drifting while carrying the Scrap Wheelbarrow Item");
-            SCRAP_WHEELBARROW_PLAY_NOISE = SyncedBindingExtensions.BindSyncedEntry(cfg,topSection, "Plays noises for players with Shopping Cart Item", true, "If false, it will just not play the sounds, it will still attract monsters to noise");
             InitialSyncCompleted += PluginConfig_InitialSyncCompleted;
             ConfigManager.Register(this);
         }

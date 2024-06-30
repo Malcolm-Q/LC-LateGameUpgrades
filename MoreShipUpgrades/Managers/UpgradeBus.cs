@@ -64,7 +64,6 @@ namespace MoreShipUpgrades.Managers
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            PluginConfiguration = Plugin.Config;
         }
 
         public Terminal GetTerminal()
@@ -349,6 +348,11 @@ namespace MoreShipUpgrades.Managers
             }
             if (prices.Length == 1 && prices[0] == -1) { prices = []; }
             return prices;
+        }
+
+        internal void SetConfiguration(LategameConfiguration config)
+        {
+            PluginConfiguration = config;
         }
     }
 }

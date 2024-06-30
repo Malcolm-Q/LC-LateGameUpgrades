@@ -1,9 +1,18 @@
 <details>
+<summary> 3.8.3 - 2024-07-?? </summary>
+
+- Refactored items and config for easier maintenance.
+  - Wheelbarrow was the most affected so it's likely the settings will reset for them.
+
+</details>
+
+<details>
 <summary> 3.8.2 - 2024-06-26 </summary>
 
 - Implemented another Back Muscles alternative mode where you can reduce the carry weight's influence on stamina consumption when running.
 - Added info for Back Muscles alternative modes.
 - Fixed issue with v55 release related to item drop ship no longer leaving after getting the items.
+  - Should still allow compatibility between v50 and v55 releases.
 - Fixed issue with wheelbarrow weight calculation giving wrong results due to misplacement of parentheses.
 
 </details>
