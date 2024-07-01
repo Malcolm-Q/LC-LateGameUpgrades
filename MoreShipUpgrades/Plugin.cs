@@ -77,7 +77,7 @@ namespace MoreShipUpgrades
             InteractiveTerminalManager.RegisterApplication<UpgradeStoreApplication>(["lgu", "lategame store"]);
             InteractiveTerminalManager.RegisterApplication<WeatherProbeApplication>("probe");
             InteractiveTerminalManager.RegisterApplication<ExtendDeadlineApplication>("extend deadline");
-            InteractiveTerminalManager.RegisterApplication<ContractApplication>("contracts");
+            InteractiveTerminalManager.RegisterApplication<ContractApplication>(["contracts", "contract"]);
 
             mls.LogInfo($"{Metadata.NAME} {Metadata.VERSION} has been loaded successfully.");
         }
