@@ -42,12 +42,12 @@ namespace MoreShipUpgrades.Misc.UI.Application
                 CursorMenu cursorMenu = cursorMenus[i];
                 screens[i] = new BoxedOutputScreen<string, string>()
                 {
-                    Title = LGUConstants.MAIN_SCREEN_TITLE,
+                    Title = LguConstants.MAIN_SCREEN_TITLE,
                     elements =
                     [
                         new TextElement()
                         {
-                            Text = LGUConstants.MAIN_SCREEN_TOP_TEXT,
+                            Text = LguConstants.MAIN_SCREEN_TOP_TEXT,
                         },
                         new TextElement()
                         {
@@ -134,13 +134,13 @@ namespace MoreShipUpgrades.Misc.UI.Application
             bool maxLevel = node.CurrentUpgrade >= node.MaxUpgrade;
             if (maxLevel && node.Unlocked)
             {
-                ErrorMessage(node.Name, node.Description, backAction, LGUConstants.REACHED_MAX_LEVEL);
+                ErrorMessage(node.Name, node.Description, backAction, LguConstants.REACHED_MAX_LEVEL);
                 return;
             }
             int price = node.GetCurrentPrice();
             if (groupCredits < price)
             {
-                ErrorMessage(node.Name, node.Description, backAction, LGUConstants.NOT_ENOUGH_CREDITS);
+                ErrorMessage(node.Name, node.Description, backAction, LguConstants.NOT_ENOUGH_CREDITS);
                 return;
             }
             string discoveredItems = string.Empty;
@@ -155,7 +155,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
                     if (i < items.Count - 1) discoveredItems += ", ";
                 }
             }
-            Confirm(node.Name, node.Description + discoveredItems, () => PurchaseUpgrade(node, price, backAction), backAction, string.Format(LGUConstants.PURCHASE_UPGRADE_FORMAT, price));
+            Confirm(node.Name, node.Description + discoveredItems, () => PurchaseUpgrade(node, price, backAction), backAction, string.Format(LguConstants.PURCHASE_UPGRADE_FORMAT, price));
         }
         void PurchaseUpgrade(CustomTerminalNode node, int price, Action backAction)
         {

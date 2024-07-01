@@ -70,8 +70,9 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 * __Hunter - $700__
     * Allows you to collect and sell samples from killed monsters
     * **Lvl 1**: Hoarding Bugs & Snare Fleas
-    * **Lvl 2**: Spiders & Baboon Hawks
-    * **Lvl 3**: Bracken, Thumper, & Eyeless Dog
+    * **Lvl 2**: Spiders, Baboon Hawks & Tulip Snake
+    * **Lvl 3**: Bracken, Thumper, Eyeless Dog & Manticoil
+    * **Lvl 4**: Forest Giant
 
 * __Medkit - $300__
     * Allows you to heal (default 20 points).
@@ -87,12 +88,11 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 * __Fast Encryption - $300__
     * Upgrades the signal transmitter.
     * Must have signal transmitter purchased.
-    * Instantly sends an unrestricted message to all clients chat when using transmit.
+    * Speeds up the transmission speed of the characters and removes the limit of characters in the transmission message.
 
 * __Interns - $1000__
     * Replaces your dead friend with a fresh intern (revives your friend).
     * Teleports to a random location in the facility.
-    * $1k per use
 
 * __Walkie GPS - $450__
     * Upgrades the walkie talkie to show your position and time.
@@ -104,7 +104,7 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 
 * __Locksmith - $640__
     * Makes noise when picking, makes a lot of noise when failing.
-    * Just run into a locked door to start the minigame.
+    * Just run into/interact with a locked door to start the minigame.
     * Strike the pins in the order they flash to unlock the door.
 
 * __Portable Teleporter - $300__
@@ -117,13 +117,16 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
     * 20% chance to get destroyed on use.
 
 * __Beekeeper - $450__
-    * Circuit bees do significantly less damage to you.
+    * Circuit bees & Butler Hornets do significantly less damage to you.
 
 * __Bigger Lungs - $600__
     * Increased sprint duration.
+    * Can increase the stamina regeneration speed through configuration
+    * Can decrease the stamina cost when jumping through configuration
 
 * __Running Shoes - $650__
     * Increased movement speed.
+    * At max level, reduces the noise made by your footsteps.
 
 * __Strong Legs - $300__
     * Jump higher.
@@ -161,6 +164,7 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 * __Back Muscles - $715__
     * Carryweight is drastically reduced.
     * % reduced increases each upgrade.
+    * Alternative modes where either speed or stamina consumption debuffs due to weight are removed.
 
 * __Lethal Deals - $300__
     * Guarantees at least one item will be on sale in the store.
@@ -176,10 +180,12 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 * __Quantum Disruptor - $1000__
     * Increases the amount of time you can stay during a moon landing (time it takes to reach final hour in the moon)
     * Each level increase further increases the amount of time.
+    * Alternative mode where you can revert back time spent on a moon through 'quantum' command
 
 * __Helmet - $750__
     * Blocks incoming damage through amount of hits.
     * Once reached the limit of hits, it will be destroyed, having to purchase a new one if needed.
+    * Alternative mode where the helmet gives partial damage reduction and only breaks when the next hit would kill the player.
 
 * __Wheelbarrow - $400__
     * Allows depositing items inside and carry all of them at once.
@@ -189,6 +195,7 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 
 * __Drop Pod Thrusters - $300__
     * Speeds up the shop's drop pod to deliver items faster.
+    * The drop pod leaves after picking up the items when the upgrade's active.
 
 * __Sick Beats - $500__
     * Boomboxes when playing music apply effects on nearby players such as movement speed, damage boost and defense.
@@ -211,6 +218,7 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 
 * __Deeper Pockets - $500__
     * Increases the amount of two-handed items you can carry in your inventory.
+    * Can configure if the wheelbarrow can be pocketed when this upgrade's active.
 
 * __Reinforced Boots - $250__
     * Reduces incoming fall damage.

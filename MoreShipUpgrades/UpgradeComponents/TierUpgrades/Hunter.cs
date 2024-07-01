@@ -16,6 +16,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         internal static Hunter Instance;
 
         public const string UPGRADE_NAME = "Hunter";
+        public const string PRICES_DEFAULT = "500,600,700";
         internal const string WORLD_BUILDING_TEXT = "\n\nOn-the-job training program that teaches your crew how to properly collect lab-ready samples of blood," +
             " skin, and organ tissue from entities found within the facility. These samples are valuable to The Company. Used to be a part of the standard onboarding procedure," +
             " but was made opt-in only in 2005 to cut onboarding costs.\n\n";

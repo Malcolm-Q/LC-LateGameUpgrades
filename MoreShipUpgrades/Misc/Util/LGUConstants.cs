@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.Misc.Util
 {
-    internal static class LGUConstants
+    internal static class LguConstants
     {
         #region General
 
@@ -563,6 +563,204 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Hunter
+
+        internal const string HUNTER_ENABLED_KEY = $"Enable {Hunter.UPGRADE_NAME} Upgrade";
+        internal const bool HUNTER_ENABLED_DEFAULT = true;
+        internal const string HUNTER_ENABLED_DESCRIPTION = "Collect and sell samples from dead enemies";
+
+        internal const string HUNTER_PRICE_KEY = $"Price of {Hunter.UPGRADE_NAME} Upgrade";
+        internal const int HUNTER_PRICE_DEFAULT = 700;
+
+        internal const string HUNTER_SAMPLE_TIERS_KEY = "Samples dropping at each tier";
+        internal const string HUNTER_SAMPLE_TIERS_DEFAULT = "Hoarding Bug, Centipede-Bunker Spider, Baboon hawk, Tulip Snake-Flowerman, MouthDog, Crawler, Manticoil-Forest Giant";
+        internal const string HUNTER_SAMPLE_TIERS_DESCRIPTION = "Specifies at which tier of Hunter do each sample start dropping from. Each tier is separated with a dash ('-') and each list of monsters will be separated with a comma (',')\n" +
+                                                                "Supported Enemies: Hoarding Bug, Centipede (Snare Flea),Bunker Spider, Baboon Hawk, Crawler (Half/Thumper), " +
+                                                                "Flowerman (Bracken), MouthDog (Eyeless Dog), Forest Giant, Tulip Snake and Manticoil.";
+
+        internal const string MINIMUM_SAMPLE_VALUE_FORMAT = "Minimum scrap value of a {0} sample";
+        internal const string MAXIMUM_SAMPLE_VALUE_FORMAT = "Maximum scrap value of a {0} sample";
+
+        #region Snare Flea
+
+        internal static readonly string SNARE_FLEA_SAMPLE_MINIMUM_VALUE_KEY = string.Format(MINIMUM_SAMPLE_VALUE_FORMAT, "Snare Flea");
+        internal const int SNARE_FLEA_SAMPLE_MINIMUM_VALUE_DEFAULT = 35;
+
+        internal static readonly string SNARE_FLEA_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Snare Flea");
+        internal const int SNARE_FLEA_SAMPLE_MAXIMUM_VALUE_DEFAULT = 60;
+
+        #endregion
+
+        #region Bunker Spider
+
+        internal static readonly string BUNKER_SPIDER_SAMPLE_MINIMUM_VALUE_KEY = string.Format(MINIMUM_SAMPLE_VALUE_FORMAT, "Bunker Spider");
+        internal const int BUNKER_SPIDER_SAMPLE_MINIMUM_VALUE_DEFAULT = 65;
+
+        internal static readonly string BUNKER_SPIDER_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Bunker Spider");
+        internal const int BUNKER_SPIDER_SAMPLE_MAXIMUM_VALUE_DEFAULT = 95;
+
+        #endregion
+
+        #region Hoarding Bug
+
+        internal static readonly string HOARDING_BUG_SAMPLE_MINIMUM_VALUE_KEY = string.Format(MINIMUM_SAMPLE_VALUE_FORMAT, "Hoarding Bug");
+        internal const int HOARDING_BUG_SAMPLE_MINIMUM_VALUE_DEFAULT = 45;
+
+        internal static readonly string HOARDING_BUG_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Hoarding Bug");
+        internal const int HOARDING_BUG_SAMPLE_MAXIMUM_VALUE_DEFAULT = 75;
+
+        #endregion
+
+        #region Bracken
+
+        internal static readonly string BRACKEN_SAMPLE_MINIMUM_VALUE_KEY = string.Format(MINIMUM_SAMPLE_VALUE_FORMAT, "Bracken");
+        internal const int BRACKEN_SAMPLE_MINIMUM_VALUE_DEFAULT = 80;
+
+        internal static readonly string BRACKEN_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Bracken");
+        internal const int BRACKEN_SAMPLE_MAXIMUM_VALUE_DEFAULT = 125;
+
+        #endregion
+
+        #region Eyeless Dog
+
+        internal static readonly string EYELESS_DOG_SAMPLE_MINIMUM_VALUE_KEY = string.Format(MINIMUM_SAMPLE_VALUE_FORMAT, "Eyeless Dog");
+        internal const int EYELESS_DOG_SAMPLE_MINIMUM_VALUE_DEFAULT = 100;
+
+        internal static readonly string EYELESS_DOG_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Eyeless Dog");
+        internal const int EYELESS_DOG_SAMPLE_MAXIMUM_VALUE_DEFAULT = 150;
+
+        #endregion
+
+        #region Baboon Hawk
+
+        internal static readonly string BABOON_HAWK_SAMPLE_MINIMUM_VALUE_KEY = string.Format(MINIMUM_SAMPLE_VALUE_FORMAT, "Baboon Hawk");
+        internal const int BABOON_HAWK_SAMPLE_MINIMUM_VALUE_DEFAULT = 75;
+
+        internal static readonly string BABOON_HAWK_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Baboon Hawk");
+        internal const int BABOON_HAWK_SAMPLE_MAXIMUM_VALUE_DEFAULT = 115;
+
+        #endregion
+
+        #region Half
+
+        internal static readonly string THUMPER_SAMPLE_MINIMUM_VALUE_KEY = string.Format(MINIMUM_SAMPLE_VALUE_FORMAT, "Half");
+        internal const int THUMPER_SAMPLE_MINIMUM_VALUE_DEFAULT = 80;
+
+        internal static readonly string THUMPER_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Half");
+        internal const int THUMPER_SAMPLE_MAXIMUM_VALUE_DEFAULT = 125;
+
+        #endregion
+
+        #region Forest Giant
+
+        internal static readonly string FOREST_KEEPER_SAMPLE_MINIMUM_VALUE_KEY = string.Format(MINIMUM_SAMPLE_VALUE_FORMAT, "Forest Keeper");
+        internal const int FOREST_KEEPER_SAMPLE_MINIMUM_VALUE_DEFAULT = 80;
+
+        internal static readonly string FOREST_KEEPER_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Forest Keeper");
+        internal const int FOREST_KEEPER_SAMPLE_MAXIMUM_VALUE_DEFAULT = 125;
+
+        #endregion
+
+        #region Manticoil
+
+        internal static readonly string MANTICOIL_SAMPLE_MINIMUM_VALUE_KEY = string.Format(MINIMUM_SAMPLE_VALUE_FORMAT, "Manticoil");
+        internal const int MANTICOIL_SAMPLE_MINIMUM_VALUE_DEFAULT = 40;
+
+        internal static readonly string MANTICOIL_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Manticoil");
+        internal const int MANTICOIL_SAMPLE_MAXIMUM_VALUE_DEFAULT = 75;
+
+        #endregion
+
+        #region Tulip Snake
+
+        internal static readonly string TULIP_SNAKE_SAMPLE_MINIMUM_VALUE_KEY = string.Format(MINIMUM_SAMPLE_VALUE_FORMAT, "Tulip Snake");
+        internal const int TULIP_SNAKE_SAMPLE_MINIMUM_VALUE_DEFAULT = 30;
+
+        internal static readonly string TULIP_SNAKE_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Tulip Snake");
+        internal const int TULIP_SNAKE_SAMPLE_MAXIMUM_VALUE_DEFAULT = 50;
+
+        #endregion
+
+        #endregion
+
+        #region Night Vision
+
+        internal const string NIGHT_VISION_ENABLED_KEY = $"Enable {NightVision.SIMPLE_UPGRADE_NAME} Upgrade";
+        internal const bool NIGHT_VISION_ENABLED_DEFAULT = true;
+        internal const string NIGHT_VISION_ENABLED_DESCRIPTION = "Toggleable night vision.";
+
+        internal const string NIGHT_VISION_PRICE_KEY = $"Price of {NightVision.SIMPLE_UPGRADE_NAME} Upgrade";
+        internal const int NIGHT_VISION_PRICE_DEFAULT = 380;
+
+        internal const string NIGHT_VISION_BATTERY_MAX_KEY = $"The max charge for your {NightVision.SIMPLE_UPGRADE_NAME} battery";
+        internal const float NIGHT_VISION_BATTERY_MAX_DEFAULT = 10f;
+        internal const string NIGHT_VISION_BATTERY_MAX_DESCRIPTION = "Default settings this will be the unupgraded time in seconds the battery will drain and regen in. Increase to increase battery life.";
+
+        internal const string NIGHT_VISION_DRAIN_SPEED_KEY = "Multiplier for night vis battery drain";
+        internal const float NIGHT_VISION_DRAIN_SPEED_DEFAULT = 1f;
+        internal const string NIGHT_VISION_DRAIN_SPEED_DESCRIPTION = "Multiplied by timedelta, lower to increase battery life.";
+
+        internal const string NIGHT_VISION_REGEN_SPEED_KEY = "Multiplier for night vis battery regen";
+        internal const float NIGHT_VISION_REGEN_SPEED_DEFAULT = 1f;
+        internal const string NIGHT_VISION_REGEN_SPEED_DESCRIPTION = "Multiplied by timedelta, raise to speed up battery regen time.";
+
+        internal const string NIGHT_VISION_COLOR_KEY = $"{NightVision.SIMPLE_UPGRADE_NAME} Color";
+        internal const string NIGHT_VISION_COLOR_DEFAULT = HEXADECIMAL_GREEN + "FF";
+        internal const string NIGHT_VISION_COLOR_DESCRIPTION = $"The color your {NightVision.SIMPLE_UPGRADE_NAME} light emits.";
+
+        internal const string NIGHT_VISION_UI_TEXT_COLOR_KEY = $"{NightVision.SIMPLE_UPGRADE_NAME} UI Text Color";
+        internal const string NIGHT_VISION_UI_TEXT_COLOR_DEFAULT = HEXADECIMAL_WHITE + "FF";
+        internal const string NIGHT_VISION_UI_TEXT_COLOR_DESCRIPTION = $"The color used for the {NightVision.SIMPLE_UPGRADE_NAME}'s UI text.";
+
+        internal const string NIGHT_VISION_UI_BAR_COLOR_KEY = $"{NightVision.SIMPLE_UPGRADE_NAME} UI Bar Color";
+        internal const string NIGHT_VISION_UI_BAR_COLOR_DEFAULT = HEXADECIMAL_GREEN + "FF";
+        internal const string NIGHT_VISION_UI_BAR_COLOR_DESCRIPTION = $"The color used for the {NightVision.SIMPLE_UPGRADE_NAME}'s UI battery bar.";
+
+        internal const string NIGHT_VISION_RANGE_KEY = $"{NightVision.SIMPLE_UPGRADE_NAME} Range";
+        internal const float NIGHT_VISION_RANGE_DEFAULT = 2000f;
+        internal const string NIGHT_VISION_RANGE_DESCRIPTION = $"Kind of like the distance your {NightVision.SIMPLE_UPGRADE_NAME} travels.";
+
+        internal const string NIGHT_VISION_RANGE_INCREMENT_KEY = $"{NightVision.SIMPLE_UPGRADE_NAME} Range Increment";
+        internal const float NIGHT_VISION_RANGE_INCREMENT_DEFAULT = 0f;
+        internal const string NIGHT_VISION_RANGE_INCREMENT_DESCRIPTION = "Increases your range by this value each upgrade.";
+
+        internal const string NIGHT_VISION_INTENSITY_KEY = $"{NightVision.SIMPLE_UPGRADE_NAME} Intensity";
+        internal const float NIGHT_VISION_INTENSITY_DEFAULT = 1000f;
+        internal const string NIGHT_VISION_INTENSITY_DESCRIPTION = $"Kind of like the brightness of your {NightVision.SIMPLE_UPGRADE_NAME}.";
+
+        internal const string NIGHT_VISION_INTENSITY_INCREMENT_KEY = $"{NightVision.SIMPLE_UPGRADE_NAME} Intensity Increment";
+        internal const float NIGHT_VISION_INTENSITY_INCREMENT_DEFAULT = 0f;
+        internal const string NIGHT_VISION_INTENSITY_INCREMENT_DESCRIPTION = "Increases your intensity by this value each upgrade.";
+
+        internal const string NIGHT_VISION_STARTUP_KEY = $"{NightVision.SIMPLE_UPGRADE_NAME} StartUp Cost";
+        internal const float NIGHT_VISION_STARTUP_DEFAULT = 0.1f;
+        internal const string NIGHT_VISION_STARTUP_DESCRIPTION = "The percent battery drained when turned on (0.1 = 10%).";
+
+        internal const string NIGHT_VISION_EXHAUST_KEY = $"{NightVision.SIMPLE_UPGRADE_NAME} Exhaustion";
+        internal const float NIGHT_VISION_EXHAUST_DEFAULT = 2f;
+        internal const string NIGHT_VISION_EXHAUST_DESCRIPTION = $"How many seconds {NightVision.SIMPLE_UPGRADE_NAME} stays fully depleted.";
+
+        internal const string NIGHT_VISION_DRAIN_INCREMENT_KEY = $"Decrease for {NightVision.SIMPLE_UPGRADE_NAME} battery drain";
+        internal const float NIGHT_VISION_DRAIN_INCREMENT_DEFAULT = 0.15f;
+        internal const string NIGHT_VISION_DRAIN_INCREMENT_DESCRIPTION = "Applied to drain speed on each upgrade.";
+
+        internal const string NIGHT_VISION_REGEN_INCREMENT_KEY = $"Increase for {NightVision.SIMPLE_UPGRADE_NAME} battery regen";
+        internal const float NIGHT_VISION_REGEN_INCREMENT_DEFAULT = 0.40f;
+        internal const string NIGHT_VISION_REGEN_INCREMENT_DESCRIPTION = "Applied to regen speed on each upgrade.";
+
+        internal const string NIGHT_VISION_BATTERY_INCREMENT_KEY = $"Increase for {NightVision.SIMPLE_UPGRADE_NAME} battery life";
+        internal const float NIGHT_VISION_BATTERY_INCREMENT_DEFAULT = 2f;
+        internal const string NIGHT_VISION_BATTERY_INCREMENT_DESCRIPTION = $"Applied to the max charge for {NightVision.SIMPLE_UPGRADE_NAME} battery on each upgrade.";
+
+        internal const string LOSE_NIGHT_VISION_ON_DEATH_KEY = $"Lose {NightVision.SIMPLE_UPGRADE_NAME} On Death";
+        internal const bool LOSE_NIGHT_VISION_ON_DEATH_DEFAULT = true;
+        internal const string LOSE_NIGHT_VISION_ON_DEATH_DESCRIPTION = $"If true when you die the {NightVision.SIMPLE_UPGRADE_NAME} will disable and will need a new pair of goggles.";
+
+        internal const string NIGHT_VISION_DROP_ON_DEATH_KEY = $"Drop {NightVisionGoggles.ITEM_NAME} on Death";
+        internal const bool NIGHT_VISION_DROP_ON_DEATH_DEFAULT = true;
+        internal const string NIGHT_VISION_DROP_ON_DEATH_DESCRIPTION = $"If true, when you die and lose {NightVision.SIMPLE_UPGRADE_NAME} upon death, you will drop the {NightVisionGoggles.ITEM_NAME} on your body.";
+        #endregion
 
         #region Mechanical Arms
 

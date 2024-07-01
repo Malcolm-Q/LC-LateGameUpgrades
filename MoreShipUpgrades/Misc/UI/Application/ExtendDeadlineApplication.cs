@@ -38,10 +38,10 @@ namespace MoreShipUpgrades.Misc.UI.Application
             int totalCost = ExtendDeadlineScript.instance.GetTotalCostPerDay(days);
             if (terminal.groupCredits < totalCost)
             {
-                ErrorMessage(ExtendDeadlineScript.NAME, LGUConstants.NOT_ENOUGH_CREDITS_EXTEND, backAction, "");
+                ErrorMessage(ExtendDeadlineScript.NAME, LguConstants.NOT_ENOUGH_CREDITS_EXTEND, backAction, "");
                 return;
             }
-            Confirm(ExtendDeadlineScript.NAME, string.Format(LGUConstants.PURCHASE_EXTEND_DEADLINE_FORMAT, days, totalCost), () => PurchaseExtendedDays(days, totalCost, backAction), backAction);
+            Confirm(ExtendDeadlineScript.NAME, string.Format(LguConstants.PURCHASE_EXTEND_DEADLINE_FORMAT, days, totalCost), () => PurchaseExtendedDays(days, totalCost, backAction), backAction);
         }
         void PurchaseExtendedDays(int days, int totalCost, Action backAction)
         {

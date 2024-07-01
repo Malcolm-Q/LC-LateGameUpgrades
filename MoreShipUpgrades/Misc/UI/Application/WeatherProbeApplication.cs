@@ -29,11 +29,11 @@ namespace MoreShipUpgrades.Misc.UI.Application
                 CursorMenu cursorMenu = cursorMenus[i];
                 ITextElement[] textElements =
                     [
-                        TextElement.Create(text: LGUConstants.MAIN_WEATHER_PROBE_TOP_TEXT),
+                        TextElement.Create(text: LguConstants.MAIN_WEATHER_PROBE_TOP_TEXT),
                         TextElement.Create(text: " "),
                         cursorMenu
                     ];
-                screens[i] = BoxedScreen.Create(title: LGUConstants.MAIN_WEATHER_PROBE_SCREEN_TITLE, elements: textElements);
+                screens[i] = BoxedScreen.Create(title: LguConstants.MAIN_WEATHER_PROBE_SCREEN_TITLE, elements: textElements);
 
                 for (int j = 0; j < levelList.Length; j++)
                 {
@@ -62,7 +62,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
                 [
                     new TextElement()
                         {
-                            Text = string.Format(LGUConstants.SELECT_WEATHER_FORMAT, level.PlanetName)
+                            Text = string.Format(LguConstants.SELECT_WEATHER_FORMAT, level.PlanetName)
                         },
                         new TextElement()
                         {
@@ -70,7 +70,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
                         },
                         new TextElement()
                         {
-                            Text = string.Format(LGUConstants.CURRENT_WEATHER_FORMAT, level.currentWeather == LevelWeatherType.None ? "Clear" : level.currentWeather)
+                            Text = string.Format(LguConstants.CURRENT_WEATHER_FORMAT, level.currentWeather == LevelWeatherType.None ? "Clear" : level.currentWeather)
                         },
                         new TextElement()
                         {
@@ -116,7 +116,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
 
                 elements[possibleWeathers.Length + 2] = new CursorElement()
                 {
-                    Name = LGUConstants.CANCEL_PROMPT,
+                    Name = LguConstants.CANCEL_PROMPT,
                     Action = cancelAction
                 };
             }
@@ -124,7 +124,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
             {
                 elements[possibleWeathers.Length + 1] = new CursorElement()
                 {
-                    Name = LGUConstants.CANCEL_PROMPT,
+                    Name = LguConstants.CANCEL_PROMPT,
                     Action = cancelAction
                 };
             }
@@ -150,19 +150,19 @@ namespace MoreShipUpgrades.Misc.UI.Application
             int groupCredits = UpgradeBus.Instance.GetTerminal().groupCredits;
             if (groupCredits < UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE)
             {
-                ErrorMessage(level.PlanetName, PreviousScreen(), LGUConstants.NOT_ENOUGH_CREDITS_SPECIFIED_PROBE);
+                ErrorMessage(level.PlanetName, PreviousScreen(), LguConstants.NOT_ENOUGH_CREDITS_SPECIFIED_PROBE);
                 return;
             }
 
             bool sameWeather = level.currentWeather == type || (level.overrideWeather && level.overrideWeatherType == type);
             if (sameWeather)
             {
-                ErrorMessage(level.PlanetName, PreviousScreen(), string.Format(LGUConstants.SAME_WEATHER_FORMAT, level.PlanetName, type == LevelWeatherType.None ? "clear" : type));
+                ErrorMessage(level.PlanetName, PreviousScreen(), string.Format(LguConstants.SAME_WEATHER_FORMAT, level.PlanetName, type == LevelWeatherType.None ? "clear" : type));
                 return;
             }
             int price = type == LevelWeatherType.None && UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_ALWAYS_CLEAR ? UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE : UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE.Value;
 
-            Confirm(level.PlanetName, string.Format(LGUConstants.CONFIRM_WEATHER_FORMAT, level.PlanetName, type, price), () => ChangeWeather(level, type), PreviousScreen());
+            Confirm(level.PlanetName, string.Format(LguConstants.CONFIRM_WEATHER_FORMAT, level.PlanetName, type, price), () => ChangeWeather(level, type), PreviousScreen());
         }
         void ChangeWeather(SelectableLevel level, LevelWeatherType weatherType)
         {
@@ -185,7 +185,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
                 elements = [
                         new TextElement()
                         {
-                            Text = string.Format(LGUConstants.WEATHER_CHANGED_FORMAT, level.PlanetName, weatherType == LevelWeatherType.None ? "clear" : weatherType),
+                            Text = string.Format(LguConstants.WEATHER_CHANGED_FORMAT, level.PlanetName, weatherType == LevelWeatherType.None ? "clear" : weatherType),
                         },
                         new TextElement()
                         {
@@ -201,10 +201,10 @@ namespace MoreShipUpgrades.Misc.UI.Application
             int groupCredits = UpgradeBus.Instance.GetTerminal().groupCredits;
             if (groupCredits < UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE)
             {
-                ErrorMessage(level.PlanetName, PreviousScreen(), LGUConstants.NOT_ENOUGH_CREDITS_PROBE);
+                ErrorMessage(level.PlanetName, PreviousScreen(), LguConstants.NOT_ENOUGH_CREDITS_PROBE);
                 return;
             }
-            Confirm(level.PlanetName, string.Format(LGUConstants.CONFIRM_RANDOM_WEATHER_FORMAT, level.PlanetName, UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE.Value), () => RandomizeWeather(level), PreviousScreen());
+            Confirm(level.PlanetName, string.Format(LguConstants.CONFIRM_RANDOM_WEATHER_FORMAT, level.PlanetName, UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE.Value), () => RandomizeWeather(level), PreviousScreen());
         }
         void RandomizeWeather(SelectableLevel level)
         {
@@ -227,7 +227,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
                 elements = [
                         new TextElement()
                         {
-                            Text = string.Format(LGUConstants.WEATHER_CHANGED_FORMAT, level.PlanetName, weather.Item2),
+                            Text = string.Format(LguConstants.WEATHER_CHANGED_FORMAT, level.PlanetName, weather.Item2),
                         },
                         new TextElement()
                         {

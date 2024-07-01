@@ -328,7 +328,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
         {
             if (terminal.IsHost || terminal.IsServer) ContractManager.Instance.SyncContractDetailsClientRpc("None", -1);
             else ContractManager.Instance.ReqSyncContractDetailsServerRpc("None", -1);
-            ErrorMessage(MAIN_MENU_TITLE, backAction, LGUConstants.CONTRACT_CANCEL_CONFIRM_PROMPT_SUCCESS);
+            ErrorMessage(MAIN_MENU_TITLE, backAction, LguConstants.CONTRACT_CANCEL_CONFIRM_PROMPT_SUCCESS);
         }
     }
 }
