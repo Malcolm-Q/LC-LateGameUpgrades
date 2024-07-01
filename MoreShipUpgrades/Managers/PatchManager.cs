@@ -9,6 +9,7 @@ using MoreShipUpgrades.Patches.NetworkManager;
 using MoreShipUpgrades.Patches.PlayerController;
 using MoreShipUpgrades.Patches.RoundComponents;
 using MoreShipUpgrades.Patches.TerminalComponents;
+using MoreShipUpgrades.Patches.Weather;
 using System;
 
 namespace MoreShipUpgrades.Managers
@@ -130,7 +131,7 @@ namespace MoreShipUpgrades.Managers
         {
             try
             {
-                harmony.PatchAll(typeof(StormyWeather));
+                harmony.PatchAll(typeof(StormyWeatherPatcher));
                 Plugin.mls.LogInfo("Weathers have been patched");
             }
             catch (Exception exception)
