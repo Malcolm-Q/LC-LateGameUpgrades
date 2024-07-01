@@ -263,17 +263,18 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
     * After being escorted back to the ship, they will thank you for your help non-stop til you arrive at The Company (where you escort them for disciplinary action).
 
 ## Commands
-* ``extend deadline <days>``
-    * Extends the current deadline of the profit quota by ``<days>``.
-    * Each day added requires $800 (configurable).
-* ``probe <moonName> [weatherType]``
+* ``extend deadline``
+    * Brings out an interactive UI where the player can select the amount of days they wish to extend with the preview of credit cost shown wtih selected amount.
+    * Each day extend will cost $800 by default (configurable)
+    * You can configure the amount of credit cost increase per each day extend.
+* ``probe``
+    * Brings out an interactive UI where the player can select which moon they wish to change the weather of and then to which weather respectfully.
     * Sends out a weather probe to the selected moon to change its current weather.
-    * If provided a ``weatherType``, it will change the moon's weather to the selected one for $500 (configurable)
+    * If a specified weather is selected, it will change the moon's weather to the selected one for $500 (configurable)
     * Otherwise, a random weather will be selected and will cost $300 (configurable)
     * You can configure the random weather command to only select cleared weathers (off by default)
-* ``contract [moonName]``
-    * Provides a contract for the players to finish on a moon.
-    * If provided a ``moonName``, it will give out a contract on specified moon.
+* ``contracts``
+    * Brings out an interactive UI where you can select to obtain a contract, see current contract status and information related to each contract type.
 
 ## API
 * Hunter

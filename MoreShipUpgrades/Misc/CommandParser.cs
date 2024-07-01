@@ -18,8 +18,6 @@ namespace MoreShipUpgrades.Misc
     internal static class CommandParser
     {
         private static LguLogger logger = new LguLogger(nameof(CommandParser));
-        private static bool attemptCancelContract = false;
-        private static string attemptSpecifyContract = null;
 
         const string LOAD_LGU_COMMAND = "load lgu";
         public static readonly List<string> contracts = new List<string> { LguConstants.DATA_CONTRACT_NAME, LguConstants.EXTERMINATOR_CONTRACT_NAME, LguConstants.EXTRACTION_CONTRACT_NAME,LguConstants.EXORCISM_CONTRACT_NAME,LguConstants.DEFUSAL_CONTRACT_NAME };
@@ -312,91 +310,6 @@ namespace MoreShipUpgrades.Misc
             stringBuilder.AppendLine();
             return DisplayTerminalMessage(stringBuilder.ToString());
         }
-        private static TerminalNode ExecuteContractCommands(string secondWord, ref Terminal terminal)
-        {
-            switch(secondWord)
-            {
-                case "cancel": return ExecuteContractCancelCommand();
-                case "info": return DisplayTerminalMessage(string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value));
-                default: return TryGetContract(secondWord, ref terminal);
-            }
-        }
-        private static TerminalNode ExecuteContractCancelCommand()
-        {
-            TerminalNode node = ScriptableObject.CreateInstance<TerminalNode>();
-            if (ContractManager.Instance.contractLevel == "None")
-            {
-                node.displayText = LguConstants.CONTRACT_CANCEL_FAIL;
-                node.clearPreviousText = true;
-                return node;
-            }
-            attemptCancelContract = true;
-            node.clearPreviousText = true;
-            node.displayText = LguConstants.CONTRACT_CANCEL_CONFIRM_PROMPT;
-            return node;
-        }
-        static TerminalNode TryGetMoonContract(string possibleMoon, ref Terminal terminal)
-        {
-            logger.LogDebug($"Trying to assign a contract on moon called {possibleMoon}");
-            string txt = null;
-            if (ContractManager.Instance.contractLevel != "None")
-            {
-                txt = $"You currently have a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}!\n\n";
-                txt += string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value);
-                logger.LogInfo($"User tried starting a new specified moon contract while they still have a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}!");
-                return DisplayTerminalMessage(txt);
-            }
-            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value)
-            {
-                txt = $"Specified Moon contracts cost ${UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value} and you have ${terminal.groupCredits}\n\n";
-                return DisplayTerminalMessage(txt);
-            }
-            string moon = ContractManager.GetSpecifiedLevel(possibleMoon);
-            if (moon == "None")
-            {
-                txt = $"Wasn't possible to find any moons whose name contains {possibleMoon} to provide a contract on it...\n\n";
-                return DisplayTerminalMessage(txt);
-            }
-            attemptSpecifyContract = moon;
-            txt = $"Type CONFIRM if you wish to have a contract on {moon} for the cost of {UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value} Company credits.\n\n";
-            return DisplayTerminalMessage(txt);
-        }
-        static TerminalNode TryGetContract(string possibleMoon, ref Terminal terminal)
-        {
-            if (contracts.Count == 0) return DisplayTerminalMessage(LguConstants.CONTRACT_FAIL);
-            if (possibleMoon != "") return TryGetMoonContract(possibleMoon, ref terminal);
-            string txt = null;
-            if(ContractManager.Instance.contractLevel != "None")
-            {
-                txt = $"You currently have a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}!\n\n";
-                txt += string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value);
-                logger.LogInfo($"User tried starting a new contract while they still have a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}!");
-                return DisplayTerminalMessage(txt);
-            }
-            if(terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value)
-            {
-                txt = $"Contracts costs ${UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value} and you have ${terminal.groupCredits}\n\n";
-                return DisplayTerminalMessage(txt);
-            }
-            LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits - UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value);
-            int i = Random.Range(0,contracts.Count);
-            if( contracts.Count > 1)
-            {
-                while (i == ContractManager.Instance.lastContractIndex)
-                {
-                    i = Random.Range(0, contracts.Count);
-                }
-            }
-            ContractManager.Instance.contractType = contracts[i];
-            txt = $"A {contracts[i]} contract has been accepted for {ContractManager.RandomLevel()}!{contractInfos[i]}";
-
-            if (terminal.IsHost || terminal.IsServer) ContractManager.Instance.SyncContractDetailsClientRpc(ContractManager.Instance.contractLevel, i);
-            else ContractManager.Instance.ReqSyncContractDetailsServerRpc(ContractManager.Instance.contractLevel, i);
-
-            logger.LogInfo($"User accepted a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}");
-
-            return DisplayTerminalMessage(txt);
-        }
 
         private static TerminalNode ExecuteLategameCommands(string secondWord)
         {
@@ -478,66 +391,17 @@ namespace MoreShipUpgrades.Misc
                 default: return HandleBruteForce(secondWord);
             }
         }
-        private static TerminalNode CheckConfirmForCancel(string word, ref Terminal terminal)
-        {
-            attemptCancelContract = false;
-            TerminalNode node = ScriptableObject.CreateInstance<TerminalNode>();
-            if (word.ToLower() != "confirm")
-            {
-                node.displayText = LguConstants.CONTRACT_CANCEL_CONFIRM_PROMPT_FAIL;
-                node.clearPreviousText = true;
-                return node;
-            }
-            if (terminal.IsHost || terminal.IsServer) ContractManager.Instance.SyncContractDetailsClientRpc("None", -1);
-            else ContractManager.Instance.ReqSyncContractDetailsServerRpc("None", -1);
-            node.displayText = LguConstants.CONTRACT_CANCEL_CONFIRM_PROMPT_SUCCESS;
-            node.clearPreviousText = true;
-            return node;
-
-        }
-        static TerminalNode CheckConfirmForSpecify(string word, ref Terminal terminal)
-        {
-            string moon = attemptSpecifyContract;
-            attemptSpecifyContract = null;
-            TerminalNode node = ScriptableObject.CreateInstance<TerminalNode>();
-            if (word.ToLower() != "confirm")
-            {
-                node.displayText = LguConstants.CONTRACT_SPECIFY_CONFIRM_PROMPT_FAIL;
-                node.clearPreviousText = true;
-                return node;
-            }
-            
-            LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits - UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value);
-            int i = Random.Range(0, contracts.Count);
-            ContractManager.Instance.contractType = contracts[i];
-            ContractManager.Instance.contractLevel = moon;
-            if (terminal.IsHost || terminal.IsServer) ContractManager.Instance.SyncContractDetailsClientRpc(ContractManager.Instance.contractLevel, i);
-            else ContractManager.Instance.ReqSyncContractDetailsServerRpc(ContractManager.Instance.contractLevel, i);
-            logger.LogInfo($"User accepted a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}");
-            return DisplayTerminalMessage(string.Format(LguConstants.CONTRACT_SPECIFY_CONFIRM_PROMPT_SUCCESS_FORMAT, contracts[i], moon, contractInfos[i]));
-        }
         public static void ParseLGUCommands(string fullText, ref Terminal terminal, ref TerminalNode outputNode)
         {
             string[] textArray = fullText.Split();
             string firstWord = textArray[0].ToLower();
             string secondWord = textArray.Length > 1 ? textArray[1].ToLower() : "";
             string thirdWord = textArray.Length > 2 ? textArray[2].ToLower() : "";
-            if (attemptSpecifyContract != null)
-            {
-                outputNode = CheckConfirmForSpecify(firstWord, ref terminal);
-                return;
-            }
-            if (attemptCancelContract)
-            {
-                outputNode = CheckConfirmForCancel(firstWord, ref terminal);
-                return;
-            }
             switch (firstWord)
             {
                 case "demon": outputNode = LookupDemon(secondWord, thirdWord); return;
                 case "lookup": outputNode = DefuseBombCommand(secondWord); return;
                 case "toggle": outputNode = ExecuteToggleCommands(secondWord, ref outputNode); return;
-                case "contract": outputNode = ExecuteContractCommands(secondWord, ref terminal); return;
                 case "bruteforce": outputNode= ExecuteBruteForce(secondWord); return;
                 case "initattack":
                 case "atk": outputNode = ExecuteDiscombobulatorAttack(ref terminal); return;
