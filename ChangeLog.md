@@ -1,6 +1,10 @@
 <details>
 <summary> 3.8.3 - 2024-07-?? </summary>
 
+- Implemented alternative modes for Lightning Rod such as:
+  - Always redirect all lightning bolts meant for items.
+  - Always redirect all lightning bolts targetting random locations.
+  - Always redirect all kinds of lightning bolts.
 - Refactored items and config for easier maintenance.
   - Wheelbarrow was the most affected so it's likely the settings will reset for them.
 - Fixed issue with Lightning Rod not functioning correctly due to the patches not being applied.

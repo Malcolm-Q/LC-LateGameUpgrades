@@ -138,6 +138,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<LightningRod.UpgradeMode> LIGHTNING_ROD_UPGRADE_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<BackMuscles.UpgradeMode> BACK_MUSCLES_UPGRADE_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> MECHANICAL_ARMS_PRICES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> MECHANICAL_ARMS_INITIAL_RANGE_INCREASE {  get; set; }
@@ -955,6 +956,7 @@ namespace MoreShipUpgrades.Misc
             LIGHTNING_ROD_PRICE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LightningRod.PRICE_SECTION, LightningRod.PRICE_DEFAULT);
             LIGHTNING_ROD_ACTIVE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LightningRod.ACTIVE_SECTION, LightningRod.ACTIVE_DEFAULT, LightningRod.ACTIVE_DESCRIPTION);
             LIGHTNING_ROD_DIST = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LightningRod.DIST_SECTION, LightningRod.DIST_DEFAULT, LightningRod.DIST_DESCRIPTION);
+            LIGHTNING_ROD_UPGRADE_MODE = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LightningRod.UPGRADE_MODE_SECTION, LightningRod.UPGRADE_MODE_DEFAULT, LightningRod.UPGRADE_MODE_DESCRIPTION);
             LIGHTNING_ROD_ITEM_PROGRESSION_ITEMS = SyncedBindingExtensions.BindSyncedEntry(cfg, topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion

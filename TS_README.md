@@ -84,6 +84,7 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 * __Lightning Rod - $1000__
     * Redirects lightning to the ship.
     * The closer you (and your metal object) are to the ship, the more likely the ship will attract the lightning.
+    * Alternative modes such as redirect all item lightning bolts, random lightning bolts and both.
 
 * __Fast Encryption - $300__
     * Upgrades the signal transmitter.

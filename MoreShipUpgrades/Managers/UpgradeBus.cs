@@ -57,8 +57,11 @@ namespace MoreShipUpgrades.Managers
         internal Dictionary<string, AudioClip> SFX = [];
         internal bool helmetDesync;
         internal bool IsBeta = false;
-
         internal int daysExtended = 0;
+
+        Terminal terminal;
+        PlayerControllerB playerController;
+        HangarShipDoor hangarShipDoors;
 
         void Awake()
         {
@@ -68,15 +71,18 @@ namespace MoreShipUpgrades.Managers
 
         public Terminal GetTerminal()
         {
-            return GameObject.Find("TerminalScript").GetComponent<Terminal>();
+            if (terminal == null) terminal = GameObject.Find("TerminalScript").GetComponent<Terminal>();
+            return terminal;
         }
         public PlayerControllerB GetLocalPlayer()
         {
-            return GameNetworkManager.Instance.localPlayerController;
+            if (playerController == null) playerController = GameNetworkManager.Instance.localPlayerController;
+            return playerController;
         }
         public HangarShipDoor GetShipDoors()
         {
-            return FindObjectOfType<HangarShipDoor>();
+            if (hangarShipDoors == null) hangarShipDoors = FindObjectOfType<HangarShipDoor>();
+            return hangarShipDoors;
         }
 
         public void ResetAllValues(bool wipeObjRefs = true)
@@ -91,6 +97,7 @@ namespace MoreShipUpgrades.Managers
 
             if (PluginConfiguration.DISCOMBOBULATOR_ENABLED.Value) Discombobulator.instance.flashCooldown = 0f;
             if (PluginConfiguration.BACK_MUSCLES_ENABLED.Value) BackMuscles.Instance.alteredWeight = 1f;
+            if (PluginConfiguration.LIGHTNING_ROD_ENABLED) LightningRod.instance.ResetValues();
             if (wipeObjRefs) {
                 UpgradeObjects = [];
                 discoveredItems.Clear();
@@ -110,6 +117,9 @@ namespace MoreShipUpgrades.Managers
             foreach (string key in upgradeLevels.Keys.ToList())
                 upgradeLevels[key] = 0;
 
+            terminal = null;
+            playerController = null;
+            hangarShipDoors = null;
         }
         private void ResetPlayerAttributes()
         {
