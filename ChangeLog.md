@@ -8,6 +8,7 @@
 - Refactored items and config for easier maintenance.
   - Wheelbarrow was the most affected so it's likely the settings will reset for them.
 - Fixed issue with Lightning Rod not functioning correctly due to the patches not being applied.
+- Fixed issue with events related with explosions not functioning due to changes from v56 release of the game.
 
 </details>
 
