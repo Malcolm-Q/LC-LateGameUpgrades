@@ -11,7 +11,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
     class BiggerLungs : TierUpgrade, IUpgradeWorldBuilding
     {
         public const string UPGRADE_NAME = "Bigger Lungs";
-        public static string PRICES_DEFAULT = "350,450,550";
+        internal const string PRICES_DEFAULT = "350,450,550";
         internal const string WORLD_BUILDING_TEXT = "\n\nService package for {0}." +
             " Opting into every maintenance procedure will arrange for your suit's pipes to be cleaned and repaired, filters re-issued," +
             " and DRM removed from the integrated air conditioning system.\n\n";
@@ -25,7 +25,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             if (!UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_ENABLED.Value) return regenValue;
             if (!GetActiveUpgrade(UPGRADE_NAME) || GetUpgradeLevel(UPGRADE_NAME) < UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_STAMINA_REGEN_APPLY_LEVEL.Value - 1) return regenValue;
-            return regenValue * Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_STAMINA_REGEN_INCREASE.Value + UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_STAMINA_REGEN_INCREMENTAL_INCREASE * Mathf.Abs(GetUpgradeLevel(UPGRADE_NAME) - UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_STAMINA_REGEN_APPLY_LEVEL.Value - 1), 0f, 10f);
+            return regenValue * Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_STAMINA_REGEN_INCREASE.Value + (UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_STAMINA_REGEN_INCREMENTAL_INCREASE * Mathf.Abs(GetUpgradeLevel(UPGRADE_NAME) - UpgradeBus.Instance.PluginConfiguration.BIGGER_LUNGS_STAMINA_REGEN_APPLY_LEVEL.Value - 1)), 0f, 10f);
 
         }
         public static float GetAdditionalStaminaTime(float defaultValue)

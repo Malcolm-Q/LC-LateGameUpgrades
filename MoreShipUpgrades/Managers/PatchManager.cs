@@ -38,6 +38,7 @@ namespace MoreShipUpgrades.Managers
             {
                 harmony.PatchAll(typeof(BaboonBirdAIPatcher));
                 harmony.PatchAll(typeof(ButlerBeesPatcher));
+                harmony.PatchAll(typeof(ClaySurgeonAIPatcher));
                 harmony.PatchAll(typeof(EnemyAIPatcher));
                 harmony.PatchAll(typeof(EnemyAICollisionDetectPatcher));
                 harmony.PatchAll(typeof(HoarderBugAIPatcher));

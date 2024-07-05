@@ -143,6 +143,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string CLAY_GLASSES_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ClayGlasses.UPGRADE_NAME);
         internal static readonly string MECHANICAL_ARMS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, MechanicalArms.UPGRADE_NAME);
         internal static readonly string SCAVENGER_INSTINCTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ScavengerInstincts.UPGRADE_NAME);
         internal static readonly string LANDING_THRUSTERS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, LandingThrusters.UPGRADE_NAME);
@@ -563,6 +564,25 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Clay Glasses
+
+        internal const string CLAY_GLASSES_ENABLED_KEY = $"Enable {ClayGlasses.UPGRADE_NAME} Upgrade";
+        internal const bool CLAY_GLASSES_ENABLED_DEFAULT = true;
+        internal const string CLAY_GLASSES_ENABLED_DESCRIPTION = "Tier upgrade which increases the distance to start seeing the Clay Surgeon Entity.";
+
+        internal const string CLAY_GLASSES_PRICE_KEY = $"Price of {ClayGlasses.UPGRADE_NAME} Upgrade";
+        internal const int CLAY_GLASSES_PRICE_DEFAULT = 200;
+
+        internal const string CLAY_GLASSES_DISTANCE_INITIAL_INCREASE_KEY = "Initial Distance Increase";
+        internal const float CLAY_GLASSES_DISTANCE_INITIAL_INCREASE_DEFAULT = 10f;
+        internal const string CLAY_GLASSES_DISTANCE_INITIAL_INCREASE_DESCRIPTION = "Distance increased when first purchasing the upgrade to be able to spot the Clay Surgeon";
+
+        internal const string CLAY_GLASSES_DISTANCE_INCREMENTAL_INCREASE_KEY = "Incremental Distance Increase";
+        internal const float CLAY_GLASSES_DISTANCE_INCREMENTAL_INCREASE_DEFAULT = 5f;
+        internal const string CLAY_GLASSES_DISTANCE_INCREMENTAL_INCREASE_DESCRIPTION = "Distance increased when purchasing further levels of the upgrade to be able to spot the Clay Surgeon";
+
+        #endregion
 
         #region Hunter
 
