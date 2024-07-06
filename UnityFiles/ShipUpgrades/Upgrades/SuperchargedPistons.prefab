@@ -195,7 +195,7 @@ GameObject:
   - component: {fileID: 6901526314252520495}
   - component: {fileID: 7148446588576680961}
   m_Layer: 0
-  m_Name: SuperchargedMotors
+  m_Name: SuperchargedPistons
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
