@@ -21,7 +21,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         /// </summary>
         private StartOfRound roundInstance;
 
-        bool KeepScanNode
+        protected override bool KeepScanNode
         {
             get
             {
@@ -42,7 +42,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             base.Start();
             localPlayer = UpgradeBus.Instance.GetLocalPlayer();
             roundInstance = StartOfRound.Instance;
-            if (!KeepScanNode) LguScanNodeProperties.RemoveScanNode(gameObject);
         }
         /// <summary>
         /// Check if this item is currently grabbed by a player and if it's the local player and if so, reset their drown timer.

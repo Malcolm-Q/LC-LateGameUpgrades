@@ -13,7 +13,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
     /// Base class which represents an item with the ability of teleporting the player back to the ship through vanila teleport
     /// when activated
     /// </summary>
-    internal class BasePortableTeleporter : LategameItem
+    internal abstract class BasePortableTeleporter : LategameItem
     {
         /// <summary>
         /// Sounds played when interacting with the portable teleporter

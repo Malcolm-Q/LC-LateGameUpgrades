@@ -255,9 +255,9 @@ namespace MoreShipUpgrades.Misc.Util
             if (currentLine != "") result += (padLeftFirst || !first ? leftPadding : "") + currentLine + new string(' ', Mathf.Max(0, actualLength - currentLinePosition)) + rightPadding + '\n';
             return result;
         }
-        internal static void SpawnExplosion(Vector3 explosionPosition, bool spawnExplosionEffect = false, float killRange = 1f, float damageRange = 1f, int nonLethalDamage = 50, float physicsForce = 0f, GameObject overridePrefab = null)
+        internal static void SpawnExplosion(Vector3 explosionPosition, bool spawnExplosionEffect = false, float killRange = 1f, float damageRange = 1f, int nonLethalDamage = 50, float physicsForce = 0f, GameObject overridePrefab = null, bool goThroughCar = false)
         {
-            Landmine.SpawnExplosion(explosionPosition, spawnExplosionEffect, killRange, damageRange, nonLethalDamage, physicsForce, overridePrefab);
+            Landmine.SpawnExplosion(explosionPosition, spawnExplosionEffect, killRange, damageRange, nonLethalDamage, physicsForce, overridePrefab, goThroughCar: goThroughCar);
         }
 
         internal static void SetupGameObject<T>(string name) where T : Component

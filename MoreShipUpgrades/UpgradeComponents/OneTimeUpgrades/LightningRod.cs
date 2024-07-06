@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 {
-    class LightningRod : OneTimeUpgrade, IUpgradeWorldBuilding
+    public class LightningRod : OneTimeUpgrade, IUpgradeWorldBuilding
     {
         public const string UPGRADE_NAME = "Lightning Rod";
         internal const string WORLD_BUILDING_TEXT = "\n\nService key for the Ship's terminal which allows your crew to legally use the Ship's 'Static Attraction Field' module." +
@@ -16,6 +16,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             "is saddled with the uniquely-awkward task of having to ransom a safety feature back to the employee in text while not also admitting to the existence of" +
             " an occupational hazard that was previously denied in court.\n\n";
         public static LightningRod instance;
+        StormyWeather StormyWeather;
         private static LguLogger logger = new LguLogger(UPGRADE_NAME);
 
         // Configuration
@@ -40,9 +41,32 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         public const float DIST_DEFAULT = 175f;
         public const string DIST_DESCRIPTION = $"The closer you are the more likely the rod will reroute lightning.";
 
-        public bool CanTryInterceptLightning { get; internal set; }
+        public const string UPGRADE_MODE_SECTION = $"Current Upgrade Mode for {UPGRADE_NAME}";
+        public const UpgradeMode UPGRADE_MODE_DEFAULT = UpgradeMode.EffectiveRange;
+        public const string UPGRADE_MODE_DESCRIPTION = "Supported Values:\n" +
+                                                        "EffectiveRange: The closer the item is to the ship, the more likely the lightning directed to it will be redirected to the ship instead.\n" +
+                                                        "AlwaysRerouteItem: Whenever an item is picked to be hit by lightning, the bolt will be redirected to the ship instead.\n" +
+                                                        "AlwaysRerouteRandom: Whenever a random lightning bolt (not the one used to target items) is produced, the bolt will be redirected to the ship instead.\n" +
+                                                        "AlwaysRerouteAll: Whenever any kind of lightning bolt is produced, the bolt will be redirected to the ship instead.\n";
+
+        public static UpgradeMode CurrentUpgradeMode
+        {
+            get
+            {
+                return UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_UPGRADE_MODE;
+            }
+        }
+
         public bool LightningIntercepted { get; internal set; }
         public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_PRICE.Value <= 0;
+
+        public enum UpgradeMode
+        {
+            EffectiveRange,
+            AlwaysRerouteItem,
+            AlwaysRerouteRandom,
+            AlwaysRerouteAll
+        }
 
         void Awake()
         {
@@ -53,19 +77,45 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
         public static void TryInterceptLightning(ref StormyWeather __instance, ref GrabbableObject ___targetingMetalObject)
         {
-            if (!instance.CanTryInterceptLightning) return;
-            instance.CanTryInterceptLightning = false;
+            bool intercepted = false;
+            switch(CurrentUpgradeMode)
+            {
+                case UpgradeMode.EffectiveRange:
+                    {
+                        if (___targetingMetalObject == null)
+                        {
+                            intercepted = false;
+                            break;
+                        }
+                        Terminal terminal = UpgradeBus.Instance.GetTerminal();
+                        float dist = Vector3.Distance(___targetingMetalObject.transform.position, terminal.transform.position);
 
-            Terminal terminal = UpgradeBus.Instance.GetTerminal();
-            float dist = Vector3.Distance(___targetingMetalObject.transform.position, terminal.transform.position);
+                        if (dist > UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_DIST.Value) return;
 
-            if (dist > UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_DIST.Value) return;
+                        dist /= UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_DIST.Value;
+                        float prob = 1 - dist;
+                        float rand = Random.value;
+                        intercepted = rand < prob;
+                        break;
+                    }
+                case UpgradeMode.AlwaysRerouteItem:
+                    {
+                        intercepted = ___targetingMetalObject != null;
+                        break;
+                    }
+                case UpgradeMode.AlwaysRerouteRandom:
+                    {
+                        intercepted = ___targetingMetalObject == null;
+                        break;
+                    }
+                case UpgradeMode.AlwaysRerouteAll:
+                    {
+                        intercepted = true;
+                        break;
+                    }
+            }
 
-            dist /= UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_DIST.Value;
-            float prob = 1 - dist;
-            float rand = Random.value;
-
-            if (rand < prob)
+            if (intercepted)
             {
                 __instance.staticElectricityParticle.Stop();
                 instance.LightningIntercepted = true;
@@ -83,7 +133,8 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         public void CoordinateInterceptionClientRpc()
         {
             LightningIntercepted = true;
-            FindObjectOfType<StormyWeather>(true).staticElectricityParticle.gameObject.SetActive(false);
+            if (StormyWeather == null) StormyWeather = FindObjectOfType<StormyWeather>(true);
+            StormyWeather.staticElectricityParticle.gameObject.SetActive(false);
         }
 
         public string GetWorldBuildingText(bool shareStatus = false)
@@ -93,7 +144,18 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
         public override string GetDisplayInfo(int price = -1)
         {
-            return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), price, UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_DIST.Value);
+            switch (CurrentUpgradeMode)
+            {
+                case UpgradeMode.EffectiveRange:
+                    return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), price, UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_DIST.Value);
+                case UpgradeMode.AlwaysRerouteItem:
+                    return $"${price} - Reroutes all lightning bolts directed to metallic objects to the ship's lightning rod.";
+                case UpgradeMode.AlwaysRerouteRandom:
+                    return $"${price} - Reroutes all non-targetting lightning bolts to the ship's lightning rod.";
+                case UpgradeMode.AlwaysRerouteAll:
+                    return $"${price} - Reroutes all kind of lightning bolts to the ship's lightning rod";
+            }
+            return string.Empty;
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
@@ -112,6 +174,11 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
                                     configuration.LIGHTNING_ROD_ENABLED.Value,
                                     configuration.LIGHTNING_ROD_PRICE.Value,
                                     configuration.OVERRIDE_UPGRADE_NAMES ? configuration.LIGHTNING_ROD_OVERRIDE_NAME : "");
+        }
+
+        internal void ResetValues()
+        {
+            StormyWeather = null;
         }
     }
 }

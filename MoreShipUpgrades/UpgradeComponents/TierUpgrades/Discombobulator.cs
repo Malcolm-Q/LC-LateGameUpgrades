@@ -13,7 +13,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
     class Discombobulator : TierUpgrade, IUpgradeWorldBuilding
     {
         internal float flashCooldown = 0f;
-        private static LguLogger logger = new LguLogger(nameof(Discombobulator));
         public static Discombobulator instance;
 
         public const string UPGRADE_NAME = "Discombobulator";

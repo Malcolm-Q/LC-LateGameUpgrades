@@ -14,9 +14,24 @@ namespace MoreShipUpgrades.Patches.Weather
         [HarmonyPatch(nameof(StormyWeather.LightningStrike))]
         static void CheckIfLightningRodPresent(StormyWeather __instance, ref Vector3 strikePosition, bool useTargetedObject)
         {
-            if (LightningRod.instance != null && LightningRod.instance.LightningIntercepted && useTargetedObject)
+            if (LightningRod.instance != null && LightningRod.instance.LightningIntercepted)
             {
-                // we need to check useTargetedObject so we're not rerouting random strikes to the ship.
+                switch(LightningRod.CurrentUpgradeMode)
+                {
+                    case LightningRod.UpgradeMode.EffectiveRange:
+                    case LightningRod.UpgradeMode.AlwaysRerouteItem:
+                        {
+                            if (!useTargetedObject) return;
+                            break;
+                        }
+                    case LightningRod.UpgradeMode.AlwaysRerouteRandom:
+                        {
+                            if (useTargetedObject) return;
+                            break;
+                        }
+                    case LightningRod.UpgradeMode.AlwaysRerouteAll:
+                        break;
+                }
                 LightningRod.RerouteLightningBolt(ref strikePosition, ref __instance);
             }
         }
@@ -26,15 +41,7 @@ namespace MoreShipUpgrades.Patches.Weather
         static void InterceptSelectedObject(StormyWeather __instance, GrabbableObject ___targetingMetalObject)
         {
             if (!BaseUpgrade.GetActiveUpgrade(LightningRod.UPGRADE_NAME) || !LguStore.Instance.IsHost || !LguStore.Instance.IsServer) { return; }
-            if (___targetingMetalObject == null)
-            {
-                if (LightningRod.instance != null) // Lightning rod could be disabled so we wouldn't have an instance
-                    LightningRod.instance.CanTryInterceptLightning = true;
-            }
-            else
-            {
-                LightningRod.TryInterceptLightning(ref __instance, ref ___targetingMetalObject);
-            }
+            LightningRod.TryInterceptLightning(ref __instance, ref ___targetingMetalObject);
         }
     }
 }

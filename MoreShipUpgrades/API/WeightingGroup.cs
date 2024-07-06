@@ -20,7 +20,7 @@ namespace MoreShipUpgrades.API
             double roll = new Random().NextDouble();
             double total = 0;
 
-            foreach (KeyValuePair<T, double> pair in this.OrderByDescending(v => v.Value)) 
+            foreach (KeyValuePair<T, double> pair in this.OrderByDescending(v => v.Value))
             {
                 total += pair.Value / totalWeight;
                 if (roll <= total)

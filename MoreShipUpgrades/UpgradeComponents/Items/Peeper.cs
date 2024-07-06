@@ -17,7 +17,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         /// The Animator component of the instance of the class
         /// </summary>
         private Animator anim;
-        bool KeepScanNode
+        protected override bool KeepScanNode
         {
             get
             {
@@ -30,7 +30,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             base.Start();
             anim = GetComponent<Animator>();
             UpgradeBus.Instance.coilHeadItems.Add(this);
-            if (!KeepScanNode) LguScanNodeProperties.RemoveScanNode(gameObject);
         }
         public override void Update()
         {

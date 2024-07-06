@@ -13,11 +13,11 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
             " with any objects they possess once used. In 2406, a massive stock of liquidated TeleMax Teleportation Remotes was acquired by The Company in aftermarket" +
             " following a battery-related recall. As a result, the Company is able to offer them to its employees for cheap, but they are prone to swelling and combustion. Handle with care.";
 
-        bool KeepScanNode
+        protected override bool KeepScanNode
         {
             get
             {
-                return UpgradeBus.Instance.PluginConfiguration.STORE_WHEELBARROW_SCAN_NODE;
+                return UpgradeBus.Instance.PluginConfiguration.PORTABLE_TELEPORTER_SCAN_NODE;
             }
         }
         public string GetDisplayInfo()
@@ -35,7 +35,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter
             base.Start();
             breakChance = UpgradeBus.Instance.PluginConfiguration.CHANCE_TO_BREAK.Value;
             keepItems = UpgradeBus.Instance.PluginConfiguration.KEEP_ITEMS_ON_TELE.Value;
-            if (!KeepScanNode) LguScanNodeProperties.RemoveScanNode(gameObject);
         }
     }
 }

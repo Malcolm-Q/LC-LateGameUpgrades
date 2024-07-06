@@ -7,12 +7,17 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
 {
     internal class MonsterSample : LategameItem
     {
-        /// <summary>
-        /// Logger of the class
-        /// </summary>
-        private static LguLogger logger = new LguLogger(nameof(MonsterSample));
         private static int usedMapSeed = -1;
         private static System.Random random = null;
+
+        protected override bool KeepScanNode
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         public override void Start()
         {
             base.Start();

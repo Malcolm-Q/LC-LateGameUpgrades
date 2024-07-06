@@ -3,18 +3,15 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
+using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
-using System;
-using System.Diagnostics;
-using System.Numerics;
-using System.Xml.Linq;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Misc.Util
 {
-    internal static class LGUConstants
+    internal static class LguConstants
     {
         #region General
 
@@ -65,6 +62,46 @@ namespace MoreShipUpgrades.Misc.Util
 
         #region Item Progression
 
+        internal const string ITEM_PROGRESSION_SECTION = "_Item Progression Route_";
+
+        internal const string ALTERNATIVE_ITEM_PROGRESSION_KEY = "Enable Item Progression";
+        internal const bool ALTERNATIVE_ITEM_PROGRESSION_DEFAULT = false;
+        internal const string ALTERNATIVE_ITEM_PROGRESSION_DESCRIPTION = "Alternative Item Progression\n" +
+                                                                        "If true, items retrieved can be used for ship upgrades.";
+
+        internal const string ITEM_PROGRESSION_MODE_KEY = "Item Progression Mode";
+        internal const ItemProgressionManager.CollectionModes ITEM_PROGRESSION_MODE_DEFAULT = ItemProgressionManager.CollectionModes.CustomScrap;
+        internal const string ITEM_PROGRESSION_MODE_DESCRIPTION = "Item Progression Mode\n" +
+                                                                "Supported Modes: \n" +
+                                                                "CustomScrap: Specified scrap will contribute towards the level of the associated upgrade.\n" +
+                                                                "UniqueScrap: All scrap (specifications will be ignored) will contribute towards the level of a random assigned upgrade\n" +
+                                                                "NearestValue: At the end of each Quota, grant a random upgrade worth the nearest total scrap collected, rounded down.\n" +
+                                                                "ChancePerScrap: For each scrap sold, run a configured chance to receive a random/cheap/lowest tier upgrade.\n" +
+                                                                "Apparatice: Always receive an upgrade when an apparatus has been successfully sold.";
+
+        internal const string ITEM_PROGRESSION_CONTRIBUTION_MULTIPLIER_KEY = "Item Progression Multiplier";
+        internal const float ITEM_PROGRESSION_CONTRIBUTION_MULTIPLIER_DEFAULT = 0.85f;
+        internal const string ITEM_PROGRESSION_CONTRIBUTION_MULTIPLIER_DESCRIPTION = "Item Progression Contribution Multiplier\n" +
+                                                                                    "The multiplier for scrap's value contribution towards an upgrade.";
+
+        internal const string SCRAP_UPGRADE_CHANCE_KEY = "Scrap Upgrade Chance";
+        internal const float SCRAP_UPGRADE_CHANCE_DEFAULT = 0.05f;
+        internal const string SCRAP_UPGRADE_CHANCE_DESCRIPTION = "Upgrade Chance Calculation\n" +
+                                                                "Only used if Item Progression Mode is set to ChancePerScrap.\n" +
+                                                                "X -> (X * 100) %";
+
+        internal const string SCRAP_UPGRADE_MODE_KEY = "Upgrade Chance Priority";
+        internal const ItemProgressionManager.ChancePerScrapModes SCRAP_UPGRADE_MODE_DEFAULT = ItemProgressionManager.ChancePerScrapModes.LowestLevel;
+        internal const string SCRAP_UPGRADE_MODE_DESCRIPTION = "Upgrade Chance Priority\n" +
+                                                            "Only used if Item Progression Mode is set to ChancePerScrap.\n" +
+                                                            "Acceptable Values:\nRandom: Pick a random upgrade to apply.\n" +
+                                                            "Cheapest: Pick the cheapest upgrade to apply.\n" +
+                                                            "Lowest Tier: Pick the upgrade with the lowest level to apply.";
+
+        internal const string ITEM_PROGRESSION_BLACKLISTED_ITEMS_KEY = "Blacklisted Items";
+        internal const string ITEM_PROGRESSION_BLACKLISTED_ITEMS_DEFAULT = "Clipboard";
+        internal const string ITEM_PROGRESSION_BLACKLISTED_ITEMS_DESCRIPTION = "Blacklisted items for Item Progression.\nOnly used if Item Progression Mode is set to UniqueScrap. These items will NOT contribute towards ANY upgrade";
+
         internal const string ITEM_PROGRESSION_ITEMS_KEY = "Contribution Items";
         internal const string ITEM_PROGRESSION_ITEMS_DEFAULT = "";
         internal const string ITEM_PROGRESSION_ITEMS_DESCRIPTION = "Items that when sold contribute to the purchase of the upgrade. Either the scan node's name or ItemProperties.itemName can be inserted here";
@@ -106,6 +143,11 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string IMPROVED_STEERING_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ImprovedSteering.UPGRADE_NAME);
+        internal static readonly string SUPERCHARGED_PISTONS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, SuperchargedPistons.UPGRADE_NAME);
+        internal static readonly string RAPID_MOTORS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, RapidMotors.UPGRADE_NAME);
+        internal static readonly string VEHICLE_PLATING_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, VehiclePlating.UPGRADE_NAME);
+        internal static readonly string CLAY_GLASSES_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ClayGlasses.UPGRADE_NAME);
         internal static readonly string MECHANICAL_ARMS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, MechanicalArms.UPGRADE_NAME);
         internal static readonly string SCAVENGER_INSTINCTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ScavengerInstincts.UPGRADE_NAME);
         internal static readonly string LANDING_THRUSTERS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, LandingThrusters.UPGRADE_NAME);
@@ -416,9 +458,409 @@ namespace MoreShipUpgrades.Misc.Util
         internal static readonly string PEEPER_SCAN_NODE_KEY = string.Format(ITEM_SCAN_NODE_KEY_FORMAT, Peeper.ITEM_NAME);
         #endregion
 
+        #region Shopping Cart
+
+        internal const string SCRAP_WHEELBARROW_ENABLED_KEY = $"Enable the {ScrapWheelbarrow.ITEM_NAME} Item";
+        internal const bool SCRAP_WHEELBARROW_ENABLED_DEFAULT = true;
+        internal const string SCRAP_WHEELBARROW_ENABLED_DESCRIPTION = "Allows you to scavenge a shopping cart in which you can store items on";
+
+        internal const string SCRAP_WHEELBARROW_RARITY_KEY = $"Spawn Chance of the {ScrapWheelbarrow.ITEM_NAME} Item";
+        internal const float SCRAP_WHEELBARROW_RARITY_DEFAULT = 0.1f;
+        internal const string SCRAP_WHEELBARROW_RARITY_DESCRIPTION = $"How likely it is for a {ScrapWheelbarrow.ITEM_NAME} item to spawn when landing on a moon. (0.1 = 10%)";
+
+        internal const string SCRAP_WHEELBARROW_WEIGHT_KEY = $"Weight of the {ScrapWheelbarrow.ITEM_NAME} Item";
+        internal const float SCRAP_WHEELBARROW_WEIGHT_DEFAULT = 25f;
+        internal const string SCRAP_WHEELBARROW_WEIGHT_DESCRIPTION = $"Weight of the {ScrapWheelbarrow.ITEM_NAME} without any items in lbs";
+
+        internal const string SCRAP_WHEELBARROW_RESTRICTION_MODE_KEY = $"Restrictions on the {ScrapWheelbarrow.ITEM_NAME} Item";
+        internal const WheelbarrowScript.Restrictions SCRAP_WHEELBARROW_RESTRICTION_MODE_DEFAULT = WheelbarrowScript.Restrictions.ItemCount;
+        internal const string SCRAP_WHEELBARROW_RESTRICTION_MODE_DESCRIPTION = $"Restriction applied when trying to insert an item on the {ScrapWheelbarrow.ITEM_NAME}.\n" +
+                                                                        $"Supported values: None, ItemCount, TotalWeight, All";
+
+        internal const string SCRAP_WHEELBARROW_MINIMUM_VALUE_KEY = $"Minimum scrap value of {ScrapWheelbarrow.ITEM_NAME}";
+        internal const int SCRAP_WHEELBARROW_MINIMUM_VALUE_DEFAULT = 50;
+        internal const string SCRAP_WHEELBARROW_MINIMUM_VALUE_DESCRIPTION = "Lower boundary of the scrap's possible value";
+
+        internal const string SCRAP_WHEELBARROW_MAXIMUM_VALUE_KEY = $"Maximum scrap value of {ScrapWheelbarrow.ITEM_NAME}";
+        internal const int SCRAP_WHEELBARROW_MAXIMUM_VALUE_DEFAULT = 100;
+        internal const string SCRAP_WHEELBARROW_MAXIMUM_VALUE_DESCRIPTION = "Higher boundary of the scrap's possible value";
+
+        internal const string SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_KEY = $"Maximum amount of weight for {ScrapWheelbarrow.ITEM_NAME}";
+        internal const float SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_DEFAULT = 100f;
+        internal const string SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_DESCRIPTION = $"How much weight (in lbs and after weight reduction multiplier is applied on the stored items) a {ScrapWheelbarrow.ITEM_NAME} can carry in items before it is considered full.";
+
+        internal const string SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_KEY = $"Maximum amount of items for {ScrapWheelbarrow.ITEM_NAME}";
+        internal const int SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_DEFAULT = 6;
+        internal const string SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_DESCRIPTION = $"Amount of items allowed before the {ScrapWheelbarrow.ITEM_NAME} is considered full";
+
+        internal const string SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER_KEY = $"Weight reduction multiplier for {ScrapWheelbarrow.ITEM_NAME}";
+        internal const float SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER_DEFAULT = 0.5f;
+        internal const string SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MUTLIPLIER_DESCRIPTION = $"How much an item's weight will be ignored to the {ScrapWheelbarrow.ITEM_NAME}'s total weight";
+
+        internal const string SCRAP_WHEELBARROW_NOISE_RANGE_KEY = $"Noise range of the {ScrapWheelbarrow.ITEM_NAME} Item";
+        internal const float SCRAP_WHEELBARROW_NOISE_RANGE_DEFAULT = 14f;
+        internal const string SCRAP_WHEELBARROW_NOISE_RANGE_DESCRIPTION = $"How far the {ScrapWheelbarrow.ITEM_NAME} sound propagates to nearby enemies when in movement";
+
+        internal const string SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_KEY = $"Look sensitivity drawback of the {ScrapWheelbarrow.ITEM_NAME} Item";
+        internal const float SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_DEFAULT = 0.4f;
+        internal const string SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_DESCRIPTION = $"Value multiplied on the player's look sensitivity when moving with the {ScrapWheelbarrow.ITEM_NAME} Item";
+
+        internal const string SCRAP_WHEELBARROW_MOVEMENT_SLOPPY_KEY = $"Sloppiness of the {ScrapWheelbarrow.ITEM_NAME} Item";
+        internal const float SCRAP_WHEELBARROW_MOVEMENT_SLOPPY_DEFAULT = 5f;
+        internal const string SCRAP_WHEELBARROW_MOVEMENT_SLOPPY_DESCRIPTION = $"Value multiplied on the player's movement to give the feeling of drifting while carrying the {ScrapWheelbarrow.ITEM_NAME} Item";
+
+        internal const string SCRAP_WHEELBARROW_PLAY_NOISE_KEY = $"Plays noises for players with {ScrapWheelbarrow.ITEM_NAME} Item";
+        internal const bool SCRAP_WHEELBARROW_PLAY_NOISE_DEFAULT = true;
+        internal const string SCRAP_WHEELBARROW_PLAY_NOISE_DESCRIPTION = "If false, it will just not play the sounds, it will still attract monsters to noise";
+
+        #endregion
+
+        #region Wheelbarrow
+
+        internal const string WHEELBARROW_ENABLED_KEY = $"Enable the {StoreWheelbarrow.ITEM_NAME} Item";
+        internal const bool WHEELBARROW_ENABLED_DEFAULT = true;
+        internal const string WHEELBARROW_ENABLED_DESCRIPTION = "Allows you to buy a wheelbarrow to carry items outside of your inventory";
+
+        internal const string WHEELBARROW_PRICE_KEY = $"Price of the {StoreWheelbarrow.ITEM_NAME} Item";
+        internal const int WHEELBARROW_PRICE_DEFAULT = 400;
+        internal const string WHEELBARROW_PRICE_DESCRIPTION = $"Price of the {StoreWheelbarrow.ITEM_NAME} in the store";
+
+        internal const string WHEELBARROW_WEIGHT_KEY = $"Weight of the {StoreWheelbarrow.ITEM_NAME} Item";
+        internal const float WHEELBARROW_WEIGHT_DEFAULT = 30f;
+        internal const string WHEELBARROW_WEIGHT_DESCRIPTION = $"Weight of the {StoreWheelbarrow.ITEM_NAME} without any items in lbs";
+
+        internal const string WHEELBARROW_RESTRICTION_MODE_KEY = $"Restrictions on the {StoreWheelbarrow.ITEM_NAME} Item";
+        internal const WheelbarrowScript.Restrictions WHEELBARROW_RESTRICTION_MODE_DEFAULT = WheelbarrowScript.Restrictions.ItemCount;
+        internal const string WHEELBARROW_RESTRICTION_MODE_DESCRIPTION = $"Restriction applied when trying to insert an item on the {StoreWheelbarrow.ITEM_NAME}.\n" +
+                                                                        $"Supported values: None, ItemCount, TotalWeight, All";
+
+        internal const string WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_KEY = $"Maximum amount of weight for {StoreWheelbarrow.ITEM_NAME}";
+        internal const float WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_DEFAULT = 100f;
+        internal const string WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_DESCRIPTION = $"How much weight (in lbs and after weight reduction multiplier is applied on the stored items) a {StoreWheelbarrow.ITEM_NAME} can carry in items before it is considered full.";
+
+        internal const string WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_KEY = $"Maximum amount of items for {StoreWheelbarrow.ITEM_NAME}";
+        internal const int WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_DEFAULT = 4;
+        internal const string WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_DESCRIPTION = $"Amount of items allowed before the {StoreWheelbarrow.ITEM_NAME} is considered full";
+
+        internal const string WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER_KEY = $"Weight reduction multiplier for {StoreWheelbarrow.ITEM_NAME}";
+        internal const float WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER_DEFAULT = 0.7f;
+        internal const string WHEELBARROW_WEIGHT_REDUCTION_MUTLIPLIER_DESCRIPTION = $"How much an item's weight will be ignored to the {StoreWheelbarrow.ITEM_NAME}'s total weight";
+
+        internal const string WHEELBARROW_NOISE_RANGE_KEY = $"Noise range of the {StoreWheelbarrow.ITEM_NAME} Item";
+        internal const float WHEELBARROW_NOISE_RANGE_DEFAULT = 14f;
+        internal const string WHEELBARROW_NOISE_RANGE_DESCRIPTION = $"How far the {StoreWheelbarrow.ITEM_NAME} sound propagates to nearby enemies when in movement";
+
+        internal const string WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_KEY = $"Look sensitivity drawback of the {StoreWheelbarrow.ITEM_NAME} Item";
+        internal const float WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_DEFAULT = 0.4f;
+        internal const string WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_DESCRIPTION = $"Value multiplied on the player's look sensitivity when moving with the {StoreWheelbarrow.ITEM_NAME} Item";
+
+        internal const string WHEELBARROW_MOVEMENT_SLOPPY_KEY = $"Sloppiness of the {StoreWheelbarrow.ITEM_NAME} Item";
+        internal const float WHEELBARROW_MOVEMENT_SLOPPY_DEFAULT = 5f;
+        internal const string WHEELBARROW_MOVEMENT_SLOPPY_DESCRIPTION = $"Value multiplied on the player's movement to give the feeling of drifting while carrying the {StoreWheelbarrow.ITEM_NAME} Item";
+
+        internal const string WHEELBARROW_PLAY_NOISE_KEY = $"Plays noises for players with {StoreWheelbarrow.ITEM_NAME} Item";
+        internal const bool WHEELBARROW_PLAY_NOISE_DEFAULT = true;
+        internal const string WHEELBARROW_PLAY_NOISE_DESCRIPTION = "If false, it will just not play the sounds, it will still attract monsters to noise";
+
+        internal static readonly string STORE_WHEELBARROW_SCAN_NODE_KEY = string.Format(ITEM_SCAN_NODE_KEY_FORMAT, StoreWheelbarrow.ITEM_NAME);
+        #endregion
+
         #endregion
 
         #region Upgrades
+
+        #region Improved Steering
+
+        internal const string IMPROVED_STEERING_ENABLED_KEY = $"Enable {ImprovedSteering.UPGRADE_NAME} Upgrade";
+        internal const bool IMPROVED_STEERING_ENABLED_DEFAULT = true;
+        internal const string IMPROVED_STEERING_ENABLED_DESCRIPTION = "Tier upgrade which increases the turning speed of the Company Cruiser vehicle";
+
+        internal const string IMPROVED_STEERING_PRICE_KEY = $"Price of {ImprovedSteering.UPGRADE_NAME} Upgrade";
+        internal const int IMPROVED_STEERING_PRICE_DEFAULT = 100;
+
+        internal const string IMPROVED_STEERING_TURNING_SPEED_INITIAL_INCREASE_KEY = "Initial Turning Speed Increase";
+        internal const float IMPROVED_STEERING_TURNING_SPEED_INITIAL_INCREASE_DEFAULT = 1f;
+        internal const string IMPROVED_STEERING_TURNING_SPEED_INITIAL_INCREASE_DESCRIPTION = "Amount of turning speed increased when first purchasing the upgrade to the Company Cruiser vehicle.";
+
+        internal const string IMPROVED_STEERING_TURNING_SPEED_INCREMENTAL_INCREASE_KEY = "Incremental Turning Speed Increase";
+        internal const float IMPROVED_STEERING_TURNING_SPEED_INCREMENTAL_INCREASE_DEFAULT = 0.5f;
+        internal const string IMPROVED_STEERING_TURNING_SPEED_INCREMENTAL_INCREASE_DESCRIPTION = "Amount of turning speed increased when purchasing further levels of the upgrade to the Company Cruiser vehicle.";
+
+        #endregion
+
+        #region Supercharged Pistons
+
+        internal const string SUPERCHARGED_PISTONS_ENABLED_KEY = $"Enable {SuperchargedPistons.UPGRADE_NAME} Upgrade";
+        internal const bool SUPERCHARGED_PISTONS_ENABLED_DEFAULT = true;
+        internal const string SUPERCHARGED_PISTONS_ENABLED_DESCRIPTION = "Tier upgrade which increases the company cruiser's maximum speed when driving";
+
+        internal const string SUPERCHARGED_PISTONS_PRICE_KEY = $"Price of {SuperchargedPistons.UPGRADE_NAME} Upgrade";
+        internal const int SUPERCHARGED_PISTONS_PRICE_DEFAULT = 250;
+
+        internal const string SUPERCHARGED_PISTONS_ENGINE_TORQUE_INITIAL_INCREASE_KEY = "Initial Engine Torque Increase";
+        internal const float SUPERCHARGED_PISTONS_ENGINE_TORQUE_INITIAL_INCREASE_DEFAULT = 40f;
+        internal const string SUPERCHARGED_PISTONS_ENGINE_TORQUE_INITIAL_INCREASE_DESCRIPTION = "Amount of maximum speed increased when first purchasing the upgrade to the Company Cruiser vehicle.";
+
+        internal const string SUPERCHARGED_PISTONS_ENGINE_TORQUE_INCREMENTAL_INCREASE_KEY = "Incremental Engine Torque Increase";
+        internal const float SUPERCHARGED_PISTONS_ENGINE_TORQUE_INCREMENTAL_INCREASE_DEFAULT = 20f;
+        internal const string SUPERCHARGED_PISTONS_ENGINE_TORQUE_INCREMENTAL_INCREASE_DESCRIPTION = "Amount of maximum speed increased when purchasing further levels of the upgrade to the Company Cruiser vehicle.";
+
+        #endregion
+
+        #region Rapid Motors
+
+        internal const string RAPID_MOTORS_ENABLED_KEY = $"Enable {RapidMotors.UPGRADE_NAME} Upgrade";
+        internal const bool RAPID_MOTORS_ENABLED_DEFAULT = true;
+        internal const string RAPID_MOTORS_ENABLED_DESCRIPTION = "Tier upgrade which increases the company cruiser's acceleration when driving.";
+
+        internal const string RAPID_MOTORS_PRICE_KEY = $"Price of {RapidMotors.UPGRADE_NAME} Upgrade";
+        internal const int RAPID_MOTORS_PRICE_DEFAULT = 150;
+
+        internal const string RAPID_MOTORS_ACCELERATION_INITIAL_INCREASE_KEY = "Initial Acceleration Increase";
+        internal const float RAPID_MOTORS_ACCELERATION_INITIAL_INCREASE_DEFAULT = 2f;
+        internal const string RAPID_MOTORS_ACCELERATION_INITIAL_INCREASE_DESCRIPTION = "Amount of acceleration increased when first purchasing the upgrade to the company cruiser vehicle.";
+
+        internal const string RAPID_MOTORS_ACCELERATION_INCREMENTAL_INCREASE_KEY = "Incremental Acceleration Increase";
+        internal const float RAPID_MOTORS_ACCELERATION_INCREMENTAL_INCREASE_DEFAULT = 0.5f;
+        internal const string RAPID_MOTORS_ACCELERATION_INCREMENTAL_INCREASE_DESCRIPTION = "Amount of acceleration increased when purchasing further levels of the upgrade to the company cruiser vehicle.";
+
+        #endregion
+
+        #region Vehicle Plating
+
+        internal const string VEHICLE_PLATING_ENABLED_KEY = $"Enable {VehiclePlating.UPGRADE_NAME} Upgrade";
+        internal const bool VEHICLE_PLATING_ENABLED_DEFAULT = true;
+        internal const string VEHICLE_PLATING_ENABLED_DESCRIPTION = "Tier upgrade which increases the company cruiser's maximum health to sustain damage from outside sources.";
+
+        internal const string VEHICLE_PLATING_PRICE_KEY = $"Price of {VehiclePlating.UPGRADE_NAME} Upgrade";
+        internal const int VEHICLE_PLATING_PRICE_DEFAULT = 150;
+
+        internal const string VEHICLE_PLATING_HEALTH_INITIAL_INCREASE_KEY = "Initial Health Increase";
+        internal const int VEHICLE_PLATING_HEALTH_INITIAL_INCREASE_DEFAULT = 10;
+        internal const string VEHICLE_PLATING_HEALTH_INITIAL_INCREASE_DESCRIPTION = "Amount of health increased when first purchasing the upgrade to the company cruiser vehicle.";
+
+        internal const string VEHICLE_PLATING_HEALTH_INCREMENTAL_INCREASE_KEY = "Incremental Health Increase";
+        internal const int VEHICLE_PLATING_HEALTH_INCREMENTAL_INCREASE_DEFAULT = 5;
+        internal const string VEHICLE_PLATING_HEALTH_INCREMENTAL_INCREASE_DESCRIPTION = "Amount of health increased when purchasing further levels of the upgrade to the company cruiser vehicle.";
+
+        #endregion
+
+        #region Clay Glasses
+
+        internal const string CLAY_GLASSES_ENABLED_KEY = $"Enable {ClayGlasses.UPGRADE_NAME} Upgrade";
+        internal const bool CLAY_GLASSES_ENABLED_DEFAULT = true;
+        internal const string CLAY_GLASSES_ENABLED_DESCRIPTION = "Tier upgrade which increases the distance to start seeing the Clay Surgeon Entity.";
+
+        internal const string CLAY_GLASSES_PRICE_KEY = $"Price of {ClayGlasses.UPGRADE_NAME} Upgrade";
+        internal const int CLAY_GLASSES_PRICE_DEFAULT = 200;
+
+        internal const string CLAY_GLASSES_DISTANCE_INITIAL_INCREASE_KEY = "Initial Distance Increase";
+        internal const float CLAY_GLASSES_DISTANCE_INITIAL_INCREASE_DEFAULT = 10f;
+        internal const string CLAY_GLASSES_DISTANCE_INITIAL_INCREASE_DESCRIPTION = "Distance increased when first purchasing the upgrade to be able to spot the Clay Surgeon";
+
+        internal const string CLAY_GLASSES_DISTANCE_INCREMENTAL_INCREASE_KEY = "Incremental Distance Increase";
+        internal const float CLAY_GLASSES_DISTANCE_INCREMENTAL_INCREASE_DEFAULT = 5f;
+        internal const string CLAY_GLASSES_DISTANCE_INCREMENTAL_INCREASE_DESCRIPTION = "Distance increased when purchasing further levels of the upgrade to be able to spot the Clay Surgeon";
+
+        #endregion
+
+        #region Hunter
+
+        internal const string HUNTER_ENABLED_KEY = $"Enable {Hunter.UPGRADE_NAME} Upgrade";
+        internal const bool HUNTER_ENABLED_DEFAULT = true;
+        internal const string HUNTER_ENABLED_DESCRIPTION = "Collect and sell samples from dead enemies";
+
+        internal const string HUNTER_PRICE_KEY = $"Price of {Hunter.UPGRADE_NAME} Upgrade";
+        internal const int HUNTER_PRICE_DEFAULT = 700;
+
+        internal const string HUNTER_SAMPLE_TIERS_KEY = "Samples dropping at each tier";
+        internal const string HUNTER_SAMPLE_TIERS_DEFAULT = "Hoarding Bug, Centipede-Bunker Spider, Baboon hawk, Tulip Snake-Flowerman, MouthDog, Crawler, Manticoil-Forest Giant";
+        internal const string HUNTER_SAMPLE_TIERS_DESCRIPTION = "Specifies at which tier of Hunter do each sample start dropping from. Each tier is separated with a dash ('-') and each list of monsters will be separated with a comma (',')\n" +
+                                                                "Supported Enemies: Hoarding Bug, Centipede (Snare Flea),Bunker Spider, Baboon Hawk, Crawler (Half/Thumper), " +
+                                                                "Flowerman (Bracken), MouthDog (Eyeless Dog), Forest Giant, Tulip Snake and Manticoil.";
+
+        internal const string MINIMUM_SAMPLE_VALUE_FORMAT = "Minimum scrap value of a {0} sample";
+        internal const string MAXIMUM_SAMPLE_VALUE_FORMAT = "Maximum scrap value of a {0} sample";
+
+        #region Snare Flea
+
+        internal static readonly string SNARE_FLEA_SAMPLE_MINIMUM_VALUE_KEY = string.Format(MINIMUM_SAMPLE_VALUE_FORMAT, "Snare Flea");
+        internal const int SNARE_FLEA_SAMPLE_MINIMUM_VALUE_DEFAULT = 35;
+
+        internal static readonly string SNARE_FLEA_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Snare Flea");
+        internal const int SNARE_FLEA_SAMPLE_MAXIMUM_VALUE_DEFAULT = 60;
+
+        #endregion
+
+        #region Bunker Spider
+
+        internal static readonly string BUNKER_SPIDER_SAMPLE_MINIMUM_VALUE_KEY = string.Format(MINIMUM_SAMPLE_VALUE_FORMAT, "Bunker Spider");
+        internal const int BUNKER_SPIDER_SAMPLE_MINIMUM_VALUE_DEFAULT = 65;
+
+        internal static readonly string BUNKER_SPIDER_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Bunker Spider");
+        internal const int BUNKER_SPIDER_SAMPLE_MAXIMUM_VALUE_DEFAULT = 95;
+
+        #endregion
+
+        #region Hoarding Bug
+
+        internal static readonly string HOARDING_BUG_SAMPLE_MINIMUM_VALUE_KEY = string.Format(MINIMUM_SAMPLE_VALUE_FORMAT, "Hoarding Bug");
+        internal const int HOARDING_BUG_SAMPLE_MINIMUM_VALUE_DEFAULT = 45;
+
+        internal static readonly string HOARDING_BUG_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Hoarding Bug");
+        internal const int HOARDING_BUG_SAMPLE_MAXIMUM_VALUE_DEFAULT = 75;
+
+        #endregion
+
+        #region Bracken
+
+        internal static readonly string BRACKEN_SAMPLE_MINIMUM_VALUE_KEY = string.Format(MINIMUM_SAMPLE_VALUE_FORMAT, "Bracken");
+        internal const int BRACKEN_SAMPLE_MINIMUM_VALUE_DEFAULT = 80;
+
+        internal static readonly string BRACKEN_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Bracken");
+        internal const int BRACKEN_SAMPLE_MAXIMUM_VALUE_DEFAULT = 125;
+
+        #endregion
+
+        #region Eyeless Dog
+
+        internal static readonly string EYELESS_DOG_SAMPLE_MINIMUM_VALUE_KEY = string.Format(MINIMUM_SAMPLE_VALUE_FORMAT, "Eyeless Dog");
+        internal const int EYELESS_DOG_SAMPLE_MINIMUM_VALUE_DEFAULT = 100;
+
+        internal static readonly string EYELESS_DOG_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Eyeless Dog");
+        internal const int EYELESS_DOG_SAMPLE_MAXIMUM_VALUE_DEFAULT = 150;
+
+        #endregion
+
+        #region Baboon Hawk
+
+        internal static readonly string BABOON_HAWK_SAMPLE_MINIMUM_VALUE_KEY = string.Format(MINIMUM_SAMPLE_VALUE_FORMAT, "Baboon Hawk");
+        internal const int BABOON_HAWK_SAMPLE_MINIMUM_VALUE_DEFAULT = 75;
+
+        internal static readonly string BABOON_HAWK_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Baboon Hawk");
+        internal const int BABOON_HAWK_SAMPLE_MAXIMUM_VALUE_DEFAULT = 115;
+
+        #endregion
+
+        #region Half
+
+        internal static readonly string THUMPER_SAMPLE_MINIMUM_VALUE_KEY = string.Format(MINIMUM_SAMPLE_VALUE_FORMAT, "Half");
+        internal const int THUMPER_SAMPLE_MINIMUM_VALUE_DEFAULT = 80;
+
+        internal static readonly string THUMPER_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Half");
+        internal const int THUMPER_SAMPLE_MAXIMUM_VALUE_DEFAULT = 125;
+
+        #endregion
+
+        #region Forest Giant
+
+        internal static readonly string FOREST_KEEPER_SAMPLE_MINIMUM_VALUE_KEY = string.Format(MINIMUM_SAMPLE_VALUE_FORMAT, "Forest Keeper");
+        internal const int FOREST_KEEPER_SAMPLE_MINIMUM_VALUE_DEFAULT = 80;
+
+        internal static readonly string FOREST_KEEPER_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Forest Keeper");
+        internal const int FOREST_KEEPER_SAMPLE_MAXIMUM_VALUE_DEFAULT = 125;
+
+        #endregion
+
+        #region Manticoil
+
+        internal static readonly string MANTICOIL_SAMPLE_MINIMUM_VALUE_KEY = string.Format(MINIMUM_SAMPLE_VALUE_FORMAT, "Manticoil");
+        internal const int MANTICOIL_SAMPLE_MINIMUM_VALUE_DEFAULT = 40;
+
+        internal static readonly string MANTICOIL_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Manticoil");
+        internal const int MANTICOIL_SAMPLE_MAXIMUM_VALUE_DEFAULT = 75;
+
+        #endregion
+
+        #region Tulip Snake
+
+        internal static readonly string TULIP_SNAKE_SAMPLE_MINIMUM_VALUE_KEY = string.Format(MINIMUM_SAMPLE_VALUE_FORMAT, "Tulip Snake");
+        internal const int TULIP_SNAKE_SAMPLE_MINIMUM_VALUE_DEFAULT = 30;
+
+        internal static readonly string TULIP_SNAKE_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Tulip Snake");
+        internal const int TULIP_SNAKE_SAMPLE_MAXIMUM_VALUE_DEFAULT = 50;
+
+        #endregion
+
+        #endregion
+
+        #region Night Vision
+
+        internal const string NIGHT_VISION_ENABLED_KEY = $"Enable {NightVision.SIMPLE_UPGRADE_NAME} Upgrade";
+        internal const bool NIGHT_VISION_ENABLED_DEFAULT = true;
+        internal const string NIGHT_VISION_ENABLED_DESCRIPTION = "Toggleable night vision.";
+
+        internal const string NIGHT_VISION_PRICE_KEY = $"Price of {NightVision.SIMPLE_UPGRADE_NAME} Upgrade";
+        internal const int NIGHT_VISION_PRICE_DEFAULT = 380;
+
+        internal const string NIGHT_VISION_BATTERY_MAX_KEY = $"The max charge for your {NightVision.SIMPLE_UPGRADE_NAME} battery";
+        internal const float NIGHT_VISION_BATTERY_MAX_DEFAULT = 10f;
+        internal const string NIGHT_VISION_BATTERY_MAX_DESCRIPTION = "Default settings this will be the unupgraded time in seconds the battery will drain and regen in. Increase to increase battery life.";
+
+        internal const string NIGHT_VISION_DRAIN_SPEED_KEY = "Multiplier for night vis battery drain";
+        internal const float NIGHT_VISION_DRAIN_SPEED_DEFAULT = 1f;
+        internal const string NIGHT_VISION_DRAIN_SPEED_DESCRIPTION = "Multiplied by timedelta, lower to increase battery life.";
+
+        internal const string NIGHT_VISION_REGEN_SPEED_KEY = "Multiplier for night vis battery regen";
+        internal const float NIGHT_VISION_REGEN_SPEED_DEFAULT = 1f;
+        internal const string NIGHT_VISION_REGEN_SPEED_DESCRIPTION = "Multiplied by timedelta, raise to speed up battery regen time.";
+
+        internal const string NIGHT_VISION_COLOR_KEY = $"{NightVision.SIMPLE_UPGRADE_NAME} Color";
+        internal const string NIGHT_VISION_COLOR_DEFAULT = HEXADECIMAL_GREEN + "FF";
+        internal const string NIGHT_VISION_COLOR_DESCRIPTION = $"The color your {NightVision.SIMPLE_UPGRADE_NAME} light emits.";
+
+        internal const string NIGHT_VISION_UI_TEXT_COLOR_KEY = $"{NightVision.SIMPLE_UPGRADE_NAME} UI Text Color";
+        internal const string NIGHT_VISION_UI_TEXT_COLOR_DEFAULT = HEXADECIMAL_WHITE + "FF";
+        internal const string NIGHT_VISION_UI_TEXT_COLOR_DESCRIPTION = $"The color used for the {NightVision.SIMPLE_UPGRADE_NAME}'s UI text.";
+
+        internal const string NIGHT_VISION_UI_BAR_COLOR_KEY = $"{NightVision.SIMPLE_UPGRADE_NAME} UI Bar Color";
+        internal const string NIGHT_VISION_UI_BAR_COLOR_DEFAULT = HEXADECIMAL_GREEN + "FF";
+        internal const string NIGHT_VISION_UI_BAR_COLOR_DESCRIPTION = $"The color used for the {NightVision.SIMPLE_UPGRADE_NAME}'s UI battery bar.";
+
+        internal const string NIGHT_VISION_RANGE_KEY = $"{NightVision.SIMPLE_UPGRADE_NAME} Range";
+        internal const float NIGHT_VISION_RANGE_DEFAULT = 2000f;
+        internal const string NIGHT_VISION_RANGE_DESCRIPTION = $"Kind of like the distance your {NightVision.SIMPLE_UPGRADE_NAME} travels.";
+
+        internal const string NIGHT_VISION_RANGE_INCREMENT_KEY = $"{NightVision.SIMPLE_UPGRADE_NAME} Range Increment";
+        internal const float NIGHT_VISION_RANGE_INCREMENT_DEFAULT = 0f;
+        internal const string NIGHT_VISION_RANGE_INCREMENT_DESCRIPTION = "Increases your range by this value each upgrade.";
+
+        internal const string NIGHT_VISION_INTENSITY_KEY = $"{NightVision.SIMPLE_UPGRADE_NAME} Intensity";
+        internal const float NIGHT_VISION_INTENSITY_DEFAULT = 1000f;
+        internal const string NIGHT_VISION_INTENSITY_DESCRIPTION = $"Kind of like the brightness of your {NightVision.SIMPLE_UPGRADE_NAME}.";
+
+        internal const string NIGHT_VISION_INTENSITY_INCREMENT_KEY = $"{NightVision.SIMPLE_UPGRADE_NAME} Intensity Increment";
+        internal const float NIGHT_VISION_INTENSITY_INCREMENT_DEFAULT = 0f;
+        internal const string NIGHT_VISION_INTENSITY_INCREMENT_DESCRIPTION = "Increases your intensity by this value each upgrade.";
+
+        internal const string NIGHT_VISION_STARTUP_KEY = $"{NightVision.SIMPLE_UPGRADE_NAME} StartUp Cost";
+        internal const float NIGHT_VISION_STARTUP_DEFAULT = 0.1f;
+        internal const string NIGHT_VISION_STARTUP_DESCRIPTION = "The percent battery drained when turned on (0.1 = 10%).";
+
+        internal const string NIGHT_VISION_EXHAUST_KEY = $"{NightVision.SIMPLE_UPGRADE_NAME} Exhaustion";
+        internal const float NIGHT_VISION_EXHAUST_DEFAULT = 2f;
+        internal const string NIGHT_VISION_EXHAUST_DESCRIPTION = $"How many seconds {NightVision.SIMPLE_UPGRADE_NAME} stays fully depleted.";
+
+        internal const string NIGHT_VISION_DRAIN_INCREMENT_KEY = $"Decrease for {NightVision.SIMPLE_UPGRADE_NAME} battery drain";
+        internal const float NIGHT_VISION_DRAIN_INCREMENT_DEFAULT = 0.15f;
+        internal const string NIGHT_VISION_DRAIN_INCREMENT_DESCRIPTION = "Applied to drain speed on each upgrade.";
+
+        internal const string NIGHT_VISION_REGEN_INCREMENT_KEY = $"Increase for {NightVision.SIMPLE_UPGRADE_NAME} battery regen";
+        internal const float NIGHT_VISION_REGEN_INCREMENT_DEFAULT = 0.40f;
+        internal const string NIGHT_VISION_REGEN_INCREMENT_DESCRIPTION = "Applied to regen speed on each upgrade.";
+
+        internal const string NIGHT_VISION_BATTERY_INCREMENT_KEY = $"Increase for {NightVision.SIMPLE_UPGRADE_NAME} battery life";
+        internal const float NIGHT_VISION_BATTERY_INCREMENT_DEFAULT = 2f;
+        internal const string NIGHT_VISION_BATTERY_INCREMENT_DESCRIPTION = $"Applied to the max charge for {NightVision.SIMPLE_UPGRADE_NAME} battery on each upgrade.";
+
+        internal const string LOSE_NIGHT_VISION_ON_DEATH_KEY = $"Lose {NightVision.SIMPLE_UPGRADE_NAME} On Death";
+        internal const bool LOSE_NIGHT_VISION_ON_DEATH_DEFAULT = true;
+        internal const string LOSE_NIGHT_VISION_ON_DEATH_DESCRIPTION = $"If true when you die the {NightVision.SIMPLE_UPGRADE_NAME} will disable and will need a new pair of goggles.";
+
+        internal const string NIGHT_VISION_DROP_ON_DEATH_KEY = $"Drop {NightVisionGoggles.ITEM_NAME} on Death";
+        internal const bool NIGHT_VISION_DROP_ON_DEATH_DEFAULT = true;
+        internal const string NIGHT_VISION_DROP_ON_DEATH_DESCRIPTION = $"If true, when you die and lose {NightVision.SIMPLE_UPGRADE_NAME} upon death, you will drop the {NightVisionGoggles.ITEM_NAME} on your body.";
+        #endregion
 
         #region Mechanical Arms
 
@@ -587,7 +1029,8 @@ namespace MoreShipUpgrades.Misc.Util
         internal const BackMuscles.UpgradeMode BACK_MUSCLES_UPGRADE_MODE_DEFAULT = BackMuscles.UpgradeMode.ReduceWeight;
         internal const string BACK_MUSCLES_UPGRADE_MODE_DESCRIPTION = "Applied mode when purchasing the upgrade:\n" +
             "ReduceWeight (Reduces the overall weight of items when grabbed), " +
-            "ReduceCarryInfluence (Reduces the carry weight influence when sprinting)";
+            "ReduceCarryInfluence (Reduces the carry weight influence when sprinting), " +
+            "ReduceStrain (Reduces the carry weight influence on stamina consumption when running),";
 
         #endregion
 

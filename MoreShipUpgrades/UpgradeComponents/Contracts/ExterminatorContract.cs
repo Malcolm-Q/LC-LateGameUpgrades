@@ -6,7 +6,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Contracts
     {
         public override void Start()
         {
-            contractType = LGUConstants.EXTERMINATOR_CONTRACT_NAME;
+            contractType = LguConstants.EXTERMINATOR_CONTRACT_NAME;
             base.Start();
         }
     }

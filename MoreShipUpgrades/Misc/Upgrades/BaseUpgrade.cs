@@ -47,7 +47,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
         {
             UpgradeBus.Instance.activeUpgrades[upgradeName] = true;
             if (!UpgradeBus.Instance.PluginConfiguration.SHOW_UPGRADES_CHAT.LocalValue) return;
-            ShowUpgradeNotification(LGUConstants.UPGRADE_UNLOADED_NOTIFICATION_DEFAULT_COLOR, $"{(UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? overridenUpgradeName : upgradeName)} is active!");
+            ShowUpgradeNotification(LguConstants.UPGRADE_UNLOADED_NOTIFICATION_DEFAULT_COLOR, $"{(UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? overridenUpgradeName : upgradeName)} is active!");
         }
         /// <summary>
         /// Function responsible to insert this upgrade's gameObject into the UpgradeBus' list of gameObjects for handling
@@ -63,7 +63,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
         {
             UpgradeBus.Instance.activeUpgrades[upgradeName] = false;
             if (!UpgradeBus.Instance.PluginConfiguration.SHOW_UPGRADES_CHAT.LocalValue) return;
-            ShowUpgradeNotification(LGUConstants.UPGRADE_LOADED_NOTIFICATION_DEFAULT_COLOR, $"{(UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? overridenUpgradeName : upgradeName)} has been disabled!");
+            ShowUpgradeNotification(LguConstants.UPGRADE_LOADED_NOTIFICATION_DEFAULT_COLOR, $"{(UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? overridenUpgradeName : upgradeName)} has been disabled!");
         }
         /// <summary>
         /// Shows a notification for when an upgrade is loaded or unloaded from the player
@@ -127,13 +127,6 @@ namespace MoreShipUpgrades.Misc.Upgrades
             throw new NotSupportedException();
         }
 
-        /// <summary>
-        /// Generic function where it adds a script (specificed through the type) into an GameObject asset 
-        /// which is present in a provided asset bundle in a given path and registers it as a network prefab.
-        /// </summary>
-        /// <typeparam name="T"> The script we wish to include into the GameObject asset</typeparam>
-        /// <param name="bundle"> The asset bundle where the asset is located</param>
-        /// <param name="path"> The path to access the asset in the asset bundle</param>
         internal static void SetupGenericPerk<T>(string upgradeName) where T : Component
         {
             Tools.SetupGameObject<T>(upgradeName);

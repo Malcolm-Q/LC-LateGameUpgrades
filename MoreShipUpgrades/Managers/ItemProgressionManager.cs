@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using static Unity.Audio.Handle;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -93,18 +94,21 @@ namespace MoreShipUpgrades.Managers
             int scrapValue = scrapItem.scrapValue;
             scrapValue = Mathf.CeilToInt(StartOfRound.Instance.companyBuyingRate * scrapValue);
             scrapValue = Mathf.CeilToInt(ConfiguredItemContributionMultiplier * scrapValue);
-            CustomTerminalNode assignedUpgrade = GetCustomTerminalNode(UpgradeBus.Instance.scrapToCollectionUpgrade[scrapName]);
-            int contributed = UpgradeBus.Instance.contributionValues[assignedUpgrade.OriginalName];
-            int currentPrice = assignedUpgrade.GetCurrentPrice();
-            contributed += scrapValue;
-            while (contributed > currentPrice)
+            foreach (string upgradeName in UpgradeBus.Instance.scrapToCollectionUpgrade[scrapName])
             {
-                LguStore.Instance.HandleUpgradeForNoHostClientRpc(assignedUpgrade.OriginalName, assignedUpgrade.Unlocked);
-                LguStore.Instance.UpdateUpgrades(assignedUpgrade, assignedUpgrade.Unlocked);
-                contributed -= currentPrice;
-                currentPrice = assignedUpgrade.GetCurrentPrice();
+                CustomTerminalNode assignedUpgrade = GetCustomTerminalNode(upgradeName);
+                int contributed = UpgradeBus.Instance.contributionValues[assignedUpgrade.OriginalName];
+                int currentPrice = assignedUpgrade.GetCurrentPrice();
+                contributed += scrapValue;
+                while (contributed > currentPrice)
+                {
+                    LguStore.Instance.HandleUpgradeForNoHostClientRpc(assignedUpgrade.OriginalName, assignedUpgrade.Unlocked);
+                    LguStore.Instance.UpdateUpgrades(assignedUpgrade, assignedUpgrade.Unlocked);
+                    contributed -= currentPrice;
+                    currentPrice = assignedUpgrade.GetCurrentPrice();
+                }
+                LguStore.Instance.SetContributionValueClientRpc(assignedUpgrade.OriginalName, contributed);
             }
-            LguStore.Instance.SetContributionValueClientRpc(assignedUpgrade.OriginalName, contributed);
         }
 
         public static void CheckCollectionScrap(GrabbableObject scrapItem)
@@ -196,8 +200,7 @@ namespace MoreShipUpgrades.Managers
                 MethodInfo method = type.GetMethod(nameof(BaseUpgrade.RegisterScrapToUpgrade), BindingFlags.Static | BindingFlags.Public);
                 (string, string[]) pair = ((string, string[]))method.Invoke(null, null);
                 string upgradeName = pair.Item1;
-                string[] scrapItems = pair.Item2;
-                foreach (string scrapItem in scrapItems)
+                foreach (string scrapItem in pair.Item2)
                     AddScrapToUpgrade(upgradeName, scrapItem.ToLower().Trim());
             }
         }
@@ -228,12 +231,14 @@ namespace MoreShipUpgrades.Managers
 
         public static void AddScrapToUpgrade(ref CustomTerminalNode node, string scrapName)
         {
-            UpgradeBus.Instance.scrapToCollectionUpgrade[scrapName] = node.OriginalName;
+            AddScrapToUpgrade(node.OriginalName, scrapName);
         }
 
         public static void AddScrapToUpgrade(string upgradeName, string scrapName)
         {
-            UpgradeBus.Instance.scrapToCollectionUpgrade[scrapName] = upgradeName;
+            if (!UpgradeBus.Instance.scrapToCollectionUpgrade.ContainsKey(scrapName))
+                UpgradeBus.Instance.scrapToCollectionUpgrade[scrapName] = [];
+            UpgradeBus.Instance.scrapToCollectionUpgrade[scrapName].Add(upgradeName);
         }
 
         static void SelectTerminalNode(ref CustomTerminalNode selectedNode, CustomTerminalNode possibleNode)
@@ -300,12 +305,15 @@ namespace MoreShipUpgrades.Managers
         internal static List<string> GetDiscoveredItems(CustomTerminalNode node)
         {
             List<string> result = [];
-            foreach (KeyValuePair<string, string> pair in UpgradeBus.Instance.scrapToCollectionUpgrade)
+            foreach (KeyValuePair<string, List<string>> pair in UpgradeBus.Instance.scrapToCollectionUpgrade)
             {
-                string nodeName = pair.Value;
+                List<string> nodes = pair.Value;
                 string scrapName = pair.Key;
-                if (nodeName == node.OriginalName && UpgradeBus.Instance.discoveredItems.Contains(scrapName))
-                    result.Add(scrapName);
+                foreach (string nodeName in nodes)
+                {
+                    if (nodeName == node.OriginalName && UpgradeBus.Instance.discoveredItems.Contains(scrapName))
+                        result.Add(scrapName);
+                }
             }
             return result;
         }

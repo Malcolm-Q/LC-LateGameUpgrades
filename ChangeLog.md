@@ -1,4 +1,41 @@
 <details>
+<summary> 3.9.0 - 2024-07-06 </summary>
+
+- Implemented "Vehicle Plating" tier upgrade which increases the Company Cruiser's maximum health.
+- Implemented "Rapid Motors" tier upgrade which increases the Company Cruiser's acceleration.
+- Implemented "Supercharged Pistons" tier upgrade which increases the Company Cruiser's maximum speed.
+- Implemented "Improved Steering" tier upgrade which increases the Company Cruiser's turning speed.
+- Implemented alternative modes for Lightning Rod such as:
+  - Always redirect all lightning bolts meant for items.
+  - Always redirect all lightning bolts targetting random locations.
+  - Always redirect all kinds of lightning bolts.
+- Refactored items and config for easier maintenance.
+  - Wheelbarrow was the most affected so it's likely the settings will reset for them.
+- Fixed issue with Lightning Rod not functioning correctly due to the patches not being applied.
+- Fixed issue with events related with explosions not functioning due to changes from v56 release of the game.
+
+</details>
+
+<details>
+<summary> 3.8.2 - 2024-06-26 </summary>
+
+- Implemented another Back Muscles alternative mode where you can reduce the carry weight's influence on stamina consumption when running.
+- Added info for Back Muscles alternative modes.
+- Fixed issue with v55 release related to item drop ship no longer leaving after getting the items.
+  - Should still allow compatibility between v50 and v55 releases.
+- Fixed issue with wheelbarrow weight calculation giving wrong results due to misplacement of parentheses.
+
+</details>
+
+<details>
+<summary> 3.8.1 - 2024-06-25 </summary>
+
+- Fixed issue with Back Muscles leading to additional 100lb being added to the player due to negative weight countermeasures.
+- Added configurability of allowing items being assigned to multiple upgrades.
+
+</details>
+
+<details>
 <summary> 3.8.0 - 2024-06-25 </summary>
 
 - Implemented an alternative "Item Progression" mode where you can acquire upgrades based on the items you sell alongside using credits to purchase them.

@@ -29,6 +29,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         internal Color nightVisColor;
         public static NightVision Instance { get; internal set; }
 
+        public const string SIMPLE_UPGRADE_NAME = "Night Vision";
         public const string UPGRADE_NAME = "NV Headset Batteries";
         public const string PRICES_DEFAULT = "300,400,500";
 

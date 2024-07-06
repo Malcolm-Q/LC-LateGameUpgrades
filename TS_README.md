@@ -22,6 +22,7 @@ The goal of this mod is to allow you to make playthroughs last longer and to rem
 
 If using V40 - downgrade to V2.1.0  
 If using v45 - downgrade to v2.8.6
+If using v50 - downgrade to v3.8.1
 
 ## Compatibility
 
@@ -70,8 +71,9 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 * __Hunter - $700__
     * Allows you to collect and sell samples from killed monsters
     * **Lvl 1**: Hoarding Bugs & Snare Fleas
-    * **Lvl 2**: Spiders & Baboon Hawks
-    * **Lvl 3**: Bracken, Thumper, & Eyeless Dog
+    * **Lvl 2**: Spiders, Baboon Hawks & Tulip Snake
+    * **Lvl 3**: Bracken, Thumper, Eyeless Dog & Manticoil
+    * **Lvl 4**: Forest Giant
 
 * __Medkit - $300__
     * Allows you to heal (default 20 points).
@@ -83,16 +85,16 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 * __Lightning Rod - $1000__
     * Redirects lightning to the ship.
     * The closer you (and your metal object) are to the ship, the more likely the ship will attract the lightning.
+    * Alternative modes such as redirect all item lightning bolts, random lightning bolts and both.
 
 * __Fast Encryption - $300__
     * Upgrades the signal transmitter.
     * Must have signal transmitter purchased.
-    * Instantly sends an unrestricted message to all clients chat when using transmit.
+    * Speeds up the transmission speed of the characters and removes the limit of characters in the transmission message.
 
 * __Interns - $1000__
     * Replaces your dead friend with a fresh intern (revives your friend).
     * Teleports to a random location in the facility.
-    * $1k per use
 
 * __Walkie GPS - $450__
     * Upgrades the walkie talkie to show your position and time.
@@ -104,7 +106,7 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 
 * __Locksmith - $640__
     * Makes noise when picking, makes a lot of noise when failing.
-    * Just run into a locked door to start the minigame.
+    * Just run into/interact with a locked door to start the minigame.
     * Strike the pins in the order they flash to unlock the door.
 
 * __Portable Teleporter - $300__
@@ -117,13 +119,16 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
     * 20% chance to get destroyed on use.
 
 * __Beekeeper - $450__
-    * Circuit bees do significantly less damage to you.
+    * Circuit bees & Butler Hornets do significantly less damage to you.
 
 * __Bigger Lungs - $600__
     * Increased sprint duration.
+    * Can increase the stamina regeneration speed through configuration
+    * Can decrease the stamina cost when jumping through configuration
 
 * __Running Shoes - $650__
     * Increased movement speed.
+    * At max level, reduces the noise made by your footsteps.
 
 * __Strong Legs - $300__
     * Jump higher.
@@ -161,6 +166,7 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 * __Back Muscles - $715__
     * Carryweight is drastically reduced.
     * % reduced increases each upgrade.
+    * Alternative modes where either speed or stamina consumption debuffs due to weight are removed.
 
 * __Lethal Deals - $300__
     * Guarantees at least one item will be on sale in the store.
@@ -176,10 +182,12 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 * __Quantum Disruptor - $1000__
     * Increases the amount of time you can stay during a moon landing (time it takes to reach final hour in the moon)
     * Each level increase further increases the amount of time.
+    * Alternative mode where you can revert back time spent on a moon through 'quantum' command
 
 * __Helmet - $750__
     * Blocks incoming damage through amount of hits.
     * Once reached the limit of hits, it will be destroyed, having to purchase a new one if needed.
+    * Alternative mode where the helmet gives partial damage reduction and only breaks when the next hit would kill the player.
 
 * __Wheelbarrow - $400__
     * Allows depositing items inside and carry all of them at once.
@@ -189,6 +197,7 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 
 * __Drop Pod Thrusters - $300__
     * Speeds up the shop's drop pod to deliver items faster.
+    * The drop pod leaves after picking up the items when the upgrade's active.
 
 * __Sick Beats - $500__
     * Boomboxes when playing music apply effects on nearby players such as movement speed, damage boost and defense.
@@ -211,6 +220,7 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 
 * __Deeper Pockets - $500__
     * Increases the amount of two-handed items you can carry in your inventory.
+    * Can configure if the wheelbarrow can be pocketed when this upgrade's active.
 
 * __Reinforced Boots - $250__
     * Reduces incoming fall damage.
@@ -220,6 +230,18 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 
 * __Mechanical Arms - $300__
     * Increases the player's interaction range with items and interactables.
+
+* __Clay Glasses - $200__*
+    * Increases the maximum distance from which the player can spot a "Clay Surgeon" entity. 
+
+* __Vehicle Plating - $150__*
+    * Increases the Company Cruiser vehicle's maximum health.
+ 
+* __Rapid Motors - $150__*
+    * Increases the Company Cruiser vehicle's acceleration.
+
+* __Supercharged Pistons - $250__*
+    * Increases the Company Cruiser vehicle's maximum speed. 
 
 ## Contracts
 * __Defusal Contract__
@@ -255,17 +277,18 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
     * After being escorted back to the ship, they will thank you for your help non-stop til you arrive at The Company (where you escort them for disciplinary action).
 
 ## Commands
-* ``extend deadline <days>``
-    * Extends the current deadline of the profit quota by ``<days>``.
-    * Each day added requires $800 (configurable).
-* ``probe <moonName> [weatherType]``
+* ``extend deadline``
+    * Brings out an interactive UI where the player can select the amount of days they wish to extend with the preview of credit cost shown wtih selected amount.
+    * Each day extend will cost $800 by default (configurable)
+    * You can configure the amount of credit cost increase per each day extend.
+* ``probe``
+    * Brings out an interactive UI where the player can select which moon they wish to change the weather of and then to which weather respectfully.
     * Sends out a weather probe to the selected moon to change its current weather.
-    * If provided a ``weatherType``, it will change the moon's weather to the selected one for $500 (configurable)
+    * If a specified weather is selected, it will change the moon's weather to the selected one for $500 (configurable)
     * Otherwise, a random weather will be selected and will cost $300 (configurable)
     * You can configure the random weather command to only select cleared weathers (off by default)
-* ``contract [moonName]``
-    * Provides a contract for the players to finish on a moon.
-    * If provided a ``moonName``, it will give out a contract on specified moon.
+* ``contracts``
+    * Brings out an interactive UI where you can select to obtain a contract, see current contract status and information related to each contract type.
 
 ## API
 * Hunter

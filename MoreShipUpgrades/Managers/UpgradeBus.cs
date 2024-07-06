@@ -27,7 +27,7 @@ namespace MoreShipUpgrades.Managers
 
         internal Dictionary<string, bool> activeUpgrades = [];
         internal Dictionary<string, int> upgradeLevels = [];
-        internal Dictionary<string, string> scrapToCollectionUpgrade = [];
+        internal Dictionary<string, List<string>> scrapToCollectionUpgrade = [];
         internal Dictionary<string, int> contributionValues = [];
         internal List<string> discoveredItems = [];
 
@@ -57,27 +57,32 @@ namespace MoreShipUpgrades.Managers
         internal Dictionary<string, AudioClip> SFX = [];
         internal bool helmetDesync;
         internal bool IsBeta = false;
-
         internal int daysExtended = 0;
+
+        Terminal terminal;
+        PlayerControllerB playerController;
+        HangarShipDoor hangarShipDoors;
 
         void Awake()
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            PluginConfiguration = Plugin.Config;
         }
 
         public Terminal GetTerminal()
         {
-            return GameObject.Find("TerminalScript").GetComponent<Terminal>();
+            if (terminal == null) terminal = GameObject.Find("TerminalScript").GetComponent<Terminal>();
+            return terminal;
         }
         public PlayerControllerB GetLocalPlayer()
         {
-            return GameNetworkManager.Instance.localPlayerController;
+            if (playerController == null) playerController = GameNetworkManager.Instance.localPlayerController;
+            return playerController;
         }
         public HangarShipDoor GetShipDoors()
         {
-            return FindObjectOfType<HangarShipDoor>();
+            if (hangarShipDoors == null) hangarShipDoors = FindObjectOfType<HangarShipDoor>();
+            return hangarShipDoors;
         }
 
         public void ResetAllValues(bool wipeObjRefs = true)
@@ -92,6 +97,7 @@ namespace MoreShipUpgrades.Managers
 
             if (PluginConfiguration.DISCOMBOBULATOR_ENABLED.Value) Discombobulator.instance.flashCooldown = 0f;
             if (PluginConfiguration.BACK_MUSCLES_ENABLED.Value) BackMuscles.Instance.alteredWeight = 1f;
+            if (PluginConfiguration.LIGHTNING_ROD_ENABLED) LightningRod.instance.ResetValues();
             if (wipeObjRefs) {
                 UpgradeObjects = [];
                 discoveredItems.Clear();
@@ -111,6 +117,9 @@ namespace MoreShipUpgrades.Managers
             foreach (string key in upgradeLevels.Keys.ToList())
                 upgradeLevels[key] = 0;
 
+            terminal = null;
+            playerController = null;
+            hangarShipDoors = null;
         }
         private void ResetPlayerAttributes()
         {
@@ -175,7 +184,7 @@ namespace MoreShipUpgrades.Managers
             if (!PluginConfiguration.DATA_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
                 logger.LogInfo("Removing data contract");
-                int idx = CommandParser.contracts.IndexOf(LGUConstants.DATA_CONTRACT_NAME);
+                int idx = CommandParser.contracts.IndexOf(LguConstants.DATA_CONTRACT_NAME);
                 if (idx != -1)
                 {
                     CommandParser.contractInfos.RemoveAt(idx);
@@ -185,7 +194,7 @@ namespace MoreShipUpgrades.Managers
             if (!PluginConfiguration.EXTRACTION_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
                 logger.LogInfo("Removing extraction contract");
-                int idx = CommandParser.contracts.IndexOf(LGUConstants.EXTRACTION_CONTRACT_NAME);
+                int idx = CommandParser.contracts.IndexOf(LguConstants.EXTRACTION_CONTRACT_NAME);
                 if (idx != -1)
                 {
                     CommandParser.contractInfos.RemoveAt(idx);
@@ -195,7 +204,7 @@ namespace MoreShipUpgrades.Managers
             if (!PluginConfiguration.EXORCISM_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
                 logger.LogInfo("Removing exorcism contract");
-                int idx = CommandParser.contracts.IndexOf(LGUConstants.EXORCISM_CONTRACT_NAME);
+                int idx = CommandParser.contracts.IndexOf(LguConstants.EXORCISM_CONTRACT_NAME);
                 if (idx != -1)
                 {
                     CommandParser.contractInfos.RemoveAt(idx);
@@ -205,7 +214,7 @@ namespace MoreShipUpgrades.Managers
             if (!PluginConfiguration.DEFUSAL_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
                 logger.LogInfo("Removing defusal contract");
-                int idx = CommandParser.contracts.IndexOf(LGUConstants.DEFUSAL_CONTRACT_NAME);
+                int idx = CommandParser.contracts.IndexOf(LguConstants.DEFUSAL_CONTRACT_NAME);
                 if (idx != -1)
                 {
                     CommandParser.contractInfos.RemoveAt(idx);
@@ -222,7 +231,7 @@ namespace MoreShipUpgrades.Managers
                 else
                 {
                     logger.LogInfo("Removing exterminator contract");
-                    int idx = CommandParser.contracts.IndexOf(LGUConstants.EXTERMINATOR_CONTRACT_NAME);
+                    int idx = CommandParser.contracts.IndexOf(LguConstants.EXTERMINATOR_CONTRACT_NAME);
                     if (idx != -1)
                     {
                         CommandParser.contractInfos.RemoveAt(idx);
@@ -349,6 +358,11 @@ namespace MoreShipUpgrades.Managers
             }
             if (prices.Length == 1 && prices[0] == -1) { prices = []; }
             return prices;
+        }
+
+        internal void SetConfiguration(LategameConfiguration config)
+        {
+            PluginConfiguration = config;
         }
     }
 }

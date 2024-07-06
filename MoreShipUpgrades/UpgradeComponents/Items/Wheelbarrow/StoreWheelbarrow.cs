@@ -8,11 +8,10 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
 {
     internal class StoreWheelbarrow : WheelbarrowScript, IDisplayInfo
     {
-        static readonly LguLogger logger = new(nameof(StoreWheelbarrow));
         private GameObject wheel;
         internal const string ITEM_NAME = "Wheelbarrow";
         internal const string ITEM_DESCRIPTION = "Allows carrying multiple items";
-        bool KeepScanNode
+        protected override bool KeepScanNode
         {
             get
             {
@@ -31,25 +30,15 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         {
             base.Start();
             wheel = GameObject.Find("lgu_wheelbarrow_wheel");
-            if (wheel == null) logger.LogError($"Couldn't find the wheel's {nameof(GameObject)} to perform rotations");
-            maximumAmountItems = UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS.Value;
-            weightReduceMultiplier = UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER.Value;
-            Enum.TryParse(typeof(Restrictions), UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_RESTRICTION_MODE.Value, out object parsedRestriction);
-            if (parsedRestriction == null)
-            {
-                logger.LogError($"An error occured parsing the restriction mode ({UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_RESTRICTION_MODE}), defaulting to ItemCount");
-                restriction = Restrictions.ItemCount;
-            }
-            else
-            {
-                restriction = (Restrictions)parsedRestriction;
-            }
-            maximumWeightAllowed = UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED.Value;
-            noiseRange = UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_NOISE_RANGE.Value;
-            sloppiness = UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_MOVEMENT_SLOPPY.Value;
-            lookSensitivityDrawback = UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK.Value;
-            playSounds = UpgradeBus.Instance.PluginConfiguration.WHEELBARROW_PLAY_NOISE.Value;
-            if (!KeepScanNode) LguScanNodeProperties.RemoveScanNode(gameObject);
+            LategameConfiguration config = UpgradeBus.Instance.PluginConfiguration;
+            maximumAmountItems = config.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS.Value;
+            weightReduceMultiplier = config.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER.Value;
+            restriction = config.WHEELBARROW_RESTRICTION_MODE;
+            maximumWeightAllowed = config.WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED.Value;
+            noiseRange = config.WHEELBARROW_NOISE_RANGE.Value;
+            sloppiness = config.WHEELBARROW_MOVEMENT_SLOPPY.Value;
+            lookSensitivityDrawback = config.WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK.Value;
+            playSounds = config.WHEELBARROW_PLAY_NOISE.Value;
         }
 
         public override void Update()

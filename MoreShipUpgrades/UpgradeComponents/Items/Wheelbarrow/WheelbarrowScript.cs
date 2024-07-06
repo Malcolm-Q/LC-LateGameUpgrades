@@ -13,10 +13,10 @@ using UnityEngine.InputSystem;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
 {
-    abstract class WheelbarrowScript : LategameItem
+    public abstract class WheelbarrowScript : LategameItem
     {
         internal const float VELOCITY_APPLY_EFFECT_THRESHOLD = 5.0f;
-        protected enum Restrictions
+        public enum Restrictions
         {
             None,
             TotalWeight,
@@ -260,7 +260,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         }
         private bool CheckWheelbarrowAllRestrictions()
         {
-            bool weightCondition = totalWeight > (1f + maximumWeightAllowed) / 100f;
+            bool weightCondition = totalWeight > 1f + (maximumWeightAllowed / 100f);
             bool itemCountCondition = currentAmountItems >= maximumAmountItems;
             if (weightCondition || itemCountCondition)
             {
@@ -271,7 +271,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow
         }
         private bool CheckWheelbarrowWeightRestriction()
         {
-            if (totalWeight > (1f + maximumWeightAllowed) / 100f)
+            if (totalWeight > 1f + (maximumWeightAllowed / 100f))
             {
                 SetInteractTriggers(interactable: false, hoverTip: TOO_MUCH_WEIGHT_TEXT);
                 return true;
