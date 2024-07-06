@@ -230,6 +230,18 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 * __Mechanical Arms - $300__
     * Increases the player's interaction range with items and interactables.
 
+* __Clay Glasses - $200__*
+    * Increases the maximum distance from which the player can spot a "Clay Surgeon" entity. 
+
+* __Vehicle Plating - $150__*
+    * Increases the Company Cruiser vehicle's maximum health.
+ 
+* __Rapid Motors - $150__*
+    * Increases the Company Cruiser vehicle's acceleration.
+
+* __Supercharged Pistons - $250__*
+    * Increases the Company Cruiser vehicle's maximum speed. 
+
 ## Contracts
 * __Defusal Contract__
     * Look around the facility for a ticking bomb. Defuse it before the timer runs out or anyone near it might meet a gruesome fate.

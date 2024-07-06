@@ -143,6 +143,9 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string SUPERCHARGED_PISTONS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, SuperchargedPistons.)
+        internal static readonly string RAPID_MOTORS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, RapidMotors.UPGRADE_NAME);
+        internal static readonly string VEHICLE_PLATING_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, VehiclePlating.UPGRADE_NAME);
         internal static readonly string CLAY_GLASSES_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ClayGlasses.UPGRADE_NAME);
         internal static readonly string MECHANICAL_ARMS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, MechanicalArms.UPGRADE_NAME);
         internal static readonly string SCAVENGER_INSTINCTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ScavengerInstincts.UPGRADE_NAME);
@@ -564,6 +567,63 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Supercharged Pistons
+
+        internal const string SUPERCHARGED_PISTONS_ENABLED_KEY = $"Enable {SuperchargedPistons.UPGRADE_NAME} Upgrade";
+        internal const bool SUPERCHARGED_PISTONS_ENABLED_DEFAULT = true;
+        internal const string SUPERCHARGED_PISTONS_ENABLED_DESCRIPTION = "Tier upgrade which increases the company cruiser's maximum speed when driving";
+
+        internal const string SUPERCHARGED_PISTONS_PRICE_KEY = $"Price of {SuperchargedPistons.UPGRADE_NAME} Upgrade";
+        internal const int SUPERCHARGED_PISTONS_PRICE_DEFAULT = 250;
+
+        internal const string SUPERCHARGED_PISTONS_ENGINE_TORQUE_INITIAL_INCREASE_KEY = "Initial Engine Torque Increase";
+        internal const float SUPERCHARGED_PISTONS_ENGINE_TORQUE_INITIAL_INCREASE_DEFAULT = 40f;
+        internal const string SUPERCHARGED_PISTONS_ENGINE_TORQUE_INITIAL_INCREASE_DESCRIPTION = "Amount of maximum speed increased when first purchasing the upgrade to the Company Cruiser vehicle.";
+
+        internal const string SUPERCHARGED_PISTONS_ENGINE_TORQUE_INCREMENTAL_INCREASE_KEY = "Incremental Engine Torque Increase";
+        internal const float SUPERCHARGED_PISTONS_ENGINE_TORQUE_INCREMENTAL_INCREASE_DEFAULT = 20f;
+        internal const string SUPERCHARGED_PISTONS_ENGINE_TORQUE_INCREMENTAL_INCREASE_DESCRIPTION = "Amount of maximum speed increased when purchasing further levels of the upgrade to the Company Cruiser vehicle.";
+
+        #endregion
+
+        #region Rapid Motors
+
+        internal const string RAPID_MOTORS_ENABLED_KEY = $"Enable {RapidMotors.UPGRADE_NAME} Upgrade";
+        internal const bool RAPID_MOTORS_ENABLED_DEFAULT = true;
+        internal const string RAPID_MOTORS_ENABLED_DESCRIPTION = "Tier upgrade which increases the company cruiser's acceleration when driving.";
+
+        internal const string RAPID_MOTORS_PRICE_KEY = $"Price of {RapidMotors.UPGRADE_NAME} Upgrade";
+        internal const int RAPID_MOTORS_PRICE_DEFAULT = 150;
+
+        internal const string RAPID_MOTORS_ACCELERATION_INITIAL_INCREASE_KEY = "Initial Acceleration Increase";
+        internal const float RAPID_MOTORS_ACCELERATION_INITIAL_INCREASE_DEFAULT = 2f;
+        internal const string RAPID_MOTORS_ACCELERATION_INITIAL_INCREASE_DESCRIPTION = "Amount of acceleration increased when first purchasing the upgrade to the company cruiser vehicle.";
+
+        internal const string RAPID_MOTORS_ACCELERATION_INCREMENTAL_INCREASE_KEY = "Incremental Acceleration Increase";
+        internal const float RAPID_MOTORS_ACCELERATION_INCREMENTAL_INCREASE_DEFAULT = 0.5f;
+        internal const string RAPID_MOTORS_ACCELERATION_INCREMENTAL_INCREASE_DESCRIPTION = "Amount of acceleration increased when purchasing further levels of the upgrade to the company cruiser vehicle.";
+
+        #endregion
+
+        #region Vehicle Plating
+
+        internal const string VEHICLE_PLATING_ENABLED_KEY = $"Enable {VehiclePlating.UPGRADE_NAME} Upgrade";
+        internal const bool VEHICLE_PLATING_ENABLED_DEFAULT = true;
+        internal const string VEHICLE_PLATING_ENABLED_DESCRIPTION = "Tier upgrade which increases the company cruiser's maximum health to sustain damage from outside sources.";
+
+        internal const string VEHICLE_PLATING_PRICE_KEY = $"Price of {VehiclePlating.UPGRADE_NAME} Upgrade";
+        internal const int VEHICLE_PLATING_PRICE_DEFAULT = 150;
+
+        internal const string VEHICLE_PLATING_HEALTH_INITIAL_INCREASE_KEY = "Initial Health Increase";
+        internal const int VEHICLE_PLATING_HEALTH_INITIAL_INCREASE_DEFAULT = 10;
+        internal const string VEHICLE_PLATING_HEALTH_INITIAL_INCREASE_DESCRIPTION = "Amount of health increased when first purchasing the upgrade to the company cruiser vehicle.";
+
+        internal const string VEHICLE_PLATING_HEALTH_INCREMENTAL_INCREASE_KEY = "Incremental Health Increase";
+        internal const int VEHICLE_PLATING_HEALTH_INCREMENTAL_INCREASE_DEFAULT = 5;
+        internal const string VEHICLE_PLATING_HEALTH_INCREMENTAL_INCREASE_DESCRIPTION = "Amount of health increased when purchasing further levels of the upgrade to the company cruiser vehicle.";
+
+        #endregion
 
         #region Clay Glasses
 

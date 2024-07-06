@@ -200,8 +200,7 @@ namespace MoreShipUpgrades.Managers
                 MethodInfo method = type.GetMethod(nameof(BaseUpgrade.RegisterScrapToUpgrade), BindingFlags.Static | BindingFlags.Public);
                 (string, string[]) pair = ((string, string[]))method.Invoke(null, null);
                 string upgradeName = pair.Item1;
-                string[] scrapItems = pair.Item2;
-                foreach (string scrapItem in scrapItems)
+                foreach (string scrapItem in pair.Item2)
                     AddScrapToUpgrade(upgradeName, scrapItem.ToLower().Trim());
             }
         }

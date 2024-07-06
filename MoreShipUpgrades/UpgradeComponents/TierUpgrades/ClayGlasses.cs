@@ -37,7 +37,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
             System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.CLAY_GLASSES_DISTANCE_INITIAL_INCREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.CLAY_GLASSES_DISTANCE_INCREMENTAL_INCREASE.Value);
-            const string infoFormat = "LVL {0} - ${1} - Increases the maximum distance to spot a \"Clay Surgeon\" entity by {2} additional units.\n";
+            const string infoFormat = "LVL {0} - ${1} - The maximum distance to spot a \"Clay Surgeon\" entity is increased by {2} additional units.\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
 
