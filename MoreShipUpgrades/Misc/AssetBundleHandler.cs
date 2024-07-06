@@ -129,6 +129,7 @@ namespace MoreShipUpgrades.Misc
             { VehiclePlating.UPGRADE_NAME, upgrades+"VehiclePlating.prefab" },
             { RapidMotors.UPGRADE_NAME, upgrades+"RapidMotors.prefab" },
             { SuperchargedPistons.UPGRADE_NAME, upgrades+"SuperchargedPistons.prefab" },
+            { ImprovedSteering.UPGRADE_NAME, upgrades+"ImprovedSteering.prefab" },
 
             { "Advanced Portable Tele", storeItems+"TpButtonAdv.asset" },
             { "Portable Tele", storeItems+"TpButton.asset" },

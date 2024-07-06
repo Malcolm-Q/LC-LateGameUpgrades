@@ -143,6 +143,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string IMPROVED_STEERING_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ImprovedSteering.UPGRADE_NAME);
         internal static readonly string SUPERCHARGED_PISTONS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, SuperchargedPistons.UPGRADE_NAME);
         internal static readonly string RAPID_MOTORS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, RapidMotors.UPGRADE_NAME);
         internal static readonly string VEHICLE_PLATING_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, VehiclePlating.UPGRADE_NAME);
@@ -567,6 +568,25 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Improved Steering
+
+        internal const string IMPROVED_STEERING_ENABLED_KEY = $"Enable {ImprovedSteering.UPGRADE_NAME} Upgrade";
+        internal const bool IMPROVED_STEERING_ENABLED_DEFAULT = true;
+        internal const string IMPROVED_STEERING_ENABLED_DESCRIPTION = "Tier upgrade which increases the turning speed of the Company Cruiser vehicle";
+
+        internal const string IMPROVED_STEERING_PRICE_KEY = $"Price of {ImprovedSteering.UPGRADE_NAME} Upgrade";
+        internal const int IMPROVED_STEERING_PRICE_DEFAULT = 100;
+
+        internal const string IMPROVED_STEERING_TURNING_SPEED_INITIAL_INCREASE_KEY = "Initial Turning Speed Increase";
+        internal const float IMPROVED_STEERING_TURNING_SPEED_INITIAL_INCREASE_DEFAULT = 1f;
+        internal const string IMPROVED_STEERING_TURNING_SPEED_INITIAL_INCREASE_DESCRIPTION = "Amount of turning speed increased when first purchasing the upgrade to the Company Cruiser vehicle.";
+
+        internal const string IMPROVED_STEERING_TURNING_SPEED_INCREMENTAL_INCREASE_KEY = "Incremental Turning Speed Increase";
+        internal const float IMPROVED_STEERING_TURNING_SPEED_INCREMENTAL_INCREASE_DEFAULT = 0.5f;
+        internal const string IMPROVED_STEERING_TURNING_SPEED_INCREMENTAL_INCREASE_DESCRIPTION = "Amount of turning speed increased when purchasing further levels of the upgrade to the Company Cruiser vehicle.";
+
+        #endregion
 
         #region Supercharged Pistons
 

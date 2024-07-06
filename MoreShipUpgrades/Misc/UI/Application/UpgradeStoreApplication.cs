@@ -16,9 +16,10 @@ namespace MoreShipUpgrades.Misc.UI.Application
 {
     internal class UpgradeStoreApplication : PageApplication
     {
+        const int UPGRADES_PER_PAGE = 12;
         protected override int GetEntriesPerPage<T>(T[] entries)
         {
-            return Mathf.CeilToInt(entries.Length / 2.5f);
+            return UPGRADES_PER_PAGE;
         }
         public override void Initialization()
         {

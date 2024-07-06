@@ -23,6 +23,7 @@ namespace MoreShipUpgrades.Misc
     public class LategameConfiguration : SyncedConfig2<LategameConfiguration>
     {
         #region Enabled
+        [field: SyncedEntryField] public SyncedEntry<bool> IMPROVED_STEERING_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SUPERCHARGED_PISTONS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> RAPID_MOTORS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> VEHICLE_PLATING_ENABLED {  get; set; }
@@ -95,6 +96,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Initial Prices
+        [field: SyncedEntryField] public SyncedEntry<int> IMPROVED_STEERING_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SUPERCHARGED_PISTONS_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> RAPID_MOTORS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> VEHICLE_PLATING_PRICE {  get; set; }
@@ -147,6 +149,10 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<string> IMPROVED_STEERING_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> IMPROVED_STEERING_OVERRIDE_NAME { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<float> IMPROVED_STEERING_TURNING_SPEED_INITIAL_INCREASE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<float> IMPROVED_STEERING_TURNING_SPEED_INCREMENTAL_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> SUPERCHARGED_PISTONS_PRICES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> SUPERCHARGED_PISTONS_OVERRIDE_NAME {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> SUPERCHARGED_PISTONS_ENGINE_TORQUE_INITIAL_INCREASE {  get; set; }
@@ -454,6 +460,7 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<float> SCRAP_UPGRADE_CHANCE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<ItemProgressionManager.ChancePerScrapModes> SCRAP_UPGRADE_CHANCE_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_BLACKLISTED_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> IMPROVED_STEERING_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> SUPERCHARGED_PISTONS_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> RAPID_MOTORS_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> VEHICLE_PLATING_ITEM_PROGRESSION_ITEMS {  get; set; }
@@ -527,6 +534,7 @@ namespace MoreShipUpgrades.Misc
 
             topSection = LguConstants.OVERRIDE_NAMES_SECTION;
             OVERRIDE_UPGRADE_NAMES              = cfg.BindSyncedEntry(topSection, LguConstants.OVERRIDE_NAMES_ENABLED_KEY, LguConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LguConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
+            IMPROVED_STEERING_OVERRIDE_NAME     = cfg.BindSyncedEntry(topSection, LguConstants.IMPROVED_STEERING_OVERRIDE_NAME_KEY, ImprovedSteering.UPGRADE_NAME);
             SUPERCHARGED_PISTONS_OVERRIDE_NAME  = cfg.BindSyncedEntry(topSection, LguConstants.SUPERCHARGED_PISTONS_OVERRIDE_NAME_KEY, SuperchargedPistons.UPGRADE_NAME);
             RAPID_MOTORS_OVERRIDE_NAME          = cfg.BindSyncedEntry(topSection, LguConstants.RAPID_MOTORS_OVERRIDE_NAME_KEY, RapidMotors.UPGRADE_NAME);
             VEHICLE_PLATING_OVERRIDE_NAME       = cfg.BindSyncedEntry(topSection, LguConstants.VEHICLE_PLATING_OVERRIDE_NAME_KEY, VehiclePlating.UPGRADE_NAME);
@@ -701,6 +709,18 @@ namespace MoreShipUpgrades.Misc
             #endregion
 
             #region Upgrades
+
+            #region Improved Steering
+
+            topSection = ImprovedSteering.UPGRADE_NAME;
+            IMPROVED_STEERING_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.IMPROVED_STEERING_ENABLED_KEY, LguConstants.IMPROVED_STEERING_ENABLED_DEFAULT, LguConstants.IMPROVED_STEERING_ENABLED_DESCRIPTION);
+            IMPROVED_STEERING_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.IMPROVED_STEERING_PRICE_KEY, LguConstants.IMPROVED_STEERING_PRICE_DEFAULT);
+            IMPROVED_STEERING_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, ImprovedSteering.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            IMPROVED_STEERING_TURNING_SPEED_INITIAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.IMPROVED_STEERING_TURNING_SPEED_INITIAL_INCREASE_KEY, LguConstants.IMPROVED_STEERING_TURNING_SPEED_INITIAL_INCREASE_DEFAULT, LguConstants.IMPROVED_STEERING_TURNING_SPEED_INITIAL_INCREASE_DESCRIPTION);
+            IMPROVED_STEERING_TURNING_SPEED_INCREMENTAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.IMPROVED_STEERING_TURNING_SPEED_INCREMENTAL_INCREASE_KEY, LguConstants.IMPROVED_STEERING_TURNING_SPEED_INCREMENTAL_INCREASE_DEFAULT, LguConstants.IMPROVED_STEERING_TURNING_SPEED_INCREMENTAL_INCREASE_DESCRIPTION);
+            IMPROVED_STEERING_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
 
             #region Supercharged Pistons
 

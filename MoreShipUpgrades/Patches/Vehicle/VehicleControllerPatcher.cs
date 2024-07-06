@@ -33,6 +33,7 @@ namespace MoreShipUpgrades.Patches.Vehicle
         {
             __instance.carAcceleration = RapidMotors.GetAdditionalAcceleration(__instance.carAcceleration);
             __instance.EngineTorque = SuperchargedPistons.GetAdditionalEngineTorque(__instance.EngineTorque);
+            __instance.steeringWheelTurnSpeed = ImprovedSteering.GetAdditionalTurningSpeed(__instance.steeringWheelTurnSpeed);
         }
     }
 }

@@ -1,9 +1,10 @@
 <details>
-<summary> 3.8.3 - 2024-07-?? </summary>
+<summary> 3.9.0 - 2024-07-06 </summary>
 
 - Implemented "Vehicle Plating" tier upgrade which increases the Company Cruiser's maximum health.
 - Implemented "Rapid Motors" tier upgrade which increases the Company Cruiser's acceleration.
 - Implemented "Supercharged Pistons" tier upgrade which increases the Company Cruiser's maximum speed.
+- Implemented "Improved Steering" tier upgrade which increases the Company Cruiser's turning speed.
 - Implemented alternative modes for Lightning Rod such as:
   - Always redirect all lightning bolts meant for items.
   - Always redirect all lightning bolts targetting random locations.
