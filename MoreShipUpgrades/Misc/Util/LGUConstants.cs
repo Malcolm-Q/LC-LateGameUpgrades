@@ -60,6 +60,28 @@ namespace MoreShipUpgrades.Misc.Util
 
         #region Plugin Configuration
 
+        #region Randomize Available Upgrades
+
+        internal const string RANDOMIZE_UPGRADES_SECTION = "_Randomize Upgrades_";
+
+        internal const string RANDOMIZE_UPGRADES_ENABLED_KEY = "Enable Randomize Upgrades";
+        internal const bool RANDOMIZE_UPGRADES_ENABLED_DEFAULT = false;
+        internal const string RANDOMIZE_UPGRADES_ENABLED_DESCRIPTION = "Upgrades will be randomized per selected event to be allowed purchased on the store.";
+
+        internal const string RANDOMIZE_UPGRADES_AMOUNT_KEY = "Amount of Upgrades";
+        internal const int RANDOMIZE_UPGRADES_AMOUNT_DEFAULT = 5;
+        internal const string RANDOMIZE_UPGRADES_AMOUNT_DESCRIPTION = "Amount of Upgrades that will always appear in the store (if allowed).";
+
+        internal const string RANDOMIZE_UPGRADES_ALWAYS_SHOW_PURCHASED_KEY = "Show purchased upgrades";
+        internal const bool RANDOMIZE_UPGRADES_ALWAYS_SHOW_PURCHASED_DEFAULT = true;
+        internal const string RANDOMIZE_UPGRADES_ALWAYS_SHOW_PURCHASED_DESCRIPTION = "Wether purchased upgrades will always show in the store and the specified amount of random upgrades will not include these in the selection.";
+
+        internal const string RANDOMIZE_UPGRADES_CHANGE_UPGRADES_EVENT_KEY = "Randomize Upgrades Event";
+        internal const RandomizeUpgradeManager.RandomizeUpgradeEvents RANDOMIZE_UPGRADES_CHANGE_UPGRADES_EVENT_DEFAULT = RandomizeUpgradeManager.RandomizeUpgradeEvents.PerQuota;
+        internal const string RANDOMIZE_UPGRADES_CHANGE_UPGRADES_EVENT_DESCRIPTION = "Event which triggers the random upgrades being changed in the store.";
+
+        #endregion
+
         #region Item Progression
 
         internal const string ITEM_PROGRESSION_SECTION = "_Item Progression Route_";

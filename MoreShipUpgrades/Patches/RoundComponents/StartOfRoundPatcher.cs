@@ -80,6 +80,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         {
             ResetContract(ref __instance);
             QuantumDisruptor.TryResetQuantum(QuantumDisruptor.ResetModes.MoonLanding);
+            RandomizeUpgradeManager.RandomizeUpgrades(RandomizeUpgradeManager.RandomizeUpgradeEvents.PerMoonLanding);
         }
         static void ResetContract(ref StartOfRound __instance)
         {
@@ -185,6 +186,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         static void ChangeLevelPostfix()
         {
             QuantumDisruptor.TryResetQuantum(QuantumDisruptor.ResetModes.MoonRerouting);
+            RandomizeUpgradeManager.RandomizeUpgrades(RandomizeUpgradeManager.RandomizeUpgradeEvents.PerMoonRouting);
         }
     }
 }

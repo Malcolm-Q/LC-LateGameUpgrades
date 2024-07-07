@@ -122,6 +122,10 @@ namespace MoreShipUpgrades.Managers
         internal void ServerSaveFile(bool resetCredits = true)
         {
             string saveFile = GameNetworkManager.Instance.currentSaveFileName;
+            LguSave.scrapToUpgrade = UpgradeBus.Instance.scrapToCollectionUpgrade;
+            LguSave.contributedValues = UpgradeBus.Instance.contributionValues;
+            LguSave.discoveredItems = UpgradeBus.Instance.discoveredItems;
+            LguSave.randomUpgradeSeed = RandomizeUpgradeManager.randomUpgradeSeed;
             string json = JsonConvert.SerializeObject(LguSave);
             ES3.Save(key: saveDataKey, value: json, filePath: saveFile);
             if (resetCredits) PlayerManager.instance.ResetUpgradeSpentCredits();
@@ -420,7 +424,6 @@ namespace MoreShipUpgrades.Managers
                 UpgradeBus.Instance.helmetDesync = true;
                 // this will just sync the helmets on StartGame
             }
-
             UpgradeBus.Instance.LoadSales();
 
             StartCoroutine(WaitForUpgradeObject());
@@ -468,6 +471,8 @@ namespace MoreShipUpgrades.Managers
                     customNode.Unlocked = true;
                 }
             }
+            RandomizeUpgradeManager.SetRandomUpgradeSeed(LguSave.randomUpgradeSeed);
+            RandomizeUpgradeManager.RandomizeUpgrades();
         }
 
         internal void UpdateUpgrades(CustomTerminalNode node, bool increment = false)
@@ -680,6 +685,17 @@ namespace MoreShipUpgrades.Managers
                 SyncWeatherClientRpc(level, ContractManager.probedWeathers[level]);
             }
         }
+        [ServerRpc(RequireOwnership = false)]
+        internal void RandomizeUpgradesServerRpc()
+        {
+            RandomizeUpgradesClientRpc(RandomizeUpgradeManager.randomUpgradeSeed);
+        }
+
+        [ClientRpc]
+        internal void RandomizeUpgradesClientRpc(int seed)
+        {
+            RandomizeUpgradeManager.RandomizeUpgrades(seed);
+        }
     }
 
     [Serializable]
@@ -704,5 +720,6 @@ namespace MoreShipUpgrades.Managers
         public Dictionary<string, List<string>> scrapToUpgrade = UpgradeBus.Instance.scrapToCollectionUpgrade;
         public Dictionary<string, int> contributedValues = UpgradeBus.Instance.contributionValues;
         public List<string> discoveredItems = UpgradeBus.Instance.discoveredItems;
+        public int randomUpgradeSeed = RandomizeUpgradeManager.randomUpgradeSeed;
     }
 }

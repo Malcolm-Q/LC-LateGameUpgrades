@@ -21,6 +21,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         public int CurrentUpgrade { get; set; }
         public bool SharedUpgrade { get; set; }
         public float SalePercentage { get; set; } = 1f;
+        public bool Visible {  get; set; }
         protected CustomTerminalNode(string name, int unlockPrice, string description, GameObject prefab, int[] prices = null, int maxUpgrade = 0, string originalName = "", bool sharedUpgrade = false)
         {
             if (prices == null) { prices = []; }
@@ -32,6 +33,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
             UnlockPrice = unlockPrice;
             OriginalName = originalName;
             SharedUpgrade = sharedUpgrade;
+            Visible = true;
         }
 
         public int CompareTo(object obj)
@@ -60,6 +62,16 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
             int remainingLevels = Unlocked ? 0 : 1;
             remainingLevels += MaxUpgrade != 0 ? Mathf.Max(0, MaxUpgrade - CurrentUpgrade) : 0;
             return remainingLevels;
+        }
+
+        public void ToggleVisibility(bool visible)
+        {
+            Visible = visible;
+        }
+
+        public bool IsVisible() 
+        {
+            return Visible;
         }
     }
 }

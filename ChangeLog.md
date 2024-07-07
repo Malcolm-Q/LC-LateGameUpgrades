@@ -1,4 +1,15 @@
 <details>
+<summary> 3.9.1 - 2024-07-?? </summary>
+
+- Implemented "Randomized Upgrades" mode which makes the upgrades be randomly selected to appear in the shop rather than the full list
+  - You can configure the amount of upgrades that can be picked to show up.
+  - You can configure to show the upgrades already purchased.
+  - You can configure when should the upgrades be randomized again (per quota, per moon routing or per moon landing).
+- Fixed issue with some relevant components not being saved correctly, leading to constantly changing per save boot.
+
+</details>
+
+<details>
 <summary> 3.9.0 - 2024-07-06 </summary>
 
 - Implemented "Vehicle Plating" tier upgrade which increases the Company Cruiser's maximum health.

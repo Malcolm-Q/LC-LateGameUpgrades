@@ -18,6 +18,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             GenerateNewSales(ref __instance);
             ExtendDeadlineScript.SetDaysExtended(daysExtended: 0);
             QuantumDisruptor.TryResetQuantum(QuantumDisruptor.ResetModes.NewQuota);
+            RandomizeUpgradeManager.RandomizeUpgrades(RandomizeUpgradeManager.RandomizeUpgradeEvents.PerQuota);
         }
 
         static void GenerateNewSales(ref TimeOfDay __instance)

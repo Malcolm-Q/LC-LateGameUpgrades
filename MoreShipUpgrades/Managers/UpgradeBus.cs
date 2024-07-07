@@ -248,6 +248,7 @@ namespace MoreShipUpgrades.Managers
             SyncAvailableContracts();
 
             logger.LogInfo("Successfully reconstructed with hosts config.");
+            if (LguStore.Instance.IsClient && !LguStore.Instance.IsHost) LguStore.Instance.RandomizeUpgradesServerRpc();
         }
         internal void BuildCustomNodes()
         {

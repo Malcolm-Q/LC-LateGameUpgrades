@@ -9,6 +9,7 @@ using MoreShipUpgrades.Misc.UI.Cursor;
 using MoreShipUpgrades.Misc.Util;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 using UnityEngine;
 
@@ -23,7 +24,8 @@ namespace MoreShipUpgrades.Misc.UI.Application
         }
         public override void Initialization()
         {
-            (CustomTerminalNode[][], CursorMenu[], IScreen[]) entries = GetPageEntries(UpgradeBus.Instance.terminalNodes.ToArray());
+            CustomTerminalNode[] filteredNodes = UpgradeBus.Instance.terminalNodes.Where(x => x.Visible).ToArray();
+            (CustomTerminalNode[][], CursorMenu[], IScreen[]) entries = GetPageEntries(filteredNodes);
 
             CustomTerminalNode[][] pagesUpgrades = entries.Item1;
             CursorMenu[] cursorMenus = entries.Item2;
