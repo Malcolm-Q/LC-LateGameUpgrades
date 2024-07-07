@@ -8,7 +8,7 @@ namespace MoreShipUpgrades.Managers
 {
     public static class RandomizeUpgradeManager
     {
-        internal static int randomUpgradeSeed;
+        static int randomUpgradeSeed;
         static int visibleNodes = 0;
         public enum RandomizeUpgradeEvents
         {
@@ -60,13 +60,12 @@ namespace MoreShipUpgrades.Managers
             if (!LguStore.Instance.IsHost) return;
             if (!IsRandomizedEnabled) return;
             if (ConfiguredChangeEvent != triggeredEvent) return;
-            randomUpgradeSeed = new Random().Next();
-            LguStore.Instance.RandomizeUpgradesClientRpc(randomUpgradeSeed);
+            LguStore.Instance.RandomizeUpgradesClientRpc(new Random().Next());
         }
         internal static void RandomizeUpgrades(int seed)
         {
-            randomUpgradeSeed = seed;
-            Random rand = new Random(seed);
+            SetRandomUpgradeSeed(seed);
+            Random rand = new(seed);
             ResetAllUpgrades();
             int maximumUpgrade = ConfiguredUpgradeAmount;
             if (UpgradeBus.Instance.terminalNodes.Count - visibleNodes < maximumUpgrade)
@@ -95,14 +94,13 @@ namespace MoreShipUpgrades.Managers
             visibleNodes = 0;
             foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
             {
-                node.Visible = (node.Unlocked || (node.OriginalName == NightVision.UPGRADE_NAME && node.CurrentUpgrade > 0)) && AlwaysShowPurchased;
+                node.Visible = node.Unlocked && (node.OriginalName != NightVision.UPGRADE_NAME || node.CurrentUpgrade > 0) && AlwaysShowPurchased;
                 if (node.Visible) visibleNodes++;
             }
         }
 
         internal static void SetRandomUpgradeSeed(int seed)
         {
-            Plugin.mls.LogDebug(seed);
             if (seed == 0)
             {
                 randomUpgradeSeed = new Random().Next();
@@ -112,6 +110,17 @@ namespace MoreShipUpgrades.Managers
             {
                 randomUpgradeSeed = seed;
             }
+        }
+
+        internal static int GetRandomUpgradeSeed()
+        {
+            return randomUpgradeSeed;
+        }
+        internal static void Save()
+        {
+            LguSave save = LguStore.Instance.LguSave;
+            save.randomUpgradeSeed = randomUpgradeSeed;
+            LguStore.Instance.LguSave = save;
         }
     }
 }

@@ -26,7 +26,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         }
         internal const string UPGRADE_NAME = "Quantum Disruptor";
         internal const string PRICES_DEFAULT = "1200,1500,1800";
-        internal static QuantumDisruptor Instance;
+        internal static QuantumDisruptor Instance { get; set; }
 
         internal static UpgradeModes CurrentMode
         {
@@ -45,9 +45,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         internal int availableUsages = -1;
         internal int currentUsages = 0;
         internal int hoursToReduce = -1;
+        static void SetInstance(QuantumDisruptor instance)
+        {
+            Instance = instance;
+        }
         void Awake()
         {
-            Instance = this;
+            SetInstance(this);
             upgradeName = UPGRADE_NAME;
             overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_OVERRIDE_NAME;
         }
@@ -92,8 +96,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 case UpgradeModes.SlowdownTime: base.Load(); break;
                 case UpgradeModes.RevertTime:
                     {
-                        availableUsages = UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INITIAL_USES.Value + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INCREMENTAL_USES;
-                        hoursToReduce = UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INITIAL_HOURS_REVERT_ON_USE.Value + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_REVERT_ON_USE;
+                        availableUsages = UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INITIAL_USES.Value + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INCREMENTAL_USES);
+                        hoursToReduce = UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INITIAL_HOURS_REVERT_ON_USE.Value + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_REVERT_ON_USE);
                         UpgradeBus.Instance.activeUpgrades[upgradeName] = true;
                         if (!UpgradeBus.Instance.PluginConfiguration.SHOW_UPGRADES_CHAT.LocalValue) return;
                         ShowUpgradeNotification(LguConstants.UPGRADE_UNLOADED_NOTIFICATION_DEFAULT_COLOR, $"{(UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? overridenUpgradeName : upgradeName)} is active!");
@@ -108,14 +112,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             if (CurrentMode != UpgradeModes.SlowdownTime) return defaultValue;
 
-            float additionalValue = UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER;
+            float additionalValue = UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER);
             return Mathf.Clamp(defaultValue - additionalValue, 0.01f, defaultValue);
         }
 
         string GetQuantumDisruptorRevertInfo(int level, int price)
         {
-            Func<int, float> infoFunctionUsages = level => UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INITIAL_USES.Value + level * UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INCREMENTAL_USES.Value;
-            Func<int, float> infoFunctionHours = level => UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INITIAL_HOURS_REVERT_ON_USE.Value + level * UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_REVERT_ON_USE.Value;
+            static float infoFunctionUsages(int level) => UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INITIAL_USES.Value + (level * UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INCREMENTAL_USES.Value);
+            static float infoFunctionHours(int level) => UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INITIAL_HOURS_REVERT_ON_USE.Value + (level * UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_REVERT_ON_USE.Value);
             string resetString = string.Empty;
             switch (CurrentResetMode)
             {
@@ -123,7 +127,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 case ResetModes.MoonRerouting: resetString = "moon routing"; break;
                 case ResetModes.NewQuota: resetString = "completed quota"; break;
             }
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             switch (level)
             {
                 case 1: sb.Append($"LVL {level} - ${price}: Unlocks \'quantum\' command which reverts curret moon's time by {infoFunctionHours(level - 1)} hours and can only be used {infoFunctionUsages(level - 1)} times per {resetString}\n"); break;
@@ -137,13 +141,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             {
                 case UpgradeModes.SlowdownTime:
                     {
-                        Func<int, float> infoFunction = level => (UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER.Value + level * UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER.Value) * 100f;
-                        string infoFormat = "LVL {0} - ${1} - Decreases the landed moon's rotation force (time passing) by {2}%\n";
+                        static float infoFunction(int level) => (UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER.Value + (level * UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER.Value)) * 100f;
+                        const string infoFormat = "LVL {0} - ${1} - Decreases the landed moon's rotation force (time passing) by {2}%\n";
                         return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
                     }
                 case UpgradeModes.RevertTime:
                     {
-                        StringBuilder sb = new StringBuilder();
+                        StringBuilder sb = new();
                         sb.Append(GetQuantumDisruptorRevertInfo(1, initialPrice));
                         for (int i = 0; i < maxLevels; i++)
                             sb.Append(GetQuantumDisruptorRevertInfo(i + 2, incrementalPrices[i]));
@@ -157,8 +161,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             get
             {
                 string[] prices = UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_PRICES.Value.Split(',');
-                bool free = UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-                return free;
+                return UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
 

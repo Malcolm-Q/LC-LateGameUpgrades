@@ -508,7 +508,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string SCRAP_WHEELBARROW_RESTRICTION_MODE_KEY = $"Restrictions on the {ScrapWheelbarrow.ITEM_NAME} Item";
         internal const WheelbarrowScript.Restrictions SCRAP_WHEELBARROW_RESTRICTION_MODE_DEFAULT = WheelbarrowScript.Restrictions.ItemCount;
         internal const string SCRAP_WHEELBARROW_RESTRICTION_MODE_DESCRIPTION = $"Restriction applied when trying to insert an item on the {ScrapWheelbarrow.ITEM_NAME}.\n" +
-                                                                        $"Supported values: None, ItemCount, TotalWeight, All";
+                                                                        "Supported values: None, ItemCount, TotalWeight, All";
 
         internal const string SCRAP_WHEELBARROW_MINIMUM_VALUE_KEY = $"Minimum scrap value of {ScrapWheelbarrow.ITEM_NAME}";
         internal const int SCRAP_WHEELBARROW_MINIMUM_VALUE_DEFAULT = 50;
@@ -565,7 +565,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string WHEELBARROW_RESTRICTION_MODE_KEY = $"Restrictions on the {StoreWheelbarrow.ITEM_NAME} Item";
         internal const WheelbarrowScript.Restrictions WHEELBARROW_RESTRICTION_MODE_DEFAULT = WheelbarrowScript.Restrictions.ItemCount;
         internal const string WHEELBARROW_RESTRICTION_MODE_DESCRIPTION = $"Restriction applied when trying to insert an item on the {StoreWheelbarrow.ITEM_NAME}.\n" +
-                                                                        $"Supported values: None, ItemCount, TotalWeight, All";
+                                                                        "Supported values: None, ItemCount, TotalWeight, All";
 
         internal const string WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_KEY = $"Maximum amount of weight for {StoreWheelbarrow.ITEM_NAME}";
         internal const float WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_DEFAULT = 100f;
@@ -1662,7 +1662,7 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Colours
-        internal static readonly Color Invisible = new Color(0, 0, 0, 0);
+        internal static readonly Color Invisible = new(0, 0, 0, 0);
         #endregion
 
         #endregion

@@ -17,18 +17,17 @@ namespace MoreShipUpgrades.Misc
 {
     internal static class CommandParser
     {
-        private static LguLogger logger = new LguLogger(nameof(CommandParser));
+        static readonly LguLogger logger = new(nameof(CommandParser));
 
         const string LOAD_LGU_COMMAND = "load lgu";
-        public static readonly List<string> contracts = new List<string> { LguConstants.DATA_CONTRACT_NAME, LguConstants.EXTERMINATOR_CONTRACT_NAME, LguConstants.EXTRACTION_CONTRACT_NAME,LguConstants.EXORCISM_CONTRACT_NAME,LguConstants.DEFUSAL_CONTRACT_NAME };
-        public static readonly List<string> contractInfos = new List<string> {
+        public static readonly List<string> contracts = [LguConstants.DATA_CONTRACT_NAME, LguConstants.EXTERMINATOR_CONTRACT_NAME, LguConstants.EXTRACTION_CONTRACT_NAME,LguConstants.EXORCISM_CONTRACT_NAME,LguConstants.DEFUSAL_CONTRACT_NAME];
+        public static readonly List<string> contractInfos = [
             "\n\nOur systems have detected an active PC somewhere in the facility.\nFind it, use the bruteforce command on the ship terminal with the devices IP to get login credentials, then use the cd, ls, and mv commands to find the .db file (enter `mv survey.db` in the containing folder).\n\n",
             "\n\nIt's been reported that the population of hoarder bugs on this moon have skyrocketed and become aggressive. You must destroy their nest at all costs.\n\n",
             "\n\nCrew number 5339 have reported that one of their operatives was lost on this moon and left behind. You will have to find or bring a medkit to heal and extract the lost operative.\n\n" ,
             "\n\nUnusual activity in the spirit world has been reported at this facility.\nFind the ritual site to determine what type of demon it is, enter `demon DemonName` in the terminal to get the ritual instructions. Find ritual items and banish the demon.\n\n" ,
-            "\n\nAn unknown party has planted a bomb at an integral point in this facility.\nYou must find the bomb and work together to defuse it.\nUse the `Lookup` command with the bombs serial number to get defusal instructions.\n\n" 
-        };
-
+            "\n\nAn unknown party has planted a bomb at an integral point in this facility.\nYou must find the bomb and work together to defuse it.\nUse the `Lookup` command with the bombs serial number to get defusal instructions.\n\n"
+        ];
 
         private static TerminalNode DisplayTerminalMessage(string message, bool clearPreviousText = true)
         {
@@ -47,7 +46,7 @@ namespace MoreShipUpgrades.Misc
             Discombobulator.instance.PlayAudioAndUpdateCooldownServerRpc();
 
             Collider[] array = Physics.OverlapSphere(terminal.transform.position, UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_RADIUS.Value, 524288);
-            if (array.Length <= 0) return DisplayTerminalMessage(LguConstants.DISCOMBOBULATOR_NO_ENEMIES);
+            if (array.Length == 0) return DisplayTerminalMessage(LguConstants.DISCOMBOBULATOR_NO_ENEMIES);
 
             if (UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_NOTIFY_CHAT.Value)
             {
@@ -83,7 +82,7 @@ namespace MoreShipUpgrades.Misc
             if (LguStore.Instance.LguSave.playerSaves.ContainsKey(GameNetworkManager.Instance.localPlayerController.playerSteamId))
             {
                 UpgradeBus.Instance.ResetAllValues(false);
-                SaveInfo saveInfo = new SaveInfo();
+                SaveInfo saveInfo = new();
                 ulong id = GameNetworkManager.Instance.localPlayerController.playerSteamId;
                 LguStore.Instance.SaveInfo = saveInfo;
                 LguStore.Instance.UpdateLGUSaveServerRpc(id, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(saveInfo)));
@@ -104,7 +103,10 @@ namespace MoreShipUpgrades.Misc
                     LguStore.Instance.SyncCreditsClientRpc(value);
                     return DisplayTerminalMessage(string.Format(LguConstants.FORCE_CREDITS_SUCCESS_FORMAT, value));
                 }
-                else return DisplayTerminalMessage(LguConstants.FORCE_CREDITS_HOST_ONLY);
+                else
+                {
+                    return DisplayTerminalMessage(LguConstants.FORCE_CREDITS_HOST_ONLY);
+                }
             }
 
             return DisplayTerminalMessage(string.Format(LguConstants.FORCE_CREDITS_PARSED_FAIL_FORMAT, creditAmount));
@@ -130,7 +132,7 @@ namespace MoreShipUpgrades.Misc
             if (text.ToLower() == LOAD_LGU_COMMAND) return DisplayTerminalMessage(LguConstants.LOAD_LGU_NO_NAME);
 
             PlayerControllerB[] players = UnityEngine.Object.FindObjectsOfType<PlayerControllerB>();
-            List<string> playerNames = new List<string>();
+            List<string> playerNames = [];
             string playerNameToSearch = text.Substring(text.IndexOf(LOAD_LGU_COMMAND) + LOAD_LGU_COMMAND.Length).Trim();
             foreach (PlayerControllerB player in players)
             {
@@ -139,7 +141,7 @@ namespace MoreShipUpgrades.Misc
                 ulong playerSteamID = player.playerSteamId;
                 if (playerName == null) continue;
                 playerNames.Add(playerName);
-                if (!playerName.ToLower().Contains(playerNameToSearch.ToLower())) continue;
+                if (!playerName.Contains(playerNameToSearch, System.StringComparison.OrdinalIgnoreCase)) continue;
 
                 LguStore.Instance.ShareSaveServerRpc();
                 terminal.StartCoroutine(WaitForSync(playerSteamID));
@@ -155,16 +157,16 @@ namespace MoreShipUpgrades.Misc
         {
             if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage(LguConstants.SCANNER_LEVEL_REQUIRED);
 
-            GrabbableObject[] scrapItems = UnityEngine.Object.FindObjectsOfType<GrabbableObject>().ToArray();
+            GrabbableObject[] scrapItems = Object.FindObjectsOfType<GrabbableObject>();
             GrabbableObject[] filteredHives = scrapItems.Where(scrap => scrap.itemProperties.itemName == "Hive").ToArray();
             GrabbableObject[] bestHives = filteredHives.OrderByDescending(v => v.scrapValue).ToArray();
             StringBuilder stringBuilder = new();
-            stringBuilder.Append($"Found {bestHives.Length} Hives:").AppendLine();
+            stringBuilder.AppendLine($"Found {bestHives.Length} Hives:");
             foreach (GrabbableObject scrap in bestHives)
             {
-                stringBuilder.Append($"{scrap.scrapValue} // X: {scrap.gameObject.transform.position.x.ToString("F1")}, Y: {scrap.gameObject.transform.position.y.ToString("F1")}, Z: {scrap.gameObject.transform.position.z.ToString("F1")}").AppendLine();
+                stringBuilder.AppendLine($"{scrap.scrapValue} // X: {scrap.gameObject.transform.position.x:F1}, Y: {scrap.gameObject.transform.position.y:F1}, Z: {scrap.gameObject.transform.position.z:F1}");
             }
-            stringBuilder.Append("Don't forget your GPS!").AppendLine().AppendLine();
+            stringBuilder.AppendLine("Don't forget your GPS!").AppendLine();
             logger.LogInfo($"Scan Hives command found {filteredHives.Length} hives.");
             return DisplayTerminalMessage(stringBuilder.ToString());
         }
@@ -177,12 +179,12 @@ namespace MoreShipUpgrades.Misc
             GrabbableObject[] filteredScrap = scrapItems.Where(scrap => scrap.isInFactory && scrap.itemProperties.isScrap).ToArray();
             GrabbableObject[] bestScrap = filteredScrap.OrderByDescending(v => v.scrapValue).Take(5).ToArray();
             StringBuilder stringBuilder = new();
-            stringBuilder.Append("Most valuable items:").AppendLine();
+            stringBuilder.AppendLine("Most valuable items:");
             foreach (GrabbableObject scrap in bestScrap)
             {
-                stringBuilder.Append($"{scrap.itemProperties.itemName}: ${scrap.scrapValue}\nX: {Mathf.RoundToInt(scrap.gameObject.transform.position.x)}, Y: {Mathf.RoundToInt(scrap.gameObject.transform.position.y)}, Z: {Mathf.RoundToInt(scrap.gameObject.transform.position.z)}").AppendLine();
+                stringBuilder.AppendLine($"{scrap.itemProperties.itemName}: ${scrap.scrapValue}\nX: {Mathf.RoundToInt(scrap.gameObject.transform.position.x)}, Y: {Mathf.RoundToInt(scrap.gameObject.transform.position.y)}, Z: {Mathf.RoundToInt(scrap.gameObject.transform.position.z)}");
             }
-            stringBuilder.Append("Don't forget your GPS!").AppendLine().AppendLine();
+            stringBuilder.AppendLine("Don't forget your GPS!").AppendLine();
             logger.LogInfo($"Scan scrap command found {filteredScrap.Length} valid scrap items.");
             return DisplayTerminalMessage(stringBuilder.ToString());
         }
@@ -197,15 +199,15 @@ namespace MoreShipUpgrades.Misc
             PlayerControllerB[] deadPlayers = filteredPlayers.Where(player => player.isPlayerDead).ToArray();
             StringBuilder stringBuilder = new();
 
-            stringBuilder.Append("Alive Players:").AppendLine();
+            stringBuilder.AppendLine("Alive Players:");
             foreach (PlayerControllerB player in alivePlayers)
             {
-                stringBuilder.Append($"\n{player.playerUsername} - X:{Mathf.RoundToInt(player.transform.position.x)},Y:{Mathf.RoundToInt(player.transform.position.y)},Z:{Mathf.RoundToInt(player.transform.position.z)}").AppendLine();
+                stringBuilder.AppendLine($"\n{player.playerUsername} - X:{Mathf.RoundToInt(player.transform.position.x)},Y:{Mathf.RoundToInt(player.transform.position.y)},Z:{Mathf.RoundToInt(player.transform.position.z)}");
             }
-            stringBuilder.Append("Dead Players:").AppendLine();
+            stringBuilder.AppendLine("Dead Players:");
             foreach (PlayerControllerB player in deadPlayers)
             {
-                stringBuilder.Append($"\n{player.playerUsername} - X:{Mathf.RoundToInt(player.transform.position.x)},Y:{Mathf.RoundToInt(player.transform.position.y)},Z:{Mathf.RoundToInt(player.transform.position.z)}").AppendLine();
+                stringBuilder.AppendLine($"\n{player.playerUsername} - X:{Mathf.RoundToInt(player.transform.position.x)},Y:{Mathf.RoundToInt(player.transform.position.y)},Z:{Mathf.RoundToInt(player.transform.position.z)}");
             }
             stringBuilder.AppendLine();
             logger.LogInfo($"Scan players command found {alivePlayers.Length} alive players and {deadPlayers.Length} dead players.");
@@ -215,10 +217,10 @@ namespace MoreShipUpgrades.Misc
         {
             if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage(LguConstants.SCANNER_LEVEL_REQUIRED);
 
-            EnemyAI[] enemies = UnityEngine.Object.FindObjectsOfType<EnemyAI>().Where(enem => !enem.isEnemyDead).ToArray();
-            if (enemies.Length <= 0) return DisplayTerminalMessage("0 enemies detected\n\n");
+            EnemyAI[] enemies = Object.FindObjectsOfType<EnemyAI>().Where(enem => !enem.isEnemyDead).ToArray();
+            if (enemies.Length == 0) return DisplayTerminalMessage("0 enemies detected\n\n");
 
-            Dictionary<string, int> enemyCount = new Dictionary<string, int>();
+            Dictionary<string, int> enemyCount = new();
             if (!UpgradeBus.Instance.PluginConfiguration.VERBOSE_ENEMIES.Value)
             {
                 logger.LogInfo("Scan Enemies: Verbose mode = true");
@@ -242,14 +244,13 @@ namespace MoreShipUpgrades.Misc
                     if (enemyCount.ContainsKey(realName)) { enemyCount[realName]++; }
                     else { enemyCount.Add(realName, 1); }
                 }
-
             }
             logger.LogInfo($"Scan Enemies found {enemies.Length} alive enemies.");
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.Append($"Alive Enemies: {enemies.Length}").AppendLine();
+            StringBuilder stringBuilder = new();
+            stringBuilder.AppendLine($"Alive Enemies: {enemies.Length}");
             foreach (KeyValuePair<string, int> count in enemyCount)
             {
-                stringBuilder.Append($"{count.Key} - {count.Value}").AppendLine();
+                stringBuilder.AppendLine($"{count.Key} - {count.Value}");
             }
             stringBuilder.AppendLine();
             return DisplayTerminalMessage(stringBuilder.ToString());
@@ -259,9 +260,9 @@ namespace MoreShipUpgrades.Misc
         {
             if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage(LguConstants.SCANNER_LEVEL_REQUIRED);
 
-            List<GameObject> fireEscape = UnityEngine.Object.FindObjectsOfType<GameObject>().Where(obj => obj.name == "SpawnEntranceBTrigger").ToList();
-            List<EntranceTeleport> mainDoors = UnityEngine.Object.FindObjectsOfType<EntranceTeleport>().ToList();
-            List<EntranceTeleport> doorsToRemove = new List<EntranceTeleport>();
+            List<GameObject> fireEscape = Object.FindObjectsOfType<GameObject>().Where(obj => obj.name == "SpawnEntranceBTrigger").ToList();
+            List<EntranceTeleport> mainDoors = Object.FindObjectsOfType<EntranceTeleport>().ToList();
+            List<EntranceTeleport> doorsToRemove = [];
 
             foreach (EntranceTeleport door in mainDoors)
             {
@@ -275,35 +276,32 @@ namespace MoreShipUpgrades.Misc
             }
             PlayerControllerB player = StartOfRound.Instance.mapScreen.targetedPlayer;
 
-            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new();
             if (player.isInsideFactory)
             {
-                stringBuilder.Append($"Closest exits to {player.playerUsername} " +
+                stringBuilder.AppendLine($"Closest exits to {player.playerUsername} " +
                                     $"(X:{Mathf.RoundToInt(player.transform.position.x)}," +
                                     $"Y:{Mathf.RoundToInt(player.transform.position.y)}," +
-                                    $"Z:{Mathf.RoundToInt(player.transform.position.z)}):")
-                            .AppendLine();
+                                    $"Z:{Mathf.RoundToInt(player.transform.position.z)}):");
                 GameObject[] Closest3 = fireEscape.OrderBy(door => Vector3.Distance(door.transform.position, player.transform.position)).Take(3).ToArray();
                 foreach (Vector3 doorPosition in Closest3.Select(door => door.transform.position))
                 {
-                    stringBuilder.Append($"X:{Mathf.RoundToInt(doorPosition.x)}," +
+                    stringBuilder.AppendLine($"X:{Mathf.RoundToInt(doorPosition.x)}," +
                                         $"Y:{Mathf.RoundToInt(doorPosition.y)}," +
                                         $"Z:{Mathf.RoundToInt(doorPosition.z)} - " +
-                                        $"{Mathf.RoundToInt(Vector3.Distance(doorPosition, player.transform.position))} units away.")
-                                .AppendLine();
+                                        $"{Mathf.RoundToInt(Vector3.Distance(doorPosition, player.transform.position))} units away.");
                 }
                 logger.LogInfo($"Scan Doors, player is inside factory. Found {fireEscape.Count} doors.");
             }
             else
             {
-                stringBuilder.Append($"Entrances for {player.playerUsername} " +
+                stringBuilder.AppendLine($"Entrances for {player.playerUsername} " +
                                     $"(X:{Mathf.RoundToInt(player.transform.position.x)}," +
                                     $"Y:{Mathf.RoundToInt(player.transform.position.y)}," +
-                                    $"Z:{Mathf.RoundToInt(player.transform.position.z)}):")
-                            .AppendLine();
+                                    $"Z:{Mathf.RoundToInt(player.transform.position.z)}):");
                 foreach (Vector3 doorPosition in mainDoors.Select(door => door.transform.position))
                 {
-                    stringBuilder.Append($"X:{Mathf.RoundToInt(doorPosition.x)},Y:{Mathf.RoundToInt(doorPosition.y)},Z:{Mathf.RoundToInt(doorPosition.z)} - {Mathf.RoundToInt(Vector3.Distance(doorPosition, player.transform.position))} units away.").AppendLine();
+                    stringBuilder.AppendLine($"X:{Mathf.RoundToInt(doorPosition.x)},Y:{Mathf.RoundToInt(doorPosition.y)},Z:{Mathf.RoundToInt(doorPosition.z)} - {Mathf.RoundToInt(Vector3.Distance(doorPosition, player.transform.position))} units away.");
                 }
                 logger.LogInfo($"Scan Doors, player is outside factory. Found {mainDoors.Count} doors.");
             }
@@ -313,83 +311,76 @@ namespace MoreShipUpgrades.Misc
 
         private static TerminalNode ExecuteLategameCommands(string secondWord)
         {
-            switch (secondWord)
+            return secondWord switch
             {
-                case "commands": return ExecuteLGUCommands();
-                default: return ExecuteModInformation();
-            }
+                "commands" => ExecuteLGUCommands(),
+                _ => ExecuteModInformation(),
+            };
         }
         private static TerminalNode ExecuteResetCommands(string secondWord, ref TerminalNode outputNode)
         {
-            switch (secondWord)
+            return secondWord switch
             {
-                case "lgu": return ExecuteResetLGUSave();
-                default: return outputNode;
-            }
+                "lgu" => ExecuteResetLGUSave(),
+                _ => outputNode,
+            };
         }
         private static TerminalNode ExecuteLoadCommands(string secondWord, string fullText, ref Terminal terminal, ref TerminalNode outputNode)
         {
-            switch (secondWord)
+            return secondWord switch
             {
-                case "lgu": return ExecuteLoadLGUCommand(fullText, ref terminal);
-                default: return outputNode;
-            }
+                "lgu" => ExecuteLoadLGUCommand(fullText, ref terminal),
+                _ => outputNode,
+            };
         }
         private static TerminalNode ExecuteScanCommands(string secondWord, ref TerminalNode outputNode)
         {
-            switch (secondWord)
+            return secondWord switch
             {
-                case "hives": return ExecuteScanHivesCommand();
-                case "scrap": return ExecuteScanScrapCommand();
-                case "player": return ExecuteScanPlayerCommand();
-                case "enemies": return ExecuteScanEnemiesCommand();
-                case "doors": return ExecuteScanDoorsCommand();
-                default: return outputNode;
-            }
+                "hives" => ExecuteScanHivesCommand(),
+                "scrap" => ExecuteScanScrapCommand(),
+                "player" => ExecuteScanPlayerCommand(),
+                "enemies" => ExecuteScanEnemiesCommand(),
+                "doors" => ExecuteScanDoorsCommand(),
+                _ => outputNode,
+            };
         }
         private static TerminalNode ExecuteExtendDeadlineCommand(string daysString, ref Terminal terminal, ref TerminalNode outputNode)
         {
             if (!UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_ENABLED.Value) return outputNode;
 
-            if (daysString == "")
+            if (daysString.Length == 0)
                 return DisplayTerminalMessage(LguConstants.EXTEND_DEADLINE_USAGE);
 
-            if (!(int.TryParse(daysString, out int days) && days > 0)) 
+            if (!(int.TryParse(daysString, out int days) && days > 0))
                 return DisplayTerminalMessage(string.Format(LguConstants.EXTEND_DEADLINE_PARSING_ERROR_FORMAT, daysString));
 
-            int totalCost = ExtendDeadlineScript.instance.GetTotalCostPerDay(days);
+            int totalCost = ExtendDeadlineScript.Instance.GetTotalCostPerDay(days);
 
-            if (terminal.groupCredits < totalCost) 
+            if (terminal.groupCredits < totalCost)
                 return DisplayTerminalMessage(string.Format(LguConstants.EXTEND_DEADLINE_NOT_ENOUGH_CREDITS_FORMAT, totalCost, terminal.groupCredits));
 
             terminal.groupCredits -= totalCost;
             LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits);
-            ExtendDeadlineScript.instance.ExtendDeadlineServerRpc(days);
+            ExtendDeadlineScript.Instance.ExtendDeadlineServerRpc(days);
 
             return DisplayTerminalMessage($"Extended the deadline by {days} day{(days == 1 ? "" : "s")}.\n\n");
         }
         private static TerminalNode ExecuteExtendCommands(string secondWord, string thirdWord, ref Terminal terminal, ref TerminalNode outputNode)
         {
-            switch(secondWord)
+            return secondWord switch
             {
-                case "deadline": return ExecuteExtendDeadlineCommand(thirdWord, ref terminal, ref outputNode);
-                default: return outputNode;
-            }
-        }
-        private static TerminalNode ExecuteToggleCommands(string secondWord, ref TerminalNode outputNode)
-        {
-            switch (secondWord)
-            {
-                default: return outputNode;
-            }
+                "deadline" => ExecuteExtendDeadlineCommand(thirdWord, ref terminal, ref outputNode),
+                _ => outputNode,
+            };
         }
         private static TerminalNode ExecuteBruteForce(string secondWord)
         {
-            switch (secondWord)
+            return secondWord switch
             {
-                case "": return DisplayTerminalMessage(LguConstants.BRUTEFORCE_USAGE);
-                default: return HandleBruteForce(secondWord);
-            }
+                "" => DisplayTerminalMessage(LguConstants.BRUTEFORCE_USAGE),
+                _ => HandleBruteForce(secondWord),
+            };
         }
         public static void ParseLGUCommands(string fullText, ref Terminal terminal, ref TerminalNode outputNode)
         {
@@ -401,7 +392,6 @@ namespace MoreShipUpgrades.Misc
             {
                 case "demon": outputNode = LookupDemon(secondWord, thirdWord); return;
                 case "lookup": outputNode = DefuseBombCommand(secondWord); return;
-                case "toggle": outputNode = ExecuteToggleCommands(secondWord, ref outputNode); return;
                 case "bruteforce": outputNode= ExecuteBruteForce(secondWord); return;
                 case "initattack":
                 case "atk": outputNode = ExecuteDiscombobulatorAttack(ref terminal); return;
@@ -417,11 +407,11 @@ namespace MoreShipUpgrades.Misc
                 case "load": outputNode = ExecuteLoadCommands(secondWord, fullText, ref terminal, ref outputNode); return;
                 case "scan": outputNode = ExecuteScanCommands(secondWord, ref outputNode); return;
                 case "scrap": outputNode = ExecuteScrapCommands(secondWord, ref terminal, ref outputNode); return;
-                case "quantum": ExecuteQuantumCommands(secondWord, ref terminal, ref outputNode); return;
+                case "quantum": ExecuteQuantumCommands(ref terminal, ref outputNode); return;
                 default: return;
             }
         }
-        private static void ExecuteQuantumCommands(string word, ref Terminal terminal, ref TerminalNode outputNode)
+        private static void ExecuteQuantumCommands(ref Terminal terminal, ref TerminalNode outputNode)
         {
             if (!UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_ENABLED) return;
             if (!BaseUpgrade.GetActiveUpgrade(QuantumDisruptor.UPGRADE_NAME))
@@ -458,16 +448,16 @@ namespace MoreShipUpgrades.Misc
         }
         private static TerminalNode ExecuteScrapCommands(string secondWord, ref Terminal terminal, ref TerminalNode outputNode)
         {
-            switch(secondWord)
+            return secondWord switch
             {
-                case "insurance": return ExecuteScrapInsuranceCommand(ref terminal, ref outputNode);
-                default: return outputNode;
-            }
+                "insurance" => ExecuteScrapInsuranceCommand(ref terminal, ref outputNode),
+                _ => outputNode,
+            };
         }
         private static TerminalNode LookupDemon(string secondWord, string thirdWord)
         {
             string demon = secondWord.ToUpper();
-            if (demon == "DE" && thirdWord.ToUpper() == "OGEN") demon = demon + " " + thirdWord.ToUpper();
+            if (demon == "DE" && string.Equals(thirdWord, "OGEN", System.StringComparison.OrdinalIgnoreCase)) demon = demon + " " + thirdWord.ToUpper();
             if (PentagramScript.DemonInstructions.ContainsKey(demon))
             {
                 string[] items = PentagramScript.DemonInstructions[demon];
@@ -483,8 +473,8 @@ namespace MoreShipUpgrades.Misc
             {
                 return DisplayTerminalMessage(LguConstants.LOOKUP_NOT_IN_CONTRACT);
             }
-            if (secondWord == "") return DisplayTerminalMessage(LguConstants.LOOKUP_USAGE);
-            if (secondWord.ToLower() == ContractManager.Instance.SerialNumber.ToLower() || secondWord.ToLower() == ContractManager.Instance.SerialNumber.Replace("-","").ToLower())
+            if (secondWord.Length == 0) return DisplayTerminalMessage(LguConstants.LOOKUP_USAGE);
+            if (string.Equals(secondWord, ContractManager.Instance.SerialNumber, System.StringComparison.OrdinalIgnoreCase) || string.Equals(secondWord, ContractManager.Instance.SerialNumber.Replace("-", ""), System.StringComparison.OrdinalIgnoreCase))
             {
                 logger.LogInfo("DEFUSAL: user entered correct serial number!");
                 return DisplayTerminalMessage(string.Format(LguConstants.LOOKUP_CUT_WIRES_FORMAT, string.Join("\n\n", ContractManager.Instance.bombOrder)));
@@ -498,7 +488,7 @@ namespace MoreShipUpgrades.Misc
                     return DisplayTerminalMessage(string.Format(LguConstants.LOOKUP_CUT_WIRES_FORMAT, string.Join("\n\n", ContractManager.Instance.fakeBombOrders[secondWord])));
                 }
                 logger.LogInfo("DEFUSAL: Generating new fake defusal under this key.");
-                List<string> falseOrder = new List<string> { "red","green","blue" };
+                List<string> falseOrder = ["red","green","blue"];
                 Tools.ShuffleList(falseOrder);
                 ContractManager.Instance.fakeBombOrders.Add(secondWord, falseOrder);
                 return DisplayTerminalMessage(string.Format(LguConstants.LOOKUP_CUT_WIRES_FORMAT, string.Join("\n\n", falseOrder)));
@@ -507,7 +497,7 @@ namespace MoreShipUpgrades.Misc
 
         private static TerminalNode HandleBruteForce(string secondWord)
         {
-            string txt = null;
+            string txt;
             string ip = ContractManager.Instance.DataMinigameKey;
             if(secondWord == ip)
             {
@@ -519,7 +509,7 @@ namespace MoreShipUpgrades.Misc
             {
                 logger.LogInfo($"USER INCORRECTLY ENTERED IP ADDRESS! submitted: {secondWord}, expected: {ip}");
                 txt = $"PING {secondWord} ({secondWord}): 56 data bytes\r\nRequest timeout for icmp_seq 0\r\nRequest timeout for icmp_seq 1\r\nRequest timeout for icmp_seq 2\r\nRequest timeout for icmp_seq 3\r\n\r\n--- {secondWord} ping statistics ---\r\n4 packets transmitted, 0 packets received, 100.0% packet loss\n\n";
-                txt += $"CONNECTION FAILED -- INVALID ADDRESS?\n\n";
+                txt += "CONNECTION FAILED -- INVALID ADDRESS?\n\n";
             }
             return DisplayTerminalMessage(txt);
         }
@@ -534,13 +524,13 @@ namespace MoreShipUpgrades.Misc
         private static IEnumerator CountDownChat(float count)
         {
             HUDManager.Instance.chatText.text = "";
-            HUDManager.Instance.chatText.text += $"<color=#FFFFFF>Stun Duration: {count.ToString("F1")} seconds.</color>";
+            HUDManager.Instance.chatText.text += $"<color=#FFFFFF>Stun Duration: {count:F1} seconds.</color>";
             while (count > 0f)
             {
                 yield return new WaitForSeconds(1f);
-                count -= 1f;
+                count--;
                 HUDManager.Instance.chatText.text = "";
-                HUDManager.Instance.chatText.text += $"<color=#FFFFFF>Stun Duration: {count.ToString("F1")} seconds.</color>";
+                HUDManager.Instance.chatText.text += $"<color=#FFFFFF>Stun Duration: {count:F1} seconds.</color>";
             }
             HUDManager.Instance.chatText.text = "";
             HUDManager.Instance.chatText.text += "\n<color=#FF0000>Effected enemies are no longer stunned!</color>";

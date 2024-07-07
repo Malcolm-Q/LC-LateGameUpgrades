@@ -56,5 +56,4 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             ItemProgressionManager.CheckNewQuota(__instance.quotaFulfilled);
         }
     }
-
 }

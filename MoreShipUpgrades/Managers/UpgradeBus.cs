@@ -36,7 +36,6 @@ namespace MoreShipUpgrades.Managers
 
         internal AudioClip flashNoise;
         internal GameObject modStorePrefab;
-        internal TerminalNode modStoreInterface;
 
         internal Dictionary<string, SpawnableMapObjectDef> spawnableMapObjects = [];
         internal Dictionary<string, int> spawnableMapObjectsAmount = [];
@@ -56,7 +55,6 @@ namespace MoreShipUpgrades.Managers
 
         internal Dictionary<string, AudioClip> SFX = [];
         internal bool helmetDesync;
-        internal bool IsBeta = false;
         internal int daysExtended = 0;
 
         Terminal terminal;

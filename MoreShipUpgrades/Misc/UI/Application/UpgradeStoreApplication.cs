@@ -10,6 +10,7 @@ using MoreShipUpgrades.Misc.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Xml.Linq;
 using UnityEngine;
 
@@ -80,13 +81,13 @@ namespace MoreShipUpgrades.Misc.UI.Application
         string GetCurrentSort()
         {
             int currentSort = currentCursorMenu.sortingIndex;
-            switch(currentSort)
+            return currentSort switch
             {
-                case 0: return "Sorted by: Alphabetical";
-                case 1: return "Sorted by: Price (Ascending)";
-                case 2: return "Sorted by: Price (Descending)";
-                default: return "";
-            }
+                0 => "Sorted by: Alphabetical",
+                1 => "Sorted by: Price (Ascending)",
+                2 => "Sorted by: Price (Descending)",
+                _ => "",
+            };
         }
         int CompareName(CursorElement cursor1, CursorElement cursor2)
         {
@@ -126,10 +127,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
 
             int groupCredits = UpgradeBus.Instance.GetTerminal().groupCredits;
             int price = node.GetCurrentPrice();
-            if (groupCredits < price)
-                return false;
-
-            return true;
+            return groupCredits >= price;
         }
         public void BuyUpgrade(CustomTerminalNode node, Action backAction)
         {
@@ -146,16 +144,16 @@ namespace MoreShipUpgrades.Misc.UI.Application
                 ErrorMessage(node.Name, node.Description, backAction, LguConstants.NOT_ENOUGH_CREDITS);
                 return;
             }
-            string discoveredItems = string.Empty;
+            StringBuilder discoveredItems = new();
             List<string> items = ItemProgressionManager.GetDiscoveredItems(node);
             if (items.Count > 0)
             {
-                discoveredItems = "\n\nDiscovered items: ";
+                discoveredItems.Append("\n\nDiscovered items: ");
                 for (int i = 0; i < items.Count; i++)
                 {
                     string item = items[i];
-                    discoveredItems += item;
-                    if (i < items.Count - 1) discoveredItems += ", ";
+                    discoveredItems.Append(item);
+                    if (i < items.Count - 1) discoveredItems.Append(", ");
                 }
             }
             Confirm(node.Name, node.Description + discoveredItems, () => PurchaseUpgrade(node, price, backAction), backAction, string.Format(LguConstants.PURCHASE_UPGRADE_FORMAT, price));

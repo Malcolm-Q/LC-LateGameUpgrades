@@ -17,8 +17,8 @@ using InteractiveTerminalAPI.UI;
 
 namespace MoreShipUpgrades
 {
-    [BepInPlugin(Metadata.GUID,Metadata.NAME,Metadata.VERSION)]
-    [BepInDependency("evaisa.lethallib","0.13.0")]
+    [BepInPlugin(Metadata.GUID, Metadata.NAME, Metadata.VERSION)]
+    [BepInDependency("evaisa.lethallib", "0.13.0")]
     [BepInDependency("com.sigurd.csync")]
     [BepInDependency("com.rune580.LethalCompanyInputUtils")]
     [BepInDependency("WhiteSpike.InteractiveTerminalAPI")]
@@ -28,7 +28,7 @@ namespace MoreShipUpgrades
 
         void Awake()
         {
-            LategameConfiguration config = new LategameConfiguration(Config);
+            LategameConfiguration config = new(Config);
             // netcode patching stuff
             IEnumerable<Type> types;
             try
@@ -56,10 +56,12 @@ namespace MoreShipUpgrades
             string assetDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "shipupgrades");
             AssetBundle UpgradeAssets = AssetBundle.LoadFromFile(assetDir);
 
-            GameObject gameObject = new GameObject("UpgradeBus");
-            gameObject.hideFlags = HideFlags.HideAndDontSave;
+            GameObject gameObject = new("UpgradeBus")
+            {
+                hideFlags = HideFlags.HideAndDontSave
+            };
             gameObject.AddComponent<UpgradeBus>();
-            gameObject = new GameObject("SpawnItemManager");
+            gameObject = new("SpawnItemManager");
             gameObject.AddComponent<ItemManager>();
 
             UpgradeBus.Instance.UpgradeAssets = UpgradeAssets;
@@ -130,5 +132,5 @@ namespace MoreShipUpgrades
             }
             mls.LogInfo("Commands have been setup");
         }
-    }   
+    }
 }

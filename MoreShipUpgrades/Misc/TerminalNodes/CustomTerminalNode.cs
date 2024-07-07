@@ -69,7 +69,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
             Visible = visible;
         }
 
-        public bool IsVisible() 
+        public bool IsVisible()
         {
             return Visible;
         }

@@ -40,7 +40,7 @@ namespace MoreShipUpgrades.Managers
         /// <summary>
         /// Old save format of Lategame Upgrades
         /// </summary>
-        public LGUSaveV1 oldSave;
+        LGUSaveV1 oldSave;
         /// <summary>
         /// Player identifier of the client
         /// </summary>
@@ -125,7 +125,8 @@ namespace MoreShipUpgrades.Managers
             LguSave.scrapToUpgrade = UpgradeBus.Instance.scrapToCollectionUpgrade;
             LguSave.contributedValues = UpgradeBus.Instance.contributionValues;
             LguSave.discoveredItems = UpgradeBus.Instance.discoveredItems;
-            LguSave.randomUpgradeSeed = RandomizeUpgradeManager.randomUpgradeSeed;
+            ItemProgressionManager.Save();
+            RandomizeUpgradeManager.Save();
             string json = JsonConvert.SerializeObject(LguSave);
             ES3.Save(key: saveDataKey, value: json, filePath: saveFile);
             if (resetCredits) PlayerManager.instance.ResetUpgradeSpentCredits();
@@ -688,7 +689,7 @@ namespace MoreShipUpgrades.Managers
         [ServerRpc(RequireOwnership = false)]
         internal void RandomizeUpgradesServerRpc()
         {
-            RandomizeUpgradesClientRpc(RandomizeUpgradeManager.randomUpgradeSeed);
+            RandomizeUpgradesClientRpc(RandomizeUpgradeManager.GetRandomUpgradeSeed());
         }
 
         [ClientRpc]
@@ -717,9 +718,9 @@ namespace MoreShipUpgrades.Managers
     public class LguSave
     {
         public Dictionary<ulong, SaveInfo> playerSaves = [];
-        public Dictionary<string, List<string>> scrapToUpgrade = UpgradeBus.Instance.scrapToCollectionUpgrade;
-        public Dictionary<string, int> contributedValues = UpgradeBus.Instance.contributionValues;
-        public List<string> discoveredItems = UpgradeBus.Instance.discoveredItems;
-        public int randomUpgradeSeed = RandomizeUpgradeManager.randomUpgradeSeed;
+        public Dictionary<string, List<string>> scrapToUpgrade;
+        public Dictionary<string, int> contributedValues;
+        public List<string> discoveredItems;
+        public int randomUpgradeSeed;
     }
 }
