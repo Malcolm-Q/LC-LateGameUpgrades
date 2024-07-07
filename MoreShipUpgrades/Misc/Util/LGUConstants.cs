@@ -102,6 +102,17 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string ITEM_PROGRESSION_BLACKLISTED_ITEMS_DEFAULT = "Clipboard";
         internal const string ITEM_PROGRESSION_BLACKLISTED_ITEMS_DESCRIPTION = "Blacklisted items for Item Progression.\nOnly used if Item Progression Mode is set to UniqueScrap. These items will NOT contribute towards ANY upgrade";
 
+        internal const string ITEM_PROGRESSION_BLACKLIST_ITEMS_ENTRY_DELIMITER = ",";
+
+        internal const string ITEM_PROGRESSION_APPARATICE_ITEMS_KEY = "Apparatus Items";
+        internal const string ITEM_PROGRESSION_APPARATICE_ITEMS_DEFAULT = $"Apparatus{ITEM_PROGRESSION_APPARATICE_ITEMS_ATTRIBUTE_DELIMITER}1{ITEM_PROGRESSION_APPARATICE_ITEMS_ENTRY_DELIMITER}ExampleItemName{ITEM_PROGRESSION_APPARATICE_ITEMS_ATTRIBUTE_DELIMITER}2";
+        internal const string ITEM_PROGRESSION_APPARATICE_ITEMS_DESCRIPTION = "Items that are considered \"Apparatice\" and provide a set amount of upgrades once sold to The Company.\n" +
+                                                                            "The item name is either the one displayed in the scan node or its internal name.\n" +
+                                                                            "This list is only valid if Item Progression Mode is set to Apparatice.";
+
+        internal const string ITEM_PROGRESSION_APPARATICE_ITEMS_ENTRY_DELIMITER = ",";
+        internal const string ITEM_PROGRESSION_APPARATICE_ITEMS_ATTRIBUTE_DELIMITER = "@";
+
         internal const string ITEM_PROGRESSION_ITEMS_KEY = "Contribution Items";
         internal const string ITEM_PROGRESSION_ITEMS_DEFAULT = "";
         internal const string ITEM_PROGRESSION_ITEMS_DESCRIPTION = "Items that when sold contribute to the purchase of the upgrade. Either the scan node's name or ItemProperties.itemName can be inserted here";

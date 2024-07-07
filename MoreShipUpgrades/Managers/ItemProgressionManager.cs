@@ -1,5 +1,6 @@
 ﻿using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.Misc.Util;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -27,6 +28,7 @@ namespace MoreShipUpgrades.Managers
         }
         static readonly List<string> blacklistedItems = [];
         static readonly Dictionary<string, int> contributedRecently = [];
+        static readonly Dictionary<string, int> apparatusItems = [];
         internal static CollectionModes CurrentCollectionMode
         {
             get
@@ -55,13 +57,32 @@ namespace MoreShipUpgrades.Managers
                 return UpgradeBus.Instance.PluginConfiguration.ITEM_PROGRESSION_CONTRIBUTION_MULTIPLIER;
             }
         }
-        static void ExecuteApparaticeLogic(string scrapName)
+        static void ExecuteApparaticeLogic(GrabbableObject scrapItem, string scrapName)
         {
-            if (scrapName != "apparatus") return;
+            if (!apparatusItems.ContainsKey(scrapName))
+            {
+                Plugin.mls.LogInfo($"{scrapName} from ItemProperties was not found in the dictionary, looking through scan node...");
+                ScanNodeProperties node = scrapItem.GetComponentInChildren<ScanNodeProperties>();
+                if (node == null)
+                {
+                    Plugin.mls.LogWarning($"{scrapName} doesn't have a scan node, skipping...");
+                    return;
+                }
+                scrapName = node.headerText.ToLower().Trim();
+                if (!apparatusItems.ContainsKey(scrapName))
+                {
+                    Plugin.mls.LogWarning($"{scrapName} from Scan Node was not found in the dictionary.");
+                    return;
+                }
+            }
+            int upgrades = apparatusItems[scrapName];
 
-            CustomTerminalNode randomNode = PickRandomUpgrade();
-            LguStore.Instance.HandleUpgradeForNoHostClientRpc(randomNode.OriginalName, randomNode.Unlocked);
-            LguStore.Instance.UpdateUpgrades(randomNode, randomNode.Unlocked);
+            for(int i = 0; i < upgrades; i++)
+            {
+                CustomTerminalNode randomNode = PickRandomUpgrade();
+                LguStore.Instance.HandleUpgradeForNoHostClientRpc(randomNode.OriginalName, randomNode.Unlocked);
+                LguStore.Instance.UpdateUpgrades(randomNode, randomNode.Unlocked);
+            }
         }
 
         static void ExecuteChancerPerScrapLogic()
@@ -121,7 +142,7 @@ namespace MoreShipUpgrades.Managers
             {
                 case CollectionModes.Apparatice:
                     {
-                        ExecuteApparaticeLogic(scrapName);
+                        ExecuteApparaticeLogic(scrapItem, scrapName);
                         break;
                     }
                 case CollectionModes.ChancePerScrap:
@@ -169,7 +190,29 @@ namespace MoreShipUpgrades.Managers
             }
             return currentNode;
         }
-
+        public static void InitializeBlacklistItems()
+        {
+            blacklistedItems.Clear();
+            string configuredValue = UpgradeBus.Instance.PluginConfiguration.ITEM_PROGRESSION_BLACKLISTED_ITEMS;
+            foreach (string entry in configuredValue.Split(LguConstants.ITEM_PROGRESSION_BLACKLIST_ITEMS_ENTRY_DELIMITER))
+            {
+                blacklistedItems.Add(entry.ToLower());
+            }
+        }
+        const int ITEM_NAME_INDEX = 0;
+        const int ITEM_UPGRADE_COUNTER_INDEX = 1;
+        public static void InitializeApparatusItems()
+        {
+            apparatusItems.Clear();
+            string configuredValue = UpgradeBus.Instance.PluginConfiguration.ITEM_PROGRESSION_APPARATICE_ITEMS;
+            foreach (string entry in configuredValue.Split(LguConstants.ITEM_PROGRESSION_APPARATICE_ITEMS_ENTRY_DELIMITER))
+            {
+                string[] item = entry.Split(LguConstants.ITEM_PROGRESSION_APPARATICE_ITEMS_ATTRIBUTE_DELIMITER);
+                string itemName = item[ITEM_NAME_INDEX];
+                int.TryParse(item[ITEM_UPGRADE_COUNTER_INDEX], out int value);
+                apparatusItems[itemName.ToLower()] = value;
+            }
+        }
         private static bool IsBlacklisted(string scrapName)
         {
             return blacklistedItems.Contains(scrapName);
@@ -177,7 +220,7 @@ namespace MoreShipUpgrades.Managers
 
         public static CustomTerminalNode PickRandomUpgrade()
         {
-            return UpgradeBus.Instance.terminalNodes.ToArray()[UnityEngine.Random.Range(0, UpgradeBus.Instance.terminalNodes.Count)];
+            return UpgradeBus.Instance.terminalNodes[UnityEngine.Random.Range(0, UpgradeBus.Instance.terminalNodes.Count)];
         }
         static void AssignRandomScrap()
         {

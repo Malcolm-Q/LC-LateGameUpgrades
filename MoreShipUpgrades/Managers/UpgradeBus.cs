@@ -262,6 +262,8 @@ namespace MoreShipUpgrades.Managers
 
             terminalNodes.Sort();
             ItemProgressionManager.InitializeContributionValues();
+            ItemProgressionManager.InitializeBlacklistItems();
+            ItemProgressionManager.InitializeApparatusItems();
         }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can be purchased multiple times
