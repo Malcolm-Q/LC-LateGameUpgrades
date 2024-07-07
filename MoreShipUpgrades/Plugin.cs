@@ -74,10 +74,10 @@ namespace MoreShipUpgrades
             InputUtilsCompat.Init();
             PatchManager.PatchMainVersion();
 
-            InteractiveTerminalManager.RegisterApplication<UpgradeStoreApplication>(["lgu", "lategame store"]);
-            InteractiveTerminalManager.RegisterApplication<WeatherProbeApplication>("probe");
-            InteractiveTerminalManager.RegisterApplication<ExtendDeadlineApplication>("extend deadline");
-            InteractiveTerminalManager.RegisterApplication<ContractApplication>(["contracts", "contract"]);
+            InteractiveTerminalManager.RegisterApplication<UpgradeStoreApplication>(["lgu", "lategame store"], caseSensitive: false);
+            InteractiveTerminalManager.RegisterApplication<WeatherProbeApplication>("probe", caseSensitive: false);
+            InteractiveTerminalManager.RegisterApplication<ExtendDeadlineApplication>("extend deadline", caseSensitive: false);
+            InteractiveTerminalManager.RegisterApplication<ContractApplication>(["contracts", "contract"], caseSensitive: false);
 
             mls.LogInfo($"{Metadata.NAME} {Metadata.VERSION} has been loaded successfully.");
         }
