@@ -7,6 +7,14 @@ using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.RadarBooster;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.WeedKiller;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Zapgun;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Store;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Vehicle;
 using UnityEngine;
 
@@ -177,6 +185,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string WEED_GENETIC_MANIPULATION_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, WeedGeneticManipulation.UPGRADE_NAME);
         internal static readonly string IGNITION_COIL_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, IgnitionCoil.UPGRADE_NAME);
         internal static readonly string FLUFFY_SEATS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, FluffySeats.UPGRADE_NAME);
         internal static readonly string IMPROVED_STEERING_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ImprovedSteering.UPGRADE_NAME);
@@ -604,6 +613,25 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Weed Genetic Manipulation
+
+        internal const string WEED_GENETIC_MANIPULATION_ENABLED_KEY = $"Enable {WeedGeneticManipulation.UPGRADE_NAME} Upgrade";
+        internal const bool WEED_GENETIC_MANIPULATION_ENABLED_DEFAULT = true;
+        internal const string WEED_GENETIC_MANIPULATION_ENABLED_DESCRIPTION = "Tier upgrade which increases the effectiveness of the Weed Killer on eradicating plants";
+
+        internal const string WEED_GENETIC_MANIPULATION_PRICE_KEY = $"Price of {WeedGeneticManipulation.UPGRADE_NAME} Upgrade";
+        internal const int WEED_GENETIC_MANIPULATION_PRICE_DEFAULT = 100;
+
+        internal const string WEED_GENETIC_INITIAL_EFFECTIVENESS_INCREASE_KEY = "Initial Effectiveness Increase";
+        internal const int WEED_GENETIC_INITIAL_EFFECTIVENESS_INCREASE_DEFAULT = 50;
+        internal const string WEED_GENETIC_INITIAL_EFFECTIVENESS_INCREASE_DESCRIPTION = "Amount of effectiveness (%) when first purchasing the upgrade increased on the Weed Killer to eradicate plants";
+
+        internal const string WEED_GENETIC_INCREMENTAL_EFFECTIVENESS_INCREASE_KEY = "Incremental Effectiveness Increase";
+        internal const int WEED_GENETIC_INCREMENTAL_EFFECTIVENESS_INCREASE_DEFAULT = 25;
+        internal const string WEED_GENETIC_INCREMENTAL_EFFECTIVENESS_INCREASE_DESCRIPTION = "Amount of effectiveness (%) when purchasing further levels of the upgrade increased on the Weed Killer to eradicate plants";
+
+        #endregion
 
         #region Ignition Coil
 

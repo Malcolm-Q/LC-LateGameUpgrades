@@ -8,7 +8,7 @@ using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System;
 using UnityEngine;
 
-namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
+namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 {
     public class BackMuscles : TierUpgrade, IUpgradeWorldBuilding
     {
@@ -76,7 +76,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             if (!enabled) return defaultWeight;
             if (CurrentUpgradeMode != intendedMode) return defaultWeight;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultWeight;
-            return Mathf.Max(defaultWeight * (UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_REDUCTION.Value - (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_INCREMENT.Value)), lowerBound);
+            return Mathf.Max(defaultWeight * (UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_REDUCTION.Value - GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_INCREMENT.Value), lowerBound);
         }
 
         public static void UpdatePlayerWeight()
@@ -104,9 +104,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            Func<int, float> infoFunction = level => (UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_REDUCTION.Value - (level * UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_INCREMENT.Value)) * 100;
+            Func<int, float> infoFunction = level => (UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_REDUCTION.Value - level * UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_INCREMENT.Value) * 100;
             string infoFormat;
-            switch(CurrentUpgradeMode)
+            switch (CurrentUpgradeMode)
             {
                 case UpgradeMode.ReduceWeight:
                     {

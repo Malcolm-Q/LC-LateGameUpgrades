@@ -68,6 +68,7 @@ namespace MoreShipUpgrades.Managers
             harmony.PatchAll(typeof(RadarBoosterPatcher));
             harmony.PatchAll(typeof(ShovelPatcher));
             harmony.PatchAll(typeof(WalkiePatcher));
+            harmony.PatchAll(typeof(SprayPaintItemPatcher));
             Plugin.mls.LogInfo("Items have been patched");
         }
         static void PatchVitalComponents()

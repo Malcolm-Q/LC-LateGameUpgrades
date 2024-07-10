@@ -5,7 +5,7 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
 
-namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
+namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {
     internal class ReinforcedBoots : TierUpgrade
     {
@@ -18,13 +18,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         }
         public static int ReduceFallDamage(int defaultValue)
         {
-            if (!(GetActiveUpgrade(UPGRADE_NAME))) return defaultValue;
-            float multiplier = 1f - ((UpgradeBus.Instance.PluginConfiguration.REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION)) / 100f);
+            if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
+            float multiplier = 1f - (UpgradeBus.Instance.PluginConfiguration.REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION) / 100f;
             return (int)Mathf.Clamp(defaultValue * multiplier, 0f, defaultValue);
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION.Value + (level * UpgradeBus.Instance.PluginConfiguration.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION.Value);
+            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION.Value + level * UpgradeBus.Instance.PluginConfiguration.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION.Value;
             string infoFormat = "LVL {0} - ${1} - Reduces fall damage by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }

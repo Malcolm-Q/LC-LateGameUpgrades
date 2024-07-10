@@ -5,7 +5,7 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Text;
 
-namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
+namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {
     class BetterScanner : TierUpgrade, IUpgradeWorldBuilding
     {
@@ -82,7 +82,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                                                 configuration.SHARED_UPGRADES.Value || !configuration.BETTER_SCANNER_INDIVIDUAL.Value,
                                                 configuration.BETTER_SCANNER_ENABLED.Value,
                                                 configuration.BETTER_SCANNER_PRICE.Value,
-                                                [ configuration.BETTER_SCANNER_PRICE2.Value, configuration.BETTER_SCANNER_PRICE3.Value],
+                                                [configuration.BETTER_SCANNER_PRICE2.Value, configuration.BETTER_SCANNER_PRICE3.Value],
                                                 configuration.OVERRIDE_UPGRADE_NAMES ? configuration.BETTER_SCANNER_OVERRIDE_NAME : ""
                                                 );
         }

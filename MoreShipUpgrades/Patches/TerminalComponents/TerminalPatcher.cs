@@ -8,6 +8,7 @@ using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.Patches.Items;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Store;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;

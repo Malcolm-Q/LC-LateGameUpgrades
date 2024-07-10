@@ -7,7 +7,7 @@ using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System;
 using UnityEngine;
 
-namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
+namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {
     internal class RunningShoes : TierUpgrade, IUpgradeWorldBuilding
     {
@@ -42,7 +42,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             if (!UpgradeBus.Instance.PluginConfiguration.RUNNING_SHOES_ENABLED) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
-            float additionalValue = UpgradeBus.Instance.PluginConfiguration.MOVEMENT_SPEED_UNLOCK + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.MOVEMENT_INCREMENT);
+            float additionalValue = UpgradeBus.Instance.PluginConfiguration.MOVEMENT_SPEED_UNLOCK + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.MOVEMENT_INCREMENT;
             return Mathf.Clamp(defaultValue + additionalValue, defaultValue, float.MaxValue);
         }
 

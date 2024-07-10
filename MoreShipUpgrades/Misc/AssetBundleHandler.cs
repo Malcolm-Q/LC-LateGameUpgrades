@@ -3,6 +3,14 @@ using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.RadarBooster;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.WeedKiller;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Zapgun;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Store;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Vehicle;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -133,6 +141,7 @@ namespace MoreShipUpgrades.Misc
             { ImprovedSteering.UPGRADE_NAME, upgrades+"ImprovedSteering.prefab" },
             { FluffySeats.UPGRADE_NAME, upgrades+"FluffySeats.prefab" },
             { IgnitionCoil.UPGRADE_NAME, upgrades+"IgnitionCoil.prefab" },
+            { WeedGeneticManipulation.UPGRADE_NAME, upgrades+"WeedGeneticManipulation.prefab" },
 
             { "Advanced Portable Tele", storeItems+"TpButtonAdv.asset" },
             { "Portable Tele", storeItems+"TpButton.asset" },

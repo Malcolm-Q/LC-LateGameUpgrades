@@ -8,7 +8,7 @@ using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
+namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.RadarBooster
 {
     internal class ChargingBooster : TierUpgrade
     {
@@ -30,7 +30,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             base.Load();
             RadarBoosterItem[] radarBoosters = FindObjectsOfType<RadarBoosterItem>();
-            for(int i = 0; i < radarBoosters.Length; i++)
+            for (int i = 0; i < radarBoosters.Length; i++)
             {
                 RadarBoosterItem radarBooster = radarBoosters[i];
                 if (radarBooster.GetComponent<ChargingStationManager>() != null) continue;
@@ -58,9 +58,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_COOLDOWN.Value - ((level+1) * UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE.Value);
+            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_COOLDOWN.Value - (level + 1) * UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE.Value;
             string infoFormat = "LVL {0} - ${1} - Radar boosters will have a recharge cooldown of {2} seconds.\n";
-            
+
             return $"LVL 1 - ${initialPrice} -  Provides charging stations to the radar boosters. After used, goes on cooldown for {UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_COOLDOWN.Value} seconds\n" + Tools.GenerateInfoForUpgrade(infoFormat, 0, incrementalPrices.ToArray(), infoFunction, skipFirst: true);
         }
         public override bool CanInitializeOnStart

@@ -5,7 +5,7 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
 
-namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
+namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {
     internal class MechanicalArms : TierUpgrade
     {
@@ -27,13 +27,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.MECHANICAL_ARMS_INITIAL_RANGE_INCREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE.Value);
+            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.MECHANICAL_ARMS_INITIAL_RANGE_INCREASE.Value + level * UpgradeBus.Instance.PluginConfiguration.MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE.Value;
             string infoFormat = "LVL {0} - ${1} - Increases the player's interaction range by {2} units.\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
         public override bool CanInitializeOnStart
         {
-            get 
+            get
             {
                 string[] prices = UpgradeBus.Instance.PluginConfiguration.MECHANICAL_ARMS_PRICES.Value.Split(',');
                 bool free = UpgradeBus.Instance.PluginConfiguration.MECHANICAL_ARMS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");

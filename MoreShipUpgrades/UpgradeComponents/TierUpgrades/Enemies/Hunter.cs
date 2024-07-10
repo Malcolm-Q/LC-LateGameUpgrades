@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
+namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies
 {
     class Hunter : TierUpgrade, IUpgradeWorldBuilding
     {
@@ -68,7 +68,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             levels = [];
             string[] tiersList = UpgradeBus.Instance.PluginConfiguration.HUNTER_SAMPLE_TIERS.Value.ToLower().Split('-');
-            for (int level = 0; level < tiersList.Length;  ++level)
+            for (int level = 0; level < tiersList.Length; ++level)
             {
                 foreach (string monster in tiersList[level].Split(',').Select(x => x.Trim().ToLower()))
                 {
@@ -105,9 +105,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 return false;
             }
 
-            if (levels.TryGetValue(monsterName, out int harvestLevel)) {
-                logger.LogDebug($"{monsterName} can be harvested at level {harvestLevel+1}");
-                return harvestLevel <= BaseUpgrade.GetUpgradeLevel(UPGRADE_NAME);
+            if (levels.TryGetValue(monsterName, out int harvestLevel))
+            {
+                logger.LogDebug($"{monsterName} can be harvested at level {harvestLevel + 1}");
+                return harvestLevel <= GetUpgradeLevel(UPGRADE_NAME);
             }
 
             logger.LogDebug($"{monsterName} cannot be harvested at any level");

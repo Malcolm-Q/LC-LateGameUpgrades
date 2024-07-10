@@ -20,6 +20,8 @@ using HarmonyLib;
 using static MoreShipUpgrades.Managers.ItemProgressionManager;
 using MoreShipUpgrades.Misc.Util;
 using System.Text;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies;
 
 namespace MoreShipUpgrades.Managers
 {

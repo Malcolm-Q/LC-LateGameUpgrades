@@ -15,7 +15,7 @@ using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 
-namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
+namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {
     internal class NightVision : TierUpgrade, IPlayerSync
     {
@@ -120,7 +120,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         }
 
         private void TurnOn()
-    {
+        {
             nightVisColor = client.nightVision.color;
             nightVisRange = client.nightVision.range;
             nightVisIntensity = client.nightVision.intensity;
@@ -254,7 +254,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
 
-            CustomTerminalNode node = UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(NightVision.UPGRADE_NAME,
+            CustomTerminalNode node = UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
                                                 configuration.SHARED_UPGRADES.Value || !configuration.NIGHT_VISION_INDIVIDUAL.Value,
                                                 configuration.NIGHT_VISION_ENABLED.Value,
                                                 0,

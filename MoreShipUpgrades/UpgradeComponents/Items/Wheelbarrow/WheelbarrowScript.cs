@@ -4,7 +4,7 @@ using LethalLib.Modules;
 using MoreShipUpgrades.Input;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using System;
 using System.Collections.Generic;
 using Unity.Netcode;

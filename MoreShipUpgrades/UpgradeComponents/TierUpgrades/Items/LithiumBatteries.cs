@@ -4,7 +4,7 @@ using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 
-namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
+namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items
 {
     internal class LithiumBatteries : TierUpgrade
     {
@@ -27,7 +27,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.LITHIUM_BATTERIES_INITIAL_MULTIPLIER.Value + (level * UpgradeBus.Instance.PluginConfiguration.LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER.Value);
+            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.LITHIUM_BATTERIES_INITIAL_MULTIPLIER.Value + level * UpgradeBus.Instance.PluginConfiguration.LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER.Value;
             string infoFormat = "LVL {0} - ${1} - Decreases the rate of battery used on the items by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
