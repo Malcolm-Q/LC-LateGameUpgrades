@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
+namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Vehicle
 {
     internal class SuperchargedPistons : TierUpgrade
     {
@@ -71,7 +71,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.SUPERCHARGED_PISTONS_ENGINE_TORQUE_INITIAL_INCREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.SUPERCHARGED_PISTONS_ENGINE_TORQUE_INCREMENTAL_INCREASE.Value);
+            Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.SUPERCHARGED_PISTONS_ENGINE_TORQUE_INITIAL_INCREASE.Value + level * UpgradeBus.Instance.PluginConfiguration.SUPERCHARGED_PISTONS_ENGINE_TORQUE_INCREMENTAL_INCREASE.Value;
             const string infoFormat = "LVL {0} - ${1} - Company Cruiser vehicle's maximum speed is increased by {2}.\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }

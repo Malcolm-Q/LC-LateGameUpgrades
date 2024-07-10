@@ -5,7 +5,7 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
 
-namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
+namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Vehicle
 {
     internal class RapidMotors : TierUpgrade
     {
@@ -67,7 +67,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.RAPID_MOTORS_ACCELERATION_INITIAL_INCREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.RAPID_MOTORS_ACCELERATION_INCREMENTAL_INCREASE.Value);
+            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.RAPID_MOTORS_ACCELERATION_INITIAL_INCREASE.Value + level * UpgradeBus.Instance.PluginConfiguration.RAPID_MOTORS_ACCELERATION_INCREMENTAL_INCREASE.Value;
             const string infoFormat = "LVL {0} - ${1} - Company Cruiser vehicle's maximum acceleration is increased by {2}.\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }

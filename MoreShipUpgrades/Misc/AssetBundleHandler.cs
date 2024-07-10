@@ -3,6 +3,7 @@ using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Vehicle;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using UnityEngine;
@@ -130,6 +131,8 @@ namespace MoreShipUpgrades.Misc
             { RapidMotors.UPGRADE_NAME, upgrades+"RapidMotors.prefab" },
             { SuperchargedPistons.UPGRADE_NAME, upgrades+"SuperchargedPistons.prefab" },
             { ImprovedSteering.UPGRADE_NAME, upgrades+"ImprovedSteering.prefab" },
+            { FluffySeats.UPGRADE_NAME, upgrades+"FluffySeats.prefab" },
+            { IgnitionCoil.UPGRADE_NAME, upgrades+"IgnitionCoil.prefab" },
 
             { "Advanced Portable Tele", storeItems+"TpButtonAdv.asset" },
             { "Portable Tele", storeItems+"TpButton.asset" },

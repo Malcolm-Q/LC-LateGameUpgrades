@@ -7,6 +7,7 @@ using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Vehicle;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Misc.Util
@@ -176,6 +177,8 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string IGNITION_COIL_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, IgnitionCoil.UPGRADE_NAME);
+        internal static readonly string FLUFFY_SEATS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, FluffySeats.UPGRADE_NAME);
         internal static readonly string IMPROVED_STEERING_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ImprovedSteering.UPGRADE_NAME);
         internal static readonly string SUPERCHARGED_PISTONS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, SuperchargedPistons.UPGRADE_NAME);
         internal static readonly string RAPID_MOTORS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, RapidMotors.UPGRADE_NAME);
@@ -601,6 +604,43 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Ignition Coil
+
+        internal const string IGNITION_COIL_ENABLED_KEY = $"Enable {IgnitionCoil.UPGRADE_NAME} Upgrade";
+        internal const bool IGNITION_COIL_ENABLED_DEFAULT = true;
+        internal const string IGNITION_COIL_ENABLED_DESCRIPTION = "Tier upgrade which increases the chance of ignition to turn on the Company Cruiser Vehicle.";
+
+        internal const string IGNITION_COIL_PRICE_KEY = $"Price of {IgnitionCoil.UPGRADE_NAME} Upgrade";
+        internal const int IGNITION_COIL_PRICE_DEFAULT = 50;
+
+        internal const string IGNITION_COIL_IGNITION_INITIAL_CHANCE_INCREASE_KEY = "Initial Ignition Chance Increase";
+        internal const int IGNITION_COIL_IGNITION_INITIAL_CHANCE_INCREASE_DEFAULT = 25;
+        internal const string IGNITION_COIL_IGNITION_INITIAL_CHANCE_INCREASE_DESCRIPTION = "Amount of chance (%) increased when first purchasing the upgrade to ignite on the Company Cruiser Vehicle";
+
+        internal const string IGNITION_COIL_IGNITION_INCREMENTAL_CHANCE_INCREASE_KEY = "Incremental Ignition Chance Increase";
+        internal const int IGNITION_COIL_IGNITION_INCREMENTAL_CHANCE_INCREASE_DEFAULT = 25;
+        internal const string IGNITION_COIL_IGNITION_INCREMENTAL_CHANCE_INCREASE_DESCRIPTION = "Amount of chance (%) increased when purchasing further levels of the upgrade to ignite on the Company Cruiser Vehicle";
+
+        #endregion
+
+        #region Fluffy Seats
+
+        internal const string FLUFFY_SEATS_ENABLED_KEY = $"Enable {FluffySeats.UPGRADE_NAME} Upgrade";
+        internal const bool FLUFFY_SEATS_ENABLED_DEFAULT = true;
+        internal const string FLUFFY_SEATS_ENABLED_DESCRIPTION = "Tier upgrade which provides player damage mitigation when bumping too hard with the Company Cruiser Vehicle.";
+
+        internal const string FLUFFY_SEATS_PRICE_KEY = $"Price of {FluffySeats.UPGRADE_NAME} Upgrade";
+        internal const int FLUFFY_SEATS_PRICE_DEFAULT = 100;
+
+        internal const string FLUFFY_SEATS_DAMAGE_MITIGATION_INITIAL_INCREASE_KEY = "Initial Player Damage Mitigation Increase";
+        internal const int FLUFFY_SEATS_DAMAGE_MITIGATION_INITIAL_INCREASE_DEFAULT = 25;
+        internal const string FLUFFY_SEATS_DAMAGE_MITIGATION_INITIAL_INCREASE_DESCRIPTION = "Amount of damage mitigation (%) increased when first purchasing the upgrade when riding the Company Cruiser Vehicle.";
+
+        internal const string FLUFFY_SEATS_DAMAGE_MITIGATION_INCREMENTAL_INCREASE_KEY = "Incremental Player Damage Mitigation Increase";
+        internal const int FLUFFY_SEATS_DAMAGE_MITIGATION_INCREMENTAL_INCREASE_DEFAULT = 25;
+        internal const string FLUFFY_SEATS_DAMAGE_MITIGATION_INCREMENTAL_INCREASE_DESCRIPTION = "Amount of damage mitigation (%) increased when purchasing further levels of the upgrade when riding the Company Cruiser Vehicle.";
+        #endregion
 
         #region Improved Steering
 
@@ -1585,7 +1625,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         #endregion
 
-        #region Extend Deadlien Display
+        #region Extend Deadline Display
 
         internal const string NOT_ENOUGH_CREDITS_EXTEND = "Not enough credits to purchase the selected amount of days to extend.";
         internal const string PURCHASE_EXTEND_DEADLINE_FORMAT = "Do you wish to purchase {0} days to extend the deadline for the cost of {1} credits?";

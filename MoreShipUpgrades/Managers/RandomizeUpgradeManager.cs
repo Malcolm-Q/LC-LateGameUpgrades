@@ -52,6 +52,7 @@ namespace MoreShipUpgrades.Managers
         const double UPGRADE_PICK_PROBABILITY = 0.5f;
         internal static void RandomizeUpgrades()
         {
+            if (!IsRandomizedEnabled) return;
             RandomizeUpgrades(randomUpgradeSeed);
         }
 

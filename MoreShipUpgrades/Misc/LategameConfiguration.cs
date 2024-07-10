@@ -15,6 +15,7 @@ using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
 using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Vehicle;
 
 namespace MoreShipUpgrades.Misc
 {
@@ -22,6 +23,8 @@ namespace MoreShipUpgrades.Misc
     public class LategameConfiguration : SyncedConfig2<LategameConfiguration>
     {
         #region Enabled
+        [field: SyncedEntryField] public SyncedEntry<bool> IGNITION_COIL_ENABLED {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> FLUFFY_SEATS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> IMPROVED_STEERING_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SUPERCHARGED_PISTONS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> RAPID_MOTORS_ENABLED {  get; set; }
@@ -95,6 +98,8 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Initial Prices
+        [field: SyncedEntryField] public SyncedEntry<int> IGNITION_COIL_PRICE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> FLUFFY_SEATS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> IMPROVED_STEERING_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SUPERCHARGED_PISTONS_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> RAPID_MOTORS_PRICE {  get; set; }
@@ -148,6 +153,14 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<string> IGNITION_COIL_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> IGNITION_COIL_OVERRIDE_NAME {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> IGNITION_COIL_IGNITION_INITIAL_CHANCE_INCREASE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> IGNITION_COIL_IGNITION_INCREMENTAL_CHANCE_INCREASE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> FLUFFY_SEATS_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> FLUFFY_SEATS_OVERRIDE_NAME { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> FLUFFY_SEATS_DAMAGE_MITIGATION_INITIAL_INCREASE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> FLUFFY_SEATS_DAMAGE_MITIGATION_INCREMENTAL_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> IMPROVED_STEERING_PRICES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> IMPROVED_STEERING_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> IMPROVED_STEERING_TURNING_SPEED_INITIAL_INCREASE {  get; set; }
@@ -460,6 +473,8 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<ItemProgressionManager.ChancePerScrapModes> SCRAP_UPGRADE_CHANCE_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_BLACKLISTED_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_APPARATICE_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> IGNITION_COIL_ITEM_PROGRESSION_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> FLUFFY_SEATS_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> IMPROVED_STEERING_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> SUPERCHARGED_PISTONS_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> RAPID_MOTORS_ITEM_PROGRESSION_ITEMS {  get; set; }
@@ -503,7 +518,6 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Randomize Upgrades
-
         [field: SyncedEntryField] public SyncedEntry<bool> RANDOMIZE_UPGRADES_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> RANDOMIZE_UPGRADES_AMOUNT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> RANDOMIZE_UPGRADES_ALWAYS_SHOW_PURCHASED {  get; set; }
@@ -553,6 +567,8 @@ namespace MoreShipUpgrades.Misc
 
             topSection = LguConstants.OVERRIDE_NAMES_SECTION;
             OVERRIDE_UPGRADE_NAMES              = cfg.BindSyncedEntry(topSection, LguConstants.OVERRIDE_NAMES_ENABLED_KEY, LguConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LguConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
+            IGNITION_COIL_OVERRIDE_NAME         = cfg.BindSyncedEntry(topSection, LguConstants.IGNITION_COIL_OVERRIDE_NAME_KEY, IgnitionCoil.UPGRADE_NAME);
+            FLUFFY_SEATS_OVERRIDE_NAME          = cfg.BindSyncedEntry(topSection, LguConstants.FLUFFY_SEATS_OVERRIDE_NAME_KEY, FluffySeats.UPGRADE_NAME);
             IMPROVED_STEERING_OVERRIDE_NAME     = cfg.BindSyncedEntry(topSection, LguConstants.IMPROVED_STEERING_OVERRIDE_NAME_KEY, ImprovedSteering.UPGRADE_NAME);
             SUPERCHARGED_PISTONS_OVERRIDE_NAME  = cfg.BindSyncedEntry(topSection, LguConstants.SUPERCHARGED_PISTONS_OVERRIDE_NAME_KEY, SuperchargedPistons.UPGRADE_NAME);
             RAPID_MOTORS_OVERRIDE_NAME          = cfg.BindSyncedEntry(topSection, LguConstants.RAPID_MOTORS_OVERRIDE_NAME_KEY, RapidMotors.UPGRADE_NAME);
@@ -728,6 +744,30 @@ namespace MoreShipUpgrades.Misc
             #endregion
 
             #region Upgrades
+
+            #region Ignition Coil
+
+            topSection = IgnitionCoil.UPGRADE_NAME;
+            IGNITION_COIL_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.IGNITION_COIL_ENABLED_KEY, LguConstants.IGNITION_COIL_ENABLED_DEFAULT, LguConstants.IGNITION_COIL_ENABLED_DESCRIPTION);
+            IGNITION_COIL_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.IGNITION_COIL_PRICE_KEY, LguConstants.IGNITION_COIL_PRICE_DEFAULT);
+            IGNITION_COIL_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, IgnitionCoil.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            IGNITION_COIL_IGNITION_INITIAL_CHANCE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.IGNITION_COIL_IGNITION_INITIAL_CHANCE_INCREASE_KEY, LguConstants.IGNITION_COIL_IGNITION_INITIAL_CHANCE_INCREASE_DEFAULT, LguConstants.IGNITION_COIL_IGNITION_INITIAL_CHANCE_INCREASE_DESCRIPTION);
+            IGNITION_COIL_IGNITION_INCREMENTAL_CHANCE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.IGNITION_COIL_IGNITION_INCREMENTAL_CHANCE_INCREASE_KEY, LguConstants.IGNITION_COIL_IGNITION_INCREMENTAL_CHANCE_INCREASE_DEFAULT, LguConstants.IGNITION_COIL_IGNITION_INCREMENTAL_CHANCE_INCREASE_DESCRIPTION);
+            IGNITION_COIL_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
+
+            #region Fluffy Seats
+
+            topSection = FluffySeats.UPGRADE_NAME;
+            FLUFFY_SEATS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.FLUFFY_SEATS_ENABLED_KEY, LguConstants.FLUFFY_SEATS_ENABLED_DEFAULT, LguConstants.FLUFFY_SEATS_ENABLED_DESCRIPTION);
+            FLUFFY_SEATS_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.FLUFFY_SEATS_PRICE_KEY, LguConstants.FLUFFY_SEATS_PRICE_DEFAULT);
+            FLUFFY_SEATS_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, FluffySeats.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            FLUFFY_SEATS_DAMAGE_MITIGATION_INITIAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.FLUFFY_SEATS_DAMAGE_MITIGATION_INITIAL_INCREASE_KEY, LguConstants.FLUFFY_SEATS_DAMAGE_MITIGATION_INITIAL_INCREASE_DEFAULT, LguConstants.FLUFFY_SEATS_DAMAGE_MITIGATION_INITIAL_INCREASE_DESCRIPTION);
+            FLUFFY_SEATS_DAMAGE_MITIGATION_INCREMENTAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.FLUFFY_SEATS_DAMAGE_MITIGATION_INCREMENTAL_INCREASE_KEY, LguConstants.FLUFFY_SEATS_DAMAGE_MITIGATION_INCREMENTAL_INCREASE_DEFAULT, LguConstants.FLUFFY_SEATS_DAMAGE_MITIGATION_INCREMENTAL_INCREASE_DESCRIPTION);
+            FLUFFY_SEATS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
 
             #region Improved Steering
 
