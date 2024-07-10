@@ -1,10 +1,8 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.WeedKiller;
-using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
 namespace MoreShipUpgrades.Patches.Items
 {

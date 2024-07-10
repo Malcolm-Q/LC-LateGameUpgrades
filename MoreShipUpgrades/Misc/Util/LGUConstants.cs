@@ -624,11 +624,11 @@ namespace MoreShipUpgrades.Misc.Util
         internal const int WEED_GENETIC_MANIPULATION_PRICE_DEFAULT = 100;
 
         internal const string WEED_GENETIC_INITIAL_EFFECTIVENESS_INCREASE_KEY = "Initial Effectiveness Increase";
-        internal const int WEED_GENETIC_INITIAL_EFFECTIVENESS_INCREASE_DEFAULT = 50;
+        internal const int WEED_GENETIC_INITIAL_EFFECTIVENESS_INCREASE_DEFAULT = 75;
         internal const string WEED_GENETIC_INITIAL_EFFECTIVENESS_INCREASE_DESCRIPTION = "Amount of effectiveness (%) when first purchasing the upgrade increased on the Weed Killer to eradicate plants";
 
         internal const string WEED_GENETIC_INCREMENTAL_EFFECTIVENESS_INCREASE_KEY = "Incremental Effectiveness Increase";
-        internal const int WEED_GENETIC_INCREMENTAL_EFFECTIVENESS_INCREASE_DEFAULT = 25;
+        internal const int WEED_GENETIC_INCREMENTAL_EFFECTIVENESS_INCREASE_DEFAULT = 50;
         internal const string WEED_GENETIC_INCREMENTAL_EFFECTIVENESS_INCREASE_DESCRIPTION = "Amount of effectiveness (%) when purchasing further levels of the upgrade increased on the Weed Killer to eradicate plants";
 
         #endregion
