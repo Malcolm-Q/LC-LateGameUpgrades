@@ -3,7 +3,7 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 
-namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
+namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
 {
     internal class LethalDeals : OneTimeUpgrade
     {

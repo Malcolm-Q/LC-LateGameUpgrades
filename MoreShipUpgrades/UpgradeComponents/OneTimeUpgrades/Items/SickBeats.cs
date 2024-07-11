@@ -6,7 +6,7 @@ using MoreShipUpgrades.Misc.Upgrades;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
+namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items
 {
     class SickBeats : OneTimeUpgrade
     {

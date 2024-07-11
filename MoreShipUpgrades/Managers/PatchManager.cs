@@ -31,6 +31,7 @@ namespace MoreShipUpgrades.Managers
         static void PatchEnemies()
         {
             harmony.PatchAll(typeof(BaboonBirdAIPatcher));
+            harmony.PatchAll(typeof(ButlerEnemyAIPatcher));
             harmony.PatchAll(typeof(ButlerBeesPatcher));
             harmony.PatchAll(typeof(ClaySurgeonAIPatcher));
             harmony.PatchAll(typeof(EnemyAIPatcher));

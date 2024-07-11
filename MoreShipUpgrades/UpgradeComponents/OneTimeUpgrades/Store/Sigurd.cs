@@ -6,7 +6,7 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
-namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
+namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
 {
     class Sigurd : OneTimeUpgrade, IUpgradeWorldBuilding
     {
@@ -34,7 +34,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             System.Random random = new(StartOfRound.Instance.randomMapSeed);
             if (random.Next(0, 100) < Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.SIGURD_LAST_DAY_CHANCE.Value, 0, 100))
-                return defaultValue + (UpgradeBus.Instance.PluginConfiguration.SIGURD_LAST_DAY_PERCENT.Value / 100) ;
+                return defaultValue + UpgradeBus.Instance.PluginConfiguration.SIGURD_LAST_DAY_PERCENT.Value / 100;
             return defaultValue;
         }
 
@@ -46,7 +46,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
             System.Random random = new(StartOfRound.Instance.randomMapSeed);
             if (random.Next(0, 100) < Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.SIGURD_CHANCE.Value, 0, 100))
-                return defaultValue + (UpgradeBus.Instance.PluginConfiguration.SIGURD_PERCENT.Value / 100);
+                return defaultValue + UpgradeBus.Instance.PluginConfiguration.SIGURD_PERCENT.Value / 100;
             return defaultValue;
         }
 

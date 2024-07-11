@@ -6,7 +6,7 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
+namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items
 {
     class WalkieGPS : OneTimeUpgrade
     {

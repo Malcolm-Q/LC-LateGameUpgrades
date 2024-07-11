@@ -5,7 +5,7 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
-using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using System.Collections.Generic;
 using System.Reflection;

@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
+namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player
 {
     class LockSmith : OneTimeUpgrade, IUpgradeWorldBuilding
     {
@@ -48,7 +48,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             pin4.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(() => StrikePin(3));
             pin5.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(() => StrikePin(4));
 
-            pins = [ pin1, pin2, pin3, pin4, pin5 ];
+            pins = [pin1, pin2, pin3, pin4, pin5];
         }
 
         void Update()

@@ -22,6 +22,9 @@ using MoreShipUpgrades.Misc.Util;
 using System.Text;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player;
 
 namespace MoreShipUpgrades.Managers
 {

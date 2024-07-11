@@ -5,6 +5,11 @@ using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
 using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies;
@@ -185,6 +190,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string FEDORA_SUIT_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, FedoraSuit.UPGRADE_NAME);
         internal static readonly string WEED_GENETIC_MANIPULATION_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, WeedGeneticManipulation.UPGRADE_NAME);
         internal static readonly string IGNITION_COIL_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, IgnitionCoil.UPGRADE_NAME);
         internal static readonly string FLUFFY_SEATS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, FluffySeats.UPGRADE_NAME);
@@ -613,6 +619,17 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Fedora Suit
+
+        internal const string FEDORA_SUIT_ENABLED_KEY = $"Enable {FedoraSuit.UPGRADE_NAME} Upgrade";
+        internal const bool FEDORA_SUIT_ENABLED_DEFAULT = true;
+        internal const string FEDORA_SUIT_ENABLED_DESCRIPTION = "One Time upgrade which makes Butler enemies not be angry at you when alone. (It will still be angry when you hit them)";
+
+        internal const string FEDORA_SUIT_PRICE_KEY = $"Price of {FedoraSuit.UPGRADE_NAME} Upgrade";
+        internal const int FEDORA_SUIT_PRICE_DEFAULT = 750;
+
+        #endregion
 
         #region Weed Genetic Manipulation
 

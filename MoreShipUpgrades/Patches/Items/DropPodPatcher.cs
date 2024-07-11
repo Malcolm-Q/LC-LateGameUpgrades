@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
-using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;

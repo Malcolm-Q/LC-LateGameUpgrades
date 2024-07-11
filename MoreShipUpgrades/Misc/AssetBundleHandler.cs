@@ -1,6 +1,11 @@
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies;
@@ -142,6 +147,7 @@ namespace MoreShipUpgrades.Misc
             { FluffySeats.UPGRADE_NAME, upgrades+"FluffySeats.prefab" },
             { IgnitionCoil.UPGRADE_NAME, upgrades+"IgnitionCoil.prefab" },
             { WeedGeneticManipulation.UPGRADE_NAME, upgrades+"WeedGeneticManipulation.prefab" },
+            { FedoraSuit.UPGRADE_NAME, upgrades+"FedoraSuit.prefab" },
 
             { "Advanced Portable Tele", storeItems+"TpButtonAdv.asset" },
             { "Portable Tele", storeItems+"TpButton.asset" },

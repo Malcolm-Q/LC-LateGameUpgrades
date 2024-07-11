@@ -5,7 +5,7 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
-namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
+namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship
 {
     class FastEncryption : OneTimeUpgrade
     {
@@ -28,7 +28,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         public static float GetMultiplierOnSignalTextTimer(float defaultMultiplier)
         {
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultMultiplier;
-            return defaultMultiplier* TRANSMIT_MULTIPLIER;
+            return defaultMultiplier * TRANSMIT_MULTIPLIER;
         }
         public override string GetDisplayInfo(int price = -1)
         {

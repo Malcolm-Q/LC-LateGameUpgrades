@@ -7,6 +7,8 @@
   - You can configure when should the upgrades be randomized again (per quota, per moon routing or per moon landing).
 - Implemented "Fluffy Seats" tier upgrade which adds player damage mitigation when driving the Company Cruiser vehicle.
 - Implemented "Ignition Coil" tier upgrade which increases the chance of igniting on the Company Cruiser vehicle.
+- Implemented "Weed Genetic Manipulation" tier upgrade which increases the effectiveness of the Weed Killer item on eradicating plants.
+- Implemented "Fedora Suit" one time upgrade where makes the butler enemies not be angry at you when you are alone (they will still attack you if you attack them)
 - Fixed issue with some relevant components not being saved correctly, leading to constantly changing per save boot.
 
 </details>

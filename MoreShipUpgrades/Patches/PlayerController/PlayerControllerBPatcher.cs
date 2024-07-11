@@ -7,13 +7,13 @@ using System.Reflection.Emit;
 using System.Linq;
 using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using UnityEngine;
-using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
 
 namespace MoreShipUpgrades.Patches.PlayerController
 {
