@@ -47,7 +47,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.WeedKiller
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.WEED_GENETIC_MANIPULATION_PRICES.Value.Split(","));
+            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.WEED_GENETIC_MANIPULATION_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {

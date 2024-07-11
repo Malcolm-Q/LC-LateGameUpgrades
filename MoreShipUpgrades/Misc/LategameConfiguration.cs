@@ -36,6 +36,7 @@ namespace MoreShipUpgrades.Misc
     public class LategameConfiguration : SyncedConfig2<LategameConfiguration>
     {
         #region Enabled
+        [field: SyncedEntryField] public SyncedEntry<bool> TURBO_TANK_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> FEDORA_SUIT_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> WEED_GENETIC_MANIPULATION_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> IGNITION_COIL_ENABLED {  get; set; }
@@ -114,6 +115,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Initial Prices
+        [field: SyncedEntryField] public SyncedEntry<int> TURBO_TANK_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> FEDORA_SUIT_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> WEED_GENETIC_MANIPULATION_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> IGNITION_COIL_PRICE {  get; set; }
@@ -171,6 +173,10 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<string> TURBO_TANK_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> TURBO_TANK_OVERRIDE_NAME { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> TURBO_TANK_CAPACITY_INITIAL_INCREASE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> TURBO_TANK_CAPACITY_INCREMENTAL_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> FEDORA_SUIT_OVERRIDE_NAME {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> WEED_GENETIC_MANIPULATION_PRICES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> WEED_GENETIC_MANIPULATION_OVERRIDE_NAME {  get; set; }
@@ -496,6 +502,7 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<ItemProgressionManager.ChancePerScrapModes> SCRAP_UPGRADE_CHANCE_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_BLACKLISTED_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_APPARATICE_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> TURBO_TANK_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> FEDORA_SUIT_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> WEED_GENETIC_MANIPULATION_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> IGNITION_COIL_ITEM_PROGRESSION_ITEMS {  get; set; }
@@ -592,6 +599,7 @@ namespace MoreShipUpgrades.Misc
 
             topSection = LguConstants.OVERRIDE_NAMES_SECTION;
             OVERRIDE_UPGRADE_NAMES              = cfg.BindSyncedEntry(topSection, LguConstants.OVERRIDE_NAMES_ENABLED_KEY, LguConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LguConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
+            TURBO_TANK_OVERRIDE_NAME            = cfg.BindSyncedEntry(topSection, LguConstants.TURBO_TANK_OVERRIDE_NAME_KEY, TurboTank.UPGRADE_NAME);
             FEDORA_SUIT_OVERRIDE_NAME           = cfg.BindSyncedEntry(topSection, LguConstants.FEDORA_SUIT_OVERRIDE_NAME_KEY, FedoraSuit.UPGRADE_NAME);
             WEED_GENETIC_MANIPULATION_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.WEED_GENETIC_MANIPULATION_OVERRIDE_NAME_KEY, WeedGeneticManipulation.UPGRADE_NAME);
             IGNITION_COIL_OVERRIDE_NAME         = cfg.BindSyncedEntry(topSection, LguConstants.IGNITION_COIL_OVERRIDE_NAME_KEY, IgnitionCoil.UPGRADE_NAME);
@@ -771,6 +779,18 @@ namespace MoreShipUpgrades.Misc
             #endregion
 
             #region Upgrades
+
+            #region Turbo Tank
+
+            topSection = TurboTank.UPGRADE_NAME;
+            TURBO_TANK_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.TURBO_TANK_ENABLED_KEY, LguConstants.TURBO_TANK_ENABLED_DEFAULT, LguConstants.TURBO_TANK_ENABLED_DESCRIPTION);
+            TURBO_TANK_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.TURBO_TANK_PRICE_KEY, LguConstants.TURBO_TANK_PRICE_DEFAULT);
+            TURBO_TANK_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, TurboTank.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            TURBO_TANK_CAPACITY_INITIAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.TURBO_TANK_CAPACITY_INITIAL_INCREASE_KEY, LguConstants.TURBO_TANK_CAPACITY_INITIAL_INCREASE_DEFAULT, LguConstants.TURBO_TANK_CAPACITY_INITIAL_INCREASE_DESCRIPTION);
+            TURBO_TANK_CAPACITY_INCREMENTAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.TURBO_TANK_CAPACITY_INCREMENTAL_INCREASE_KEY, LguConstants.TURBO_TANK_CAPACITY_INCREMENTAL_INCREASE_DEFAULT, LguConstants.TURBO_TANK_CAPACITY_INCREMENTAL_INCREASE_DESCRIPTION);
+            TURBO_TANK_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
 
             #region Fedora Suit
 

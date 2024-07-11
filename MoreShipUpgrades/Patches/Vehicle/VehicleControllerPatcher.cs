@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using Mono.Cecil.Cil;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Vehicle;
 using System;
@@ -14,17 +15,33 @@ namespace MoreShipUpgrades.Patches.Vehicle
         [HarmonyTranspiler]
         [HarmonyPatch(nameof(VehicleController.Start))]
         [HarmonyPatch(nameof(VehicleController.Update))]
-        [HarmonyPatch(nameof(VehicleController.ReactToDamage))]
         static IEnumerable<CodeInstruction> IncreaseMaximumHealthTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            List<CodeInstruction> codes = new(instructions);
+            int index = 0;
+
+            IncreaseMaximumHealthTranspile(ref index, ref codes);
+            return codes;
+        }
+
+        [HarmonyTranspiler]
+        [HarmonyPatch(nameof(VehicleController.ReactToDamage))]
+        static IEnumerable<CodeInstruction> ReactToDamageTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            List<CodeInstruction> codes = new(instructions);
+            int index = 0;
+
+            IncreaseMaximumHealthTranspile(ref index, ref codes);
+            IncreaseTurboCapacityTranspile(ref index, ref codes, isFloat: true);
+            return codes;
+        }
+
+        static void IncreaseMaximumHealthTranspile(ref int index, ref List<CodeInstruction> codes)
         {
             FieldInfo baseCarHP = typeof(VehicleController).GetField(nameof(VehicleController.baseCarHP));
             MethodInfo getAdditionalMaximumHealth = typeof(VehiclePlating).GetMethod(nameof(VehiclePlating.GetAdditionalMaximumHealth));
 
-            List<CodeInstruction> codes = new(instructions);
-            int index = 0;
-
             Tools.FindField(ref index, ref codes, findField: baseCarHP, addCode: getAdditionalMaximumHealth, errorMessage: "Couldn't find the baseCarHP field");
-            return codes;
         }
 
         [HarmonyTranspiler]
@@ -56,6 +73,33 @@ namespace MoreShipUpgrades.Patches.Vehicle
             Tools.FindField(ref index, ref codes, findField: chanceToStartIgnition, addCode: getAdditionalIgnitionChance, errorMessage: "Couldn't find usage of chanceToStartIgnition field");
 
             return codes;
+        }
+
+        [HarmonyTranspiler]
+        [HarmonyPatch(nameof(VehicleController.AddTurboBoost))]
+        static IEnumerable<CodeInstruction> AddTurboBoostTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            List<CodeInstruction> codes = new(instructions);
+            int index = 0;
+
+            IncreaseTurboCapacityTranspile(ref index, ref codes, isFloat: false);
+
+            return codes;
+        }
+
+        static void IncreaseTurboCapacityTranspile(ref int index, ref List<CodeInstruction> codes, bool isFloat = false)
+        {
+
+            if (!isFloat)
+            {
+                MethodInfo getAdditionalTurboCapacity = typeof(TurboTank).GetMethod(nameof(TurboTank.GetAdditionalTurboCapacity), [typeof(int)]);
+                Tools.FindInteger(ref index, ref codes, findValue: 5, addCode: getAdditionalTurboCapacity, errorMessage: "Couldn't find the defined maximum turbo capacity when adding turbo boost");
+            }
+            else
+            {
+                MethodInfo getAdditionalTurboCapacity = typeof(TurboTank).GetMethod(nameof(TurboTank.GetAdditionalTurboCapacity), [typeof(float)]);
+                Tools.FindFloat(ref index, ref codes, findValue: 5f, addCode: getAdditionalTurboCapacity, errorMessage: "Couldn't find the defined maximum turbo capacity when updating turbo scale");
+            }
         }
 
         [HarmonyPostfix]

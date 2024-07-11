@@ -1,5 +1,5 @@
 <details>
-<summary> 3.9.1 - 2024-07-?? </summary>
+<summary> 3.9.1 - 2024-07-11 </summary>
 
 - Implemented "Randomized Upgrades" mode which makes the upgrades be randomly selected to appear in the shop rather than the full list
   - You can configure the amount of upgrades that can be picked to show up.
@@ -9,6 +9,7 @@
 - Implemented "Ignition Coil" tier upgrade which increases the chance of igniting on the Company Cruiser vehicle.
 - Implemented "Weed Genetic Manipulation" tier upgrade which increases the effectiveness of the Weed Killer item on eradicating plants.
 - Implemented "Fedora Suit" one time upgrade where makes the butler enemies not be angry at you when you are alone (they will still attack you if you attack them)
+- Implemented "Turbo Tank" tier upgrade which increases the maximum capacity of turbo the Company Cruiser vehicle can hold.
 - Fixed issue with some relevant components not being saved correctly, leading to constantly changing per save boot.
 
 </details>

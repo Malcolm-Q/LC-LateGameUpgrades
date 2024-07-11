@@ -190,6 +190,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string TURBO_TANK_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, TurboTank.UPGRADE_NAME);
         internal static readonly string FEDORA_SUIT_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, FedoraSuit.UPGRADE_NAME);
         internal static readonly string WEED_GENETIC_MANIPULATION_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, WeedGeneticManipulation.UPGRADE_NAME);
         internal static readonly string IGNITION_COIL_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, IgnitionCoil.UPGRADE_NAME);
@@ -619,6 +620,25 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Turbo Tank
+
+        internal const string TURBO_TANK_ENABLED_KEY = $"Enable {TurboTank.UPGRADE_NAME} Upgrade";
+        internal const bool TURBO_TANK_ENABLED_DEFAULT = true;
+        internal const string TURBO_TANK_ENABLED_DESCRIPTION = "Tier upgrade which increases the maximum capacity of Company Cruiser Vehicle's turbo";
+
+        internal const string TURBO_TANK_PRICE_KEY = $"Price of {TurboTank.UPGRADE_NAME} Upgrade";
+        internal const int TURBO_TANK_PRICE_DEFAULT = 200;
+
+        internal const string TURBO_TANK_CAPACITY_INITIAL_INCREASE_KEY = "Initial Turbo Capacity Increase";
+        internal const int TURBO_TANK_CAPACITY_INITIAL_INCREASE_DEFAULT = 2;
+        internal const string TURBO_TANK_CAPACITY_INITIAL_INCREASE_DESCRIPTION = "Amount of turbo capacity increased when first purchasing the upgrade on the Company Cruiser Vehicle";
+
+        internal const string TURBO_TANK_CAPACITY_INCREMENTAL_INCREASE_KEY = "Incremental Turbo Capacity Increase";
+        internal const int TURBO_TANK_CAPACITY_INCREMENTAL_INCREASE_DEFAULT = 1;
+        internal const string TURBO_TANK_CAPACITY_INCREMENTAL_INCREASE_DESCRIPTION = "Amount of turbo capacity increased when purchasing further levels of the upgrade on the Company Cruiser Vehicle";
+
+        #endregion
 
         #region Fedora Suit
 

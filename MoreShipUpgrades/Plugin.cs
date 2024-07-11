@@ -39,7 +39,6 @@ namespace MoreShipUpgrades
             {
                 types = e.Types.Where(t => t != null);
             }
-
             foreach (var type in types)
             {
                 var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
