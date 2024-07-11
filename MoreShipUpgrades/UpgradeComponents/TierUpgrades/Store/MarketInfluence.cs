@@ -21,8 +21,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Store
         }
         public static int GetGuaranteedPercentageSale(int defaultPercentage, int maxValue)
         {
+            if (!UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_ENABLED) return defaultPercentage;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultPercentage;
-            return Mathf.Clamp(defaultPercentage + UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_INITIAL_PERCENTAGE.Value + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE.Value, 0, maxValue);
+            return Mathf.Clamp(defaultPercentage + UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_INITIAL_PERCENTAGE.Value + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE.Value), 0, maxValue);
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {

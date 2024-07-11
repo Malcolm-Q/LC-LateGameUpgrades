@@ -65,6 +65,7 @@ namespace MoreShipUpgrades.Managers
         }
         internal static void RandomizeUpgrades(int seed)
         {
+            if (!IsRandomizedEnabled) return;
             SetRandomUpgradeSeed(seed);
             Random rand = new(seed);
             ResetAllUpgrades();
@@ -95,7 +96,7 @@ namespace MoreShipUpgrades.Managers
             visibleNodes = 0;
             foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
             {
-                node.Visible = node.Unlocked && (node.OriginalName != NightVision.UPGRADE_NAME || node.CurrentUpgrade > 0) && AlwaysShowPurchased;
+                node.Visible = !IsRandomizedEnabled || (node.Unlocked && (node.OriginalName != NightVision.UPGRADE_NAME || node.CurrentUpgrade > 0) && AlwaysShowPurchased);
                 if (node.Visible) visibleNodes++;
             }
         }

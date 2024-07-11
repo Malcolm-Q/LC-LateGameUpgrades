@@ -190,6 +190,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string TRACTION_BOOTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, TractionBoots.UPGRADE_NAME);
         internal static readonly string TURBO_TANK_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, TurboTank.UPGRADE_NAME);
         internal static readonly string FEDORA_SUIT_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, FedoraSuit.UPGRADE_NAME);
         internal static readonly string WEED_GENETIC_MANIPULATION_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, WeedGeneticManipulation.UPGRADE_NAME);
@@ -620,6 +621,25 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Traction Boots
+
+        internal const string TRACTION_BOOTS_ENABLED_KEY = $"Enable {TractionBoots.UPGRADE_NAME} Upgrade";
+        internal const bool TRACTION_BOOTS_ENABLED_DEFAULT = true;
+        internal const string TRACTION_BOOTS_ENABLED_DESCRIPTION = "Tier upgrade which increases the traction factor on the player's movement";
+
+        internal const string TRACTION_BOOTS_PRICE_KEY = $"Price of {TractionBoots.UPGRADE_NAME} Upgrade";
+        internal const int TRACTION_BOOTS_PRICE_DEFAULT = 100;
+
+        internal const string TRACTION_BOOTS_INITIAL_INCREASE_KEY = "Initial Traction Increase";
+        internal const int TRACTION_BOOTS_INITIAL_INCREASE_DEFAULT = 25;
+        internal const string TRACTION_BOOTS_INITIAL_INCREASE_DESCRIPTION = "Multiplier value (%) applied to the player's walking force when first purchasing the upgrade.";
+
+        internal const string TRACTION_BOOTS_INCREMENTAL_INCREASE_KEY = "Incremental Traction Increase";
+        internal const int TRACTION_BOOTS_INCREMENTAL_INCREASE_DEFAULT = 25;
+        internal const string TRACTION_BOOTS_INCREMENTAL_INCREASE_DESCRIPTION = "Multiplier value (%) added to the initial which then gets applied to the player's walking force when first purchasing the upgrade.";
+
+        #endregion
 
         #region Turbo Tank
 

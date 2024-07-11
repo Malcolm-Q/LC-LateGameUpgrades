@@ -1,4 +1,13 @@
 <details>
+<summary> 3.9.2 - 2024-07-12 </summary>
+
+- Implemented "Traction Boots" upgrade which increases the player's traction force to the ground to allow easier movement direction change.
+- Fixed showing limited amount of entries in the upgrade store due to lack of bool check for randomized upgrades mode.
+- Fixed free upgrades not being applied again after players get fired from The Company.
+
+</details>
+
+<details>
 <summary> 3.9.1 - 2024-07-11 </summary>
 
 - Implemented "Randomized Upgrades" mode which makes the upgrades be randomly selected to appear in the shop rather than the full list
