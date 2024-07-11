@@ -1,5 +1,5 @@
 ﻿using HarmonyLib;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 namespace MoreShipUpgrades.Patches.Interactables
 {
     [HarmonyPatch(typeof(SteamValveHazard))]

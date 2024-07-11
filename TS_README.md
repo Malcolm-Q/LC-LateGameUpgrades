@@ -12,7 +12,7 @@ Type `lategame store` or `lgu` to view current upgrade status and cost.
 Type `info <upgrade>` for dynamic info.
 
 This adds:
-* 20+ Upgrades.
+* 30+ Upgrades.
 * 5 complex team oriented missions (Contracts).
 * Mission items, NPC, rewards and behaviours.
 * 8 new Store items.
@@ -231,17 +231,70 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 * __Mechanical Arms - $300__
     * Increases the player's interaction range with items and interactables.
 
-* __Clay Glasses - $200__*
+* __Clay Glasses - $200__
     * Increases the maximum distance from which the player can spot a "Clay Surgeon" entity. 
 
-* __Vehicle Plating - $150__*
+* __Vehicle Plating - $150__
     * Increases the Company Cruiser vehicle's maximum health.
  
 * __Rapid Motors - $150__*
     * Increases the Company Cruiser vehicle's acceleration.
 
-* __Supercharged Pistons - $250__*
+* __Supercharged Pistons - $250__
     * Increases the Company Cruiser vehicle's maximum speed. 
+
+* __Fluffy Seats - $100__
+    * Provides player damage mitigation when crashing with the Company Cruiser vehicle a little too hard.
+    
+* __Improved Steering - $100__
+    * Increases the Company Cruiser vehicle's turning speed.
+   
+* __Ignition Coil - $50__
+    * Increases the chance of immediately turning on the Company Cruiser vehicle on ignition.
+    
+* __Weed Genetic Manipulation - $100__
+    * Increases the effectiveness of the Weed Killer item in eradicating plants. 
+
+* __Fedora Suit - $750__
+    * Makes Butler enemies not immediately attack you when alone with them.
+    * If attacked, they will still retaliate.
+
+* __Turbo Tank - $200__
+    * Increases the Company Cruiser vehicle's maximum turbo capacity. 
+
+## Item Progression Mode
+
+This mod offers an alternative mode for obtaining upgrades through selling items to The Company. The following modes are available for playthroughs:
+* Apparatice
+    * Items that are considered an "apparatus" (configurable due to custom interiors having custom items) will provide a randomly picked upgrade to level up when sold to The Company
+* Chance per Scrap
+    * When any kind of scrap item is sold to The Company, a roll will be made and check if it meets the chance criteria (value is configurable).
+    * If successfull, an upgrade will be picked to level up according to the selected chance mode:
+        * Random: an upgrade will be picked at random without any outside factors influencing the choice.
+        * Cheapest: the upgrade that has the lowest cost to purchase will be picked
+        * Lowest Level: the upgrade that has the lowest level will be picked
+
+* Nearest Value
+    * On each quota met event, the value accquired to meet the quota will be used to pick an upgrade that has at least the same cost
+    for the quota value.
+    * If no upgrades were found that had a cost lower than the meeting quota, no upgrade is picked.
+
+* Unique Scrap
+    * Upon save boot, each scrap item will be associated to an upgrade at random.
+    When the item is sold, percentage of that amount (configurable) is used to contribute to the costs of the respective upgrade.
+    Once the amount contributed to the item has been reached, the upgrade will rank up to the next level (if allowed).
+
+* Custom Scrap
+    * Similar logic with "Unique Scrap" but the items assigned to each upgrade are the ones assigned in each upgrade's configuration.
+    * The names inserted in this configuration can be either the names displayed in their scan nodes or their internal names (in this case, the value of "itemProperties.itemName)
+        * The names are case insensitive
+
+## Randomize Upgrades Mode
+
+This mod offers a "Randomize Upgrade" mode where a set amount of upgrades are picked from the total enabled and then shown in the upgrade store.
+* You can configure the amount of upgrades that can be picked randomly to appear in the store
+* You can configure this mode to allow showing already purchased upgrades.
+* You can configure when should the randomization of the upgrades be executed (per moon landing, per moon routing or per quota).
 
 ## Contracts
 * __Defusal Contract__

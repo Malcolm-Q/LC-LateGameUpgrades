@@ -2,7 +2,7 @@
 using HarmonyLib;
 using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
 

@@ -5,8 +5,22 @@ using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
 using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.RadarBooster;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.WeedKiller;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Zapgun;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Store;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Vehicle;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Misc.Util
@@ -60,6 +74,28 @@ namespace MoreShipUpgrades.Misc.Util
 
         #region Plugin Configuration
 
+        #region Randomize Available Upgrades
+
+        internal const string RANDOMIZE_UPGRADES_SECTION = "_Randomize Upgrades_";
+
+        internal const string RANDOMIZE_UPGRADES_ENABLED_KEY = "Enable Randomize Upgrades";
+        internal const bool RANDOMIZE_UPGRADES_ENABLED_DEFAULT = false;
+        internal const string RANDOMIZE_UPGRADES_ENABLED_DESCRIPTION = "Upgrades will be randomized per selected event to be allowed purchased on the store.";
+
+        internal const string RANDOMIZE_UPGRADES_AMOUNT_KEY = "Amount of Upgrades";
+        internal const int RANDOMIZE_UPGRADES_AMOUNT_DEFAULT = 5;
+        internal const string RANDOMIZE_UPGRADES_AMOUNT_DESCRIPTION = "Amount of Upgrades that will always appear in the store (if allowed).";
+
+        internal const string RANDOMIZE_UPGRADES_ALWAYS_SHOW_PURCHASED_KEY = "Show purchased upgrades";
+        internal const bool RANDOMIZE_UPGRADES_ALWAYS_SHOW_PURCHASED_DEFAULT = true;
+        internal const string RANDOMIZE_UPGRADES_ALWAYS_SHOW_PURCHASED_DESCRIPTION = "Wether purchased upgrades will always show in the store and the specified amount of random upgrades will not include these in the selection.";
+
+        internal const string RANDOMIZE_UPGRADES_CHANGE_UPGRADES_EVENT_KEY = "Randomize Upgrades Event";
+        internal const RandomizeUpgradeManager.RandomizeUpgradeEvents RANDOMIZE_UPGRADES_CHANGE_UPGRADES_EVENT_DEFAULT = RandomizeUpgradeManager.RandomizeUpgradeEvents.PerQuota;
+        internal const string RANDOMIZE_UPGRADES_CHANGE_UPGRADES_EVENT_DESCRIPTION = "Event which triggers the random upgrades being changed in the store.";
+
+        #endregion
+
         #region Item Progression
 
         internal const string ITEM_PROGRESSION_SECTION = "_Item Progression Route_";
@@ -102,6 +138,17 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string ITEM_PROGRESSION_BLACKLISTED_ITEMS_DEFAULT = "Clipboard";
         internal const string ITEM_PROGRESSION_BLACKLISTED_ITEMS_DESCRIPTION = "Blacklisted items for Item Progression.\nOnly used if Item Progression Mode is set to UniqueScrap. These items will NOT contribute towards ANY upgrade";
 
+        internal const string ITEM_PROGRESSION_BLACKLIST_ITEMS_ENTRY_DELIMITER = ",";
+
+        internal const string ITEM_PROGRESSION_APPARATICE_ITEMS_KEY = "Apparatus Items";
+        internal const string ITEM_PROGRESSION_APPARATICE_ITEMS_DEFAULT = $"Apparatus{ITEM_PROGRESSION_APPARATICE_ITEMS_ATTRIBUTE_DELIMITER}1{ITEM_PROGRESSION_APPARATICE_ITEMS_ENTRY_DELIMITER}ExampleItemName{ITEM_PROGRESSION_APPARATICE_ITEMS_ATTRIBUTE_DELIMITER}2";
+        internal const string ITEM_PROGRESSION_APPARATICE_ITEMS_DESCRIPTION = "Items that are considered \"Apparatice\" and provide a set amount of upgrades once sold to The Company.\n" +
+                                                                            "The item name is either the one displayed in the scan node or its internal name.\n" +
+                                                                            "This list is only valid if Item Progression Mode is set to Apparatice.";
+
+        internal const string ITEM_PROGRESSION_APPARATICE_ITEMS_ENTRY_DELIMITER = ",";
+        internal const string ITEM_PROGRESSION_APPARATICE_ITEMS_ATTRIBUTE_DELIMITER = "@";
+
         internal const string ITEM_PROGRESSION_ITEMS_KEY = "Contribution Items";
         internal const string ITEM_PROGRESSION_ITEMS_DEFAULT = "";
         internal const string ITEM_PROGRESSION_ITEMS_DESCRIPTION = "Items that when sold contribute to the purchase of the upgrade. Either the scan node's name or ItemProperties.itemName can be inserted here";
@@ -143,6 +190,11 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string TURBO_TANK_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, TurboTank.UPGRADE_NAME);
+        internal static readonly string FEDORA_SUIT_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, FedoraSuit.UPGRADE_NAME);
+        internal static readonly string WEED_GENETIC_MANIPULATION_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, WeedGeneticManipulation.UPGRADE_NAME);
+        internal static readonly string IGNITION_COIL_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, IgnitionCoil.UPGRADE_NAME);
+        internal static readonly string FLUFFY_SEATS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, FluffySeats.UPGRADE_NAME);
         internal static readonly string IMPROVED_STEERING_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ImprovedSteering.UPGRADE_NAME);
         internal static readonly string SUPERCHARGED_PISTONS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, SuperchargedPistons.UPGRADE_NAME);
         internal static readonly string RAPID_MOTORS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, RapidMotors.UPGRADE_NAME);
@@ -475,7 +527,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string SCRAP_WHEELBARROW_RESTRICTION_MODE_KEY = $"Restrictions on the {ScrapWheelbarrow.ITEM_NAME} Item";
         internal const WheelbarrowScript.Restrictions SCRAP_WHEELBARROW_RESTRICTION_MODE_DEFAULT = WheelbarrowScript.Restrictions.ItemCount;
         internal const string SCRAP_WHEELBARROW_RESTRICTION_MODE_DESCRIPTION = $"Restriction applied when trying to insert an item on the {ScrapWheelbarrow.ITEM_NAME}.\n" +
-                                                                        $"Supported values: None, ItemCount, TotalWeight, All";
+                                                                        "Supported values: None, ItemCount, TotalWeight, All";
 
         internal const string SCRAP_WHEELBARROW_MINIMUM_VALUE_KEY = $"Minimum scrap value of {ScrapWheelbarrow.ITEM_NAME}";
         internal const int SCRAP_WHEELBARROW_MINIMUM_VALUE_DEFAULT = 50;
@@ -532,7 +584,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string WHEELBARROW_RESTRICTION_MODE_KEY = $"Restrictions on the {StoreWheelbarrow.ITEM_NAME} Item";
         internal const WheelbarrowScript.Restrictions WHEELBARROW_RESTRICTION_MODE_DEFAULT = WheelbarrowScript.Restrictions.ItemCount;
         internal const string WHEELBARROW_RESTRICTION_MODE_DESCRIPTION = $"Restriction applied when trying to insert an item on the {StoreWheelbarrow.ITEM_NAME}.\n" +
-                                                                        $"Supported values: None, ItemCount, TotalWeight, All";
+                                                                        "Supported values: None, ItemCount, TotalWeight, All";
 
         internal const string WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_KEY = $"Maximum amount of weight for {StoreWheelbarrow.ITEM_NAME}";
         internal const float WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_DEFAULT = 100f;
@@ -568,6 +620,92 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Turbo Tank
+
+        internal const string TURBO_TANK_ENABLED_KEY = $"Enable {TurboTank.UPGRADE_NAME} Upgrade";
+        internal const bool TURBO_TANK_ENABLED_DEFAULT = true;
+        internal const string TURBO_TANK_ENABLED_DESCRIPTION = "Tier upgrade which increases the maximum capacity of Company Cruiser Vehicle's turbo";
+
+        internal const string TURBO_TANK_PRICE_KEY = $"Price of {TurboTank.UPGRADE_NAME} Upgrade";
+        internal const int TURBO_TANK_PRICE_DEFAULT = 200;
+
+        internal const string TURBO_TANK_CAPACITY_INITIAL_INCREASE_KEY = "Initial Turbo Capacity Increase";
+        internal const int TURBO_TANK_CAPACITY_INITIAL_INCREASE_DEFAULT = 2;
+        internal const string TURBO_TANK_CAPACITY_INITIAL_INCREASE_DESCRIPTION = "Amount of turbo capacity increased when first purchasing the upgrade on the Company Cruiser Vehicle";
+
+        internal const string TURBO_TANK_CAPACITY_INCREMENTAL_INCREASE_KEY = "Incremental Turbo Capacity Increase";
+        internal const int TURBO_TANK_CAPACITY_INCREMENTAL_INCREASE_DEFAULT = 1;
+        internal const string TURBO_TANK_CAPACITY_INCREMENTAL_INCREASE_DESCRIPTION = "Amount of turbo capacity increased when purchasing further levels of the upgrade on the Company Cruiser Vehicle";
+
+        #endregion
+
+        #region Fedora Suit
+
+        internal const string FEDORA_SUIT_ENABLED_KEY = $"Enable {FedoraSuit.UPGRADE_NAME} Upgrade";
+        internal const bool FEDORA_SUIT_ENABLED_DEFAULT = true;
+        internal const string FEDORA_SUIT_ENABLED_DESCRIPTION = "One Time upgrade which makes Butler enemies not be angry at you when alone. (It will still be angry when you hit them)";
+
+        internal const string FEDORA_SUIT_PRICE_KEY = $"Price of {FedoraSuit.UPGRADE_NAME} Upgrade";
+        internal const int FEDORA_SUIT_PRICE_DEFAULT = 750;
+
+        #endregion
+
+        #region Weed Genetic Manipulation
+
+        internal const string WEED_GENETIC_MANIPULATION_ENABLED_KEY = $"Enable {WeedGeneticManipulation.UPGRADE_NAME} Upgrade";
+        internal const bool WEED_GENETIC_MANIPULATION_ENABLED_DEFAULT = true;
+        internal const string WEED_GENETIC_MANIPULATION_ENABLED_DESCRIPTION = "Tier upgrade which increases the effectiveness of the Weed Killer on eradicating plants";
+
+        internal const string WEED_GENETIC_MANIPULATION_PRICE_KEY = $"Price of {WeedGeneticManipulation.UPGRADE_NAME} Upgrade";
+        internal const int WEED_GENETIC_MANIPULATION_PRICE_DEFAULT = 100;
+
+        internal const string WEED_GENETIC_INITIAL_EFFECTIVENESS_INCREASE_KEY = "Initial Effectiveness Increase";
+        internal const int WEED_GENETIC_INITIAL_EFFECTIVENESS_INCREASE_DEFAULT = 75;
+        internal const string WEED_GENETIC_INITIAL_EFFECTIVENESS_INCREASE_DESCRIPTION = "Amount of effectiveness (%) when first purchasing the upgrade increased on the Weed Killer to eradicate plants";
+
+        internal const string WEED_GENETIC_INCREMENTAL_EFFECTIVENESS_INCREASE_KEY = "Incremental Effectiveness Increase";
+        internal const int WEED_GENETIC_INCREMENTAL_EFFECTIVENESS_INCREASE_DEFAULT = 50;
+        internal const string WEED_GENETIC_INCREMENTAL_EFFECTIVENESS_INCREASE_DESCRIPTION = "Amount of effectiveness (%) when purchasing further levels of the upgrade increased on the Weed Killer to eradicate plants";
+
+        #endregion
+
+        #region Ignition Coil
+
+        internal const string IGNITION_COIL_ENABLED_KEY = $"Enable {IgnitionCoil.UPGRADE_NAME} Upgrade";
+        internal const bool IGNITION_COIL_ENABLED_DEFAULT = true;
+        internal const string IGNITION_COIL_ENABLED_DESCRIPTION = "Tier upgrade which increases the chance of ignition to turn on the Company Cruiser Vehicle.";
+
+        internal const string IGNITION_COIL_PRICE_KEY = $"Price of {IgnitionCoil.UPGRADE_NAME} Upgrade";
+        internal const int IGNITION_COIL_PRICE_DEFAULT = 50;
+
+        internal const string IGNITION_COIL_IGNITION_INITIAL_CHANCE_INCREASE_KEY = "Initial Ignition Chance Increase";
+        internal const int IGNITION_COIL_IGNITION_INITIAL_CHANCE_INCREASE_DEFAULT = 25;
+        internal const string IGNITION_COIL_IGNITION_INITIAL_CHANCE_INCREASE_DESCRIPTION = "Amount of chance (%) increased when first purchasing the upgrade to ignite on the Company Cruiser Vehicle";
+
+        internal const string IGNITION_COIL_IGNITION_INCREMENTAL_CHANCE_INCREASE_KEY = "Incremental Ignition Chance Increase";
+        internal const int IGNITION_COIL_IGNITION_INCREMENTAL_CHANCE_INCREASE_DEFAULT = 25;
+        internal const string IGNITION_COIL_IGNITION_INCREMENTAL_CHANCE_INCREASE_DESCRIPTION = "Amount of chance (%) increased when purchasing further levels of the upgrade to ignite on the Company Cruiser Vehicle";
+
+        #endregion
+
+        #region Fluffy Seats
+
+        internal const string FLUFFY_SEATS_ENABLED_KEY = $"Enable {FluffySeats.UPGRADE_NAME} Upgrade";
+        internal const bool FLUFFY_SEATS_ENABLED_DEFAULT = true;
+        internal const string FLUFFY_SEATS_ENABLED_DESCRIPTION = "Tier upgrade which provides player damage mitigation when bumping too hard with the Company Cruiser Vehicle.";
+
+        internal const string FLUFFY_SEATS_PRICE_KEY = $"Price of {FluffySeats.UPGRADE_NAME} Upgrade";
+        internal const int FLUFFY_SEATS_PRICE_DEFAULT = 100;
+
+        internal const string FLUFFY_SEATS_DAMAGE_MITIGATION_INITIAL_INCREASE_KEY = "Initial Player Damage Mitigation Increase";
+        internal const int FLUFFY_SEATS_DAMAGE_MITIGATION_INITIAL_INCREASE_DEFAULT = 25;
+        internal const string FLUFFY_SEATS_DAMAGE_MITIGATION_INITIAL_INCREASE_DESCRIPTION = "Amount of damage mitigation (%) increased when first purchasing the upgrade when riding the Company Cruiser Vehicle.";
+
+        internal const string FLUFFY_SEATS_DAMAGE_MITIGATION_INCREMENTAL_INCREASE_KEY = "Incremental Player Damage Mitigation Increase";
+        internal const int FLUFFY_SEATS_DAMAGE_MITIGATION_INCREMENTAL_INCREASE_DEFAULT = 25;
+        internal const string FLUFFY_SEATS_DAMAGE_MITIGATION_INCREMENTAL_INCREASE_DESCRIPTION = "Amount of damage mitigation (%) increased when purchasing further levels of the upgrade when riding the Company Cruiser Vehicle.";
+        #endregion
 
         #region Improved Steering
 
@@ -1552,7 +1690,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         #endregion
 
-        #region Extend Deadlien Display
+        #region Extend Deadline Display
 
         internal const string NOT_ENOUGH_CREDITS_EXTEND = "Not enough credits to purchase the selected amount of days to extend.";
         internal const string PURCHASE_EXTEND_DEADLINE_FORMAT = "Do you wish to purchase {0} days to extend the deadline for the cost of {1} credits?";
@@ -1629,7 +1767,7 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Colours
-        internal static readonly Color Invisible = new Color(0, 0, 0, 0);
+        internal static readonly Color Invisible = new(0, 0, 0, 0);
         #endregion
 
         #endregion

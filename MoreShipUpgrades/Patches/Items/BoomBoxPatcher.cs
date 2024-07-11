@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
 
 namespace MoreShipUpgrades.Patches.Items
 {

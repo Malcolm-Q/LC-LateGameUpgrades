@@ -17,8 +17,8 @@ using InteractiveTerminalAPI.UI;
 
 namespace MoreShipUpgrades
 {
-    [BepInPlugin(Metadata.GUID,Metadata.NAME,Metadata.VERSION)]
-    [BepInDependency("evaisa.lethallib","0.13.0")]
+    [BepInPlugin(Metadata.GUID, Metadata.NAME, Metadata.VERSION)]
+    [BepInDependency("evaisa.lethallib", "0.13.0")]
     [BepInDependency("com.sigurd.csync")]
     [BepInDependency("com.rune580.LethalCompanyInputUtils")]
     [BepInDependency("WhiteSpike.InteractiveTerminalAPI")]
@@ -28,7 +28,7 @@ namespace MoreShipUpgrades
 
         void Awake()
         {
-            LategameConfiguration config = new LategameConfiguration(Config);
+            LategameConfiguration config = new(Config);
             // netcode patching stuff
             IEnumerable<Type> types;
             try
@@ -39,7 +39,6 @@ namespace MoreShipUpgrades
             {
                 types = e.Types.Where(t => t != null);
             }
-
             foreach (var type in types)
             {
                 var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
@@ -56,10 +55,12 @@ namespace MoreShipUpgrades
             string assetDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "shipupgrades");
             AssetBundle UpgradeAssets = AssetBundle.LoadFromFile(assetDir);
 
-            GameObject gameObject = new GameObject("UpgradeBus");
-            gameObject.hideFlags = HideFlags.HideAndDontSave;
+            GameObject gameObject = new("UpgradeBus")
+            {
+                hideFlags = HideFlags.HideAndDontSave
+            };
             gameObject.AddComponent<UpgradeBus>();
-            gameObject = new GameObject("SpawnItemManager");
+            gameObject = new("SpawnItemManager");
             gameObject.AddComponent<ItemManager>();
 
             UpgradeBus.Instance.UpgradeAssets = UpgradeAssets;
@@ -74,10 +75,10 @@ namespace MoreShipUpgrades
             InputUtilsCompat.Init();
             PatchManager.PatchMainVersion();
 
-            InteractiveTerminalManager.RegisterApplication<UpgradeStoreApplication>(["lgu", "lategame store"]);
-            InteractiveTerminalManager.RegisterApplication<WeatherProbeApplication>("probe");
-            InteractiveTerminalManager.RegisterApplication<ExtendDeadlineApplication>("extend deadline");
-            InteractiveTerminalManager.RegisterApplication<ContractApplication>(["contracts", "contract"]);
+            InteractiveTerminalManager.RegisterApplication<UpgradeStoreApplication>(["lgu", "lategame store"], caseSensitive: false);
+            InteractiveTerminalManager.RegisterApplication<WeatherProbeApplication>("probe", caseSensitive: false);
+            InteractiveTerminalManager.RegisterApplication<ExtendDeadlineApplication>("extend deadline", caseSensitive: false);
+            InteractiveTerminalManager.RegisterApplication<ContractApplication>(["contracts", "contract"], caseSensitive: false);
 
             mls.LogInfo($"{Metadata.NAME} {Metadata.VERSION} has been loaded successfully.");
         }
@@ -130,5 +131,5 @@ namespace MoreShipUpgrades
             }
             mls.LogInfo("Commands have been setup");
         }
-    }   
+    }
 }

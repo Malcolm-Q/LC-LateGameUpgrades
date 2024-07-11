@@ -9,12 +9,15 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
     {
         internal const string NAME = "Extend Deadline";
         internal const string ENABLED_SECTION = $"Enable {NAME}";
-        private static LguLogger logger;
-        internal static ExtendDeadlineScript instance;
+        private readonly static LguLogger logger = new(NAME);
+        internal static ExtendDeadlineScript Instance { get; set; }
+        static void SetInstance(ExtendDeadlineScript instance )
+        {
+            Instance = instance;
+        }
         void Start()
         {
-            logger = new LguLogger(NAME);
-            instance = this;
+            SetInstance(this);
             DontDestroyOnLoad(gameObject);
         }
 

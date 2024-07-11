@@ -2,7 +2,7 @@
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Items.RadarBooster;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.RadarBooster;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Patches.Items

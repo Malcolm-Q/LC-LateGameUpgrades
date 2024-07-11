@@ -1,8 +1,22 @@
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.RadarBooster;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.WeedKiller;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Zapgun;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Store;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Vehicle;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using UnityEngine;
@@ -130,6 +144,11 @@ namespace MoreShipUpgrades.Misc
             { RapidMotors.UPGRADE_NAME, upgrades+"RapidMotors.prefab" },
             { SuperchargedPistons.UPGRADE_NAME, upgrades+"SuperchargedPistons.prefab" },
             { ImprovedSteering.UPGRADE_NAME, upgrades+"ImprovedSteering.prefab" },
+            { FluffySeats.UPGRADE_NAME, upgrades+"FluffySeats.prefab" },
+            { IgnitionCoil.UPGRADE_NAME, upgrades+"IgnitionCoil.prefab" },
+            { WeedGeneticManipulation.UPGRADE_NAME, upgrades+"WeedGeneticManipulation.prefab" },
+            { FedoraSuit.UPGRADE_NAME, upgrades+"FedoraSuit.prefab" },
+            { TurboTank.UPGRADE_NAME, upgrades+"TurboTank.prefab" },
 
             { "Advanced Portable Tele", storeItems+"TpButtonAdv.asset" },
             { "Portable Tele", storeItems+"TpButton.asset" },

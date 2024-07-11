@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Misc.Upgrades;
-using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player;
 
 namespace MoreShipUpgrades.Patches.Interactables
 {

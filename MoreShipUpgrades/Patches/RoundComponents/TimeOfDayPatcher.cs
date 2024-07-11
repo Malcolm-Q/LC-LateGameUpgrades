@@ -2,8 +2,8 @@
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Commands;
-using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Patches.RoundComponents
@@ -18,6 +18,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             GenerateNewSales(ref __instance);
             ExtendDeadlineScript.SetDaysExtended(daysExtended: 0);
             QuantumDisruptor.TryResetQuantum(QuantumDisruptor.ResetModes.NewQuota);
+            RandomizeUpgradeManager.RandomizeUpgrades(RandomizeUpgradeManager.RandomizeUpgradeEvents.PerQuota);
         }
 
         static void GenerateNewSales(ref TimeOfDay __instance)
@@ -55,5 +56,4 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             ItemProgressionManager.CheckNewQuota(__instance.quotaFulfilled);
         }
     }
-
 }

@@ -15,7 +15,20 @@ using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
 using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
-
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Vehicle;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Store;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.WeedKiller;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Zapgun;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.RadarBooster;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies;
 
 namespace MoreShipUpgrades.Misc
 {
@@ -23,6 +36,11 @@ namespace MoreShipUpgrades.Misc
     public class LategameConfiguration : SyncedConfig2<LategameConfiguration>
     {
         #region Enabled
+        [field: SyncedEntryField] public SyncedEntry<bool> TURBO_TANK_ENABLED {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> FEDORA_SUIT_ENABLED {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> WEED_GENETIC_MANIPULATION_ENABLED {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> IGNITION_COIL_ENABLED {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> FLUFFY_SEATS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> IMPROVED_STEERING_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SUPERCHARGED_PISTONS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> RAPID_MOTORS_ENABLED {  get; set; }
@@ -72,6 +90,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Individual
+        [field: SyncedEntryField] public SyncedEntry<bool> FEDORA_SUIT_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> CLAY_GLASSES_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> MECHANICAL_ARMS_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> REINFORCED_BOOTS_INDIVIDUAL {  get; set; }
@@ -96,6 +115,11 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Initial Prices
+        [field: SyncedEntryField] public SyncedEntry<int> TURBO_TANK_PRICE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> FEDORA_SUIT_PRICE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> WEED_GENETIC_MANIPULATION_PRICE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> IGNITION_COIL_PRICE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> FLUFFY_SEATS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> IMPROVED_STEERING_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SUPERCHARGED_PISTONS_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> RAPID_MOTORS_PRICE {  get; set; }
@@ -149,6 +173,23 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<string> TURBO_TANK_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> TURBO_TANK_OVERRIDE_NAME { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> TURBO_TANK_CAPACITY_INITIAL_INCREASE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> TURBO_TANK_CAPACITY_INCREMENTAL_INCREASE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> FEDORA_SUIT_OVERRIDE_NAME {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> WEED_GENETIC_MANIPULATION_PRICES { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> WEED_GENETIC_MANIPULATION_OVERRIDE_NAME {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> WEED_GENETIC_MANIPULATION_INITIAL_EFFECTIVENESS_INCREASE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> WEED_GENETIC_MANIPULATION_INCREMENTAL_EFFECTIVENESS_INCREASE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> IGNITION_COIL_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> IGNITION_COIL_OVERRIDE_NAME {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> IGNITION_COIL_IGNITION_INITIAL_CHANCE_INCREASE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> IGNITION_COIL_IGNITION_INCREMENTAL_CHANCE_INCREASE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> FLUFFY_SEATS_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> FLUFFY_SEATS_OVERRIDE_NAME { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> FLUFFY_SEATS_DAMAGE_MITIGATION_INITIAL_INCREASE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> FLUFFY_SEATS_DAMAGE_MITIGATION_INCREMENTAL_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> IMPROVED_STEERING_PRICES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> IMPROVED_STEERING_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> IMPROVED_STEERING_TURNING_SPEED_INITIAL_INCREASE {  get; set; }
@@ -460,6 +501,12 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<float> SCRAP_UPGRADE_CHANCE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<ItemProgressionManager.ChancePerScrapModes> SCRAP_UPGRADE_CHANCE_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_BLACKLISTED_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_APPARATICE_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> TURBO_TANK_ITEM_PROGRESSION_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> FEDORA_SUIT_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> WEED_GENETIC_MANIPULATION_ITEM_PROGRESSION_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> IGNITION_COIL_ITEM_PROGRESSION_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> FLUFFY_SEATS_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> IMPROVED_STEERING_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> SUPERCHARGED_PISTONS_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> RAPID_MOTORS_ITEM_PROGRESSION_ITEMS {  get; set; }
@@ -502,10 +549,27 @@ namespace MoreShipUpgrades.Misc
 
         #endregion
 
+        #region Randomize Upgrades
+        [field: SyncedEntryField] public SyncedEntry<bool> RANDOMIZE_UPGRADES_ENABLED { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> RANDOMIZE_UPGRADES_AMOUNT { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> RANDOMIZE_UPGRADES_ALWAYS_SHOW_PURCHASED {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<RandomizeUpgradeManager.RandomizeUpgradeEvents> RANDOMIZE_UPGRADES_CHANGE_UPGRADES_EVENT {  get; set; }
+        #endregion
+
         #region Configuration Bindings
         public LategameConfiguration(ConfigFile cfg) : base(Metadata.GUID)
         {
             string topSection;
+
+            #region Randomize Upgrades
+
+            topSection = LguConstants.RANDOMIZE_UPGRADES_SECTION;
+            RANDOMIZE_UPGRADES_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.RANDOMIZE_UPGRADES_ENABLED_KEY, LguConstants.RANDOMIZE_UPGRADES_ENABLED_DEFAULT, LguConstants.RANDOMIZE_UPGRADES_ENABLED_DESCRIPTION);
+            RANDOMIZE_UPGRADES_AMOUNT = cfg.BindSyncedEntry(topSection, LguConstants.RANDOMIZE_UPGRADES_AMOUNT_KEY, LguConstants.RANDOMIZE_UPGRADES_AMOUNT_DEFAULT, LguConstants.RANDOMIZE_UPGRADES_AMOUNT_DESCRIPTION);
+            RANDOMIZE_UPGRADES_ALWAYS_SHOW_PURCHASED = cfg.BindSyncedEntry(topSection, LguConstants.RANDOMIZE_UPGRADES_ALWAYS_SHOW_PURCHASED_KEY, LguConstants.RANDOMIZE_UPGRADES_ALWAYS_SHOW_PURCHASED_DEFAULT, LguConstants.RANDOMIZE_UPGRADES_ALWAYS_SHOW_PURCHASED_DESCRIPTION);
+            RANDOMIZE_UPGRADES_CHANGE_UPGRADES_EVENT = cfg.BindSyncedEntry(topSection, LguConstants.RANDOMIZE_UPGRADES_CHANGE_UPGRADES_EVENT_KEY, LguConstants.RANDOMIZE_UPGRADES_CHANGE_UPGRADES_EVENT_DEFAULT, LguConstants.RANDOMIZE_UPGRADES_CHANGE_UPGRADES_EVENT_DESCRIPTION);
+
+            #endregion
 
             #region Item Progression
 
@@ -516,6 +580,7 @@ namespace MoreShipUpgrades.Misc
             SCRAP_UPGRADE_CHANCE = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_UPGRADE_CHANCE_KEY, LguConstants.SCRAP_UPGRADE_CHANCE_DEFAULT, LguConstants.SCRAP_UPGRADE_CHANCE_DESCRIPTION);
             SCRAP_UPGRADE_CHANCE_MODE = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_UPGRADE_MODE_KEY, LguConstants.SCRAP_UPGRADE_MODE_DEFAULT, LguConstants.SCRAP_UPGRADE_MODE_DESCRIPTION);
             ITEM_PROGRESSION_BLACKLISTED_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_BLACKLISTED_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_BLACKLISTED_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_BLACKLISTED_ITEMS_DESCRIPTION);
+            ITEM_PROGRESSION_APPARATICE_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_APPARATICE_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_APPARATICE_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_APPARATICE_ITEMS_DESCRIPTION);
 
             #endregion 
 
@@ -534,6 +599,11 @@ namespace MoreShipUpgrades.Misc
 
             topSection = LguConstants.OVERRIDE_NAMES_SECTION;
             OVERRIDE_UPGRADE_NAMES              = cfg.BindSyncedEntry(topSection, LguConstants.OVERRIDE_NAMES_ENABLED_KEY, LguConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LguConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
+            TURBO_TANK_OVERRIDE_NAME            = cfg.BindSyncedEntry(topSection, LguConstants.TURBO_TANK_OVERRIDE_NAME_KEY, TurboTank.UPGRADE_NAME);
+            FEDORA_SUIT_OVERRIDE_NAME           = cfg.BindSyncedEntry(topSection, LguConstants.FEDORA_SUIT_OVERRIDE_NAME_KEY, FedoraSuit.UPGRADE_NAME);
+            WEED_GENETIC_MANIPULATION_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.WEED_GENETIC_MANIPULATION_OVERRIDE_NAME_KEY, WeedGeneticManipulation.UPGRADE_NAME);
+            IGNITION_COIL_OVERRIDE_NAME         = cfg.BindSyncedEntry(topSection, LguConstants.IGNITION_COIL_OVERRIDE_NAME_KEY, IgnitionCoil.UPGRADE_NAME);
+            FLUFFY_SEATS_OVERRIDE_NAME          = cfg.BindSyncedEntry(topSection, LguConstants.FLUFFY_SEATS_OVERRIDE_NAME_KEY, FluffySeats.UPGRADE_NAME);
             IMPROVED_STEERING_OVERRIDE_NAME     = cfg.BindSyncedEntry(topSection, LguConstants.IMPROVED_STEERING_OVERRIDE_NAME_KEY, ImprovedSteering.UPGRADE_NAME);
             SUPERCHARGED_PISTONS_OVERRIDE_NAME  = cfg.BindSyncedEntry(topSection, LguConstants.SUPERCHARGED_PISTONS_OVERRIDE_NAME_KEY, SuperchargedPistons.UPGRADE_NAME);
             RAPID_MOTORS_OVERRIDE_NAME          = cfg.BindSyncedEntry(topSection, LguConstants.RAPID_MOTORS_OVERRIDE_NAME_KEY, RapidMotors.UPGRADE_NAME);
@@ -710,6 +780,64 @@ namespace MoreShipUpgrades.Misc
 
             #region Upgrades
 
+            #region Turbo Tank
+
+            topSection = TurboTank.UPGRADE_NAME;
+            TURBO_TANK_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.TURBO_TANK_ENABLED_KEY, LguConstants.TURBO_TANK_ENABLED_DEFAULT, LguConstants.TURBO_TANK_ENABLED_DESCRIPTION);
+            TURBO_TANK_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.TURBO_TANK_PRICE_KEY, LguConstants.TURBO_TANK_PRICE_DEFAULT);
+            TURBO_TANK_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, TurboTank.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            TURBO_TANK_CAPACITY_INITIAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.TURBO_TANK_CAPACITY_INITIAL_INCREASE_KEY, LguConstants.TURBO_TANK_CAPACITY_INITIAL_INCREASE_DEFAULT, LguConstants.TURBO_TANK_CAPACITY_INITIAL_INCREASE_DESCRIPTION);
+            TURBO_TANK_CAPACITY_INCREMENTAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.TURBO_TANK_CAPACITY_INCREMENTAL_INCREASE_KEY, LguConstants.TURBO_TANK_CAPACITY_INCREMENTAL_INCREASE_DEFAULT, LguConstants.TURBO_TANK_CAPACITY_INCREMENTAL_INCREASE_DESCRIPTION);
+            TURBO_TANK_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
+
+            #region Fedora Suit
+
+            topSection = FedoraSuit.UPGRADE_NAME;
+            FEDORA_SUIT_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.FEDORA_SUIT_ENABLED_KEY, LguConstants.FEDORA_SUIT_ENABLED_DEFAULT, LguConstants.FEDORA_SUIT_ENABLED_DESCRIPTION);
+            FEDORA_SUIT_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            FEDORA_SUIT_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.FEDORA_SUIT_PRICE_KEY, LguConstants.FEDORA_SUIT_PRICE_DEFAULT);
+            FEDORA_SUIT_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_MODE_DESCRIPTION);
+
+            #endregion
+
+            #region Weed Genetic Manipulation
+
+            topSection = WeedGeneticManipulation.UPGRADE_NAME;
+            WEED_GENETIC_MANIPULATION_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.WEED_GENETIC_MANIPULATION_ENABLED_KEY, LguConstants.WEED_GENETIC_MANIPULATION_ENABLED_DEFAULT, LguConstants.WEED_GENETIC_MANIPULATION_ENABLED_DESCRIPTION);
+            WEED_GENETIC_MANIPULATION_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.WEED_GENETIC_MANIPULATION_PRICE_KEY, LguConstants.WEED_GENETIC_MANIPULATION_PRICE_DEFAULT);
+            WEED_GENETIC_MANIPULATION_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, WeedGeneticManipulation.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            WEED_GENETIC_MANIPULATION_INITIAL_EFFECTIVENESS_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.WEED_GENETIC_INITIAL_EFFECTIVENESS_INCREASE_KEY, LguConstants.WEED_GENETIC_INITIAL_EFFECTIVENESS_INCREASE_DEFAULT, LguConstants.WEED_GENETIC_INITIAL_EFFECTIVENESS_INCREASE_DESCRIPTION);
+            WEED_GENETIC_MANIPULATION_INCREMENTAL_EFFECTIVENESS_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.WEED_GENETIC_INCREMENTAL_EFFECTIVENESS_INCREASE_KEY, LguConstants.WEED_GENETIC_INCREMENTAL_EFFECTIVENESS_INCREASE_DEFAULT, LguConstants.WEED_GENETIC_INCREMENTAL_EFFECTIVENESS_INCREASE_DESCRIPTION);
+            WEED_GENETIC_MANIPULATION_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
+
+            #region Ignition Coil
+
+            topSection = IgnitionCoil.UPGRADE_NAME;
+            IGNITION_COIL_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.IGNITION_COIL_ENABLED_KEY, LguConstants.IGNITION_COIL_ENABLED_DEFAULT, LguConstants.IGNITION_COIL_ENABLED_DESCRIPTION);
+            IGNITION_COIL_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.IGNITION_COIL_PRICE_KEY, LguConstants.IGNITION_COIL_PRICE_DEFAULT);
+            IGNITION_COIL_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, IgnitionCoil.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            IGNITION_COIL_IGNITION_INITIAL_CHANCE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.IGNITION_COIL_IGNITION_INITIAL_CHANCE_INCREASE_KEY, LguConstants.IGNITION_COIL_IGNITION_INITIAL_CHANCE_INCREASE_DEFAULT, LguConstants.IGNITION_COIL_IGNITION_INITIAL_CHANCE_INCREASE_DESCRIPTION);
+            IGNITION_COIL_IGNITION_INCREMENTAL_CHANCE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.IGNITION_COIL_IGNITION_INCREMENTAL_CHANCE_INCREASE_KEY, LguConstants.IGNITION_COIL_IGNITION_INCREMENTAL_CHANCE_INCREASE_DEFAULT, LguConstants.IGNITION_COIL_IGNITION_INCREMENTAL_CHANCE_INCREASE_DESCRIPTION);
+            IGNITION_COIL_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
+
+            #region Fluffy Seats
+
+            topSection = FluffySeats.UPGRADE_NAME;
+            FLUFFY_SEATS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.FLUFFY_SEATS_ENABLED_KEY, LguConstants.FLUFFY_SEATS_ENABLED_DEFAULT, LguConstants.FLUFFY_SEATS_ENABLED_DESCRIPTION);
+            FLUFFY_SEATS_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.FLUFFY_SEATS_PRICE_KEY, LguConstants.FLUFFY_SEATS_PRICE_DEFAULT);
+            FLUFFY_SEATS_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, FluffySeats.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            FLUFFY_SEATS_DAMAGE_MITIGATION_INITIAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.FLUFFY_SEATS_DAMAGE_MITIGATION_INITIAL_INCREASE_KEY, LguConstants.FLUFFY_SEATS_DAMAGE_MITIGATION_INITIAL_INCREASE_DEFAULT, LguConstants.FLUFFY_SEATS_DAMAGE_MITIGATION_INITIAL_INCREASE_DESCRIPTION);
+            FLUFFY_SEATS_DAMAGE_MITIGATION_INCREMENTAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.FLUFFY_SEATS_DAMAGE_MITIGATION_INCREMENTAL_INCREASE_KEY, LguConstants.FLUFFY_SEATS_DAMAGE_MITIGATION_INCREMENTAL_INCREASE_DEFAULT, LguConstants.FLUFFY_SEATS_DAMAGE_MITIGATION_INCREMENTAL_INCREASE_DESCRIPTION);
+            FLUFFY_SEATS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
+
             #region Improved Steering
 
             topSection = ImprovedSteering.UPGRADE_NAME;
@@ -819,7 +947,6 @@ namespace MoreShipUpgrades.Misc
             REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION = cfg.BindSyncedEntry(topSection, LguConstants.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION_KEY, LguConstants.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION_DEFAULT, LguConstants.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION_DESCRIPTION);
             REINFORCED_BOOTS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
-
             #endregion
 
             #region Deeper Pockets
@@ -894,7 +1021,7 @@ namespace MoreShipUpgrades.Misc
             BEEKEEPER_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
-                
+
             #region Better Scanner
 
             topSection = BetterScanner.UPGRADE_NAME;
@@ -1327,8 +1454,7 @@ namespace MoreShipUpgrades.Misc
             if (amount == UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value) return;
             MapObjects.RemoveMapObject(UpgradeBus.Instance.spawnableMapObjects["MedkitMapItem"], Levels.LevelTypes.All);
             AnimationCurve curve = new(new Keyframe(0f, UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value), new Keyframe(1f, UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value));
-            MapObjects.RegisterMapObject(mapObject: UpgradeBus.Instance.spawnableMapObjects["MedkitMapItem"], levels: Levels.LevelTypes.All, spawnRateFunction: (level) => curve);
+            MapObjects.RegisterMapObject(mapObject: UpgradeBus.Instance.spawnableMapObjects["MedkitMapItem"], levels: Levels.LevelTypes.All, spawnRateFunction: (_) => curve);
         }
-
     }
 }

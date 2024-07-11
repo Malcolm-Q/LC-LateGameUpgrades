@@ -2,7 +2,7 @@
 using HarmonyLib;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
-using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Patches.Interactables

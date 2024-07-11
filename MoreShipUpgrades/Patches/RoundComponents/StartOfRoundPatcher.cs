@@ -5,8 +5,10 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -20,7 +22,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
     [HarmonyPatch(typeof(StartOfRound))]
     internal static class StartOfRoundPatcher
     {
-        static LguLogger logger = new LguLogger(nameof(StartOfRoundPatcher));
+        static readonly LguLogger logger = new(nameof(StartOfRoundPatcher));
         [HarmonyPrefix]
         [HarmonyPatch(nameof(StartOfRound.Awake))]
         static void InitLguStore(StartOfRound __instance)
@@ -56,8 +58,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         [HarmonyPatch(nameof(StartOfRound.PowerSurgeShip))]
         static bool PowerSurgeShip()
         {
-            if (BaseUpgrade.GetActiveUpgrade(LightningRod.UPGRADE_NAME)) return false;
-            return true;
+            return !BaseUpgrade.GetActiveUpgrade(LightningRod.UPGRADE_NAME);
         }
 
         [HarmonyTranspiler]
@@ -80,6 +81,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         {
             ResetContract(ref __instance);
             QuantumDisruptor.TryResetQuantum(QuantumDisruptor.ResetModes.MoonLanding);
+            RandomizeUpgradeManager.RandomizeUpgrades(RandomizeUpgradeManager.RandomizeUpgradeEvents.PerMoonLanding);
         }
         static void ResetContract(ref StartOfRound __instance)
         {
@@ -144,7 +146,6 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             }
             if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_AFFECT_LANDING && UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_AFFECT_DEPARTING)
                 __instance.shipAnimator.speed *= LandingThrusters.GetLandingSpeedMultiplier();
-
         }
         [HarmonyPatch(nameof(StartOfRound.EndOfGame))]
         [HarmonyPostfix]
@@ -158,7 +159,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
 
         [HarmonyPatch(nameof(StartOfRound.openingDoorsSequence))]
         [HarmonyPrefix]
-        static void openingDoorsSequencePrefix(StartOfRound __instance)
+        static void OpeningDoorsSequencePrefix(StartOfRound __instance)
         {
             if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_ENABLED) return;
             if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_AFFECT_LANDING) return;
@@ -168,7 +169,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
 
         [HarmonyPatch(nameof(StartOfRound.openingDoorsSequence), MethodType.Enumerator)]
         [HarmonyTranspiler]
-        static IEnumerable<CodeInstruction> openingDoorsSequenceTranspiler(IEnumerable<CodeInstruction> instructions)
+        static IEnumerable<CodeInstruction> OpeningDoorsSequenceTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo getLandingSpeedMultiplier = typeof(LandingThrusters).GetMethod(nameof(LandingThrusters.GetInteractMutliplier));
             List<CodeInstruction> codes = instructions.ToList();
@@ -185,6 +186,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         static void ChangeLevelPostfix()
         {
             QuantumDisruptor.TryResetQuantum(QuantumDisruptor.ResetModes.MoonRerouting);
+            RandomizeUpgradeManager.RandomizeUpgrades(RandomizeUpgradeManager.RandomizeUpgradeEvents.PerMoonRouting);
         }
     }
 }

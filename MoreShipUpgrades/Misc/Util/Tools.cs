@@ -124,7 +124,10 @@ namespace MoreShipUpgrades.Misc.Util
             }
             if (findValue is string) return code.opcode == OpCodes.Ldstr && code.operand.Equals(findValue);
             if (findValue is MethodInfo) return (code.opcode == OpCodes.Call || code.opcode == OpCodes.Callvirt) && code.operand == findValue;
-            if (findValue is FieldInfo) return (code.opcode == OpCodes.Ldfld || code.opcode == OpCodes.Stfld) && code.operand == findValue;
+            if (findValue is FieldInfo)
+            {
+                return (code.opcode == OpCodes.Ldfld || code.opcode == OpCodes.Stfld) && code.operand == findValue;
+            }
             if (findValue is OpCode) return code.opcode == (OpCode)findValue;
             return false;
         }

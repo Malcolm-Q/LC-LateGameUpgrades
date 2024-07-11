@@ -10,7 +10,11 @@ using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
 using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +40,6 @@ namespace MoreShipUpgrades.Managers
 
         internal AudioClip flashNoise;
         internal GameObject modStorePrefab;
-        internal TerminalNode modStoreInterface;
 
         internal Dictionary<string, SpawnableMapObjectDef> spawnableMapObjects = [];
         internal Dictionary<string, int> spawnableMapObjectsAmount = [];
@@ -56,7 +59,6 @@ namespace MoreShipUpgrades.Managers
 
         internal Dictionary<string, AudioClip> SFX = [];
         internal bool helmetDesync;
-        internal bool IsBeta = false;
         internal int daysExtended = 0;
 
         Terminal terminal;
@@ -93,6 +95,7 @@ namespace MoreShipUpgrades.Managers
 
             if (PluginConfiguration.BEATS_ENABLED.Value) SickBeats.Instance.EffectsActive = false;
             if (PluginConfiguration.NIGHT_VISION_ENABLED.Value) NightVision.Instance.nightVisionActive = false;
+            if (PluginConfiguration.FEDORA_SUIT_ENABLED) FedoraSuit.instance.wearingFedora.Clear();
             ContractManager.Instance.ResetAllValues();
 
             if (PluginConfiguration.DISCOMBOBULATOR_ENABLED.Value) Discombobulator.instance.flashCooldown = 0f;
@@ -248,6 +251,7 @@ namespace MoreShipUpgrades.Managers
             SyncAvailableContracts();
 
             logger.LogInfo("Successfully reconstructed with hosts config.");
+            if (LguStore.Instance.IsClient && !LguStore.Instance.IsHost) LguStore.Instance.RandomizeUpgradesServerRpc();
         }
         internal void BuildCustomNodes()
         {
@@ -262,6 +266,8 @@ namespace MoreShipUpgrades.Managers
 
             terminalNodes.Sort();
             ItemProgressionManager.InitializeContributionValues();
+            ItemProgressionManager.InitializeBlacklistItems();
+            ItemProgressionManager.InitializeApparatusItems();
         }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can be purchased multiple times

@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Misc.Util;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies;
 using System;
 using System.Collections.Generic;
 using System.Reflection;

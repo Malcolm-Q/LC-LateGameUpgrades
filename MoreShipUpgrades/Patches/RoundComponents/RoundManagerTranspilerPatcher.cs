@@ -3,7 +3,7 @@ using MoreShipUpgrades.UpgradeComponents.Commands;
 using System.Collections.Generic;
 using System.Reflection;
 using MoreShipUpgrades.Misc.Util;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
 
 namespace MoreShipUpgrades.Patches.RoundComponents
 {

@@ -7,19 +7,19 @@ using System.Reflection.Emit;
 using System.Linq;
 using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using UnityEngine;
-using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Items;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
 
 namespace MoreShipUpgrades.Patches.PlayerController
 {
     [HarmonyPatch(typeof(PlayerControllerB))]
     internal static class PlayerControllerBPatcher
     {
-
         [HarmonyPostfix]
         [HarmonyPatch(nameof(PlayerControllerB.Awake))]
         static void StartPostfix(PlayerControllerB __instance)
@@ -95,8 +95,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             {
                 Helmet.ExecuteHelmetDamageMitigation(ref __instance, ref damageNumber);
             }
-            if (damageNumber == 0) return false;
-            return true;
+            return damageNumber != 0;
         }
 
         [HarmonyTranspiler]
@@ -104,7 +103,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         static IEnumerable<CodeInstruction> PlayerHitGroundEffectsTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo reduceFallDamageMethod = typeof(ReinforcedBoots).GetMethod(nameof(ReinforcedBoots.ReduceFallDamage));
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            List<CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindInteger(ref index, ref codes, findValue: 100, addCode: reduceFallDamageMethod, errorMessage: "Couldn't find 100 fall damage");
             Tools.FindInteger(ref index, ref codes, findValue: 80, addCode: reduceFallDamageMethod, errorMessage: "Couldn't find 80 fall damage");
@@ -154,7 +153,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
                 if (player.currentlyHeldObject is WheelbarrowScript) return;
             }
             int twoHandedCount = 0;
-            int maxTwoHandedCount = 1 + UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_INITIAL_TWO_HANDED_ITEMS + BaseUpgrade.GetUpgradeLevel(DeepPockets.UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_ITEMS;
+            int maxTwoHandedCount = 1 + UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_INITIAL_TWO_HANDED_ITEMS + (BaseUpgrade.GetUpgradeLevel(DeepPockets.UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_ITEMS);
 
             for(int i = 0; i < player.ItemSlots.Length && twoHandedCount < maxTwoHandedCount; i++)
             {
@@ -189,7 +188,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         [HarmonyPatch(nameof(PlayerControllerB.PlaceGrabbableObject))]
         static IEnumerable<CodeInstruction> ItemWeightTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            List<CodeInstruction> codes = new(instructions);
             int index = 0;
             AddBackMusclesCodeInstruction(ref index, ref codes);
 
@@ -244,7 +243,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             FieldInfo sprintTime = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.sprintTime));
             FieldInfo carryWeight = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.carryWeight));
 
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            List<CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindField(ref index, ref codes, findField: sprintTime, addCode: additionalSprintTime, errorMessage: "Couldn't find the first occurence of sprintTime field");
             Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: backMusclesStaminaWeight, errorMessage: "Couldn't find the occurence of carryWeight field");
@@ -263,7 +262,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         static IEnumerable<CodeInstruction> JumpPerformedTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo biggerLungsReduceJumpCost = typeof(BiggerLungs).GetMethod(nameof(BiggerLungs.ApplyPossibleReducedJumpStaminaCost));
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            List<CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindFloat(ref index, ref codes, findValue: 0.08f, addCode: biggerLungsReduceJumpCost, errorMessage: "Couldn't find jump stamina cost");
             return codes;
@@ -286,7 +285,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         static IEnumerable<CodeInstruction> AddReduceNoiseRangeFunctionToPlayerFootsteps(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo runningShoesReduceNoiseRange = typeof(RunningShoes).GetMethod(nameof(RunningShoes.ApplyPossibleReducedNoiseRange));
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            List<CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindFloat(ref index, ref codes, findValue: 22, addCode: runningShoesReduceNoiseRange, errorMessage: "Couldn't find footstep noise");
             Tools.FindFloat(ref index, ref codes, findValue: 17, addCode: runningShoesReduceNoiseRange, errorMessage: "Couldn't find footstep noise");
@@ -298,7 +297,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         static IEnumerable<CodeInstruction> PlayerLookInputTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo reduceLookSensitivity = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrowLookSensitivity));
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            List<CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindFloat(ref index, ref codes, findValue: 0.008f, addCode: reduceLookSensitivity, errorMessage: "Couldn't find look sensitivity value we wanted to influence");
             return codes;
@@ -311,15 +310,13 @@ namespace MoreShipUpgrades.Patches.PlayerController
             MethodInfo additionalJumpForce = typeof(StrongLegs).GetMethod(nameof(StrongLegs.GetAdditionalJumpForce));
             FieldInfo jumpForce = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.jumpForce));
 
-
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            List<CodeInstruction> codes = new(instructions);
             int index = 0;
 
             Tools.FindField(ref index, ref codes, findField: jumpForce, addCode: additionalJumpForce, errorMessage: "Couldn't find first occurence of jump force field");
             Tools.FindField(ref index, ref codes, findField: jumpForce, addCode: additionalJumpForce, errorMessage: "Couldn't find second occurence of jump force field");
             return codes;
         }
-
 
         [HarmonyPatch(nameof(PlayerControllerB.Update))] // We're all going to die
         [HarmonyTranspiler] // Just kidding
@@ -336,7 +333,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             FieldInfo climbSpeed = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.climbSpeed));
             FieldInfo jumpForce = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.jumpForce));
 
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            List<CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindField(ref index, ref codes, findField: movementSpeed, addCode: additionalMovement, errorMessage: "Couldn't find first occurence of movement speed field");
             Tools.FindField(ref index, ref codes, findField: movementSpeed, addCode: additionalMovement, errorMessage: "Couldn't find second occurence of movement speed field");
@@ -354,7 +351,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         {
             MethodInfo carryingWheelbarrow = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrow));
             FieldInfo isMenuOpen = typeof(QuickMenuManager).GetField(nameof(QuickMenuManager.isMenuOpen));
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            List<CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindField(ref index, ref codes, findField: isMenuOpen, addCode: carryingWheelbarrow, orInstruction: true, errorMessage: "Couldn't find isMenuOpen field");
             return codes;
@@ -367,7 +364,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         {
             FieldInfo grabDistance = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.grabDistance));
             MethodInfo getIncreasedRange = typeof(MechanicalArms).GetMethod(nameof(MechanicalArms.GetIncreasedGrabDistance));
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            List<CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindField(ref index, ref codes, findField: grabDistance, addCode: getIncreasedRange, errorMessage: "Couldn't find the grab distance field");
             return codes;

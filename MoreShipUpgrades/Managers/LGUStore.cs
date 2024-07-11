@@ -20,6 +20,11 @@ using HarmonyLib;
 using static MoreShipUpgrades.Managers.ItemProgressionManager;
 using MoreShipUpgrades.Misc.Util;
 using System.Text;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -40,7 +45,7 @@ namespace MoreShipUpgrades.Managers
         /// <summary>
         /// Old save format of Lategame Upgrades
         /// </summary>
-        public LGUSaveV1 oldSave;
+        LGUSaveV1 oldSave;
         /// <summary>
         /// Player identifier of the client
         /// </summary>
@@ -122,6 +127,11 @@ namespace MoreShipUpgrades.Managers
         internal void ServerSaveFile(bool resetCredits = true)
         {
             string saveFile = GameNetworkManager.Instance.currentSaveFileName;
+            LguSave.scrapToUpgrade = UpgradeBus.Instance.scrapToCollectionUpgrade;
+            LguSave.contributedValues = UpgradeBus.Instance.contributionValues;
+            LguSave.discoveredItems = UpgradeBus.Instance.discoveredItems;
+            ItemProgressionManager.Save();
+            RandomizeUpgradeManager.Save();
             string json = JsonConvert.SerializeObject(LguSave);
             ES3.Save(key: saveDataKey, value: json, filePath: saveFile);
             if (resetCredits) PlayerManager.instance.ResetUpgradeSpentCredits();
@@ -420,7 +430,6 @@ namespace MoreShipUpgrades.Managers
                 UpgradeBus.Instance.helmetDesync = true;
                 // this will just sync the helmets on StartGame
             }
-
             UpgradeBus.Instance.LoadSales();
 
             StartCoroutine(WaitForUpgradeObject());
@@ -468,6 +477,8 @@ namespace MoreShipUpgrades.Managers
                     customNode.Unlocked = true;
                 }
             }
+            RandomizeUpgradeManager.SetRandomUpgradeSeed(LguSave.randomUpgradeSeed);
+            RandomizeUpgradeManager.RandomizeUpgrades();
         }
 
         internal void UpdateUpgrades(CustomTerminalNode node, bool increment = false)
@@ -680,6 +691,17 @@ namespace MoreShipUpgrades.Managers
                 SyncWeatherClientRpc(level, ContractManager.probedWeathers[level]);
             }
         }
+        [ServerRpc(RequireOwnership = false)]
+        internal void RandomizeUpgradesServerRpc()
+        {
+            RandomizeUpgradesClientRpc(RandomizeUpgradeManager.GetRandomUpgradeSeed());
+        }
+
+        [ClientRpc]
+        internal void RandomizeUpgradesClientRpc(int seed)
+        {
+            RandomizeUpgradeManager.RandomizeUpgrades(seed);
+        }
     }
 
     [Serializable]
@@ -701,8 +723,9 @@ namespace MoreShipUpgrades.Managers
     public class LguSave
     {
         public Dictionary<ulong, SaveInfo> playerSaves = [];
-        public Dictionary<string, List<string>> scrapToUpgrade = UpgradeBus.Instance.scrapToCollectionUpgrade;
-        public Dictionary<string, int> contributedValues = UpgradeBus.Instance.contributionValues;
-        public List<string> discoveredItems = UpgradeBus.Instance.discoveredItems;
+        public Dictionary<string, List<string>> scrapToUpgrade;
+        public Dictionary<string, int> contributedValues;
+        public List<string> discoveredItems;
+        public int randomUpgradeSeed;
     }
 }

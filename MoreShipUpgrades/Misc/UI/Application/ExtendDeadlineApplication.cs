@@ -20,7 +20,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
             for (int i = 0; i < cursorCounterElements.Length; i++)
             {
                 int counter = i;
-                array[i] = (int x) => $"${ExtendDeadlineScript.instance.GetTotalCostPerDay(x)}";
+                array[i] = (int x) => $"${ExtendDeadlineScript.Instance.GetTotalCostPerDay(x)}";
                 cursorCounterElements[i] = CursorOutputElement<string>.Create(name: "Days to extend",
                                                                             description: "",
                                                                             action: () => TryPurchaseExtendedDays(cursorCounterElements[counter], backAction: () => SwitchScreen(screen, cursorCounterMenu, previous: true)),
@@ -35,7 +35,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
         void TryPurchaseExtendedDays<T>(CursorOutputElement<T> element, Action backAction)
         {
             int days = element.Counter;
-            int totalCost = ExtendDeadlineScript.instance.GetTotalCostPerDay(days);
+            int totalCost = ExtendDeadlineScript.Instance.GetTotalCostPerDay(days);
             if (terminal.groupCredits < totalCost)
             {
                 ErrorMessage(ExtendDeadlineScript.NAME, LguConstants.NOT_ENOUGH_CREDITS_EXTEND, backAction, "");
@@ -47,7 +47,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
         {
             terminal.groupCredits -= totalCost;
             LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits);
-            ExtendDeadlineScript.instance.ExtendDeadlineServerRpc(days);
+            ExtendDeadlineScript.Instance.ExtendDeadlineServerRpc(days);
             backAction();
         }
         protected void Confirm(string title, string description, Action confirmAction, Action declineAction, string additionalMessage = "")
