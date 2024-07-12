@@ -1704,6 +1704,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string MAIN_SCREEN_TITLE = "Lategame Upgrades";
         internal const string MAIN_SCREEN_TOP_TEXT = "Select an upgrade to purchase:";
+        internal const string MAIN_SCREEN_TOP_TEXT_NO_ENTRIES = "There are no upgrades for purchase.";
 
         internal const string MAIN_WEATHER_PROBE_SCREEN_TITLE = "Weather Probe";
         internal const string MAIN_WEATHER_PROBE_TOP_TEXT = "Select a moon you wish to alter the weather of:";

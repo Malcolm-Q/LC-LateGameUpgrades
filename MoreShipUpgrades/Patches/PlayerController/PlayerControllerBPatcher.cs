@@ -339,6 +339,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             Tools.FindField(ref index, ref codes, findField: movementSpeed, addCode: additionalMovement, errorMessage: "Couldn't find first occurence of movement speed field");
             Tools.FindField(ref index, ref codes, findField: movementSpeed, addCode: additionalMovement, errorMessage: "Couldn't find second occurence of movement speed field");
             Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: reduceCarryLoss, errorMessage: "Couldn't find first carryWeight occurence");
+            Tools.FindFloat(ref index, ref codes, findValue: 5f, skip: true, errorMessage: "Couldn't skip the value of 5f used on drunkness calculations");
             Tools.FindFloat(ref index, ref codes, findValue: 5f, addCode: additionalTractionForce, errorMessage: "Couldn't find the numerator used when sprinting");
             Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: reduceMovement, errorMessage: "Couldn't find second carryWeight occurence");
             Tools.FindFloat(ref index, ref codes, findValue: 10f, addCode: additionalTractionForce, errorMessage: "Couldn't find the numerator used when walking");

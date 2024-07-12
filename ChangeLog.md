@@ -1,4 +1,12 @@
 <details>
+<summary> 3.9.3 - 2024-07-12 </summary>
+
+- Fixed Traction Boots not applying on sprinting movement.
+- Fixed upgrade store breaking due to having no entries when configured so.
+
+</details>
+
+<details>
 <summary> 3.9.2 - 2024-07-12 </summary>
 
 - Implemented "Traction Boots" upgrade which increases the player's traction force to the ground to allow easier movement direction change.

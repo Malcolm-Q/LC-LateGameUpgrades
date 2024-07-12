@@ -262,6 +262,9 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 * __Turbo Tank - $200__
     * Increases the Company Cruiser vehicle's maximum turbo capacity. 
 
+* __Traction Boots - $100__
+    * Increases the player's traction force to the ground to allow easier movement direction change.
+
 ## Item Progression Mode
 
 This mod offers an alternative mode for obtaining upgrades through selling items to The Company. The following modes are available for playthroughs:

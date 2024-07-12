@@ -1,6 +1,7 @@
 ﻿using InteractiveTerminalAPI.UI;
 using InteractiveTerminalAPI.UI.Application;
 using InteractiveTerminalAPI.UI.Cursor;
+using InteractiveTerminalAPI.UI.Page;
 using InteractiveTerminalAPI.UI.Screen;
 using LethalLib.Modules;
 using MoreShipUpgrades.Managers;
@@ -33,6 +34,32 @@ namespace MoreShipUpgrades.Misc.UI.Application
             CursorMenu[] cursorMenus = entries.Item2;
             IScreen[] screens = entries.Item3;
 
+            if (pagesUpgrades.Length == 0)
+            {
+                CursorElement[] elements = new CursorElement[1];
+                elements[0] = CursorElement.Create(name: "Leave", action: () => UnityEngine.Object.Destroy(InteractiveTerminalManager.Instance));
+                CursorMenu cursorMenu = CursorMenu.Create(startingCursorIndex: 0, elements: elements);
+                IScreen screen = new BoxedScreen()
+                {
+                    Title = LguConstants.MAIN_SCREEN_TITLE,
+                    elements =
+                    [
+                        new TextElement()
+                        {
+                            Text = LguConstants.MAIN_SCREEN_TOP_TEXT_NO_ENTRIES,
+                        },
+                        new TextElement()
+                        {
+                            Text = " "
+                        },
+                        cursorMenu
+                    ]
+                };
+                currentPage = PageCursorElement.Create(startingPageIndex: 0, elements: [screen], cursorMenus: [cursorMenu]);
+                currentCursorMenu = cursorMenu;
+                currentScreen = screen;
+                return;
+            }
             for (int i = 0; i < pagesUpgrades.Length; i++)
             {
                 CustomTerminalNode[] upgrades = pagesUpgrades[i];
