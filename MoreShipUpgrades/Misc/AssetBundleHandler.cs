@@ -149,6 +149,7 @@ namespace MoreShipUpgrades.Misc
             { WeedGeneticManipulation.UPGRADE_NAME, upgrades+"WeedGeneticManipulation.prefab" },
             { FedoraSuit.UPGRADE_NAME, upgrades+"FedoraSuit.prefab" },
             { TurboTank.UPGRADE_NAME, upgrades+"TurboTank.prefab" },
+            { TractionBoots.UPGRADE_NAME, upgrades+"TractionBoots.prefab" },
 
             { "Advanced Portable Tele", storeItems+"TpButtonAdv.asset" },
             { "Portable Tele", storeItems+"TpButton.asset" },

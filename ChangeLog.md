@@ -1,4 +1,23 @@
 <details>
+<summary> 3.9.3 - 2024-07-12 </summary>
+
+- Fixed Traction Boots not applying on sprinting movement.
+- Fixed upgrade store breaking due to having no entries when configured so.
+- Changed Fluffy Seats to also include the instant kill when hitting too hard on an obstacle
+  - This will not prevent you from death when the car gets destroyed and you die due to the explosion. Only Inertia related damages will be mitigated by this upgrade. 
+
+</details>
+
+<details>
+<summary> 3.9.2 - 2024-07-12 </summary>
+
+- Implemented "Traction Boots" upgrade which increases the player's traction force to the ground to allow easier movement direction change.
+- Fixed showing limited amount of entries in the upgrade store due to lack of bool check for randomized upgrades mode.
+- Fixed free upgrades not being applied again after players get fired from The Company.
+
+</details>
+
+<details>
 <summary> 3.9.1 - 2024-07-11 </summary>
 
 - Implemented "Randomized Upgrades" mode which makes the upgrades be randomly selected to appear in the shop rather than the full list

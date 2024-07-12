@@ -1,12 +1,14 @@
 ﻿using InteractiveTerminalAPI.UI;
 using InteractiveTerminalAPI.UI.Application;
 using InteractiveTerminalAPI.UI.Cursor;
+using InteractiveTerminalAPI.UI.Page;
 using InteractiveTerminalAPI.UI.Screen;
 using LethalLib.Modules;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.UI.Cursor;
 using MoreShipUpgrades.Misc.Util;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,13 +27,39 @@ namespace MoreShipUpgrades.Misc.UI.Application
         }
         public override void Initialization()
         {
-            CustomTerminalNode[] filteredNodes = UpgradeBus.Instance.terminalNodes.Where(x => x.Visible).ToArray();
+            CustomTerminalNode[] filteredNodes = UpgradeBus.Instance.terminalNodes.Where(x => x.Visible && (x.UnlockPrice > 0 || (x.OriginalName == NightVision.UPGRADE_NAME && (x.Prices.Length > 0 && x.Prices[0] != 0)))).ToArray();
             (CustomTerminalNode[][], CursorMenu[], IScreen[]) entries = GetPageEntries(filteredNodes);
 
             CustomTerminalNode[][] pagesUpgrades = entries.Item1;
             CursorMenu[] cursorMenus = entries.Item2;
             IScreen[] screens = entries.Item3;
 
+            if (pagesUpgrades.Length == 0)
+            {
+                CursorElement[] elements = new CursorElement[1];
+                elements[0] = CursorElement.Create(name: "Leave", action: () => UnityEngine.Object.Destroy(InteractiveTerminalManager.Instance));
+                CursorMenu cursorMenu = CursorMenu.Create(startingCursorIndex: 0, elements: elements);
+                IScreen screen = new BoxedScreen()
+                {
+                    Title = LguConstants.MAIN_SCREEN_TITLE,
+                    elements =
+                    [
+                        new TextElement()
+                        {
+                            Text = LguConstants.MAIN_SCREEN_TOP_TEXT_NO_ENTRIES,
+                        },
+                        new TextElement()
+                        {
+                            Text = " "
+                        },
+                        cursorMenu
+                    ]
+                };
+                currentPage = PageCursorElement.Create(startingPageIndex: 0, elements: [screen], cursorMenus: [cursorMenu]);
+                currentCursorMenu = cursorMenu;
+                currentScreen = screen;
+                return;
+            }
             for (int i = 0; i < pagesUpgrades.Length; i++)
             {
                 CustomTerminalNode[] upgrades = pagesUpgrades[i];

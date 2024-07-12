@@ -205,6 +205,7 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.Instance.ResetAllValues(false);
             if(!IsHost || !IsServer) LguSave = new LguSave();
             SaveInfo = new SaveInfo();
+            StartCoroutine(WaitForUpgradeObject());
         }
 
         /// <summary>

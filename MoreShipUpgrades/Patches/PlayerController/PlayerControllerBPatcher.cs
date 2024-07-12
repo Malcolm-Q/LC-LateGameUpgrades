@@ -14,6 +14,7 @@ using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Vehicle;
 
 namespace MoreShipUpgrades.Patches.PlayerController
 {
@@ -29,12 +30,33 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
         [HarmonyPrefix]
         [HarmonyPatch(nameof(PlayerControllerB.KillPlayer))]
-        static void DisableUpgradesOnDeath(PlayerControllerB __instance)
+        static bool DisableUpgradesOnDeath(PlayerControllerB __instance, Vector3 bodyVelocity, bool spawnBody, CauseOfDeath causeOfDeath, int deathAnimation, Vector3 positionOffset)
+        {
+            if (!__instance.IsOwner) return true;
+            if (__instance.isPlayerDead) return true;
+            if (!__instance.AllowPlayerDeath()) return true;
+            LoseNightVisionOnDeath(ref __instance);
+            return PreventInstantKill(ref __instance, bodyVelocity, spawnBody, causeOfDeath, deathAnimation, positionOffset);
+        }
+
+        static bool PreventInstantKill(ref PlayerControllerB __instance, Vector3 bodyVelocity, bool spawnBody, CauseOfDeath causeOfDeath, int deathAnimation, Vector3 positionOffset)
+        {
+            switch(causeOfDeath)
+            {
+                case CauseOfDeath.Inertia:
+                    {
+                        if (!BaseUpgrade.GetActiveUpgrade(FluffySeats.UPGRADE_NAME)) return true;
+                        Plugin.mls.LogInfo($"Kill player fired due to car crash with {FluffySeats.UPGRADE_NAME} upgrade on, mitigating 100 damage instead of instant kill...");
+                        __instance.DamagePlayer(FluffySeats.GetPlayerDamageMitigation(100), hasDamageSFX: true, callRPC: true, causeOfDeath: causeOfDeath, deathAnimation: deathAnimation, fallDamage: false, force: bodyVelocity);
+                        return false;
+                    }
+                default: return true;
+            }
+        }
+
+        static void LoseNightVisionOnDeath(ref PlayerControllerB __instance)
         {
             if (!UpgradeBus.Instance.PluginConfiguration.LOSE_NIGHT_VIS_ON_DEATH.Value) return;
-            if (!__instance.IsOwner) return;
-            if (__instance.isPlayerDead) return;
-            if (!__instance.AllowPlayerDeath()) return;
 
             if (__instance != UpgradeBus.Instance.GetLocalPlayer()) return;
             if (!BaseUpgrade.GetActiveUpgrade(NightVision.UPGRADE_NAME)) return;
@@ -327,6 +349,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             MethodInfo additionalMovement = typeof(RunningShoes).GetMethod(nameof(RunningShoes.GetAdditionalMovementSpeed));
             MethodInfo additionalClimbSpeed = typeof(ClimbingGloves).GetMethod(nameof(ClimbingGloves.GetAdditionalClimbingSpeed));
             MethodInfo additionalJumpForce = typeof(StrongLegs).GetMethod(nameof(StrongLegs.GetAdditionalJumpForce));
+            MethodInfo additionalTractionForce = typeof(TractionBoots).GetMethod(nameof(TractionBoots.GetAdditionalTractionForce));
 
             FieldInfo carryWeight = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.carryWeight));
             FieldInfo movementSpeed = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.movementSpeed));
@@ -338,7 +361,10 @@ namespace MoreShipUpgrades.Patches.PlayerController
             Tools.FindField(ref index, ref codes, findField: movementSpeed, addCode: additionalMovement, errorMessage: "Couldn't find first occurence of movement speed field");
             Tools.FindField(ref index, ref codes, findField: movementSpeed, addCode: additionalMovement, errorMessage: "Couldn't find second occurence of movement speed field");
             Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: reduceCarryLoss, errorMessage: "Couldn't find first carryWeight occurence");
+            Tools.FindFloat(ref index, ref codes, findValue: 5f, skip: true, errorMessage: "Couldn't skip the value of 5f used on drunkness calculations");
+            Tools.FindFloat(ref index, ref codes, findValue: 5f, addCode: additionalTractionForce, errorMessage: "Couldn't find the numerator used when sprinting");
             Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: reduceMovement, errorMessage: "Couldn't find second carryWeight occurence");
+            Tools.FindFloat(ref index, ref codes, findValue: 10f, addCode: additionalTractionForce, errorMessage: "Couldn't find the numerator used when walking");
             Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: reduceMovement, errorMessage: "Couldn't find third carryWeight occurence");
             Tools.FindField(ref index, ref codes, findField: jumpForce, addCode: additionalJumpForce, errorMessage: "Couldn't find occurence of jump force field");
             Tools.FindField(ref index, ref codes, findField: climbSpeed, addCode: additionalClimbSpeed, errorMessage: "Couldn't find occurence of climb speed field");
