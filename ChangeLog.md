@@ -3,6 +3,8 @@
 
 - Fixed Traction Boots not applying on sprinting movement.
 - Fixed upgrade store breaking due to having no entries when configured so.
+- Changed Fluffy Seats to also include the instant kill when hitting too hard on an obstacle
+  - This will not prevent you from death when the car gets destroyed and you die due to the explosion. Only Inertia related damages will be mitigated by this upgrade. 
 
 </details>
 

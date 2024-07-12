@@ -14,6 +14,7 @@ using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Vehicle;
 
 namespace MoreShipUpgrades.Patches.PlayerController
 {
@@ -29,12 +30,33 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
         [HarmonyPrefix]
         [HarmonyPatch(nameof(PlayerControllerB.KillPlayer))]
-        static void DisableUpgradesOnDeath(PlayerControllerB __instance)
+        static bool DisableUpgradesOnDeath(PlayerControllerB __instance, Vector3 bodyVelocity, bool spawnBody, CauseOfDeath causeOfDeath, int deathAnimation, Vector3 positionOffset)
+        {
+            if (!__instance.IsOwner) return true;
+            if (__instance.isPlayerDead) return true;
+            if (!__instance.AllowPlayerDeath()) return true;
+            LoseNightVisionOnDeath(ref __instance);
+            return PreventInstantKill(ref __instance, bodyVelocity, spawnBody, causeOfDeath, deathAnimation, positionOffset);
+        }
+
+        static bool PreventInstantKill(ref PlayerControllerB __instance, Vector3 bodyVelocity, bool spawnBody, CauseOfDeath causeOfDeath, int deathAnimation, Vector3 positionOffset)
+        {
+            switch(causeOfDeath)
+            {
+                case CauseOfDeath.Inertia:
+                    {
+                        if (!BaseUpgrade.GetActiveUpgrade(FluffySeats.UPGRADE_NAME)) return true;
+                        Plugin.mls.LogInfo($"Kill player fired due to car crash with {FluffySeats.UPGRADE_NAME} upgrade on, mitigating 100 damage instead of instant kill...");
+                        __instance.DamagePlayer(FluffySeats.GetPlayerDamageMitigation(100), hasDamageSFX: true, callRPC: true, causeOfDeath: causeOfDeath, deathAnimation: deathAnimation, fallDamage: false, force: bodyVelocity);
+                        return false;
+                    }
+                default: return true;
+            }
+        }
+
+        static void LoseNightVisionOnDeath(ref PlayerControllerB __instance)
         {
             if (!UpgradeBus.Instance.PluginConfiguration.LOSE_NIGHT_VIS_ON_DEATH.Value) return;
-            if (!__instance.IsOwner) return;
-            if (__instance.isPlayerDead) return;
-            if (!__instance.AllowPlayerDeath()) return;
 
             if (__instance != UpgradeBus.Instance.GetLocalPlayer()) return;
             if (!BaseUpgrade.GetActiveUpgrade(NightVision.UPGRADE_NAME)) return;
