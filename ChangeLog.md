@@ -6,6 +6,7 @@
 - Fixed player's saves not being loaded correctly when ""upgrades being shared"" was set to false in configuration
 - Fixed "Efficient Engines" discount being applied to the Company Cruiser acquisition rather than Moon Routing
 - Fixed "Beekeeper" upgrade information not describing the final upgrade scrap value increase on beehives
+- Fixed medkit item from this mod being disabled removing all other medkit related items from the store (through renaming to "Old Medkit")
 - Implemented "Hiking Boots" upgrade which decrease the effect of climbing slopes in terrain
 - Implemented configuration to toggle showing world-building text of some upgrades.
 
