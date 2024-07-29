@@ -179,6 +179,9 @@ namespace MoreShipUpgrades.Misc.Util
         internal const bool SALE_APPLY_ONCE_DEFAULT = false;
         internal const string SALE_APPLY_ONCE_DESCRIPTION = "When an upgrade is on sale, apply the sale only on the first ever purchase of it while on sale. Consecutive purchases will not have the sale applied";
 
+        internal const string SHOW_WORLD_BUILDING_TEXT_KEY = "Show World Building text in Upgrade information";
+        internal const bool SHOW_WORLD_BUILDING_TEXT_DEFAULT = true;
+        internal const string SHOW_WORLD_BUILDING_TEXT_DESCRIPTION = "When viewing an upgrade's information, wether show world-building text along with pratical information or not.";
         #endregion
 
         #region Name Overrides

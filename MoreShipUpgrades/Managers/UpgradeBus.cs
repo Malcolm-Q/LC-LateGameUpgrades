@@ -291,7 +291,7 @@ namespace MoreShipUpgrades.Managers
             if (!enabled) return null;
 
             string moreInfo = SetupUpgradeInfo(upgrade: multiPerk.GetComponent<BaseUpgrade>(), price: initialPrice, incrementalPrices: prices);
-            if (multiPerk.GetComponent<BaseUpgrade>() is IUpgradeWorldBuilding component) moreInfo += "\n\n" + component.GetWorldBuildingText(shareStatus) + "\n";
+            if (UpgradeBus.Instance.PluginConfiguration.SHOW_WORLD_BUILDING_TEXT && multiPerk.GetComponent<BaseUpgrade>() is IUpgradeWorldBuilding component) moreInfo += "\n\n" + component.GetWorldBuildingText(shareStatus) + "\n";
 
             return new TierTerminalNode(
                 name: overrideName != "" ? overrideName : upgradeName,
@@ -322,7 +322,7 @@ namespace MoreShipUpgrades.Managers
             if (!enabled) return null;
             string info = SetupUpgradeInfo(upgrade: oneTimeUpgrade.GetComponent<BaseUpgrade>(), price: price);
             string moreInfo = info;
-            if (oneTimeUpgrade.GetComponent<BaseUpgrade>() is IUpgradeWorldBuilding component) moreInfo += "\n\n" + component.GetWorldBuildingText(shareStatus) + "\n";
+            if (UpgradeBus.Instance.PluginConfiguration.SHOW_WORLD_BUILDING_TEXT && oneTimeUpgrade.GetComponent<BaseUpgrade>() is IUpgradeWorldBuilding component) moreInfo += "\n\n" + component.GetWorldBuildingText(shareStatus) + "\n";
 
             return new OneTimeTerminalNode(
                 name: overrideName != "" ? overrideName : upgradeName,
