@@ -71,7 +71,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.PROTEIN_UNLOCK_FORCE.Value + 1 + (UpgradeBus.Instance.PluginConfiguration.PROTEIN_INCREMENT.Value * level);
+            Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.PROTEIN_UNLOCK_FORCE.Value + (UpgradeBus.Instance.PluginConfiguration.PROTEIN_INCREMENT.Value * level);
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }

@@ -190,6 +190,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string HIKING_BOOTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, HikingBoots.UPGRADE_NAME);
         internal static readonly string TRACTION_BOOTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, TractionBoots.UPGRADE_NAME);
         internal static readonly string TURBO_TANK_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, TurboTank.UPGRADE_NAME);
         internal static readonly string FEDORA_SUIT_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, FedoraSuit.UPGRADE_NAME);
@@ -621,6 +622,25 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Hiking Boots
+
+        internal const string HIKING_BOOTS_ENABLED_KEY = $"Enable {HikingBoots.UPGRADE_NAME} Upgrade";
+        internal const bool HIKING_BOOTS_ENABLED_DEFAULT = true;
+        internal const string HIKING_BOOTS_ENABLED_DESCRIPTION = "Tier upgrade which reduces the impact of going through uphill slopes";
+
+        internal const string HIKING_BOOTS_PRICE_KEY = $"Price of {HikingBoots.UPGRADE_NAME} Upgrade";
+        internal const int HIKING_BOOTS_PRICE_DEFAULT = 75;
+
+        internal const string HIKING_BOOTS_INITIAL_DECREASE_KEY = "Initial Uphill Slope Debuff Decrease";
+        internal const int HIKING_BOOTS_INITIAL_DECREASE_DEFAULT = 25;
+        internal const string HIKING_BOOTS_INITIAL_DECREASE_DESCRIPTION = "Initial percentage of the uphill slope debuff removed when first purchasing the upgrade";
+
+        internal const string HIKING_BOOTS_INCREMENTAL_DECREASE_KEY = "Incremental Uphill Slope Debuff Decrease";
+        internal const int HIKING_BOOTS_INCREMENTAL_DECREASE_DEFAULT = 25;
+        internal const string HIKING_BOOTS_INCREMENTAL_DECREASE_DESCRIPTION = "Incremental percetange of the uphill slope debuff removed when purchasing further levels of the upgrade";
+
+        #endregion
 
         #region Traction Boots
 

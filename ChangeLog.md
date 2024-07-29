@@ -1,4 +1,13 @@
 <details>
+<summary> 3.9.4 - 2024-08-?? </summary>
+
+- Fixed typo in Charging Booster's upgrade information
+- Fixed extra increment on Protein Powder's damage increase in its upgrade information
+- Implemented "Hiking Boots" upgrade which decrease the effect of climbing slopes in terrain
+
+</details>
+
+<details>
 <summary> 3.9.3 - 2024-07-12 </summary>
 
 - Fixed Traction Boots not applying on sprinting movement.

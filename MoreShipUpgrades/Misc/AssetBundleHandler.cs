@@ -150,6 +150,7 @@ namespace MoreShipUpgrades.Misc
             { FedoraSuit.UPGRADE_NAME, upgrades+"FedoraSuit.prefab" },
             { TurboTank.UPGRADE_NAME, upgrades+"TurboTank.prefab" },
             { TractionBoots.UPGRADE_NAME, upgrades+"TractionBoots.prefab" },
+            { HikingBoots.UPGRADE_NAME, upgrades+"HikingBoots.prefab" },
 
             { "Advanced Portable Tele", storeItems+"TpButtonAdv.asset" },
             { "Portable Tele", storeItems+"TpButton.asset" },
