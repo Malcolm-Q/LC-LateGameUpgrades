@@ -451,6 +451,7 @@ namespace MoreShipUpgrades.Managers
             if (playerID != 0)
             {
                 logger.LogInfo($"Loading SteamID: {playerID}");
+                SaveInfo = LguSave.playerSaves[playerID];
                 UpdateUpgradeBus();
             }
             else

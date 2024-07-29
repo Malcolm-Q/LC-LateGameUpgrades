@@ -3,6 +3,7 @@
 
 - Fixed typo in Charging Booster's upgrade information
 - Fixed extra increment on Protein Powder's damage increase in its upgrade information
+- Fixed player's saves not being loaded correctly when ""upgrades being shared"" was set to false in configuration
 - Implemented "Hiking Boots" upgrade which decrease the effect of climbing slopes in terrain
 
 </details>
