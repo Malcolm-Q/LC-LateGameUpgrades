@@ -14,6 +14,7 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Commands;
 using MoreShipUpgrades.Misc.UI.Application;
 using InteractiveTerminalAPI.UI;
+using static BepInEx.BepInDependency;
 
 namespace MoreShipUpgrades
 {
@@ -22,6 +23,7 @@ namespace MoreShipUpgrades
     [BepInDependency("com.sigurd.csync")]
     [BepInDependency("com.rune580.LethalCompanyInputUtils")]
     [BepInDependency("WhiteSpike.InteractiveTerminalAPI")]
+    [BepInDependency(LethalLevelLoader.Plugin.ModGUID, DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
         internal static readonly ManualLogSource mls = BepInEx.Logging.Logger.CreateLogSource(Metadata.NAME);

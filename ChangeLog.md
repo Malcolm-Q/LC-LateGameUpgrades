@@ -7,6 +7,7 @@
 - Fixed "Efficient Engines" discount being applied to the Company Cruiser acquisition rather than Moon Routing
 - Fixed "Beekeeper" upgrade information not describing the final upgrade scrap value increase on beehives
 - Fixed medkit item from this mod being disabled removing all other medkit related items from the store (through renaming to "Old Medkit")
+- Included check for moon being locked (through mods such as Selene Choice) when selecting a moon for contract random selecting
 - Implemented "Hiking Boots" upgrade which decrease the effect of climbing slopes in terrain
 - Implemented configuration to toggle showing world-building text of some upgrades.
 

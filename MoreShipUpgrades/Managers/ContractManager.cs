@@ -1,5 +1,7 @@
-﻿using LethalLib.Extras;
+﻿using LethalLevelLoader;
+using LethalLib.Extras;
 using LethalLib.Modules;
+using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Contracts;
 using MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal;
@@ -154,6 +156,12 @@ namespace MoreShipUpgrades.Managers
                 SelectableLevel level = availableLevels[levelIndex];
                 lastLevel = level.PlanetName;
                 if (level.PlanetName.Contains("Gordion")) continue;
+                if (LethalLevelLoaderCompat.Enabled)
+                {
+                    ExtendedLevel extendedLevel;
+                    LethalLevelLoader.PatchedContent.TryGetExtendedContent(level, out extendedLevel);
+                    if (extendedLevel == null || extendedLevel.IsRouteLocked) continue;
+                }
                 logger.LogDebug($"Picked {level.PlanetName} as possible moon for contract...");
                 if (routeKeyword == null) routeKeyword = UpgradeBus.Instance.GetTerminal().terminalNodes.allKeywords.First(k => k.word == "route");
                 for (int i = 0; i < routeKeyword.compatibleNouns.Length && lvl == Instance.contractLevel; i++)
