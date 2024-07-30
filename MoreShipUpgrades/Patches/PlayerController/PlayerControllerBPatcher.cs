@@ -350,18 +350,22 @@ namespace MoreShipUpgrades.Patches.PlayerController
             MethodInfo additionalClimbSpeed = typeof(ClimbingGloves).GetMethod(nameof(ClimbingGloves.GetAdditionalClimbingSpeed));
             MethodInfo additionalJumpForce = typeof(StrongLegs).GetMethod(nameof(StrongLegs.GetAdditionalJumpForce));
             MethodInfo additionalTractionForce = typeof(TractionBoots).GetMethod(nameof(TractionBoots.GetAdditionalTractionForce));
+            MethodInfo uphillSlopeMultiplier = typeof(HikingBoots).GetMethod(nameof(HikingBoots.ReduceUphillSlopeDebuff));
 
             FieldInfo carryWeight = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.carryWeight));
             FieldInfo movementSpeed = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.movementSpeed));
             FieldInfo climbSpeed = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.climbSpeed));
             FieldInfo jumpForce = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.jumpForce));
+            FieldInfo slopeIntensity = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.slopeIntensity));
+            FieldInfo slopeModifier = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.slopeModifier), BindingFlags.NonPublic | BindingFlags.Instance);
 
             List<CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindField(ref index, ref codes, findField: movementSpeed, addCode: additionalMovement, errorMessage: "Couldn't find first occurence of movement speed field");
             Tools.FindField(ref index, ref codes, findField: movementSpeed, addCode: additionalMovement, errorMessage: "Couldn't find second occurence of movement speed field");
             Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: reduceCarryLoss, errorMessage: "Couldn't find first carryWeight occurence");
-            Tools.FindFloat(ref index, ref codes, findValue: 5f, skip: true, errorMessage: "Couldn't skip the value of 5f used on drunkness calculations");
+            Tools.FindField(ref index, ref codes, findField: slopeIntensity, skip: true, errorMessage: "Couldn't find skip slope Intensity");
+            Tools.FindField(ref index, ref codes, findField: slopeModifier, addCode: uphillSlopeMultiplier, errorMessage: "Couldn't find occurence of slopeModifier");
             Tools.FindFloat(ref index, ref codes, findValue: 5f, addCode: additionalTractionForce, errorMessage: "Couldn't find the numerator used when sprinting");
             Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: reduceMovement, errorMessage: "Couldn't find second carryWeight occurence");
             Tools.FindFloat(ref index, ref codes, findValue: 10f, addCode: additionalTractionForce, errorMessage: "Couldn't find the numerator used when walking");

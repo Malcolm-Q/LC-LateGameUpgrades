@@ -119,9 +119,7 @@ namespace MoreShipUpgrades.Misc
             { FastEncryption.UPGRADE_NAME, upgrades+"Pager.prefab" },
             { LockSmith.UPGRADE_NAME, upgrades+"LockSmith.prefab" },
             { Stimpack.UPGRADE_NAME, upgrades+"PlayerHealth.prefab" },
-            { ExtendDeadlineScript.NAME, commands+"ExtendDeadline.prefab" },
             { ShutterBatteries.UPGRADE_NAME, upgrades+"DoorsHydraulicsBattery.prefab" },
-            { ScrapInsurance.COMMAND_NAME, commands+"ScrapInsurance.prefab" },
             { MarketInfluence.UPGRADE_NAME, upgrades+"MarketInfluence.prefab" },
             { BargainConnections.UPGRADE_NAME, upgrades+"BargainConnections.prefab" },
             { LethalDeals.UPGRADE_NAME, upgrades+"LethalDeals.prefab" },
@@ -150,6 +148,7 @@ namespace MoreShipUpgrades.Misc
             { FedoraSuit.UPGRADE_NAME, upgrades+"FedoraSuit.prefab" },
             { TurboTank.UPGRADE_NAME, upgrades+"TurboTank.prefab" },
             { TractionBoots.UPGRADE_NAME, upgrades+"TractionBoots.prefab" },
+            { HikingBoots.UPGRADE_NAME, upgrades+"HikingBoots.prefab" },
 
             { "Advanced Portable Tele", storeItems+"TpButtonAdv.asset" },
             { "Portable Tele", storeItems+"TpButton.asset" },

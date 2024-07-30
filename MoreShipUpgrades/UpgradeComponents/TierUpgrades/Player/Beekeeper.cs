@@ -53,7 +53,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             System.Func<int, float> infoFunction = level => 100 * (UpgradeBus.Instance.PluginConfiguration.BEEKEEPER_DAMAGE_MULTIPLIER.Value - (level * UpgradeBus.Instance.PluginConfiguration.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT.Value));
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction) + $"\nOn maximum level, applies a {(UpgradeBus.Instance.PluginConfiguration.BEEKEEPER_HIVE_VALUE_INCREASE - 1f)*100f:F0}% scrap value increase on beehives.";
         }
         [ServerRpc(RequireOwnership = false)]
         public void ToggleIncreaseHivePriceServerRpc()

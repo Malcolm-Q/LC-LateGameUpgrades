@@ -2,8 +2,6 @@
 using HarmonyLib;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
-using MoreShipUpgrades.Misc.UI;
-using MoreShipUpgrades.Misc.UI.Application;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.Patches.Items;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship;
@@ -13,8 +11,6 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Store;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
-using UnityEngine;
-using UnityEngine.InputSystem.Controls;
 
 namespace MoreShipUpgrades.Patches.TerminalComponents
 {
@@ -74,7 +70,7 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
         [HarmonyPatch(nameof(Terminal.LoadNewNode))]
         static void LoadNewNodePostfix(Terminal __instance, TerminalNode node) 
         {
-            if (node.buyRerouteToMoon != -2) return;
+            if (node.buyRerouteToMoon != -2 || node.buyVehicleIndex != -1) return;
             string toReplace = EfficientEngines.GetDiscountedMoonPrice(node.itemCost).ToString();
             __instance.screenText.text = __instance.currentText.Replace(node.itemCost.ToString(), toReplace);
             __instance.currentText = __instance.screenText.text;
@@ -88,6 +84,7 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             int index = 0;
             Tools.FindField(ref index, ref codes, itemCost, skip: true, errorMessage: "Couldn't find the item cost applied to a specific item with index 7");
+            Tools.FindField(ref index, ref codes, itemCost, skip: true, errorMessage: "Couldn't find the item cost used when buying vehicles");
             Tools.FindField(ref index, ref codes, itemCost, addCode: applyMoonDiscount, errorMessage: "Couldn't find the item cost applied to moon routing");
             return codes;
         }

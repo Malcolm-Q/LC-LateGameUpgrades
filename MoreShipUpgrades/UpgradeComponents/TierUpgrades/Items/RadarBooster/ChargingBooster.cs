@@ -58,7 +58,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.RadarBooster
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_COOLDOWN.Value - (level + 1) * UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE.Value;
+            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_COOLDOWN.Value - (level) * UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE.Value;
             string infoFormat = "LVL {0} - ${1} - Radar boosters will have a recharge cooldown of {2} seconds.\n";
 
             return $"LVL 1 - ${initialPrice} -  Provides charging stations to the radar boosters. After used, goes on cooldown for {UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_COOLDOWN.Value} seconds\n" + Tools.GenerateInfoForUpgrade(infoFormat, 0, incrementalPrices.ToArray(), infoFunction, skipFirst: true);

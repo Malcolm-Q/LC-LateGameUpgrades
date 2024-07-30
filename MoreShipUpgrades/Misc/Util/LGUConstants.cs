@@ -179,6 +179,9 @@ namespace MoreShipUpgrades.Misc.Util
         internal const bool SALE_APPLY_ONCE_DEFAULT = false;
         internal const string SALE_APPLY_ONCE_DESCRIPTION = "When an upgrade is on sale, apply the sale only on the first ever purchase of it while on sale. Consecutive purchases will not have the sale applied";
 
+        internal const string SHOW_WORLD_BUILDING_TEXT_KEY = "Show World Building text in Upgrade information";
+        internal const bool SHOW_WORLD_BUILDING_TEXT_DEFAULT = true;
+        internal const string SHOW_WORLD_BUILDING_TEXT_DESCRIPTION = "When viewing an upgrade's information, wether show world-building text along with pratical information or not.";
         #endregion
 
         #region Name Overrides
@@ -190,6 +193,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string HIKING_BOOTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, HikingBoots.UPGRADE_NAME);
         internal static readonly string TRACTION_BOOTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, TractionBoots.UPGRADE_NAME);
         internal static readonly string TURBO_TANK_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, TurboTank.UPGRADE_NAME);
         internal static readonly string FEDORA_SUIT_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, FedoraSuit.UPGRADE_NAME);
@@ -317,26 +321,6 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string CONTRACT_QUOTA_MULTIPLIER_DESCRIPTION = "0 = None of the quota value will influence the loot's value.\n100 = The quota value will be added fully to the loot's value.";
         #endregion
 
-        #region Extend Deadline
-
-        internal const string EXTEND_DEADLINE_ENABLED_KEY = $"Enable {ExtendDeadlineScript.NAME} Purchase";
-        internal const bool EXTEND_DEADLINE_ENABLED_DEFAULT = true;
-        internal const string EXTEND_DEADLINE_ENABLED_DESCRIPTION = "Increments the amount of days before deadline is reached.";
-
-        internal const string EXTEND_DEADLINE_PRICE_KEY = $"{ExtendDeadlineScript.NAME} Price";
-        internal const int EXTEND_DEADLINE_PRICE_DEFAULT = 800;
-        internal const string EXTEND_DEADLINE_PRICE_DESCRIPTION = "Price of each day extension requested in the terminal.";
-
-        internal const string EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA_KEY = $"{ExtendDeadlineScript.NAME} Additional Cost per Quota";
-        internal const int EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA_DEFAULT = 0;
-        internal const string EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA_DESCRIPTION = "Additional cost added to the Extend Deadline command per every quota completed";
-
-        internal const string EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY_KEY = $"{ExtendDeadlineScript.NAME} Additional Cost per Day";
-        internal const int EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY_DEFAULT = 0;
-        internal const string EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY_DESCRIPTION = "Additional cost added to the Extend Deadline command per every day extended";
-
-        #endregion
-
         #region Interns
 
         internal const string INTERNS_ENABLED_KEY = "Enable hiring of interns";
@@ -346,16 +330,6 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string INTERNS_PRICE_KEY = $"{Interns.NAME} Price";
         internal const int INTERNS_PRICE_DEFAULT = 1000;
         internal const string INTERNS_PRICE_DESCRIPTION = "Default price to hire an intern.";
-
-        #endregion
-
-        #region Scrap Insurance
-
-        internal const string SCRAP_INSURANCE_ENABLED_KEY = $"Enable {ScrapInsurance.COMMAND_NAME} Command";
-        internal const bool SCRAP_INSURANCE_ENABLED_DEFAULT = true;
-        internal const string SCRAP_INSURANCE_ENABLED_DESCRIPTION = "One time purchase which allows you to keep all your scrap upon a team wipe on a moon trip";
-
-        internal const string SCRAP_INSURANCE_PRICE_KEY = $"Price of {ScrapInsurance.COMMAND_NAME}";
 
         #endregion
 
@@ -621,6 +595,25 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Hiking Boots
+
+        internal const string HIKING_BOOTS_ENABLED_KEY = $"Enable {HikingBoots.UPGRADE_NAME} Upgrade";
+        internal const bool HIKING_BOOTS_ENABLED_DEFAULT = true;
+        internal const string HIKING_BOOTS_ENABLED_DESCRIPTION = "Tier upgrade which reduces the impact of going through uphill slopes";
+
+        internal const string HIKING_BOOTS_PRICE_KEY = $"Price of {HikingBoots.UPGRADE_NAME} Upgrade";
+        internal const int HIKING_BOOTS_PRICE_DEFAULT = 75;
+
+        internal const string HIKING_BOOTS_INITIAL_DECREASE_KEY = "Initial Uphill Slope Debuff Decrease";
+        internal const int HIKING_BOOTS_INITIAL_DECREASE_DEFAULT = 25;
+        internal const string HIKING_BOOTS_INITIAL_DECREASE_DESCRIPTION = "Initial percentage of the uphill slope debuff removed when first purchasing the upgrade";
+
+        internal const string HIKING_BOOTS_INCREMENTAL_DECREASE_KEY = "Incremental Uphill Slope Debuff Decrease";
+        internal const int HIKING_BOOTS_INCREMENTAL_DECREASE_DEFAULT = 25;
+        internal const string HIKING_BOOTS_INCREMENTAL_DECREASE_DESCRIPTION = "Incremental percetange of the uphill slope debuff removed when purchasing further levels of the upgrade";
+
+        #endregion
 
         #region Traction Boots
 
@@ -1711,13 +1704,6 @@ namespace MoreShipUpgrades.Misc.Util
 
         #endregion
 
-        #region Extend Deadline Display
-
-        internal const string NOT_ENOUGH_CREDITS_EXTEND = "Not enough credits to purchase the selected amount of days to extend.";
-        internal const string PURCHASE_EXTEND_DEADLINE_FORMAT = "Do you wish to purchase {0} days to extend the deadline for the cost of {1} credits?";
-
-        #endregion
-
         #region Weather Display
 
         internal const string SELECT_WEATHER_FORMAT = "Select the available weathers for {0}:";
@@ -1823,10 +1809,6 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string CONTRACT_CANCEL_FAIL = "You must have accepted a contract to execute this command...\n\n";
         internal const string CONTRACT_CANCEL_CONFIRM_PROMPT = "Type CONFIRM to cancel your current contract. There will be no refunds.\n\n";
         internal const string CONTRACT_FAIL = "Not possible to provide a contract due to configuration having it disabled.\n\n";
-
-        internal const string EXTEND_DEADLINE_USAGE = "You need to specify how many days you wish to extend the deadline for: \"extend deadline <days>\"\n\n";
-        internal const string EXTEND_DEADLINE_PARSING_ERROR_FORMAT = "Invalid value ({0}) inserted to extend the deadline.\n\n";
-        internal const string EXTEND_DEADLINE_NOT_ENOUGH_CREDITS_FORMAT = "Not enough credits to purchase the proposed deadline extension.\n Total price: {0}\n Current credits: {1}\n\n";
 
         internal const string BRUTEFORCE_USAGE = "Enter a valid address for a device to connect to!\n\n";
 

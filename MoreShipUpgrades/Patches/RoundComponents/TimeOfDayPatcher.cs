@@ -16,7 +16,6 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         static void SyncNewProfitQuotaClientRpcPostfix(TimeOfDay __instance)
         {
             GenerateNewSales(ref __instance);
-            ExtendDeadlineScript.SetDaysExtended(daysExtended: 0);
             QuantumDisruptor.TryResetQuantum(QuantumDisruptor.ResetModes.NewQuota);
             RandomizeUpgradeManager.RandomizeUpgrades(RandomizeUpgradeManager.RandomizeUpgradeEvents.PerQuota);
         }

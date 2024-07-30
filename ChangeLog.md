@@ -1,4 +1,21 @@
 <details>
+<summary> 3.9.5 - 2024-07-30 </summary>
+
+- Fixed typo in Charging Booster's upgrade information
+- Fixed extra increment on Protein Powder's damage increase in its upgrade information
+- Fixed player's saves not being loaded correctly when ""upgrades being shared"" was set to false in configuration
+- Fixed "Efficient Engines" discount being applied to the Company Cruiser acquisition rather than Moon Routing
+- Fixed "Beekeeper" upgrade information not describing the final upgrade scrap value increase on beehives
+- Fixed medkit item from this mod being disabled removing all other medkit related items from the store (through renaming to "Old Medkit")
+- Included check for moon being locked (through mods such as Selene Choice) when selecting a moon for contract random selecting
+- Implemented "Hiking Boots" upgrade which decrease the effect of climbing slopes in terrain
+- Implemented configuration to toggle showing world-building text of some upgrades.
+- Separated "Extend Deadline" and "Scrap Insurance" from this mod into their own respective mods.
+  - This mod will not be dependent on them: you can decide either to use them or not. 
+
+</details>
+
+<details>
 <summary> 3.9.3 - 2024-07-12 </summary>
 
 - Fixed Traction Boots not applying on sprinting movement.

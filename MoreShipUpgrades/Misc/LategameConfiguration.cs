@@ -36,6 +36,7 @@ namespace MoreShipUpgrades.Misc
     public class LategameConfiguration : SyncedConfig2<LategameConfiguration>
     {
         #region Enabled
+        [field: SyncedEntryField] public SyncedEntry<bool> HIKING_BOOTS_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> TRACTION_BOOTS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> TURBO_TANK_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> FEDORA_SUIT_ENABLED {  get; set; }
@@ -75,11 +76,9 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<bool> HUNTER_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> PLAYER_HEALTH_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> PEEPER_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> EXTEND_DEADLINE_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> WHEELBARROW_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SCRAP_WHEELBARROW_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> DOOR_HYDRAULICS_BATTERY_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> SCRAP_INSURANCE_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> FASTER_DROP_POD_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SIGURD_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SIGURD_LAST_DAY_ENABLED { get; set; }
@@ -91,6 +90,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Individual
+        [field: SyncedEntryField] public SyncedEntry<bool> HIKING_BOOTS_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> TRACTION_BOOTS_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> FEDORA_SUIT_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> CLAY_GLASSES_INDIVIDUAL {  get; set; }
@@ -117,6 +117,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Initial Prices
+        [field: SyncedEntryField] public SyncedEntry<int> HIKING_BOOTS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> TRACTION_BOOTS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> TURBO_TANK_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> FEDORA_SUIT_PRICE {  get; set; }
@@ -162,12 +163,10 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<int> WALKIE_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> LIGHTNING_ROD_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> PLAYER_HEALTH_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> EXTEND_DEADLINE_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_SPECIFY_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> WHEELBARROW_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> DOOR_HYDRAULICS_BATTERY_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> SCRAP_INSURANCE_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> FASTER_DROP_POD_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SIGURD_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> EFFICIENT_ENGINES_PRICE { get; set; }
@@ -176,6 +175,11 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<bool> SHOW_WORLD_BUILDING_TEXT {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> HIKING_BOOTS_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> HIKING_BOOTS_OVERRIDE_NAME { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> HIKING_BOOTS_INITIAL_DECREASE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> HIKING_BOOTS_INCREMENTAL_DECREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> TRACTION_BOOTS_PRICES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> TRACTION_BOOTS_OVERRIDE_NAME {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> TRACTION_BOOTS_INITIAL_INCREASE {  get; set; }
@@ -237,8 +241,6 @@ namespace MoreShipUpgrades.Misc
 
         [field: SyncedEntryField] public SyncedEntry<int> HELMET_DAMAGE_REDUCTION { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> HELMET_DAMAGE_MITIGATION_MODE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA { get; set; }
         [field: SyncedEntryField] public SyncedEntry<QuantumDisruptor.ResetModes> QUANTUM_DISRUPTOR_RESET_MODE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<QuantumDisruptor.UpgradeModes> QUANTUM_DISRUPTOR_UPGRADE_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> QUANTUM_DISRUPTOR_INITIAL_HOURS_REVERT_ON_USE { get; set; }
@@ -509,6 +511,7 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<ItemProgressionManager.ChancePerScrapModes> SCRAP_UPGRADE_CHANCE_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_BLACKLISTED_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_APPARATICE_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> HIKING_BOOTS_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> TRACTION_BOOTS_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> TURBO_TANK_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> FEDORA_SUIT_ITEM_PROGRESSION_ITEMS { get; set; }
@@ -600,6 +603,7 @@ namespace MoreShipUpgrades.Misc
             KEEP_UPGRADES_AFTER_FIRED_CUTSCENE = cfg.BindSyncedEntry(topSection, LguConstants.KEEP_UPGRADES_AFTER_FIRED_KEY, LguConstants.KEEP_UPGRADES_AFTER_FIRED_DEFAULT, LguConstants.KEEP_UPGRADES_AFTER_FIRED_DESCRIPTION);
             SHOW_UPGRADES_CHAT = cfg.BindSyncedEntry(topSection, LguConstants.SHOW_UPGRADES_CHAT_KEY, LguConstants.SHOW_UPGRADES_CHAT_DEFAULT, LguConstants.SHOW_UPGRADES_CHAT_DESCRIPTION);
             SALE_APPLY_ONCE = cfg.BindSyncedEntry(topSection, LguConstants.SALE_APPLY_ONCE_KEY, LguConstants.SALE_APPLY_ONCE_DEFAULT, LguConstants.SALE_APPLY_ONCE_DESCRIPTION);
+            SHOW_WORLD_BUILDING_TEXT = cfg.BindSyncedEntry(topSection, LguConstants.SHOW_WORLD_BUILDING_TEXT_KEY, LguConstants.SHOW_WORLD_BUILDING_TEXT_DEFAULT, LguConstants.SHOW_WORLD_BUILDING_TEXT_DESCRIPTION);
 
             #endregion
 
@@ -607,6 +611,7 @@ namespace MoreShipUpgrades.Misc
 
             topSection = LguConstants.OVERRIDE_NAMES_SECTION;
             OVERRIDE_UPGRADE_NAMES              = cfg.BindSyncedEntry(topSection, LguConstants.OVERRIDE_NAMES_ENABLED_KEY, LguConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LguConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
+            HIKING_BOOTS_OVERRIDE_NAME          = cfg.BindSyncedEntry(topSection, LguConstants.HIKING_BOOTS_OVERRIDE_NAME_KEY, HikingBoots.UPGRADE_NAME);
             TRACTION_BOOTS_OVERRIDE_NAME        = cfg.BindSyncedEntry(topSection, LguConstants.TRACTION_BOOTS_OVERRIDE_NAME_KEY, TractionBoots.UPGRADE_NAME);
             TURBO_TANK_OVERRIDE_NAME            = cfg.BindSyncedEntry(topSection, LguConstants.TURBO_TANK_OVERRIDE_NAME_KEY, TurboTank.UPGRADE_NAME);
             FEDORA_SUIT_OVERRIDE_NAME           = cfg.BindSyncedEntry(topSection, LguConstants.FEDORA_SUIT_OVERRIDE_NAME_KEY, FedoraSuit.UPGRADE_NAME);
@@ -789,8 +794,20 @@ namespace MoreShipUpgrades.Misc
 
             #region Upgrades
 
-            #region Traction Boots
+            #region Hiking Boots
 
+            topSection = HikingBoots.UPGRADE_NAME;
+            HIKING_BOOTS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.HIKING_BOOTS_ENABLED_KEY, LguConstants.HIKING_BOOTS_ENABLED_DEFAULT, LguConstants.HIKING_BOOTS_ENABLED_DESCRIPTION);
+            HIKING_BOOTS_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            HIKING_BOOTS_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.HIKING_BOOTS_PRICE_KEY, LguConstants.HIKING_BOOTS_PRICE_DEFAULT);
+            HIKING_BOOTS_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, HikingBoots.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            HIKING_BOOTS_INITIAL_DECREASE = cfg.BindSyncedEntry(topSection, LguConstants.HIKING_BOOTS_INITIAL_DECREASE_KEY, LguConstants.HIKING_BOOTS_INITIAL_DECREASE_DEFAULT, LguConstants.HIKING_BOOTS_INITIAL_DECREASE_DESCRIPTION);
+            HIKING_BOOTS_INCREMENTAL_DECREASE = cfg.BindSyncedEntry(topSection, LguConstants.HIKING_BOOTS_INCREMENTAL_DECREASE_KEY, LguConstants.HIKING_BOOTS_INCREMENTAL_DECREASE_DEFAULT, LguConstants.HIKING_BOOTS_INCREMENTAL_DECREASE_DESCRIPTION);
+            HIKING_BOOTS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
+
+            #region Traction Boots
             topSection = TractionBoots.UPGRADE_NAME;
             TRACTION_BOOTS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.TRACTION_BOOTS_ENABLED_KEY, LguConstants.TRACTION_BOOTS_ENABLED_DEFAULT, LguConstants.TRACTION_BOOTS_ENABLED_DESCRIPTION);
             TRACTION_BOOTS_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
@@ -799,7 +816,6 @@ namespace MoreShipUpgrades.Misc
             TRACTION_BOOTS_INITIAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.TRACTION_BOOTS_INITIAL_INCREASE_KEY, LguConstants.TRACTION_BOOTS_INITIAL_INCREASE_DEFAULT, LguConstants.TRACTION_BOOTS_INITIAL_INCREASE_DESCRIPTION);
             TRACTION_BOOTS_INCREMENTAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.TRACTION_BOOTS_INCREMENTAL_INCREASE_KEY, LguConstants.TRACTION_BOOTS_INCREMENTAL_INCREASE_DEFAULT, LguConstants.TRACTION_BOOTS_INCREMENTAL_INCREASE_DESCRIPTION);
             TRACTION_BOOTS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
             #endregion
 
             #region Turbo Tank
@@ -1420,29 +1436,11 @@ namespace MoreShipUpgrades.Misc
 
             #region Commands
 
-            #region Extend Deadline
-
-            topSection = ExtendDeadlineScript.NAME;
-            EXTEND_DEADLINE_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.EXTEND_DEADLINE_ENABLED_KEY, LguConstants.EXTEND_DEADLINE_ENABLED_DEFAULT, LguConstants.EXTEND_DEADLINE_ENABLED_DESCRIPTION);
-            EXTEND_DEADLINE_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.EXTEND_DEADLINE_PRICE_KEY, LguConstants.EXTEND_DEADLINE_PRICE_DEFAULT, LguConstants.EXTEND_DEADLINE_PRICE_DESCRIPTION);
-            EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA = cfg.BindSyncedEntry(topSection, LguConstants.EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA_KEY, LguConstants.EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA_DEFAULT, LguConstants.EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA_DESCRIPTION);
-            EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY = cfg.BindSyncedEntry(topSection, LguConstants.EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY_KEY, LguConstants.EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY_DEFAULT, LguConstants.EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY_DESCRIPTION);
-
-            #endregion
-
             #region Interns
 
             topSection = Interns.NAME;
             INTERN_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.INTERNS_ENABLED_KEY, LguConstants.INTERNS_ENABLED_DEFAULT, LguConstants.INTERNS_ENABLED_DESCRIPTION);
             INTERN_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.INTERNS_PRICE_KEY, LguConstants.INTERNS_PRICE_DEFAULT, LguConstants.INTERNS_PRICE_DESCRIPTION);
-
-            #endregion
-
-            #region Scrap Insurance
-
-            topSection = ScrapInsurance.COMMAND_NAME;
-            SCRAP_INSURANCE_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_INSURANCE_ENABLED_KEY, LguConstants.SCRAP_INSURANCE_ENABLED_DEFAULT, LguConstants.SCRAP_INSURANCE_ENABLED_DESCRIPTION);
-            SCRAP_INSURANCE_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_INSURANCE_PRICE_KEY, ScrapInsurance.DEFAULT_PRICE);
 
             #endregion
 

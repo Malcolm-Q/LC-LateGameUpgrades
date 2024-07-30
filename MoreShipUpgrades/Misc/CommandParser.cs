@@ -346,35 +346,6 @@ namespace MoreShipUpgrades.Misc
                 _ => outputNode,
             };
         }
-        private static TerminalNode ExecuteExtendDeadlineCommand(string daysString, ref Terminal terminal, ref TerminalNode outputNode)
-        {
-            if (!UpgradeBus.Instance.PluginConfiguration.EXTEND_DEADLINE_ENABLED.Value) return outputNode;
-
-            if (daysString.Length == 0)
-                return DisplayTerminalMessage(LguConstants.EXTEND_DEADLINE_USAGE);
-
-            if (!(int.TryParse(daysString, out int days) && days > 0))
-                return DisplayTerminalMessage(string.Format(LguConstants.EXTEND_DEADLINE_PARSING_ERROR_FORMAT, daysString));
-
-            int totalCost = ExtendDeadlineScript.Instance.GetTotalCostPerDay(days);
-
-            if (terminal.groupCredits < totalCost)
-                return DisplayTerminalMessage(string.Format(LguConstants.EXTEND_DEADLINE_NOT_ENOUGH_CREDITS_FORMAT, totalCost, terminal.groupCredits));
-
-            terminal.groupCredits -= totalCost;
-            LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits);
-            ExtendDeadlineScript.Instance.ExtendDeadlineServerRpc(days);
-
-            return DisplayTerminalMessage($"Extended the deadline by {days} day{(days == 1 ? "" : "s")}.\n\n");
-        }
-        private static TerminalNode ExecuteExtendCommands(string secondWord, string thirdWord, ref Terminal terminal, ref TerminalNode outputNode)
-        {
-            return secondWord switch
-            {
-                "deadline" => ExecuteExtendDeadlineCommand(thirdWord, ref terminal, ref outputNode),
-                _ => outputNode,
-            };
-        }
         private static TerminalNode ExecuteBruteForce(string secondWord)
         {
             return secondWord switch
@@ -404,10 +375,8 @@ namespace MoreShipUpgrades.Misc
                 case "forcecredits": outputNode = ExecuteForceCredits(secondWord, ref terminal); return;
                 case "intern":
                 case "interns": outputNode = ExecuteInternsCommand(ref terminal); return;
-                case "extend": outputNode = ExecuteExtendCommands(secondWord, thirdWord, ref terminal, ref outputNode); return;
                 case "load": outputNode = ExecuteLoadCommands(secondWord, fullText, ref terminal, ref outputNode); return;
                 case "scan": outputNode = ExecuteScanCommands(secondWord, ref outputNode); return;
-                case "scrap": outputNode = ExecuteScrapCommands(secondWord, ref terminal, ref outputNode); return;
                 case "quantum": ExecuteQuantumCommands(ref terminal, ref outputNode); return;
                 default: return;
             }
@@ -428,32 +397,6 @@ namespace MoreShipUpgrades.Misc
             }
             if (terminal.IsHost || terminal.IsServer) QuantumDisruptor.Instance.RevertTimeClientRpc();
             outputNode = DisplayTerminalMessage($"Successfully reverted back current moon's time by {QuantumDisruptor.Instance.hoursToReduce}. You currently have {QuantumDisruptor.Instance.currentUsages} out of {QuantumDisruptor.Instance.availableUsages} usages.\n");
-        }
-        private static TerminalNode ExecuteScrapInsuranceCommand(ref Terminal terminal, ref TerminalNode outputNode)
-        {
-            if (!UpgradeBus.Instance.PluginConfiguration.SCRAP_INSURANCE_ENABLED.Value) return outputNode;
-
-            if (ScrapInsurance.GetScrapInsuranceStatus())
-                return DisplayTerminalMessage(LguConstants.SCRAP_INSURANCE_ALREADY_PURCHASED);
-
-            if (!StartOfRound.Instance.inShipPhase)
-                return DisplayTerminalMessage(LguConstants.SCRAP_INSURANCE_ONLY_IN_ORBIT);
-
-            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.SCRAP_INSURANCE_PRICE.Value)
-                return DisplayTerminalMessage(string.Format(LguConstants.SCRAP_INSURANCE_NOT_ENOUGH_CREDITS_FORMAT, UpgradeBus.Instance.PluginConfiguration.SCRAP_INSURANCE_PRICE.Value, terminal.groupCredits));
-
-            terminal.groupCredits -= UpgradeBus.Instance.PluginConfiguration.SCRAP_INSURANCE_PRICE.Value;
-            LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits);
-            ScrapInsurance.TurnOnScrapInsurance();
-            return DisplayTerminalMessage(LguConstants.SCRAP_INSURANCE_SUCCESS);
-        }
-        private static TerminalNode ExecuteScrapCommands(string secondWord, ref Terminal terminal, ref TerminalNode outputNode)
-        {
-            return secondWord switch
-            {
-                "insurance" => ExecuteScrapInsuranceCommand(ref terminal, ref outputNode),
-                _ => outputNode,
-            };
         }
         private static TerminalNode LookupDemon(string secondWord, string thirdWord)
         {
@@ -540,11 +483,9 @@ namespace MoreShipUpgrades.Misc
         private static TerminalNode ExecuteLGUCommands()
         {
             string displayText = "Late Game Commands\n\n";
-            displayText += HelpTerminalNode.HandleHelpExtendDeadline();
             displayText += HelpTerminalNode.HandleHelpInterns();
             displayText += HelpTerminalNode.HandleHelpContract();
             displayText += HelpTerminalNode.HandleHelpDiscombobulator();
-            displayText += HelpTerminalNode.HandleHelpScrapInsurance();
             displayText += HelpTerminalNode.HandleHelpWeatherProbe();
             displayText += "\n\n";
             return DisplayTerminalMessage(displayText);
