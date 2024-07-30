@@ -353,16 +353,6 @@ namespace MoreShipUpgrades.Misc.Util
 
         #endregion
 
-        #region Scrap Insurance
-
-        internal const string SCRAP_INSURANCE_ENABLED_KEY = $"Enable {ScrapInsurance.COMMAND_NAME} Command";
-        internal const bool SCRAP_INSURANCE_ENABLED_DEFAULT = true;
-        internal const string SCRAP_INSURANCE_ENABLED_DESCRIPTION = "One time purchase which allows you to keep all your scrap upon a team wipe on a moon trip";
-
-        internal const string SCRAP_INSURANCE_PRICE_KEY = $"Price of {ScrapInsurance.COMMAND_NAME}";
-
-        #endregion
-
         #region Weather Probe
 
         internal const string WEATHER_PROBE_ENABLED_KEY = $"Enable {WeatherManager.WEATHER_PROBE_COMMAND} Command";

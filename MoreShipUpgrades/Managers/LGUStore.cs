@@ -176,10 +176,6 @@ namespace MoreShipUpgrades.Managers
             GameObject extendDeadline = Instantiate(AssetBundleHandler.GetPerkGameObject(ExtendDeadlineScript.NAME));
             intern.hideFlags = HideFlags.HideAndDontSave;
             extendDeadline.GetComponent<NetworkObject>().Spawn();
-
-            GameObject insurance = Instantiate(AssetBundleHandler.GetPerkGameObject(ScrapInsurance.COMMAND_NAME));
-            intern.hideFlags = HideFlags.HideAndDontSave;
-            insurance.GetComponent<NetworkObject>().Spawn();
         }
         /// <summary>
         /// Remote Procedure Call used by clients to notify the server that the game's current run has reached its end and must reset Lategame Upgrade's upgrades and other attributes to default

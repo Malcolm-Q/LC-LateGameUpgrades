@@ -36,18 +36,6 @@ namespace MoreShipUpgrades.Patches.HUD
             float num = Vector3.Distance(playerScript.transform.position, node.transform.position);
             __result = num <= node.maxRange + rangeIncrease && num >= node.minRange;
         }
-
-        [HarmonyPatch(nameof(HUDManager.FillEndGameStats))]
-        [HarmonyTranspiler]
-        static IEnumerable<CodeInstruction> FillEndGameStatsTranspiler(IEnumerable<CodeInstruction> instructions)
-        {
-            FieldInfo allPlayersDead = typeof(StartOfRound).GetField(nameof(StartOfRound.allPlayersDead));
-            MethodInfo scrapInsuranceStatus = typeof(ScrapInsurance).GetMethod(nameof(ScrapInsurance.GetScrapInsuranceStatus));
-            List<CodeInstruction> codes = new(instructions);
-            int index = 0;
-            Tools.FindField(ref index, ref codes, findField: allPlayersDead, addCode: scrapInsuranceStatus, notInstruction: true, andInstruction: true, errorMessage: "Couldn't find all players dead field");
-            return codes;
-        }
         [HarmonyPatch(nameof(HUDManager.UseSignalTranslatorServerRpc))]
         [HarmonyTranspiler]
         static IEnumerable<CodeInstruction> UseSignalTranslatorServerRpcTranspiler(IEnumerable<CodeInstruction> instructions)

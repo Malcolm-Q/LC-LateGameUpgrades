@@ -121,7 +121,6 @@ namespace MoreShipUpgrades.Misc
             { Stimpack.UPGRADE_NAME, upgrades+"PlayerHealth.prefab" },
             { ExtendDeadlineScript.NAME, commands+"ExtendDeadline.prefab" },
             { ShutterBatteries.UPGRADE_NAME, upgrades+"DoorsHydraulicsBattery.prefab" },
-            { ScrapInsurance.COMMAND_NAME, commands+"ScrapInsurance.prefab" },
             { MarketInfluence.UPGRADE_NAME, upgrades+"MarketInfluence.prefab" },
             { BargainConnections.UPGRADE_NAME, upgrades+"BargainConnections.prefab" },
             { LethalDeals.UPGRADE_NAME, upgrades+"LethalDeals.prefab" },

@@ -80,7 +80,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<bool> WHEELBARROW_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SCRAP_WHEELBARROW_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> DOOR_HYDRAULICS_BATTERY_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> SCRAP_INSURANCE_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> FASTER_DROP_POD_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SIGURD_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SIGURD_LAST_DAY_ENABLED { get; set; }
@@ -170,7 +169,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_SPECIFY_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> WHEELBARROW_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> DOOR_HYDRAULICS_BATTERY_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> SCRAP_INSURANCE_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> FASTER_DROP_POD_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SIGURD_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> EFFICIENT_ENGINES_PRICE { get; set; }
@@ -1457,14 +1455,6 @@ namespace MoreShipUpgrades.Misc
             topSection = Interns.NAME;
             INTERN_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.INTERNS_ENABLED_KEY, LguConstants.INTERNS_ENABLED_DEFAULT, LguConstants.INTERNS_ENABLED_DESCRIPTION);
             INTERN_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.INTERNS_PRICE_KEY, LguConstants.INTERNS_PRICE_DEFAULT, LguConstants.INTERNS_PRICE_DESCRIPTION);
-
-            #endregion
-
-            #region Scrap Insurance
-
-            topSection = ScrapInsurance.COMMAND_NAME;
-            SCRAP_INSURANCE_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_INSURANCE_ENABLED_KEY, LguConstants.SCRAP_INSURANCE_ENABLED_DEFAULT, LguConstants.SCRAP_INSURANCE_ENABLED_DESCRIPTION);
-            SCRAP_INSURANCE_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_INSURANCE_PRICE_KEY, ScrapInsurance.DEFAULT_PRICE);
 
             #endregion
 

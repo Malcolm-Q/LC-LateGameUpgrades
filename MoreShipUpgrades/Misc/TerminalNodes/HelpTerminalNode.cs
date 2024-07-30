@@ -40,17 +40,6 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
             return "";
         }
         /// <summary>
-        /// Adds information related to the "Scrap Insurance" command to the given terminal node
-        /// </summary>
-        public static string HandleHelpScrapInsurance()
-        {
-            if(UpgradeBus.Instance.PluginConfiguration.SCRAP_INSURANCE_ENABLED.Value)
-            {
-                return string.Format(SCRAP_INSURANCE_COMMAND, UpgradeBus.Instance.PluginConfiguration.SCRAP_INSURANCE_PRICE.Value);
-            }
-            return "";
-        }
-        /// <summary>
         /// Adds information related to the Discombobulator's commands to the given terminal node
         /// </summary>
         public static string HandleHelpDiscombobulator()

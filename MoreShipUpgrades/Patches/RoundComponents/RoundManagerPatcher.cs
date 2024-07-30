@@ -41,13 +41,5 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             TimeOfDay.Instance.daysUntilDeadline = previousDaysDeadline;
             savedPrevious = false;
         }
-
-        [HarmonyPatch(nameof(RoundManager.DespawnPropsAtEndOfRound))]
-        [HarmonyPostfix]
-        static void DespawnPropsAtEndOfRoundPostfix()
-        {
-            if (!UpgradeBus.Instance.PluginConfiguration.SCRAP_INSURANCE_ENABLED.Value) return;
-            ScrapInsurance.TurnOffScrapInsurance();
-        }
     }
 }
