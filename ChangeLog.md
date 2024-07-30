@@ -1,5 +1,5 @@
 <details>
-<summary> 3.9.4 - 2024-08-?? </summary>
+<summary> 3.9.5 - 2024-07-30 </summary>
 
 - Fixed typo in Charging Booster's upgrade information
 - Fixed extra increment on Protein Powder's damage increase in its upgrade information
@@ -10,6 +10,8 @@
 - Included check for moon being locked (through mods such as Selene Choice) when selecting a moon for contract random selecting
 - Implemented "Hiking Boots" upgrade which decrease the effect of climbing slopes in terrain
 - Implemented configuration to toggle showing world-building text of some upgrades.
+- Separated "Extend Deadline" and "Scrap Insurance" from this mod into their own respective mods.
+  - This mod will not be dependent on them: you can decide either to use them or not. 
 
 </details>
 

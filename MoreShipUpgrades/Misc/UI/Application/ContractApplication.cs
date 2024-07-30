@@ -2,6 +2,8 @@
 using InteractiveTerminalAPI.UI.Application;
 using InteractiveTerminalAPI.UI.Cursor;
 using InteractiveTerminalAPI.UI.Screen;
+using LethalLevelLoader;
+using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Util;
 using System;
@@ -188,6 +190,10 @@ namespace MoreShipUpgrades.Misc.UI.Application
                 return;
             }
             SelectableLevel[] levels = StartOfRound.Instance.levels.Where(x => !x.PlanetName.Contains("Gordion")).ToArray();
+            if (LethalLevelLoaderCompat.Enabled)
+            {
+                levels = levels.Where(x => PatchedContent.TryGetExtendedContent(x, out ExtendedLevel extendedLevel) && !extendedLevel.IsRouteLocked).ToArray();
+            }
             IScreen screen;
             ITextElement[] textElements;
             CursorMenu menu;
