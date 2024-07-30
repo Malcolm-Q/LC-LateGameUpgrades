@@ -172,10 +172,6 @@ namespace MoreShipUpgrades.Managers
             GameObject intern = Instantiate(AssetBundleHandler.GetPerkGameObject(Interns.NAME));
             intern.hideFlags = HideFlags.HideAndDontSave;
             intern.GetComponent<NetworkObject>().Spawn();
-
-            GameObject extendDeadline = Instantiate(AssetBundleHandler.GetPerkGameObject(ExtendDeadlineScript.NAME));
-            intern.hideFlags = HideFlags.HideAndDontSave;
-            extendDeadline.GetComponent<NetworkObject>().Spawn();
         }
         /// <summary>
         /// Remote Procedure Call used by clients to notify the server that the game's current run has reached its end and must reset Lategame Upgrade's upgrades and other attributes to default
@@ -419,8 +415,6 @@ namespace MoreShipUpgrades.Managers
             UpgradeBus.Instance.wearingHelmet = SaveInfo.wearingHelmet;
 
             UpgradeBus.Instance.SaleData = SaveInfo.SaleData;
-
-            ExtendDeadlineScript.SetDaysExtended(SaveInfo.daysExtended);
 
             if(oldHelmet != UpgradeBus.Instance.wearingHelmet)
             {
@@ -711,7 +705,6 @@ namespace MoreShipUpgrades.Managers
         public string contractLevel = ContractManager.Instance.contractLevel;
         public Dictionary<string, float> SaleData = UpgradeBus.Instance.SaleData;
         public bool wearingHelmet = UpgradeBus.Instance.wearingHelmet;
-        public int daysExtended = UpgradeBus.Instance.daysExtended;
 
         public string Version = "V2";
     }

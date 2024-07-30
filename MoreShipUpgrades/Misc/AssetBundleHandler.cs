@@ -119,7 +119,6 @@ namespace MoreShipUpgrades.Misc
             { FastEncryption.UPGRADE_NAME, upgrades+"Pager.prefab" },
             { LockSmith.UPGRADE_NAME, upgrades+"LockSmith.prefab" },
             { Stimpack.UPGRADE_NAME, upgrades+"PlayerHealth.prefab" },
-            { ExtendDeadlineScript.NAME, commands+"ExtendDeadline.prefab" },
             { ShutterBatteries.UPGRADE_NAME, upgrades+"DoorsHydraulicsBattery.prefab" },
             { MarketInfluence.UPGRADE_NAME, upgrades+"MarketInfluence.prefab" },
             { BargainConnections.UPGRADE_NAME, upgrades+"BargainConnections.prefab" },

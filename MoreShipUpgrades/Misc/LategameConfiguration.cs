@@ -76,7 +76,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<bool> HUNTER_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> PLAYER_HEALTH_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> PEEPER_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> EXTEND_DEADLINE_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> WHEELBARROW_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SCRAP_WHEELBARROW_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> DOOR_HYDRAULICS_BATTERY_ENABLED { get; set; }
@@ -164,7 +163,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<int> WALKIE_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> LIGHTNING_ROD_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> PLAYER_HEALTH_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> EXTEND_DEADLINE_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_SPECIFY_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> WHEELBARROW_PRICE { get; set; }
@@ -243,8 +241,6 @@ namespace MoreShipUpgrades.Misc
 
         [field: SyncedEntryField] public SyncedEntry<int> HELMET_DAMAGE_REDUCTION { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> HELMET_DAMAGE_MITIGATION_MODE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA { get; set; }
         [field: SyncedEntryField] public SyncedEntry<QuantumDisruptor.ResetModes> QUANTUM_DISRUPTOR_RESET_MODE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<QuantumDisruptor.UpgradeModes> QUANTUM_DISRUPTOR_UPGRADE_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> QUANTUM_DISRUPTOR_INITIAL_HOURS_REVERT_ON_USE { get; set; }
@@ -1439,16 +1435,6 @@ namespace MoreShipUpgrades.Misc
             #endregion
 
             #region Commands
-
-            #region Extend Deadline
-
-            topSection = ExtendDeadlineScript.NAME;
-            EXTEND_DEADLINE_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.EXTEND_DEADLINE_ENABLED_KEY, LguConstants.EXTEND_DEADLINE_ENABLED_DEFAULT, LguConstants.EXTEND_DEADLINE_ENABLED_DESCRIPTION);
-            EXTEND_DEADLINE_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.EXTEND_DEADLINE_PRICE_KEY, LguConstants.EXTEND_DEADLINE_PRICE_DEFAULT, LguConstants.EXTEND_DEADLINE_PRICE_DESCRIPTION);
-            EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA = cfg.BindSyncedEntry(topSection, LguConstants.EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA_KEY, LguConstants.EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA_DEFAULT, LguConstants.EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA_DESCRIPTION);
-            EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY = cfg.BindSyncedEntry(topSection, LguConstants.EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY_KEY, LguConstants.EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY_DEFAULT, LguConstants.EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY_DESCRIPTION);
-
-            #endregion
 
             #region Interns
 

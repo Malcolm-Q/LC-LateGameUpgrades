@@ -321,26 +321,6 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string CONTRACT_QUOTA_MULTIPLIER_DESCRIPTION = "0 = None of the quota value will influence the loot's value.\n100 = The quota value will be added fully to the loot's value.";
         #endregion
 
-        #region Extend Deadline
-
-        internal const string EXTEND_DEADLINE_ENABLED_KEY = $"Enable {ExtendDeadlineScript.NAME} Purchase";
-        internal const bool EXTEND_DEADLINE_ENABLED_DEFAULT = true;
-        internal const string EXTEND_DEADLINE_ENABLED_DESCRIPTION = "Increments the amount of days before deadline is reached.";
-
-        internal const string EXTEND_DEADLINE_PRICE_KEY = $"{ExtendDeadlineScript.NAME} Price";
-        internal const int EXTEND_DEADLINE_PRICE_DEFAULT = 800;
-        internal const string EXTEND_DEADLINE_PRICE_DESCRIPTION = "Price of each day extension requested in the terminal.";
-
-        internal const string EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA_KEY = $"{ExtendDeadlineScript.NAME} Additional Cost per Quota";
-        internal const int EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA_DEFAULT = 0;
-        internal const string EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_QUOTA_DESCRIPTION = "Additional cost added to the Extend Deadline command per every quota completed";
-
-        internal const string EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY_KEY = $"{ExtendDeadlineScript.NAME} Additional Cost per Day";
-        internal const int EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY_DEFAULT = 0;
-        internal const string EXTEND_DEADLINE_ADDITIONAL_PRICE_PER_DAY_DESCRIPTION = "Additional cost added to the Extend Deadline command per every day extended";
-
-        #endregion
-
         #region Interns
 
         internal const string INTERNS_ENABLED_KEY = "Enable hiring of interns";
@@ -1724,13 +1704,6 @@ namespace MoreShipUpgrades.Misc.Util
 
         #endregion
 
-        #region Extend Deadline Display
-
-        internal const string NOT_ENOUGH_CREDITS_EXTEND = "Not enough credits to purchase the selected amount of days to extend.";
-        internal const string PURCHASE_EXTEND_DEADLINE_FORMAT = "Do you wish to purchase {0} days to extend the deadline for the cost of {1} credits?";
-
-        #endregion
-
         #region Weather Display
 
         internal const string SELECT_WEATHER_FORMAT = "Select the available weathers for {0}:";
@@ -1836,10 +1809,6 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string CONTRACT_CANCEL_FAIL = "You must have accepted a contract to execute this command...\n\n";
         internal const string CONTRACT_CANCEL_CONFIRM_PROMPT = "Type CONFIRM to cancel your current contract. There will be no refunds.\n\n";
         internal const string CONTRACT_FAIL = "Not possible to provide a contract due to configuration having it disabled.\n\n";
-
-        internal const string EXTEND_DEADLINE_USAGE = "You need to specify how many days you wish to extend the deadline for: \"extend deadline <days>\"\n\n";
-        internal const string EXTEND_DEADLINE_PARSING_ERROR_FORMAT = "Invalid value ({0}) inserted to extend the deadline.\n\n";
-        internal const string EXTEND_DEADLINE_NOT_ENOUGH_CREDITS_FORMAT = "Not enough credits to purchase the proposed deadline extension.\n Total price: {0}\n Current credits: {1}\n\n";
 
         internal const string BRUTEFORCE_USAGE = "Enter a valid address for a device to connect to!\n\n";
 

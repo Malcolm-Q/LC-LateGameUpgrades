@@ -2,8 +2,6 @@
 using HarmonyLib;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
-using MoreShipUpgrades.Misc.UI;
-using MoreShipUpgrades.Misc.UI.Application;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.Patches.Items;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship;
@@ -13,8 +11,6 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Store;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
-using UnityEngine;
-using UnityEngine.InputSystem.Controls;
 
 namespace MoreShipUpgrades.Patches.TerminalComponents
 {
