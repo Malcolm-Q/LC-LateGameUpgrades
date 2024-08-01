@@ -75,7 +75,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<bool> LIGHTNING_ROD_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> HUNTER_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> PLAYER_HEALTH_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> PEEPER_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> WHEELBARROW_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SCRAP_WHEELBARROW_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> DOOR_HYDRAULICS_BATTERY_ENABLED { get; set; }
@@ -146,7 +145,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<float> QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> QUANTUM_DISRUPTOR_PRICES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> QUANTUM_DISRUPTOR_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> PEEPER_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> HUNTER_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> ADVANCED_TELE_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> WEAK_TELE_PRICE { get; set; }
@@ -231,7 +229,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<string> SCAVENGER_INSTINCTS_PRICES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SCAVENGER_INSTINCTS_INCREMENTAL_AMOUN_SCRAP_INCREASE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> PEEPER_SCAN_NODE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> MEDKIT_SCAN_NODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> HELMET_SCAN_NODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> STORE_WHEELBARROW_SCAN_NODE { get; set; }
@@ -717,15 +714,6 @@ namespace MoreShipUpgrades.Misc
             HELMET_DAMAGE_REDUCTION = cfg.BindSyncedEntry(topSection, LguConstants.HELMET_DAMAGE_REDUCTION_KEY, LguConstants.HELMET_DAMAGE_REDUCTION_DEFAULT);
             HELMET_DAMAGE_MITIGATION_MODE = cfg.BindSyncedEntry(topSection, LguConstants.HELMET_DAMAGE_MITIGATION_MODE_KEY, LguConstants.HELMET_DAMAGE_MITIGATION_MODE_DEFAULT, LguConstants.HELMET_DAMAGE_MITIGATION_MODE_DESCRIPTION);
             HELMET_SCAN_NODE = cfg.BindSyncedEntry(topSection, LguConstants.HELMET_SCAN_NODE_KEY, LguConstants.ITEM_SCAN_NODE_DEFAULT, LguConstants.ITEM_SCAN_NODE_DESCRIPTION);
-
-            #endregion
-
-            #region Peeper
-
-            topSection = Peeper.ITEM_NAME;
-            PEEPER_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.PEEPER_ENABLED_KEY, LguConstants.PEEPER_ENABLED_DEFAULT, LguConstants.PEEPER_ENABLED_DESCRIPTION);
-            PEEPER_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.PEEPER_PRICE_KEY, LguConstants.PEEPER_PRICE_DEFAULT, LguConstants.PEEPER_PRICE_DESCRIPTION);
-            PEEPER_SCAN_NODE = cfg.BindSyncedEntry(topSection, LguConstants.PEEPER_SCAN_NODE_KEY, LguConstants.ITEM_SCAN_NODE_DEFAULT, LguConstants.ITEM_SCAN_NODE_DESCRIPTION);
 
             #endregion
 

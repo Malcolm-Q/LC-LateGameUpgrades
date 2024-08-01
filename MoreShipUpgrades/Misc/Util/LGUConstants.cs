@@ -451,19 +451,6 @@ namespace MoreShipUpgrades.Misc.Util
         internal static readonly string MEDKIT_SCAN_NODE_KEY = string.Format(ITEM_SCAN_NODE_KEY_FORMAT, Medkit.ITEM_NAME);
         #endregion
 
-        #region Peeper
-
-        internal const string PEEPER_ENABLED_KEY = $"Enable {Peeper.ITEM_NAME} item";
-        internal const bool PEEPER_ENABLED_DEFAULT = true;
-        internal const string PEEPER_ENABLED_DESCRIPTION = "An item that will stare at coilheads for you.";
-
-        internal const string PEEPER_PRICE_KEY = $"{Peeper.ITEM_NAME} Price";
-        internal const int PEEPER_PRICE_DEFAULT = 500;
-        internal const string PEEPER_PRICE_DESCRIPTION = $"Default price to purchase a {Peeper.ITEM_NAME}.";
-
-        internal static readonly string PEEPER_SCAN_NODE_KEY = string.Format(ITEM_SCAN_NODE_KEY_FORMAT, Peeper.ITEM_NAME);
-        #endregion
-
         #region Shopping Cart
 
         internal const string SCRAP_WHEELBARROW_ENABLED_KEY = $"Enable the {ScrapWheelbarrow.ITEM_NAME} Item";

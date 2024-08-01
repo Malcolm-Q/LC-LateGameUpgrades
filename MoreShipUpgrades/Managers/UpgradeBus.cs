@@ -49,7 +49,6 @@ namespace MoreShipUpgrades.Managers
         internal List<CustomTerminalNode> terminalNodes = [];
         internal Dictionary<string, GameObject> UpgradeObjects = [];
         internal Dictionary<string, Item> ItemsToSync = [];
-        internal List<Peeper> coilHeadItems = [];
         internal AssetBundle UpgradeAssets;
 
         internal GameObject helmetModel;
@@ -172,7 +171,6 @@ namespace MoreShipUpgrades.Managers
 
         internal void AlterStoreItems()
         {
-            AlterStoreItem(Peeper.ITEM_NAME, PluginConfiguration.PEEPER_ENABLED, PluginConfiguration.PEEPER_PRICE);
             AlterStoreItem(Helmet.ITEM_NAME, PluginConfiguration.HELMET_ENABLED, PluginConfiguration.HELMET_PRICE);
             AlterStoreItem(AdvancedPortableTeleporter.ITEM_NAME, PluginConfiguration.ADVANCED_TELE_ENABLED, PluginConfiguration.ADVANCED_TELE_PRICE);
             AlterStoreItem(RegularPortableTeleporter.ITEM_NAME, PluginConfiguration.WEAK_TELE_ENABLED, PluginConfiguration.WEAK_TELE_PRICE);

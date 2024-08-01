@@ -38,7 +38,6 @@ namespace MoreShipUpgrades.Managers
             harmony.PatchAll(typeof(EnemyAICollisionDetectPatcher));
             harmony.PatchAll(typeof(HoarderBugAIPatcher));
             harmony.PatchAll(typeof(RedLocustBeesPatch));
-            harmony.PatchAll(typeof(SpringManAIPatcher));
             Plugin.mls.LogInfo("Enemies have been patched");
         }
 

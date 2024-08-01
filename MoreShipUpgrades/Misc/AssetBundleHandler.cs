@@ -152,13 +152,11 @@ namespace MoreShipUpgrades.Misc
 
             { "Advanced Portable Tele", storeItems+"TpButtonAdv.asset" },
             { "Portable Tele", storeItems+"TpButton.asset" },
-            { "Peeper", storeItems+"coilHead.asset" },
             { "Medkit", storeItems+"MedKitItem.asset" },
             { "HelmetItem", storeItems+"HelmetItem.asset" },
             { "HelmetModel", prefabs+"HelmetModel.prefab" },
             { "MedkitMapItem", extractionItems+"MedKitMapItem.asset" },
             { "Night Vision", storeItems+"NightVisionItem.asset" },
-            { "Diving Kit", storeItems+"DivingKitItem.asset" },
             { "Store Wheelbarrow", items + "Wheelbarrow/StoreWheelbarrowItem.asset" },
             { "Scrap Wheelbarrow", items + "Wheelbarrow/ScrapWheelbarrowItem.asset" },
             { "Bomb", defusalItems + "BombItem.asset" },
