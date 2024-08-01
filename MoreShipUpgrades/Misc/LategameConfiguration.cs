@@ -234,7 +234,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<bool> PEEPER_SCAN_NODE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> MEDKIT_SCAN_NODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> HELMET_SCAN_NODE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> DIVING_KIT_SCAN_NODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> STORE_WHEELBARROW_SCAN_NODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> PORTABLE_TELEPORTER_SCAN_NODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> ADVANCED_PORTABLE_TELEPORTER_SCAN_NODE { get; set; }
@@ -399,10 +398,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<int> MEDKIT_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MEDKIT_HEAL_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MEDKIT_USES { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> DIVEKIT_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> DIVEKIT_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> DIVEKIT_WEIGHT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> DIVEKIT_TWO_HANDED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> DISCOMBOBULATOR_DAMAGE_LEVEL { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> DISCOMBOBULATOR_INITIAL_DAMAGE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> DISCOMBOBULATOR_DAMAGE_INCREASE { get; set; }
@@ -745,17 +740,6 @@ namespace MoreShipUpgrades.Misc
 
             #endregion
 
-            #region Diving Kit
-
-            topSection = DivingKit.ITEM_NAME;
-            DIVEKIT_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.DIVING_KIT_ENABLED_KEY, LguConstants.DIVING_KIT_ENABLED_DEFAULT, LguConstants.DIVING_KIT_ENABLED_DESCRIPTION);
-            DIVEKIT_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.DIVING_KIT_PRICE_KEY, LguConstants.DIVING_KIT_PRICE_DEFAULT, LguConstants.DIVING_KIT_PRICE_DESCRIPTION);
-            DIVEKIT_WEIGHT = cfg.BindSyncedEntry(topSection, LguConstants.DIVING_KIT_WEIGHT_KEY, LguConstants.DIVING_KIT_WEIGHT_DEFAULT, LguConstants.DIVING_KIT_WEIGHT_DESCRIPTION);
-            DIVEKIT_TWO_HANDED = cfg.BindSyncedEntry(topSection, LguConstants.DIVING_KIT_TWO_HANDED_KEY, LguConstants.DIVING_KIT_TWO_HANDED_DEFAULT, LguConstants.DIVING_KIT_TWO_HANDED_DESCRIPTION);
-            DIVING_KIT_SCAN_NODE = cfg.BindSyncedEntry(topSection, LguConstants.DIVING_KIT_SCAN_NODE_KEY, LguConstants.ITEM_SCAN_NODE_DEFAULT, LguConstants.ITEM_SCAN_NODE_DESCRIPTION);
-
-            #endregion
-
             #region Wheelbarrow
 
             topSection = StoreWheelbarrow.ITEM_NAME;
@@ -773,6 +757,7 @@ namespace MoreShipUpgrades.Misc
             STORE_WHEELBARROW_SCAN_NODE = cfg.BindSyncedEntry(topSection, LguConstants.STORE_WHEELBARROW_SCAN_NODE_KEY, LguConstants.ITEM_SCAN_NODE_DEFAULT, LguConstants.ITEM_SCAN_NODE_DESCRIPTION);
 
             #endregion
+
             #region Shopping Cart
             topSection = ScrapWheelbarrow.ITEM_NAME;
             SCRAP_WHEELBARROW_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_ENABLED_KEY, LguConstants.SCRAP_WHEELBARROW_ENABLED_DEFAULT, LguConstants.SCRAP_WHEELBARROW_ENABLED_DESCRIPTION);

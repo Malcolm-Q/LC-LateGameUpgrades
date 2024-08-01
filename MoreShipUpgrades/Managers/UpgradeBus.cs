@@ -174,7 +174,6 @@ namespace MoreShipUpgrades.Managers
         {
             AlterStoreItem(Peeper.ITEM_NAME, PluginConfiguration.PEEPER_ENABLED, PluginConfiguration.PEEPER_PRICE);
             AlterStoreItem(Helmet.ITEM_NAME, PluginConfiguration.HELMET_ENABLED, PluginConfiguration.HELMET_PRICE);
-            AlterStoreItem(DivingKit.ITEM_NAME, PluginConfiguration.DIVEKIT_ENABLED, PluginConfiguration.DIVEKIT_PRICE);
             AlterStoreItem(AdvancedPortableTeleporter.ITEM_NAME, PluginConfiguration.ADVANCED_TELE_ENABLED, PluginConfiguration.ADVANCED_TELE_PRICE);
             AlterStoreItem(RegularPortableTeleporter.ITEM_NAME, PluginConfiguration.WEAK_TELE_ENABLED, PluginConfiguration.WEAK_TELE_PRICE);
             AlterStoreItem(Medkit.ITEM_NAME, PluginConfiguration.MEDKIT_ENABLED, PluginConfiguration.MEDKIT_PRICE);

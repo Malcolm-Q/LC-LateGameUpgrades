@@ -407,27 +407,6 @@ namespace MoreShipUpgrades.Misc.Util
 
         #endregion
 
-        #region Diving Kit
-
-        internal const string DIVING_KIT_ENABLED_KEY = $"Enable the {DivingKit.ITEM_NAME} Item";
-        internal const bool DIVING_KIT_ENABLED_DEFAULT = true;
-        internal const string DIVING_KIT_ENABLED_DESCRIPTION = "Allows you to buy a diving kit to breathe underwater.";
-
-        internal const string DIVING_KIT_PRICE_KEY = $"{DivingKit.ITEM_NAME} price";
-        internal const int DIVING_KIT_PRICE_DEFAULT = 650;
-        internal const string DIVING_KIT_PRICE_DESCRIPTION = $"Price for {DivingKit.ITEM_NAME}.";
-
-        internal const string DIVING_KIT_WEIGHT_KEY = "Item weight";
-        internal const float DIVING_KIT_WEIGHT_DEFAULT = 1.65f;
-        internal const string DIVING_KIT_WEIGHT_DESCRIPTION = "-1 and multiply by 100 (1.65 = 65 lbs)";
-
-        internal const string DIVING_KIT_TWO_HANDED_KEY = "Two Handed Item";
-        internal const bool DIVING_KIT_TWO_HANDED_DEFAULT = true;
-        internal const string DIVING_KIT_TWO_HANDED_DESCRIPTION = "One or two handed item.";
-
-        internal static readonly string DIVING_KIT_SCAN_NODE_KEY = string.Format(ITEM_SCAN_NODE_KEY_FORMAT, DivingKit.ITEM_NAME);
-        #endregion
-
         #region Helmet
 
         internal const string HELMET_ENABLED_KEY = $"Enable the {Helmet.ITEM_NAME} for purchase";
