@@ -14,7 +14,6 @@ using UnityEngine;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
-using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Vehicle;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Store;
@@ -75,8 +74,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<bool> LIGHTNING_ROD_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> HUNTER_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> PLAYER_HEALTH_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> WHEELBARROW_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> SCRAP_WHEELBARROW_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> DOOR_HYDRAULICS_BATTERY_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> FASTER_DROP_POD_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SIGURD_ENABLED { get; set; }
@@ -163,7 +160,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<int> PLAYER_HEALTH_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_SPECIFY_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> WHEELBARROW_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> DOOR_HYDRAULICS_BATTERY_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> FASTER_DROP_POD_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SIGURD_PRICE { get; set; }
@@ -231,7 +227,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<int> SCAVENGER_INSTINCTS_INCREMENTAL_AMOUN_SCRAP_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> MEDKIT_SCAN_NODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> HELMET_SCAN_NODE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> STORE_WHEELBARROW_SCAN_NODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> PORTABLE_TELEPORTER_SCAN_NODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> ADVANCED_PORTABLE_TELEPORTER_SCAN_NODE { get; set; }
 
@@ -442,27 +437,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<int> TULIP_SNAKE_SAMPLE_MINIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> TULIP_SNAKE_SAMPLE_MAXIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_GHOST_SPAWN { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<WheelbarrowScript.Restrictions> WHEELBARROW_RESTRICTION_MODE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> WHEELBARROW_MAXIMUM_AMOUNT_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> WHEELBARROW_WEIGHT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> WHEELBARROW_MOVEMENT_SLOPPY { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> WHEELBARROW_NOISE_RANGE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> WHEELBARROW_PLAY_NOISE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<WheelbarrowScript.Restrictions> SCRAP_WHEELBARROW_RESTRICTION_MODE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> SCRAP_WHEELBARROW_WEIGHT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> SCRAP_WHEELBARROW_NOISE_RANGE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> SCRAP_WHEELBARROW_MINIMUM_VALUE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> SCRAP_WHEELBARROW_MAXIMUM_VALUE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> SCRAP_WHEELBARROW_MOVEMENT_SLOPPY { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> SCRAP_WHEELBARROW_RARITY { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> SCRAP_WHEELBARROW_PLAY_NOISE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> SCAV_VOLUME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> CONTRACT_FREE_MOONS_ONLY { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> DOOR_HYDRAULICS_BATTERY_PRICES { get; set; }
@@ -728,41 +702,6 @@ namespace MoreShipUpgrades.Misc
 
             #endregion
 
-            #region Wheelbarrow
-
-            topSection = StoreWheelbarrow.ITEM_NAME;
-            WHEELBARROW_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.WHEELBARROW_ENABLED_KEY, LguConstants.WHEELBARROW_ENABLED_DEFAULT, LguConstants.WHEELBARROW_ENABLED_DESCRIPTION);
-            WHEELBARROW_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.WHEELBARROW_PRICE_KEY, LguConstants.WHEELBARROW_PRICE_DEFAULT, LguConstants.WHEELBARROW_PRICE_DESCRIPTION);
-            WHEELBARROW_WEIGHT = cfg.BindSyncedEntry(topSection, LguConstants.WHEELBARROW_WEIGHT_KEY, LguConstants.WHEELBARROW_WEIGHT_DEFAULT, LguConstants.WHEELBARROW_WEIGHT_DESCRIPTION);
-            WHEELBARROW_RESTRICTION_MODE = cfg.BindSyncedEntry(topSection, LguConstants.WHEELBARROW_RESTRICTION_MODE_KEY, LguConstants.WHEELBARROW_RESTRICTION_MODE_DEFAULT, LguConstants.WHEELBARROW_RESTRICTION_MODE_DESCRIPTION);
-            WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED = cfg.BindSyncedEntry(topSection, LguConstants.WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_KEY, LguConstants.WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_DEFAULT, LguConstants.WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_DESCRIPTION);
-            WHEELBARROW_MAXIMUM_AMOUNT_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_KEY, LguConstants.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_DEFAULT, LguConstants.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_DESCRIPTION);
-            WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER = cfg.BindSyncedEntry(topSection, LguConstants.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER_KEY, LguConstants.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER_DEFAULT, LguConstants.WHEELBARROW_WEIGHT_REDUCTION_MUTLIPLIER_DESCRIPTION);
-            WHEELBARROW_NOISE_RANGE = cfg.BindSyncedEntry(topSection, LguConstants.WHEELBARROW_NOISE_RANGE_KEY, LguConstants.WHEELBARROW_NOISE_RANGE_DEFAULT, LguConstants.WHEELBARROW_NOISE_RANGE_DESCRIPTION);
-            WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK = cfg.BindSyncedEntry(topSection, LguConstants.WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_KEY, LguConstants.WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_DEFAULT, LguConstants.WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_DESCRIPTION);
-            WHEELBARROW_MOVEMENT_SLOPPY = cfg.BindSyncedEntry(topSection, LguConstants.WHEELBARROW_MOVEMENT_SLOPPY_KEY, LguConstants.WHEELBARROW_MOVEMENT_SLOPPY_DEFAULT, LguConstants.WHEELBARROW_MOVEMENT_SLOPPY_DESCRIPTION);
-            WHEELBARROW_PLAY_NOISE = cfg.BindSyncedEntry(topSection, LguConstants.WHEELBARROW_PLAY_NOISE_KEY, LguConstants.WHEELBARROW_PLAY_NOISE_DEFAULT, LguConstants.WHEELBARROW_PLAY_NOISE_DESCRIPTION);
-            STORE_WHEELBARROW_SCAN_NODE = cfg.BindSyncedEntry(topSection, LguConstants.STORE_WHEELBARROW_SCAN_NODE_KEY, LguConstants.ITEM_SCAN_NODE_DEFAULT, LguConstants.ITEM_SCAN_NODE_DESCRIPTION);
-
-            #endregion
-
-            #region Shopping Cart
-            topSection = ScrapWheelbarrow.ITEM_NAME;
-            SCRAP_WHEELBARROW_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_ENABLED_KEY, LguConstants.SCRAP_WHEELBARROW_ENABLED_DEFAULT, LguConstants.SCRAP_WHEELBARROW_ENABLED_DESCRIPTION);
-            SCRAP_WHEELBARROW_RARITY = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_RARITY_KEY, LguConstants.SCRAP_WHEELBARROW_RARITY_DEFAULT, LguConstants.SCRAP_WHEELBARROW_RARITY_DESCRIPTION);
-            SCRAP_WHEELBARROW_WEIGHT = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_WEIGHT_KEY, LguConstants.SCRAP_WHEELBARROW_WEIGHT_DEFAULT, LguConstants.SCRAP_WHEELBARROW_WEIGHT_DESCRIPTION);
-            SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_KEY, LguConstants.SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_DEFAULT, LguConstants.SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_DESCRIPTION);
-            SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER_KEY, LguConstants.SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER_DEFAULT, LguConstants.SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MUTLIPLIER_DESCRIPTION);
-            SCRAP_WHEELBARROW_MINIMUM_VALUE = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_MINIMUM_VALUE_KEY, LguConstants.SCRAP_WHEELBARROW_MINIMUM_VALUE_DEFAULT, LguConstants.SCRAP_WHEELBARROW_MINIMUM_VALUE_DESCRIPTION);
-            SCRAP_WHEELBARROW_MAXIMUM_VALUE = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_MAXIMUM_VALUE_KEY, LguConstants.SCRAP_WHEELBARROW_MAXIMUM_VALUE_DEFAULT, LguConstants.SCRAP_WHEELBARROW_MAXIMUM_VALUE_DESCRIPTION);
-            SCRAP_WHEELBARROW_RESTRICTION_MODE = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_RESTRICTION_MODE_KEY, LguConstants.SCRAP_WHEELBARROW_RESTRICTION_MODE_DEFAULT, LguConstants.SCRAP_WHEELBARROW_RESTRICTION_MODE_DESCRIPTION);
-            SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_KEY, LguConstants.SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_DEFAULT, LguConstants.SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_DESCRIPTION);
-            SCRAP_WHEELBARROW_NOISE_RANGE = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_NOISE_RANGE_KEY, LguConstants.SCRAP_WHEELBARROW_NOISE_RANGE_DEFAULT, LguConstants.SCRAP_WHEELBARROW_NOISE_RANGE_DESCRIPTION);
-            SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_KEY, LguConstants.SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_DEFAULT, LguConstants.SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_DESCRIPTION);
-            SCRAP_WHEELBARROW_MOVEMENT_SLOPPY = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_MOVEMENT_SLOPPY_KEY, LguConstants.SCRAP_WHEELBARROW_MOVEMENT_SLOPPY_DEFAULT, LguConstants.SCRAP_WHEELBARROW_MOVEMENT_SLOPPY_DESCRIPTION);
-            SCRAP_WHEELBARROW_PLAY_NOISE = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_PLAY_NOISE_KEY, LguConstants.SCRAP_WHEELBARROW_PLAY_NOISE_DEFAULT, LguConstants.SCRAP_WHEELBARROW_PLAY_NOISE_DESCRIPTION);
-
-            #endregion
             #endregion
 
             #region Upgrades

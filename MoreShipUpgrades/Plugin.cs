@@ -23,6 +23,7 @@ namespace MoreShipUpgrades
     [BepInDependency("com.sigurd.csync")]
     [BepInDependency("com.rune580.LethalCompanyInputUtils")]
     [BepInDependency("WhiteSpike.InteractiveTerminalAPI")]
+    [BepInDependency("com.github.WhiteSpike.CustomItemBehaviourLibrary", DependencyFlags.SoftDependency)]
     [BepInDependency(LethalLevelLoader.Plugin.ModGUID, DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {

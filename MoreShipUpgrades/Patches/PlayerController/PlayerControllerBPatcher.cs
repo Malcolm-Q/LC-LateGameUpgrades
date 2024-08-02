@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Linq;
-using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using UnityEngine;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
@@ -15,6 +14,8 @@ using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Vehicle;
+using MoreShipUpgrades.Compat;
+using CustomItemBehaviourLibrary.AbstractItems;
 
 namespace MoreShipUpgrades.Patches.PlayerController
 {
@@ -160,7 +161,6 @@ namespace MoreShipUpgrades.Patches.PlayerController
         [HarmonyPatch(nameof(PlayerControllerB.GrabObjectClientRpc))]
         static void GrabObjectClientRpcPostfix(PlayerControllerB __instance)
         {
-            WheelbarrowUnparenting(__instance.currentlyHeldObjectServer);
             DeepPocketsTwoHandedCheck(__instance);
         }
         static void DeepPocketsTwoHandedCheck(PlayerControllerB player)
@@ -168,11 +168,11 @@ namespace MoreShipUpgrades.Patches.PlayerController
             if (!player.twoHanded) return;
             if (!BaseUpgrade.GetActiveUpgrade(DeepPockets.UPGRADE_NAME)) return;
 
-            if (!UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_ALLOW_WHEELBARROWS)
+            if (CustomItemBehaviourLibraryCompat.Enabled && !UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_ALLOW_WHEELBARROWS)
             {
                 // No putting wheelbarrows in your deeper pockets
-                if (player.currentlyHeldObjectServer is WheelbarrowScript) return;
-                if (player.currentlyHeldObject is WheelbarrowScript) return;
+                if (player.currentlyHeldObjectServer is ContainerBehaviour) return;
+                if (player.currentlyHeldObject is ContainerBehaviour) return;
             }
             int twoHandedCount = 0;
             int maxTwoHandedCount = 1 + UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_INITIAL_TWO_HANDED_ITEMS + (BaseUpgrade.GetUpgradeLevel(DeepPockets.UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_ITEMS);
@@ -189,16 +189,6 @@ namespace MoreShipUpgrades.Patches.PlayerController
                 player.twoHanded = false;
                 HUDManager.Instance.holdingTwoHandedItem.enabled = false;
             }
-        }
-        static void WheelbarrowUnparenting(GrabbableObject heldObject)
-        {
-            if (heldObject == null) return;
-
-            WheelbarrowScript wheelbarrow = heldObject.GetComponentInParent<WheelbarrowScript>();
-            if (wheelbarrow == null || heldObject is WheelbarrowScript) return;
-            heldObject.transform.SetParent(heldObject.parentObject);
-            heldObject.transform.localScale = heldObject.originalScale;
-            wheelbarrow.DecrementStoredItems();
         }
 
         [HarmonyTranspiler]
@@ -314,17 +304,6 @@ namespace MoreShipUpgrades.Patches.PlayerController
             return codes.AsEnumerable();
         }
 
-        [HarmonyPatch(nameof(PlayerControllerB.PlayerLookInput))]
-        [HarmonyTranspiler]
-        static IEnumerable<CodeInstruction> PlayerLookInputTranspiler(IEnumerable<CodeInstruction> instructions)
-        {
-            MethodInfo reduceLookSensitivity = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrowLookSensitivity));
-            List<CodeInstruction> codes = new(instructions);
-            int index = 0;
-            Tools.FindFloat(ref index, ref codes, findValue: 0.008f, addCode: reduceLookSensitivity, errorMessage: "Couldn't find look sensitivity value we wanted to influence");
-            return codes;
-        }
-
         [HarmonyPatch(nameof(PlayerControllerB.PlayerJump), MethodType.Enumerator)]
         [HarmonyTranspiler]
         static IEnumerable<CodeInstruction> PlayerJumpTranspiler(IEnumerable<CodeInstruction> instructions)
@@ -345,7 +324,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         static IEnumerable<CodeInstruction> UpdateTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo reduceCarryLoss = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreaseCarryLoss));
-            MethodInfo reduceMovement = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrowMovement));
+            //MethodInfo reduceMovement = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrowMovement));
             MethodInfo additionalMovement = typeof(RunningShoes).GetMethod(nameof(RunningShoes.GetAdditionalMovementSpeed));
             MethodInfo additionalClimbSpeed = typeof(ClimbingGloves).GetMethod(nameof(ClimbingGloves.GetAdditionalClimbingSpeed));
             MethodInfo additionalJumpForce = typeof(StrongLegs).GetMethod(nameof(StrongLegs.GetAdditionalJumpForce));
@@ -367,23 +346,11 @@ namespace MoreShipUpgrades.Patches.PlayerController
             Tools.FindField(ref index, ref codes, findField: slopeIntensity, skip: true, errorMessage: "Couldn't find skip slope Intensity");
             Tools.FindField(ref index, ref codes, findField: slopeModifier, addCode: uphillSlopeMultiplier, errorMessage: "Couldn't find occurence of slopeModifier");
             Tools.FindFloat(ref index, ref codes, findValue: 5f, addCode: additionalTractionForce, errorMessage: "Couldn't find the numerator used when sprinting");
-            Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: reduceMovement, errorMessage: "Couldn't find second carryWeight occurence");
+            //Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: reduceMovement, errorMessage: "Couldn't find second carryWeight occurence");
             Tools.FindFloat(ref index, ref codes, findValue: 10f, addCode: additionalTractionForce, errorMessage: "Couldn't find the numerator used when walking");
-            Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: reduceMovement, errorMessage: "Couldn't find third carryWeight occurence");
+            //Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: reduceMovement, errorMessage: "Couldn't find third carryWeight occurence");
             Tools.FindField(ref index, ref codes, findField: jumpForce, addCode: additionalJumpForce, errorMessage: "Couldn't find occurence of jump force field");
             Tools.FindField(ref index, ref codes, findField: climbSpeed, addCode: additionalClimbSpeed, errorMessage: "Couldn't find occurence of climb speed field");
-            return codes;
-        }
-
-        [HarmonyPatch(nameof(PlayerControllerB.Crouch_performed))]
-        [HarmonyTranspiler]
-        static IEnumerable<CodeInstruction> CrouchPerformmedTranspiler(IEnumerable<CodeInstruction> instructions)
-        {
-            MethodInfo carryingWheelbarrow = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrow));
-            FieldInfo isMenuOpen = typeof(QuickMenuManager).GetField(nameof(QuickMenuManager.isMenuOpen));
-            List<CodeInstruction> codes = new(instructions);
-            int index = 0;
-            Tools.FindField(ref index, ref codes, findField: isMenuOpen, addCode: carryingWheelbarrow, orInstruction: true, errorMessage: "Couldn't find isMenuOpen field");
             return codes;
         }
 

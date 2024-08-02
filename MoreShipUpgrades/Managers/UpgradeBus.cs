@@ -8,7 +8,6 @@ using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
-using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
@@ -176,7 +175,6 @@ namespace MoreShipUpgrades.Managers
             AlterStoreItem(RegularPortableTeleporter.ITEM_NAME, PluginConfiguration.WEAK_TELE_ENABLED, PluginConfiguration.WEAK_TELE_PRICE);
             AlterStoreItem(Medkit.ITEM_NAME, PluginConfiguration.MEDKIT_ENABLED, PluginConfiguration.MEDKIT_PRICE);
             AlterStoreItem(NightVisionGoggles.ITEM_NAME, PluginConfiguration.NIGHT_VISION_ENABLED, PluginConfiguration.NIGHT_VISION_PRICE);
-            AlterStoreItem(StoreWheelbarrow.ITEM_NAME, PluginConfiguration.WHEELBARROW_ENABLED, PluginConfiguration.WHEELBARROW_PRICE);
         }
 
         void SyncAvailableContracts()

@@ -59,6 +59,10 @@
       <HintPath>$(LC_PATH)\Unity.InputSystem.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <Reference Include="CustomItemBehaviourLibrary">
+      <HintPath>$(LC_PLUGIN_PATH)\WhiteSpike-CustomItemBehaviourLibrary\CustomItemBehaviourLibrary\CustomItemBehaviourLibrary.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Evaisa.NetcodePatcher.MSBuild" Version="3.*" PrivateAssets="all" />

@@ -1,7 +1,6 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
 using MoreShipUpgrades.Compat;
-using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
@@ -22,11 +21,6 @@ namespace MoreShipUpgrades.Input
         public static InputActionMap ActionMap;
 
         /// <summary>
-        /// Input binding used to trigger the drop all items in the wheelbarrow action
-        /// </summary>
-        public static InputAction WheelbarrowAction;
-
-        /// <summary>
         /// Input binding used to trigger the toggle of Night Vision action
         /// </summary>
         public static InputAction NvgAction;
@@ -42,7 +36,6 @@ namespace MoreShipUpgrades.Input
         {
             Asset = InputUtilsCompat.Asset;
             ActionMap = Asset.actionMaps[0];
-            WheelbarrowAction = InputUtilsCompat.WheelbarrowKey;
             NvgAction = InputUtilsCompat.NvgKey;
         }
         /// <summary>
@@ -53,7 +46,6 @@ namespace MoreShipUpgrades.Input
         public static void OnEnable()
         {
             Asset.Enable();
-            WheelbarrowAction.performed += OnWheelbarrowActionPerformed;
             NvgAction.performed += OnNvgActionPerformed;
         }
 
@@ -65,25 +57,7 @@ namespace MoreShipUpgrades.Input
         public static void OnDisable()
         {
             Asset.Disable();
-            WheelbarrowAction.performed -= OnWheelbarrowActionPerformed;
             NvgAction.performed -= OnNvgActionPerformed;
-        }
-        /// <summary>
-        /// Function performed when triggering the "Drop all items in Wheelbarrow" control binding
-        /// </summary>
-        /// <param name="context">Context which triggered this function</param>
-        private static void OnWheelbarrowActionPerformed(CallbackContext context)
-        {
-            if (localPlayerController == null || !localPlayerController.isPlayerControlled || (localPlayerController.IsServer && !localPlayerController.isHostPlayerObject))
-            {
-                return;
-            }
-
-            if (!localPlayerController.currentlyHeldObjectServer) return;
-            WheelbarrowScript wheelbarrow = localPlayerController.currentlyHeldObjectServer.GetComponent<WheelbarrowScript>();
-            if (!wheelbarrow) return;
-
-            wheelbarrow.UpdateWheelbarrowDrop();
         }
 
         /// <summary>

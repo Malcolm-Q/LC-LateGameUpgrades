@@ -58,7 +58,6 @@ namespace MoreShipUpgrades.Misc
         const string dataSFX = contractSFX + "Data Retrieval/";
         const string DiscombobulatorSFX = SFX + "Discombobulator/";
         const string ShoppingCartSFX = SFX + "Shopping Cart/";
-        const string WheelbarrowSFX = SFX + "Wheelbarrow/";
         const string PortableTeleSFX = SFX + "Portable Teleporter/";
         const string HelmetSFX = SFX + "Helmet/";
         internal static readonly Dictionary<string, string> samplePaths = new Dictionary<string, string>()
@@ -76,10 +75,6 @@ namespace MoreShipUpgrades.Misc
         };
         static Dictionary<string, string> SFXPaths = new Dictionary<string, string>()
         {
-            { "Wheelbarrow Sound 0", WheelbarrowSFX+"Wheelbarrow_Move_1.mp3" },
-            { "Wheelbarrow Sound 1", WheelbarrowSFX+"Wheelbarrow_Move_2.ogg" },
-            { "Wheelbarrow Sound 2", WheelbarrowSFX+"Wheelbarrow_Move_3.ogg" },
-            { "Wheelbarrow Sound 3", WheelbarrowSFX+"Wheelbarrow_Move_4.ogg" },
             { "Scrap Wheelbarrow Sound 0", ShoppingCartSFX+"Shopping_Cart_Move_1.ogg" },
             { "Scrap Wheelbarrow Sound 1", ShoppingCartSFX+"Shopping_Cart_Move_2.ogg" },
             { "Scrap Wheelbarrow Sound 2", ShoppingCartSFX+"Shopping_Cart_Move_3.ogg" },
@@ -157,7 +152,6 @@ namespace MoreShipUpgrades.Misc
             { "HelmetModel", prefabs+"HelmetModel.prefab" },
             { "MedkitMapItem", extractionItems+"MedKitMapItem.asset" },
             { "Night Vision", storeItems+"NightVisionItem.asset" },
-            { "Store Wheelbarrow", items + "Wheelbarrow/StoreWheelbarrowItem.asset" },
             { "Scrap Wheelbarrow", items + "Wheelbarrow/ScrapWheelbarrowItem.asset" },
             { "Bomb", defusalItems + "BombItem.asset" },
             { "Demon Tome", exorcismItems + "ExorcLootItem.asset" },
