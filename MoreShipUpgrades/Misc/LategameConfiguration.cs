@@ -13,7 +13,6 @@ using MoreShipUpgrades.Managers;
 using UnityEngine;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Items;
-using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Vehicle;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Store;
@@ -59,8 +58,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<bool> LETHAL_DEALS_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> QUANTUM_DISRUPTOR_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> CONTRACTS_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> ADVANCED_TELE_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> WEAK_TELE_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> BEEKEEPER_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> PROTEIN_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> BIGGER_LUNGS_ENABLED { get; set; }
@@ -143,8 +140,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<string> QUANTUM_DISRUPTOR_PRICES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> QUANTUM_DISRUPTOR_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> HUNTER_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> ADVANCED_TELE_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> WEAK_TELE_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> BEEKEEPER_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> PROTEIN_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> BIGGER_LUNGS_PRICE { get; set; }
@@ -227,8 +222,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<int> SCAVENGER_INSTINCTS_INCREMENTAL_AMOUN_SCRAP_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> MEDKIT_SCAN_NODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> HELMET_SCAN_NODE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> PORTABLE_TELEPORTER_SCAN_NODE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> ADVANCED_PORTABLE_TELEPORTER_SCAN_NODE { get; set; }
 
         [field: SyncedEntryField] public SyncedEntry<int> HELMET_DAMAGE_REDUCTION { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> HELMET_DAMAGE_MITIGATION_MODE { get; set; }
@@ -312,7 +305,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<float> BIGGER_LUNGS_JUMP_STAMINA_COST_DECREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> BIGGER_LUNGS_JUMP_STAMINA_COST_INCREMENTAL_DECREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> PROTEIN_INCREMENT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> KEEP_ITEMS_ON_TELE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> SPRINT_TIME_INCREASE_UNLOCK { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> MOVEMENT_SPEED_UNLOCK { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> JUMP_FORCE_UNLOCK { get; set; }
@@ -324,9 +316,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<float> SHIP_AND_ENTRANCE_DISTANCE_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> NOISE_REDUCTION { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> DISCOMBOBULATOR_COOLDOWN { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> ADV_CHANCE_TO_BREAK { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> ADV_KEEP_ITEMS_ON_TELE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> CHANCE_TO_BREAK { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> BEEKEEPER_DAMAGE_MULTIPLIER { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> DISCOMBOBULATOR_RADIUS { get; set; }
@@ -656,28 +645,6 @@ namespace MoreShipUpgrades.Misc
             #endregion
 
             #region Items
-
-            #region Weak Portable Teleporter
-
-            topSection = RegularPortableTeleporter.ITEM_NAME;
-            WEAK_TELE_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.PORTABLE_TELEPORTER_ENABLED_KEY, LguConstants.PORTABLE_TELEPORTER_ENABLED_DEFAULT);
-            WEAK_TELE_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.PORTABLE_TELEPORTER_PRICE_KEY, LguConstants.PORTABLE_TELEPORTER_PRICE_DEFAULT);
-            CHANCE_TO_BREAK = cfg.BindSyncedEntry(topSection, LguConstants.PORTABLE_TELEPORTER_BREAK_CHANCE_KEY, LguConstants.PORTABLE_TELEPORTER_BREAK_CHANCE_DEFAULT, LguConstants.PORTABLE_TELEPORTER_BREAK_CHANCE_DESCRIPTION);
-            KEEP_ITEMS_ON_TELE = cfg.BindSyncedEntry(topSection, LguConstants.PORTABLE_TELEPORTER_KEEP_ITEMS_KEY, LguConstants.PORTABLE_TELEPORTER_KEEP_ITEMS_DEFAULT, LguConstants.PORTABLE_TELEPORTER_KEEP_ITEMS_DESCRIPTION);
-            PORTABLE_TELEPORTER_SCAN_NODE = cfg.BindSyncedEntry(topSection, LguConstants.PORTABLE_TELEPORTER_SCAN_NODE_KEY, LguConstants.ITEM_SCAN_NODE_DEFAULT, LguConstants.ITEM_SCAN_NODE_DESCRIPTION);
-
-            #endregion
-
-            #region Advanced Portable Teleporter
-
-            topSection = AdvancedPortableTeleporter.ITEM_NAME;
-            ADVANCED_TELE_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.ADVANCED_PORTABLE_TELEPORTER_ENABLED_KEY, LguConstants.ADVANCED_PORTABLE_TELEPORTER_ENABLED_DEFAULT);
-            ADVANCED_TELE_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.ADVANCED_PORTABLE_TELEPORTER_PRICE_KEY, LguConstants.ADVANCED_PORTABLE_TELEPORTER_PRICE_DEFAULT);
-            ADV_CHANCE_TO_BREAK = cfg.BindSyncedEntry(topSection, LguConstants.ADVANCED_PORTABLE_TELEPORTER_BREAK_CHANCE_KEY, LguConstants.ADVANCED_PORTABLE_TELEPORTER_BREAK_CHANCE_DEFAULT, LguConstants.ADVANCED_PORTABLE_TELEPORTER_BREAK_CHANCE_DESCRIPTION);
-            ADV_KEEP_ITEMS_ON_TELE = cfg.BindSyncedEntry(topSection, LguConstants.ADVANCED_PORTABLE_TELEPORTER_KEEP_ITEMS_KEY, LguConstants.ADVANCED_PORTABLE_TELEPORTER_KEEP_ITEMS_DEFAULT, LguConstants.ADVANCED_PORTABLE_TELEPORTER_KEEP_ITEMS_DESCRIPTION);
-            ADVANCED_PORTABLE_TELEPORTER_SCAN_NODE = cfg.BindSyncedEntry(topSection, LguConstants.ADVANCED_PORTABLE_TELEPORTER_SCAN_NODE_KEY, LguConstants.ITEM_SCAN_NODE_DEFAULT, LguConstants.ITEM_SCAN_NODE_DESCRIPTION);
-
-            #endregion
 
             #region Helmet
 

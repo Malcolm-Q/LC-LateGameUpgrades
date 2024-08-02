@@ -2,7 +2,6 @@
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Items;
-using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
@@ -357,54 +356,6 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string ITEM_SCAN_NODE_KEY_FORMAT = "Enable scan node of {0}";
         internal const bool ITEM_SCAN_NODE_DEFAULT = true;
         internal const string ITEM_SCAN_NODE_DESCRIPTION = "Shows a scan node on the item when scanning";
-
-        #region Portable Teleporters
-
-        internal const string BREAK_CHANCE_KEY = "Chance to break on use";
-        internal const string BREAK_CHANCE_DESCRIPTION = "value should be 0.00 - 1.00";
-
-        internal const string KEEP_ITEMS_DESCRIPTION = "If set to false you will drop your items like when using the vanilla TP.";
-
-        #region Advanced Portable Teleporter
-
-        internal const string ADVANCED_PORTABLE_TELEPORTER_ENABLED_KEY = $"Enable {AdvancedPortableTeleporter.ITEM_NAME}";
-        internal const bool ADVANCED_PORTABLE_TELEPORTER_ENABLED_DEFAULT = true;
-
-        internal const string ADVANCED_PORTABLE_TELEPORTER_PRICE_KEY = $"Price of {AdvancedPortableTeleporter.ITEM_NAME}";
-        internal const int ADVANCED_PORTABLE_TELEPORTER_PRICE_DEFAULT = 1750;
-
-        internal const string ADVANCED_PORTABLE_TELEPORTER_BREAK_CHANCE_KEY = BREAK_CHANCE_KEY;
-        internal const float ADVANCED_PORTABLE_TELEPORTER_BREAK_CHANCE_DEFAULT = 0.1f;
-        internal const string ADVANCED_PORTABLE_TELEPORTER_BREAK_CHANCE_DESCRIPTION = BREAK_CHANCE_DESCRIPTION;
-
-        internal const string ADVANCED_PORTABLE_TELEPORTER_KEEP_ITEMS_KEY = $"Keep Items When Using {AdvancedPortableTeleporter.ITEM_NAME}s";
-        internal const bool ADVANCED_PORTABLE_TELEPORTER_KEEP_ITEMS_DEFAULT = true;
-        internal const string ADVANCED_PORTABLE_TELEPORTER_KEEP_ITEMS_DESCRIPTION = KEEP_ITEMS_DESCRIPTION;
-
-        internal static readonly string ADVANCED_PORTABLE_TELEPORTER_SCAN_NODE_KEY = string.Format(ITEM_SCAN_NODE_KEY_FORMAT, AdvancedPortableTeleporter.ITEM_NAME);
-
-        #endregion
-
-        #region Weak Portable Teleporter
-
-        internal const string PORTABLE_TELEPORTER_ENABLED_KEY = $"Enable {RegularPortableTeleporter.ITEM_NAME}";
-        internal const bool PORTABLE_TELEPORTER_ENABLED_DEFAULT = true;
-
-        internal const string PORTABLE_TELEPORTER_PRICE_KEY = $"Price of {RegularPortableTeleporter.ITEM_NAME}";
-        internal const int PORTABLE_TELEPORTER_PRICE_DEFAULT = 300;
-
-        internal const string PORTABLE_TELEPORTER_BREAK_CHANCE_KEY = BREAK_CHANCE_KEY;
-        internal const float PORTABLE_TELEPORTER_BREAK_CHANCE_DEFAULT = 0.9f;
-        internal const string PORTABLE_TELEPORTER_BREAK_CHANCE_DESCRIPTION = BREAK_CHANCE_DESCRIPTION;
-
-        internal const string PORTABLE_TELEPORTER_KEEP_ITEMS_KEY = $"Keep Items When Using {RegularPortableTeleporter.ITEM_NAME}s";
-        internal const bool PORTABLE_TELEPORTER_KEEP_ITEMS_DEFAULT = true;
-        internal const string PORTABLE_TELEPORTER_KEEP_ITEMS_DESCRIPTION = KEEP_ITEMS_DESCRIPTION;
-
-        internal static readonly string PORTABLE_TELEPORTER_SCAN_NODE_KEY = string.Format(ITEM_SCAN_NODE_KEY_FORMAT, RegularPortableTeleporter.ITEM_NAME);
-        #endregion
-
-        #endregion
 
         #region Helmet
 

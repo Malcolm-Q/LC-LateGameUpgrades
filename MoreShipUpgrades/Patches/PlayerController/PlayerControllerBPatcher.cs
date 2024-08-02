@@ -135,20 +135,6 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
             return codes.AsEnumerable();
         }
-
-        [HarmonyPrefix]
-        [HarmonyPatch(nameof(PlayerControllerB.DropAllHeldItems))]
-        static bool DontDropItems(PlayerControllerB __instance)
-        {
-            if (!UpgradeBus.Instance.TPButtonPressed) return true;
-
-            UpgradeBus.Instance.TPButtonPressed = false;
-            __instance.isSinking = false;
-            __instance.isUnderwater = false;
-            __instance.sinkingValue = 0;
-            __instance.statusEffectAudio.Stop();
-            return false;
-        }
         [HarmonyPostfix]
         [HarmonyPatch(nameof(PlayerControllerB.SwitchToItemSlot))]
         [HarmonyPatch(nameof(PlayerControllerB.BeginGrabObject))]

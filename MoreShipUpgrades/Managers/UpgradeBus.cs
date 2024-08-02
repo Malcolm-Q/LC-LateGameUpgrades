@@ -7,7 +7,6 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.Items;
-using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
@@ -33,8 +32,6 @@ namespace MoreShipUpgrades.Managers
         internal Dictionary<string, List<string>> scrapToCollectionUpgrade = [];
         internal Dictionary<string, int> contributionValues = [];
         internal List<string> discoveredItems = [];
-
-        internal bool TPButtonPressed;
         internal Dictionary<string, float> SaleData = [];
 
         internal AudioClip flashNoise;
@@ -171,8 +168,6 @@ namespace MoreShipUpgrades.Managers
         internal void AlterStoreItems()
         {
             AlterStoreItem(Helmet.ITEM_NAME, PluginConfiguration.HELMET_ENABLED, PluginConfiguration.HELMET_PRICE);
-            AlterStoreItem(AdvancedPortableTeleporter.ITEM_NAME, PluginConfiguration.ADVANCED_TELE_ENABLED, PluginConfiguration.ADVANCED_TELE_PRICE);
-            AlterStoreItem(RegularPortableTeleporter.ITEM_NAME, PluginConfiguration.WEAK_TELE_ENABLED, PluginConfiguration.WEAK_TELE_PRICE);
             AlterStoreItem(Medkit.ITEM_NAME, PluginConfiguration.MEDKIT_ENABLED, PluginConfiguration.MEDKIT_PRICE);
             AlterStoreItem(NightVisionGoggles.ITEM_NAME, PluginConfiguration.NIGHT_VISION_ENABLED, PluginConfiguration.NIGHT_VISION_PRICE);
         }

@@ -1,4 +1,17 @@
 <details>
+<summary> 3.9.6 - 2024-08-03 </summary>
+
+- Moved items into their own following mods:
+  - Portable Teleporters
+  - Wheelbarrow
+  - Shopping Cart
+  - Peeper
+  - Diving Kit
+
+</details>
+
+
+<details>
 <summary> 3.9.5 - 2024-07-30 </summary>
 
 - Fixed typo in Charging Booster's upgrade information
