@@ -1,5 +1,12 @@
 <details>
-<summary> 3.9.6 - 2024-08-?? </summary>
+<summary> 3.9.7 - 2024-08-03 </summary>
+
+- Hotfixed issue with interact due to how the check for CustomItemBehaviourLibrary mod installed is made.
+
+</details>
+
+<details>
+<summary> 3.9.6 - 2024-08-03 </summary>
 
 - Moved items into their own following mods:
   - Portable Teleporters

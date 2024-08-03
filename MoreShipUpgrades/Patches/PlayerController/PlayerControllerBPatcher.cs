@@ -15,7 +15,6 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Vehicle;
 using MoreShipUpgrades.Compat;
-using CustomItemBehaviourLibrary.AbstractItems;
 
 namespace MoreShipUpgrades.Patches.PlayerController
 {
@@ -156,9 +155,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
             if (CustomItemBehaviourLibraryCompat.Enabled && !UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_ALLOW_WHEELBARROWS)
             {
-                // No putting wheelbarrows in your deeper pockets
-                if (player.currentlyHeldObjectServer is ContainerBehaviour) return;
-                if (player.currentlyHeldObject is ContainerBehaviour) return;
+                if (CustomItemBehaviourLibraryCompat.CheckForContainers(ref player)) return;
             }
             int twoHandedCount = 0;
             int maxTwoHandedCount = 1 + UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_INITIAL_TWO_HANDED_ITEMS + (BaseUpgrade.GetUpgradeLevel(DeepPockets.UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_ITEMS);
