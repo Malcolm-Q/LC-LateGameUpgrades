@@ -11,6 +11,7 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.RadarBooster;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.WeedKiller;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Zapgun;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
@@ -144,6 +145,7 @@ namespace MoreShipUpgrades.Misc
             { TurboTank.UPGRADE_NAME, upgrades+"TurboTank.prefab" },
             { TractionBoots.UPGRADE_NAME, upgrades+"TractionBoots.prefab" },
             { HikingBoots.UPGRADE_NAME, upgrades+"HikingBoots.prefab" },
+            { SleightOfHand.UPGRADE_NAME, upgrades+"SleightOfHand.prefab" },
 
             { "Advanced Portable Tele", storeItems+"TpButtonAdv.asset" },
             { "Portable Tele", storeItems+"TpButton.asset" },

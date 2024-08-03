@@ -13,6 +13,7 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.RadarBooster;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.WeedKiller;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Zapgun;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
@@ -191,6 +192,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string SLEIGHT_OF_HAND_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, SleightOfHand.UPGRADE_NAME);
         internal static readonly string HIKING_BOOTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, HikingBoots.UPGRADE_NAME);
         internal static readonly string TRACTION_BOOTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, TractionBoots.UPGRADE_NAME);
         internal static readonly string TURBO_TANK_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, TurboTank.UPGRADE_NAME);
@@ -408,6 +410,25 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Sleight of Hand
+
+        internal const string SLEIGHT_OF_HAND_ENABLED_KEY = $"Enable {SleightOfHand.UPGRADE_NAME} Upgrade";
+        internal const bool SLEIGHT_OF_HAND_ENABLED_DEFAULT = true;
+        internal const string SLEIGHT_OF_HAND_ENABLED_DESCRIPTION = "Tier upgrade which reduces the reload time of the shotgun.";
+
+        internal const string SLEIGHT_OF_HAND_PRICE_KEY = $"Price of {SleightOfHand.UPGRADE_NAME} Upgrade";
+        internal const int SLEIGHT_OF_HAND_PRICE_DEFAULT = 100;
+
+        internal const string SLEIGHT_OF_HAND_INITIAL_INCREASE_KEY = "Initial Reload Speed Increase";
+        internal const int SLEIGHT_OF_HAND_INITIAL_INCREASE_DEFAULT = 25;
+        internal const string SLEIGHT_OF_HAND_INITIAL_INCREASE_DESCRIPTION = "Initial percentage of the reload speed increase when first purchasing the upgrade";
+
+        internal const string SLEIGHT_OF_HAND_INCREMENTAL_INCREASE_KEY = "Incremental Reload Speed Increase";
+        internal const int SLEIGHT_OF_HAND_INCREMENTAL_INCREASE_DEFAULT = 25;
+        internal const string SLEIGHT_OF_HAND_INCREMENTAL_INCREASE_DESCRIPTION = "Incremental percentage of the reload speed increase when purchasing further levels of the upgrade";
+
+        #endregion
 
         #region Hiking Boots
 
