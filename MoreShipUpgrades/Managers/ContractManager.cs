@@ -158,9 +158,7 @@ namespace MoreShipUpgrades.Managers
                 if (level.PlanetName.Contains("Gordion")) continue;
                 if (LethalLevelLoaderCompat.Enabled)
                 {
-                    ExtendedLevel extendedLevel;
-                    LethalLevelLoader.PatchedContent.TryGetExtendedContent(level, out extendedLevel);
-                    if (extendedLevel == null || extendedLevel.IsRouteLocked) continue;
+                    if (LethalLevelLoaderCompat.IsLocked(ref level)) continue;
                 }
                 logger.LogDebug($"Picked {level.PlanetName} as possible moon for contract...");
                 if (routeKeyword == null) routeKeyword = UpgradeBus.Instance.GetTerminal().terminalNodes.allKeywords.First(k => k.word == "route");
