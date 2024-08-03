@@ -1,5 +1,5 @@
 <details>
-<summary> 3.9.6 - 2024-08-03 </summary>
+<summary> 3.9.6 - 2024-08-?? </summary>
 
 - Moved items into their own following mods:
   - Portable Teleporters
@@ -7,6 +7,7 @@
   - Shopping Cart
   - Peeper
   - Diving Kit
+- Configurable random contract upon typing ``contract`` rather than interacting with the terminal application associated with contracts.
 
 </details>
 

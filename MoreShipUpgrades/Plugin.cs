@@ -80,7 +80,9 @@ namespace MoreShipUpgrades
 
             InteractiveTerminalManager.RegisterApplication<UpgradeStoreApplication>(["lgu", "lategame store"], caseSensitive: false);
             InteractiveTerminalManager.RegisterApplication<WeatherProbeApplication>("probe", caseSensitive: false);
-            InteractiveTerminalManager.RegisterApplication<ContractApplication>(["contracts", "contract"], caseSensitive: false);
+            InteractiveTerminalManager.RegisterApplication<ContractApplication>("contracts", caseSensitive: false);
+            if (!config.CONTRACT_PROVIDE_RANDOM_ONLY)
+                InteractiveTerminalManager.RegisterApplication<ContractApplication>("contract", caseSensitive: false);
 
             mls.LogInfo($"{Metadata.NAME} {Metadata.VERSION} has been loaded successfully.");
         }

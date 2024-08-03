@@ -246,6 +246,10 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string ENABLE_CONTRACTS_KEY = "Enable the ability to purchase contracts / missions";
         internal const bool ENABLE_CONTRACTS_DEFAULT = true;
 
+        internal const string CONTRACT_PROVIDE_RANDOM_ONLY_KEY = "Random Contract on Keyword";
+        internal const bool CONTRACT_PROVIDE_RANDOM_ONLY_DEFAULT = false;
+        internal const string CONTRACT_PROVIDE_RANDOM_ONLY_DESCRIPTION = "When enabled, typing contract will automatically assign you a random contract when possible. (Essentialy old behaviour)";
+
         internal const string CONTRACT_FREE_MOONS_ONLY_KEY = "Random contracts on free moons only";
         internal const bool CONTRACT_FREE_MOONS_ONLY_DEFAULT = true;
         internal const string CONTRACT_FREE_MOONS_ONLY_DESCRIPTION = "If true, \"contract\" command will only generate contracts on free moons.";

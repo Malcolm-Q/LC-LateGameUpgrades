@@ -164,6 +164,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<bool> CONTRACT_PROVIDE_RANDOM_ONLY {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SHOW_WORLD_BUILDING_TEXT {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> HIKING_BOOTS_PRICES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> HIKING_BOOTS_OVERRIDE_NAME { get; set; }
@@ -619,6 +620,7 @@ namespace MoreShipUpgrades.Misc
 
             topSection = LguConstants.CONTRACTS_SECTION;
             CONTRACTS_ENABLED                   = cfg.BindSyncedEntry(topSection, LguConstants.ENABLE_CONTRACTS_KEY                 , LguConstants.ENABLE_CONTRACTS_DEFAULT);
+            CONTRACT_PROVIDE_RANDOM_ONLY        = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_PROVIDE_RANDOM_ONLY_KEY     , LguConstants.CONTRACT_PROVIDE_RANDOM_ONLY_DEFAULT, LguConstants.CONTRACT_PROVIDE_RANDOM_ONLY_DESCRIPTION);
             CONTRACT_FREE_MOONS_ONLY            = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_FREE_MOONS_ONLY_KEY         , LguConstants.CONTRACT_FREE_MOONS_ONLY_DEFAULT, LguConstants.CONTRACT_FREE_MOONS_ONLY_DESCRIPTION);
             CONTRACT_PRICE                      = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_PRICE_KEY                   , LguConstants.CONTRACT_PRICE_DEFAULT);
             CONTRACT_SPECIFY_PRICE              = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_SPECIFY_PRICE_KEY           , LguConstants.CONTRACT_SPECIFY_PRICE_DEFAULT);

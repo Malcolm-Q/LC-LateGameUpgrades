@@ -378,8 +378,49 @@ namespace MoreShipUpgrades.Misc
                 case "load": outputNode = ExecuteLoadCommands(secondWord, fullText, ref terminal, ref outputNode); return;
                 case "scan": outputNode = ExecuteScanCommands(secondWord, ref outputNode); return;
                 case "quantum": ExecuteQuantumCommands(ref terminal, ref outputNode); return;
+                case "contract": ExecuteContractCommands(ref terminal, ref outputNode); return;
                 default: return;
             }
+        }
+        static void ExecuteContractCommands(ref Terminal terminal, ref TerminalNode outputNode)
+        {
+            if (!UpgradeBus.Instance.PluginConfiguration.CONTRACT_PROVIDE_RANDOM_ONLY) return;
+            outputNode = TryGetContract(ref terminal);
+        }
+        static TerminalNode TryGetContract(ref Terminal terminal)
+        {
+            if (contracts.Count == 0) return DisplayTerminalMessage(LguConstants.CONTRACT_FAIL);
+            string txt = null;
+            if (ContractManager.Instance.contractLevel != "None")
+            {
+                txt = $"You currently have a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}!\n\n";
+                txt += string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value);
+                logger.LogInfo($"User tried starting a new contract while they still have a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}!");
+                return DisplayTerminalMessage(txt);
+            }
+            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value)
+            {
+                txt = $"Contracts costs ${UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value} and you have ${terminal.groupCredits}\n\n";
+                return DisplayTerminalMessage(txt);
+            }
+            LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits - UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value);
+            int i = Random.Range(0, contracts.Count);
+            if (contracts.Count > 1)
+            {
+                while (i == ContractManager.Instance.lastContractIndex)
+                {
+                    i = Random.Range(0, contracts.Count);
+                }
+            }
+            ContractManager.Instance.contractType = contracts[i];
+            txt = $"A {contracts[i]} contract has been accepted for {ContractManager.RandomLevel()}!{contractInfos[i]}";
+
+            if (terminal.IsHost || terminal.IsServer) ContractManager.Instance.SyncContractDetailsClientRpc(ContractManager.Instance.contractLevel, i);
+            else ContractManager.Instance.ReqSyncContractDetailsServerRpc(ContractManager.Instance.contractLevel, i);
+
+            logger.LogInfo($"User accepted a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}");
+
+            return DisplayTerminalMessage(txt);
         }
         private static void ExecuteQuantumCommands(ref Terminal terminal, ref TerminalNode outputNode)
         {
