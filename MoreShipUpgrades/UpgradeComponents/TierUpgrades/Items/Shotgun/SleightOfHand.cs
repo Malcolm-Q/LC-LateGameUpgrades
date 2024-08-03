@@ -33,7 +33,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
             static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.SLEIGHT_OF_HAND_INITIAL_INCREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.SLEIGHT_OF_HAND_INCREMENTAL_INCREASE.Value);
-            const string infoFormat = "LVL {0} - ${1} - The reload speed of shotugns is increased by {2}%\n";
+            const string infoFormat = "LVL {0} - ${1} - The reload speed of weaponry is increased by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
         public static float ComputeSleightOfHandSpeedBoost()
