@@ -310,7 +310,6 @@ namespace MoreShipUpgrades.Patches.PlayerController
         static IEnumerable<CodeInstruction> UpdateTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo reduceCarryLoss = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreaseCarryLoss));
-            //MethodInfo reduceMovement = typeof(WheelbarrowScript).GetMethod(nameof(WheelbarrowScript.CheckIfPlayerCarryingWheelbarrowMovement));
             MethodInfo additionalMovement = typeof(RunningShoes).GetMethod(nameof(RunningShoes.GetAdditionalMovementSpeed));
             MethodInfo additionalClimbSpeed = typeof(ClimbingGloves).GetMethod(nameof(ClimbingGloves.GetAdditionalClimbingSpeed));
             MethodInfo additionalJumpForce = typeof(StrongLegs).GetMethod(nameof(StrongLegs.GetAdditionalJumpForce));
@@ -332,9 +331,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             Tools.FindField(ref index, ref codes, findField: slopeIntensity, skip: true, errorMessage: "Couldn't find skip slope Intensity");
             Tools.FindField(ref index, ref codes, findField: slopeModifier, addCode: uphillSlopeMultiplier, errorMessage: "Couldn't find occurence of slopeModifier");
             Tools.FindFloat(ref index, ref codes, findValue: 5f, addCode: additionalTractionForce, errorMessage: "Couldn't find the numerator used when sprinting");
-            //Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: reduceMovement, errorMessage: "Couldn't find second carryWeight occurence");
             Tools.FindFloat(ref index, ref codes, findValue: 10f, addCode: additionalTractionForce, errorMessage: "Couldn't find the numerator used when walking");
-            //Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: reduceMovement, errorMessage: "Couldn't find third carryWeight occurence");
             Tools.FindField(ref index, ref codes, findField: jumpForce, addCode: additionalJumpForce, errorMessage: "Couldn't find occurence of jump force field");
             Tools.FindField(ref index, ref codes, findField: climbSpeed, addCode: additionalClimbSpeed, errorMessage: "Couldn't find occurence of climb speed field");
             return codes;

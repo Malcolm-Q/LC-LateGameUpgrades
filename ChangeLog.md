@@ -9,6 +9,7 @@
   - Diving Kit
 - Configurable random contract upon typing ``contract`` rather than interacting with the terminal application associated with contracts.
 - Implemented "Sleight Of Hand" tier upgrade which increases the reload speed of the shotgun item.
+- Implemented "Hiking Boots" tier upgrade which reduces the slope effect on your movement. 
 
 </details>
 
