@@ -2,7 +2,7 @@
 <summary> 3.9.8 - 2024-08-04 </summary>
 
 - Added Kidnapper Fox and Spore Lizard samples to be used by the Hunter upgrade
-  - Though Puffer can't die, there are mods that allow that so upgrade is ready for that 
+  - Though Puffer can't die by vanilla behaviour, there are mods that allow that so upgrade is ready for that
 - Fixed NRE issue from compatibility with CustomItemBehaviourLibrary
 - Fixed issue between shotgun and Sleight of Hand when it's disabled
 
