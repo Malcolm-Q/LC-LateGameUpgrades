@@ -84,6 +84,7 @@ namespace MoreShipUpgrades
             if (!config.CONTRACT_PROVIDE_RANDOM_ONLY)
                 InteractiveTerminalManager.RegisterApplication<ContractApplication>("contract", caseSensitive: false);
 
+           
             mls.LogInfo($"{Metadata.NAME} {Metadata.VERSION} has been loaded successfully.");
         }
 

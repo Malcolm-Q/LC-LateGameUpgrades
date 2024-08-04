@@ -659,10 +659,10 @@ namespace MoreShipUpgrades.Misc.Util
         internal const int HUNTER_PRICE_DEFAULT = 700;
 
         internal const string HUNTER_SAMPLE_TIERS_KEY = "Samples dropping at each tier";
-        internal const string HUNTER_SAMPLE_TIERS_DEFAULT = "Hoarding Bug, Centipede-Bunker Spider, Baboon hawk, Tulip Snake-Flowerman, MouthDog, Crawler, Manticoil-Forest Giant";
+        internal const string HUNTER_SAMPLE_TIERS_DEFAULT = "Hoarding Bug, Centipede, Spore Lizard-Bunker Spider, Baboon hawk, Tulip Snake, Kidnapper Fox-Flowerman, MouthDog, Crawler, Manticoil-Forest Giant";
         internal const string HUNTER_SAMPLE_TIERS_DESCRIPTION = "Specifies at which tier of Hunter do each sample start dropping from. Each tier is separated with a dash ('-') and each list of monsters will be separated with a comma (',')\n" +
                                                                 "Supported Enemies: Hoarding Bug, Centipede (Snare Flea),Bunker Spider, Baboon Hawk, Crawler (Half/Thumper), " +
-                                                                "Flowerman (Bracken), MouthDog (Eyeless Dog), Forest Giant, Tulip Snake and Manticoil.";
+                                                                "Flowerman (Bracken), MouthDog (Eyeless Dog), Forest Giant, Tulip Snake, Manticoil, Kidnapper Fox and Spore Lizard.";
 
         internal const string MINIMUM_SAMPLE_VALUE_FORMAT = "Minimum scrap value of a {0} sample";
         internal const string MAXIMUM_SAMPLE_VALUE_FORMAT = "Maximum scrap value of a {0} sample";
@@ -764,6 +764,26 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal static readonly string TULIP_SNAKE_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Tulip Snake");
         internal const int TULIP_SNAKE_SAMPLE_MAXIMUM_VALUE_DEFAULT = 50;
+
+        #endregion
+
+        #region Kidnapper Fox
+
+        internal static readonly string KIDNAPPER_FOX_SAMPLE_MINIMUM_VALUE_KEY = string.Format(MINIMUM_SAMPLE_VALUE_FORMAT, "Kidnapper Fox");
+        internal const int KIDNAPPER_FOX_SAMPLE_MINIMUM_VALUE_DEFAULT = 60;
+
+        internal static readonly string KIDNAPPER_FOX_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Kidnapper Fox");
+        internal const int KIDNAPPER_FOX_SAMPLE_MAXIMUM_VALUE_DEFAULT = 80;
+
+        #endregion
+
+        #region Spore Lizard
+
+        internal static readonly string SPORE_LIZARD_SAMPLE_MINIMUM_VALUE_KEY = string.Format(MINIMUM_SAMPLE_VALUE_FORMAT, "Spore Lizard");
+        internal const int SPORE_LIZARD_SAMPLE_MINIMUM_VALUE_DEFAULT = 30;
+
+        internal static readonly string SPORE_LIZARD_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Spore Lizard");
+        internal const int SPORE_LIZARD_SAMPLE_MAXIMUM_VALUE_DEFAULT = 50;
 
         #endregion
 
