@@ -13,8 +13,6 @@ using MoreShipUpgrades.Managers;
 using UnityEngine;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Items;
-using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
-using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Vehicle;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Store;
@@ -29,6 +27,7 @@ using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun;
 
 namespace MoreShipUpgrades.Misc
 {
@@ -36,6 +35,7 @@ namespace MoreShipUpgrades.Misc
     public class LategameConfiguration : SyncedConfig2<LategameConfiguration>
     {
         #region Enabled
+        [field: SyncedEntryField] public SyncedEntry<bool> SLEIGHT_OF_HAND_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> HIKING_BOOTS_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> TRACTION_BOOTS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> TURBO_TANK_ENABLED {  get; set; }
@@ -60,8 +60,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<bool> LETHAL_DEALS_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> QUANTUM_DISRUPTOR_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> CONTRACTS_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> ADVANCED_TELE_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> WEAK_TELE_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> BEEKEEPER_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> PROTEIN_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> BIGGER_LUNGS_ENABLED { get; set; }
@@ -75,9 +73,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<bool> LIGHTNING_ROD_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> HUNTER_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> PLAYER_HEALTH_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> PEEPER_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> WHEELBARROW_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> SCRAP_WHEELBARROW_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> DOOR_HYDRAULICS_BATTERY_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> FASTER_DROP_POD_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SIGURD_ENABLED { get; set; }
@@ -90,6 +85,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Individual
+        [field: SyncedEntryField] public SyncedEntry<bool> SLEIGHT_OF_HAND_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> HIKING_BOOTS_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> TRACTION_BOOTS_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> FEDORA_SUIT_INDIVIDUAL {  get; set; }
@@ -117,6 +113,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Initial Prices
+        [field: SyncedEntryField] public SyncedEntry<int> SLEIGHT_OF_HAND_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> HIKING_BOOTS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> TRACTION_BOOTS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> TURBO_TANK_PRICE {  get; set; }
@@ -146,10 +143,7 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<float> QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> QUANTUM_DISRUPTOR_PRICES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> QUANTUM_DISRUPTOR_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> PEEPER_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> HUNTER_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> ADVANCED_TELE_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> WEAK_TELE_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> BEEKEEPER_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> PROTEIN_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> BIGGER_LUNGS_PRICE { get; set; }
@@ -165,7 +159,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<int> PLAYER_HEALTH_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_SPECIFY_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> WHEELBARROW_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> DOOR_HYDRAULICS_BATTERY_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> FASTER_DROP_POD_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SIGURD_PRICE { get; set; }
@@ -175,6 +168,11 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<string> SLEIGHT_OF_HAND_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> SLEIGHT_OF_HAND_OVERRIDE_NAME {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> SLEIGHT_OF_HAND_INITIAL_INCREASE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> SLEIGHT_OF_HAND_INCREMENTAL_INCREASE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> CONTRACT_PROVIDE_RANDOM_ONLY {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SHOW_WORLD_BUILDING_TEXT {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> HIKING_BOOTS_PRICES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> HIKING_BOOTS_OVERRIDE_NAME { get; set; }
@@ -231,13 +229,8 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<string> SCAVENGER_INSTINCTS_PRICES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SCAVENGER_INSTINCTS_INCREMENTAL_AMOUN_SCRAP_INCREASE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> PEEPER_SCAN_NODE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> MEDKIT_SCAN_NODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> HELMET_SCAN_NODE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> DIVING_KIT_SCAN_NODE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> STORE_WHEELBARROW_SCAN_NODE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> PORTABLE_TELEPORTER_SCAN_NODE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> ADVANCED_PORTABLE_TELEPORTER_SCAN_NODE { get; set; }
 
         [field: SyncedEntryField] public SyncedEntry<int> HELMET_DAMAGE_REDUCTION { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> HELMET_DAMAGE_MITIGATION_MODE { get; set; }
@@ -321,7 +314,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<float> BIGGER_LUNGS_JUMP_STAMINA_COST_DECREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> BIGGER_LUNGS_JUMP_STAMINA_COST_INCREMENTAL_DECREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> PROTEIN_INCREMENT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> KEEP_ITEMS_ON_TELE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> SPRINT_TIME_INCREASE_UNLOCK { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> MOVEMENT_SPEED_UNLOCK { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> JUMP_FORCE_UNLOCK { get; set; }
@@ -333,9 +325,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<float> SHIP_AND_ENTRANCE_DISTANCE_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> NOISE_REDUCTION { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> DISCOMBOBULATOR_COOLDOWN { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> ADV_CHANCE_TO_BREAK { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> ADV_KEEP_ITEMS_ON_TELE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> CHANCE_TO_BREAK { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> BEEKEEPER_DAMAGE_MULTIPLIER { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> DISCOMBOBULATOR_RADIUS { get; set; }
@@ -399,10 +388,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<int> MEDKIT_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MEDKIT_HEAL_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MEDKIT_USES { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> DIVEKIT_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> DIVEKIT_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> DIVEKIT_WEIGHT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> DIVEKIT_TWO_HANDED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> DISCOMBOBULATOR_DAMAGE_LEVEL { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> DISCOMBOBULATOR_INITIAL_DAMAGE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> DISCOMBOBULATOR_DAMAGE_INCREASE { get; set; }
@@ -450,27 +435,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<int> TULIP_SNAKE_SAMPLE_MINIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> TULIP_SNAKE_SAMPLE_MAXIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_GHOST_SPAWN { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<WheelbarrowScript.Restrictions> WHEELBARROW_RESTRICTION_MODE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> WHEELBARROW_MAXIMUM_AMOUNT_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> WHEELBARROW_WEIGHT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> WHEELBARROW_MOVEMENT_SLOPPY { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> WHEELBARROW_NOISE_RANGE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> WHEELBARROW_PLAY_NOISE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<WheelbarrowScript.Restrictions> SCRAP_WHEELBARROW_RESTRICTION_MODE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> SCRAP_WHEELBARROW_WEIGHT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> SCRAP_WHEELBARROW_NOISE_RANGE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> SCRAP_WHEELBARROW_MINIMUM_VALUE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> SCRAP_WHEELBARROW_MAXIMUM_VALUE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> SCRAP_WHEELBARROW_MOVEMENT_SLOPPY { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> SCRAP_WHEELBARROW_RARITY { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> SCRAP_WHEELBARROW_PLAY_NOISE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> SCAV_VOLUME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> CONTRACT_FREE_MOONS_ONLY { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> DOOR_HYDRAULICS_BATTERY_PRICES { get; set; }
@@ -511,6 +475,7 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<ItemProgressionManager.ChancePerScrapModes> SCRAP_UPGRADE_CHANCE_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_BLACKLISTED_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_APPARATICE_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> SLEIGHT_OF_HAND_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> HIKING_BOOTS_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> TRACTION_BOOTS_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> TURBO_TANK_ITEM_PROGRESSION_ITEMS {  get; set; }
@@ -611,6 +576,7 @@ namespace MoreShipUpgrades.Misc
 
             topSection = LguConstants.OVERRIDE_NAMES_SECTION;
             OVERRIDE_UPGRADE_NAMES              = cfg.BindSyncedEntry(topSection, LguConstants.OVERRIDE_NAMES_ENABLED_KEY, LguConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LguConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
+            SLEIGHT_OF_HAND_OVERRIDE_NAME       = cfg.BindSyncedEntry(topSection, LguConstants.SLEIGHT_OF_HAND_OVERRIDE_NAME_KEY, SleightOfHand.UPGRADE_NAME);
             HIKING_BOOTS_OVERRIDE_NAME          = cfg.BindSyncedEntry(topSection, LguConstants.HIKING_BOOTS_OVERRIDE_NAME_KEY, HikingBoots.UPGRADE_NAME);
             TRACTION_BOOTS_OVERRIDE_NAME        = cfg.BindSyncedEntry(topSection, LguConstants.TRACTION_BOOTS_OVERRIDE_NAME_KEY, TractionBoots.UPGRADE_NAME);
             TURBO_TANK_OVERRIDE_NAME            = cfg.BindSyncedEntry(topSection, LguConstants.TURBO_TANK_OVERRIDE_NAME_KEY, TurboTank.UPGRADE_NAME);
@@ -664,6 +630,7 @@ namespace MoreShipUpgrades.Misc
 
             topSection = LguConstants.CONTRACTS_SECTION;
             CONTRACTS_ENABLED                   = cfg.BindSyncedEntry(topSection, LguConstants.ENABLE_CONTRACTS_KEY                 , LguConstants.ENABLE_CONTRACTS_DEFAULT);
+            CONTRACT_PROVIDE_RANDOM_ONLY        = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_PROVIDE_RANDOM_ONLY_KEY     , LguConstants.CONTRACT_PROVIDE_RANDOM_ONLY_DEFAULT, LguConstants.CONTRACT_PROVIDE_RANDOM_ONLY_DESCRIPTION);
             CONTRACT_FREE_MOONS_ONLY            = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_FREE_MOONS_ONLY_KEY         , LguConstants.CONTRACT_FREE_MOONS_ONLY_DEFAULT, LguConstants.CONTRACT_FREE_MOONS_ONLY_DESCRIPTION);
             CONTRACT_PRICE                      = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_PRICE_KEY                   , LguConstants.CONTRACT_PRICE_DEFAULT);
             CONTRACT_SPECIFY_PRICE              = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_SPECIFY_PRICE_KEY           , LguConstants.CONTRACT_SPECIFY_PRICE_DEFAULT);
@@ -691,28 +658,6 @@ namespace MoreShipUpgrades.Misc
 
             #region Items
 
-            #region Weak Portable Teleporter
-
-            topSection = RegularPortableTeleporter.ITEM_NAME;
-            WEAK_TELE_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.PORTABLE_TELEPORTER_ENABLED_KEY, LguConstants.PORTABLE_TELEPORTER_ENABLED_DEFAULT);
-            WEAK_TELE_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.PORTABLE_TELEPORTER_PRICE_KEY, LguConstants.PORTABLE_TELEPORTER_PRICE_DEFAULT);
-            CHANCE_TO_BREAK = cfg.BindSyncedEntry(topSection, LguConstants.PORTABLE_TELEPORTER_BREAK_CHANCE_KEY, LguConstants.PORTABLE_TELEPORTER_BREAK_CHANCE_DEFAULT, LguConstants.PORTABLE_TELEPORTER_BREAK_CHANCE_DESCRIPTION);
-            KEEP_ITEMS_ON_TELE = cfg.BindSyncedEntry(topSection, LguConstants.PORTABLE_TELEPORTER_KEEP_ITEMS_KEY, LguConstants.PORTABLE_TELEPORTER_KEEP_ITEMS_DEFAULT, LguConstants.PORTABLE_TELEPORTER_KEEP_ITEMS_DESCRIPTION);
-            PORTABLE_TELEPORTER_SCAN_NODE = cfg.BindSyncedEntry(topSection, LguConstants.PORTABLE_TELEPORTER_SCAN_NODE_KEY, LguConstants.ITEM_SCAN_NODE_DEFAULT, LguConstants.ITEM_SCAN_NODE_DESCRIPTION);
-
-            #endregion
-
-            #region Advanced Portable Teleporter
-
-            topSection = AdvancedPortableTeleporter.ITEM_NAME;
-            ADVANCED_TELE_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.ADVANCED_PORTABLE_TELEPORTER_ENABLED_KEY, LguConstants.ADVANCED_PORTABLE_TELEPORTER_ENABLED_DEFAULT);
-            ADVANCED_TELE_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.ADVANCED_PORTABLE_TELEPORTER_PRICE_KEY, LguConstants.ADVANCED_PORTABLE_TELEPORTER_PRICE_DEFAULT);
-            ADV_CHANCE_TO_BREAK = cfg.BindSyncedEntry(topSection, LguConstants.ADVANCED_PORTABLE_TELEPORTER_BREAK_CHANCE_KEY, LguConstants.ADVANCED_PORTABLE_TELEPORTER_BREAK_CHANCE_DEFAULT, LguConstants.ADVANCED_PORTABLE_TELEPORTER_BREAK_CHANCE_DESCRIPTION);
-            ADV_KEEP_ITEMS_ON_TELE = cfg.BindSyncedEntry(topSection, LguConstants.ADVANCED_PORTABLE_TELEPORTER_KEEP_ITEMS_KEY, LguConstants.ADVANCED_PORTABLE_TELEPORTER_KEEP_ITEMS_DEFAULT, LguConstants.ADVANCED_PORTABLE_TELEPORTER_KEEP_ITEMS_DESCRIPTION);
-            ADVANCED_PORTABLE_TELEPORTER_SCAN_NODE = cfg.BindSyncedEntry(topSection, LguConstants.ADVANCED_PORTABLE_TELEPORTER_SCAN_NODE_KEY, LguConstants.ITEM_SCAN_NODE_DEFAULT, LguConstants.ITEM_SCAN_NODE_DESCRIPTION);
-
-            #endregion
-
             #region Helmet
 
             topSection = Helmet.ITEM_NAME;
@@ -722,15 +667,6 @@ namespace MoreShipUpgrades.Misc
             HELMET_DAMAGE_REDUCTION = cfg.BindSyncedEntry(topSection, LguConstants.HELMET_DAMAGE_REDUCTION_KEY, LguConstants.HELMET_DAMAGE_REDUCTION_DEFAULT);
             HELMET_DAMAGE_MITIGATION_MODE = cfg.BindSyncedEntry(topSection, LguConstants.HELMET_DAMAGE_MITIGATION_MODE_KEY, LguConstants.HELMET_DAMAGE_MITIGATION_MODE_DEFAULT, LguConstants.HELMET_DAMAGE_MITIGATION_MODE_DESCRIPTION);
             HELMET_SCAN_NODE = cfg.BindSyncedEntry(topSection, LguConstants.HELMET_SCAN_NODE_KEY, LguConstants.ITEM_SCAN_NODE_DEFAULT, LguConstants.ITEM_SCAN_NODE_DESCRIPTION);
-
-            #endregion
-
-            #region Peeper
-
-            topSection = Peeper.ITEM_NAME;
-            PEEPER_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.PEEPER_ENABLED_KEY, LguConstants.PEEPER_ENABLED_DEFAULT, LguConstants.PEEPER_ENABLED_DESCRIPTION);
-            PEEPER_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.PEEPER_PRICE_KEY, LguConstants.PEEPER_PRICE_DEFAULT, LguConstants.PEEPER_PRICE_DESCRIPTION);
-            PEEPER_SCAN_NODE = cfg.BindSyncedEntry(topSection, LguConstants.PEEPER_SCAN_NODE_KEY, LguConstants.ITEM_SCAN_NODE_DEFAULT, LguConstants.ITEM_SCAN_NODE_DESCRIPTION);
 
             #endregion
 
@@ -745,54 +681,22 @@ namespace MoreShipUpgrades.Misc
 
             #endregion
 
-            #region Diving Kit
-
-            topSection = DivingKit.ITEM_NAME;
-            DIVEKIT_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.DIVING_KIT_ENABLED_KEY, LguConstants.DIVING_KIT_ENABLED_DEFAULT, LguConstants.DIVING_KIT_ENABLED_DESCRIPTION);
-            DIVEKIT_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.DIVING_KIT_PRICE_KEY, LguConstants.DIVING_KIT_PRICE_DEFAULT, LguConstants.DIVING_KIT_PRICE_DESCRIPTION);
-            DIVEKIT_WEIGHT = cfg.BindSyncedEntry(topSection, LguConstants.DIVING_KIT_WEIGHT_KEY, LguConstants.DIVING_KIT_WEIGHT_DEFAULT, LguConstants.DIVING_KIT_WEIGHT_DESCRIPTION);
-            DIVEKIT_TWO_HANDED = cfg.BindSyncedEntry(topSection, LguConstants.DIVING_KIT_TWO_HANDED_KEY, LguConstants.DIVING_KIT_TWO_HANDED_DEFAULT, LguConstants.DIVING_KIT_TWO_HANDED_DESCRIPTION);
-            DIVING_KIT_SCAN_NODE = cfg.BindSyncedEntry(topSection, LguConstants.DIVING_KIT_SCAN_NODE_KEY, LguConstants.ITEM_SCAN_NODE_DEFAULT, LguConstants.ITEM_SCAN_NODE_DESCRIPTION);
-
-            #endregion
-
-            #region Wheelbarrow
-
-            topSection = StoreWheelbarrow.ITEM_NAME;
-            WHEELBARROW_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.WHEELBARROW_ENABLED_KEY, LguConstants.WHEELBARROW_ENABLED_DEFAULT, LguConstants.WHEELBARROW_ENABLED_DESCRIPTION);
-            WHEELBARROW_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.WHEELBARROW_PRICE_KEY, LguConstants.WHEELBARROW_PRICE_DEFAULT, LguConstants.WHEELBARROW_PRICE_DESCRIPTION);
-            WHEELBARROW_WEIGHT = cfg.BindSyncedEntry(topSection, LguConstants.WHEELBARROW_WEIGHT_KEY, LguConstants.WHEELBARROW_WEIGHT_DEFAULT, LguConstants.WHEELBARROW_WEIGHT_DESCRIPTION);
-            WHEELBARROW_RESTRICTION_MODE = cfg.BindSyncedEntry(topSection, LguConstants.WHEELBARROW_RESTRICTION_MODE_KEY, LguConstants.WHEELBARROW_RESTRICTION_MODE_DEFAULT, LguConstants.WHEELBARROW_RESTRICTION_MODE_DESCRIPTION);
-            WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED = cfg.BindSyncedEntry(topSection, LguConstants.WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_KEY, LguConstants.WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_DEFAULT, LguConstants.WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_DESCRIPTION);
-            WHEELBARROW_MAXIMUM_AMOUNT_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_KEY, LguConstants.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_DEFAULT, LguConstants.WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_DESCRIPTION);
-            WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER = cfg.BindSyncedEntry(topSection, LguConstants.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER_KEY, LguConstants.WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER_DEFAULT, LguConstants.WHEELBARROW_WEIGHT_REDUCTION_MUTLIPLIER_DESCRIPTION);
-            WHEELBARROW_NOISE_RANGE = cfg.BindSyncedEntry(topSection, LguConstants.WHEELBARROW_NOISE_RANGE_KEY, LguConstants.WHEELBARROW_NOISE_RANGE_DEFAULT, LguConstants.WHEELBARROW_NOISE_RANGE_DESCRIPTION);
-            WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK = cfg.BindSyncedEntry(topSection, LguConstants.WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_KEY, LguConstants.WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_DEFAULT, LguConstants.WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_DESCRIPTION);
-            WHEELBARROW_MOVEMENT_SLOPPY = cfg.BindSyncedEntry(topSection, LguConstants.WHEELBARROW_MOVEMENT_SLOPPY_KEY, LguConstants.WHEELBARROW_MOVEMENT_SLOPPY_DEFAULT, LguConstants.WHEELBARROW_MOVEMENT_SLOPPY_DESCRIPTION);
-            WHEELBARROW_PLAY_NOISE = cfg.BindSyncedEntry(topSection, LguConstants.WHEELBARROW_PLAY_NOISE_KEY, LguConstants.WHEELBARROW_PLAY_NOISE_DEFAULT, LguConstants.WHEELBARROW_PLAY_NOISE_DESCRIPTION);
-            STORE_WHEELBARROW_SCAN_NODE = cfg.BindSyncedEntry(topSection, LguConstants.STORE_WHEELBARROW_SCAN_NODE_KEY, LguConstants.ITEM_SCAN_NODE_DEFAULT, LguConstants.ITEM_SCAN_NODE_DESCRIPTION);
-
-            #endregion
-            #region Shopping Cart
-            topSection = ScrapWheelbarrow.ITEM_NAME;
-            SCRAP_WHEELBARROW_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_ENABLED_KEY, LguConstants.SCRAP_WHEELBARROW_ENABLED_DEFAULT, LguConstants.SCRAP_WHEELBARROW_ENABLED_DESCRIPTION);
-            SCRAP_WHEELBARROW_RARITY = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_RARITY_KEY, LguConstants.SCRAP_WHEELBARROW_RARITY_DEFAULT, LguConstants.SCRAP_WHEELBARROW_RARITY_DESCRIPTION);
-            SCRAP_WHEELBARROW_WEIGHT = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_WEIGHT_KEY, LguConstants.SCRAP_WHEELBARROW_WEIGHT_DEFAULT, LguConstants.SCRAP_WHEELBARROW_WEIGHT_DESCRIPTION);
-            SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_KEY, LguConstants.SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_DEFAULT, LguConstants.SCRAP_WHEELBARROW_MAXIMUM_AMOUNT_ITEMS_DESCRIPTION);
-            SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER_KEY, LguConstants.SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MULTIPLIER_DEFAULT, LguConstants.SCRAP_WHEELBARROW_WEIGHT_REDUCTION_MUTLIPLIER_DESCRIPTION);
-            SCRAP_WHEELBARROW_MINIMUM_VALUE = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_MINIMUM_VALUE_KEY, LguConstants.SCRAP_WHEELBARROW_MINIMUM_VALUE_DEFAULT, LguConstants.SCRAP_WHEELBARROW_MINIMUM_VALUE_DESCRIPTION);
-            SCRAP_WHEELBARROW_MAXIMUM_VALUE = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_MAXIMUM_VALUE_KEY, LguConstants.SCRAP_WHEELBARROW_MAXIMUM_VALUE_DEFAULT, LguConstants.SCRAP_WHEELBARROW_MAXIMUM_VALUE_DESCRIPTION);
-            SCRAP_WHEELBARROW_RESTRICTION_MODE = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_RESTRICTION_MODE_KEY, LguConstants.SCRAP_WHEELBARROW_RESTRICTION_MODE_DEFAULT, LguConstants.SCRAP_WHEELBARROW_RESTRICTION_MODE_DESCRIPTION);
-            SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_KEY, LguConstants.SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_DEFAULT, LguConstants.SCRAP_WHEELBARROW_MAXIMUM_WEIGHT_ALLOWED_DESCRIPTION);
-            SCRAP_WHEELBARROW_NOISE_RANGE = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_NOISE_RANGE_KEY, LguConstants.SCRAP_WHEELBARROW_NOISE_RANGE_DEFAULT, LguConstants.SCRAP_WHEELBARROW_NOISE_RANGE_DESCRIPTION);
-            SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_KEY, LguConstants.SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_DEFAULT, LguConstants.SCRAP_WHEELBARROW_LOOK_SENSITIVITY_DRAWBACK_DESCRIPTION);
-            SCRAP_WHEELBARROW_MOVEMENT_SLOPPY = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_MOVEMENT_SLOPPY_KEY, LguConstants.SCRAP_WHEELBARROW_MOVEMENT_SLOPPY_DEFAULT, LguConstants.SCRAP_WHEELBARROW_MOVEMENT_SLOPPY_DESCRIPTION);
-            SCRAP_WHEELBARROW_PLAY_NOISE = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_WHEELBARROW_PLAY_NOISE_KEY, LguConstants.SCRAP_WHEELBARROW_PLAY_NOISE_DEFAULT, LguConstants.SCRAP_WHEELBARROW_PLAY_NOISE_DESCRIPTION);
-
-            #endregion
             #endregion
 
             #region Upgrades
+
+            #region Sleight Of Hand
+
+            topSection = SleightOfHand.UPGRADE_NAME;
+            SLEIGHT_OF_HAND_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.SLEIGHT_OF_HAND_ENABLED_KEY, LguConstants.SLEIGHT_OF_HAND_ENABLED_DEFAULT, LguConstants.SLEIGHT_OF_HAND_ENABLED_DESCRIPTION);
+            SLEIGHT_OF_HAND_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            SLEIGHT_OF_HAND_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.SLEIGHT_OF_HAND_PRICE_KEY, LguConstants.SLEIGHT_OF_HAND_PRICE_DEFAULT);
+            SLEIGHT_OF_HAND_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, SleightOfHand.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            SLEIGHT_OF_HAND_INITIAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.SLEIGHT_OF_HAND_INITIAL_INCREASE_KEY, LguConstants.SLEIGHT_OF_HAND_INITIAL_INCREASE_DEFAULT, LguConstants.SLEIGHT_OF_HAND_INITIAL_INCREASE_DESCRIPTION);
+            SLEIGHT_OF_HAND_INCREMENTAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.SLEIGHT_OF_HAND_INCREMENTAL_INCREASE_KEY, LguConstants.SLEIGHT_OF_HAND_INCREMENTAL_INCREASE_DEFAULT, LguConstants.SLEIGHT_OF_HAND_INCREMENTAL_INCREASE_DESCRIPTION);
+            SLEIGHT_OF_HAND_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
 
             #region Hiking Boots
 

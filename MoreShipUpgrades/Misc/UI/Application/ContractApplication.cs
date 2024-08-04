@@ -192,7 +192,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
             SelectableLevel[] levels = StartOfRound.Instance.levels.Where(x => !x.PlanetName.Contains("Gordion")).ToArray();
             if (LethalLevelLoaderCompat.Enabled)
             {
-                levels = levels.Where(x => PatchedContent.TryGetExtendedContent(x, out ExtendedLevel extendedLevel) && !extendedLevel.IsRouteLocked).ToArray();
+                LethalLevelLoaderCompat.GrabAllAvailableLevels(ref levels);
             }
             IScreen screen;
             ITextElement[] textElements;

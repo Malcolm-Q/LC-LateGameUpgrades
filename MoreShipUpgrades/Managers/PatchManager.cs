@@ -30,7 +30,6 @@ namespace MoreShipUpgrades.Managers
         }
         static void PatchEnemies()
         {
-            harmony.PatchAll(typeof(BaboonBirdAIPatcher));
             harmony.PatchAll(typeof(ButlerEnemyAIPatcher));
             harmony.PatchAll(typeof(ButlerBeesPatcher));
             harmony.PatchAll(typeof(ClaySurgeonAIPatcher));
@@ -38,7 +37,6 @@ namespace MoreShipUpgrades.Managers
             harmony.PatchAll(typeof(EnemyAICollisionDetectPatcher));
             harmony.PatchAll(typeof(HoarderBugAIPatcher));
             harmony.PatchAll(typeof(RedLocustBeesPatch));
-            harmony.PatchAll(typeof(SpringManAIPatcher));
             Plugin.mls.LogInfo("Enemies have been patched");
         }
 
@@ -68,6 +66,7 @@ namespace MoreShipUpgrades.Managers
             harmony.PatchAll(typeof(PatchToolPatcher));
             harmony.PatchAll(typeof(RadarBoosterPatcher));
             harmony.PatchAll(typeof(ShovelPatcher));
+            harmony.PatchAll(typeof(ShotgunPatcher));
             harmony.PatchAll(typeof(WalkiePatcher));
             harmony.PatchAll(typeof(SprayPaintItemPatcher));
             Plugin.mls.LogInfo("Items have been patched");

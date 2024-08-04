@@ -7,8 +7,6 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.Items;
-using MoreShipUpgrades.UpgradeComponents.Items.PortableTeleporter;
-using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
@@ -34,8 +32,6 @@ namespace MoreShipUpgrades.Managers
         internal Dictionary<string, List<string>> scrapToCollectionUpgrade = [];
         internal Dictionary<string, int> contributionValues = [];
         internal List<string> discoveredItems = [];
-
-        internal bool TPButtonPressed;
         internal Dictionary<string, float> SaleData = [];
 
         internal AudioClip flashNoise;
@@ -49,7 +45,6 @@ namespace MoreShipUpgrades.Managers
         internal List<CustomTerminalNode> terminalNodes = [];
         internal Dictionary<string, GameObject> UpgradeObjects = [];
         internal Dictionary<string, Item> ItemsToSync = [];
-        internal List<Peeper> coilHeadItems = [];
         internal AssetBundle UpgradeAssets;
 
         internal GameObject helmetModel;
@@ -172,14 +167,9 @@ namespace MoreShipUpgrades.Managers
 
         internal void AlterStoreItems()
         {
-            AlterStoreItem(Peeper.ITEM_NAME, PluginConfiguration.PEEPER_ENABLED, PluginConfiguration.PEEPER_PRICE);
             AlterStoreItem(Helmet.ITEM_NAME, PluginConfiguration.HELMET_ENABLED, PluginConfiguration.HELMET_PRICE);
-            AlterStoreItem(DivingKit.ITEM_NAME, PluginConfiguration.DIVEKIT_ENABLED, PluginConfiguration.DIVEKIT_PRICE);
-            AlterStoreItem(AdvancedPortableTeleporter.ITEM_NAME, PluginConfiguration.ADVANCED_TELE_ENABLED, PluginConfiguration.ADVANCED_TELE_PRICE);
-            AlterStoreItem(RegularPortableTeleporter.ITEM_NAME, PluginConfiguration.WEAK_TELE_ENABLED, PluginConfiguration.WEAK_TELE_PRICE);
             AlterStoreItem(Medkit.ITEM_NAME, PluginConfiguration.MEDKIT_ENABLED, PluginConfiguration.MEDKIT_PRICE);
             AlterStoreItem(NightVisionGoggles.ITEM_NAME, PluginConfiguration.NIGHT_VISION_ENABLED, PluginConfiguration.NIGHT_VISION_PRICE);
-            AlterStoreItem(StoreWheelbarrow.ITEM_NAME, PluginConfiguration.WHEELBARROW_ENABLED, PluginConfiguration.WHEELBARROW_PRICE);
         }
 
         void SyncAvailableContracts()

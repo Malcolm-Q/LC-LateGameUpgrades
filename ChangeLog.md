@@ -1,4 +1,36 @@
 <details>
+<summary> 3.9.8 - 2024-08-04 </summary>
+
+- Fixed NRE issue from compatibility with CustomItemBehaviourLibrary
+- Fixed issue between shotgun and Sleight of Hand when it's disabled
+
+</details>
+
+<details>
+<summary> 3.9.7 - 2024-08-03 </summary>
+
+- Hotfixed issue with interact due to how the check for CustomItemBehaviourLibrary mod installed is made.
+- Also fixed same issues with LethalLevelLoader.
+
+</details>
+
+<details>
+<summary> 3.9.6 - 2024-08-03 </summary>
+
+- Moved items into their own following mods:
+  - Portable Teleporters
+  - Wheelbarrow
+  - Shopping Cart
+  - Peeper
+  - Diving Kit
+- Configurable random contract upon typing ``contract`` rather than interacting with the terminal application associated with contracts.
+- Implemented "Sleight Of Hand" tier upgrade which increases the reload speed of the shotgun item.
+- Implemented "Hiking Boots" tier upgrade which reduces the slope effect on your movement. 
+
+</details>
+
+
+<details>
 <summary> 3.9.5 - 2024-07-30 </summary>
 
 - Fixed typo in Charging Booster's upgrade information

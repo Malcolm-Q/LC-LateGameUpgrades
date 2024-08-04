@@ -15,8 +15,7 @@ This adds:
 * 30+ Upgrades.
 * 5 complex team oriented missions (Contracts).
 * Mission items, NPC, rewards and behaviours.
-* 8 new Store items.
-* 1 rare scrap (Shopping cart).
+* A couple store items.
    
 The goal of this mod is to allow you to make playthroughs last longer and to remedy the stale lategame of not having anything to spend your money on and only going to one moon.
 
@@ -61,10 +60,6 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 ## Upgrades & Items
 ***Everything is tweakable via the config***
 
-* __Diving Kit - $650__
-    * Breathe underwater.
-    * Heavy, two handed, low visibility.
-
 * __Stimpack - $600__
     * Increase health by 20 per level.
 
@@ -101,22 +96,10 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
     * Must be holding it.
     * Useful for fog or finding home.
 
-* __Peeper - $500__
-    * Looks at coil heads for you.
-
 * __Locksmith - $640__
     * Makes noise when picking, makes a lot of noise when failing.
     * Just run into/interact with a locked door to start the minigame.
     * Strike the pins in the order they flash to unlock the door.
-
-* __Portable Teleporter - $300__
-    * An item that when used teleports you back to the ship.
-    * Keeps items.
-    * 90% chance to get destroyed on use.
-
-* __Advanced Portable Teleporter - $1750__
-    * Same as above.
-    * 20% chance to get destroyed on use.
 
 * __Beekeeper - $450__
     * Circuit bees & Butler Hornets do significantly less damage to you.
@@ -188,12 +171,6 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
     * Blocks incoming damage through amount of hits.
     * Once reached the limit of hits, it will be destroyed, having to purchase a new one if needed.
     * Alternative mode where the helmet gives partial damage reduction and only breaks when the next hit would kill the player.
-
-* __Wheelbarrow - $400__
-    * Allows depositing items inside and carry all of them at once.
-    * Can be restricted to amount of items or weight allowed in the wheelbarrow.
-    * Applies a weight reduction multiplier on the deposited items when carried through the wheelbarrow.
-    * Makes noise when being carried so be careful around monsters when using it!
 
 * __Drop Pod Thrusters - $300__
     * Speeds up the shop's drop pod to deliver items faster.

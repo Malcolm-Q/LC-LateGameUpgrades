@@ -4,7 +4,6 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Commands;
-using MoreShipUpgrades.UpgradeComponents.Items.Wheelbarrow;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using System.Collections.Generic;
@@ -21,7 +20,6 @@ namespace MoreShipUpgrades.Patches.HUD
         [HarmonyPatch(nameof(HUDManager.MeetsScanNodeRequirements))]
         static void MeetsScanNodeRequirementsPostFix(ScanNodeProperties node, ref bool __result, PlayerControllerB playerScript)
         {
-            if (node != null && node.GetComponentInParent<WheelbarrowScript>() != null && node.headerText != "Shopping Cart" && node.headerText != "Wheelbarrow") { __result = false; return; }
             if (!BaseUpgrade.GetActiveUpgrade(BetterScanner.UPGRADE_NAME)) { return; }
             if (node == null) { __result = false; return; }
             bool throughWall = Physics.Linecast(playerScript.gameplayCamera.transform.position, node.transform.position, 256, QueryTriggerInteraction.Ignore);

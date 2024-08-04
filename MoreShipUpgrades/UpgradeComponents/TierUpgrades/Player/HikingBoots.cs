@@ -1,13 +1,10 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.TerminalNodes;
-using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 using GameNetcodeStuff;
+using MoreShipUpgrades.Misc;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {
@@ -28,15 +25,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             if (!UpgradeBus.Instance.PluginConfiguration.HIKING_BOOTS_ENABLED) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
-            PlayerControllerB localPlayer = UpgradeBus.Instance.GetLocalPlayer();
-            if (localPlayer.isPlayerSliding) return defaultValue;
             float multiplier = ComputeUphillSlopeDebuffMultiplier();
             return Mathf.Clamp(defaultValue * multiplier, 0f, defaultValue);
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
             System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.HIKING_BOOTS_INITIAL_DECREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.HIKING_BOOTS_INCREMENTAL_DECREASE.Value);
-            string infoFormat = "LVL {0} - ${1} - Reduces the movement speed debuff when climbing uphill slopes by {2}%\n";
+            string infoFormat = "LVL {0} - ${1} - Reduces the movement speed change when going through slopes by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
 
@@ -55,11 +50,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public new static void RegisterUpgrade()
         {
-            //SetupGenericPerk<HikingBoots>(UPGRADE_NAME);
+            SetupGenericPerk<HikingBoots>(UPGRADE_NAME);
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            /*
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
 
             return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
@@ -68,8 +62,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
                                                 configuration.HIKING_BOOTS_PRICE,
                                                 UpgradeBus.ParseUpgradePrices(configuration.HIKING_BOOTS_PRICES),
                                                 configuration.OVERRIDE_UPGRADE_NAMES ? configuration.HIKING_BOOTS_OVERRIDE_NAME : "");
-            */
-            return null;
         }
     }
 }
