@@ -1,4 +1,12 @@
 <details>
+<summary> 3.9.8 - 2024-08-04 </summary>
+
+- Fixed NRE issue from compatibility with CustomItemBehaviourLibrary
+- Fixed issue between shotgun and Sleight of Hand when it's disabled
+
+</details>
+
+<details>
 <summary> 3.9.7 - 2024-08-03 </summary>
 
 - Hotfixed issue with interact due to how the check for CustomItemBehaviourLibrary mod installed is made.

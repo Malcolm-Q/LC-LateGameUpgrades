@@ -12,8 +12,8 @@ namespace MoreShipUpgrades.Compat
         public static bool CheckForContainers(ref PlayerControllerB player)
         {
             // No putting wheelbarrows in your deeper pockets
-            if (player.currentlyHeldObjectServer.GetComponent<ContainerBehaviour>() != null) return true;
-            if (player.currentlyHeldObject.GetComponent<ContainerBehaviour>() != null) return true;
+            if (player.currentlyHeldObjectServer is ContainerBehaviour) return true;
+            if (player.currentlyHeldObject is ContainerBehaviour) return true;
             return false;
         }
     }

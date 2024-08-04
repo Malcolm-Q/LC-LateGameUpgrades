@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun;
 using System.Collections;
@@ -14,6 +15,7 @@ namespace MoreShipUpgrades.Patches.Items
         [HarmonyPrefix]
         static void ReloadGunEffectsClientRpcPrefix(ShotgunItem __instance, bool start)
         {
+            if (!BaseUpgrade.GetActiveUpgrade(SleightOfHand.UPGRADE_NAME)) return;
             if (start)
             {
                 __instance.gunAnimator.speed *= 1f + SleightOfHand.ComputeSleightOfHandSpeedBoost();
