@@ -1,4 +1,11 @@
 <details>
+<summary> 3.9.9 - 2024-08-05 </summary>
+
+- Fixed the scan nodes from the new samples to display the correct names.
+
+</details>
+
+<details>
 <summary> 3.9.8 - 2024-08-04 </summary>
 
 - Added Kidnapper Fox and Spore Lizard samples to be used by the Hunter upgrade
