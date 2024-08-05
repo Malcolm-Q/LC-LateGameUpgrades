@@ -13,7 +13,6 @@ using MoreShipUpgrades.Managers;
 using UnityEngine;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Items;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Vehicle;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Store;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
@@ -38,15 +37,8 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<bool> SLEIGHT_OF_HAND_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> HIKING_BOOTS_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> TRACTION_BOOTS_ENABLED {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> TURBO_TANK_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> FEDORA_SUIT_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> WEED_GENETIC_MANIPULATION_ENABLED {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> IGNITION_COIL_ENABLED {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> FLUFFY_SEATS_ENABLED {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> IMPROVED_STEERING_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> SUPERCHARGED_PISTONS_ENABLED {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> RAPID_MOTORS_ENABLED {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> VEHICLE_PLATING_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> CLAY_GLASSES_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> MECHANICAL_ARMS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SCAVENGER_INSTINCTS_ENABLED {  get; set; }
@@ -116,15 +108,8 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<int> SLEIGHT_OF_HAND_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> HIKING_BOOTS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> TRACTION_BOOTS_PRICE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> TURBO_TANK_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> FEDORA_SUIT_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> WEED_GENETIC_MANIPULATION_PRICE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> IGNITION_COIL_PRICE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> FLUFFY_SEATS_PRICE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> IMPROVED_STEERING_PRICE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> SUPERCHARGED_PISTONS_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> RAPID_MOTORS_PRICE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> VEHICLE_PLATING_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CLAY_GLASSES_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MECHANICAL_ARMS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SCAVENGER_INSTINCTS_PRICE {  get; set; }
@@ -182,39 +167,11 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<string> TRACTION_BOOTS_OVERRIDE_NAME {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> TRACTION_BOOTS_INITIAL_INCREASE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> TRACTION_BOOTS_INCREMENTAL_INCREASE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> TURBO_TANK_PRICES {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> TURBO_TANK_OVERRIDE_NAME { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> TURBO_TANK_CAPACITY_INITIAL_INCREASE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> TURBO_TANK_CAPACITY_INCREMENTAL_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> FEDORA_SUIT_OVERRIDE_NAME {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> WEED_GENETIC_MANIPULATION_PRICES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> WEED_GENETIC_MANIPULATION_OVERRIDE_NAME {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> WEED_GENETIC_MANIPULATION_INITIAL_EFFECTIVENESS_INCREASE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> WEED_GENETIC_MANIPULATION_INCREMENTAL_EFFECTIVENESS_INCREASE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> IGNITION_COIL_PRICES {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> IGNITION_COIL_OVERRIDE_NAME {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> IGNITION_COIL_IGNITION_INITIAL_CHANCE_INCREASE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> IGNITION_COIL_IGNITION_INCREMENTAL_CHANCE_INCREASE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> FLUFFY_SEATS_PRICES {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> FLUFFY_SEATS_OVERRIDE_NAME { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> FLUFFY_SEATS_DAMAGE_MITIGATION_INITIAL_INCREASE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> FLUFFY_SEATS_DAMAGE_MITIGATION_INCREMENTAL_INCREASE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> IMPROVED_STEERING_PRICES {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> IMPROVED_STEERING_OVERRIDE_NAME { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> IMPROVED_STEERING_TURNING_SPEED_INITIAL_INCREASE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> IMPROVED_STEERING_TURNING_SPEED_INCREMENTAL_INCREASE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> SUPERCHARGED_PISTONS_PRICES {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> SUPERCHARGED_PISTONS_OVERRIDE_NAME {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> SUPERCHARGED_PISTONS_ENGINE_TORQUE_INITIAL_INCREASE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> SUPERCHARGED_PISTONS_ENGINE_TORQUE_INCREMENTAL_INCREASE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> RAPID_MOTORS_PRICES {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> RAPID_MOTORS_OVERRIDE_NAME {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> RAPID_MOTORS_ACCELERATION_INITIAL_INCREASE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> RAPID_MOTORS_ACCELERATION_INCREMENTAL_INCREASE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> VEHICLE_PLATING_PRICES {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> VEHICLE_PLATING_OVERRIDE_NAME {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> VEHICLE_PLATING_HEALTH_INITIAL_INCREASE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> VEHICLE_PLATING_HEALTH_INCREMENTAL_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> CLAY_GLASSES_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> CLAY_GLASSES_PRICES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> CLAY_GLASSES_DISTANCE_INITIAL_INCREASE {  get; set; }
@@ -482,15 +439,8 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<string> SLEIGHT_OF_HAND_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> HIKING_BOOTS_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> TRACTION_BOOTS_ITEM_PROGRESSION_ITEMS {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> TURBO_TANK_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> FEDORA_SUIT_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> WEED_GENETIC_MANIPULATION_ITEM_PROGRESSION_ITEMS {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> IGNITION_COIL_ITEM_PROGRESSION_ITEMS {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> FLUFFY_SEATS_ITEM_PROGRESSION_ITEMS {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> IMPROVED_STEERING_ITEM_PROGRESSION_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> SUPERCHARGED_PISTONS_ITEM_PROGRESSION_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> RAPID_MOTORS_ITEM_PROGRESSION_ITEMS {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> VEHICLE_PLATING_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> CLAY_GLASSES_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> ALUMINIUM_COILS_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> BACK_MUSCLES_ITEM_PROGRESSION_ITEMS { get; set; }
@@ -583,15 +533,8 @@ namespace MoreShipUpgrades.Misc
             SLEIGHT_OF_HAND_OVERRIDE_NAME       = cfg.BindSyncedEntry(topSection, LguConstants.SLEIGHT_OF_HAND_OVERRIDE_NAME_KEY, SleightOfHand.UPGRADE_NAME);
             HIKING_BOOTS_OVERRIDE_NAME          = cfg.BindSyncedEntry(topSection, LguConstants.HIKING_BOOTS_OVERRIDE_NAME_KEY, HikingBoots.UPGRADE_NAME);
             TRACTION_BOOTS_OVERRIDE_NAME        = cfg.BindSyncedEntry(topSection, LguConstants.TRACTION_BOOTS_OVERRIDE_NAME_KEY, TractionBoots.UPGRADE_NAME);
-            TURBO_TANK_OVERRIDE_NAME            = cfg.BindSyncedEntry(topSection, LguConstants.TURBO_TANK_OVERRIDE_NAME_KEY, TurboTank.UPGRADE_NAME);
             FEDORA_SUIT_OVERRIDE_NAME           = cfg.BindSyncedEntry(topSection, LguConstants.FEDORA_SUIT_OVERRIDE_NAME_KEY, FedoraSuit.UPGRADE_NAME);
             WEED_GENETIC_MANIPULATION_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.WEED_GENETIC_MANIPULATION_OVERRIDE_NAME_KEY, WeedGeneticManipulation.UPGRADE_NAME);
-            IGNITION_COIL_OVERRIDE_NAME         = cfg.BindSyncedEntry(topSection, LguConstants.IGNITION_COIL_OVERRIDE_NAME_KEY, IgnitionCoil.UPGRADE_NAME);
-            FLUFFY_SEATS_OVERRIDE_NAME          = cfg.BindSyncedEntry(topSection, LguConstants.FLUFFY_SEATS_OVERRIDE_NAME_KEY, FluffySeats.UPGRADE_NAME);
-            IMPROVED_STEERING_OVERRIDE_NAME     = cfg.BindSyncedEntry(topSection, LguConstants.IMPROVED_STEERING_OVERRIDE_NAME_KEY, ImprovedSteering.UPGRADE_NAME);
-            SUPERCHARGED_PISTONS_OVERRIDE_NAME  = cfg.BindSyncedEntry(topSection, LguConstants.SUPERCHARGED_PISTONS_OVERRIDE_NAME_KEY, SuperchargedPistons.UPGRADE_NAME);
-            RAPID_MOTORS_OVERRIDE_NAME          = cfg.BindSyncedEntry(topSection, LguConstants.RAPID_MOTORS_OVERRIDE_NAME_KEY, RapidMotors.UPGRADE_NAME);
-            VEHICLE_PLATING_OVERRIDE_NAME       = cfg.BindSyncedEntry(topSection, LguConstants.VEHICLE_PLATING_OVERRIDE_NAME_KEY, VehiclePlating.UPGRADE_NAME);
             CLAY_GLASSES_OVERRIDE_NAME          = cfg.BindSyncedEntry(topSection, LguConstants.CLAY_GLASSES_OVERRIDE_NAME_KEY, ClayGlasses.UPGRADE_NAME);
             MECHANICAL_ARMS_OVERRIDE_NAME       = cfg.BindSyncedEntry(topSection, LguConstants.MECHANICAL_ARMS_OVERRIDE_NAME_KEY, MechanicalArms.UPGRADE_NAME);
             SCAVENGER_INSTINCTS_OVERRIDE_NAME   = cfg.BindSyncedEntry(topSection, LguConstants.SCAVENGER_INSTINCTS_OVERRIDE_NAME_KEY, ScavengerInstincts.UPGRADE_NAME);
@@ -726,18 +669,6 @@ namespace MoreShipUpgrades.Misc
             TRACTION_BOOTS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
             #endregion
 
-            #region Turbo Tank
-
-            topSection = TurboTank.UPGRADE_NAME;
-            TURBO_TANK_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.TURBO_TANK_ENABLED_KEY, LguConstants.TURBO_TANK_ENABLED_DEFAULT, LguConstants.TURBO_TANK_ENABLED_DESCRIPTION);
-            TURBO_TANK_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.TURBO_TANK_PRICE_KEY, LguConstants.TURBO_TANK_PRICE_DEFAULT);
-            TURBO_TANK_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, TurboTank.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            TURBO_TANK_CAPACITY_INITIAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.TURBO_TANK_CAPACITY_INITIAL_INCREASE_KEY, LguConstants.TURBO_TANK_CAPACITY_INITIAL_INCREASE_DEFAULT, LguConstants.TURBO_TANK_CAPACITY_INITIAL_INCREASE_DESCRIPTION);
-            TURBO_TANK_CAPACITY_INCREMENTAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.TURBO_TANK_CAPACITY_INCREMENTAL_INCREASE_KEY, LguConstants.TURBO_TANK_CAPACITY_INCREMENTAL_INCREASE_DEFAULT, LguConstants.TURBO_TANK_CAPACITY_INCREMENTAL_INCREASE_DESCRIPTION);
-            TURBO_TANK_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
-
             #region Fedora Suit
 
             topSection = FedoraSuit.UPGRADE_NAME;
@@ -757,78 +688,6 @@ namespace MoreShipUpgrades.Misc
             WEED_GENETIC_MANIPULATION_INITIAL_EFFECTIVENESS_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.WEED_GENETIC_INITIAL_EFFECTIVENESS_INCREASE_KEY, LguConstants.WEED_GENETIC_INITIAL_EFFECTIVENESS_INCREASE_DEFAULT, LguConstants.WEED_GENETIC_INITIAL_EFFECTIVENESS_INCREASE_DESCRIPTION);
             WEED_GENETIC_MANIPULATION_INCREMENTAL_EFFECTIVENESS_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.WEED_GENETIC_INCREMENTAL_EFFECTIVENESS_INCREASE_KEY, LguConstants.WEED_GENETIC_INCREMENTAL_EFFECTIVENESS_INCREASE_DEFAULT, LguConstants.WEED_GENETIC_INCREMENTAL_EFFECTIVENESS_INCREASE_DESCRIPTION);
             WEED_GENETIC_MANIPULATION_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
-
-            #region Ignition Coil
-
-            topSection = IgnitionCoil.UPGRADE_NAME;
-            IGNITION_COIL_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.IGNITION_COIL_ENABLED_KEY, LguConstants.IGNITION_COIL_ENABLED_DEFAULT, LguConstants.IGNITION_COIL_ENABLED_DESCRIPTION);
-            IGNITION_COIL_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.IGNITION_COIL_PRICE_KEY, LguConstants.IGNITION_COIL_PRICE_DEFAULT);
-            IGNITION_COIL_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, IgnitionCoil.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            IGNITION_COIL_IGNITION_INITIAL_CHANCE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.IGNITION_COIL_IGNITION_INITIAL_CHANCE_INCREASE_KEY, LguConstants.IGNITION_COIL_IGNITION_INITIAL_CHANCE_INCREASE_DEFAULT, LguConstants.IGNITION_COIL_IGNITION_INITIAL_CHANCE_INCREASE_DESCRIPTION);
-            IGNITION_COIL_IGNITION_INCREMENTAL_CHANCE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.IGNITION_COIL_IGNITION_INCREMENTAL_CHANCE_INCREASE_KEY, LguConstants.IGNITION_COIL_IGNITION_INCREMENTAL_CHANCE_INCREASE_DEFAULT, LguConstants.IGNITION_COIL_IGNITION_INCREMENTAL_CHANCE_INCREASE_DESCRIPTION);
-            IGNITION_COIL_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
-
-            #region Fluffy Seats
-
-            topSection = FluffySeats.UPGRADE_NAME;
-            FLUFFY_SEATS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.FLUFFY_SEATS_ENABLED_KEY, LguConstants.FLUFFY_SEATS_ENABLED_DEFAULT, LguConstants.FLUFFY_SEATS_ENABLED_DESCRIPTION);
-            FLUFFY_SEATS_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.FLUFFY_SEATS_PRICE_KEY, LguConstants.FLUFFY_SEATS_PRICE_DEFAULT);
-            FLUFFY_SEATS_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, FluffySeats.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            FLUFFY_SEATS_DAMAGE_MITIGATION_INITIAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.FLUFFY_SEATS_DAMAGE_MITIGATION_INITIAL_INCREASE_KEY, LguConstants.FLUFFY_SEATS_DAMAGE_MITIGATION_INITIAL_INCREASE_DEFAULT, LguConstants.FLUFFY_SEATS_DAMAGE_MITIGATION_INITIAL_INCREASE_DESCRIPTION);
-            FLUFFY_SEATS_DAMAGE_MITIGATION_INCREMENTAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.FLUFFY_SEATS_DAMAGE_MITIGATION_INCREMENTAL_INCREASE_KEY, LguConstants.FLUFFY_SEATS_DAMAGE_MITIGATION_INCREMENTAL_INCREASE_DEFAULT, LguConstants.FLUFFY_SEATS_DAMAGE_MITIGATION_INCREMENTAL_INCREASE_DESCRIPTION);
-            FLUFFY_SEATS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
-
-            #region Improved Steering
-
-            topSection = ImprovedSteering.UPGRADE_NAME;
-            IMPROVED_STEERING_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.IMPROVED_STEERING_ENABLED_KEY, LguConstants.IMPROVED_STEERING_ENABLED_DEFAULT, LguConstants.IMPROVED_STEERING_ENABLED_DESCRIPTION);
-            IMPROVED_STEERING_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.IMPROVED_STEERING_PRICE_KEY, LguConstants.IMPROVED_STEERING_PRICE_DEFAULT);
-            IMPROVED_STEERING_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, ImprovedSteering.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            IMPROVED_STEERING_TURNING_SPEED_INITIAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.IMPROVED_STEERING_TURNING_SPEED_INITIAL_INCREASE_KEY, LguConstants.IMPROVED_STEERING_TURNING_SPEED_INITIAL_INCREASE_DEFAULT, LguConstants.IMPROVED_STEERING_TURNING_SPEED_INITIAL_INCREASE_DESCRIPTION);
-            IMPROVED_STEERING_TURNING_SPEED_INCREMENTAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.IMPROVED_STEERING_TURNING_SPEED_INCREMENTAL_INCREASE_KEY, LguConstants.IMPROVED_STEERING_TURNING_SPEED_INCREMENTAL_INCREASE_DEFAULT, LguConstants.IMPROVED_STEERING_TURNING_SPEED_INCREMENTAL_INCREASE_DESCRIPTION);
-            IMPROVED_STEERING_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
-
-            #region Supercharged Pistons
-
-            topSection = SuperchargedPistons.UPGRADE_NAME;
-            SUPERCHARGED_PISTONS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.SUPERCHARGED_PISTONS_ENABLED_KEY, LguConstants.SUPERCHARGED_PISTONS_ENABLED_DEFAULT, LguConstants.SUPERCHARGED_PISTONS_ENABLED_DESCRIPTION);
-            SUPERCHARGED_PISTONS_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.SUPERCHARGED_PISTONS_PRICE_KEY, LguConstants.SUPERCHARGED_PISTONS_PRICE_DEFAULT);
-            SUPERCHARGED_PISTONS_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, SuperchargedPistons.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            SUPERCHARGED_PISTONS_ENGINE_TORQUE_INITIAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.SUPERCHARGED_PISTONS_ENGINE_TORQUE_INITIAL_INCREASE_KEY, LguConstants.SUPERCHARGED_PISTONS_ENGINE_TORQUE_INITIAL_INCREASE_DEFAULT, LguConstants.SUPERCHARGED_PISTONS_ENGINE_TORQUE_INITIAL_INCREASE_DESCRIPTION);
-            SUPERCHARGED_PISTONS_ENGINE_TORQUE_INCREMENTAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.SUPERCHARGED_PISTONS_ENGINE_TORQUE_INCREMENTAL_INCREASE_KEY, LguConstants.SUPERCHARGED_PISTONS_ENGINE_TORQUE_INCREMENTAL_INCREASE_DEFAULT, LguConstants.SUPERCHARGED_PISTONS_ENGINE_TORQUE_INCREMENTAL_INCREASE_DESCRIPTION);
-            SUPERCHARGED_PISTONS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
-
-            #region Rapid Motors
-
-            topSection = RapidMotors.UPGRADE_NAME;
-            RAPID_MOTORS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.RAPID_MOTORS_ENABLED_KEY, LguConstants.RAPID_MOTORS_ENABLED_DEFAULT, LguConstants.RAPID_MOTORS_ENABLED_DESCRIPTION);
-            RAPID_MOTORS_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.RAPID_MOTORS_PRICE_KEY, LguConstants.RAPID_MOTORS_PRICE_DEFAULT);
-            RAPID_MOTORS_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, RapidMotors.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            RAPID_MOTORS_ACCELERATION_INITIAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.RAPID_MOTORS_ACCELERATION_INITIAL_INCREASE_KEY, LguConstants.RAPID_MOTORS_ACCELERATION_INITIAL_INCREASE_DEFAULT, LguConstants.RAPID_MOTORS_ACCELERATION_INITIAL_INCREASE_DESCRIPTION);
-            RAPID_MOTORS_ACCELERATION_INCREMENTAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.RAPID_MOTORS_ACCELERATION_INCREMENTAL_INCREASE_KEY, LguConstants.RAPID_MOTORS_ACCELERATION_INCREMENTAL_INCREASE_DEFAULT, LguConstants.RAPID_MOTORS_ACCELERATION_INCREMENTAL_INCREASE_DESCRIPTION);
-            RAPID_MOTORS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
-
-            #region Vehicle Plating
-
-            topSection = VehiclePlating.UPGRADE_NAME;
-            VEHICLE_PLATING_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.VEHICLE_PLATING_ENABLED_KEY, LguConstants.VEHICLE_PLATING_ENABLED_DEFAULT, LguConstants.VEHICLE_PLATING_ENABLED_DESCRIPTION);
-            VEHICLE_PLATING_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.VEHICLE_PLATING_PRICE_KEY, LguConstants.VEHICLE_PLATING_PRICE_DEFAULT);
-            VEHICLE_PLATING_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, VehiclePlating.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            VEHICLE_PLATING_HEALTH_INITIAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.VEHICLE_PLATING_HEALTH_INITIAL_INCREASE_KEY, LguConstants.VEHICLE_PLATING_HEALTH_INITIAL_INCREASE_DEFAULT, LguConstants.VEHICLE_PLATING_HEALTH_INITIAL_INCREASE_DESCRIPTION);
-            VEHICLE_PLATING_HEALTH_INCREMENTAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.VEHICLE_PLATING_HEALTH_INCREMENTAL_INCREASE_KEY, LguConstants.VEHICLE_PLATING_HEALTH_INCREMENTAL_INCREASE_DEFAULT, LguConstants.VEHICLE_PLATING_HEALTH_INCREMENTAL_INCREASE_DESCRIPTION);
-            VEHICLE_PLATING_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
