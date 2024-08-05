@@ -23,15 +23,24 @@ namespace MoreShipUpgrades.Patches.NetworkManager
                 Object.Destroy(upgrade.gameObject);
             }
         }
-
         [HarmonyPrefix]
-        [HarmonyPatch(nameof(GameNetworkManager.Disconnect))]
-        static void ResetCredits()
+        [HarmonyPatch(nameof(GameNetworkManager.SaveGame))]
+        static void SaveGamePrefix(GameNetworkManager __instance)
         {
-            if (!GameNetworkManager.Instance.isHostingGame) return;
+            if (!__instance.isHostingGame || StartOfRound.Instance.inShipPhase || !UpgradeBus.Instance.boughtUpgrades) return;
             Terminal terminal = UpgradeBus.Instance.GetTerminal();
-            terminal.groupCredits += PlayerManager.instance.upgradeSpendCredits;
-            PlayerManager.instance.ResetUpgradeSpentCredits();
+            ES3.Save("GroupCredits", terminal.groupCredits, __instance.currentSaveFileName);
+            UpgradeBus.Instance.boughtUpgrades = false;
+        }
+
+        [HarmonyPostfix]
+        [HarmonyPatch(nameof(GameNetworkManager.SaveGame))]
+        static void SaveGamePostfix(GameNetworkManager __instance)
+        {
+            if (!__instance.isHostingGame) return;
+            logger.LogDebug("Saving the LGU upgrades unto a json file...");
+            LguStore.Instance.ServerSaveFile();
+
         }
     }
 }

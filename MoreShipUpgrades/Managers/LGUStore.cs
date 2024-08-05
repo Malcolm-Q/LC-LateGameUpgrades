@@ -124,7 +124,7 @@ namespace MoreShipUpgrades.Managers
         /// <summary>
         /// Stores Lategame Upgrades' relevant save data into the game's current save file.
         /// </summary>
-        internal void ServerSaveFile(bool resetCredits = true)
+        internal void ServerSaveFile()
         {
             string saveFile = GameNetworkManager.Instance.currentSaveFileName;
             LguSave.scrapToUpgrade = UpgradeBus.Instance.scrapToCollectionUpgrade;
@@ -134,7 +134,6 @@ namespace MoreShipUpgrades.Managers
             RandomizeUpgradeManager.Save();
             string json = JsonConvert.SerializeObject(LguSave);
             ES3.Save(key: saveDataKey, value: json, filePath: saveFile);
-            if (resetCredits) PlayerManager.instance.ResetUpgradeSpentCredits();
         }
 
         internal void UpdateServerSave()

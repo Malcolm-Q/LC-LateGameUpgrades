@@ -20,12 +20,6 @@ namespace MoreShipUpgrades.Patches.PlayerController
     [HarmonyPatch(typeof(PlayerControllerB))]
     internal static class PlayerControllerBPatcher
     {
-        [HarmonyPostfix]
-        [HarmonyPatch(nameof(PlayerControllerB.Awake))]
-        static void StartPostfix(PlayerControllerB __instance)
-        {
-            __instance.gameObject.AddComponent<PlayerManager>();
-        }
 
         [HarmonyPrefix]
         [HarmonyPatch(nameof(PlayerControllerB.KillPlayer))]

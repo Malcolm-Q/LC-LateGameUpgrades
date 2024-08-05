@@ -54,7 +54,7 @@ namespace MoreShipUpgrades.Managers
 
         internal Dictionary<string, AudioClip> SFX = [];
         internal bool helmetDesync;
-        internal int daysExtended = 0;
+        internal bool boughtUpgrades;
 
         Terminal terminal;
         PlayerControllerB playerController;

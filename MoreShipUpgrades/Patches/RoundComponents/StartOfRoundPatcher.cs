@@ -91,22 +91,6 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             ContractManager.Instance.SyncContractDetailsClientRpc("None", -1);
         }
 
-        [HarmonyPatch(nameof(StartOfRound.AutoSaveShipData))]
-        [HarmonyPrefix]
-        static void AutoSaveShipDataPrefix()
-        {
-            PlayerManager.instance.ResetUpgradeSpentCredits();
-        }
-
-        [HarmonyPatch(nameof(StartOfRound.AutoSaveShipData))]
-        [HarmonyPostfix]
-        static void AutoSaveShipDataPostfix()
-        {
-            if (!GameNetworkManager.Instance.isHostingGame) return;
-            logger.LogDebug("Saving the LGU upgrades unto a json file...");
-            LguStore.Instance.ServerSaveFileServerRpc();
-        }
-
         [HarmonyPatch(nameof(StartOfRound.ResetShip))]
         [HarmonyTranspiler]
         static IEnumerable<CodeInstruction> ResetShip(IEnumerable<CodeInstruction> instructions)
