@@ -2,6 +2,8 @@
 <summary> 3.9.9 - 2024-08-05 </summary>
 
 - Fixed the scan nodes from the new samples to display the correct names.
+- Separated Company Cruiser related upgrades into their own mod for easier setup, issue solving and for people who do not wish to alter the Company Cruiser's stats in any shape or form through this mod.
+  - Player, Item, Ship, Store and Enemy upgrades will remain in this mod as they are core mechanics of the game.
 
 </details>
 
