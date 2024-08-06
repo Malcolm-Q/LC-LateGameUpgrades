@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using LethalLib.Extras;
 using LethalLib.Modules;
+using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
@@ -54,7 +55,6 @@ namespace MoreShipUpgrades.Managers
 
         internal Dictionary<string, AudioClip> SFX = [];
         internal bool helmetDesync;
-        internal bool boughtUpgrades;
 
         Terminal terminal;
         PlayerControllerB playerController;
@@ -85,6 +85,10 @@ namespace MoreShipUpgrades.Managers
         public void ResetAllValues(bool wipeObjRefs = true)
         {
             if (LguStore.Instance == null) return; // Quitting the game
+            if (GoodItemScanCompat.Enabled)
+            {
+                GoodItemScanCompat.Reset();
+            }
             ResetPlayerAttributes();
             if (LguStore.Instance.IsServer || LguStore.Instance.IsHost) LguStore.Instance.ResetShipAttributesClientRpc();
 

@@ -63,6 +63,10 @@
       <HintPath>$(LC_PLUGIN_PATH)\WhiteSpike-CustomItemBehaviourLibrary\CustomItemBehaviourLibrary\CustomItemBehaviourLibrary.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <Reference Include="GoodItemScan">
+      <HintPath>$(LC_PLUGIN_PATH)\TestAccount666-GoodItemScan\GoodItemScan.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Evaisa.NetcodePatcher.MSBuild" Version="3.*" PrivateAssets="all" />
