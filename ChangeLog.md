@@ -1,4 +1,13 @@
 <details>
+<summary> 3.9.10 - 2024-08-06 </summary>
+
+- Fixed issue with saving
+- Added compatibility with GoodItemScan mod with Better Scanner
+- Changed the medkit's name (once again) to "Medic Bag";
+
+</details>
+
+<details>
 <summary> 3.9.9 - 2024-08-05 </summary>
 
 - Fixed the scan nodes from the new samples to display the correct names.

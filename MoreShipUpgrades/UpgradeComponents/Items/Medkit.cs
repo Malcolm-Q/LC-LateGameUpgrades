@@ -151,7 +151,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
 
             MedKitItem.creditsWorth = UpgradeBus.Instance.PluginConfiguration.MEDKIT_PRICE.Value;
             MedKitItem.itemId = 492016;
-            MedKitItem.itemName = "Old Medkit";
+            MedKitItem.itemName = "Medic Bag";
             Medkit medScript = MedKitItem.spawnPrefab.AddComponent<Medkit>();
             medScript.itemProperties = MedKitItem;
             medScript.grabbable = true;
