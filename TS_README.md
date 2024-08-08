@@ -305,3 +305,12 @@ This mod offers a "Randomize Upgrade" mode where a set amount of upgrades are pi
 ## API
 * Hunter
     * You can register your own items to the Hunter upgrade for them to spawn on enemy kills! Just follow the wiki page associated with ``Hunter API``.
+
+## Items/Commands moved to their own Mods
+- [Peeper](https://thunderstore.io/c/lethal-company/p/WhiteSpike/Peeper/)
+- [Portable Teleporters](https://thunderstore.io/c/lethal-company/p/WhiteSpike/Portable_Teleporters/)
+- [Wheelbarrow](https://thunderstore.io/c/lethal-company/p/WhiteSpike/Wheelbarrow/)
+- [Shopping Cart](https://thunderstore.io/c/lethal-company/p/WhiteSpike/Shopping_Cart/)
+- [Diving Kit](https://thunderstore.io/c/lethal-company/p/WhiteSpike/Diving_Kit/)
+- [Scrap Insurance](https://thunderstore.io/c/lethal-company/p/WhiteSpike/Scrap_Insurance/)
+- [Extend Deadline](https://thunderstore.io/c/lethal-company/p/WhiteSpike/Extend_Deadline/)

@@ -1,4 +1,11 @@
 <details>
+<summary> 3.9.11 - 2024-08-06 </summary>
+
+- Linked items/commands mods in the README.
+
+</details>
+
+<details>
 <summary> 3.9.10 - 2024-08-06 </summary>
 
 - Fixed issue with saving
