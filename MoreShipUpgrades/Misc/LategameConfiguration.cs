@@ -71,7 +71,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<bool> SIGURD_LAST_DAY_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> EFFICIENT_ENGINES_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> CLIMBING_GLOVES_ENABLED {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> WEATHER_PROBE_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> LITHIUM_BATTERIES_ENABLED { get; set; }
 
         #endregion
@@ -118,8 +117,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<int> DEEPER_POCKETS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> ALUMINIUM_COILS_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CLIMBING_GLOVES_PRICE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> WEATHER_PROBE_PRICE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> WEATHER_PROBE_PICKED_WEATHER_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CHARGING_BOOSTER_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MARKET_INFLUENCE_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> BARGAIN_CONNECTIONS_PRICE { get; set; }
@@ -424,7 +421,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<float> SIGURD_PERCENT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> SIGURD_LAST_DAY_PERCENT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SALE_APPLY_ONCE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> WEATHER_PROBE_ALWAYS_CLEAR {  get; set; }
 
         #endregion
 
@@ -1212,16 +1208,6 @@ namespace MoreShipUpgrades.Misc
             topSection = Interns.NAME;
             INTERN_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.INTERNS_ENABLED_KEY, LguConstants.INTERNS_ENABLED_DEFAULT, LguConstants.INTERNS_ENABLED_DESCRIPTION);
             INTERN_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.INTERNS_PRICE_KEY, LguConstants.INTERNS_PRICE_DEFAULT, LguConstants.INTERNS_PRICE_DESCRIPTION);
-
-            #endregion
-
-            #region Weather Probe
-
-            topSection = WeatherManager.WEATHER_PROBE_COMMAND;
-            WEATHER_PROBE_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.WEATHER_PROBE_ENABLED_KEY, LguConstants.WEATHER_PROBE_ENABLED_DEFAULT, LguConstants.WEATHER_PROBE_ENABLED_DESCRIPTION);
-            WEATHER_PROBE_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.WEATHER_PROBE_PRICE_KEY, LguConstants.WEATHER_PROBE_PRICE_DEFAULT, LguConstants.WEATHER_PROBE_PRICE_DESCRIPTION);
-            WEATHER_PROBE_ALWAYS_CLEAR = cfg.BindSyncedEntry(topSection, LguConstants.WEATHER_PROBE_ALWAYS_CLEAR_KEY, LguConstants.WEATHER_PROBE_ALWAYS_CLEAR_DEFAULT, LguConstants.WEATHER_PROBE_ALWAYS_CLEAR_DESCRIPTION);
-            WEATHER_PROBE_PICKED_WEATHER_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.WEATHER_PROBE_PICKED_WEATHER_PRICE_KEY, LguConstants.WEATHER_PROBE_PICKED_WEATHER_PRICE_DEFAULT, LguConstants.WEATHER_PROBE_PICKED_WEATHER_PRICE_DESCRIPTION);
 
             #endregion
 

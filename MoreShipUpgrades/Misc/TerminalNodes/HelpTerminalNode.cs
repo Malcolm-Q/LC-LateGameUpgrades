@@ -9,7 +9,6 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
     {
         static bool addedHelp = false;
         const string INTERNS_HELP_COMMAND = ">INTERNS / INTERN\nRevives the selected player in radar with a new employee. Consumes {0} credits for each revive.\n\n";
-        const string WEATHER_PROBE_HELP_COMMAND = ">PROBE\nSends out a weather probe to the specified moon and changes its current weather.\nIt will cost {0} Company credits for a randomized weather selection or {1} Company Credits when specifying the weather on a given moon.\nIt cannot change to a weather which is not possible to happen on that moon.\n";
 
         const string CONTRACT_HELP_COMMAND = ">CONTRACT [moon]\nGives you a random contract for a scrap item with considerable value and lasts til you leave from assigned planet.\nConsumes {0} credits for each contract and will be unable to get another contract til current has expired.\nIf a moon is specified, it will generate a contract for that moon for the cost of {1} Company credits instead.\n\n";
         const string ATK_HELP_COMMAND = ">ATK / INITATTACK\nStuns nearby enemies for a set period of time. Only applicable when Discombobulator has been purchased\n\n";
@@ -28,14 +27,6 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
             if (addedHelp) return;
             helpNode.displayText += ">LATEGAME\nDisplays information related with Lategame-Upgrades mod\n\n";
             addedHelp = true;
-        }
-        public static string HandleHelpWeatherProbe()
-        {
-            if(UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_ENABLED.Value)
-            {
-                return string.Format(WEATHER_PROBE_HELP_COMMAND, UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PRICE.Value, UpgradeBus.Instance.PluginConfiguration.WEATHER_PROBE_PICKED_WEATHER_PRICE.Value);
-            }
-            return "";
         }
         /// <summary>
         /// Adds information related to the Discombobulator's commands to the given terminal node
