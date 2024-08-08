@@ -9,7 +9,6 @@ using MoreShipUpgrades.Patches.NetworkManager;
 using MoreShipUpgrades.Patches.PlayerController;
 using MoreShipUpgrades.Patches.RoundComponents;
 using MoreShipUpgrades.Patches.TerminalComponents;
-using MoreShipUpgrades.Patches.Vehicle;
 using MoreShipUpgrades.Patches.Weather;
 using System;
 
@@ -25,7 +24,6 @@ namespace MoreShipUpgrades.Managers
             PatchInteractables();
             PatchItems();
             PatchVitalComponents();
-            PatchVehicle();
             PatchWeather();
         }
         static void PatchEnemies()
@@ -83,12 +81,6 @@ namespace MoreShipUpgrades.Managers
             harmony.PatchAll(typeof(TerminalPatcher));
             harmony.PatchAll(typeof(Keybinds));
             Plugin.mls.LogInfo("Game managers have been patched");
-        }
-
-        static void PatchVehicle()
-        {
-            harmony.PatchAll(typeof(VehicleControllerPatcher));
-            Plugin.mls.LogInfo("Vehicles have been patched");
         }
         static void PatchWeather()
         {

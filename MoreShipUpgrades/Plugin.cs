@@ -27,10 +27,11 @@ namespace MoreShipUpgrades
     [BepInDependency(LethalLevelLoader.Plugin.ModGUID, DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
-        internal static readonly ManualLogSource mls = BepInEx.Logging.Logger.CreateLogSource(Metadata.NAME);
+        internal static ManualLogSource mls;
 
         void Awake()
         {
+            mls = Logger;
             LategameConfiguration config = new(Config);
             // netcode patching stuff
             IEnumerable<Type> types;
@@ -79,11 +80,11 @@ namespace MoreShipUpgrades
             PatchManager.PatchMainVersion();
 
             InteractiveTerminalManager.RegisterApplication<UpgradeStoreApplication>(["lgu", "lategame store"], caseSensitive: false);
-            InteractiveTerminalManager.RegisterApplication<WeatherProbeApplication>("probe", caseSensitive: false);
             InteractiveTerminalManager.RegisterApplication<ContractApplication>("contracts", caseSensitive: false);
             if (!config.CONTRACT_PROVIDE_RANDOM_ONLY)
                 InteractiveTerminalManager.RegisterApplication<ContractApplication>("contract", caseSensitive: false);
 
+           
             mls.LogInfo($"{Metadata.NAME} {Metadata.VERSION} has been loaded successfully.");
         }
 

@@ -106,7 +106,7 @@ namespace MoreShipUpgrades.Managers
             if (seed == 0)
             {
                 randomUpgradeSeed = new Random().Next();
-                LguStore.Instance.ServerSaveFile(false);
+                LguStore.Instance.ServerSaveFile();
             }
             else
             {

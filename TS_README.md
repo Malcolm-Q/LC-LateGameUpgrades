@@ -210,24 +210,6 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 
 * __Clay Glasses - $200__
     * Increases the maximum distance from which the player can spot a "Clay Surgeon" entity. 
-
-* __Vehicle Plating - $150__
-    * Increases the Company Cruiser vehicle's maximum health.
- 
-* __Rapid Motors - $150__*
-    * Increases the Company Cruiser vehicle's acceleration.
-
-* __Supercharged Pistons - $250__
-    * Increases the Company Cruiser vehicle's maximum speed. 
-
-* __Fluffy Seats - $100__
-    * Provides player damage mitigation when crashing with the Company Cruiser vehicle a little too hard.
-    
-* __Improved Steering - $100__
-    * Increases the Company Cruiser vehicle's turning speed.
-   
-* __Ignition Coil - $50__
-    * Increases the chance of immediately turning on the Company Cruiser vehicle on ignition.
     
 * __Weed Genetic Manipulation - $100__
     * Increases the effectiveness of the Weed Killer item in eradicating plants. 
@@ -235,9 +217,6 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 * __Fedora Suit - $750__
     * Makes Butler enemies not immediately attack you when alone with them.
     * If attacked, they will still retaliate.
-
-* __Turbo Tank - $200__
-    * Increases the Company Cruiser vehicle's maximum turbo capacity. 
 
 * __Traction Boots - $100__
     * Increases the player's traction force to the ground to allow easier movement direction change.
@@ -326,3 +305,12 @@ This mod offers a "Randomize Upgrade" mode where a set amount of upgrades are pi
 ## API
 * Hunter
     * You can register your own items to the Hunter upgrade for them to spawn on enemy kills! Just follow the wiki page associated with ``Hunter API``.
+
+## Items/Commands moved to their own Mods
+- [Peeper](https://thunderstore.io/c/lethal-company/p/WhiteSpike/Peeper/)
+- [Portable Teleporters](https://thunderstore.io/c/lethal-company/p/WhiteSpike/Portable_Teleporters/)
+- [Wheelbarrow](https://thunderstore.io/c/lethal-company/p/WhiteSpike/Wheelbarrow/)
+- [Shopping Cart](https://thunderstore.io/c/lethal-company/p/WhiteSpike/Shopping_Cart/)
+- [Diving Kit](https://thunderstore.io/c/lethal-company/p/WhiteSpike/Diving_Kit/)
+- [Scrap Insurance](https://thunderstore.io/c/lethal-company/p/WhiteSpike/Scrap_Insurance/)
+- [Extend Deadline](https://thunderstore.io/c/lethal-company/p/WhiteSpike/Extend_Deadline/)

@@ -124,7 +124,7 @@ namespace MoreShipUpgrades.Managers
         /// <summary>
         /// Stores Lategame Upgrades' relevant save data into the game's current save file.
         /// </summary>
-        internal void ServerSaveFile(bool resetCredits = true)
+        internal void ServerSaveFile()
         {
             string saveFile = GameNetworkManager.Instance.currentSaveFileName;
             LguSave.scrapToUpgrade = UpgradeBus.Instance.scrapToCollectionUpgrade;
@@ -134,7 +134,6 @@ namespace MoreShipUpgrades.Managers
             RandomizeUpgradeManager.Save();
             string json = JsonConvert.SerializeObject(LguSave);
             ES3.Save(key: saveDataKey, value: json, filePath: saveFile);
-            if (resetCredits) PlayerManager.instance.ResetUpgradeSpentCredits();
         }
 
         internal void UpdateServerSave()
@@ -641,17 +640,6 @@ namespace MoreShipUpgrades.Managers
             logger.LogDebug("Resetting the ship's attributes");
             UpgradeBus.Instance.UpgradeObjects.Values.Where(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>() is IServerSync).Do(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute());
         }
-        [ServerRpc(RequireOwnership = false)]
-        internal void SyncWeatherServerRpc(string level, LevelWeatherType selectedWeather)
-        {
-            SyncWeatherClientRpc(level, selectedWeather);
-        }
-
-        [ClientRpc]
-        internal void SyncWeatherClientRpc(string level, LevelWeatherType selectedWeather)
-        {
-            SyncWeather(level, selectedWeather);
-        }
 
         [ClientRpc]
         internal void SetContributionValueClientRpc(string key, int value)
@@ -663,24 +651,6 @@ namespace MoreShipUpgrades.Managers
         internal void DiscoverItemClientRpc(string scrapName)
         {
             DiscoverScrap(scrapName);
-        }
-
-        internal void SyncWeather(string level, LevelWeatherType selectedWeather)
-        {
-            SelectableLevel[] availableLevels = StartOfRound.Instance.levels;
-            SelectableLevel selectedLevel = availableLevels.First(x => x.PlanetName.Contains(level));
-            if (selectedLevel.overrideWeather) selectedLevel.overrideWeatherType = selectedWeather;
-            else selectedLevel.currentWeather = selectedWeather;
-            ContractManager.probedWeathers[selectedLevel.PlanetName] = selectedWeather;
-            if (selectedLevel == StartOfRound.Instance.currentLevel) StartOfRound.Instance.SetMapScreenInfoToCurrentLevel();
-        }
-        [ServerRpc(RequireOwnership = false)]
-        internal void SyncProbeWeathersServerRpc()
-        {
-            foreach (string level in ContractManager.probedWeathers.Keys.ToList())
-            {
-                SyncWeatherClientRpc(level, ContractManager.probedWeathers[level]);
-            }
         }
         [ServerRpc(RequireOwnership = false)]
         internal void RandomizeUpgradesServerRpc()

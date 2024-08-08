@@ -262,7 +262,7 @@ namespace MoreShipUpgrades.Managers
                         break;
                     }
             }
-            LguStore.Instance.ServerSaveFile(false);
+            LguStore.Instance.ServerSaveFile();
         }
 
         public static void AddScrapToUpgrade(ref CustomTerminalNode node, List<string> scrapNames)

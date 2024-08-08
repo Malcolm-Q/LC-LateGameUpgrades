@@ -91,22 +91,6 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             ContractManager.Instance.SyncContractDetailsClientRpc("None", -1);
         }
 
-        [HarmonyPatch(nameof(StartOfRound.AutoSaveShipData))]
-        [HarmonyPrefix]
-        static void AutoSaveShipDataPrefix()
-        {
-            PlayerManager.instance.ResetUpgradeSpentCredits();
-        }
-
-        [HarmonyPatch(nameof(StartOfRound.AutoSaveShipData))]
-        [HarmonyPostfix]
-        static void AutoSaveShipDataPostfix()
-        {
-            if (!GameNetworkManager.Instance.isHostingGame) return;
-            logger.LogDebug("Saving the LGU upgrades unto a json file...");
-            LguStore.Instance.ServerSaveFileServerRpc();
-        }
-
         [HarmonyPatch(nameof(StartOfRound.ResetShip))]
         [HarmonyTranspiler]
         static IEnumerable<CodeInstruction> ResetShip(IEnumerable<CodeInstruction> instructions)
@@ -116,14 +100,6 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             int index = 0;
             Tools.FindFloat(ref index, ref codes, findValue: 0.3f, addCode: sigurdChance, errorMessage: "Couldn't find the 0.3 value which is used as buying rate");
             return codes.AsEnumerable();
-        }
-        [HarmonyPatch(nameof(StartOfRound.SetPlanetsWeather))]
-        [HarmonyPostfix]
-        static void SetPlanetsWeatherPostfix(StartOfRound __instance)
-        {
-            if (__instance.IsHost || __instance.IsServer) return;
-            if (LguStore.Instance == null) return;
-            LguStore.Instance.SyncProbeWeathersServerRpc();
         }
 
         [HarmonyPatch(nameof(StartOfRound.OnPlayerConnectedClientRpc))]

@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using LethalLib.Extras;
 using LethalLib.Modules;
+using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
@@ -48,13 +49,11 @@ namespace MoreShipUpgrades.Managers
         internal AssetBundle UpgradeAssets;
 
         internal GameObject helmetModel;
-        internal Helmet helmetScript;
         internal bool wearingHelmet = false;
         internal int helmetHits = 0;
 
         internal Dictionary<string, AudioClip> SFX = [];
         internal bool helmetDesync;
-        internal int daysExtended = 0;
 
         Terminal terminal;
         PlayerControllerB playerController;
@@ -85,6 +84,10 @@ namespace MoreShipUpgrades.Managers
         public void ResetAllValues(bool wipeObjRefs = true)
         {
             if (LguStore.Instance == null) return; // Quitting the game
+            if (GoodItemScanCompat.Enabled)
+            {
+                GoodItemScanCompat.Reset();
+            }
             ResetPlayerAttributes();
             if (LguStore.Instance.IsServer || LguStore.Instance.IsHost) LguStore.Instance.ResetShipAttributesClientRpc();
 
@@ -292,6 +295,30 @@ namespace MoreShipUpgrades.Managers
                 maxUpgrade: prices.Length,
                 originalName: upgradeName,
                 sharedUpgrade: shareStatus);
+        }
+        internal CustomTerminalNode SetupMultiplePurchasableTerminalNode(string upgradeName,
+                                                                        bool shareStatus,
+                                                                        bool enabled,
+                                                                        int initialPrice,
+                                                                        int[] prices,
+                                                                        string overrideName,
+                                                                        GameObject prefab)
+        {
+            if (!enabled) return null;
+
+            string moreInfo = SetupUpgradeInfo(upgrade: prefab.GetComponent<BaseUpgrade>(), price: initialPrice, incrementalPrices: prices);
+            if (UpgradeBus.Instance.PluginConfiguration.SHOW_WORLD_BUILDING_TEXT && prefab.GetComponent<BaseUpgrade>() is IUpgradeWorldBuilding component) moreInfo += "\n\n" + component.GetWorldBuildingText(shareStatus) + "\n";
+
+            return new TierTerminalNode(
+                name: overrideName != "" ? overrideName : upgradeName,
+                unlockPrice: initialPrice,
+                description: moreInfo,
+                prefab: prefab,
+                prices: prices,
+                maxUpgrade: prices.Length,
+                originalName: upgradeName,
+                sharedUpgrade: shareStatus);
+
         }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can only be bought once

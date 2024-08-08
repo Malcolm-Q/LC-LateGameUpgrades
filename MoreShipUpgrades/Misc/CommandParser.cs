@@ -527,7 +527,6 @@ namespace MoreShipUpgrades.Misc
             displayText += HelpTerminalNode.HandleHelpInterns();
             displayText += HelpTerminalNode.HandleHelpContract();
             displayText += HelpTerminalNode.HandleHelpDiscombobulator();
-            displayText += HelpTerminalNode.HandleHelpWeatherProbe();
             displayText += "\n\n";
             return DisplayTerminalMessage(displayText);
         }

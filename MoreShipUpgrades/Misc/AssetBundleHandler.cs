@@ -17,7 +17,6 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Zapgun;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Store;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Vehicle;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using UnityEngine;
@@ -73,6 +72,8 @@ namespace MoreShipUpgrades.Misc
             { "forestgiant", sampleItems+ "ForestKeeperSample.asset" },
             { "manticoil", sampleItems+ "ManticoilSample.asset" },
             { "tulip snake", sampleItems+ "TulipSnakeSample.asset" },
+            { "bush wolf", sampleItems+ "KidnapperFoxSample.asset" },
+            { "puffer", sampleItems+ "SporeLizardSample.asset" },
         };
         static Dictionary<string, string> SFXPaths = new Dictionary<string, string>()
         {
@@ -134,15 +135,8 @@ namespace MoreShipUpgrades.Misc
             { ScavengerInstincts.UPGRADE_NAME, upgrades+"ScavengerInstincts.prefab" },
             { MechanicalArms.UPGRADE_NAME, upgrades+"MechanicalArms.prefab" },
             { ClayGlasses.UPGRADE_NAME, upgrades+"ClayGlasses.prefab" },
-            { VehiclePlating.UPGRADE_NAME, upgrades+"VehiclePlating.prefab" },
-            { RapidMotors.UPGRADE_NAME, upgrades+"RapidMotors.prefab" },
-            { SuperchargedPistons.UPGRADE_NAME, upgrades+"SuperchargedPistons.prefab" },
-            { ImprovedSteering.UPGRADE_NAME, upgrades+"ImprovedSteering.prefab" },
-            { FluffySeats.UPGRADE_NAME, upgrades+"FluffySeats.prefab" },
-            { IgnitionCoil.UPGRADE_NAME, upgrades+"IgnitionCoil.prefab" },
             { WeedGeneticManipulation.UPGRADE_NAME, upgrades+"WeedGeneticManipulation.prefab" },
             { FedoraSuit.UPGRADE_NAME, upgrades+"FedoraSuit.prefab" },
-            { TurboTank.UPGRADE_NAME, upgrades+"TurboTank.prefab" },
             { TractionBoots.UPGRADE_NAME, upgrades+"TractionBoots.prefab" },
             { HikingBoots.UPGRADE_NAME, upgrades+"HikingBoots.prefab" },
             { SleightOfHand.UPGRADE_NAME, upgrades+"SleightOfHand.prefab" },

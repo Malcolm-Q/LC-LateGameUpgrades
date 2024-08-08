@@ -27,6 +27,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
         }
         public override void Initialization()
         {
+            UpgradeBus.Instance.Reconstruct();
             CustomTerminalNode[] filteredNodes = UpgradeBus.Instance.terminalNodes.Where(x => x.Visible && (x.UnlockPrice > 0 || (x.OriginalName == NightVision.UPGRADE_NAME && (x.Prices.Length > 0 && x.Prices[0] != 0)))).ToArray();
             (CustomTerminalNode[][], CursorMenu[], IScreen[]) entries = GetPageEntries(filteredNodes);
 

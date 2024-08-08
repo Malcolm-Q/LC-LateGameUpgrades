@@ -56,6 +56,17 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies
             { "manticoil", "Manticoil" },
             { "manti coil", "Manticoil" },
             { "bird", "Manticoil" },
+            { "puffer", "Spore Lizard" },
+            { "sporelizard", "Spore Lizard" },
+            { "spore lizard", "Spore Lizard" },
+            { "lizard", "Spore Lizard" },
+            { "fox", "Kidnapper Fox" },
+            { "kidnapper fox", "Kidnapper Fox" },
+            { "kidnapperfox", "Kidnapper Fox" },
+            { "bush wolf", "Kidnapper Fox" },
+            { "bushwolf", "Kidnapper Fox" },
+            { "wolf", "Kidnapper Fox" },
+            
             };
 
         /**

@@ -1,4 +1,5 @@
-﻿using MoreShipUpgrades.Managers;
+﻿using MoreShipUpgrades.Compat;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
@@ -21,6 +22,31 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             upgradeName = UPGRADE_NAME;
             overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.BETTER_SCANNER_OVERRIDE_NAME;
             base.Start();
+        }
+
+        public override void Load()
+        {
+            base.Load();
+            if (GoodItemScanCompat.Enabled)
+            {
+                int level = GetUpgradeLevel(UPGRADE_NAME);
+                if (level > 0)
+                {
+                    GoodItemScanCompat.IncreaseScanDistance((int)UpgradeBus.Instance.PluginConfiguration.NODE_DISTANCE_INCREASE);
+                    GoodItemScanCompat.IncreaseEnemyScanDistance((int)UpgradeBus.Instance.PluginConfiguration.NODE_DISTANCE_INCREASE);
+                }
+                if (level == 2) GoodItemScanCompat.ToggleScanThroughWalls(true);
+            }
+        }
+
+        public override void Increment()
+        {
+            base.Increment();
+            if (GoodItemScanCompat.Enabled)
+            {
+                int level = GetUpgradeLevel(UPGRADE_NAME);
+                if (level == 2) GoodItemScanCompat.ToggleScanThroughWalls(true);
+            }
         }
 
         public static void AddScannerNodeToValve(ref SteamValveHazard steamValveHazard)
