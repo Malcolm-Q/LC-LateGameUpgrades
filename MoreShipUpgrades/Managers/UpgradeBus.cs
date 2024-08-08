@@ -49,7 +49,6 @@ namespace MoreShipUpgrades.Managers
         internal AssetBundle UpgradeAssets;
 
         internal GameObject helmetModel;
-        internal Helmet helmetScript;
         internal bool wearingHelmet = false;
         internal int helmetHits = 0;
 

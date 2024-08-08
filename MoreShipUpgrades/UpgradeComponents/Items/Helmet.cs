@@ -31,7 +31,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             if (buttonDown)
             {
                 if (UpgradeBus.Instance.wearingHelmet) return;
-                UpgradeBus.Instance.helmetScript = this;
                 UpgradeBus.Instance.wearingHelmet = true;
                 UpgradeBus.Instance.helmetHits = UpgradeBus.Instance.PluginConfiguration.HELMET_HITS_BLOCKED.Value;
                 if (IsHost) LguStore.Instance.SpawnAndMoveHelmetClientRpc(new NetworkObjectReference(playerHeldBy.GetComponent<NetworkObject>()), playerHeldBy.playerSteamId);
