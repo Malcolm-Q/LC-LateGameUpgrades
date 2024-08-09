@@ -102,7 +102,6 @@ namespace MoreShipUpgrades.Managers
             {
                 node.Unlocked = false;
                 node.CurrentUpgrade = 0;
-                if(node.Name == NightVision.UPGRADE_NAME) { node.Unlocked = true; }
             }
 
             foreach (string key in activeUpgrades.Keys.ToList())

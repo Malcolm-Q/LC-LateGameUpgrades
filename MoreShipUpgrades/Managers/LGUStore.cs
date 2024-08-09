@@ -82,7 +82,7 @@ namespace MoreShipUpgrades.Managers
         /// <returns></returns>
         IEnumerator WaitForConfigSync()
         {
-            yield return new WaitForSeconds(2.5f);
+            yield return new WaitForSeconds(3.0f);
             UpgradeBus.Instance.Reconstruct();
         }
         /// <summary>
@@ -100,7 +100,7 @@ namespace MoreShipUpgrades.Managers
                 File.Delete(filePath);
             }
             string json = (string)ES3.Load(key: saveDataKey, filePath: saveFile, defaultValue: null);
-            File.WriteAllText(filePath, json);
+            //File.WriteAllText(filePath, json);
             if (json != null)
             {
                 logger.LogInfo($"Loading save file for slot {saveNum}.");
@@ -443,7 +443,7 @@ namespace MoreShipUpgrades.Managers
 
         private IEnumerator WaitForUpgradeObject()
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(4f);
             logger.LogInfo("Applying loaded upgrades...");
             foreach (CustomTerminalNode customNode in UpgradeBus.Instance.terminalNodes)
             {
@@ -454,7 +454,7 @@ namespace MoreShipUpgrades.Managers
                 BaseUpgrade comp = UpgradeBus.Instance.UpgradeObjects[customNode.OriginalName].GetComponent<BaseUpgrade>();
                 bool free = comp.CanInitializeOnStart;
                 if (activeUpgrade || free) comp.Load();
-                if (customNode.OriginalName == NightVision.UPGRADE_NAME || free)
+                if (free)
                 {
                     customNode.Unlocked = true;
                 }
