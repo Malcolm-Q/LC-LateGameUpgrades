@@ -19,12 +19,6 @@ namespace MoreShipUpgrades.Input
         }
 
         /// <summary>
-        /// Input binding used to trigger the drop all items in the wheelbarrow action
-        /// </summary>
-        [InputAction(LguConstants.DROP_ALL_ITEMS_WHEELBARROW_DEFAULT_KEYBIND, Name = LguConstants.DROP_ALL_ITEMS_WHEELBARROW_KEYBIND_NAME)]
-        public InputAction WheelbarrowKey { get; set; }
-
-        /// <summary>
         /// Input binding used to trigger the toggle of Night Vision action
         /// </summary>
         [InputAction(LguConstants.TOGGLE_NIGHT_VISION_DEFAULT_KEYBIND, Name = LguConstants.TOGGLE_NIGHT_VISION_KEYBIND_NAME)]

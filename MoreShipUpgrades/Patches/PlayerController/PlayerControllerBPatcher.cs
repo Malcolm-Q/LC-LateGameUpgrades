@@ -90,18 +90,6 @@ namespace MoreShipUpgrades.Patches.PlayerController
             return codes.AsEnumerable();
         }
 
-        [HarmonyPrefix]
-        [HarmonyPatch(nameof(PlayerControllerB.DamagePlayer))]
-        static bool DamagePlayerPrefix(ref PlayerControllerB __instance, ref int damageNumber)
-        {
-            if (!__instance.IsOwner || __instance.isPlayerDead || !__instance.AllowPlayerDeath()) return true;
-            if (UpgradeBus.Instance.wearingHelmet)
-            {
-                Helmet.ExecuteHelmetDamageMitigation(ref __instance, ref damageNumber);
-            }
-            return damageNumber != 0;
-        }
-
         [HarmonyTranspiler]
         [HarmonyPatch(nameof(PlayerControllerB.PlayerHitGroundEffects))]
         static IEnumerable<CodeInstruction> PlayerHitGroundEffectsTranspiler(IEnumerable<CodeInstruction> instructions)

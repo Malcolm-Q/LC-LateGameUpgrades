@@ -13,10 +13,6 @@ namespace MoreShipUpgrades.Compat
         /// </summary>
         internal static InputActionAsset Asset => IngameKeybinds.GetAsset();
         /// <summary>
-        /// Input binding used to trigger the drop all items in the wheelbarrow action
-        /// </summary>
-        public static InputAction WheelbarrowKey => IngameKeybinds.Instance.WheelbarrowKey;
-        /// <summary>
         /// Input binding used to trigger the toggle of Night Vision action
         /// </summary>
         public static InputAction NvgKey => IngameKeybinds.Instance.NvgKey;

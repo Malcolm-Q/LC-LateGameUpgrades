@@ -48,13 +48,6 @@ namespace MoreShipUpgrades.Managers
         internal Dictionary<string, Item> ItemsToSync = [];
         internal AssetBundle UpgradeAssets;
 
-        internal GameObject helmetModel;
-        internal bool wearingHelmet = false;
-        internal int helmetHits = 0;
-
-        internal Dictionary<string, AudioClip> SFX = [];
-        internal bool helmetDesync;
-
         Terminal terminal;
         PlayerControllerB playerController;
         HangarShipDoor hangarShipDoors;
@@ -170,7 +163,6 @@ namespace MoreShipUpgrades.Managers
 
         internal void AlterStoreItems()
         {
-            AlterStoreItem(Helmet.ITEM_NAME, PluginConfiguration.HELMET_ENABLED, PluginConfiguration.HELMET_PRICE);
             AlterStoreItem(Medkit.ITEM_NAME, PluginConfiguration.MEDKIT_ENABLED, PluginConfiguration.MEDKIT_PRICE);
             AlterStoreItem(NightVisionGoggles.ITEM_NAME, PluginConfiguration.NIGHT_VISION_ENABLED, PluginConfiguration.NIGHT_VISION_PRICE);
         }

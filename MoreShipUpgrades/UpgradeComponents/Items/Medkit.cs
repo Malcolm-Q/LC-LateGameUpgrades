@@ -93,6 +93,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
                 heal_value -= potentialHealth - maximumHealth;
             }
             playerHeldBy.health += heal_value;
+            hudManager.UpdateHealthUI(playerHeldBy.health, hurtPlayer: false);
 
             if (IsHost || IsServer) UpdateMedkitUsesClientRpc();
             else UpdateMedkitUsesServerRpc();

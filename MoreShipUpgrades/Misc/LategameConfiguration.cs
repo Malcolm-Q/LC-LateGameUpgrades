@@ -184,10 +184,7 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<int> SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SCAVENGER_INSTINCTS_INCREMENTAL_AMOUN_SCRAP_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> MEDKIT_SCAN_NODE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> HELMET_SCAN_NODE { get; set; }
 
-        [field: SyncedEntryField] public SyncedEntry<int> HELMET_DAMAGE_REDUCTION { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> HELMET_DAMAGE_MITIGATION_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<QuantumDisruptor.ResetModes> QUANTUM_DISRUPTOR_RESET_MODE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<QuantumDisruptor.UpgradeModes> QUANTUM_DISRUPTOR_UPGRADE_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> QUANTUM_DISRUPTOR_INITIAL_HOURS_REVERT_ON_USE { get; set; }
@@ -365,9 +362,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<float> BEATS_SPEED_INC { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> BEATS_RADIUS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> BEATS_DMG_INC { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> HELMET_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> HELMET_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> HELMET_HITS_BLOCKED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SNARE_FLEA_SAMPLE_MINIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SNARE_FLEA_SAMPLE_MAXIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> BUNKER_SPIDER_SAMPLE_MINIMUM_VALUE { get; set; }
@@ -600,18 +594,6 @@ namespace MoreShipUpgrades.Misc
             #endregion
 
             #region Items
-
-            #region Helmet
-
-            topSection = Helmet.ITEM_NAME;
-            HELMET_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.HELMET_ENABLED_KEY, LguConstants.HELMET_ENABLED_DEFAULT);
-            HELMET_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.HELMET_PRICE_KEY, LguConstants.HELMET_PRICE_DEFAULT);
-            HELMET_HITS_BLOCKED = cfg.BindSyncedEntry(topSection, LguConstants.HELMET_AMOUNT_OF_HITS_KEY, LguConstants.HELMET_AMOUNT_OF_HITS_DEFAULT);
-            HELMET_DAMAGE_REDUCTION = cfg.BindSyncedEntry(topSection, LguConstants.HELMET_DAMAGE_REDUCTION_KEY, LguConstants.HELMET_DAMAGE_REDUCTION_DEFAULT);
-            HELMET_DAMAGE_MITIGATION_MODE = cfg.BindSyncedEntry(topSection, LguConstants.HELMET_DAMAGE_MITIGATION_MODE_KEY, LguConstants.HELMET_DAMAGE_MITIGATION_MODE_DEFAULT, LguConstants.HELMET_DAMAGE_MITIGATION_MODE_DESCRIPTION);
-            HELMET_SCAN_NODE = cfg.BindSyncedEntry(topSection, LguConstants.HELMET_SCAN_NODE_KEY, LguConstants.ITEM_SCAN_NODE_DEFAULT, LguConstants.ITEM_SCAN_NODE_DESCRIPTION);
-
-            #endregion
 
             #region Medkit
 

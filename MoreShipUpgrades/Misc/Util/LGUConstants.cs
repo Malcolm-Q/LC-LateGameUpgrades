@@ -335,29 +335,6 @@ namespace MoreShipUpgrades.Misc.Util
         internal const bool ITEM_SCAN_NODE_DEFAULT = true;
         internal const string ITEM_SCAN_NODE_DESCRIPTION = "Shows a scan node on the item when scanning";
 
-        #region Helmet
-
-        internal const string HELMET_ENABLED_KEY = $"Enable the {Helmet.ITEM_NAME} for purchase";
-        internal const bool HELMET_ENABLED_DEFAULT = true;
-
-        internal const string HELMET_PRICE_KEY = $"Price of the {Helmet.ITEM_NAME}";
-        internal const int HELMET_PRICE_DEFAULT = 750;
-
-        internal const string HELMET_AMOUNT_OF_HITS_KEY = $"Amount of hits blocked by {Helmet.ITEM_NAME}";
-        internal const int HELMET_AMOUNT_OF_HITS_DEFAULT = 3;
-        internal const string HELMET_AMOUNT_OF_HITS_DESCRIPTION = "Only valid when TotalPerHit damage mitigation mode is selected.";
-
-        internal const string HELMET_DAMAGE_REDUCTION_KEY = $"Damage reduction (%) when wearing a {Helmet.ITEM_NAME}";
-        internal const int HELMET_DAMAGE_REDUCTION_DEFAULT = 20;
-        internal const string HELMET_DAMAGE_REDUCTION_DESCRIPTION = "Only valid when PartialTilLowHealth damage mitigation mode is selected.";
-
-        internal const string HELMET_DAMAGE_MITIGATION_MODE_KEY = $"Damage mitigation mode selected when wearing a {Helmet.ITEM_NAME}";
-        internal const string HELMET_DAMAGE_MITIGATION_MODE_DEFAULT = "TotalPerHit";
-        internal const string HELMET_DAMAGE_MITIGATION_MODE_DESCRIPTION = "Accepted Values: TotalPerHit (full immunity and helmet takes hits on durability), PartialTilLowHealth (partial immunity and helmet breaks when low health)";
-
-        internal static readonly string HELMET_SCAN_NODE_KEY = string.Format(ITEM_SCAN_NODE_KEY_FORMAT, Helmet.ITEM_NAME);
-        #endregion
-
         #region Medkit
 
         internal const string MEDKIT_ENABLED_KEY = $"Enable the {Medkit.ITEM_NAME} item";
