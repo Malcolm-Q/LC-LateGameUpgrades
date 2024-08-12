@@ -314,3 +314,5 @@ This mod offers a "Randomize Upgrade" mode where a set amount of upgrades are pi
 - [Diving Kit](https://thunderstore.io/c/lethal-company/p/WhiteSpike/Diving_Kit/)
 - [Scrap Insurance](https://thunderstore.io/c/lethal-company/p/WhiteSpike/Scrap_Insurance/)
 - [Extend Deadline](https://thunderstore.io/c/lethal-company/p/WhiteSpike/Extend_Deadline/)
+- [Weather Probe](https://thunderstore.io/c/lethal-company/p/WhiteSpike/Weather_Probe/)
+- [Helmet](https://thunderstore.io/c/lethal-company/p/WhiteSpike/Helmet/)

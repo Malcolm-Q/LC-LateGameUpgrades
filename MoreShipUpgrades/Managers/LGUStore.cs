@@ -82,7 +82,7 @@ namespace MoreShipUpgrades.Managers
         /// <returns></returns>
         IEnumerator WaitForConfigSync()
         {
-            yield return new WaitForSeconds(2.5f);
+            yield return new WaitForSeconds(3.0f);
             UpgradeBus.Instance.Reconstruct();
         }
         /// <summary>
@@ -100,7 +100,7 @@ namespace MoreShipUpgrades.Managers
                 File.Delete(filePath);
             }
             string json = (string)ES3.Load(key: saveDataKey, filePath: saveFile, defaultValue: null);
-            File.WriteAllText(filePath, json);
+            //File.WriteAllText(filePath, json);
             if (json != null)
             {
                 logger.LogInfo($"Loading save file for slot {saveNum}.");
@@ -396,7 +396,6 @@ namespace MoreShipUpgrades.Managers
                 SaveInfo = LguSave.playerSaves[playerID];
                 logger.LogInfo($"Successfully loaded save data for ID: {playerID}");
             }
-            bool oldHelmet = UpgradeBus.Instance.wearingHelmet;
             UpgradeBus.Instance.activeUpgrades = SaveInfo.activeUpgrades;
             UpgradeBus.Instance.upgradeLevels = SaveInfo.upgradeLevels;
             UpgradeBus.Instance.discoveredItems = LguSave.discoveredItems;
@@ -411,15 +410,8 @@ namespace MoreShipUpgrades.Managers
 
             ContractManager.Instance.contractLevel = SaveInfo.contractLevel;
             ContractManager.Instance.contractType = SaveInfo.contractType;
-            UpgradeBus.Instance.wearingHelmet = SaveInfo.wearingHelmet;
 
             UpgradeBus.Instance.SaleData = SaveInfo.SaleData;
-
-            if(oldHelmet != UpgradeBus.Instance.wearingHelmet)
-            {
-                UpgradeBus.Instance.helmetDesync = true;
-                // this will just sync the helmets on StartGame
-            }
             UpgradeBus.Instance.LoadSales();
 
             StartCoroutine(WaitForUpgradeObject());
@@ -451,7 +443,7 @@ namespace MoreShipUpgrades.Managers
 
         private IEnumerator WaitForUpgradeObject()
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(4f);
             logger.LogInfo("Applying loaded upgrades...");
             foreach (CustomTerminalNode customNode in UpgradeBus.Instance.terminalNodes)
             {
@@ -462,7 +454,7 @@ namespace MoreShipUpgrades.Managers
                 BaseUpgrade comp = UpgradeBus.Instance.UpgradeObjects[customNode.OriginalName].GetComponent<BaseUpgrade>();
                 bool free = comp.CanInitializeOnStart;
                 if (activeUpgrade || free) comp.Load();
-                if (customNode.OriginalName == NightVision.UPGRADE_NAME || free)
+                if (free)
                 {
                     customNode.Unlocked = true;
                 }
@@ -558,81 +550,6 @@ namespace MoreShipUpgrades.Managers
             SaveInfo = new SaveInfo();
             UpdateLGUSaveServerRpc(playerID, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(SaveInfo)), true);
         }
-        [ClientRpc]
-        public void DestroyHelmetClientRpc(ulong id)
-        {
-            if(StartOfRound.Instance.allPlayerObjects.Length <= (int)id)
-            {
-                logger.LogError($"ID: {id} can not be used to index allPlayerObjects! (Length: {StartOfRound.Instance.allPlayerObjects.Length})");
-                return;
-            }
-
-            GameObject player = StartOfRound.Instance.allPlayerObjects[(int)id];
-            if (player == null)
-            {
-                logger.LogError("Player is with helmet is null!");
-                return;
-            }
-            if (player.GetComponent<PlayerControllerB>().IsOwner) return; // owner doesn't have model
-
-            Transform helmet = player.transform.GetChild(0).GetChild(3).GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetChild(2).Find("HelmetModel(Clone)");
-            if(helmet == null)
-            {
-                logger.LogError("Unable to find 'HelmetModel(Clone) on player!");
-                return;
-            }
-            Destroy(helmet.gameObject); // this isn't a netobj hence the client side destruction
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        public void ReqDestroyHelmetServerRpc(ulong id)
-        {
-            logger.LogInfo($"Instructing clients to destroy helmet of player : {id}");
-            DestroyHelmetClientRpc(id);
-        }
-
-        [ClientRpc]
-        internal void SpawnAndMoveHelmetClientRpc(NetworkObjectReference netRef, ulong id)
-        {
-            netRef.TryGet(out NetworkObject obj);
-            if (obj == null || obj.IsOwner)
-            {
-                if (obj == null) logger.LogError("Failed to resolve network object ref in SpawnAndMoveHelmetClientRpc!");
-                else logger.LogInfo("This client owns the helmet, skipping cosmetic instantiation.");
-                return;
-            }
-            Transform head = obj.transform.GetChild(0).GetChild(3).GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetChild(2); // phenomenal
-            GameObject go = Instantiate(UpgradeBus.Instance.helmetModel, head);
-            go.transform.localPosition = new Vector3(0.01f,0.1f,0.08f);
-            logger.LogInfo($"Successfully spawned helmet cosmetic for player: {id}");
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        internal void ReqSpawnAndMoveHelmetServerRpc(NetworkObjectReference netRef, ulong id)
-        {
-            logger.LogInfo($"Instructing clients to spawn helmet on player : {id}");
-            SpawnAndMoveHelmetClientRpc(netRef, id);
-        }
-
-        [ClientRpc]
-        internal void PlayAudioOnPlayerClientRpc(NetworkBehaviourReference netRef, string clip)
-        {
-            netRef.TryGet(out PlayerControllerB player);
-            if (player == null)
-            {
-                logger.LogError("Unable to resolve network behaviour reference in PlayAudioOnPlayerClientRpc!");
-                return;
-            }
-            player.GetComponentInChildren<AudioSource>().PlayOneShot(UpgradeBus.Instance.SFX[clip]);
-            logger.LogInfo($"Playing '{clip}' SFX on player: {player.playerUsername}");
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        internal void ReqPlayAudioOnPlayerServerRpc(NetworkBehaviourReference netRef, string clip)
-        {
-            logger.LogInfo($"Instructing clients to play '{clip}' SFX");
-            PlayAudioOnPlayerClientRpc(netRef, clip);
-        }
 
         [ClientRpc]
         internal void ResetShipAttributesClientRpc()
@@ -663,6 +580,12 @@ namespace MoreShipUpgrades.Managers
         {
             RandomizeUpgradeManager.RandomizeUpgrades(seed);
         }
+
+        [ServerRpc(RequireOwnership = false)]
+        internal void AddUpgradeSpentCreditsServerRpc(int price)
+        {
+            PlayerManager.instance.IncreaseUpgradeSpentCredits(price);
+        }
     }
 
     [Serializable]
@@ -674,7 +597,6 @@ namespace MoreShipUpgrades.Managers
         public string contractType = ContractManager.Instance.contractType;
         public string contractLevel = ContractManager.Instance.contractLevel;
         public Dictionary<string, float> SaleData = UpgradeBus.Instance.SaleData;
-        public bool wearingHelmet = UpgradeBus.Instance.wearingHelmet;
 
         public string Version = "V2";
     }

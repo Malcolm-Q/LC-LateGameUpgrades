@@ -40,7 +40,7 @@ namespace MoreShipUpgrades.Patches.NetworkManager
             if (!__instance.isHostingGame) return;
             logger.LogDebug("Saving the LGU upgrades unto a json file...");
             LguStore.Instance.ServerSaveFile();
-
+            PlayerManager.instance.ResetUpgradeSpentCredits();
         }
     }
 }

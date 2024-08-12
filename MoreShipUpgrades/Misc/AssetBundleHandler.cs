@@ -59,7 +59,6 @@ namespace MoreShipUpgrades.Misc
         const string DiscombobulatorSFX = SFX + "Discombobulator/";
         const string ShoppingCartSFX = SFX + "Shopping Cart/";
         const string PortableTeleSFX = SFX + "Portable Teleporter/";
-        const string HelmetSFX = SFX + "Helmet/";
         internal static readonly Dictionary<string, string> samplePaths = new Dictionary<string, string>()
         {
             { "centipede", sampleItems+ "SnareFleaSample.asset" },
@@ -81,8 +80,6 @@ namespace MoreShipUpgrades.Misc
             { "Scrap Wheelbarrow Sound 1", ShoppingCartSFX+"Shopping_Cart_Move_2.ogg" },
             { "Scrap Wheelbarrow Sound 2", ShoppingCartSFX+"Shopping_Cart_Move_3.ogg" },
             { "Scrap Wheelbarrow Sound 3", ShoppingCartSFX+"Shopping_Cart_Move_4.ogg" },
-            { "HelmetHit", HelmetSFX+"bonk.mp3" },
-            { "breakWood", HelmetSFX+"breakWood.mp3" },
             { "Break", PortableTeleSFX+"break.mp3" },
             { "Error", PortableTeleSFX+"error.mp3" },
             { "Button Press", PortableTeleSFX+"ButtonPress2.ogg" },
