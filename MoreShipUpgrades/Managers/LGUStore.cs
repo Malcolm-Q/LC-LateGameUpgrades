@@ -580,6 +580,12 @@ namespace MoreShipUpgrades.Managers
         {
             RandomizeUpgradeManager.RandomizeUpgrades(seed);
         }
+
+        [ServerRpc(RequireOwnership = false)]
+        internal void AddUpgradeSpentCreditsServerRpc(int price)
+        {
+            PlayerManager.instance.IncreaseUpgradeSpentCredits(price);
+        }
     }
 
     [Serializable]

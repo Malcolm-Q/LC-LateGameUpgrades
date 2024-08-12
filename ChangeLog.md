@@ -1,4 +1,13 @@
 <details>
+<summary> 3.9.12 - 2024-08-12 </summary>
+
+- Split Weather Probe and Helmet item into their own mods.
+- Possibly fixed issue with saving.
+- Increased time for the configuration to synchronize before starting to build stuff with it.
+
+</details>
+
+<details>
 <summary> 3.9.11 - 2024-08-06 </summary>
 
 - Linked items/commands mods in the README.

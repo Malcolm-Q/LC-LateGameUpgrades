@@ -189,7 +189,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
         void PurchaseUpgrade(CustomTerminalNode node, int price, Action backAction)
         {
             LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits - price);
-            PlayerManager.instance.IncreaseUpgradeSpentCredits(price);
+            LguStore.Instance.AddUpgradeSpentCreditsServerRpc(price);
             if (!node.Unlocked)
             {
                 LguStore.Instance.HandleUpgrade(node);
