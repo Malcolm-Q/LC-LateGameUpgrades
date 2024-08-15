@@ -1,4 +1,12 @@
 <details>
+<summary> 4.0.0 - ????-??-?? </summary>
+
+- Fixed calculations related to Item Contribution CustomScrap and UniqueScrap modes, leading to reaching level ups sooner than expected.
+- Fixed Night Vision related mechanics due to upgrade starting not ranked up rather than on first level.
+
+</details>
+
+<details>
 <summary> 3.9.12 - 2024-08-12 </summary>
 
 - Split Weather Probe and Helmet item into their own mods.
