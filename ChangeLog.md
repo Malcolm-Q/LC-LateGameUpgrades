@@ -3,6 +3,8 @@
 
 - Fixed calculations related to Item Contribution CustomScrap and UniqueScrap modes, leading to reaching level ups sooner than expected.
 - Fixed Night Vision related mechanics due to upgrade starting not ranked up rather than on first level.
+- Fixed Interns used on players that died while in the vehicle to be stuck in their animations.
+- Made Fedora Suit not stop buttlers from brushing the floor to not just appear looking at you forever without doing anything.
 
 </details>
 

@@ -2,11 +2,9 @@
 using HarmonyLib;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies;
-using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Text;
 
 namespace MoreShipUpgrades.Patches.Enemies
 {

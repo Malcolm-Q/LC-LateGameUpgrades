@@ -110,6 +110,8 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             LguStore.Instance.ShareSaveServerRpc();
         }
 
+        #region Landing Speed
+
         [HarmonyPatch(nameof(StartOfRound.ShipLeave))]
         [HarmonyPrefix]
         static void ShipLeavePrefix(StartOfRound __instance)
@@ -156,6 +158,8 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             codes.Insert(index+1, new CodeInstruction(OpCodes.Div));
             return codes;
         }
+
+        #endregion
 
         [HarmonyPatch(nameof(StartOfRound.ChangeLevel))]
         [HarmonyPostfix]

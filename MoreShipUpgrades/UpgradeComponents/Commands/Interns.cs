@@ -60,6 +60,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
             if (player.isPlayerDead || player.isPlayerControlled)
             {
                 player.isClimbingLadder = false;
+                player.inVehicleAnimation = false;
                 player.ResetZAndXRotation();
                 player.thisController.enabled = true;
                 player.health = health;
