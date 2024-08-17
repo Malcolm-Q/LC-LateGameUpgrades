@@ -30,7 +30,7 @@ namespace MoreShipUpgrades.Patches.NetworkManager
             if (!__instance.isHostingGame) return;
             if (!StartOfRound.Instance.inShipPhase && PlayerManager.instance.GetUpgradeSpentCredits() > 0)
             {
-                int previousCredits = ES3.Load<int>("GroupCredits", __instance.currentSaveFileName);
+                int previousCredits = ES3.Load("GroupCredits", __instance.currentSaveFileName, defaultValue: 60);
                 ES3.Save("GroupCredits", previousCredits - PlayerManager.instance.GetUpgradeSpentCredits(), __instance.currentSaveFileName);
             }
             logger.LogDebug("Saving the LGU upgrades unto a json file...");
