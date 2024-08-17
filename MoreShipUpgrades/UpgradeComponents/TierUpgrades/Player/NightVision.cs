@@ -91,7 +91,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 
         public void Toggle()
         {
-            if (!GetActiveUpgrade(UPGRADE_NAME)) return;
+            if (!GetActiveUpgrade("Night Vision")) return;
             if (UpgradeBus.Instance.GetLocalPlayer().inTerminalMenu) return;
             nightVisionActive = !nightVisionActive;
             if (client == null) { client = GameNetworkManager.Instance.localPlayerController; }
@@ -146,11 +146,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         public override void Load()
         {
             base.Load();
+            if (!GetActiveUpgrade("Night Vision")) return;
             EnableOnClient();
         }
         public override void Unwind()
         {
             base.Unwind();
+            if (!GetActiveUpgrade("Night Vision")) return;
             DisableOnClient();
         }
 
@@ -179,7 +181,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             if (client == null) { client = GameNetworkManager.Instance.localPlayerController; }
             transform.GetChild(0).gameObject.SetActive(true);
-            UpgradeBus.Instance.activeUpgrades[UPGRADE_NAME] = true;
+            UpgradeBus.Instance.activeUpgrades["Night Vision"] = true;
             LguStore.Instance.UpdateLGUSaveServerRpc(client.playerSteamId, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(new SaveInfo())));
             HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Press {Keybinds.NvgAction.GetBindingDisplayString()} to toggle Night Vision!!!</color>";
         }
@@ -192,7 +194,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             client.nightVision.intensity = nightVisIntensity;
 
             transform.GetChild(0).gameObject.SetActive(false);
-            UpgradeBus.Instance.activeUpgrades[UPGRADE_NAME] = false;
+            UpgradeBus.Instance.activeUpgrades["Night Vision"] = false;
             LguStore.Instance.UpdateLGUSaveServerRpc(client.playerSteamId, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(new SaveInfo())));
             client = null;
         }

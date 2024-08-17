@@ -1,4 +1,11 @@
 <details>
+<summary> 3.9.14 - 2024-08-17 </summary>
+
+- Fixed NV Headset Batteries granting night vision when bought the upgrade for the first time.
+
+</details>
+
+<details>
 <summary> 3.9.13 - 2024-08-17 </summary>
 
 - Fixed calculations related to Item Contribution CustomScrap and UniqueScrap modes, leading to reaching level ups sooner than expected.

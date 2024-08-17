@@ -40,7 +40,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         {
             base.ItemActivate(used, buttonDown);
             if (!buttonDown) return;
-            if (BaseUpgrade.GetActiveUpgrade(NightVision.UPGRADE_NAME))
+            if (BaseUpgrade.GetActiveUpgrade("Night Vision"))
             {
                 HUDManager.Instance.chatText.text += "<color=#FF0000>Night vision is already active!</color>";
                 return;
