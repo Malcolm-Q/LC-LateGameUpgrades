@@ -135,16 +135,6 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             __instance.shipAnimator.speed /= LandingThrusters.GetLandingSpeedMultiplier();
         }
 
-        [HarmonyPatch(nameof(StartOfRound.openingDoorsSequence))]
-        [HarmonyPrefix]
-        static void OpeningDoorsSequencePrefix(StartOfRound __instance)
-        {
-            if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_ENABLED) return;
-            if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_AFFECT_LANDING) return;
-
-            __instance.shipAnimator.speed *= LandingThrusters.GetLandingSpeedMultiplier();
-        }
-
         [HarmonyPatch(nameof(StartOfRound.openingDoorsSequence), MethodType.Enumerator)]
         [HarmonyTranspiler]
         static IEnumerable<CodeInstruction> OpeningDoorsSequenceTranspiler(IEnumerable<CodeInstruction> instructions)

@@ -72,7 +72,7 @@ namespace MoreShipUpgrades.Managers
         {
             harmony.PatchAll(typeof(GameNetworkManagerPatcher));
             harmony.PatchAll(typeof(PlayerControllerBPatcher));
-            harmony.PatchAll(typeof(RoundManagerTranspilerPatcher));
+            harmony.PatchAll(typeof(RoundManagerPatcher));
             harmony.PatchAll(typeof(StartOfRoundPatcher));
             harmony.PatchAll(typeof(TimeOfDayPatcher));
             harmony.PatchAll(typeof(TimeOfDayTranspilerPatcher));

@@ -316,7 +316,6 @@ namespace MoreShipUpgrades.Managers
                     }
             }
         }
-
         public static CustomTerminalNode SelectChancePerScrapUpgrade()
         {
             CustomTerminalNode node = null;

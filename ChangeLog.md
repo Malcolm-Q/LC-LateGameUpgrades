@@ -3,6 +3,7 @@
 
 - Fixed Item Progression mode "ChancePerScrap" mode, specifically the "Random" one, not working correctly leading to always upgrade the first ever upgrade in the list.
 - Prevented grabbable objects which have enemy scripts attached and they are not considered dead to not be pocketed to prevent issues.
+- Fixed issue with Landing Thrusters not acting correctly when LethalLevelLoader is loaded by changing the patched method to apply the buff when landing.
 
 </details>
 
