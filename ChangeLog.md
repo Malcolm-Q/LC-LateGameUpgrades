@@ -1,4 +1,11 @@
 <details>
+<summary> 3.9.15 - 2024-08-17 </summary>
+
+- Fixed Item Progression mode "ChancePerScrap" mode, specifically the "Random" one, not working correctly leading to always upgrade the first ever upgrade in the list.
+
+</details>
+
+<details>
 <summary> 3.9.14 - 2024-08-17 </summary>
 
 - Fixed NV Headset Batteries granting night vision when bought the upgrade for the first time.

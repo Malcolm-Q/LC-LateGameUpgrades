@@ -294,7 +294,7 @@ namespace MoreShipUpgrades.Managers
             {
                 case ChancePerScrapModes.Random:
                     {
-                        if (UnityEngine.Random.Range(0, 1) > 0.5) selectedNode = possibleNode;
+                        if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.5) selectedNode = possibleNode;
                         break;
                     }
                 case ChancePerScrapModes.LowestLevel:

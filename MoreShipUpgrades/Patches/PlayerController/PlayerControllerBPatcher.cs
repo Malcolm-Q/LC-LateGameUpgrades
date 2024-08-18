@@ -123,6 +123,9 @@ namespace MoreShipUpgrades.Patches.PlayerController
             if (!player.twoHanded) return;
             if (!BaseUpgrade.GetActiveUpgrade(DeepPockets.UPGRADE_NAME)) return;
 
+            EnemyAI enemy = player.currentlyHeldObjectServer.GetComponent<EnemyAI>();
+            if (enemy != null && !enemy.isEnemyDead) return;
+
             if (CustomItemBehaviourLibraryCompat.Enabled && !UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_ALLOW_WHEELBARROWS)
             {
                 if (CustomItemBehaviourLibraryCompat.CheckForContainers(ref player)) return;
