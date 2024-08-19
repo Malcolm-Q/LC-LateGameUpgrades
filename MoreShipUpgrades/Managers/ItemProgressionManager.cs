@@ -120,7 +120,7 @@ namespace MoreShipUpgrades.Managers
                 int contributed = UpgradeBus.Instance.contributionValues[assignedUpgrade.OriginalName];
                 int currentPrice = assignedUpgrade.GetCurrentPrice() + contributed;
                 contributed += scrapValue;
-                while (contributed >= currentPrice)
+                while (contributed >= currentPrice && assignedUpgrade.GetRemainingLevels() > 0)
                 {
                     LguStore.Instance.HandleUpgradeForNoHostClientRpc(assignedUpgrade.OriginalName, assignedUpgrade.Unlocked);
                     LguStore.Instance.UpdateUpgrades(assignedUpgrade, assignedUpgrade.Unlocked);
