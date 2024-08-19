@@ -6,6 +6,8 @@
 - Fixed issue with Landing Thrusters not acting correctly when LethalLevelLoader is loaded by changing the patched method to apply the buff when landing.
 - Fixed issue with CustomScrap and UniqueScrap modes from Item Progression mode leading to NREs due to trying to increase another level of upgrades that can only have one.
 - Fixed issue with not being able to die due inconsistency between Night Vision and its upgrade.
+- Added Maneater Sample to the Hunter upgrade
+  - Already generated configuration files will have to update the tier configuration to include one of: maneater, cave dweller, cavedweller, baby, babyeater.  
 
 </details>
 

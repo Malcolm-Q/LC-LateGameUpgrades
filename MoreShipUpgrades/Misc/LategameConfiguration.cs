@@ -655,7 +655,7 @@ namespace MoreShipUpgrades.Misc
             FEDORA_SUIT_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.FEDORA_SUIT_ENABLED_KEY, LguConstants.FEDORA_SUIT_ENABLED_DEFAULT, LguConstants.FEDORA_SUIT_ENABLED_DESCRIPTION);
             FEDORA_SUIT_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
             FEDORA_SUIT_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.FEDORA_SUIT_PRICE_KEY, LguConstants.FEDORA_SUIT_PRICE_DEFAULT);
-            FEDORA_SUIT_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_MODE_DESCRIPTION);
+            FEDORA_SUIT_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
 
