@@ -477,7 +477,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const int HUNTER_PRICE_DEFAULT = 700;
 
         internal const string HUNTER_SAMPLE_TIERS_KEY = "Samples dropping at each tier";
-        internal const string HUNTER_SAMPLE_TIERS_DEFAULT = "Hoarding Bug, Centipede, Spore Lizard-Bunker Spider, Baboon hawk, Tulip Snake, Kidnapper Fox-Flowerman, MouthDog, Crawler, Manticoil-Forest Giant";
+        internal const string HUNTER_SAMPLE_TIERS_DEFAULT = "Hoarding Bug, Centipede, Spore Lizard-Bunker Spider, Baboon hawk, Tulip Snake, Kidnapper Fox-Flowerman, MouthDog, Crawler, Manticoil, Maneater-Forest Giant";
         internal const string HUNTER_SAMPLE_TIERS_DESCRIPTION = "Specifies at which tier of Hunter do each sample start dropping from. Each tier is separated with a dash ('-') and each list of monsters will be separated with a comma (',')\n" +
                                                                 "Supported Enemies: Hoarding Bug, Centipede (Snare Flea),Bunker Spider, Baboon Hawk, Crawler (Half/Thumper), " +
                                                                 "Flowerman (Bracken), MouthDog (Eyeless Dog), Forest Giant, Tulip Snake, Manticoil, Kidnapper Fox and Spore Lizard.";
@@ -602,6 +602,16 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal static readonly string SPORE_LIZARD_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Spore Lizard");
         internal const int SPORE_LIZARD_SAMPLE_MAXIMUM_VALUE_DEFAULT = 50;
+
+        #endregion
+
+        #region Maneater
+
+        internal static readonly string MANEATER_SAMPLE_MINIMUM_VALUE_KEY = string.Format(MINIMUM_SAMPLE_VALUE_FORMAT, "Maneater");
+        internal const int MANEATER_SAMPLE_MINIMUM_VALUE_DEFAULT = 80;
+
+        internal static readonly string MANEATER_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Maneater");
+        internal const int MANEATER_SAMPLE_MAXIMUM_VALUE_DEFAULT = 120;
 
         #endregion
 

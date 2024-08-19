@@ -68,6 +68,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
                 { "tulip snake", UpgradeBus.Instance.PluginConfiguration.TULIP_SNAKE_SAMPLE_MINIMUM_VALUE.Value },
                 { "bush wolf", UpgradeBus.Instance.PluginConfiguration.KIDNAPPER_FOX_SAMPLE_MINIMUM_VALUE.Value },
                 { "puffer", UpgradeBus.Instance.PluginConfiguration.SPORE_LIZARD_SAMPLE_MINIMUM_VALUE.Value },
+                { "maneater", UpgradeBus.Instance.PluginConfiguration.MANEATER_SAMPLE_MINIMUM_VALUE },
             };
             Dictionary<string, int> MAXIMUM_VALUES = new Dictionary<string, int>()
             {
@@ -83,6 +84,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
                 { "tulip snake", UpgradeBus.Instance.PluginConfiguration.TULIP_SNAKE_SAMPLE_MAXIMUM_VALUE.Value },
                 { "bush wolf", UpgradeBus.Instance.PluginConfiguration.KIDNAPPER_FOX_SAMPLE_MAXIMUM_VALUE.Value },
                 { "puffer", UpgradeBus.Instance.PluginConfiguration.SPORE_LIZARD_SAMPLE_MAXIMUM_VALUE.Value },
+                { "maneater", UpgradeBus.Instance.PluginConfiguration.MANEATER_SAMPLE_MAXIMUM_VALUE },
             };
             foreach (string creatureName in AssetBundleHandler.samplePaths.Keys)
             {

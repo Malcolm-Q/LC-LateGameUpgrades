@@ -73,6 +73,7 @@ namespace MoreShipUpgrades.Misc
             { "tulip snake", sampleItems+ "TulipSnakeSample.asset" },
             { "bush wolf", sampleItems+ "KidnapperFoxSample.asset" },
             { "puffer", sampleItems+ "SporeLizardSample.asset" },
+            { "maneater", sampleItems+ "ManeaterSample.asset" },
         };
         static Dictionary<string, string> SFXPaths = new Dictionary<string, string>()
         {

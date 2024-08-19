@@ -386,6 +386,8 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<int> KIDNAPPER_FOX_SAMPLE_MAXIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SPORE_LIZARD_SAMPLE_MINIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SPORE_LIZARD_SAMPLE_MAXIMUM_VALUE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> MANEATER_SAMPLE_MINIMUM_VALUE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> MANEATER_SAMPLE_MAXIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_GHOST_SPAWN { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> SCAV_VOLUME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> CONTRACT_FREE_MOONS_ONLY { get; set; }
@@ -952,6 +954,8 @@ namespace MoreShipUpgrades.Misc
             KIDNAPPER_FOX_SAMPLE_MAXIMUM_VALUE = cfg.BindSyncedEntry(topSection, LguConstants.KIDNAPPER_FOX_SAMPLE_MAXIMUM_VALUE_KEY, LguConstants.KIDNAPPER_FOX_SAMPLE_MAXIMUM_VALUE_DEFAULT);
             SPORE_LIZARD_SAMPLE_MINIMUM_VALUE = cfg.BindSyncedEntry(topSection, LguConstants.SPORE_LIZARD_SAMPLE_MINIMUM_VALUE_KEY, LguConstants.SPORE_LIZARD_SAMPLE_MINIMUM_VALUE_DEFAULT);
             SPORE_LIZARD_SAMPLE_MAXIMUM_VALUE = cfg.BindSyncedEntry(topSection, LguConstants.SPORE_LIZARD_SAMPLE_MAXIMUM_VALUE_KEY, LguConstants.SPORE_LIZARD_SAMPLE_MAXIMUM_VALUE_DEFAULT);
+            MANEATER_SAMPLE_MINIMUM_VALUE = cfg.BindSyncedEntry(topSection, LguConstants.MANEATER_SAMPLE_MINIMUM_VALUE_KEY, LguConstants.MANEATER_SAMPLE_MINIMUM_VALUE_DEFAULT);
+            MANEATER_SAMPLE_MAXIMUM_VALUE = cfg.BindSyncedEntry(topSection, LguConstants.MANEATER_SAMPLE_MAXIMUM_VALUE_KEY, LguConstants.MANEATER_SAMPLE_MAXIMUM_VALUE_DEFAULT);
             HUNTER_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
