@@ -55,6 +55,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies
         {
             wearingFedora[clientId] = fedora;
         }
+        public static int IsWearingFedoraSuitInt(PlayerControllerB spottedPlayer)
+        {
+            return IsWearingFedoraSuit(spottedPlayer) ? 1 : 0;
+        }
 
         public static bool IsWearingFedoraSuit(PlayerControllerB spottedPlayer)
         {

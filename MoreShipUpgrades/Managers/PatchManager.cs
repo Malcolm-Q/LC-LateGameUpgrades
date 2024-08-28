@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.Input;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Patches.Enemies;
@@ -25,6 +26,16 @@ namespace MoreShipUpgrades.Managers
             PatchItems();
             PatchVitalComponents();
             PatchWeather();
+            PatchCompatibility();
+        }
+        static void PatchCompatibility()
+        {
+            if (OxygenCompat.Enabled)
+            {
+                Plugin.mls.LogInfo($"Oxygen mod has been detected. Proceeding to patch...");
+                harmony.PatchAll(typeof(OxygenLogicPatcher));
+                Plugin.mls.LogInfo($"Patched Oxygen mod related components for correct behaviour on Oxygen Canisters upgrade in relation to oxygen consumption. If any issues arise related to the oxygen mechanic when both LGU and Oxygen mods are present, report to LGU first.");
+            }
         }
         static void PatchEnemies()
         {
@@ -50,6 +61,7 @@ namespace MoreShipUpgrades.Managers
             harmony.PatchAll(typeof(DoorLockPatcher));
             harmony.PatchAll(typeof(HangarShipDoorPatcher));
             harmony.PatchAll(typeof(InteractTriggerPatcher));
+            harmony.PatchAll(typeof(QuicksandTriggerPatcher));
             harmony.PatchAll(typeof(SteamValveHazardPatch));
             Plugin.mls.LogInfo("Interactables have been patched");
         }
@@ -72,7 +84,7 @@ namespace MoreShipUpgrades.Managers
         {
             harmony.PatchAll(typeof(GameNetworkManagerPatcher));
             harmony.PatchAll(typeof(PlayerControllerBPatcher));
-            harmony.PatchAll(typeof(RoundManagerTranspilerPatcher));
+            harmony.PatchAll(typeof(RoundManagerPatcher));
             harmony.PatchAll(typeof(StartOfRoundPatcher));
             harmony.PatchAll(typeof(TimeOfDayPatcher));
             harmony.PatchAll(typeof(TimeOfDayTranspilerPatcher));

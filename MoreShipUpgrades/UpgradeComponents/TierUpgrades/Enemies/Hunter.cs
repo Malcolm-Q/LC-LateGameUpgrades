@@ -66,7 +66,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies
             { "bush wolf", "Kidnapper Fox" },
             { "bushwolf", "Kidnapper Fox" },
             { "wolf", "Kidnapper Fox" },
-            
+            { "maneater", "Maneater" },
+            { "cave dweller", "Maneater" },
+            { "cavedweller", "Maneater" },
+            { "baby", "Maneater" },
+            { "babyeater", "Maneater" },
             };
 
         /**

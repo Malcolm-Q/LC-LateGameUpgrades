@@ -67,6 +67,12 @@
       <HintPath>$(LC_PLUGIN_PATH)\TestAccount666-GoodItemScan\GoodItemScan.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <Reference Include="Oxygen">
+      <Publicize>true</Publicize>
+      <HintPath>$(LC_PLUGIN_PATH)\consequential-Oxygen\Oxygen.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Evaisa.NetcodePatcher.MSBuild" Version="3.*" PrivateAssets="all" />

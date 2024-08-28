@@ -118,9 +118,9 @@ namespace MoreShipUpgrades.Managers
             {
                 CustomTerminalNode assignedUpgrade = GetCustomTerminalNode(upgradeName);
                 int contributed = UpgradeBus.Instance.contributionValues[assignedUpgrade.OriginalName];
-                int currentPrice = assignedUpgrade.GetCurrentPrice();
+                int currentPrice = assignedUpgrade.GetCurrentPrice() + contributed;
                 contributed += scrapValue;
-                while (contributed > currentPrice)
+                while (contributed >= currentPrice && assignedUpgrade.GetRemainingLevels() > 0)
                 {
                     LguStore.Instance.HandleUpgradeForNoHostClientRpc(assignedUpgrade.OriginalName, assignedUpgrade.Unlocked);
                     LguStore.Instance.UpdateUpgrades(assignedUpgrade, assignedUpgrade.Unlocked);
@@ -294,7 +294,7 @@ namespace MoreShipUpgrades.Managers
             {
                 case ChancePerScrapModes.Random:
                     {
-                        if (UnityEngine.Random.Range(0, 1) > 0.5) selectedNode = possibleNode;
+                        if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.5) selectedNode = possibleNode;
                         break;
                     }
                 case ChancePerScrapModes.LowestLevel:
@@ -316,7 +316,6 @@ namespace MoreShipUpgrades.Managers
                     }
             }
         }
-
         public static CustomTerminalNode SelectChancePerScrapUpgrade()
         {
             CustomTerminalNode node = null;

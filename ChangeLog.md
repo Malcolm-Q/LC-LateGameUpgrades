@@ -1,4 +1,49 @@
 <details>
+<summary> 3.10.0 - 2024-08-28 </summary>
+
+- Implemented "Oxygen Canister" tier upgrade which reduces the oxygen consumption rate of the player.
+- Implemented "Rubber boots" tier upgrade which reduces the movement hinderance from walking on water surfaces.
+  - This also includes the quick sand patches during the Rainy weather.
+  - If the percentage decrease reaches or exceeds 100%, you will not be slowed down when walking through it.
+  - This reduces how much movement hindurance you get from walking on water surfaces, not how much you're hindered by which is always by half multiplied by outside hinder multipliers such as this one and cobwebs.
+- Fixed NRE being thrown when the player is still in two-handed mode and having no object in hand. 
+- Fixed another NRE issue related to upgrade terminal nodes due to Item Progression mode.
+- Fixed Night Vision Goggles throwing NRE when you have the respective upgrade disabled.
+- Fixed Market Influence not working correctly due to additional sale methods being introduced for vehicles.
+
+</details>
+<details>
+<summary> 3.9.15 - 2024-08-19 </summary>
+
+- Fixed Item Progression mode "ChancePerScrap" mode, specifically the "Random" one, not working correctly leading to always upgrade the first ever upgrade in the list.
+- Prevented grabbable objects which have enemy scripts attached and they are not considered dead to not be pocketed to prevent issues.
+- Fixed issue with Landing Thrusters not acting correctly when LethalLevelLoader is loaded by changing the patched method to apply the buff when landing.
+- Fixed issue with CustomScrap and UniqueScrap modes from Item Progression mode leading to NREs due to trying to increase another level of upgrades that can only have one.
+- Fixed issue with not being able to die due inconsistency between Night Vision and its upgrade.
+- Added Maneater Sample to the Hunter upgrade
+  - Already generated configuration files will have to update the tier configuration to include one of: maneater, cave dweller, cavedweller, baby, babyeater.  
+
+</details>
+
+<details>
+<summary> 3.9.14 - 2024-08-17 </summary>
+
+- Fixed NV Headset Batteries granting night vision when bought the upgrade for the first time.
+
+</details>
+
+<details>
+<summary> 3.9.13 - 2024-08-17 </summary>
+
+- Fixed calculations related to Item Contribution CustomScrap and UniqueScrap modes, leading to reaching level ups sooner than expected.
+- Fixed Night Vision related mechanics due to upgrade starting not ranked up rather than on first level.
+- Fixed Interns used on players that died while in the vehicle to be stuck in their animations.
+- Made Fedora Suit not stop buttlers from brushing the floor to not just appear looking at you forever without doing anything.
+- Fixed error being thrown when disconnecting on a moon and previously bought upgrades before quitting the game.
+
+</details>
+
+<details>
 <summary> 3.9.12 - 2024-08-12 </summary>
 
 - Split Weather Probe and Helmet item into their own mods.

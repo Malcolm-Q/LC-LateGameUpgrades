@@ -110,6 +110,8 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             LguStore.Instance.ShareSaveServerRpc();
         }
 
+        #region Landing Speed
+
         [HarmonyPatch(nameof(StartOfRound.ShipLeave))]
         [HarmonyPrefix]
         static void ShipLeavePrefix(StartOfRound __instance)
@@ -133,16 +135,6 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             __instance.shipAnimator.speed /= LandingThrusters.GetLandingSpeedMultiplier();
         }
 
-        [HarmonyPatch(nameof(StartOfRound.openingDoorsSequence))]
-        [HarmonyPrefix]
-        static void OpeningDoorsSequencePrefix(StartOfRound __instance)
-        {
-            if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_ENABLED) return;
-            if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_AFFECT_LANDING) return;
-
-            __instance.shipAnimator.speed *= LandingThrusters.GetLandingSpeedMultiplier();
-        }
-
         [HarmonyPatch(nameof(StartOfRound.openingDoorsSequence), MethodType.Enumerator)]
         [HarmonyTranspiler]
         static IEnumerable<CodeInstruction> OpeningDoorsSequenceTranspiler(IEnumerable<CodeInstruction> instructions)
@@ -156,6 +148,8 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             codes.Insert(index+1, new CodeInstruction(OpCodes.Div));
             return codes;
         }
+
+        #endregion
 
         [HarmonyPatch(nameof(StartOfRound.ChangeLevel))]
         [HarmonyPostfix]

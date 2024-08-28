@@ -6,10 +6,8 @@ to install just put the MoreShipUpgrades folder in your BepInEx plugins folder.
 ### *Everything about this mod can be changed via the extremely extensive config "com.malco.lethalcompany.moreshipupgrades.config"*  
 The config is automatically synced from host to clients excluding changes to equipment (peeper, night vision goggles, portable teles)
 
-
 Type `lategame` in the terminal to see mod info!  
 Type `lategame store` or `lgu` to view current upgrade status and cost.  
-Type `info <upgrade>` for dynamic info.
 
 This adds:
 * 30+ Upgrades.
@@ -22,12 +20,6 @@ The goal of this mod is to allow you to make playthroughs last longer and to rem
 If using V40 - downgrade to V2.1.0  
 If using v45 - downgrade to v2.8.6
 If using v50 - downgrade to v3.8.1
-
-## Compatibility
-
-### This mod changes and patches a lot so problems may arise.  
-- Bigger Lobby and More Company are more or less compatible but credit desync can arise  
-- Use common sense, EX: if you download a mod that changes the movement speed of the player every frame and the movement speed upgrade from my mod doesn't work that's why.
 
 ## Community
 
@@ -66,8 +58,8 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 * __Hunter - $700__
     * Allows you to collect and sell samples from killed monsters
     * **Lvl 1**: Hoarding Bugs & Snare Fleas
-    * **Lvl 2**: Spiders, Baboon Hawks & Tulip Snake
-    * **Lvl 3**: Bracken, Thumper, Eyeless Dog & Manticoil
+    * **Lvl 2**: Spiders, Baboon Hawks, Tulip Snake & Kidnapper Fox
+    * **Lvl 3**: Bracken, Thumper, Eyeless Dog, Maneater & Manticoil
     * **Lvl 4**: Forest Giant
 
 * __Medkit - $300__
@@ -221,6 +213,16 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 * __Traction Boots - $100__
     * Increases the player's traction force to the ground to allow easier movement direction change.
 
+* __Oxygen Canisters - $100__
+    * Decreases the oxygen consumption rate of the player.
+    
+* __Rubber Boots - $50__
+    * Decreases the movement hinderance when walking on water surfaces.
+    * This also includes the quick sand patches during the Rainy weather.
+    * If the percentage decrease reaches or exceeds 100%, you will not be slowed down when walking through it.
+    * This reduces how much movement hindurance you get from walking on water surfaces, not how much you're hindered by which is always by half multiplied by outside hinder multipliers such as this one and cobwebs.
+    
+
 ## Item Progression Mode
 
 This mod offers an alternative mode for obtaining upgrades through selling items to The Company. The following modes are available for playthroughs:
@@ -289,16 +291,6 @@ This mod offers a "Randomize Upgrade" mode where a set amount of upgrades are pi
     * After being escorted back to the ship, they will thank you for your help non-stop til you arrive at The Company (where you escort them for disciplinary action).
 
 ## Commands
-* ``extend deadline``
-    * Brings out an interactive UI where the player can select the amount of days they wish to extend with the preview of credit cost shown wtih selected amount.
-    * Each day extend will cost $800 by default (configurable)
-    * You can configure the amount of credit cost increase per each day extend.
-* ``probe``
-    * Brings out an interactive UI where the player can select which moon they wish to change the weather of and then to which weather respectfully.
-    * Sends out a weather probe to the selected moon to change its current weather.
-    * If a specified weather is selected, it will change the moon's weather to the selected one for $500 (configurable)
-    * Otherwise, a random weather will be selected and will cost $300 (configurable)
-    * You can configure the random weather command to only select cleared weathers (off by default)
 * ``contracts``
     * Brings out an interactive UI where you can select to obtain a contract, see current contract status and information related to each contract type.
 

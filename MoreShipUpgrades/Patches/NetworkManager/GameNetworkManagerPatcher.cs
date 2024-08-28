@@ -23,21 +23,16 @@ namespace MoreShipUpgrades.Patches.NetworkManager
                 Object.Destroy(upgrade.gameObject);
             }
         }
-        [HarmonyPrefix]
-        [HarmonyPatch(nameof(GameNetworkManager.SaveGame))]
-        static void SaveGamePrefix(GameNetworkManager __instance)
-        {
-            if (!__instance.isHostingGame || StartOfRound.Instance.inShipPhase || PlayerManager.instance.GetUpgradeSpentCredits() <= 0) return;
-            int previousCredits = ES3.Load<int>("GroupCredits", __instance.currentSaveFileName);
-            ES3.Save("GroupCredits", previousCredits - PlayerManager.instance.GetUpgradeSpentCredits(), __instance.currentSaveFileName);
-            PlayerManager.instance.ResetUpgradeSpentCredits();
-        }
-
         [HarmonyPostfix]
         [HarmonyPatch(nameof(GameNetworkManager.SaveGame))]
         static void SaveGamePostfix(GameNetworkManager __instance)
         {
             if (!__instance.isHostingGame) return;
+            if (!StartOfRound.Instance.inShipPhase && PlayerManager.instance.GetUpgradeSpentCredits() > 0)
+            {
+                int previousCredits = ES3.Load("GroupCredits", __instance.currentSaveFileName, defaultValue: 60);
+                ES3.Save("GroupCredits", previousCredits - PlayerManager.instance.GetUpgradeSpentCredits(), __instance.currentSaveFileName);
+            }
             logger.LogDebug("Saving the LGU upgrades unto a json file...");
             LguStore.Instance.ServerSaveFile();
             PlayerManager.instance.ResetUpgradeSpentCredits();

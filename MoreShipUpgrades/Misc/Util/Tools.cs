@@ -16,6 +16,24 @@ namespace MoreShipUpgrades.Misc.Util
     internal static class Tools
     {
         static LguLogger logger = new LguLogger(nameof(Tools));
+        public static void FindCodeInstructionReverse(ref int index, ref List<CodeInstruction> codes, object findValue, MethodInfo addCode, bool skip = false, bool requireInstance = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, string errorMessage = "Not found")
+        {
+            bool found = false;
+            for (; index >= 0; index--)
+            {
+                if (!CheckCodeInstruction(codes[index], findValue)) continue;
+                found = true;
+                if (skip) break;
+                if (andInstruction) codes.Insert(index + 1, new CodeInstruction(OpCodes.And));
+                if (!andInstruction && orInstruction) codes.Insert(index + 1, new CodeInstruction(OpCodes.Or));
+                if (notInstruction) codes.Insert(index + 1, new CodeInstruction(OpCodes.Not));
+                codes.Insert(index + 1, new CodeInstruction(OpCodes.Call, addCode));
+                if (requireInstance) codes.Insert(index + 1, new CodeInstruction(OpCodes.Ldarg_0));
+                break;
+            }
+            if (!found) logger.LogError(errorMessage);
+            index--;
+        }
         public static void FindCodeInstruction(ref int index, ref List<CodeInstruction> codes, object findValue, MethodInfo addCode, bool skip = false, bool requireInstance = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, string errorMessage = "Not found")
         {
             bool found = false;
@@ -33,6 +51,21 @@ namespace MoreShipUpgrades.Misc.Util
             }
             if (!found) logger.LogError(errorMessage);
             index++;
+        }
+        public static void FindLocalFieldReverse(ref int index, ref List<CodeInstruction> codes, int localIndex, object addCode = null, bool skip = false, bool store = false, bool requireInstance = false, string errorMessage = "Not found")
+        {
+            bool found = false;
+            for (; index >= 0; index--)
+            {
+                if (!CheckCodeInstruction(codes[index], localIndex, store)) continue;
+                found = true;
+                if (skip) break;
+                codes.Insert(index + 1, new CodeInstruction(OpCodes.Call, addCode));
+                if (requireInstance) codes.Insert(index + 1, new CodeInstruction(OpCodes.Ldarg_0));
+                break;
+            }
+            if (!found) logger.LogError(errorMessage);
+            index--;
         }
         public static void FindLocalField(ref int index, ref List<CodeInstruction> codes, int localIndex, object addCode = null, bool skip = false, bool store = false, bool requireInstance = false, string errorMessage = "Not found")
         {
@@ -53,6 +86,10 @@ namespace MoreShipUpgrades.Misc.Util
         {
             FindCodeInstruction(ref index, ref codes, findValue: findValue, addCode: addCode, skip: skip, requireInstance: requireInstance, notInstruction: notInstruction, andInstruction: andInstruction, orInstruction: orInstruction, errorMessage: errorMessage);
         }
+        public static void FindFieldReverse(ref int index, ref List<CodeInstruction> codes, FieldInfo findField, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
+        {
+            FindCodeInstructionReverse(ref index, ref codes, findValue: findField, addCode: addCode, skip: skip, requireInstance: requireInstance, notInstruction: notInstruction, andInstruction: andInstruction, orInstruction: orInstruction, errorMessage: errorMessage);
+        }
         public static void FindField(ref int index, ref List<CodeInstruction> codes, FieldInfo findField, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
         {
             FindCodeInstruction(ref index, ref codes, findValue: findField, addCode: addCode, skip: skip, requireInstance: requireInstance, notInstruction: notInstruction, andInstruction: andInstruction, orInstruction: orInstruction, errorMessage: errorMessage);
@@ -64,6 +101,10 @@ namespace MoreShipUpgrades.Misc.Util
         public static void FindFloat(ref int index, ref List<CodeInstruction> codes, float findValue, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
         {
             FindCodeInstruction(ref index, ref codes, findValue: findValue, addCode: addCode, skip: skip, requireInstance: requireInstance, notInstruction: notInstruction, andInstruction: andInstruction, orInstruction: orInstruction, errorMessage: errorMessage);
+        }
+        public static void FindIntegerReverse(ref int index, ref List<CodeInstruction> codes, sbyte findValue, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
+        {
+            FindCodeInstructionReverse(ref index, ref codes, findValue: findValue, addCode: addCode, skip: skip, requireInstance: requireInstance, notInstruction: notInstruction, andInstruction: andInstruction, orInstruction: orInstruction, errorMessage: errorMessage);
         }
         public static void FindInteger(ref int index, ref List<CodeInstruction> codes, sbyte findValue, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
         {

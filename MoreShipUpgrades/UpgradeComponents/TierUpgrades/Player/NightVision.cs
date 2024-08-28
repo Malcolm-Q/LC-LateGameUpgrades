@@ -54,11 +54,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             if (client == null) { return; }
 
-            float maxBattery = UpgradeBus.Instance.PluginConfiguration.NIGHT_BATTERY_MAX.Value + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_BATTERY_INCREMENT.Value;
+            float maxBattery = UpgradeBus.Instance.PluginConfiguration.NIGHT_BATTERY_MAX.Value + (GetUpgradeLevel(UPGRADE_NAME) + 1) * UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_BATTERY_INCREMENT.Value;
 
             if (nightVisionActive)
             {
-                nightBattery -= Time.deltaTime * (UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_DRAIN_SPEED.Value - GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_DRAIN_INCREMENT.Value);
+                nightBattery -= Time.deltaTime * (UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_DRAIN_SPEED.Value - (GetUpgradeLevel(UPGRADE_NAME) + 1) * UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_DRAIN_INCREMENT.Value);
                 nightBattery = Mathf.Clamp(nightBattery, 0f, maxBattery);
                 transform.GetChild(0).gameObject.SetActive(true);
 
@@ -69,7 +69,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             }
             else if (!batteryExhaustion)
             {
-                nightBattery += Time.deltaTime * (UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_REGEN_SPEED.Value + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_REGEN_INCREMENT.Value);
+                nightBattery += Time.deltaTime * (UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_REGEN_SPEED.Value + (GetUpgradeLevel(UPGRADE_NAME) + 1) * UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_REGEN_INCREMENT.Value);
                 nightBattery = Mathf.Clamp(nightBattery, 0f, maxBattery);
 
                 if (nightBattery >= maxBattery)
@@ -91,7 +91,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 
         public void Toggle()
         {
-            if (!GetActiveUpgrade(UPGRADE_NAME)) return;
+            if (!GetActiveUpgrade("Night Vision")) return;
             if (UpgradeBus.Instance.GetLocalPlayer().inTerminalMenu) return;
             nightVisionActive = !nightVisionActive;
             if (client == null) { client = GameNetworkManager.Instance.localPlayerController; }
@@ -146,11 +146,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         public override void Load()
         {
             base.Load();
+            if (!GetActiveUpgrade("Night Vision")) return;
             EnableOnClient();
         }
         public override void Unwind()
         {
             base.Unwind();
+            if (!GetActiveUpgrade("Night Vision")) return;
             DisableOnClient();
         }
 
@@ -179,7 +181,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             if (client == null) { client = GameNetworkManager.Instance.localPlayerController; }
             transform.GetChild(0).gameObject.SetActive(true);
-            UpgradeBus.Instance.activeUpgrades[UPGRADE_NAME] = true;
+            UpgradeBus.Instance.activeUpgrades["Night Vision"] = true;
             LguStore.Instance.UpdateLGUSaveServerRpc(client.playerSteamId, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(new SaveInfo())));
             HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Press {Keybinds.NvgAction.GetBindingDisplayString()} to toggle Night Vision!!!</color>";
         }
@@ -192,7 +194,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             client.nightVision.intensity = nightVisIntensity;
 
             transform.GetChild(0).gameObject.SetActive(false);
-            UpgradeBus.Instance.activeUpgrades[UPGRADE_NAME] = false;
+            UpgradeBus.Instance.activeUpgrades["Night Vision"] = false;
             LguStore.Instance.UpdateLGUSaveServerRpc(client.playerSteamId, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(new SaveInfo())));
             client = null;
         }
@@ -201,17 +203,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             switch (level)
             {
-                case 1:
-                    {
-                        float drain = (UpgradeBus.Instance.PluginConfiguration.NIGHT_BATTERY_MAX.Value - UpgradeBus.Instance.PluginConfiguration.NIGHT_BATTERY_MAX.Value * UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_STARTUP.Value) / UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_DRAIN_SPEED.Value;
-                        float regen = UpgradeBus.Instance.PluginConfiguration.NIGHT_BATTERY_MAX.Value / UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_REGEN_SPEED.Value;
-                        return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), level, price, drain, regen);
-                    }
                 default:
                     {
-                        float regenAdjustment = Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_REGEN_SPEED.Value + UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_REGEN_INCREMENT.Value * (level - 1), 0, 1000);
-                        float drainAdjustment = Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_DRAIN_SPEED.Value - UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_DRAIN_INCREMENT.Value * (level - 1), 0, 1000);
-                        float batteryLife = UpgradeBus.Instance.PluginConfiguration.NIGHT_BATTERY_MAX.Value + UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_BATTERY_INCREMENT.Value * (level - 1);
+                        float regenAdjustment = Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_REGEN_SPEED.Value + UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_REGEN_INCREMENT.Value * (level), 0, 1000);
+                        float drainAdjustment = Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_DRAIN_SPEED.Value - UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_DRAIN_INCREMENT.Value * (level), 0, 1000);
+                        float batteryLife = UpgradeBus.Instance.PluginConfiguration.NIGHT_BATTERY_MAX.Value + UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_BATTERY_INCREMENT.Value * (level);
 
                         string drainTime = "infinite";
                         if (drainAdjustment != 0) drainTime = ((batteryLife - batteryLife * UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_STARTUP.Value) / drainAdjustment).ToString("F2");
@@ -227,6 +223,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
             StringBuilder stringBuilder = new();
+            float drain = (UpgradeBus.Instance.PluginConfiguration.NIGHT_BATTERY_MAX.Value - UpgradeBus.Instance.PluginConfiguration.NIGHT_BATTERY_MAX.Value * UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_STARTUP.Value) / UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_DRAIN_SPEED.Value;
+            float regen = UpgradeBus.Instance.PluginConfiguration.NIGHT_BATTERY_MAX.Value / UpgradeBus.Instance.PluginConfiguration.NIGHT_VIS_REGEN_SPEED.Value;
+            stringBuilder.Append($"The affected item (Night vision Googles) has a base drain time to empty of {drain} seconds and regeneration time to full of {regen} seconds.\n\n");
             stringBuilder.Append(GetNightVisionInfo(1, initialPrice));
             for (int i = 0; i < maxLevels; i++)
                 stringBuilder.Append(GetNightVisionInfo(i + 2, incrementalPrices[i]));
@@ -253,14 +252,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         public new static CustomTerminalNode RegisterTerminalNode()
         {
             LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            int[] prices = UpgradeBus.ParseUpgradePrices(configuration.NIGHT_VISION_UPGRADE_PRICES.Value);
 
             CustomTerminalNode node = UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
                                                 configuration.SHARED_UPGRADES.Value || !configuration.NIGHT_VISION_INDIVIDUAL.Value,
                                                 configuration.NIGHT_VISION_ENABLED.Value,
-                                                0,
-                                                UpgradeBus.ParseUpgradePrices(configuration.NIGHT_VISION_UPGRADE_PRICES.Value),
+                                                prices[0],
+                                                prices[1..],
                                                 configuration.OVERRIDE_UPGRADE_NAMES ? configuration.NIGHT_VISION_OVERRIDE_NAME : "");
-            if (node != null) node.Unlocked = true;
             return node;
         }
 

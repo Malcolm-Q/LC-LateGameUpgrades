@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Reflection;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
+using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 
 namespace MoreShipUpgrades.Patches.RoundComponents
 {
     [HarmonyPatch(typeof(RoundManager))]
-    internal static class RoundManagerTranspilerPatcher
+    internal static class RoundManagerPatcher
     {
         [HarmonyPatch(nameof(RoundManager.SpawnScrapInLevel))]
         [HarmonyTranspiler]
@@ -23,6 +25,16 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             Tools.FindField(ref index, ref codes, findField: minimumScrap, addCode: increaseScrap, errorMessage: "Couldn't find level's minimum scrap amount");
             Tools.FindField(ref index, ref codes, findField: maximumScrap, addCode: increaseScrap, errorMessage: "Couldn't find level's maximum scrap amount");
             return codes;
+        }
+
+        [HarmonyPatch(nameof(RoundManager.LoadNewLevel))]
+        [HarmonyPrefix]
+        static void OpeningDoorsSequencePrefix()
+        {
+            if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_ENABLED) return;
+            if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_AFFECT_LANDING) return;
+
+            StartOfRound.Instance.shipAnimator.speed *= LandingThrusters.GetLandingSpeedMultiplier();
         }
     }
 }
