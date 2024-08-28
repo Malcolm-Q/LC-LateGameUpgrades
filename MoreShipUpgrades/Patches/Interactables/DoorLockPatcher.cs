@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player;
 
@@ -11,7 +12,9 @@ namespace MoreShipUpgrades.Patches.Interactables
         [HarmonyPostfix]
         static void UpdatePostfix(DoorLock __instance)
         {
-            if (__instance.isLocked && !__instance.isPickingLock && BaseUpgrade.GetActiveUpgrade(LockSmith.UPGRADE_NAME))
+            if (!UpgradeBus.Instance.PluginConfiguration.LOCKSMITH_ENABLED) return;
+            if (!BaseUpgrade.GetActiveUpgrade(LockSmith.UPGRADE_NAME)) return;
+            if (__instance.isLocked && !__instance.isPickingLock)
             {
                 __instance.doorTrigger.hoverTip = "Lockpick: [LMB]";
                 __instance.doorTrigger.interactable = true;

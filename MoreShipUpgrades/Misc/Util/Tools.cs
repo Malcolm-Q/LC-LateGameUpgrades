@@ -34,6 +34,21 @@ namespace MoreShipUpgrades.Misc.Util
             if (!found) logger.LogError(errorMessage);
             index++;
         }
+        public static void FindLocalFieldReverse(ref int index, ref List<CodeInstruction> codes, int localIndex, object addCode = null, bool skip = false, bool store = false, bool requireInstance = false, string errorMessage = "Not found")
+        {
+            bool found = false;
+            for (; index > 0; index--)
+            {
+                if (!CheckCodeInstruction(codes[index], localIndex, store)) continue;
+                found = true;
+                if (skip) break;
+                codes.Insert(index + 1, new CodeInstruction(OpCodes.Call, addCode));
+                if (requireInstance) codes.Insert(index + 1, new CodeInstruction(OpCodes.Ldarg_0));
+                break;
+            }
+            if (!found) logger.LogError(errorMessage);
+            index--;
+        }
         public static void FindLocalField(ref int index, ref List<CodeInstruction> codes, int localIndex, object addCode = null, bool skip = false, bool store = false, bool requireInstance = false, string errorMessage = "Not found")
         {
             bool found = false;

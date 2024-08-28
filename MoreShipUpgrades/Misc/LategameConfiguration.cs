@@ -34,6 +34,7 @@ namespace MoreShipUpgrades.Misc
     public class LategameConfiguration : SyncedConfig2<LategameConfiguration>
     {
         #region Enabled
+        [field: SyncedEntryField] public SyncedEntry<bool> OXYGEN_CANISTERS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SLEIGHT_OF_HAND_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> HIKING_BOOTS_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> TRACTION_BOOTS_ENABLED {  get; set; }
@@ -76,6 +77,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Individual
+        [field: SyncedEntryField] public SyncedEntry<bool> OXYGEN_CANISTERS_INDIVIDUAL { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SLEIGHT_OF_HAND_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> HIKING_BOOTS_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> TRACTION_BOOTS_INDIVIDUAL {  get; set; }
@@ -104,6 +106,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Initial Prices
+        [field: SyncedEntryField] public SyncedEntry<int> OXYGEN_CANISTERS_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SLEIGHT_OF_HAND_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> HIKING_BOOTS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> TRACTION_BOOTS_PRICE {  get; set; }
@@ -150,6 +153,10 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<string> OXYGEN_CANISTERS_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> OXYGEN_CANISTERS_OVERRIDE_NAME {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> OXYGEN_CANISTERS_INITIAL_OXYGEN_CONSUMPTION_DECREASE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> SLEIGHT_OF_HAND_PRICES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> SLEIGHT_OF_HAND_OVERRIDE_NAME {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SLEIGHT_OF_HAND_INITIAL_INCREASE {  get; set; }
@@ -428,6 +435,7 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<ItemProgressionManager.ChancePerScrapModes> SCRAP_UPGRADE_CHANCE_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_BLACKLISTED_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_APPARATICE_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> OXYGEN_CANISTERS_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> SLEIGHT_OF_HAND_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> HIKING_BOOTS_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> TRACTION_BOOTS_ITEM_PROGRESSION_ITEMS {  get; set; }
@@ -522,6 +530,7 @@ namespace MoreShipUpgrades.Misc
 
             topSection = LguConstants.OVERRIDE_NAMES_SECTION;
             OVERRIDE_UPGRADE_NAMES              = cfg.BindSyncedEntry(topSection, LguConstants.OVERRIDE_NAMES_ENABLED_KEY, LguConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LguConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
+            OXYGEN_CANISTERS_OVERRIDE_NAME      = cfg.BindSyncedEntry(topSection, LguConstants.OXYGEN_CANISTERS_OVERRIDE_NAME_KEY, OxygenCanisters.UPGRADE_NAME);
             SLEIGHT_OF_HAND_OVERRIDE_NAME       = cfg.BindSyncedEntry(topSection, LguConstants.SLEIGHT_OF_HAND_OVERRIDE_NAME_KEY, SleightOfHand.UPGRADE_NAME);
             HIKING_BOOTS_OVERRIDE_NAME          = cfg.BindSyncedEntry(topSection, LguConstants.HIKING_BOOTS_OVERRIDE_NAME_KEY, HikingBoots.UPGRADE_NAME);
             TRACTION_BOOTS_OVERRIDE_NAME        = cfg.BindSyncedEntry(topSection, LguConstants.TRACTION_BOOTS_OVERRIDE_NAME_KEY, TractionBoots.UPGRADE_NAME);
@@ -611,6 +620,19 @@ namespace MoreShipUpgrades.Misc
             #endregion
 
             #region Upgrades
+
+            #region Oxygen Canisters
+
+            topSection = OxygenCanisters.UPGRADE_NAME;
+            OXYGEN_CANISTERS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.OXYGEN_CANISTERS_ENABLED_KEY, LguConstants.OXYGEN_CANISTERS_ENABLED_DEFAULT, LguConstants.OXYGEN_CANISTERS_ENABLED_DESCRIPTION);
+            OXYGEN_CANISTERS_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            OXYGEN_CANISTERS_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.OXYGEN_CANISTERS_PRICE_KEY, LguConstants.OXYGEN_CANISTERS_PRICE_DEFAULT);
+            OXYGEN_CANISTERS_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, OxygenCanisters.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
+            OXYGEN_CANISTERS_INITIAL_OXYGEN_CONSUMPTION_DECREASE = cfg.BindSyncedEntry(topSection, LguConstants.OXYGEN_CANISTERS_INITIAL_OXYGEN_CONSUMPTION_DECREASE_KEY, LguConstants.OXYGEN_CANISTERS_INITIAL_OXYGEN_CONSUMPTION_DECREASE_DEFAULT, LguConstants.OXYGEN_CANISTERS_INITIAL_OXYGEN_CONSUMPTION_DECREASE_DESCRIPTION);
+            OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE = cfg.BindSyncedEntry(topSection, LguConstants.OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE_KEY, LguConstants.OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE_DEFAULT, LguConstants.OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE_DESCRIPTION);
+            OXYGEN_CANISTERS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
 
             #region Sleight Of Hand
 

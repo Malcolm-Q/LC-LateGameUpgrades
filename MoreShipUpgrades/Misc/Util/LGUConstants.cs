@@ -191,6 +191,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string OXYGEN_CANISTERS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, OxygenCanisters.UPGRADE_NAME);
         internal static readonly string SLEIGHT_OF_HAND_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, SleightOfHand.UPGRADE_NAME);
         internal static readonly string HIKING_BOOTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, HikingBoots.UPGRADE_NAME);
         internal static readonly string TRACTION_BOOTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, TractionBoots.UPGRADE_NAME);
@@ -359,6 +360,26 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Oxygen Canisters
+
+        internal const string OXYGEN_CANISTERS_ENABLED_KEY = $"Enable {OxygenCanisters.UPGRADE_NAME} Upgrade";
+        internal const bool OXYGEN_CANISTERS_ENABLED_DEFAULT = true;
+        internal const string OXYGEN_CANISTERS_ENABLED_DESCRIPTION = "Tier upgrade which reduces the consumption rate of oxygen while underwater.";
+
+        internal const string OXYGEN_CANISTERS_PRICE_KEY = $"Price of {OxygenCanisters.UPGRADE_NAME} Upgrade";
+        internal const int OXYGEN_CANISTERS_PRICE_DEFAULT = 100;
+
+        internal const string OXYGEN_CANISTERS_INITIAL_OXYGEN_CONSUMPTION_DECREASE_KEY = "Initial Oxygen Consumption Decrease";
+        internal const int OXYGEN_CANISTERS_INITIAL_OXYGEN_CONSUMPTION_DECREASE_DEFAULT = 20;
+        internal const string OXYGEN_CANISTERS_INITIAL_OXYGEN_CONSUMPTION_DECREASE_DESCRIPTION = "Initial percentage of oxygen consumption decrease when first purchasing the upgrade";
+
+        internal const string OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE_KEY = "Incremental Oxygen Consumption Decrease";
+        internal const int OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE_DEFAULT = 20;
+        internal const string OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE_DESCRIPTION = "Incremental percentage of oxygen consumption decrease when purchasing further levels of the upgrade";
+
+
+        #endregion
 
         #region Sleight of Hand
 

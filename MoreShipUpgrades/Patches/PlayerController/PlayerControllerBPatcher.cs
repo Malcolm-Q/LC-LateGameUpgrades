@@ -123,8 +123,11 @@ namespace MoreShipUpgrades.Patches.PlayerController
             if (!player.twoHanded) return;
             if (!BaseUpgrade.GetActiveUpgrade(DeepPockets.UPGRADE_NAME)) return;
 
-            EnemyAI enemy = player.currentlyHeldObjectServer.GetComponent<EnemyAI>();
-            if (enemy != null && !enemy.isEnemyDead) return;
+            if (player.currentlyHeldObjectServer != null)
+            {
+                EnemyAI enemy = player.currentlyHeldObjectServer.GetComponent<EnemyAI>();
+                if (enemy != null && !enemy.isEnemyDead) return;
+            }
 
             if (CustomItemBehaviourLibraryCompat.Enabled && !UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_ALLOW_WHEELBARROWS)
             {
@@ -317,6 +320,17 @@ namespace MoreShipUpgrades.Patches.PlayerController
             List<CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindField(ref index, ref codes, findField: grabDistance, addCode: getIncreasedRange, errorMessage: "Couldn't find the grab distance field");
+            return codes;
+        }
+
+        [HarmonyPatch(nameof(PlayerControllerB.SetFaceUnderwaterFilters))]
+        [HarmonyTranspiler]
+        static IEnumerable<CodeInstruction> SetFaceUnderwaterFiltersTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo ReduceOxygenConsumption = typeof(OxygenCanisters).GetMethod(nameof(OxygenCanisters.ReduceOxygenConsumption));
+            List<CodeInstruction> codes = new(instructions);
+            int index = 0;
+            Tools.FindDiv(ref index, ref codes, addCode: ReduceOxygenConsumption, errorMessage: "Couldn't find the value used to decrease the drowning timer");
             return codes;
         }
     }

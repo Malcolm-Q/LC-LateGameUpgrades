@@ -466,20 +466,29 @@ namespace MoreShipUpgrades.Managers
         internal void UpdateUpgrades(CustomTerminalNode node, bool increment = false)
         {
             node.Unlocked = true;
-            if (increment) { node.CurrentUpgrade++; }
-            logger.LogInfo($"Node found and unlocked (level = {node.CurrentUpgrade})");
-
-            if (!increment)
+            BaseUpgrade upgrade = UpgradeBus.Instance.UpgradeObjects[node.OriginalName].GetComponent<BaseUpgrade>();
+            if (increment)
             {
-                UpgradeBus.Instance.UpgradeObjects[node.OriginalName].GetComponent<BaseUpgrade>().Load();
-                logger.LogInfo("First purchase, executing BaseUpgrade.load()");
+                node.CurrentUpgrade++;
+                if (upgrade is TierUpgrade tierUpgrade)
+                {
+                    logger.LogInfo("upgrade already unlocked, executing TierUpgrade.Increment()");
+                    tierUpgrade.Increment();
+                }
+                else
+                {
+                    logger.LogInfo("Upgrade cannot be incremented. Skipping...");
+                }
             }
             else
             {
-                UpgradeBus.Instance.UpgradeObjects[node.OriginalName].GetComponent<TierUpgrade>().Increment();
-                logger.LogInfo("upgrade already unlocked, executing TierUpgrade.Increment()");
+                logger.LogInfo("First purchase, executing BaseUpgrade.load()");
+                upgrade.Load();
             }
+            logger.LogInfo($"Node found ({node.OriginalName}) and unlocked (level = {node.CurrentUpgrade})");
+
             SetContributionValue(node.OriginalName, 0);
+
             SaveInfo = new SaveInfo();
             UpdateLGUSaveServerRpc(playerID, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(SaveInfo)));
         }

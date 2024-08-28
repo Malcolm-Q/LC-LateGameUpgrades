@@ -25,9 +25,11 @@ namespace MoreShipUpgrades
     [BepInDependency("WhiteSpike.InteractiveTerminalAPI")]
     [BepInDependency("com.github.WhiteSpike.CustomItemBehaviourLibrary", DependencyFlags.SoftDependency)]
     [BepInDependency(LethalLevelLoader.Plugin.ModGUID, DependencyFlags.SoftDependency)]
+    [BepInDependency(Oxygen.OxygenBase.modGUID, DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
         internal static ManualLogSource mls;
+        internal static Dictionary<string, GameObject> networkPrefabs = [];
 
         void Awake()
         {

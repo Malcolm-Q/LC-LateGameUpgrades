@@ -1,4 +1,14 @@
 <details>
+<summary> 3.10.0 - 2024-08-28 </summary>
+
+- Implemented "Oxygen Canister" tier upgrade which reduces the oxygen consumption rate of the player.
+- Fixed NRE being thrown when the player is still in two-handed mode and having no object in hand. 
+- Fixed another NRE issue related to upgrade terminal nodes due to Item Progression mode.
+- Fixed Night Vision Goggles throwing NRE when you have the respective upgrade disabled.
+- Fixed Market Influence not working correctly due to additional sale methods being introduced for vehicles.
+
+</details>
+<details>
 <summary> 3.9.15 - 2024-08-19 </summary>
 
 - Fixed Item Progression mode "ChancePerScrap" mode, specifically the "Random" one, not working correctly leading to always upgrade the first ever upgrade in the list.
