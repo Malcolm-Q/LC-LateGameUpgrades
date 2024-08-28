@@ -191,6 +191,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string RUBBER_BOOTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, RubberBoots.UPGRADE_NAME);
         internal static readonly string OXYGEN_CANISTERS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, OxygenCanisters.UPGRADE_NAME);
         internal static readonly string SLEIGHT_OF_HAND_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, SleightOfHand.UPGRADE_NAME);
         internal static readonly string HIKING_BOOTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, HikingBoots.UPGRADE_NAME);
@@ -360,6 +361,26 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Rubber Boots
+
+        internal const string RUBBER_BOOTS_ENABLED_KEY = $"Enable {RubberBoots.UPGRADE_NAME} Upgrade";
+        internal const bool RUBBER_BOOTS_ENABLED_DEFAULT = true;
+        internal const string RUBBER_BOOTS_ENABLED_DESCRIPTION = "Tier upgrade which reduces the consumption rate of oxygen while underwater.";
+
+        internal const string RUBBER_BOOTS_PRICE_KEY = $"Price of {RubberBoots.UPGRADE_NAME} Upgrade";
+        internal const int RUBBER_BOOTS_PRICE_DEFAULT = 50;
+
+        internal const string RUBBER_BOOTS_INITIAL_MOVEMENT_HINDERANCE_DECREASE_KEY = "Initial Movement Hinderance Decrease";
+        internal const int RUBBER_BOOTS_INITIAL_MOVEMENT_HINDERANCE_DECREASE_DEFAULT = 20;
+        internal const string RUBBER_BOOTS_INITIAL_MOVEMENT_HINDERANCE_DECREASE_DESCRIPTION = "Initial percentage decrease of movement hinderance on water surfaces when first purchasing the upgrade";
+
+        internal const string RUBBER_BOOTS_INCREMENTAL_MOVEMENT_HINDERANCE_DECREASE_KEY = "Incremental Oxygen Consumption Decrease";
+        internal const int RUBBER_BOOTS_INCREMENTAL_MOVEMENT_HINDERANCE_DECREASE_DEFAULT = 20;
+        internal const string RUBBER_BOOTS_INCREMENTAL_MOVEMENT_HINDERANCE_DECREASE_DESCRIPTION = "Incremental percentage decrease of movement hinderance on water surfaces when purchasing further levels of the upgrade";
+
+
+        #endregion
 
         #region Oxygen Canisters
 

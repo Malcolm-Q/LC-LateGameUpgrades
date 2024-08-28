@@ -2,6 +2,10 @@
 <summary> 3.10.0 - 2024-08-28 </summary>
 
 - Implemented "Oxygen Canister" tier upgrade which reduces the oxygen consumption rate of the player.
+- Implemented "Rubber boots" tier upgrade which reduces the movement hinderance from walking on water surfaces.
+  - This also includes the quick sand patches during the Rainy weather.
+  - If the percentage decrease reaches or exceeds 100%, you will not be slowed down when walking through it.
+  - This reduces how much movement hindurance you get from walking on water surfaces, not how much you're hindered by which is always by half multiplied by outside hinder multipliers such as this one and cobwebs.
 - Fixed NRE being thrown when the player is still in two-handed mode and having no object in hand. 
 - Fixed another NRE issue related to upgrade terminal nodes due to Item Progression mode.
 - Fixed Night Vision Goggles throwing NRE when you have the respective upgrade disabled.

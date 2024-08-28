@@ -221,6 +221,16 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 * __Traction Boots - $100__
     * Increases the player's traction force to the ground to allow easier movement direction change.
 
+* __Oxygen Canisters - $100__
+    * Decreases the oxygen consumption rate of the player.
+    
+* __Rubber Boots - $50__
+    * Decreases the movement hinderance when walking on water surfaces.
+    * This also includes the quick sand patches during the Rainy weather.
+    * If the percentage decrease reaches or exceeds 100%, you will not be slowed down when walking through it.
+    * This reduces how much movement hindurance you get from walking on water surfaces, not how much you're hindered by which is always by half multiplied by outside hinder multipliers such as this one and cobwebs.
+    
+
 ## Item Progression Mode
 
 This mod offers an alternative mode for obtaining upgrades through selling items to The Company. The following modes are available for playthroughs:
