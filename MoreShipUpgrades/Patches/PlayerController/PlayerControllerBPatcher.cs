@@ -165,7 +165,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
             return codes;
         }
-        static void AddBackMusclesCodeInstruction(ref int index, ref List<CodeInstruction> codes)
+        internal static void AddBackMusclesCodeInstruction(ref int index, ref List<CodeInstruction> codes)
         {
             MethodInfo affectWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreasePossibleWeight));
             Tools.FindSub(ref index, ref codes, addCode: affectWeight, errorMessage: "Couldn't find item weight");
