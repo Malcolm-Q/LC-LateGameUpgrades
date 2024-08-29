@@ -208,15 +208,6 @@ namespace MoreShipUpgrades.Misc
             }
             return result;
         }
-        internal static AudioClip[] GetAudioClipList(string name, int length)
-        {
-            AudioClip[] array = new AudioClip[length];
-            for (int i = 0; i < length; i++)
-            {
-                array[i] = GetAudioClip($"{name} {i}");
-            }
-            return array;
-        }
 
         /// <summary>
         /// Tries to load an asset from provided asset bundle through a given path into a Item

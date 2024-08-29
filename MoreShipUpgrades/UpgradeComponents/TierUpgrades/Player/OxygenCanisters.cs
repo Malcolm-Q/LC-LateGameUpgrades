@@ -28,8 +28,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.OXYGEN_CANISTERS_INITIAL_OXYGEN_CONSUMPTION_DECREASE.Value + level * UpgradeBus.Instance.PluginConfiguration.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION.Value;
-            string infoFormat = "LVL {0} - ${1} - Reduces oxygen consumption rate by {2}%\n";
+            static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.OXYGEN_CANISTERS_INITIAL_OXYGEN_CONSUMPTION_DECREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION.Value);
+            const string infoFormat = "LVL {0} - ${1} - Reduces oxygen consumption rate by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
 
@@ -38,7 +38,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             get
             {
                 string[] prices = UpgradeBus.Instance.PluginConfiguration.OXYGEN_CANISTERS_PRICES.Value.Split(',');
-                bool free = UpgradeBus.Instance.PluginConfiguration.OXYGEN_CANISTERS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+                bool free = UpgradeBus.Instance.PluginConfiguration.OXYGEN_CANISTERS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
                 return free;
             }
         }

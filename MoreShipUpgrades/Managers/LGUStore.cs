@@ -136,12 +136,6 @@ namespace MoreShipUpgrades.Managers
             ES3.Save(key: saveDataKey, value: json, filePath: saveFile);
         }
 
-        internal void UpdateServerSave()
-        {
-            LguSave.playerSaves[playerID] = new SaveInfo();
-            ServerSaveFile();
-        }
-
         /// <summary>
         /// Remove Procedure Call used by clients to notify the server to update a client's save with provided save data
         /// </summary>
@@ -260,36 +254,6 @@ namespace MoreShipUpgrades.Managers
             {
                 UpdateUpgradeBus();
             }
-        }
-        /// <summary>
-        /// Remote Procedure Call used by clients to notify the server to change the current amount of credits in the current game session to the provided amount
-        /// </summary>
-        /// <param name="credits">New amount of credits to set on the current game session</param>
-        [ServerRpc(RequireOwnership = false)]
-        public void SyncCreditsServerRpc(int credits)
-        {
-            logger.LogInfo($"Request to sync credits to ${credits} received, calling ClientRpc...");
-            SyncCreditsClientRpc(credits);
-        }
-        /// <summary>
-        /// Remote Procedure Call used by server to notify the clients to change the current amount of credits in the current game session to the provided amount
-        /// </summary>
-        /// <param name="newCredits">New amount of credits to set on the current game session</param>
-        [ClientRpc]
-        public void SyncCreditsClientRpc(int newCredits)
-        {
-            SyncCredits(newCredits);
-        }
-
-        /// <summary>
-        /// Changes the current amount of credits in the current game session to the provided amount
-        /// </summary>
-        /// <param name="newCredits">New amount of credits to set on the current game session</param>
-        void SyncCredits(int newCredits)
-        {
-            logger.LogInfo($"Credits have been synced to ${newCredits}");
-            Terminal terminal = UpgradeBus.Instance.GetTerminal();
-            terminal.groupCredits = newCredits;
         }
 
         /// <summary>
@@ -462,7 +426,6 @@ namespace MoreShipUpgrades.Managers
             RandomizeUpgradeManager.SetRandomUpgradeSeed(LguSave.randomUpgradeSeed);
             RandomizeUpgradeManager.RandomizeUpgrades();
         }
-
         internal void UpdateUpgrades(CustomTerminalNode node, bool increment = false)
         {
             node.Unlocked = true;

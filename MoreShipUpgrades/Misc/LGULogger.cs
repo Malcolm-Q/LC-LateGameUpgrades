@@ -28,8 +28,8 @@ namespace MoreShipUpgrades.Misc
         {
             logSource.LogInfo($"[{moduleName}] {message}");
         }
-        public void LogWarning(object message) 
-        { 
+        public void LogWarning(object message)
+        {
             logSource.LogWarning($"[{moduleName}] {message}");
         }
         public void LogError(object message)

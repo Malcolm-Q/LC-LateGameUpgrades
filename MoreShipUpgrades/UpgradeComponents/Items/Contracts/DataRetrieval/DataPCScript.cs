@@ -24,11 +24,11 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
 
         Text IPText;
         InputField userField, passField, gameField;
-        string user, pass, ip;
+        string user, pass;
         string defaultText;
         string dir = "C:\\WINDOWS";
         static string rootDir = "C:\\WINDOWS";
-        List<string> dirs = new List<string>() {
+        readonly List<string> dirs = new List<string>() {
             rootDir+"\\Documents",
             rootDir+"\\Downloads",
             rootDir+"\\TopSecret",
@@ -46,8 +46,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
             rootDir+"\\Surveys",
         };
 
-        List<string> fileDirs = new List<string>();
-        string[] files = {
+        readonly List<string> fileDirs = new List<string>();
+        readonly string[] files = {
             "minecraft.exe",
             "MoreRam.dll",
             "why_mustard_is_better_than_ketchup.txt",
@@ -89,11 +89,9 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
 
             audio = GetComponent<AudioSource>();
 
-
-
             if (IsHost || IsServer)
             {
-                ip = $"{Random.Range(0, 213)}.{Random.Range(0, 99)}.{Random.Range(0, 99)}.{Random.Range(0, 255)}";
+                string ip = $"{Random.Range(0, 213)}.{Random.Range(0, 99)}.{Random.Range(0, 99)}.{Random.Range(0, 255)}";
                 IPText.text = IPText.text.Replace("[IP]", ip);
                 user = RandomString();
                 pass = RandomString();
@@ -207,94 +205,115 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.DataRetrieval
             {
                 secondWord = words[1];
             }
-            if (firstWord == "ls")
+            switch(firstWord)
+            {
+                case "ls":
+                    {
+                        ExecuteLsCommand();
+                        return;
+                    }
+                case "cd":
+                    {
+                        ExecuteCdCommand(secondWord);
+                        return;
+                    }
+                case "mv":
+                    {
+                        ExecuteMvCommand(secondWord);
+                        return;
+                    }
+                default:
+                    {
+                        UnknownCommand(firstWord, secondWord);
+                        break;
+                    }
+            }
+        }
+
+        void SetGameFieldText(string text)
+        {
+            gameField.text = text;
+            defaultText = gameField.text;
+        }
+
+        void UnknownCommand(string firstWord, string secondWord)
+        {
+            SetGameFieldText($"{firstWord} {secondWord} WAS NOT RECOGNIZED AS A COMMAND\n\nCOMMANDS ARE :\nLS\nCD\nMV\n\n{dir}> ");
+        }
+
+        void ExecuteLsCommand()
+        {
+            if (dir == rootDir)
+            {
+                SetGameFieldText($"{string.Join("\n", dirs)}\n\n{dir}> ");
+                return;
+            }
+            SetGameFieldText($"{string.Join("\n", fileDirs.Where(x => x.Contains(dir)))}\n\n{dir}> ");
+        }
+
+        void ExecuteCdCommand(string input)
+        {
+            if (input.Length == 0)
+            {
+                SetGameFieldText($"YOU MUST PROVIDE A VALID DIRECTORY TO SWITCH TO\n\n{dir}");
+                return;
+            }
+            if (input == ".." || input == "~")
             {
                 if (dir == rootDir)
                 {
-                    gameField.text = $"{string.Join("\n", dirs)}\n\n{dir}> ";
-                    defaultText = gameField.text;
+                    SetGameFieldText($"YOU ARE ALREADY IN THE ROOT DIRECTORY\n\n{dir}> ");
                     return;
                 }
-                gameField.text = $"{string.Join("\n", fileDirs.Where(x => x.Contains(dir)))}\n\n{dir}> ";
-                defaultText = gameField.text;
+                dir = rootDir;
+                SetGameFieldText($"{dir}> ");
                 return;
             }
-            else if (firstWord == "cd")
+            if (dirs.Contains($"{dir}\\{input}"))
             {
-                if (secondWord == "")
-                {
-                    gameField.text = $"YOU MUST PROVIDE A VALID DIRECTORY TO SWITCH TO\n\n{dir}";
-                    defaultText = gameField.text;
-                    return;
-                }
-                if (secondWord == ".." || secondWord == "~")
-                {
-                    if (dir == rootDir)
-                    {
-                        gameField.text = $"YOU ARE ALREADY IN THE ROOT DIRECTORY\n\n{dir}> ";
-                        defaultText = gameField.text;
-                        return;
-                    }
-                    dir = rootDir;
-                    gameField.text = $"{dir}> ";
-                    defaultText = gameField.text;
-                    return;
-                }
-                if (dirs.Contains($"{dir}\\{secondWord}"))
-                {
-                    dir = $"{dir}\\{secondWord}";
-                    gameField.text = $"{dir}> ";
-                    defaultText = gameField.text;
-                    return;
-                }
-                gameField.text = $"{dir}\\{secondWord} IS NOT A VALID DIRECTORY\n\nENTER LS TO VIEW DIRECTORIES\n\n{dir}> ";
-                defaultText = gameField.text;
+                dir = $"{dir}\\{input}";
+                SetGameFieldText($"{dir}> ");
                 return;
             }
-            else if (firstWord == "mv")
-            {
-                if (secondWord == "")
-                {
-                    gameField.text = $"YOU MUST PROVIDE A VALID FILE TO MOVE\n\n{dir}";
-                    defaultText = gameField.text;
-                    return;
-                }
-                if (secondWord == "survey.db")
-                {
-                    if (fileDirs.Contains($"{dir}\\survey.db"))
-                    {
-                        logger.LogInfo("Minigame completed, spawning loot and exiting...");
-                        SetPlayerInputs(true);
-                        if (IsHost || IsServer)
-                        {
-                            ExitGameClientRpc(new NetworkBehaviourReference(this), true);
-                        }
-                        else
-                        {
+            SetGameFieldText($"{dir}\\{input} IS NOT A VALID DIRECTORY\n\nENTER LS TO VIEW DIRECTORIES\n\n{dir}> ");
+        }
 
-                            ExitGameServerRpc(new NetworkBehaviourReference(this), true);
-                        }
-                        return;
+        void ExecuteMvCommand(string input)
+        {
+            if (input == "")
+            {
+                SetGameFieldText($"YOU MUST PROVIDE A VALID FILE TO MOVE\n\n{dir}");
+                return;
+            }
+            if (input == "survey.db")
+            {
+                if (fileDirs.Contains($"{dir}\\survey.db"))
+                {
+                    logger.LogInfo("Minigame completed, spawning loot and exiting...");
+                    SetPlayerInputs(true);
+                    if (IsHost || IsServer)
+                    {
+                        ExitGameClientRpc(new NetworkBehaviourReference(this), true);
                     }
                     else
                     {
-                        gameField.text = $"{dir}\\survey.db does not exist\n\n{dir}> ";
-                        defaultText = gameField.text;
-                        return;
+
+                        ExitGameServerRpc(new NetworkBehaviourReference(this), true);
                     }
-                }
-                if (fileDirs.Contains($"{dir}\\{secondWord}"))
-                {
-                    gameField.text = $"{dir}\\{secondWord} IS NOT A FILE OF INTEREST\n\n{dir}> ";
-                    defaultText = gameField.text;
                     return;
                 }
-                gameField.text = $"{dir}\\{secondWord} IS NOT A VALID FILE\n\nENTER LS TO VIEW FILES\n\n{dir}> ";
-                defaultText = gameField.text;
+                else
+                {
+                    SetGameFieldText($"{dir}\\survey.db does not exist\n\n{dir}> ");
+                    return;
+                }
+            }
+            if (fileDirs.Contains($"{dir}\\{input}"))
+            {
+                SetGameFieldText($"{dir}\\{input} IS NOT A FILE OF INTEREST\n\n{dir}> ");
                 return;
             }
-            gameField.text = $"{firstWord} {secondWord} WAS NOT RECOGNIZED AS A COMMAND\n\nCOMMANDS ARE :\nLS\nCD\nMV\n\n{dir}> ";
-            defaultText = gameField.text;
+            SetGameFieldText($"{dir}\\{input} IS NOT A VALID FILE\n\nENTER LS TO VIEW FILES\n\n{dir}> ");
         }
 
         public void Login()

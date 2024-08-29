@@ -241,9 +241,7 @@ namespace MoreShipUpgrades.Managers
             {
                 MethodInfo method = type.GetMethod(nameof(BaseUpgrade.RegisterScrapToUpgrade), BindingFlags.Static | BindingFlags.Public);
                 (string, string[]) pair = ((string, string[]))method.Invoke(null, null);
-                string upgradeName = pair.Item1;
-                foreach (string scrapItem in pair.Item2)
-                    AddScrapToUpgrade(upgradeName, scrapItem.ToLower().Trim());
+                AddScrapToUpgrade(pair.Item1, pair.Item2);
             }
         }
 
@@ -265,10 +263,10 @@ namespace MoreShipUpgrades.Managers
             LguStore.Instance.ServerSaveFile();
         }
 
-        public static void AddScrapToUpgrade(ref CustomTerminalNode node, List<string> scrapNames)
+        public static void AddScrapToUpgrade(string upgradeName, string[] scrapNames)
         {
             foreach (string scrapName in scrapNames)
-                AddScrapToUpgrade(ref node, scrapName);
+                AddScrapToUpgrade(upgradeName, scrapName);
         }
 
         public static void AddScrapToUpgrade(ref CustomTerminalNode node, string scrapName)

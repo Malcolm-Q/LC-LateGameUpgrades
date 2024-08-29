@@ -74,6 +74,11 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Extraction
         [ClientRpc]
         void HealScavClientRpc()
         {
+            HealScavenger();
+        }
+
+        void HealScavenger()
+        {
             trig.GetComponent<BoxCollider>().enabled = false;
             audio.PlayOneShot(clipDict["heal"][0], UpgradeBus.Instance.PluginConfiguration.SCAV_VOLUME.Value);
             anim.SetTrigger("heal");
@@ -93,23 +98,30 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Extraction
             float TimeToWait = Random.Range(25f, 45f);
             if (prop.isInShipRoom) TimeToWait *= 3f;
             yield return new WaitForSeconds(TimeToWait);
+            string soundType;
             if (prop.isHeld)
             {
-                PlayAudioClientRpc(Random.Range(0, clipDict["held"].Length), "held");
+                soundType = "held";
             }
             else if (prop.isInShipRoom)
             {
-                PlayAudioClientRpc(Random.Range(0, clipDict["safe"].Length), "safe");
+                soundType = "safe";
             }
             else
             {
-                PlayAudioClientRpc(Random.Range(0, clipDict["lost"].Length), "lost");
+                soundType = "lost";
             }
+            PlayAudioClientRpc(Random.Range(0, clipDict[soundType].Length), "lost");
             StartCoroutine(AudioStream());
         }
 
         [ClientRpc]
         void PlayAudioClientRpc(int index, string soundType)
+        {
+            PlayAudioLocal(index, soundType);
+        }
+
+        void PlayAudioLocal(int index, string soundType)
         {
             audio.PlayOneShot(clipDict[soundType][index], UpgradeBus.Instance.PluginConfiguration.SCAV_VOLUME.Value);
             RoundManager.Instance.PlayAudibleNoise(transform.position, 30f, 0.9f, 0, prop.isInShipRoom, 5);

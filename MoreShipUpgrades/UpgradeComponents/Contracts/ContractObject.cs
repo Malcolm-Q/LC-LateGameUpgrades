@@ -43,10 +43,5 @@ namespace MoreShipUpgrades.UpgradeComponents.Contracts
 
             Tools.SpawnMob("Hoarding bug", transform.position, UpgradeBus.Instance.PluginConfiguration.CONTRACT_BUG_SPAWNS.Value);
         }
-
-        public string GetContractType()
-        {
-            return contractType;
-        }
     }
 }

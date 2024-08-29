@@ -102,32 +102,6 @@ namespace MoreShipUpgrades.Misc
             AddScanNode(objectToAddScanNode: objectToAddScanNode, nodeType: NodeType.GENERAL, header: header, subText: subText, creatureScanID: creatureScanID, minRange: minRange, maxRange: maxRange);
         }
         /// <summary>
-        /// Adds a scrap scan node to the provided gameObject and set its attributes to the provided ones
-        /// </summary>
-        /// <param name="objectToAddScanNode">GameObject we wish to add the scan node on</param>
-        /// <param name="header">Text displayed on the header of the scan node</param>
-        /// <param name="subText">Text displayed below the header of the scan node</param>
-        /// <param name="creatureScanID">Identifier of the bestiary entry to unlock when scanning this node</param>
-        /// <param name="minRange">Minimum range required to display this node</param>
-        /// <param name="maxRange">Maximum range allowed to display this node</param>
-        public static void AddScrapScanNode(GameObject objectToAddScanNode, string header = "LGU Scan Node", string subText = "Used for LGU stuff", int creatureScanID = -1, int minRange = 2, int maxRange = 7)
-        {
-            AddScanNode(objectToAddScanNode: objectToAddScanNode, nodeType: NodeType.SCRAP, header: header, subText: subText, creatureScanID: creatureScanID, minRange: minRange, maxRange: maxRange);
-        }
-        /// <summary>
-        /// Adds a danger scan node to the provided gameObject and set its attributes to the provided ones
-        /// </summary>
-        /// <param name="objectToAddScanNode">GameObject we wish to add the scan node on</param>
-        /// <param name="header">Text displayed on the header of the scan node</param>
-        /// <param name="subText">Text displayed below the header of the scan node</param>
-        /// <param name="creatureScanID">Identifier of the bestiary entry to unlock when scanning this node</param>
-        /// <param name="minRange">Minimum range required to display this node</param>
-        /// <param name="maxRange">Maximum range allowed to display this node</param>
-        public static void AddDangerScanNode(GameObject objectToAddScanNode, string header = "LGU Scan Node", string subText = "Used for LGU stuff", int creatureScanID = -1, int minRange = 2, int maxRange = 7)
-        {
-            AddScanNode(objectToAddScanNode: objectToAddScanNode, nodeType: NodeType.DANGER, header: header, subText: subText, creatureScanID: creatureScanID, minRange: minRange, maxRange: maxRange);
-        }
-        /// <summary>
         /// Destroys the component associated with scan node
         /// </summary>
         /// <param name="objectToRemoveScanNode">GameObject we want to remove the scan node from</param>

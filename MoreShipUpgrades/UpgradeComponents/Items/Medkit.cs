@@ -129,12 +129,18 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         [ClientRpc]
         void UpdateMedkitUsesClientRpc()
         {
+            UpdateMedkitUsagesLocal();
+        }
+
+        void UpdateMedkitUsagesLocal()
+        {
             uses++;
             if (uses < maximumUses) return;
 
             itemUsedUp = true;
             if (playerHeldBy == UpgradeBus.Instance.GetLocalPlayer()) hudManager.DisplayTip("NO MORE USES!", "This medkit doesn't have anymore supplies!", true, false, "LC_Tip1");
         }
+
         public string GetDisplayInfo()
         {
             return $"MEDKIT - ${UpgradeBus.Instance.PluginConfiguration.MEDKIT_PRICE.Value}\n\n" +

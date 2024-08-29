@@ -3,7 +3,6 @@ using InteractiveTerminalAPI.UI.Application;
 using InteractiveTerminalAPI.UI.Cursor;
 using InteractiveTerminalAPI.UI.Page;
 using InteractiveTerminalAPI.UI.Screen;
-using LethalLib.Modules;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.UI.Cursor;
@@ -13,8 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Xml.Linq;
-using UnityEngine;
 
 namespace MoreShipUpgrades.Misc.UI.Application
 {
@@ -188,7 +185,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
         }
         void PurchaseUpgrade(CustomTerminalNode node, int price, Action backAction)
         {
-            LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits - price);
+            terminal.SyncGroupCreditsServerRpc(terminal.groupCredits - price, terminal.numberOfItemsInDropship);
             LguStore.Instance.AddUpgradeSpentCreditsServerRpc(price);
             if (!node.Unlocked)
             {

@@ -50,7 +50,6 @@ namespace MoreShipUpgrades.Managers
 
         Terminal terminal;
         PlayerControllerB playerController;
-        HangarShipDoor hangarShipDoors;
 
         void Awake()
         {
@@ -67,11 +66,6 @@ namespace MoreShipUpgrades.Managers
         {
             if (playerController == null) playerController = GameNetworkManager.Instance.localPlayerController;
             return playerController;
-        }
-        public HangarShipDoor GetShipDoors()
-        {
-            if (hangarShipDoors == null) hangarShipDoors = FindObjectOfType<HangarShipDoor>();
-            return hangarShipDoors;
         }
 
         public void ResetAllValues(bool wipeObjRefs = true)
@@ -112,7 +106,6 @@ namespace MoreShipUpgrades.Managers
 
             terminal = null;
             playerController = null;
-            hangarShipDoors = null;
         }
         private void ResetPlayerAttributes()
         {

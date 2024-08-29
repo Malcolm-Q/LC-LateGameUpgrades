@@ -366,7 +366,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string RUBBER_BOOTS_ENABLED_KEY = $"Enable {RubberBoots.UPGRADE_NAME} Upgrade";
         internal const bool RUBBER_BOOTS_ENABLED_DEFAULT = true;
-        internal const string RUBBER_BOOTS_ENABLED_DESCRIPTION = "Tier upgrade which reduces the consumption rate of oxygen while underwater.";
+        internal const string RUBBER_BOOTS_ENABLED_DESCRIPTION = "Tier upgrade which reduces the movement hinderance when walking on water surfaces.";
 
         internal const string RUBBER_BOOTS_PRICE_KEY = $"Price of {RubberBoots.UPGRADE_NAME} Upgrade";
         internal const int RUBBER_BOOTS_PRICE_DEFAULT = 50;
@@ -378,7 +378,6 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string RUBBER_BOOTS_INCREMENTAL_MOVEMENT_HINDERANCE_DECREASE_KEY = "Incremental Oxygen Consumption Decrease";
         internal const int RUBBER_BOOTS_INCREMENTAL_MOVEMENT_HINDERANCE_DECREASE_DEFAULT = 20;
         internal const string RUBBER_BOOTS_INCREMENTAL_MOVEMENT_HINDERANCE_DECREASE_DESCRIPTION = "Incremental percentage decrease of movement hinderance on water surfaces when purchasing further levels of the upgrade";
-
 
         #endregion
 
@@ -398,7 +397,6 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE_KEY = "Incremental Oxygen Consumption Decrease";
         internal const int OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE_DEFAULT = 20;
         internal const string OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE_DESCRIPTION = "Incremental percentage of oxygen consumption decrease when purchasing further levels of the upgrade";
-
 
         #endregion
 
@@ -488,7 +486,6 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string WEED_GENETIC_INCREMENTAL_EFFECTIVENESS_INCREASE_DESCRIPTION = "Amount of effectiveness (%) when purchasing further levels of the upgrade increased on the Weed Killer to eradicate plants";
 
         #endregion
-
 
         #region Clay Glasses
 

@@ -32,10 +32,15 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exterminator
         [ServerRpc(RequireOwnership = false)]
         void SpawnLootServerRpc(Vector3 pos)
         {
-            GameObject go = Instantiate(loot, pos + Vector3.up, Quaternion.identity);
+            SpawnLoot(pos);
+        }
+
+        void SpawnLoot(Vector3 position)
+        {
+            GameObject go = Instantiate(loot, position + Vector3.up, Quaternion.identity);
             go.GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.Instance.PluginConfiguration.CONTRACT_BUG_REWARD.Value + (int)(TimeOfDay.Instance.profitQuota * Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.CONTRACT_REWARD_QUOTA_MULTIPLIER.Value / 100f, 0f, 1f)));
             go.GetComponent<NetworkObject>().Spawn();
-            DisableNestClientRpc(new NetworkObjectReference(gameObject));
+            DisableNestClientRpc(NetworkObject);
         }
 
         [ClientRpc]
@@ -44,23 +49,21 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exterminator
             netRef.TryGet(out NetworkObject netObj);
             if (netObj != null)
             {
-                netObj.gameObject.SetActive(false);
+                netObj.Despawn();
             }
         }
 
         void CleanMess(PlayerControllerB player)
         {
+            Vector3 lootPosition = transform.position + Vector3.up;
 
             if (IsHost || IsServer)
             {
-                GameObject go = Instantiate(loot, transform.position + Vector3.up, Quaternion.identity);
-                go.GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.Instance.PluginConfiguration.CONTRACT_BUG_REWARD.Value + (int)(TimeOfDay.Instance.profitQuota * Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.CONTRACT_REWARD_QUOTA_MULTIPLIER.Value / 100f, 0f, 1f)));
-                go.GetComponent<NetworkObject>().Spawn();
-                DisableNestClientRpc(new NetworkObjectReference(gameObject));
+                SpawnLoot(lootPosition);
             }
             else
             {
-                SpawnLootServerRpc(transform.position + Vector3.up);
+                SpawnLootServerRpc(lootPosition);
             }
         }
 
