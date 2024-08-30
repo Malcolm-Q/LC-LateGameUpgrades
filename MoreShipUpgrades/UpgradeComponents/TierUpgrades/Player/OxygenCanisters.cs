@@ -28,7 +28,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.OXYGEN_CANISTERS_INITIAL_OXYGEN_CONSUMPTION_DECREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION.Value);
+            static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.OXYGEN_CANISTERS_INITIAL_OXYGEN_CONSUMPTION_DECREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE.Value);
             const string infoFormat = "LVL {0} - ${1} - Reduces oxygen consumption rate by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
