@@ -6,6 +6,7 @@
   - You will still be able to see the upgrades for their current level and related info, just not the option of purchasing it. 
 - Possibly fixed issue with Back Muscles when using Lethal Company Virtual Reality mod.
 - Possibly fixed issue with Mechanical Arms when using Lethal Company Virtual Reality mod.
+- Fixed issue with Oxygen Canister and Rubber Boots override name taking Reinforced Boot's, leading to confusion when chat prompt appears.
 - Code cleanup and refactoring.
 
 </details>

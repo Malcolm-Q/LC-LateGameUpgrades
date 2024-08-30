@@ -14,7 +14,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.REINFORCED_BOOTS_OVERRIDE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.RUBBER_BOOTS_OVERRIDE_NAME;
         }
         public static float CalculateDecreaseMultiplier()
         {
