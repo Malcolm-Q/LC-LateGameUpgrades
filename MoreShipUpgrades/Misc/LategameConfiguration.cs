@@ -34,6 +34,7 @@ namespace MoreShipUpgrades.Misc
     public class LategameConfiguration : SyncedConfig2<LategameConfiguration>
     {
         #region Enabled
+        [field: SyncedEntryField] public SyncedEntry<bool> LIFE_INSURANCE_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> RUBBER_BOOTS_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> OXYGEN_CANISTERS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SLEIGHT_OF_HAND_ENABLED {  get; set; }
@@ -108,6 +109,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Initial Prices
+        [field: SyncedEntryField] public SyncedEntry<int> LIFE_INSURANCE_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> RUBBER_BOOTS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> OXYGEN_CANISTERS_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SLEIGHT_OF_HAND_PRICE {  get; set; }
@@ -156,6 +158,10 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<string> LIFE_INSURANCE_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> LIFE_INSURANCE_OVERRIDE_NAME {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> LIFE_INSURANCE_INITIAL_COST_PERCENTAGE_DECREASE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> LIFE_INSURANCE_INCREMENTAL_COST_PERCENTAGE_DECREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> RUBBER_BOOTS_PRICES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> RUBBER_BOOTS_OVERRIDE_NAME {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> RUBBER_BOOTS_INITIAL_MOVEMENT_HINDERANCE_DECREASE {  get; set; }
@@ -442,6 +448,7 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<ItemProgressionManager.ChancePerScrapModes> SCRAP_UPGRADE_CHANCE_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_BLACKLISTED_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_APPARATICE_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> LIFE_INSURANCE_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> RUBBER_BOOTS_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> OXYGEN_CANISTERS_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> SLEIGHT_OF_HAND_ITEM_PROGRESSION_ITEMS {  get; set; }
@@ -538,6 +545,7 @@ namespace MoreShipUpgrades.Misc
 
             topSection = LguConstants.OVERRIDE_NAMES_SECTION;
             OVERRIDE_UPGRADE_NAMES              = cfg.BindSyncedEntry(topSection, LguConstants.OVERRIDE_NAMES_ENABLED_KEY, LguConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LguConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
+            LIFE_INSURANCE_OVERRIDE_NAME        = cfg.BindSyncedEntry(topSection, LguConstants.LIFE_INSURANCE_OVERRIDE_NAME_KEY, LifeInsurance.UPGRADE_NAME);
             RUBBER_BOOTS_OVERRIDE_NAME          = cfg.BindSyncedEntry(topSection, LguConstants.RUBBER_BOOTS_OVERRIDE_NAME_KEY, RubberBoots.UPGRADE_NAME);
             OXYGEN_CANISTERS_OVERRIDE_NAME      = cfg.BindSyncedEntry(topSection, LguConstants.OXYGEN_CANISTERS_OVERRIDE_NAME_KEY, OxygenCanisters.UPGRADE_NAME);
             SLEIGHT_OF_HAND_OVERRIDE_NAME       = cfg.BindSyncedEntry(topSection, LguConstants.SLEIGHT_OF_HAND_OVERRIDE_NAME_KEY, SleightOfHand.UPGRADE_NAME);
@@ -629,6 +637,18 @@ namespace MoreShipUpgrades.Misc
             #endregion
 
             #region Upgrades
+
+            #region Life Insurance
+
+            topSection = LifeInsurance.UPGRADE_NAME;
+            LIFE_INSURANCE_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.LIFE_INSURANCE_ENABLED_KEY, LguConstants.LIFE_INSURANCE_ENABLED_DEFAULT, LguConstants.LIFE_INSURANCE_ENABLED_DESCRIPTION);
+            LIFE_INSURANCE_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.LIFE_INSURANCE_PRICE_KEY, LguConstants.LIFE_INSURANCE_PRICE_DEFAULT);
+            LIFE_INSURANCE_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, LifeInsurance.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
+            LIFE_INSURANCE_INITIAL_COST_PERCENTAGE_DECREASE = cfg.BindSyncedEntry(topSection, LguConstants.LIFE_INSURANCE_INITIAL_COST_PERCENTAGE_DECREASE_KEY, LguConstants.LIFE_INSURANCE_INITIAL_COST_PERCENTAGE_DECREASE_DEFAULT, LguConstants.LIFE_INSURANCE_INITIAL_COST_PERCENTAGE_DECREASE_DESCRIPTION);
+            LIFE_INSURANCE_INCREMENTAL_COST_PERCENTAGE_DECREASE = cfg.BindSyncedEntry(topSection, LguConstants.LIFE_INSURANCE_INCREMENTAL_COST_PERCENTAGE_DECREASE_KEY, LguConstants.LIFE_INSURANCE_INCREMENTAL_COST_PERCENTAGE_DECREASE_DEFAULT, LguConstants.LIFE_INSURANCE_INCREMENTAL_COST_PERCENTAGE_DECREASE_DESCRIPTION);
+            LIFE_INSURANCE_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
 
             #region Rubber Boots
 

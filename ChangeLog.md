@@ -1,6 +1,7 @@
 <details>
 <summary> 3.10.1 - 2024-08-29 </summary>
 
+- Implemented "Life Insurance" tier upgrade which reduces the credit loss when leaving a body behind.
 - Possibly fixed issue with Back Muscles when using Lethal Company Virtual Reality mod.
 - Possibly fixed issue with Mechanical Arms when using Lethal Company Virtual Reality mod.
 

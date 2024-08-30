@@ -191,6 +191,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string LIFE_INSURANCE_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, LifeInsurance.UPGRADE_NAME);
         internal static readonly string RUBBER_BOOTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, RubberBoots.UPGRADE_NAME);
         internal static readonly string OXYGEN_CANISTERS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, OxygenCanisters.UPGRADE_NAME);
         internal static readonly string SLEIGHT_OF_HAND_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, SleightOfHand.UPGRADE_NAME);
@@ -361,6 +362,25 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Life Insurance
+
+        internal const string LIFE_INSURANCE_ENABLED_KEY = $"Enable {LifeInsurance.UPGRADE_NAME} Upgrade";
+        internal const bool LIFE_INSURANCE_ENABLED_DEFAULT = true;
+        internal const string LIFE_INSURANCE_ENABLED_DESCRIPTION = "Tier upgrade which reduces the credit loss from leaving a body behind when exiting a moon.";
+
+        internal const string LIFE_INSURANCE_PRICE_KEY = $"Price of {LifeInsurance.UPGRADE_NAME} Upgrade";
+        internal const int LIFE_INSURANCE_PRICE_DEFAULT = 200;
+
+        internal const string LIFE_INSURANCE_INITIAL_COST_PERCENTAGE_DECREASE_KEY = "Initial Credit Loss Decrease";
+        internal const int LIFE_INSURANCE_INITIAL_COST_PERCENTAGE_DECREASE_DEFAULT = 20;
+        internal const string LIFE_INSURANCE_INITIAL_COST_PERCENTAGE_DECREASE_DESCRIPTION = "Initial percentage decrease of the credit loss when first purchasing the upgrade";
+
+        internal const string LIFE_INSURANCE_INCREMENTAL_COST_PERCENTAGE_DECREASE_KEY = "Incremental Credit Loss Decrease";
+        internal const int LIFE_INSURANCE_INCREMENTAL_COST_PERCENTAGE_DECREASE_DEFAULT = 20;
+        internal const string LIFE_INSURANCE_INCREMENTAL_COST_PERCENTAGE_DECREASE_DESCRIPTION = "Incremental percentage decrease of the credit loss when purchasing further levels of the upgrade";
+
+        #endregion
 
         #region Rubber Boots
 
