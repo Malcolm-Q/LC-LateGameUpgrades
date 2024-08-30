@@ -288,6 +288,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             MethodInfo additionalJumpForce = typeof(StrongLegs).GetMethod(nameof(StrongLegs.GetAdditionalJumpForce));
             MethodInfo additionalTractionForce = typeof(TractionBoots).GetMethod(nameof(TractionBoots.GetAdditionalTractionForce));
             MethodInfo uphillSlopeMultiplier = typeof(HikingBoots).GetMethod(nameof(HikingBoots.ReduceUphillSlopeDebuff));
+            MethodInfo ReduceCrouchMovementSpeedDebuff = typeof(CarbonKneejoints).GetMethod(nameof(CarbonKneejoints.ReduceCrouchMovementSpeedDebuff));
 
             FieldInfo carryWeight = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.carryWeight));
             FieldInfo movementSpeed = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.movementSpeed));
@@ -301,6 +302,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             Tools.FindField(ref index, ref codes, findField: movementSpeed, addCode: additionalMovement, errorMessage: "Couldn't find first occurence of movement speed field");
             Tools.FindField(ref index, ref codes, findField: movementSpeed, addCode: additionalMovement, errorMessage: "Couldn't find second occurence of movement speed field");
             Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: reduceCarryLoss, errorMessage: "Couldn't find first carryWeight occurence");
+            Tools.FindFloat(ref index, ref codes, findValue: 1.5f, addCode: ReduceCrouchMovementSpeedDebuff, errorMessage: "Couldn't find the movement speed loss value while crouching");
             Tools.FindField(ref index, ref codes, findField: slopeIntensity, skip: true, errorMessage: "Couldn't find skip slope Intensity");
             Tools.FindField(ref index, ref codes, findField: slopeModifier, addCode: uphillSlopeMultiplier, errorMessage: "Couldn't find occurence of slopeModifier");
             Tools.FindFloat(ref index, ref codes, findValue: 5f, addCode: additionalTractionForce, errorMessage: "Couldn't find the numerator used when sprinting");

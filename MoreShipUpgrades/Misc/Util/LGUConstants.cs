@@ -195,6 +195,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string CARBON_KNEEJOINTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, CarbonKneejoints.UPGRADE_NAME);
         internal static readonly string LIFE_INSURANCE_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, LifeInsurance.UPGRADE_NAME);
         internal static readonly string RUBBER_BOOTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, RubberBoots.UPGRADE_NAME);
         internal static readonly string OXYGEN_CANISTERS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, OxygenCanisters.UPGRADE_NAME);
@@ -366,6 +367,25 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Carbon Kneejoints
+
+        internal const string CARBON_KNEEJOINTS_ENABLED_KEY = $"Enable {CarbonKneejoints.UPGRADE_NAME} Upgrade";
+        internal const bool CARBON_KNEEJOINTS_ENABLED_DEFAULT = true;
+        internal const string CARBON_KNEEJOINTS_ENABLED_DESCRIPTION = "Tier upgrade which reduces the movement speed loss due to crouching.";
+
+        internal const string CARBON_KNEEJOINTS_PRICE_KEY = $"Price of {CarbonKneejoints.UPGRADE_NAME} Upgrade";
+        internal const int CARBON_KNEEJOINTS_PRICE_DEFAULT = 100;
+
+        internal const string CARBON_KNEEJOINTS_INITIAL_CROUCH_DEBUFF_DECREASE_KEY = "Initial Crouch Movement Speed Debuff Decrease";
+        internal const int CARBON_KNEEJOINTS_INITIAL_CROUCH_DEBUFF_DECREASE_DEFAULT = 20;
+        internal const string CARBON_KNEEJOINTS_INITIAL_CROUCH_DEBUFF_DECREASE_DESCRIPTION = "Initial percentage decrease of the movement speed loss while crouching when first purchasing the upgrade";
+
+        internal const string CARBON_KNEEJOINTS_INCREMENTAL_CROUCH_DEBUFF_DECREASE_KEY = "Incremental Crouch Movement Speed Debuff Decrease";
+        internal const int CARBON_KNEEJOINTS_INCREMENTAL_CROUCH_DEBUFF_DECREASE_DEFAULT = 20;
+        internal const string CARBON_KNEEJOINTS_INCREMENTAL_CROUCH_DEBUFF_DECREASE_DESCRIPTION = "Incremental percentage decrease of the movement speed loss while crouching when purchasing further levels of the upgrade";
+
+        #endregion
 
         #region Life Insurance
 
