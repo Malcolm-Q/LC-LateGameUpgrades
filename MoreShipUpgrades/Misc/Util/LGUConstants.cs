@@ -144,6 +144,10 @@ namespace MoreShipUpgrades.Misc.Util
                                                                             "The item name is either the one displayed in the scan node or its internal name.\n" +
                                                                             "This list is only valid if Item Progression Mode is set to Apparatice.";
 
+        internal const string ITEM_PROGRESSION_NO_PURCHASE_UPGRADES_KEY = "Non-Purchaseable Upgrades";
+        internal const bool ITEM_PROGRESSION_NO_PURCHASE_UPGRADES_DEFAULT = false;
+        internal const string ITEM_PROGRESSION_NO_PURCHASE_UPGRADES_DESCRIPTION = "Prevents the upgrades from being purchaseable in the store to be only used to know how far are they to acquiring one. Only valid if Item Progression mode is toggled on";
+
         internal const string ITEM_PROGRESSION_APPARATICE_ITEMS_ENTRY_DELIMITER = ",";
         internal const string ITEM_PROGRESSION_APPARATICE_ITEMS_ATTRIBUTE_DELIMITER = "@";
 

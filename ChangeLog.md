@@ -2,8 +2,11 @@
 <summary> 3.10.1 - 2024-08-29 </summary>
 
 - Implemented "Life Insurance" tier upgrade which reduces the credit loss when leaving a body behind.
+- Added configuration entry to make upgrades not purchaseable when using Item Progression Mode.
+  - You will still be able to see the upgrades for their current level and related info, just not the option of purchasing it. 
 - Possibly fixed issue with Back Muscles when using Lethal Company Virtual Reality mod.
 - Possibly fixed issue with Mechanical Arms when using Lethal Company Virtual Reality mod.
+- Code cleanup and refactoring.
 
 </details>
 

@@ -146,6 +146,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
         }
         static bool CanBuyUpgrade(CustomTerminalNode node)
         {
+            if (UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_ITEM_PROGRESSION && UpgradeBus.Instance.PluginConfiguration.ITEM_PROGRESSION_NO_PURCHASE_UPGRADES) return true;
             bool maxLevel = node.CurrentUpgrade >= node.MaxUpgrade;
             if (maxLevel && node.Unlocked)
                 return false;
@@ -180,6 +181,11 @@ namespace MoreShipUpgrades.Misc.UI.Application
                     discoveredItems.Append(item);
                     if (i < items.Count - 1) discoveredItems.Append(", ");
                 }
+            }
+            if (UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_ITEM_PROGRESSION && UpgradeBus.Instance.PluginConfiguration.ITEM_PROGRESSION_NO_PURCHASE_UPGRADES)
+            {
+                ErrorMessage(node.Name, node.Description, backAction, " ");
+                return;
             }
             Confirm(node.Name, node.Description + discoveredItems, () => PurchaseUpgrade(node, price, backAction), backAction, string.Format(LguConstants.PURCHASE_UPGRADE_FORMAT, price));
         }
