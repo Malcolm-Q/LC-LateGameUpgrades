@@ -222,6 +222,12 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
     * If the percentage decrease reaches or exceeds 100%, you will not be slowed down when walking through it.
     * This reduces how much movement hindurance you get from walking on water surfaces, not how much you're hindered by which is always by half multiplied by outside hinder multipliers such as this one and cobwebs.
     
+* __Life Insurance - $200__
+    * Decreases the credit loss due to player deaths.
+
+* __Carbon Kneejoints - $100__
+    * Decreases the movement speed loss when crouching.
+    * At 100%, crouching speed will be the same as walking.
 
 ## Item Progression Mode
 
