@@ -290,11 +290,6 @@ namespace MoreShipUpgrades.Managers
             }
             switch (CurrentChancePerScrapMode)
             {
-                case ChancePerScrapModes.Random:
-                    {
-                        if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.5) selectedNode = possibleNode;
-                        break;
-                    }
                 case ChancePerScrapModes.LowestLevel:
                     {
                         if (selectedNode.Unlocked &&
@@ -312,11 +307,24 @@ namespace MoreShipUpgrades.Managers
                         if (nodePrice > randomNodePrice) selectedNode = possibleNode;
                         break;
                     }
+                default: selectedNode = possibleNode; break;
             }
         }
         public static CustomTerminalNode SelectChancePerScrapUpgrade()
         {
             CustomTerminalNode node = null;
+            if (CurrentChancePerScrapMode == ChancePerScrapModes.Random)
+            {
+                int tries = 0;
+                node = PickRandomUpgrade();
+                while (node.MaxUpgrade <= node.CurrentUpgrade && tries < UpgradeBus.Instance.terminalNodes.Count*2)
+                {
+                    node = PickRandomUpgrade();
+                    tries++;
+                }
+                return node;
+            }
+
             foreach (CustomTerminalNode randomNode in UpgradeBus.Instance.terminalNodes)
             {
                 SelectTerminalNode(ref node, randomNode);

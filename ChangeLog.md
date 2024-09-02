@@ -5,10 +5,12 @@
 - Implemented "Carbon Kneejoints" tier upgrade which reduces the movement speed loss while crouching.
 - Added configuration entry to make upgrades not purchaseable when using Item Progression Mode.
   - You will still be able to see the upgrades for their current level and related info, just not the option of purchasing it. 
+- Changed logic of ChancePerScrap mode on Random to be index logic rather than loop logic which was leading to always picking the last upgrades more often than it should.
 - Possibly fixed issue with Back Muscles when using Lethal Company Virtual Reality mod.
 - Possibly fixed issue with Mechanical Arms when using Lethal Company Virtual Reality mod.
 - Fixed issue with Oxygen Canister and Rubber Boots override name taking Reinforced Boot's, leading to confusion when chat prompt appears.
 - Fixed issue with Oxygen Canister using Reinforced Boot's incremental value in its information description.
+- Fixed issue with sounds with a couple items.
 - Code cleanup and refactoring.
 
 </details>
