@@ -276,9 +276,10 @@ namespace MoreShipUpgrades.Managers
 
         public static void AddScrapToUpgrade(string upgradeName, string scrapName)
         {
-            if (!UpgradeBus.Instance.scrapToCollectionUpgrade.ContainsKey(scrapName))
-                UpgradeBus.Instance.scrapToCollectionUpgrade[scrapName] = [];
-            UpgradeBus.Instance.scrapToCollectionUpgrade[scrapName].Add(upgradeName);
+            string key = scrapName.ToLower().Trim();
+            if (!UpgradeBus.Instance.scrapToCollectionUpgrade.ContainsKey(key))
+                UpgradeBus.Instance.scrapToCollectionUpgrade[key] = [];
+            UpgradeBus.Instance.scrapToCollectionUpgrade[key].Add(upgradeName);
         }
 
         static void SelectTerminalNode(ref CustomTerminalNode selectedNode, CustomTerminalNode possibleNode)

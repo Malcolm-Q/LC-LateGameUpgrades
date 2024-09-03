@@ -1,4 +1,12 @@
 <details>
+<summary> 3.10.2 - 2024-08-29 </summary>
+
+- Possibly fixed issue with Landing Thrusters only applying on host.
+- Fixed issue with item names being case-sensitive in the config related to Item Progression.
+
+
+</details>
+<details>
 <summary> 3.10.1 - 2024-08-29 </summary>
 
 - Implemented "Life Insurance" tier upgrade which reduces the credit loss when leaving a body behind.
