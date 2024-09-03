@@ -5,6 +5,7 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -67,6 +68,17 @@ namespace MoreShipUpgrades.Patches.HUD
             int index = 0;
             Tools.FindFloat(ref index, ref codes, findValue: 0.5f, addCode: multiplierSignalTimer, errorMessage: "Couldn't find the 0.5f value which is used in enumerator wait timer");
             Tools.FindFloat(ref index, ref codes, findValue: 0.7f, addCode: multiplierSignalTimer, errorMessage: "Couldn't find the 0.5f value which is used in enumerator wait timer");
+            return codes;
+        }
+
+        [HarmonyTranspiler]
+        [HarmonyPatch(nameof(HUDManager.ApplyPenalty))]
+        static IEnumerable<CodeInstruction> ApplyPenaltyTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo ReduceCreditCostPercentage = typeof(LifeInsurance).GetMethod(nameof(LifeInsurance.ReduceCreditCostPercentage));
+            List<CodeInstruction> codes = new(instructions);
+            int index = 0;
+            Tools.FindFloat(ref index, ref codes, findValue: 0.2f, addCode: ReduceCreditCostPercentage, errorMessage: "Couldn't find the multiplier used to decrease the amount of Company Credits");
             return codes;
         }
     }

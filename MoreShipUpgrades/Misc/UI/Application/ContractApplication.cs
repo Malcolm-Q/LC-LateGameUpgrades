@@ -33,21 +33,21 @@ namespace MoreShipUpgrades.Misc.UI.Application
                     name: MAIN_MENU_CURSOR_ELEMENTS[0],
                     description: "",
                     action: ShowContractInformation,
-                    active: (x) => true,
+                    active: (_) => true,
                     selectInactive: false
                 );
             cursorElements[1] = CursorElement.Create(
                     name: MAIN_MENU_CURSOR_ELEMENTS[1],
                     description: "",
                     action: PickContract,
-                    active: (x) => ContractManager.Instance.contractType == "None",
+                    active: (_) => ContractManager.Instance.contractType == "None",
                     selectInactive: true
                 ); 
             cursorElements[2] = CursorElement.Create(
                     name: MAIN_MENU_CURSOR_ELEMENTS[2],
                     description: "",
                     action: ShowCurrentContract,
-                    active: (x) => ContractManager.Instance.contractType != "None",
+                    active: (_) => ContractManager.Instance.contractType != "None",
                     selectInactive: true
                 );
             menu = CursorMenu.Create(startingCursorIndex: 0, elements: cursorElements);
@@ -79,7 +79,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
                     name: CommandParser.contracts[counter],
                     description: string.Empty,
                     action: () => ShowContractInformation(CommandParser.contracts[counter], CommandParser.contractInfos[counter]),
-                    active: (x) => true,
+                    active: (_) => true,
                     selectInactive: false
                     );
             }
@@ -87,7 +87,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
                     name: "Back",
                     description: string.Empty,
                     action: () => SwitchScreen(previousScreen, previousCursorMenu, true),
-                    active: (x) => true,
+                    active: (_) => true,
                     selectInactive: true
                     );
             menu = CursorMenu.Create(startingCursorIndex: 0, elements: cursorElements);
@@ -114,7 +114,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
                         name: "Back",
                         description: string.Empty,
                         action: () => SwitchScreen(previousScreen, previousCursorMenu, true),
-                        active: (x) => true,
+                        active: (_) => true,
                         selectInactive: true
                         ),
             ];
@@ -148,21 +148,21 @@ namespace MoreShipUpgrades.Misc.UI.Application
                         name: RANDOM_MOON_CURSOR_ELEMENT,
                         description: string.Empty,
                         action: ConfirmRandomMoonContract,
-                        active: (x) => terminal.groupCredits >= UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE,
+                        active: (_) => terminal.groupCredits >= UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE,
                         selectInactive: true
                         ),
                 CursorElement.Create(
                         name: SPECIFIED_MOON_CURSOR_ELEMENT,
                         description: string.Empty,
                         action: PickSpecifiedMoonContract,
-                        active: (x) => terminal.groupCredits >= UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE,
+                        active: (_) => terminal.groupCredits >= UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE,
                         selectInactive: true
                         ),
                 CursorElement.Create(
                         name: "Back",
                         description: string.Empty,
                         action: () => SwitchScreen(previousScreen, previousCursorMenu, true),
-                        active: (x) => true,
+                        active: (_) => true,
                         selectInactive: true
                         ),
             ];
@@ -201,7 +201,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
                     name: levels[counter].PlanetName,
                     description: string.Empty,
                     action: () => ConfirmSpecifiedMoonContract(levels[counter]),
-                    active: (x) => true,
+                    active: (_) => true,
                     selectInactive: false
                     );
             }
@@ -209,7 +209,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
                     name: "Back",
                     description: string.Empty,
                     action: () => SwitchScreen(previousScreen, previousCursorMenu, true),
-                    active: (x) => true,
+                    active: (_) => true,
                     selectInactive: true
                     );
             menu = CursorMenu.Create(startingCursorIndex: 0, elements: cursorElements);
@@ -232,7 +232,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
 
         void PurchaseSpecifiedMoonContract(SelectableLevel level, Action backAction)
         {
-            LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits - UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value);
+            terminal.SyncGroupCreditsServerRpc(terminal.groupCredits - UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value, terminal.numberOfItemsInDropship);
             int i = UnityEngine.Random.Range(0, CommandParser.contracts.Count);
             if (CommandParser.contracts.Count > 1)
             {
@@ -263,7 +263,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
 
         void PurchaseRandomMoonContract(Action backAction)
         {
-            LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits - UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value);
+            terminal.SyncGroupCreditsServerRpc(terminal.groupCredits - UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value, terminal.numberOfItemsInDropship);
             int i = UnityEngine.Random.Range(0, CommandParser.contracts.Count);
             if (CommandParser.contracts.Count > 1)
             {
@@ -297,14 +297,14 @@ namespace MoreShipUpgrades.Misc.UI.Application
                         name: "Cancel Current Contract",
                         description: string.Empty,
                         action: ConfirmCancelContract,
-                        active: (x) => true,
+                        active: (_) => true,
                         selectInactive: true
                         ),
                 CursorElement.Create(
                         name: "Back",
                         description: string.Empty,
                         action: () => SwitchScreen(previousScreen, previousCursorMenu, true),
-                        active: (x) => true,
+                        active: (_) => true,
                         selectInactive: true
                         ),
             ];
@@ -323,7 +323,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
         {
             IScreen previousScreen = currentScreen;
             CursorMenu previousCursorMenu = currentCursorMenu;
-            Confirm(MAIN_MENU_TITLE, $"Do you wish to cancel the current contract?", () => CancelContract(() => SwitchScreen(mainScreen, mainCursorMenu, true)), () => SwitchScreen(previousScreen, previousCursorMenu, true));
+            Confirm(MAIN_MENU_TITLE, "Do you wish to cancel the current contract?", () => CancelContract(() => SwitchScreen(mainScreen, mainCursorMenu, true)), () => SwitchScreen(previousScreen, previousCursorMenu, true));
         }
 
         void CancelContract(Action backAction)

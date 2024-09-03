@@ -13,25 +13,25 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
     {
         static LguLogger logger = new LguLogger(nameof(BombDefusalScript));
         AudioSource audio;
-        Dictionary<string, GameObject> wires = new Dictionary<string, GameObject>
+        readonly Dictionary<string, GameObject> wires = new Dictionary<string, GameObject>
         {
             {"red",null },
             {"green",null },
             {"blue",null }
         };
-        Dictionary<string, GameObject> cutWires = new Dictionary<string, GameObject>
+        readonly Dictionary<string, GameObject> cutWires = new Dictionary<string, GameObject>
         {
             {"red",null },
             {"green",null },
             {"blue",null }
         };
-        Dictionary<string, InteractTrigger[]> trigs = new Dictionary<string, InteractTrigger[]>
+        readonly Dictionary<string, InteractTrigger[]> trigs = new Dictionary<string, InteractTrigger[]>
         {
             {"red",null },
             {"green",null },
             {"blue",null }
         };
-        public AudioClip tick, snip;
+        internal AudioClip tick, snip;
 
         BoxCollider grabBox;
 

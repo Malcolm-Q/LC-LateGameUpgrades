@@ -39,12 +39,10 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exorcism
         PlaceableObjectsSurface place;
         LguLogger logger = new LguLogger(nameof(PentagramScript));
 
-        string DemonName;
-
         /// <summary>
         /// Dictionary used to store correct ritual items for each ghost entry
         /// </summary>
-        public static Dictionary<string, string[]> DemonInstructions = new Dictionary<string, string[]>
+        public static readonly Dictionary<string, string[]> DemonInstructions = new Dictionary<string, string[]>
         {   // I just stole these from phasmaphobia idk anything about ghosts
             { "POLTERGEIST", new string[] {"Heart","Bones","Crucifix"} },
             { "PHANTOM", new string[] { "Heart","Bones","Candelabra" } },
@@ -61,7 +59,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exorcism
         /// <summary>
         /// The ghost selected and its respective ritual items to suceed at the ritual
         /// </summary>
-        public List<string> currentRitual = new List<string>();
+        List<string> currentRitual = new List<string>();
 
         /// <summary>
         /// Sounds used in the pentagram
@@ -93,7 +91,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exorcism
         void SyncAltarClientRpc(int index)
         {
             currentRitual = DemonInstructions[DemonInstructions.Keys.ElementAt(index)].ToList();
-            DemonName = DemonInstructions.Keys.ElementAt(index);
+            string DemonName = DemonInstructions.Keys.ElementAt(index);
             if (trig == null) trig = GetComponent<InteractTrigger>();
             trig.disabledHoverTip = $"{DemonName} ALTAR";
         }

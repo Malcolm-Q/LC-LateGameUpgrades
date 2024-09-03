@@ -115,24 +115,6 @@ namespace MoreShipUpgrades.Managers
             LguStore.Instance.UpdateLGUSaveServerRpc(LguStore.Instance.playerID, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(LguStore.Instance.SaveInfo)), true);
         }
         /// <summary>
-        /// Searches through the available moons whose name contains a substring that matches the provided string
-        /// </summary>
-        /// <param name="moon">Name of a supposed moon</param>
-        /// <returns>Full name of the moon if found any occurences, otherwise the name of the last contract moon</returns>
-        internal static string GetSpecifiedLevel(string moon)
-        {
-            string lvl = Instance.contractLevel;
-            SelectableLevel[] availableLevels = StartOfRound.Instance.levels;
-            for (int i = 0; i < availableLevels.Length; i++)
-            {
-                logger.LogDebug(availableLevels[i].PlanetName.ToLower());
-                if (!availableLevels[i].PlanetName.ToLower().Contains(moon)) continue;
-                lvl = availableLevels[i].PlanetName;
-                break;
-            }
-            return lvl;
-        }
-        /// <summary>
         /// Searches through the available moons and picks an element out of the list that satisfies the criteria
         /// </summary>
         /// <returns>A moon that satifies the criteria, otherwise the name of the last contract moon</returns>

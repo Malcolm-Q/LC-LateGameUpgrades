@@ -206,7 +206,6 @@ namespace MoreShipUpgrades.Misc.Util
                 list[n] = value;
             }
         }
-
         public static bool SpawnMob(string mob, Vector3 position, int numToSpawn) // this could be moved to tools
         {
             for (int i = 0; i < RoundManager.Instance.currentLevel.Enemies.Count; i++)
@@ -242,62 +241,6 @@ namespace MoreShipUpgrades.Misc.Util
             if (hex == null || !ColorUtility.TryParseHtmlString("#" + hex.Trim('#', ' '), out Color color))
                 return defaultValue;
             return color;
-        }
-
-        internal static string WrapText(string text, int availableLength, string leftPadding = "", string rightPadding = "", bool padLeftFirst = true)
-        {
-            int actualLength = availableLength - leftPadding.Length - rightPadding.Length;
-            string result = "";
-            string currentLine = "";
-            int currentLinePosition = 0; // due to use of HTML tags
-            int possibleWrap = -1;
-            bool first = true;
-            bool HTMLTag = false;
-            for (int characterIndex = 0; characterIndex < text.Length; characterIndex++)
-            {
-                char character = text[characterIndex];
-                if (character == '<')
-                    HTMLTag = true;
-                if (character == ' ' && !HTMLTag)
-                {
-                    possibleWrap = currentLine.Length;
-                }
-                if (character != '\n')
-                {
-                    currentLine += character;
-                    if (!HTMLTag) currentLinePosition++;
-                }
-                if (character == '>' && HTMLTag) HTMLTag = false;
-                if (currentLinePosition >= actualLength || character == '\n')
-                {
-                    if (character != '\n' && character != ' ')
-                    {
-                        if (possibleWrap != -1)
-                        {
-                            string newText = (padLeftFirst || !first ? leftPadding : "") + currentLine.Substring(0, possibleWrap) + new string(' ', Mathf.Max(0, actualLength - possibleWrap)) + rightPadding;
-                            result += newText + '\n';
-                            currentLine = currentLine.Substring(possibleWrap + 1);
-                        }
-                        else
-                        {
-                            string newText = (padLeftFirst || !first ? leftPadding : "") + currentLine + rightPadding;
-                            result += newText + "\n";
-                            currentLine = "";
-                        }
-                    }
-                    else
-                    {
-                        if (currentLine != "") result += (padLeftFirst || !first ? leftPadding : "") + currentLine + new string(' ', Mathf.Max(0, actualLength - currentLinePosition)) + rightPadding + '\n';
-                        currentLine = "";
-                    }
-                    possibleWrap = -1;
-                    first = false;
-                    currentLinePosition = currentLine.Length;
-                }
-
-            }
-            if (currentLine != "") result += (padLeftFirst || !first ? leftPadding : "") + currentLine + new string(' ', Mathf.Max(0, actualLength - currentLinePosition)) + rightPadding + '\n';
-            return result;
         }
         internal static void SpawnExplosion(Vector3 explosionPosition, bool spawnExplosionEffect = false, float killRange = 1f, float damageRange = 1f, int nonLethalDamage = 50, float physicsForce = 0f, GameObject overridePrefab = null, bool goThroughCar = false)
         {

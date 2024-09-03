@@ -95,13 +95,13 @@ namespace MoreShipUpgrades.Misc
                 return DisplayTerminalMessage(LguConstants.LGU_SAVE_NOT_FOUND);
             }
         }
-        private static TerminalNode ExecuteForceCredits(string creditAmount, ref Terminal __instance)
+        private static TerminalNode ExecuteForceCredits(string creditAmount, ref Terminal terminal)
         {
             if (int.TryParse(creditAmount, out int value))
             {
-                if (__instance.IsHost || __instance.IsServer)
+                if (terminal.IsHost || terminal.IsServer)
                 {
-                    LguStore.Instance.SyncCreditsClientRpc(value);
+                    terminal.SyncGroupCreditsClientRpc(value, terminal.numberOfItemsInDropship);
                     return DisplayTerminalMessage(string.Format(LguConstants.FORCE_CREDITS_SUCCESS_FORMAT, value));
                 }
                 else
@@ -120,8 +120,7 @@ namespace MoreShipUpgrades.Misc
 
             PlayerControllerB player = StartOfRound.Instance.mapScreen.targetedPlayer;
             if (!player.isPlayerDead) return DisplayTerminalMessage(string.Format(LguConstants.INTERNS_PLAYER_ALREADY_ALIVE_FORMAT, player.playerUsername));
-            terminal.groupCredits -= UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value;
-            LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits);
+            terminal.SyncGroupCreditsServerRpc(terminal.groupCredits - UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value, terminal.numberOfItemsInDropship);
             Interns.instance.ReviveTargetedPlayerServerRpc();
             string name = Interns.instance.internNames[UnityEngine.Random.Range(0, Interns.instance.internNames.Length)];
             string interest = Interns.instance.internInterests[UnityEngine.Random.Range(0, Interns.instance.internInterests.Length)];
@@ -403,7 +402,7 @@ namespace MoreShipUpgrades.Misc
                 txt = $"Contracts costs ${UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value} and you have ${terminal.groupCredits}\n\n";
                 return DisplayTerminalMessage(txt);
             }
-            LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits - UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value);
+            terminal.SyncGroupCreditsServerRpc(terminal.groupCredits - UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value, terminal.numberOfItemsInDropship);
             int i = Random.Range(0, contracts.Count);
             if (contracts.Count > 1)
             {

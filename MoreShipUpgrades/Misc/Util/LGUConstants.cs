@@ -144,6 +144,10 @@ namespace MoreShipUpgrades.Misc.Util
                                                                             "The item name is either the one displayed in the scan node or its internal name.\n" +
                                                                             "This list is only valid if Item Progression Mode is set to Apparatice.";
 
+        internal const string ITEM_PROGRESSION_NO_PURCHASE_UPGRADES_KEY = "Non-Purchaseable Upgrades";
+        internal const bool ITEM_PROGRESSION_NO_PURCHASE_UPGRADES_DEFAULT = false;
+        internal const string ITEM_PROGRESSION_NO_PURCHASE_UPGRADES_DESCRIPTION = "Prevents the upgrades from being purchaseable in the store to be only used to know how far are they to acquiring one. Only valid if Item Progression mode is toggled on";
+
         internal const string ITEM_PROGRESSION_APPARATICE_ITEMS_ENTRY_DELIMITER = ",";
         internal const string ITEM_PROGRESSION_APPARATICE_ITEMS_ATTRIBUTE_DELIMITER = "@";
 
@@ -191,6 +195,8 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string CARBON_KNEEJOINTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, CarbonKneejoints.UPGRADE_NAME);
+        internal static readonly string LIFE_INSURANCE_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, LifeInsurance.UPGRADE_NAME);
         internal static readonly string RUBBER_BOOTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, RubberBoots.UPGRADE_NAME);
         internal static readonly string OXYGEN_CANISTERS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, OxygenCanisters.UPGRADE_NAME);
         internal static readonly string SLEIGHT_OF_HAND_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, SleightOfHand.UPGRADE_NAME);
@@ -362,11 +368,49 @@ namespace MoreShipUpgrades.Misc.Util
 
         #region Upgrades
 
+        #region Carbon Kneejoints
+
+        internal const string CARBON_KNEEJOINTS_ENABLED_KEY = $"Enable {CarbonKneejoints.UPGRADE_NAME} Upgrade";
+        internal const bool CARBON_KNEEJOINTS_ENABLED_DEFAULT = true;
+        internal const string CARBON_KNEEJOINTS_ENABLED_DESCRIPTION = "Tier upgrade which reduces the movement speed loss due to crouching.";
+
+        internal const string CARBON_KNEEJOINTS_PRICE_KEY = $"Price of {CarbonKneejoints.UPGRADE_NAME} Upgrade";
+        internal const int CARBON_KNEEJOINTS_PRICE_DEFAULT = 100;
+
+        internal const string CARBON_KNEEJOINTS_INITIAL_CROUCH_DEBUFF_DECREASE_KEY = "Initial Crouch Movement Speed Debuff Decrease";
+        internal const int CARBON_KNEEJOINTS_INITIAL_CROUCH_DEBUFF_DECREASE_DEFAULT = 20;
+        internal const string CARBON_KNEEJOINTS_INITIAL_CROUCH_DEBUFF_DECREASE_DESCRIPTION = "Initial percentage decrease of the movement speed loss while crouching when first purchasing the upgrade";
+
+        internal const string CARBON_KNEEJOINTS_INCREMENTAL_CROUCH_DEBUFF_DECREASE_KEY = "Incremental Crouch Movement Speed Debuff Decrease";
+        internal const int CARBON_KNEEJOINTS_INCREMENTAL_CROUCH_DEBUFF_DECREASE_DEFAULT = 20;
+        internal const string CARBON_KNEEJOINTS_INCREMENTAL_CROUCH_DEBUFF_DECREASE_DESCRIPTION = "Incremental percentage decrease of the movement speed loss while crouching when purchasing further levels of the upgrade";
+
+        #endregion
+
+        #region Life Insurance
+
+        internal const string LIFE_INSURANCE_ENABLED_KEY = $"Enable {LifeInsurance.UPGRADE_NAME} Upgrade";
+        internal const bool LIFE_INSURANCE_ENABLED_DEFAULT = true;
+        internal const string LIFE_INSURANCE_ENABLED_DESCRIPTION = "Tier upgrade which reduces the credit loss from leaving a body behind when exiting a moon.";
+
+        internal const string LIFE_INSURANCE_PRICE_KEY = $"Price of {LifeInsurance.UPGRADE_NAME} Upgrade";
+        internal const int LIFE_INSURANCE_PRICE_DEFAULT = 200;
+
+        internal const string LIFE_INSURANCE_INITIAL_COST_PERCENTAGE_DECREASE_KEY = "Initial Credit Loss Decrease";
+        internal const int LIFE_INSURANCE_INITIAL_COST_PERCENTAGE_DECREASE_DEFAULT = 20;
+        internal const string LIFE_INSURANCE_INITIAL_COST_PERCENTAGE_DECREASE_DESCRIPTION = "Initial percentage decrease of the credit loss when first purchasing the upgrade";
+
+        internal const string LIFE_INSURANCE_INCREMENTAL_COST_PERCENTAGE_DECREASE_KEY = "Incremental Credit Loss Decrease";
+        internal const int LIFE_INSURANCE_INCREMENTAL_COST_PERCENTAGE_DECREASE_DEFAULT = 20;
+        internal const string LIFE_INSURANCE_INCREMENTAL_COST_PERCENTAGE_DECREASE_DESCRIPTION = "Incremental percentage decrease of the credit loss when purchasing further levels of the upgrade";
+
+        #endregion
+
         #region Rubber Boots
 
         internal const string RUBBER_BOOTS_ENABLED_KEY = $"Enable {RubberBoots.UPGRADE_NAME} Upgrade";
         internal const bool RUBBER_BOOTS_ENABLED_DEFAULT = true;
-        internal const string RUBBER_BOOTS_ENABLED_DESCRIPTION = "Tier upgrade which reduces the consumption rate of oxygen while underwater.";
+        internal const string RUBBER_BOOTS_ENABLED_DESCRIPTION = "Tier upgrade which reduces the movement hinderance when walking on water surfaces.";
 
         internal const string RUBBER_BOOTS_PRICE_KEY = $"Price of {RubberBoots.UPGRADE_NAME} Upgrade";
         internal const int RUBBER_BOOTS_PRICE_DEFAULT = 50;
@@ -378,7 +422,6 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string RUBBER_BOOTS_INCREMENTAL_MOVEMENT_HINDERANCE_DECREASE_KEY = "Incremental Oxygen Consumption Decrease";
         internal const int RUBBER_BOOTS_INCREMENTAL_MOVEMENT_HINDERANCE_DECREASE_DEFAULT = 20;
         internal const string RUBBER_BOOTS_INCREMENTAL_MOVEMENT_HINDERANCE_DECREASE_DESCRIPTION = "Incremental percentage decrease of movement hinderance on water surfaces when purchasing further levels of the upgrade";
-
 
         #endregion
 
@@ -398,7 +441,6 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE_KEY = "Incremental Oxygen Consumption Decrease";
         internal const int OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE_DEFAULT = 20;
         internal const string OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE_DESCRIPTION = "Incremental percentage of oxygen consumption decrease when purchasing further levels of the upgrade";
-
 
         #endregion
 
@@ -488,7 +530,6 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string WEED_GENETIC_INCREMENTAL_EFFECTIVENESS_INCREASE_DESCRIPTION = "Amount of effectiveness (%) when purchasing further levels of the upgrade increased on the Weed Killer to eradicate plants";
 
         #endregion
-
 
         #region Clay Glasses
 

@@ -32,9 +32,15 @@ namespace MoreShipUpgrades.Managers
         {
             if (OxygenCompat.Enabled)
             {
-                Plugin.mls.LogInfo($"Oxygen mod has been detected. Proceeding to patch...");
+                Plugin.mls.LogInfo("Oxygen mod has been detected. Proceeding to patch...");
                 harmony.PatchAll(typeof(OxygenLogicPatcher));
-                Plugin.mls.LogInfo($"Patched Oxygen mod related components for correct behaviour on Oxygen Canisters upgrade in relation to oxygen consumption. If any issues arise related to the oxygen mechanic when both LGU and Oxygen mods are present, report to LGU first.");
+                Plugin.mls.LogInfo("Patched Oxygen mod related components for correct behaviour on Oxygen Canisters upgrade in relation to oxygen consumption. If any issues arise related to the oxygen mechanic when both LGU and Oxygen mods are present, report to LGU first.");
+            }
+            if (LethalCompanyVRCompat.Enabled)
+            {
+                Plugin.mls.LogInfo("Lethal Company Virtual Reality mod has been detected. Proceeding to patch...");
+                harmony.PatchAll(typeof(VRControllerPatcher));
+                Plugin.mls.LogInfo("Patched Lethal Company Virtual Reality mod related components for correct behaviour on Back Muscles upgrade in relation to player's weight. If any issues arise related to the weight mechanic when both LGU and Lethal Company Virtual Reality mods are present, report to LGU first.");
             }
         }
         static void PatchEnemies()

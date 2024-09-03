@@ -14,7 +14,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.REINFORCED_BOOTS_OVERRIDE_NAME;
+            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.RUBBER_BOOTS_OVERRIDE_NAME;
         }
         public static float CalculateDecreaseMultiplier()
         {
@@ -34,8 +34,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.RUBBER_BOOTS_INITIAL_MOVEMENT_HINDERANCE_DECREASE.Value + level * UpgradeBus.Instance.PluginConfiguration.RUBBER_BOOTS_INCREMENTAL_MOVEMENT_HINDERANCE_DECREASE.Value;
-            string infoFormat = "LVL {0} - ${1} - Reduces the movement debuff when walking on water surfaces by {2}%\n";
+            static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.RUBBER_BOOTS_INITIAL_MOVEMENT_HINDERANCE_DECREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.RUBBER_BOOTS_INCREMENTAL_MOVEMENT_HINDERANCE_DECREASE.Value);
+            const string infoFormat = "LVL {0} - ${1} - Reduces the movement debuff when walking on water surfaces by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
 
@@ -44,8 +44,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             get
             {
                 string[] prices = UpgradeBus.Instance.PluginConfiguration.RUBBER_BOOTS_PRICES.Value.Split(',');
-                bool free = UpgradeBus.Instance.PluginConfiguration.RUBBER_BOOTS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-                return free;
+                return UpgradeBus.Instance.PluginConfiguration.RUBBER_BOOTS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
 

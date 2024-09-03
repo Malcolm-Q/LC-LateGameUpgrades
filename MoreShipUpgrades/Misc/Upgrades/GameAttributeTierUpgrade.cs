@@ -49,38 +49,10 @@ namespace MoreShipUpgrades.Misc.Upgrades
             /// Affects the player's PLAYER_HEALTH
             /// </summary>
             PLAYER_HEALTH,
-            /// <summary>
-            /// Affects the stamina variable used when sprinting
-            /// </summary>
-            PLAYER_SPRINT_TIME,
-            /// <summary>
-            /// Affects the speed of the player's movement
-            /// </summary>
-            PLAYER_MOVEMENT_SPEED,
-            /// <summary>
-            /// Affects the height of the player's jump
-            /// </summary>
-            PLAYER_JUMP_FORCE,
-            /// <summary>
-            /// AFfects the speed of climbing ladders
-            /// </summary>
-            PLAYER_CLIMB_SPEED,
-            /// <summary>
-            /// Affects the total amount of time the ship's doors can hold shut
-            /// </summary>
-            SHIP_DOOR_BATTERY,
-            /// <summary>
-            /// Affects the global time speed multiplier used to change the time in a moon
-            /// </summary>
-            TIME_GLOBAL_TIME_MULTIPLIER,
         }
         PlayerControllerB GetLocalPlayer()
         {
             return UpgradeBus.Instance.GetLocalPlayer();
-        }
-        HangarShipDoor GetShipDoors()
-        {
-            return UpgradeBus.Instance.GetShipDoors();
         }
         #endregion
         #region Attribute Setters
@@ -106,17 +78,10 @@ namespace MoreShipUpgrades.Misc.Upgrades
         void AddInitialValue()
         {
             PlayerControllerB localPlayer = GetLocalPlayer();
-            HangarShipDoor doorControls = GetShipDoors();
             logger.LogDebug($"Adding {initialValue} to {changingAttribute}...");
             switch (changingAttribute)
             {
                 case GameAttribute.PLAYER_HEALTH: localPlayer.health += (int)initialValue; break;
-                case GameAttribute.PLAYER_MOVEMENT_SPEED: localPlayer.movementSpeed += initialValue; break;
-                case GameAttribute.PLAYER_SPRINT_TIME: localPlayer.sprintTime += initialValue; break;
-                case GameAttribute.PLAYER_JUMP_FORCE: localPlayer.jumpForce += initialValue; break;
-                case GameAttribute.PLAYER_CLIMB_SPEED: localPlayer.climbSpeed += initialValue; break;
-                case GameAttribute.SHIP_DOOR_BATTERY: doorControls.doorPowerDuration += initialValue; break;
-                case GameAttribute.TIME_GLOBAL_TIME_MULTIPLIER: TimeOfDay.Instance.globalTimeSpeedMultiplier -= initialValue; break;
                 default: logger.LogError("No attribute was set for this upgrade to add the initial value"); break;
             }
            
@@ -128,17 +93,10 @@ namespace MoreShipUpgrades.Misc.Upgrades
         void AddIncrementalValue()
         {
             PlayerControllerB localPlayer = GetLocalPlayer();
-            HangarShipDoor doorControls = GetShipDoors();
             logger.LogDebug($"Adding {incrementalValue} to {changingAttribute}...");
             switch (changingAttribute)
             {
                 case GameAttribute.PLAYER_HEALTH: localPlayer.health += (int)incrementalValue; break;
-                case GameAttribute.PLAYER_MOVEMENT_SPEED: localPlayer.movementSpeed += incrementalValue; break;
-                case GameAttribute.PLAYER_SPRINT_TIME: localPlayer.sprintTime += incrementalValue; break;
-                case GameAttribute.PLAYER_JUMP_FORCE: localPlayer.jumpForce += incrementalValue; break;
-                case GameAttribute.PLAYER_CLIMB_SPEED: localPlayer.climbSpeed += incrementalValue; break;
-                case GameAttribute.SHIP_DOOR_BATTERY: doorControls.doorPowerDuration += incrementalValue; break;
-                case GameAttribute.TIME_GLOBAL_TIME_MULTIPLIER: TimeOfDay.Instance.globalTimeSpeedMultiplier -= incrementalValue; break;
                 default: logger.LogError("No attribute was set for this upgrade to add the incremental value"); break;
             }
         }
@@ -157,16 +115,9 @@ namespace MoreShipUpgrades.Misc.Upgrades
             }
 
             PlayerControllerB localPlayer = GetLocalPlayer();
-            HangarShipDoor doorControls = GetShipDoors();
             switch (changingAttribute)
             {
                 case GameAttribute.PLAYER_HEALTH: localPlayer.health += (int)amountToIncrement; break;
-                case GameAttribute.PLAYER_MOVEMENT_SPEED: localPlayer.movementSpeed += amountToIncrement; break;
-                case GameAttribute.PLAYER_SPRINT_TIME: localPlayer.sprintTime += amountToIncrement; break;
-                case GameAttribute.PLAYER_JUMP_FORCE: localPlayer.jumpForce += amountToIncrement; break;
-                case GameAttribute.PLAYER_CLIMB_SPEED: localPlayer.climbSpeed += amountToIncrement; break;
-                case GameAttribute.SHIP_DOOR_BATTERY: doorControls.doorPowerDuration += amountToIncrement; break;
-                case GameAttribute.TIME_GLOBAL_TIME_MULTIPLIER: TimeOfDay.Instance.globalTimeSpeedMultiplier -= amountToIncrement; break;
                 default: logger.LogError("No attribute was set for this upgrade to add the incremental values"); break;
             }
         }
@@ -191,17 +142,10 @@ namespace MoreShipUpgrades.Misc.Upgrades
         void RemoveInitialValue()
         {
             PlayerControllerB localPlayer = GetLocalPlayer();
-            HangarShipDoor doorControls = GetShipDoors();
             logger.LogDebug($"Removing {initialValue} from {changingAttribute}...");
             switch (changingAttribute)
             {
                 case GameAttribute.PLAYER_HEALTH: localPlayer.health -= (int)initialValue; break;
-                case GameAttribute.PLAYER_MOVEMENT_SPEED: localPlayer.movementSpeed -= initialValue; break;
-                case GameAttribute.PLAYER_SPRINT_TIME: localPlayer.sprintTime -= initialValue; break;
-                case GameAttribute.PLAYER_JUMP_FORCE: localPlayer.jumpForce -= initialValue; break;
-                case GameAttribute.PLAYER_CLIMB_SPEED: localPlayer.climbSpeed -= initialValue; break;
-                case GameAttribute.SHIP_DOOR_BATTERY: doorControls.doorPowerDuration -= initialValue; break;
-                case GameAttribute.TIME_GLOBAL_TIME_MULTIPLIER: TimeOfDay.Instance.globalTimeSpeedMultiplier += initialValue; break;
                 default: logger.LogError("No attribute was set for this upgrade to remove the initial value"); break;
             }
         }
@@ -212,7 +156,6 @@ namespace MoreShipUpgrades.Misc.Upgrades
         protected void RemovePossibleIncrementalValues(int upgradeLevel = 0)
         {
             PlayerControllerB localPlayer = GetLocalPlayer();
-            HangarShipDoor doorControls = GetShipDoors();
             float amountToIncrement = 0;
             for (int i = 0; i < upgradeLevel; i++)
             {
@@ -223,12 +166,6 @@ namespace MoreShipUpgrades.Misc.Upgrades
             switch (changingAttribute)
             {
                 case GameAttribute.PLAYER_HEALTH: localPlayer.health -= (int)amountToIncrement; break;
-                case GameAttribute.PLAYER_MOVEMENT_SPEED: localPlayer.movementSpeed -= amountToIncrement; break;
-                case GameAttribute.PLAYER_SPRINT_TIME: localPlayer.sprintTime -= amountToIncrement; break;
-                case GameAttribute.PLAYER_JUMP_FORCE: localPlayer.jumpForce -= amountToIncrement; break;
-                case GameAttribute.PLAYER_CLIMB_SPEED: localPlayer.climbSpeed -= amountToIncrement; break;
-                case GameAttribute.SHIP_DOOR_BATTERY: doorControls.doorPowerDuration -= amountToIncrement; break;
-                case GameAttribute.TIME_GLOBAL_TIME_MULTIPLIER: TimeOfDay.Instance.globalTimeSpeedMultiplier += amountToIncrement; break;
                 default: logger.LogError("No attribute was set for this upgrade to remove the incremental values"); break;
             }
         }
