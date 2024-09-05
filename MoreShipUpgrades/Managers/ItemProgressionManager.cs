@@ -86,7 +86,7 @@ namespace MoreShipUpgrades.Managers
 
         static void ExecuteChancerPerScrapLogic()
         {
-            if (UnityEngine.Random.Range(0, 1) >= ConfiguredChancePerScrapValue) return;
+            if (UnityEngine.Random.Range(0f, 1f) >= ConfiguredChancePerScrapValue) return;
             CustomTerminalNode node = SelectChancePerScrapUpgrade();
             LguStore.Instance.HandleUpgradeForNoHostClientRpc(node.OriginalName, node.Unlocked);
             LguStore.Instance.UpdateUpgrades(node, node.Unlocked);

@@ -191,7 +191,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
         }
         void PurchaseUpgrade(CustomTerminalNode node, int price, Action backAction)
         {
-            terminal.SyncGroupCreditsServerRpc(terminal.groupCredits - price, terminal.numberOfItemsInDropship);
+            terminal.BuyItemsServerRpc([], terminal.groupCredits - price, terminal.numberOfItemsInDropship); // The only vanilla rpc that syncs credits without ownership check
             LguStore.Instance.AddUpgradeSpentCreditsServerRpc(price);
             if (!node.Unlocked)
             {
