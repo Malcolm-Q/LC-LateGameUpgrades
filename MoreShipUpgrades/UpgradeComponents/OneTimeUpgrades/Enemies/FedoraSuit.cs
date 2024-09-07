@@ -21,7 +21,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies
         {
             upgradeName = UPGRADE_NAME;
             overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.FEDORA_SUIT_OVERRIDE_NAME;
-            wearingFedora = new();
+            wearingFedora = [];
             instance = this;
         }
 

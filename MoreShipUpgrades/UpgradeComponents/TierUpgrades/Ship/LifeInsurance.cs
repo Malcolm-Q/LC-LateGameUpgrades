@@ -3,10 +3,6 @@ using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship

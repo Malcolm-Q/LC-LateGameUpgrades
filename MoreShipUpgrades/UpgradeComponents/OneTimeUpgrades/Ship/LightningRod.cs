@@ -17,7 +17,6 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
             " an occupational hazard that was previously denied in court.\n\n";
         public static LightningRod instance;
         StormyWeather StormyWeather;
-        private static LguLogger logger = new LguLogger(UPGRADE_NAME);
 
         // Configuration
         public const string ENABLED_SECTION = $"Enable {UPGRADE_NAME} Upgrade";
@@ -39,7 +38,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         // distance
         public const string DIST_SECTION = $"Effective Distance of {UPGRADE_NAME}.";
         public const float DIST_DEFAULT = 175f;
-        public const string DIST_DESCRIPTION = $"The closer you are the more likely the rod will reroute lightning.";
+        public const string DIST_DESCRIPTION = "The closer you are the more likely the rod will reroute lightning.";
 
         public const string UPGRADE_MODE_SECTION = $"Current Upgrade Mode for {UPGRADE_NAME}";
         public const UpgradeMode UPGRADE_MODE_DEFAULT = UpgradeMode.EffectiveRange;
@@ -144,18 +143,14 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
 
         public override string GetDisplayInfo(int price = -1)
         {
-            switch (CurrentUpgradeMode)
+            return CurrentUpgradeMode switch
             {
-                case UpgradeMode.EffectiveRange:
-                    return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), price, UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_DIST.Value);
-                case UpgradeMode.AlwaysRerouteItem:
-                    return $"${price} - Reroutes all lightning bolts directed to metallic objects to the ship's lightning rod.";
-                case UpgradeMode.AlwaysRerouteRandom:
-                    return $"${price} - Reroutes all non-targetting lightning bolts to the ship's lightning rod.";
-                case UpgradeMode.AlwaysRerouteAll:
-                    return $"${price} - Reroutes all kind of lightning bolts to the ship's lightning rod";
-            }
-            return string.Empty;
+                UpgradeMode.EffectiveRange => string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), price, UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_DIST.Value),
+                UpgradeMode.AlwaysRerouteItem => $"${price} - Reroutes all lightning bolts directed to metallic objects to the ship's lightning rod.",
+                UpgradeMode.AlwaysRerouteRandom => $"${price} - Reroutes all non-targetting lightning bolts to the ship's lightning rod.",
+                UpgradeMode.AlwaysRerouteAll => $"${price} - Reroutes all kind of lightning bolts to the ship's lightning rod",
+                _ => string.Empty,
+            };
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {

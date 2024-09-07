@@ -131,6 +131,5 @@ namespace MoreShipUpgrades.Misc.Upgrades
         {
             Tools.SetupGameObject<T>(upgradeName);
         }
-
     }
 }

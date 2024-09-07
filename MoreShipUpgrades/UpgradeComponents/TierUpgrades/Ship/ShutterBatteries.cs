@@ -19,13 +19,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public const string PRICE_SECTION = $"Price of {UPGRADE_NAME}";
         public const int PRICE_DEFAULT = 300;
 
-        public const string INITIAL_SECTION = $"Initial battery boost";
+        public const string INITIAL_SECTION = "Initial battery boost";
         public const float INITIAL_DEFAULT = 5f;
-        public const string INITIAL_DESCRIPTION = $"Initial battery boost for the doors' lock on first purchase";
+        public const string INITIAL_DESCRIPTION = "Initial battery boost for the doors' lock on first purchase";
 
-        public const string INCREMENTAL_SECTION = $"Incremental battery boost";
+        public const string INCREMENTAL_SECTION = "Incremental battery boost";
         public const float INCREMENTAL_DEFAULT = 5f;
-        public const string INCREMENTAL_DESCRIPTION = $"Incremental battery boost for the doors' lock after purchase";
+        public const string INCREMENTAL_DESCRIPTION = "Incremental battery boost for the doors' lock after purchase";
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
@@ -33,8 +33,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_INITIAL.Value + level * UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_INCREMENTAL.Value;
-            string infoFormat = "LVL {0} - ${1} - Increases the door's hydraulic capacity to remain closed by {2} units\n"; // to put in the infoStrings after
+            static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_INITIAL.Value + (level * UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_INCREMENTAL.Value);
+            const string infoFormat = "LVL {0} - ${1} - Increases the door's hydraulic capacity to remain closed by {2} units\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
         public override bool CanInitializeOnStart
@@ -42,15 +42,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             get
             {
                 string[] prices = UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_PRICES.Value.Split(',');
-                bool free = UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-                return free;
+                return UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
         public static float GetAdditionalDoorTime(float defaultValue)
         {
             if (!UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_ENABLED) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
-            float additionalValue = UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_INITIAL + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_INCREMENTAL;
+            float additionalValue = UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_INITIAL + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_INCREMENTAL);
             return Mathf.Clamp(defaultValue + additionalValue, defaultValue, float.MaxValue);
         }
 

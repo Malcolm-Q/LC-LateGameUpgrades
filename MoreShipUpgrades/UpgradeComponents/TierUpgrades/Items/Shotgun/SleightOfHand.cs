@@ -3,10 +3,6 @@ using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.WeedKiller;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun
@@ -27,7 +23,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun
             get
             {
                 string[] prices = UpgradeBus.Instance.PluginConfiguration.SLEIGHT_OF_HAND_PRICES.Value.Split(',');
-                return UpgradeBus.Instance.PluginConfiguration.SLEIGHT_OF_HAND_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+                return UpgradeBus.Instance.PluginConfiguration.SLEIGHT_OF_HAND_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)

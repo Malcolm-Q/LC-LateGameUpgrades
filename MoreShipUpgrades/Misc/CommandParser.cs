@@ -44,7 +44,7 @@ namespace MoreShipUpgrades.Misc
             if (Discombobulator.instance.flashCooldown > 0f) return DisplayTerminalMessage(string.Format(LguConstants.DISCOMBOBULATOR_ON_COOLDOWN_FORMAT, Mathf.Round(Discombobulator.instance.flashCooldown)));
 
             RoundManager.Instance.PlayAudibleNoise(terminal.transform.position, 60f, 0.8f, 0, false, 14155);
-            Discombobulator.instance.PlayAudioAndUpdateCooldownServerRpc();
+            Discombobulator.instance.UseDiscombobulatorServerRpc();
 
             Collider[] array = Physics.OverlapSphere(terminal.transform.position, UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_RADIUS.Value, 524288);
             if (array.Length == 0) return DisplayTerminalMessage(LguConstants.DISCOMBOBULATOR_NO_ENEMIES);
@@ -113,8 +113,10 @@ namespace MoreShipUpgrades.Misc
             return DisplayTerminalMessage(string.Format(LguConstants.FORCE_CREDITS_PARSED_FAIL_FORMAT, creditAmount));
         }
 
-        private static TerminalNode ExecuteInternsCommand(ref Terminal terminal)
+        private static TerminalNode ExecuteInternsCommand(ref Terminal terminal, TerminalNode outputNode)
         {
+            if (!UpgradeBus.Instance.PluginConfiguration.INTERN_ENABLED) return outputNode;
+
             if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value)
                 return DisplayTerminalMessage(string.Format(LguConstants.INTERNS_NOT_ENOUGH_CREDITS_FORMAT, UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value, terminal.groupCredits));
 
@@ -133,7 +135,7 @@ namespace MoreShipUpgrades.Misc
 
             PlayerControllerB[] players = UnityEngine.Object.FindObjectsOfType<PlayerControllerB>();
             List<string> playerNames = [];
-            string playerNameToSearch = text.Substring(text.IndexOf(LOAD_LGU_COMMAND) + LOAD_LGU_COMMAND.Length).Trim();
+            string playerNameToSearch = text[(text.IndexOf(LOAD_LGU_COMMAND) + LOAD_LGU_COMMAND.Length)..].Trim();
             foreach (PlayerControllerB player in players)
             {
                 if (player == null) continue;
@@ -159,7 +161,7 @@ namespace MoreShipUpgrades.Misc
 
             GrabbableObject[] scrapItems = Object.FindObjectsOfType<GrabbableObject>();
             GrabbableObject[] filteredHives = scrapItems.Where(scrap => scrap.itemProperties.itemName == "Hive").ToArray();
-            GrabbableObject[] bestHives = filteredHives.OrderByDescending(v => v.scrapValue).ToArray();
+            GrabbableObject[] bestHives = [.. filteredHives.OrderByDescending(v => v.scrapValue)];
             StringBuilder stringBuilder = new();
             stringBuilder.AppendLine($"Found {bestHives.Length} Hives:");
             foreach (GrabbableObject scrap in bestHives)
@@ -175,9 +177,9 @@ namespace MoreShipUpgrades.Misc
         {
             if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage(LguConstants.SCANNER_LEVEL_REQUIRED);
 
-            GrabbableObject[] scrapItems = UnityEngine.Object.FindObjectsOfType<GrabbableObject>().ToArray();
-            GrabbableObject[] filteredScrap = scrapItems.Where(scrap => scrap.isInFactory && scrap.itemProperties.isScrap).ToArray();
-            GrabbableObject[] bestScrap = filteredScrap.OrderByDescending(v => v.scrapValue).Take(5).ToArray();
+            GrabbableObject[] scrapItems = [.. Object.FindObjectsOfType<GrabbableObject>()];
+            GrabbableObject[] filteredScrap = [.. scrapItems.Where(scrap => scrap.isInFactory && scrap.itemProperties.isScrap)];
+            GrabbableObject[] bestScrap = [.. filteredScrap.OrderByDescending(v => v.scrapValue).Take(5)];
             StringBuilder stringBuilder = new();
             stringBuilder.AppendLine("Most valuable items:");
             foreach (GrabbableObject scrap in bestScrap)
@@ -193,10 +195,10 @@ namespace MoreShipUpgrades.Misc
         {
             if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage(LguConstants.SCANNER_LEVEL_REQUIRED);
 
-            PlayerControllerB[] players = UnityEngine.Object.FindObjectsOfType<PlayerControllerB>().ToArray();
-            PlayerControllerB[] filteredPlayers = players.Where(player => player.playerSteamId != 0).ToArray();
-            PlayerControllerB[] alivePlayers = filteredPlayers.Where(player => !player.isPlayerDead).ToArray();
-            PlayerControllerB[] deadPlayers = filteredPlayers.Where(player => player.isPlayerDead).ToArray();
+            PlayerControllerB[] players = [.. Object.FindObjectsOfType<PlayerControllerB>()];
+            PlayerControllerB[] filteredPlayers = [.. players.Where(player => player.playerSteamId != 0)];
+            PlayerControllerB[] alivePlayers = [.. filteredPlayers.Where(player => !player.isPlayerDead)];
+            PlayerControllerB[] deadPlayers = [.. filteredPlayers.Where(player => player.isPlayerDead)];
             StringBuilder stringBuilder = new();
 
             stringBuilder.AppendLine("Alive Players:");
@@ -220,7 +222,7 @@ namespace MoreShipUpgrades.Misc
             EnemyAI[] enemies = Object.FindObjectsOfType<EnemyAI>().Where(enem => !enem.isEnemyDead).ToArray();
             if (enemies.Length == 0) return DisplayTerminalMessage("0 enemies detected\n\n");
 
-            Dictionary<string, int> enemyCount = new();
+            Dictionary<string, int> enemyCount = [];
             if (!UpgradeBus.Instance.PluginConfiguration.VERBOSE_ENEMIES.Value)
             {
                 logger.LogInfo("Scan Enemies: Verbose mode = true");
@@ -260,8 +262,8 @@ namespace MoreShipUpgrades.Misc
         {
             if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage(LguConstants.SCANNER_LEVEL_REQUIRED);
 
-            List<GameObject> fireEscape = Object.FindObjectsOfType<GameObject>().Where(obj => obj.name == "SpawnEntranceBTrigger").ToList();
-            List<EntranceTeleport> mainDoors = Object.FindObjectsOfType<EntranceTeleport>().ToList();
+            List<GameObject> fireEscape = [.. Object.FindObjectsOfType<GameObject>().Where(obj => obj.name == "SpawnEntranceBTrigger")];
+            List<EntranceTeleport> mainDoors = [.. Object.FindObjectsOfType<EntranceTeleport>()];
             List<EntranceTeleport> doorsToRemove = [];
 
             foreach (EntranceTeleport door in mainDoors)
@@ -373,7 +375,7 @@ namespace MoreShipUpgrades.Misc
                 case "reset": outputNode = ExecuteResetCommands(secondWord, ref outputNode); return;
                 case "forcecredits": outputNode = ExecuteForceCredits(secondWord, ref terminal); return;
                 case "intern":
-                case "interns": outputNode = ExecuteInternsCommand(ref terminal); return;
+                case "interns": outputNode = ExecuteInternsCommand(ref terminal, outputNode); return;
                 case "load": outputNode = ExecuteLoadCommands(secondWord, fullText, ref terminal, ref outputNode); return;
                 case "scan": outputNode = ExecuteScanCommands(secondWord, ref outputNode); return;
                 case "quantum": ExecuteQuantumCommands(ref terminal, ref outputNode); return;
@@ -389,7 +391,7 @@ namespace MoreShipUpgrades.Misc
         static TerminalNode TryGetContract(ref Terminal terminal)
         {
             if (contracts.Count == 0) return DisplayTerminalMessage(LguConstants.CONTRACT_FAIL);
-            string txt = null;
+            string txt;
             if (ContractManager.Instance.contractLevel != "None")
             {
                 txt = $"You currently have a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}!\n\n";

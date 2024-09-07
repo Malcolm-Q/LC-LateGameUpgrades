@@ -4,7 +4,6 @@ using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
-using System;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
@@ -14,7 +13,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         internal const string WORLD_BUILDING_TEXT = "\n\nMultivitamins, creatine, and military surplus stimulants blended together and repackaged," +
             " then offered on subscription. Known to be habit-forming. The label includes a Company Surgeon General's warning about increased aggression.\n\n";
 
-        private static int CRIT_DAMAGE_VALUE = 100;
+        const int CRIT_DAMAGE_VALUE = 100;
 
         // Configuration
         public const string ENABLED_SECTION = $"Enable {UPGRADE_NAME} Upgrade";
@@ -49,7 +48,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             if (!UpgradeBus.Instance.PluginConfiguration.PROTEIN_ENABLED.Value) return force;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return force;
-            int proteinForce = TryToCritEnemy() ? CRIT_DAMAGE_VALUE : UpgradeBus.Instance.PluginConfiguration.PROTEIN_UNLOCK_FORCE.Value + UpgradeBus.Instance.PluginConfiguration.PROTEIN_INCREMENT.Value * GetUpgradeLevel(UPGRADE_NAME);
+            int proteinForce = TryToCritEnemy() ? CRIT_DAMAGE_VALUE : UpgradeBus.Instance.PluginConfiguration.PROTEIN_UNLOCK_FORCE.Value + (UpgradeBus.Instance.PluginConfiguration.PROTEIN_INCREMENT.Value * GetUpgradeLevel(UPGRADE_NAME));
             return force + proteinForce;
         }
 
@@ -59,7 +58,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             int maximumLevel = prices.Length;
             int currentLevel = GetUpgradeLevel(UPGRADE_NAME);
 
-            if (currentLevel != maximumLevel && !(prices.Length == 1 && (prices[0] == "" || prices[0] == "0"))) return false;
+            if (currentLevel != maximumLevel && !(prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"))) return false;
 
             return UnityEngine.Random.value < UpgradeBus.Instance.PluginConfiguration.PROTEIN_CRIT_CHANCE.Value;
         }
@@ -71,7 +70,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.PROTEIN_UNLOCK_FORCE.Value + (UpgradeBus.Instance.PluginConfiguration.PROTEIN_INCREMENT.Value * level);
+            static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.PROTEIN_UNLOCK_FORCE.Value + (UpgradeBus.Instance.PluginConfiguration.PROTEIN_INCREMENT.Value * level);
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
@@ -80,8 +79,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             get
             {
                 string[] prices = UpgradeBus.Instance.PluginConfiguration.PROTEIN_UPGRADE_PRICES.Value.Split(',');
-                bool free = UpgradeBus.Instance.PluginConfiguration.PROTEIN_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-                return free;
+                return UpgradeBus.Instance.PluginConfiguration.PROTEIN_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
 

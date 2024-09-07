@@ -22,13 +22,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             if (!UpgradeBus.Instance.PluginConfiguration.MECHANICAL_ARMS_ENABLED) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
-            float increasedRange = UpgradeBus.Instance.PluginConfiguration.MECHANICAL_ARMS_INITIAL_RANGE_INCREASE + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE;
+            float increasedRange = UpgradeBus.Instance.PluginConfiguration.MECHANICAL_ARMS_INITIAL_RANGE_INCREASE + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE);
             return Mathf.Clamp(defaultValue + increasedRange, defaultValue, float.MaxValue);
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.MECHANICAL_ARMS_INITIAL_RANGE_INCREASE.Value + level * UpgradeBus.Instance.PluginConfiguration.MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE.Value;
-            string infoFormat = "LVL {0} - ${1} - Increases the player's interaction range by {2} units.\n";
+            static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.MECHANICAL_ARMS_INITIAL_RANGE_INCREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE.Value);
+            const string infoFormat = "LVL {0} - ${1} - Increases the player's interaction range by {2} units.\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
         public override bool CanInitializeOnStart
@@ -36,8 +36,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             get
             {
                 string[] prices = UpgradeBus.Instance.PluginConfiguration.MECHANICAL_ARMS_PRICES.Value.Split(',');
-                bool free = UpgradeBus.Instance.PluginConfiguration.MECHANICAL_ARMS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-                return free;
+                return UpgradeBus.Instance.PluginConfiguration.MECHANICAL_ARMS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
 

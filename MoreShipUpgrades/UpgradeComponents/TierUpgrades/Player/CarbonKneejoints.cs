@@ -39,8 +39,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             get
             {
                 string[] prices = UpgradeBus.Instance.PluginConfiguration.CARBON_KNEEJOINTS_PRICES.Value.Split(',');
-                bool free = UpgradeBus.Instance.PluginConfiguration.CARBON_KNEEJOINTS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
-                return free;
+                return UpgradeBus.Instance.PluginConfiguration.CARBON_KNEEJOINTS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
 

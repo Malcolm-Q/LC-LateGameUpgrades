@@ -36,9 +36,9 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items
             if (!walkieUIActive) return;
 
             Vector3 pos = GameNetworkManager.Instance.localPlayerController.transform.position;
-            x.text = $"X: {pos.x.ToString("F1")}";
-            y.text = $"Y: {pos.y.ToString("F1")}";
-            z.text = $"Z: {pos.z.ToString("F1")}";
+            x.text = $"X: {pos.x:F1}";
+            y.text = $"Y: {pos.y:F1}";
+            z.text = $"Z: {pos.z:F1}";
 
             int num = (int)(TimeOfDay.Instance.normalizedTimeOfDay * (60f * TimeOfDay.Instance.numberOfHours)) + 360;
             int num2 = (int)Mathf.Floor(num / 60f);

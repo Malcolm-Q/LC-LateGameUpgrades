@@ -100,7 +100,6 @@ namespace MoreShipUpgrades.Managers
                 File.Delete(filePath);
             }
             string json = (string)ES3.Load(key: saveDataKey, filePath: saveFile, defaultValue: null);
-            //File.WriteAllText(filePath, json);
             if (json != null)
             {
                 logger.LogInfo($"Loading save file for slot {saveNum}.");

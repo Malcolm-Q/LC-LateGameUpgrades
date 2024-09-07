@@ -37,8 +37,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.TRACTION_BOOTS_INITIAL_INCREASE.Value + level * UpgradeBus.Instance.PluginConfiguration.TRACTION_BOOTS_INCREMENTAL_INCREASE.Value;
-            string infoFormat = "LVL {0} - ${1} - Increases the player's traction to the ground by {2}%\n";
+            static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.TRACTION_BOOTS_INITIAL_INCREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.TRACTION_BOOTS_INCREMENTAL_INCREASE.Value);
+            const string infoFormat = "LVL {0} - ${1} - Increases the player's traction to the ground by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
         public override bool CanInitializeOnStart
@@ -46,8 +46,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             get
             {
                 string[] prices = UpgradeBus.Instance.PluginConfiguration.TRACTION_BOOTS_PRICES.Value.Split(',');
-                bool free = UpgradeBus.Instance.PluginConfiguration.TRACTION_BOOTS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-                return free;
+                return UpgradeBus.Instance.PluginConfiguration.TRACTION_BOOTS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
 

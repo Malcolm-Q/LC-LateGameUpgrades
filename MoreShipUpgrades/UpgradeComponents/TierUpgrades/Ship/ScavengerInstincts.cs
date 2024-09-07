@@ -22,20 +22,19 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
             get
             {
                 string[] prices = UpgradeBus.Instance.PluginConfiguration.SCAVENGER_INSTINCTS_PRICES.Value.Split(',');
-                bool free = UpgradeBus.Instance.PluginConfiguration.SCAVENGER_INSTINCTS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-                return free;
+                return UpgradeBus.Instance.PluginConfiguration.SCAVENGER_INSTINCTS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
         public static int IncreaseScrapAmount(int defaultValue)
         {
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
-            int additionalScrap = UpgradeBus.Instance.PluginConfiguration.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE.Value + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUN_SCRAP_INCREASE.Value;
+            int additionalScrap = UpgradeBus.Instance.PluginConfiguration.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE.Value + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUN_SCRAP_INCREASE.Value);
             return Mathf.Clamp(defaultValue + Mathf.CeilToInt(additionalScrap / RoundManager.Instance.scrapAmountMultiplier), defaultValue, int.MaxValue);
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE.Value + level * UpgradeBus.Instance.PluginConfiguration.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUN_SCRAP_INCREASE.Value;
-            string infoFormat = "LVL {0} - ${1} - Increases the average amount of scrap spawns by {2} additional items.\n";
+            static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUN_SCRAP_INCREASE.Value);
+            const string infoFormat = "LVL {0} - ${1} - Increases the average amount of scrap spawns by {2} additional items.\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
         public new static (string, string[]) RegisterScrapToUpgrade()

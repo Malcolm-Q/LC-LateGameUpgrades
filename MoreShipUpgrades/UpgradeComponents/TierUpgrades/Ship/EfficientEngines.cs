@@ -3,7 +3,6 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
-using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
@@ -19,8 +18,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.EFFICIENT_ENGINES_INITIAL_DISCOUNT.Value + (level * UpgradeBus.Instance.PluginConfiguration.EFFICIENT_ENGINES_INCREMENTAL_DISCOUNT.Value);
-            string infoFormat = "LVL {0} - ${1} - Moon routing will be {2}% cheaper\n";
+            static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.EFFICIENT_ENGINES_INITIAL_DISCOUNT.Value + (level * UpgradeBus.Instance.PluginConfiguration.EFFICIENT_ENGINES_INCREMENTAL_DISCOUNT.Value);
+            const string infoFormat = "LVL {0} - ${1} - Moon routing will be {2}% cheaper\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
 
@@ -37,8 +36,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             get
             {
                 string[] prices = UpgradeBus.Instance.PluginConfiguration.EFFICIENT_ENGINES_PRICES.Value.Split(',');
-                bool free = UpgradeBus.Instance.PluginConfiguration.EFFICIENT_ENGINES_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-                return free;
+                return UpgradeBus.Instance.PluginConfiguration.EFFICIENT_ENGINES_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
 

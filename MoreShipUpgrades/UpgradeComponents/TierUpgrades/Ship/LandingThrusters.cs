@@ -3,7 +3,6 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
-using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
@@ -33,8 +32,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_INITIAL_SPEED_INCREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE.Value);
-            string infoFormat = "LVL {0} - ${1} - Increases the ship's landing speed by {2}%\n";
+            static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_INITIAL_SPEED_INCREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE.Value);
+            const string infoFormat = "LVL {0} - ${1} - Increases the ship's landing speed by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
 
@@ -43,8 +42,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             get
             {
                 string[] prices = UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_PRICES.Value.Split(',');
-                bool free = UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-                return free;
+                return UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
 

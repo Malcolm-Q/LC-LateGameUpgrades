@@ -35,7 +35,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.WeedKiller
             get
             {
                 string[] prices = UpgradeBus.Instance.PluginConfiguration.WEED_GENETIC_MANIPULATION_PRICES.Value.Split(',');
-                return UpgradeBus.Instance.PluginConfiguration.WEED_GENETIC_MANIPULATION_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+                return UpgradeBus.Instance.PluginConfiguration.WEED_GENETIC_MANIPULATION_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)

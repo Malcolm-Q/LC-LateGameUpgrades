@@ -5,7 +5,6 @@ using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
-using System;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
@@ -76,14 +75,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             if (!enabled) return defaultWeight;
             if (CurrentUpgradeMode != intendedMode) return defaultWeight;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultWeight;
-            return Mathf.Max(defaultWeight * (UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_REDUCTION.Value - GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_INCREMENT.Value), lowerBound);
+            return Mathf.Max(defaultWeight * (UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_REDUCTION.Value - (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_INCREMENT.Value)), lowerBound);
         }
 
         public static void UpdatePlayerWeight()
         {
             if (CurrentUpgradeMode != UpgradeMode.ReduceWeight) return;
             PlayerControllerB player = GameNetworkManager.Instance.localPlayerController;
-            if (player.ItemSlots.Length <= 0) return;
+            if (player.ItemSlots.Length == 0) return;
 
             Instance.alteredWeight = 1f;
             for (int i = 0; i < player.ItemSlots.Length; i++)
@@ -104,7 +103,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            Func<int, float> infoFunction = level => (UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_REDUCTION.Value - level * UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_INCREMENT.Value) * 100;
+            static float infoFunction(int level) => (UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_REDUCTION.Value - (level * UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_INCREMENT.Value)) * 100;
             string infoFormat;
             switch (CurrentUpgradeMode)
             {
@@ -136,8 +135,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             get
             {
                 string[] prices = UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_UPGRADE_PRICES.Value.Split(',');
-                bool free = UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-                return free;
+                return UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
 
@@ -161,5 +159,4 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
                                                 configuration.OVERRIDE_UPGRADE_NAMES ? configuration.BACK_MUSCLES_OVERRIDE_NAME : "");
         }
     }
-
 }

@@ -35,7 +35,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public static int CalculateBeeDamage(int damageNumber)
         {
             if (!GetActiveUpgrade(UPGRADE_NAME)) return damageNumber;
-            return Mathf.Clamp((int)(damageNumber * (UpgradeBus.Instance.PluginConfiguration.BEEKEEPER_DAMAGE_MULTIPLIER.Value - GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT.Value)), 0, damageNumber);
+            return Mathf.Clamp((int)(damageNumber * (UpgradeBus.Instance.PluginConfiguration.BEEKEEPER_DAMAGE_MULTIPLIER.Value - (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT.Value))), 0, damageNumber);
         }
 
         public static int GetHiveScrapValue(int originalValue)
@@ -51,7 +51,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => 100 * (UpgradeBus.Instance.PluginConfiguration.BEEKEEPER_DAMAGE_MULTIPLIER.Value - (level * UpgradeBus.Instance.PluginConfiguration.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT.Value));
+            static float infoFunction(int level) => 100 * (UpgradeBus.Instance.PluginConfiguration.BEEKEEPER_DAMAGE_MULTIPLIER.Value - (level * UpgradeBus.Instance.PluginConfiguration.BEEKEEPER_DAMAGE_MULTIPLIER_INCREMENT.Value));
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction) + $"\nOn maximum level, applies a {(UpgradeBus.Instance.PluginConfiguration.BEEKEEPER_HIVE_VALUE_INCREASE - 1f)*100f:F0}% scrap value increase on beehives.";
         }
@@ -71,8 +71,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             get
             {
                 string[] prices = UpgradeBus.Instance.PluginConfiguration.BEEKEEPER_UPGRADE_PRICES.Value.Split(',');
-                bool free = UpgradeBus.Instance.PluginConfiguration.BEEKEEPER_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-                return free;
+                return UpgradeBus.Instance.PluginConfiguration.BEEKEEPER_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
         public new static (string, string[]) RegisterScrapToUpgrade()

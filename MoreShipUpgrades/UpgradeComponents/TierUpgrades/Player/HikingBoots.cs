@@ -3,7 +3,6 @@ using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
-using GameNetcodeStuff;
 using MoreShipUpgrades.Misc;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
@@ -30,8 +29,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.HIKING_BOOTS_INITIAL_DECREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.HIKING_BOOTS_INCREMENTAL_DECREASE.Value);
-            string infoFormat = "LVL {0} - ${1} - Reduces the movement speed change when going through slopes by {2}%\n";
+            static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.HIKING_BOOTS_INITIAL_DECREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.HIKING_BOOTS_INCREMENTAL_DECREASE.Value);
+            const string infoFormat = "LVL {0} - ${1} - Reduces the movement speed change when going through slopes by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
 
@@ -40,7 +39,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             get
             {
                 string[] prices = UpgradeBus.Instance.PluginConfiguration.HIKING_BOOTS_PRICES.Value.Split(',');
-                return UpgradeBus.Instance.PluginConfiguration.HIKING_BOOTS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+                return UpgradeBus.Instance.PluginConfiguration.HIKING_BOOTS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
 

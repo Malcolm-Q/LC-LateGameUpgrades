@@ -5,6 +5,8 @@
 - Fixed issue with item names being case-sensitive in the config related to Item Progression.
 - Fixed issue with clients buying upgrades wouldn't consume credits due to error in RPC calls.
 - Possibly fixed issue with ChancePerScrap mode due to using integers rather than floats.
+- Fixed issue with Interns enabled configuration not working correctly.
+- Code refactored.
 
 </details>
 <details>

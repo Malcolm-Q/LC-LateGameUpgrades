@@ -27,8 +27,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.LITHIUM_BATTERIES_INITIAL_MULTIPLIER.Value + level * UpgradeBus.Instance.PluginConfiguration.LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER.Value;
-            string infoFormat = "LVL {0} - ${1} - Decreases the rate of battery used on the items by {2}%\n";
+            static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.LITHIUM_BATTERIES_INITIAL_MULTIPLIER.Value + (level * UpgradeBus.Instance.PluginConfiguration.LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER.Value);
+            const string infoFormat = "LVL {0} - ${1} - Decreases the rate of battery used on the items by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
 
@@ -37,8 +37,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items
             get
             {
                 string[] prices = UpgradeBus.Instance.PluginConfiguration.LITHIUM_BATTERIES_PRICES.Value.Split(',');
-                bool free = UpgradeBus.Instance.PluginConfiguration.LITHIUM_BATTERIES_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-                return free;
+                return UpgradeBus.Instance.PluginConfiguration.LITHIUM_BATTERIES_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
 

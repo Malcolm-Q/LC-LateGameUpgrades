@@ -36,21 +36,24 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         }
 
         [ServerRpc(RequireOwnership = false)]
-        public void PlayAudioAndUpdateCooldownServerRpc()
+        public void UseDiscombobulatorServerRpc()
         {
-            PlayAudioAndUpdateCooldownClientRpc();
+            UseDiscombobulatorClientRpc();
         }
 
         [ClientRpc]
-        private void PlayAudioAndUpdateCooldownClientRpc()
+        private void UseDiscombobulatorClientRpc()
         {
             Terminal terminal = UpgradeBus.Instance.GetTerminal();
-            terminal.terminalAudio.maxDistance = 100f;
-            terminal.terminalAudio.PlayOneShot(UpgradeBus.Instance.flashNoise);
-            StartCoroutine(ResetRange(terminal));
+            PlayAudio(ref terminal);
             flashCooldown = UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_COOLDOWN.Value;
+            StunNearbyEnemies(ref terminal);
+        }
+
+        void StunNearbyEnemies(ref Terminal terminal)
+        {
             Collider[] array = Physics.OverlapSphere(terminal.transform.position, UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_RADIUS.Value, 524288);
-            if (array.Length <= 0) return;
+            if (array.Length == 0) return;
             for (int i = 0; i < array.Length; i++)
             {
                 EnemyAICollisionDetect component = array[i].GetComponent<EnemyAICollisionDetect>();
@@ -58,11 +61,18 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
                 EnemyAI enemy = component.mainScript;
                 if (CanDealDamage())
                 {
-                    int forceValue = UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_INITIAL_DAMAGE.Value + UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_DAMAGE_INCREASE.Value * (GetUpgradeLevel(UPGRADE_NAME) - UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_DAMAGE_LEVEL.Value);
+                    int forceValue = UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_INITIAL_DAMAGE.Value + (UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_DAMAGE_INCREASE.Value * (GetUpgradeLevel(UPGRADE_NAME) - UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_DAMAGE_LEVEL.Value));
                     enemy.HitEnemy(forceValue);
                 }
-                if (!enemy.isEnemyDead) enemy.SetEnemyStunned(true, UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_STUN_DURATION.Value + UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_INCREMENT.Value * GetUpgradeLevel(UPGRADE_NAME), null);
+                if (!enemy.isEnemyDead) enemy.SetEnemyStunned(true, UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_STUN_DURATION.Value + (UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_INCREMENT.Value * GetUpgradeLevel(UPGRADE_NAME)), null);
             }
+        }
+
+        void PlayAudio(ref Terminal terminal)
+        {
+            terminal.terminalAudio.maxDistance = 100f;
+            terminal.terminalAudio.PlayOneShot(UpgradeBus.Instance.flashNoise);
+            StartCoroutine(ResetRange(terminal));
         }
 
         private bool CanDealDamage()
@@ -82,7 +92,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_STUN_DURATION.Value + level * UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_INCREMENT.Value;
+            static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_STUN_DURATION.Value + (level * UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_INCREMENT.Value);
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
@@ -91,8 +101,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
             get
             {
                 string[] prices = UpgradeBus.Instance.PluginConfiguration.DISCO_UPGRADE_PRICES.Value.Split(',');
-                bool free = UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-                return free;
+                return UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
         public new static (string, string[]) RegisterScrapToUpgrade()

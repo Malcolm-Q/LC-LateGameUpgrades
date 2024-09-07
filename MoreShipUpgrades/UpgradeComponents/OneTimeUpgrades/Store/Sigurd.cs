@@ -15,7 +15,6 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
             " scrap. Before disappearing, Sigurd found a module for the ship's terminal. After installing this mysterious module, the last scrap sale that Sigurd made" +
             " was recorded at a value above normal.";
         public static Sigurd Instance;
-        public static PlayerControllerB localPlayerController => StartOfRound.Instance?.localPlayerController;
 
         internal override void Start()
         {
@@ -34,7 +33,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             System.Random random = new(StartOfRound.Instance.randomMapSeed);
             if (random.Next(0, 100) < Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.SIGURD_LAST_DAY_CHANCE.Value, 0, 100))
-                return defaultValue + UpgradeBus.Instance.PluginConfiguration.SIGURD_LAST_DAY_PERCENT.Value / 100;
+                return defaultValue + (UpgradeBus.Instance.PluginConfiguration.SIGURD_LAST_DAY_PERCENT.Value / 100f);
             return defaultValue;
         }
 
@@ -46,7 +45,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
 
             System.Random random = new(StartOfRound.Instance.randomMapSeed);
             if (random.Next(0, 100) < Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.SIGURD_CHANCE.Value, 0, 100))
-                return defaultValue + UpgradeBus.Instance.PluginConfiguration.SIGURD_PERCENT.Value / 100;
+                return defaultValue + (UpgradeBus.Instance.PluginConfiguration.SIGURD_PERCENT.Value / 100f);
             return defaultValue;
         }
 

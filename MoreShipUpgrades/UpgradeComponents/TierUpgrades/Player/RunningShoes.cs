@@ -4,7 +4,6 @@ using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
-using System;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
@@ -33,7 +32,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.MOVEMENT_SPEED_UNLOCK.Value + level * UpgradeBus.Instance.PluginConfiguration.MOVEMENT_INCREMENT.Value;
+            static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.MOVEMENT_SPEED_UNLOCK.Value + (level * UpgradeBus.Instance.PluginConfiguration.MOVEMENT_INCREMENT.Value);
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
@@ -42,7 +41,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             if (!UpgradeBus.Instance.PluginConfiguration.RUNNING_SHOES_ENABLED) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
-            float additionalValue = UpgradeBus.Instance.PluginConfiguration.MOVEMENT_SPEED_UNLOCK + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.MOVEMENT_INCREMENT;
+            float additionalValue = UpgradeBus.Instance.PluginConfiguration.MOVEMENT_SPEED_UNLOCK + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.MOVEMENT_INCREMENT);
             return Mathf.Clamp(defaultValue + additionalValue, defaultValue, float.MaxValue);
         }
 
@@ -51,8 +50,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             get
             {
                 string[] prices = UpgradeBus.Instance.PluginConfiguration.RUNNING_SHOES_UPGRADE_PRICES.Value.Split(',');
-                bool free = UpgradeBus.Instance.PluginConfiguration.RUNNING_SHOES_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-                return free;
+                return UpgradeBus.Instance.PluginConfiguration.RUNNING_SHOES_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
 
