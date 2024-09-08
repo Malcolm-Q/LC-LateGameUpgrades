@@ -52,12 +52,12 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             get
             {
-                return UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_UPGRADE_MODE;
+                return GetConfiguration().LIGHTNING_ROD_UPGRADE_MODE;
             }
         }
 
         public bool LightningIntercepted { get; internal set; }
-        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_PRICE.Value <= 0;
+        public override bool CanInitializeOnStart => GetConfiguration().LIGHTNING_ROD_PRICE.Value <= 0;
 
         public enum UpgradeMode
         {
@@ -71,7 +71,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             instance = this;
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().LIGHTNING_ROD_OVERRIDE_NAME;
         }
 
         public static void TryInterceptLightning(ref StormyWeather __instance, ref GrabbableObject ___targetingMetalObject)
@@ -89,9 +89,9 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
                         Terminal terminal = UpgradeBus.Instance.GetTerminal();
                         float dist = Vector3.Distance(___targetingMetalObject.transform.position, terminal.transform.position);
 
-                        if (dist > UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_DIST.Value) return;
+                        if (dist > GetConfiguration().LIGHTNING_ROD_DIST.Value) return;
 
-                        dist /= UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_DIST.Value;
+                        dist /= GetConfiguration().LIGHTNING_ROD_DIST.Value;
                         float prob = 1 - dist;
                         float rand = Random.value;
                         intercepted = rand < prob;
@@ -145,7 +145,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             return CurrentUpgradeMode switch
             {
-                UpgradeMode.EffectiveRange => string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), price, UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_DIST.Value),
+                UpgradeMode.EffectiveRange => string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), price, GetConfiguration().LIGHTNING_ROD_DIST.Value),
                 UpgradeMode.AlwaysRerouteItem => $"${price} - Reroutes all lightning bolts directed to metallic objects to the ship's lightning rod.",
                 UpgradeMode.AlwaysRerouteRandom => $"${price} - Reroutes all non-targetting lightning bolts to the ship's lightning rod.",
                 UpgradeMode.AlwaysRerouteAll => $"${price} - Reroutes all kind of lightning bolts to the ship's lightning rod",
@@ -154,7 +154,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.LIGHTNING_ROD_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().LIGHTNING_ROD_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -162,7 +162,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
             return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
                                     shareStatus: true,

@@ -10,12 +10,12 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
     {
         public const string UPGRADE_NAME = "Drop Pod Thrusters";
         public static FasterDropPod Instance;
-        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_PRICE.Value <= 0;
+        public override bool CanInitializeOnStart => GetConfiguration().FASTER_DROP_POD_PRICE.Value <= 0;
 
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.DROP_POD_THRUSTERS_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().DROP_POD_THRUSTERS_OVERRIDE_NAME;
             base.Start();
         }
 
@@ -25,19 +25,21 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
         }
         public static float GetFirstOrderTimer(float defaultValue)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_ENABLED.Value) return defaultValue;
+            LategameConfiguration config = GetConfiguration();
+            if (!config.FASTER_DROP_POD_ENABLED.Value) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
-            return Mathf.Clamp(defaultValue + UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_INITIAL_TIMER.Value, defaultValue, defaultValue + UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_TIMER.Value);
+            return Mathf.Clamp(defaultValue + config.FASTER_DROP_POD_INITIAL_TIMER.Value, defaultValue, defaultValue + config.FASTER_DROP_POD_TIMER.Value);
         }
         public static float GetUpgradedTimer(float defaultValue)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_ENABLED.Value) return defaultValue;
+            LategameConfiguration config = GetConfiguration();
+            if (!config.FASTER_DROP_POD_ENABLED.Value) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
-            return Mathf.Clamp(defaultValue - UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_TIMER.Value, 0f, defaultValue);
+            return Mathf.Clamp(defaultValue - config.FASTER_DROP_POD_TIMER.Value, 0f, defaultValue);
         }
         public static bool CanLeaveEarly(float shipTimer)
         {
-            return shipTimer > UpgradeBus.Instance.PluginConfiguration.FASTER_DROP_POD_LEAVE_TIMER.Value;
+            return shipTimer > GetConfiguration().FASTER_DROP_POD_LEAVE_TIMER.Value;
         }
         public static bool IsUpgradeActive()
         {
@@ -49,7 +51,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.DROP_POD_THRUSTERS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().DROP_POD_THRUSTERS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -57,7 +59,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
             return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
                                     shareStatus: true,

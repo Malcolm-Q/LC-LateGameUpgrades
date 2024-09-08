@@ -14,17 +14,23 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.REINFORCED_BOOTS_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().REINFORCED_BOOTS_OVERRIDE_NAME;
         }
         public static int ReduceFallDamage(int defaultValue)
         {
+            LategameConfiguration config = GetConfiguration();
+            if (!config.REINFORCED_BOOTS_ENABLED) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
-            float multiplier = 1f - ((UpgradeBus.Instance.PluginConfiguration.REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION)) / 100f);
+            float multiplier = 1f - ((config.REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION + (GetUpgradeLevel(UPGRADE_NAME) * config.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION)) / 100f);
             return (int)Mathf.Clamp(defaultValue * multiplier, 0f, defaultValue);
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION.Value + (level * UpgradeBus.Instance.PluginConfiguration.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION.Value);
+            static float infoFunction(int level)
+            {
+                LategameConfiguration config = GetConfiguration();
+                return config.REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION.Value + (level * config.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION.Value);
+            }
             const string infoFormat = "LVL {0} - ${1} - Reduces fall damage by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
@@ -33,14 +39,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             get
             {
-                string[] prices = UpgradeBus.Instance.PluginConfiguration.REINFORCED_BOOTS_PRICES.Value.Split(',');
-                return UpgradeBus.Instance.PluginConfiguration.REINFORCED_BOOTS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
+                LategameConfiguration config = GetConfiguration();
+                string[] prices = config.REINFORCED_BOOTS_PRICES.Value.Split(',');
+                return config.REINFORCED_BOOTS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
 
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.REINFORCED_BOOTS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().REINFORCED_BOOTS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -48,7 +55,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
             return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
                                                 configuration.SHARED_UPGRADES || !configuration.REINFORCED_BOOTS_INDIVIDUAL,

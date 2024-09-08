@@ -23,7 +23,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.SICK_BEATS_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().SICK_BEATS_OVERRIDE_NAME;
             Instance = this;
         }
         internal override void Start()
@@ -34,17 +34,18 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items
 
         public static void HandlePlayerEffects(PlayerControllerB player)
         {
+            LategameConfiguration config = GetConfiguration();
             Instance.BoomboxIcon.SetActive(Instance.EffectsActive);
             if (Instance.EffectsActive)
             {
-                if (UpgradeBus.Instance.PluginConfiguration.BEATS_SPEED.Value) player.movementSpeed += UpgradeBus.Instance.PluginConfiguration.BEATS_SPEED_INC.Value;
-                if (UpgradeBus.Instance.PluginConfiguration.BEATS_STAMINA.Value) Instance.staminaDrainCoefficient = UpgradeBus.Instance.PluginConfiguration.BEATS_STAMINA_CO.Value;
-                if (UpgradeBus.Instance.PluginConfiguration.BEATS_DEF.Value) Instance.incomingDamageCoefficient = UpgradeBus.Instance.PluginConfiguration.BEATS_DEF_CO.Value;
-                if (UpgradeBus.Instance.PluginConfiguration.BEATS_DMG.Value) Instance.damageBoost = UpgradeBus.Instance.PluginConfiguration.BEATS_DMG_INC.Value;
+                if (config.BEATS_SPEED.Value) player.movementSpeed += config.BEATS_SPEED_INC.Value;
+                if (config.BEATS_STAMINA.Value) Instance.staminaDrainCoefficient = config.BEATS_STAMINA_CO.Value;
+                if (config.BEATS_DEF.Value) Instance.incomingDamageCoefficient = config.BEATS_DEF_CO.Value;
+                if (config.BEATS_DMG.Value) Instance.damageBoost = config.BEATS_DMG_INC.Value;
             }
             else
             {
-                if (UpgradeBus.Instance.PluginConfiguration.BEATS_SPEED.Value) player.movementSpeed -= UpgradeBus.Instance.PluginConfiguration.BEATS_SPEED_INC.Value;
+                if (config.BEATS_SPEED.Value) player.movementSpeed -= config.BEATS_SPEED_INC.Value;
                 Instance.staminaDrainCoefficient = 1f;
                 Instance.incomingDamageCoefficient = 1f;
                 Instance.damageBoost = 0;
@@ -52,38 +53,39 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items
         }
         public static float ApplyPossibleIncreasedStaminaRegen(float regenValue)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.BEATS_ENABLED.Value) return regenValue;
+            if (!GetConfiguration().BEATS_ENABLED.Value) return regenValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return regenValue;
             return regenValue * Instance.staminaDrainCoefficient;
         }
 
         public static int GetShovelHitForce(int force)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.BEATS_ENABLED.Value) return force;
+            if (!GetConfiguration().BEATS_ENABLED.Value) return force;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return force;
             return force + Instance.damageBoost;
         }
 
         public static int CalculateDefense(int dmg)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.BEATS_ENABLED.Value) return dmg;
+            if (!GetConfiguration().BEATS_ENABLED.Value) return dmg;
             if (!GetActiveUpgrade(UPGRADE_NAME) || dmg < 0) return dmg; // < 0 check to not hinder healing
             return (int)(dmg * Instance.incomingDamageCoefficient);
         }
 
         public override string GetDisplayInfo(int price = -1)
         {
-            string txt = $"Sick Beats - ${price}\nPlayers within a {UpgradeBus.Instance.PluginConfiguration.BEATS_RADIUS.Value} unit radius from an active boombox will have the following effects:\n\n";
-            if (UpgradeBus.Instance.PluginConfiguration.BEATS_SPEED.Value) txt += $"Movement speed increased by {UpgradeBus.Instance.PluginConfiguration.BEATS_SPEED_INC.Value}\n";
-            if (UpgradeBus.Instance.PluginConfiguration.BEATS_DMG.Value) txt += $"Damage inflicted increased by {UpgradeBus.Instance.PluginConfiguration.BEATS_DMG_INC.Value}\n";
-            if (UpgradeBus.Instance.PluginConfiguration.BEATS_DEF.Value) txt += $"Incoming Damage multiplied by {UpgradeBus.Instance.PluginConfiguration.BEATS_DEF_CO.Value}\n";
-            if (UpgradeBus.Instance.PluginConfiguration.BEATS_STAMINA.Value) txt += $"Stamina Drain multiplied by {UpgradeBus.Instance.PluginConfiguration.BEATS_STAMINA_CO.Value}\n";
+            LategameConfiguration config = GetConfiguration();
+            string txt = $"Sick Beats - ${price}\nPlayers within a {config.BEATS_RADIUS.Value} unit radius from an active boombox will have the following effects:\n\n";
+            if (config.BEATS_SPEED.Value) txt += $"Movement speed increased by {config.BEATS_SPEED_INC.Value}\n";
+            if (config.BEATS_DMG.Value) txt += $"Damage inflicted increased by {config.BEATS_DMG_INC.Value}\n";
+            if (config.BEATS_DEF.Value) txt += $"Incoming Damage multiplied by {config.BEATS_DEF_CO.Value}\n";
+            if (config.BEATS_STAMINA.Value) txt += $"Stamina Drain multiplied by {config.BEATS_STAMINA_CO.Value}\n";
             return txt;
         }
-        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.BEATS_PRICE.Value <= 0;
+        public override bool CanInitializeOnStart => GetConfiguration().BEATS_PRICE.Value <= 0;
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.SICK_BEATS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().SICK_BEATS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -91,7 +93,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
             return UpgradeBus.Instance.SetupOneTimeTerminalNode(
                  UPGRADE_NAME,

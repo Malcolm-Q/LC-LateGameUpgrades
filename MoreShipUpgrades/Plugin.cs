@@ -15,6 +15,7 @@ using MoreShipUpgrades.Misc.Commands;
 using MoreShipUpgrades.Misc.UI.Application;
 using InteractiveTerminalAPI.UI;
 using static BepInEx.BepInDependency;
+using GoodItemScan;
 
 namespace MoreShipUpgrades
 {

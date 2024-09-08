@@ -44,9 +44,6 @@ namespace MoreShipUpgrades.Misc
         const string ritualItems = exorcismItems + "Ritual Items/";
         const string exterminatorItems = contractItems + "Exterminator/";
 
-        const string UI = root + "UI/";
-        const string introScreen = UI + "Intro Screen UI/";
-
         const string models = root + "Models/";
         const string prefabs = models + "Prefabs/";
 
@@ -120,7 +117,6 @@ namespace MoreShipUpgrades.Misc
             { LethalDeals.UPGRADE_NAME, upgrades+"LethalDeals.prefab" },
             { QuantumDisruptor.UPGRADE_NAME, upgrades+"QuantumDisruptor.prefab" },
             { ChargingBooster.UPGRADE_NAME, upgrades + "ChargingBooster.prefab" },
-            { "Intro Screen", introScreen + "IntroScreen.prefab" },
             { FasterDropPod.UPGRADE_NAME, upgrades+"FasterDropPod.prefab" },
             { Sigurd.UPGRADE_NAME, upgrades+"Sigurd.prefab" },
             { EfficientEngines.UPGRADE_NAME, upgrades+"EfficientEngines.prefab" },

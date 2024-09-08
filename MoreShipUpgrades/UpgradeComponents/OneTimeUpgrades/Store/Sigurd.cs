@@ -1,5 +1,4 @@
-﻿using GameNetcodeStuff;
-using MoreShipUpgrades.Managers;
+﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
@@ -19,7 +18,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.SIGURD_ACCESS_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().SIGURD_ACCESS_OVERRIDE_NAME;
             base.Start();
         }
 
@@ -29,23 +28,25 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
         }
         public static float GetBuyingRateLastDay(float defaultValue)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.SIGURD_LAST_DAY_ENABLED.Value) return defaultValue;
+            LategameConfiguration config = GetConfiguration();
+            if (!config.SIGURD_LAST_DAY_ENABLED.Value) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             System.Random random = new(StartOfRound.Instance.randomMapSeed);
-            if (random.Next(0, 100) < Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.SIGURD_LAST_DAY_CHANCE.Value, 0, 100))
-                return defaultValue + (UpgradeBus.Instance.PluginConfiguration.SIGURD_LAST_DAY_PERCENT.Value / 100f);
+            if (random.Next(0, 100) < Mathf.Clamp(config.SIGURD_LAST_DAY_CHANCE.Value, 0, 100))
+                return defaultValue + (config.SIGURD_LAST_DAY_PERCENT.Value / 100f);
             return defaultValue;
         }
 
         public static float GetBuyingRate(float defaultValue)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.SIGURD_ENABLED.Value) return defaultValue;
+            LategameConfiguration config = GetConfiguration();
+            if (!config.SIGURD_ENABLED.Value) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             if (TimeOfDay.Instance.daysUntilDeadline == 0) return defaultValue;
 
             System.Random random = new(StartOfRound.Instance.randomMapSeed);
-            if (random.Next(0, 100) < Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.SIGURD_CHANCE.Value, 0, 100))
-                return defaultValue + (UpgradeBus.Instance.PluginConfiguration.SIGURD_PERCENT.Value / 100f);
+            if (random.Next(0, 100) < Mathf.Clamp(config.SIGURD_CHANCE.Value, 0, 100))
+                return defaultValue + (config.SIGURD_PERCENT.Value / 100f);
             return defaultValue;
         }
 
@@ -59,10 +60,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
             return WORLD_BUILDING_TEXT;
         }
 
-        public override bool CanInitializeOnStart => (UpgradeBus.Instance.PluginConfiguration.SIGURD_ENABLED.Value || UpgradeBus.Instance.PluginConfiguration.SIGURD_LAST_DAY_ENABLED.Value) && UpgradeBus.Instance.PluginConfiguration.SIGURD_PRICE.Value <= 0;
+        public override bool CanInitializeOnStart => (GetConfiguration().SIGURD_ENABLED.Value || GetConfiguration().SIGURD_LAST_DAY_ENABLED.Value) && GetConfiguration().SIGURD_PRICE.Value <= 0;
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.SIGURD_ACCESS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().SIGURD_ACCESS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -70,7 +71,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
             return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
                                     shareStatus: true,

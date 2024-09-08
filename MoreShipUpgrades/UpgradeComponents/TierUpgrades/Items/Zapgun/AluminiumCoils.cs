@@ -15,42 +15,66 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Zapgun
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().ALUMINIUM_COILS_OVERRIDE_NAME;
             base.Start();
         }
         public static float ApplyDifficultyDecrease(float defaultDifficulty)
         {
+            LategameConfiguration config = GetConfiguration();
+            if (!config.ALUMINIUM_COILS_ENABLED) return defaultDifficulty;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultDifficulty;
-            float multiplier = 1f - ((UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_INITIAL_DIFFICULTY_DECREASE.Value + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_INCREMENTAL_DIFFICULTY_DECREASE.Value)) / 100f);
+            float multiplier = 1f - ((config.ALUMINIUM_COILS_INITIAL_DIFFICULTY_DECREASE.Value + (GetUpgradeLevel(UPGRADE_NAME) * config.ALUMINIUM_COILS_INCREMENTAL_DIFFICULTY_DECREASE.Value)) / 100f);
             return Mathf.Clamp(defaultDifficulty * multiplier, 0f, defaultDifficulty);
         }
 
         public static float ApplyCooldownDecrease(float defaultCooldown)
         {
+            LategameConfiguration config = GetConfiguration();
+            if (!config.ALUMINIUM_COILS_ENABLED) return defaultCooldown;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultCooldown;
-            float multiplier = 1f - ((UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_INITIAL_COOLDOWN_DECREASE.Value + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_DECREASE.Value)) / 100f);
+            float multiplier = 1f - ((config.ALUMINIUM_COILS_INITIAL_COOLDOWN_DECREASE.Value + (GetUpgradeLevel(UPGRADE_NAME) * config.ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_DECREASE.Value)) / 100f);
             return Mathf.Clamp(defaultCooldown * multiplier, 0f, defaultCooldown);
         }
 
         public static float ApplyIncreasedStunTimer(float defaultStunTimer)
         {
+            LategameConfiguration config = GetConfiguration();
+            if (!config.ALUMINIUM_COILS_ENABLED) return defaultStunTimer;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultStunTimer;
-            float additionalStunTimer = UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_INITIAL_STUN_TIMER_INCREASE.Value + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_INCREMENTAL_STUN_TIMER_INCREASE.Value);
+            float additionalStunTimer = config.ALUMINIUM_COILS_INITIAL_STUN_TIMER_INCREASE.Value + (GetUpgradeLevel(UPGRADE_NAME) * config.ALUMINIUM_COILS_INCREMENTAL_STUN_TIMER_INCREASE.Value);
             return defaultStunTimer + additionalStunTimer;
         }
 
         public static float ApplyIncreasedStunRange(float defaultRange)
         {
+            LategameConfiguration config = GetConfiguration();
+            if (!config.ALUMINIUM_COILS_ENABLED) return defaultRange;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultRange;
-            float AdditionalRange = UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_INITIAL_RANGE_INCREASE.Value + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_INCREMENTAL_RANGE_INCREASE.Value);
+            float AdditionalRange = config.ALUMINIUM_COILS_INITIAL_RANGE_INCREASE.Value + (GetUpgradeLevel(UPGRADE_NAME) * config.ALUMINIUM_COILS_INCREMENTAL_RANGE_INCREASE.Value);
             return defaultRange + AdditionalRange;
         }
         string GetAluminiumCoilsInfo(int level, int price)
         {
-            static float difficultyInfo(int level) => UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_INITIAL_DIFFICULTY_DECREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_INCREMENTAL_DIFFICULTY_DECREASE.Value);
-            static float rangeInfo(int level) => UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_INITIAL_RANGE_INCREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_INCREMENTAL_RANGE_INCREASE.Value);
-            static float stunTimerInfo(int level) => UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_INITIAL_STUN_TIMER_INCREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_INCREMENTAL_STUN_TIMER_INCREASE.Value);
-            static float cooldownInfo(int level) => UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_INITIAL_COOLDOWN_DECREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_DECREASE.Value);
+            static float difficultyInfo(int level)
+            {
+                LategameConfiguration config = GetConfiguration();
+                return config.ALUMINIUM_COILS_INITIAL_DIFFICULTY_DECREASE.Value + (level * config.ALUMINIUM_COILS_INCREMENTAL_DIFFICULTY_DECREASE.Value);
+            }
+            static float rangeInfo(int level)
+            {
+                LategameConfiguration config = GetConfiguration();
+                return config.ALUMINIUM_COILS_INITIAL_RANGE_INCREASE.Value + (level * config.ALUMINIUM_COILS_INCREMENTAL_RANGE_INCREASE.Value);
+            }
+            static float stunTimerInfo(int level)
+            {
+                LategameConfiguration config = GetConfiguration();
+                return config.ALUMINIUM_COILS_INITIAL_STUN_TIMER_INCREASE.Value + (level * config.ALUMINIUM_COILS_INCREMENTAL_STUN_TIMER_INCREASE.Value);
+            }
+            static float cooldownInfo(int level)
+            {
+                LategameConfiguration config = GetConfiguration();
+                return config.ALUMINIUM_COILS_INITIAL_COOLDOWN_DECREASE.Value + (level * config.ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_DECREASE.Value);
+            }
             StringBuilder sb = new();
             sb.Append($"LVL {level} - ${price}: Upgrades to zap gun:\n");
             sb.Append($"- Increases zap gun's range by {rangeInfo(level - 1) / 13f * 100f:F0}%\n");
@@ -73,8 +97,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Zapgun
         {
             get
             {
-                string[] prices = UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_PRICES.Value.Split(',');
-                return UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
+                LategameConfiguration config = GetConfiguration();
+                string[] prices = config.ALUMINIUM_COILS_PRICES.Value.Split(',');
+                return config.ALUMINIUM_COILS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
 
@@ -85,19 +110,18 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Zapgun
 
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.ALUMINIUM_COILS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().ALUMINIUM_COILS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
-            CustomTerminalNode node = UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
                                                 configuration.SHARED_UPGRADES.Value || !configuration.ALUMINIUM_COILS_INDIVIDUAL.Value,
                                                 configuration.ALUMINIUM_COILS_ENABLED.Value,
                                                 configuration.ALUMINIUM_COILS_PRICE.Value,
                                                 UpgradeBus.ParseUpgradePrices(configuration.ALUMINIUM_COILS_PRICES.Value),
                                                 configuration.OVERRIDE_UPGRADE_NAMES ? configuration.ALUMINIUM_COILS_OVERRIDE_NAME : "");
-            return node;
         }
     }
 }

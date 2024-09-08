@@ -14,20 +14,26 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.LITHIUM_BATTERIES_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().LITHIUM_BATTERIES_OVERRIDE_NAME;
             base.Start();
         }
         public static float GetChargeRateMultiplier(float defaultChargeRate)
         {
+            LategameConfiguration config = GetConfiguration();
+            if (!config.LITHIUM_BATTERIES_ENABLED) return defaultChargeRate;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultChargeRate;
-            float appliedMultiplier = UpgradeBus.Instance.PluginConfiguration.LITHIUM_BATTERIES_INITIAL_MULTIPLIER.Value;
-            appliedMultiplier += GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER.Value;
+            float appliedMultiplier = config.LITHIUM_BATTERIES_INITIAL_MULTIPLIER.Value;
+            appliedMultiplier += GetUpgradeLevel(UPGRADE_NAME) * config.LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER.Value;
             appliedMultiplier = (100 - appliedMultiplier) / 100f;
             return defaultChargeRate * appliedMultiplier;
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.LITHIUM_BATTERIES_INITIAL_MULTIPLIER.Value + (level * UpgradeBus.Instance.PluginConfiguration.LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER.Value);
+            static float infoFunction(int level)
+            {
+                LategameConfiguration config = GetConfiguration();
+                return config.LITHIUM_BATTERIES_INITIAL_MULTIPLIER.Value + (level * config.LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER.Value);
+            }
             const string infoFormat = "LVL {0} - ${1} - Decreases the rate of battery used on the items by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
@@ -36,14 +42,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items
         {
             get
             {
-                string[] prices = UpgradeBus.Instance.PluginConfiguration.LITHIUM_BATTERIES_PRICES.Value.Split(',');
-                return UpgradeBus.Instance.PluginConfiguration.LITHIUM_BATTERIES_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
+                LategameConfiguration config = GetConfiguration();
+                string[] prices = config.LITHIUM_BATTERIES_PRICES.Value.Split(',');
+                return config.LITHIUM_BATTERIES_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
 
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.LITHIUM_BATTERIES_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().LITHIUM_BATTERIES_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -51,7 +58,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
             return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
                                                 configuration.SHARED_UPGRADES.Value || !configuration.LITHIUM_BATTERIES_INDIVIDUAL.Value,

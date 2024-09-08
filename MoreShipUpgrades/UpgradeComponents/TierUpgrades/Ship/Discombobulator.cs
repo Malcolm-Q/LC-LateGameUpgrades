@@ -23,7 +23,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().DISCOMBOBULATOR_OVERRIDE_NAME;
             instance = this;
         }
 
@@ -46,13 +46,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         {
             Terminal terminal = UpgradeBus.Instance.GetTerminal();
             PlayAudio(ref terminal);
-            flashCooldown = UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_COOLDOWN.Value;
+            flashCooldown = GetConfiguration().DISCOMBOBULATOR_COOLDOWN.Value;
             StunNearbyEnemies(ref terminal);
         }
 
         void StunNearbyEnemies(ref Terminal terminal)
         {
-            Collider[] array = Physics.OverlapSphere(terminal.transform.position, UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_RADIUS.Value, 524288);
+            LategameConfiguration config = GetConfiguration();
+            Collider[] array = Physics.OverlapSphere(terminal.transform.position, config.DISCOMBOBULATOR_RADIUS.Value, 524288);
             if (array.Length == 0) return;
             for (int i = 0; i < array.Length; i++)
             {
@@ -61,10 +62,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
                 EnemyAI enemy = component.mainScript;
                 if (CanDealDamage())
                 {
-                    int forceValue = UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_INITIAL_DAMAGE.Value + (UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_DAMAGE_INCREASE.Value * (GetUpgradeLevel(UPGRADE_NAME) - UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_DAMAGE_LEVEL.Value));
+                    int forceValue = config.DISCOMBOBULATOR_INITIAL_DAMAGE.Value + (config.DISCOMBOBULATOR_DAMAGE_INCREASE.Value * (GetUpgradeLevel(UPGRADE_NAME) - config.DISCOMBOBULATOR_DAMAGE_LEVEL.Value));
                     enemy.HitEnemy(forceValue);
                 }
-                if (!enemy.isEnemyDead) enemy.SetEnemyStunned(true, UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_STUN_DURATION.Value + (UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_INCREMENT.Value * GetUpgradeLevel(UPGRADE_NAME)), null);
+                if (!enemy.isEnemyDead) enemy.SetEnemyStunned(true, config.DISCOMBOBULATOR_STUN_DURATION.Value + (config.DISCOMBOBULATOR_INCREMENT.Value * GetUpgradeLevel(UPGRADE_NAME)), null);
             }
         }
 
@@ -77,7 +78,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
 
         private bool CanDealDamage()
         {
-            return UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_DAMAGE_LEVEL.Value > 0 && GetUpgradeLevel(UPGRADE_NAME) + 1 >= UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_DAMAGE_LEVEL.Value;
+            LategameConfiguration config = GetConfiguration();
+            return config.DISCOMBOBULATOR_DAMAGE_LEVEL.Value > 0 && GetUpgradeLevel(UPGRADE_NAME) + 1 >= config.DISCOMBOBULATOR_DAMAGE_LEVEL.Value;
         }
         private IEnumerator ResetRange(Terminal terminal)
         {
@@ -92,7 +94,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_STUN_DURATION.Value + (level * UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_INCREMENT.Value);
+            static float infoFunction(int level)
+            {
+                LategameConfiguration config = GetConfiguration();
+                return config.DISCOMBOBULATOR_STUN_DURATION.Value + (level * config.DISCOMBOBULATOR_INCREMENT.Value);
+            }
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
@@ -100,13 +106,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         {
             get
             {
-                string[] prices = UpgradeBus.Instance.PluginConfiguration.DISCO_UPGRADE_PRICES.Value.Split(',');
-                return UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
+                LategameConfiguration config = GetConfiguration();
+                string[] prices = config.DISCO_UPGRADE_PRICES.Value.Split(',');
+                return config.DISCOMBOBULATOR_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().DISCOMBOBULATOR_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -116,7 +123,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
             AudioClip flashSFX = AssetBundleHandler.GetAudioClip("Flashbang");
             if (!flashSFX) return null;
 

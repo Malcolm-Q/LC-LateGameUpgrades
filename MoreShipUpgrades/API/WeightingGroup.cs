@@ -16,7 +16,6 @@ namespace MoreShipUpgrades.API
             }
             if (totalWeight <= 0f)
                 return null;
-                
             double roll = new Random().NextDouble();
             double total = 0;
 

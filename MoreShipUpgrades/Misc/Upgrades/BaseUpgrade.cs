@@ -1,5 +1,4 @@
-﻿using CSync.Lib;
-using MoreShipUpgrades.Managers;
+﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Util;
 using System;
@@ -45,9 +44,10 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// </summary>
         public virtual void Load()
         {
+            LategameConfiguration config = GetConfiguration();
             UpgradeBus.Instance.activeUpgrades[upgradeName] = true;
-            if (!UpgradeBus.Instance.PluginConfiguration.SHOW_UPGRADES_CHAT.LocalValue) return;
-            ShowUpgradeNotification(LguConstants.UPGRADE_UNLOADED_NOTIFICATION_DEFAULT_COLOR, $"{(UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? overridenUpgradeName : upgradeName)} is active!");
+            if (!config.SHOW_UPGRADES_CHAT.LocalValue) return;
+            ShowUpgradeNotification(LguConstants.UPGRADE_UNLOADED_NOTIFICATION_DEFAULT_COLOR, $"{(config.OVERRIDE_UPGRADE_NAMES ? overridenUpgradeName : upgradeName)} is active!");
         }
         /// <summary>
         /// Function responsible to insert this upgrade's gameObject into the UpgradeBus' list of gameObjects for handling
@@ -61,9 +61,10 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// </summary>
         public virtual void Unwind()
         {
+            LategameConfiguration config = GetConfiguration();
             UpgradeBus.Instance.activeUpgrades[upgradeName] = false;
-            if (!UpgradeBus.Instance.PluginConfiguration.SHOW_UPGRADES_CHAT.LocalValue) return;
-            ShowUpgradeNotification(LguConstants.UPGRADE_LOADED_NOTIFICATION_DEFAULT_COLOR, $"{(UpgradeBus.Instance.PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? overridenUpgradeName : upgradeName)} has been disabled!");
+            if (!config.SHOW_UPGRADES_CHAT.LocalValue) return;
+            ShowUpgradeNotification(LguConstants.UPGRADE_LOADED_NOTIFICATION_DEFAULT_COLOR, $"{(config.OVERRIDE_UPGRADE_NAMES ? overridenUpgradeName : upgradeName)} has been disabled!");
         }
         /// <summary>
         /// Shows a notification for when an upgrade is loaded or unloaded from the player
@@ -95,6 +96,15 @@ namespace MoreShipUpgrades.Misc.Upgrades
         {
             return UpgradeBus.Instance.upgradeLevels.GetValueOrDefault(upgradeName, 0);
         }
+        /// <summary>
+        /// Returns the configuration used for the mod
+        /// </summary>
+        /// <returns>Returns the configuration used for the mod</returns>
+        public static LategameConfiguration GetConfiguration()
+        {
+            return UpgradeBus.Instance.PluginConfiguration;
+        }
+
         /// <summary>
         /// </summary>
         /// <returns>Wether the upgrade can be loaded immediately upon game being loaded or not</returns>

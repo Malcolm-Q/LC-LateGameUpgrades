@@ -40,27 +40,29 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.PROTEIN_POWDER_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().PROTEIN_POWDER_OVERRIDE_NAME;
             base.Start();
         }
 
         public static int GetShovelHitForce(int force)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.PROTEIN_ENABLED.Value) return force;
+            LategameConfiguration config = GetConfiguration();
+            if (!config.PROTEIN_ENABLED.Value) return force;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return force;
-            int proteinForce = TryToCritEnemy() ? CRIT_DAMAGE_VALUE : UpgradeBus.Instance.PluginConfiguration.PROTEIN_UNLOCK_FORCE.Value + (UpgradeBus.Instance.PluginConfiguration.PROTEIN_INCREMENT.Value * GetUpgradeLevel(UPGRADE_NAME));
+            int proteinForce = TryToCritEnemy() ? CRIT_DAMAGE_VALUE : config.PROTEIN_UNLOCK_FORCE.Value + (config.PROTEIN_INCREMENT.Value * GetUpgradeLevel(UPGRADE_NAME));
             return force + proteinForce;
         }
 
         private static bool TryToCritEnemy()
         {
-            string[] prices = UpgradeBus.Instance.PluginConfiguration.PROTEIN_UPGRADE_PRICES.Value.Split(',');
+            LategameConfiguration config = GetConfiguration();
+            string[] prices = config.PROTEIN_UPGRADE_PRICES.Value.Split(',');
             int maximumLevel = prices.Length;
             int currentLevel = GetUpgradeLevel(UPGRADE_NAME);
 
             if (currentLevel != maximumLevel && !(prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"))) return false;
 
-            return UnityEngine.Random.value < UpgradeBus.Instance.PluginConfiguration.PROTEIN_CRIT_CHANCE.Value;
+            return UnityEngine.Random.value < config.PROTEIN_CRIT_CHANCE.Value;
         }
 
         public string GetWorldBuildingText(bool shareStatus = false)
@@ -70,7 +72,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.PROTEIN_UNLOCK_FORCE.Value + (UpgradeBus.Instance.PluginConfiguration.PROTEIN_INCREMENT.Value * level);
+            static float infoFunction(int level)
+            {
+                LategameConfiguration config = GetConfiguration();
+                return config.PROTEIN_UNLOCK_FORCE.Value + (config.PROTEIN_INCREMENT.Value * level);
+            }
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
@@ -78,14 +84,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             get
             {
-                string[] prices = UpgradeBus.Instance.PluginConfiguration.PROTEIN_UPGRADE_PRICES.Value.Split(',');
-                return UpgradeBus.Instance.PluginConfiguration.PROTEIN_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
+                LategameConfiguration config = GetConfiguration();
+                string[] prices = config.PROTEIN_UPGRADE_PRICES.Value.Split(',');
+                return config.PROTEIN_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
 
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.PROTEIN_POWDER_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().PROTEIN_POWDER_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -93,7 +100,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
             return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
                                                 configuration.SHARED_UPGRADES.Value || !configuration.PROTEIN_INDIVIDUAL.Value,

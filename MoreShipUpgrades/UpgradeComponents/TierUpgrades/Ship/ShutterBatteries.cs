@@ -29,11 +29,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.SHUTTER_BATTERIES_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().SHUTTER_BATTERIES_OVERRIDE_NAME;
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_INITIAL.Value + (level * UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_INCREMENTAL.Value);
+            static float infoFunction(int level)
+            {
+                LategameConfiguration config = GetConfiguration();
+                return config.DOOR_HYDRAULICS_BATTERY_INITIAL.Value + (level * config.DOOR_HYDRAULICS_BATTERY_INCREMENTAL.Value);
+            }
             const string infoFormat = "LVL {0} - ${1} - Increases the door's hydraulic capacity to remain closed by {2} units\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
@@ -41,21 +45,23 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             get
             {
-                string[] prices = UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_PRICES.Value.Split(',');
-                return UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
+                LategameConfiguration config = GetConfiguration();
+                string[] prices = config.DOOR_HYDRAULICS_BATTERY_PRICES.Value.Split(',');
+                return config.DOOR_HYDRAULICS_BATTERY_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
         public static float GetAdditionalDoorTime(float defaultValue)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_ENABLED) return defaultValue;
+            LategameConfiguration config = GetConfiguration();
+            if (!config.DOOR_HYDRAULICS_BATTERY_ENABLED) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
-            float additionalValue = UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_INITIAL + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.DOOR_HYDRAULICS_BATTERY_INCREMENTAL);
+            float additionalValue = config.DOOR_HYDRAULICS_BATTERY_INITIAL + (GetUpgradeLevel(UPGRADE_NAME) * config.DOOR_HYDRAULICS_BATTERY_INCREMENTAL);
             return Mathf.Clamp(defaultValue + additionalValue, defaultValue, float.MaxValue);
         }
 
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.SHUTTER_BATTERIES_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().SHUTTER_BATTERIES_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -63,7 +69,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
             return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
                                                 shareStatus: true,

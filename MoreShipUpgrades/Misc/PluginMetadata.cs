@@ -4,6 +4,6 @@
     {
         public const string GUID = "com.malco.lethalcompany.moreshipupgrades";
         public const string NAME = "More Ship Upgrades";
-        public const string VERSION = "3.10.1";
+        public const string VERSION = "3.10.2";
     }
 }

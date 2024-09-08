@@ -1,4 +1,5 @@
-﻿using MoreShipUpgrades.Managers;
+﻿using LCVR;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
@@ -19,7 +20,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.INITIAL_CLIMBING_SPEED_BOOST.Value + (level * UpgradeBus.Instance.PluginConfiguration.INCREMENTAL_CLIMBING_SPEED_BOOST.Value);
+            static float infoFunction(int level)
+            {
+                LategameConfiguration config = GetConfiguration();
+                return config.INITIAL_CLIMBING_SPEED_BOOST.Value + (level * config.INCREMENTAL_CLIMBING_SPEED_BOOST.Value);
+            }
             const string infoFormat = "LVL {0} - ${1} - Increases the speed of climbing ladders by {2} units.\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
@@ -27,21 +32,23 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             get
             {
-                string[] prices = UpgradeBus.Instance.PluginConfiguration.CLIMBING_GLOVES_PRICES.Value.Split(',');
-                return UpgradeBus.Instance.PluginConfiguration.CLIMBING_GLOVES_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
+                LategameConfiguration config = GetConfiguration();
+                string[] prices = config.CLIMBING_GLOVES_PRICES.Value.Split(',');
+                return config.CLIMBING_GLOVES_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
         public static float GetAdditionalClimbingSpeed(float defaultValue)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.CLIMBING_GLOVES_ENABLED) return defaultValue;
+            LategameConfiguration config = GetConfiguration();
+            if (!config.CLIMBING_GLOVES_ENABLED) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
-            float additionalValue = UpgradeBus.Instance.PluginConfiguration.INITIAL_CLIMBING_SPEED_BOOST + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.INCREMENTAL_CLIMBING_SPEED_BOOST);
+            float additionalValue = config.INITIAL_CLIMBING_SPEED_BOOST + (GetUpgradeLevel(UPGRADE_NAME) * config.INCREMENTAL_CLIMBING_SPEED_BOOST);
             return Mathf.Clamp(defaultValue + additionalValue, defaultValue, float.MaxValue);
         }
 
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.CLIMBING_GLOVES_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().CLIMBING_GLOVES_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -49,7 +56,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
             return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
                                                 configuration.SHARED_UPGRADES.Value || !configuration.CLIMBING_GLOVES_INDIVIDUAL.Value,

@@ -24,11 +24,11 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player
         public DoorLock currentDoor;
         bool canPick;
         public int timesStruck;
-        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.LOCKSMITH_PRICE.Value <= 0;
+        public override bool CanInitializeOnStart => GetConfiguration().LOCKSMITH_PRICE.Value <= 0;
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.LOCKSMITH_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().LOCKSMITH_OVERRIDE_NAME;
             instance = this;
         }
         internal override void Start()
@@ -148,7 +148,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.LOCKSMITH_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().LOCKSMITH_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -156,7 +156,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
             return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
                                     configuration.SHARED_UPGRADES.Value || !configuration.LOCKSMITH_INDIVIDUAL.Value,
