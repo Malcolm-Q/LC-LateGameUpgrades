@@ -1,6 +1,7 @@
 <details>
 <summary> 3.10.2 - 2024-08-29 </summary>
 
+- Displayed control binding used for sorting in the store application.
 - Possibly fixed issue with Landing Thrusters only applying on host.
 - Fixed issue with item names being case-sensitive in the config related to Item Progression.
 - Fixed issue with clients buying upgrades wouldn't consume credits due to error in RPC calls.

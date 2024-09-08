@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine.InputSystem;
 
 namespace MoreShipUpgrades.Misc.UI.Application
 {
@@ -108,9 +109,9 @@ namespace MoreShipUpgrades.Misc.UI.Application
             int currentSort = currentCursorMenu.sortingIndex;
             return currentSort switch
             {
-                0 => "Sorted by: Alphabetical",
-                1 => "Sorted by: Price (Ascending)",
-                2 => "Sorted by: Price (Descending)",
+                0 => $"Sorted by: Alphabetical [{InteractiveTerminalAPI.Compat.InputUtils_Compat.ChangeApplicationSortingKey.GetBindingDisplayString()}]",
+                1 => $"Sorted by: Price (Ascending) [{InteractiveTerminalAPI.Compat.InputUtils_Compat.ChangeApplicationSortingKey.GetBindingDisplayString()}]",
+                2 => $"Sorted by: Price (Descending) [{InteractiveTerminalAPI.Compat.InputUtils_Compat.ChangeApplicationSortingKey.GetBindingDisplayString()}]",
                 _ => "",
             };
         }
