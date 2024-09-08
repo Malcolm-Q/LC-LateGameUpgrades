@@ -60,8 +60,6 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// Initializes the upgrade to be applying to the local player by changing its selected attribute's value<para></para>
         /// Will apply incremental values based on the delta of levels between last saved and provided
         /// </summary>
-        /// <param name="upgradeActive">Represents the state of the upgrade being applied on the player</param>
-        /// <param name="upgradeLevel">Current level of the upgrade when loading the upgrade</param>
         protected void LoadUpgradeAttribute()
         {
             if (!activeUpgrade) AddInitialValue();
@@ -84,7 +82,6 @@ namespace MoreShipUpgrades.Misc.Upgrades
                 case GameAttribute.PLAYER_HEALTH: localPlayer.health += (int)initialValue; break;
                 default: logger.LogError("No attribute was set for this upgrade to add the initial value"); break;
             }
-           
         }
         /// <summary>
         /// Adds the incremental value stored in the upgrade to the selected attribute<para></para>
@@ -125,8 +122,6 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// Removes the values introduced into the selected attribute to make them normalized to the vanilla standard<para></para>
         /// and resets the active status and level of the upgrade to turned off values
         /// </summary>
-        /// <param name="upgradeActive">Current status of the upgrade</param>
-        /// <param name="upgradeLevel">Current level of the upgrade</param>
         internal void UnloadUpgradeAttribute()
         {
             bool upgradeActive = GetActiveUpgrade(upgradeName);

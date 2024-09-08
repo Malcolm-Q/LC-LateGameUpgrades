@@ -34,8 +34,10 @@ namespace MoreShipUpgrades.Misc.UI.Application
 
             if (pagesUpgrades.Length == 0)
             {
-                CursorElement[] elements = new CursorElement[1];
-                elements[0] = CursorElement.Create(name: "Leave", action: () => UnityEngine.Object.Destroy(InteractiveTerminalManager.Instance));
+                CursorElement[] elements =
+                [
+                    CursorElement.Create(name: "Leave", action: () => UnityEngine.Object.Destroy(InteractiveTerminalManager.Instance)),
+                ];
                 CursorMenu cursorMenu = CursorMenu.Create(startingCursorIndex: 0, elements: elements);
                 IScreen screen = new BoxedScreen()
                 {

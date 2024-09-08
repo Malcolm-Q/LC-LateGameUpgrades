@@ -15,23 +15,22 @@ using MoreShipUpgrades.Misc.Commands;
 using MoreShipUpgrades.Misc.UI.Application;
 using InteractiveTerminalAPI.UI;
 using static BepInEx.BepInDependency;
-using GoodItemScan;
 
 namespace MoreShipUpgrades
 {
     [BepInPlugin(Metadata.GUID, Metadata.NAME, Metadata.VERSION)]
-    [BepInDependency("evaisa.lethallib", "0.13.0")]
+    [BepInDependency(LethalLib.Plugin.ModGUID, "0.13.0")]
     [BepInDependency("com.sigurd.csync")]
-    [BepInDependency("com.rune580.LethalCompanyInputUtils")]
-    [BepInDependency("WhiteSpike.InteractiveTerminalAPI")]
-    [BepInDependency("com.github.WhiteSpike.CustomItemBehaviourLibrary", DependencyFlags.SoftDependency)]
+    [BepInDependency(LethalCompanyInputUtils.PluginInfo.PLUGIN_GUID)]
+    [BepInDependency(InteractiveTerminalAPI.Misc.Metadata.GUID)]
+    [BepInDependency(CustomItemBehaviourLibrary.Misc.Metadata.GUID, DependencyFlags.SoftDependency)]
     [BepInDependency(LethalLevelLoader.Plugin.ModGUID, DependencyFlags.SoftDependency)]
     [BepInDependency(Oxygen.OxygenBase.modGUID, DependencyFlags.SoftDependency)]
     [BepInDependency(LCVR.Plugin.PLUGIN_GUID, DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
         internal static ManualLogSource mls;
-        internal static Dictionary<string, GameObject> networkPrefabs = [];
+        internal static readonly Dictionary<string, GameObject> networkPrefabs = [];
 
         void Awake()
         {
@@ -49,8 +48,7 @@ namespace MoreShipUpgrades
             }
             foreach (var type in types)
             {
-                var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
-                foreach (var method in methods)
+                foreach (var method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static))
                 {
                     var attributes = method.GetCustomAttributes(typeof(RuntimeInitializeOnLoadMethodAttribute), false);
                     if (attributes.Length > 0)
@@ -87,7 +85,7 @@ namespace MoreShipUpgrades
             InteractiveTerminalManager.RegisterApplication<ContractApplication>("contracts", caseSensitive: false);
             if (!config.CONTRACT_PROVIDE_RANDOM_ONLY)
                 InteractiveTerminalManager.RegisterApplication<ContractApplication>("contract", caseSensitive: false);
-           
+
             mls.LogInfo($"{Metadata.NAME} {Metadata.VERSION} has been loaded successfully.");
         }
 

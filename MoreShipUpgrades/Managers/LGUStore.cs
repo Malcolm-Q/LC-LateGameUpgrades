@@ -43,7 +43,7 @@ namespace MoreShipUpgrades.Managers
         /// <summary>
         /// Old save format of Lategame Upgrades
         /// </summary>
-        LGUSaveV1 oldSave;
+        LguSaveV1 oldSave;
         /// <summary>
         /// Player identifier of the client
         /// </summary>
@@ -94,7 +94,7 @@ namespace MoreShipUpgrades.Managers
             if (File.Exists(filePath))
             {
                 string tempJson = File.ReadAllText(filePath);
-                oldSave = JsonConvert.DeserializeObject<LGUSaveV1>(tempJson);
+                oldSave = JsonConvert.DeserializeObject<LguSaveV1>(tempJson);
                 File.Delete(filePath);
             }
             string json = (string)ES3.Load(key: saveDataKey, filePath: saveFile, defaultValue: null);

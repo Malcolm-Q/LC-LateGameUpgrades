@@ -301,7 +301,6 @@ namespace MoreShipUpgrades.Managers
                 maxUpgrade: prices.Length,
                 originalName: upgradeName,
                 sharedUpgrade: shareStatus);
-
         }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can only be bought once

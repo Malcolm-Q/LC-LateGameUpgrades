@@ -11,7 +11,6 @@ using MoreShipUpgrades.Patches.PlayerController;
 using MoreShipUpgrades.Patches.RoundComponents;
 using MoreShipUpgrades.Patches.TerminalComponents;
 using MoreShipUpgrades.Patches.Weather;
-using System;
 
 namespace MoreShipUpgrades.Managers
 {

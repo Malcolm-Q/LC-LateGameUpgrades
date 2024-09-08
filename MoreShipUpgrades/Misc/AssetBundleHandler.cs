@@ -25,7 +25,7 @@ namespace MoreShipUpgrades.Misc
 {
     internal static class AssetBundleHandler
     {
-        static readonly LguLogger logger = new LguLogger(typeof(AssetBundleHandler).Name);
+        static readonly LguLogger logger = new(nameof(AssetBundleHandler));
         static Dictionary<string, string> infoJSON;
         const string root = "Assets/ShipUpgrades/";
 
@@ -56,7 +56,7 @@ namespace MoreShipUpgrades.Misc
         const string DiscombobulatorSFX = SFX + "Discombobulator/";
         const string ShoppingCartSFX = SFX + "Shopping Cart/";
         const string PortableTeleSFX = SFX + "Portable Teleporter/";
-        internal static readonly Dictionary<string, string> samplePaths = new Dictionary<string, string>()
+        static readonly Dictionary<string, string> samplePaths = new()
         {
             { "centipede", sampleItems+ "SnareFleaSample.asset" },
             { "bunker spider", sampleItems+ "BunkerSpiderSample.asset" },
@@ -72,7 +72,7 @@ namespace MoreShipUpgrades.Misc
             { "puffer", sampleItems+ "SporeLizardSample.asset" },
             { "maneater", sampleItems+ "ManeaterSample.asset" },
         };
-        static Dictionary<string, string> SFXPaths = new Dictionary<string, string>()
+        static readonly Dictionary<string, string> SFXPaths = new()
         {
             { "Scrap Wheelbarrow Sound 0", ShoppingCartSFX+"Shopping_Cart_Move_1.ogg" },
             { "Scrap Wheelbarrow Sound 1", ShoppingCartSFX+"Shopping_Cart_Move_2.ogg" },
@@ -91,7 +91,7 @@ namespace MoreShipUpgrades.Misc
             { "Laptop Error", dataSFX + "winError.mp3" },
             { "Laptop Start", dataSFX + "startup.mp3" },
         };
-        static Dictionary<string, string> assetPaths = new Dictionary<string, string>()
+        static readonly Dictionary<string, string> assetPaths = new()
         {
             { Beekeeper.UPGRADE_NAME, upgrades+"beekeeper.prefab" },
             { SickBeats.UPGRADE_NAME, upgrades+"SickBeats.prefab" },
@@ -232,7 +232,7 @@ namespace MoreShipUpgrades.Misc
             if (!infoStringAsset)
             {
                 logger.LogError("An error has occurred trying to load info strings from the bundle");
-                return new();
+                return [];
             }
 
             infoJSON = JsonConvert.DeserializeObject<Dictionary<string, string>>(infoStringAsset.text);
