@@ -22,7 +22,7 @@ namespace MoreShipUpgrades
     [BepInDependency(LethalLib.Plugin.ModGUID, "0.13.0")]
     [BepInDependency("com.sigurd.csync")]
     [BepInDependency(LethalCompanyInputUtils.PluginInfo.PLUGIN_GUID)]
-    [BepInDependency(InteractiveTerminalAPI.Misc.Metadata.GUID)]
+    [BepInDependency("WhiteSpike.InteractiveTerminalAPI")]
     [BepInDependency(CustomItemBehaviourLibrary.Misc.Metadata.GUID, DependencyFlags.SoftDependency)]
     [BepInDependency(LethalLevelLoader.Plugin.ModGUID, DependencyFlags.SoftDependency)]
     [BepInDependency(Oxygen.OxygenBase.modGUID, DependencyFlags.SoftDependency)]

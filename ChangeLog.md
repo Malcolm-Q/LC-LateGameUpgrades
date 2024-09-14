@@ -3,6 +3,7 @@
 
 - Displayed control binding used for sorting in the store application.
 - Possibly fixed issue with Landing Thrusters only applying on host.
+- Possibly fixed issue with sales re-emerging after purchase when leaving and creating a new lobby.
 - Fixed issue with item names being case-sensitive in the config related to Item Progression.
 - Fixed issue with clients buying upgrades wouldn't consume credits due to error in RPC calls.
 - Possibly fixed issue with ChancePerScrap mode due to using integers rather than floats.

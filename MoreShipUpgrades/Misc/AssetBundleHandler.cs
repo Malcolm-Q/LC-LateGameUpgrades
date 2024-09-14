@@ -56,7 +56,7 @@ namespace MoreShipUpgrades.Misc
         const string DiscombobulatorSFX = SFX + "Discombobulator/";
         const string ShoppingCartSFX = SFX + "Shopping Cart/";
         const string PortableTeleSFX = SFX + "Portable Teleporter/";
-        static readonly Dictionary<string, string> samplePaths = new()
+        internal static readonly Dictionary<string, string> samplePaths = new()
         {
             { "centipede", sampleItems+ "SnareFleaSample.asset" },
             { "bunker spider", sampleItems+ "BunkerSpiderSample.asset" },
