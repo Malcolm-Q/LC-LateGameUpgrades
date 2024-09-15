@@ -27,9 +27,9 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             return codes;
         }
 
-        [HarmonyPatch(nameof(RoundManager.GenerateNewLevelClientRpc))]
+        [HarmonyPatch(nameof(RoundManager.FinishGeneratingLevel))]
         [HarmonyPrefix]
-        static void GenerateNewLevelClientRpcPrefix()
+        static void FinishGeneratingLevelPrefix()
         {
             if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_ENABLED) return;
             if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_AFFECT_LANDING) return;

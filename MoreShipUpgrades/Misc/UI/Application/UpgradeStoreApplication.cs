@@ -204,11 +204,6 @@ namespace MoreShipUpgrades.Misc.UI.Application
             {
                 LguStore.Instance.HandleUpgrade(node, true);
             }
-            if (node.SalePercentage != 1f && UpgradeBus.Instance.PluginConfiguration.SALE_APPLY_ONCE.Value)
-            {
-                node.SalePercentage = 1f;
-                UpgradeBus.Instance.SaleData[node.Name] = node.SalePercentage;
-            }
             backAction();
         }
     }

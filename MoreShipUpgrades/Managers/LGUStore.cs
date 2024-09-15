@@ -450,6 +450,12 @@ namespace MoreShipUpgrades.Managers
 
             SetContributionValue(node.OriginalName, 0);
 
+            if (node.SalePercentage != 1f && UpgradeBus.Instance.PluginConfiguration.SALE_APPLY_ONCE.Value)
+            {
+                node.SalePercentage = 1f;
+                UpgradeBus.Instance.SaleData[node.Name] = node.SalePercentage;
+            }
+
             SaveInfo = new SaveInfo();
             UpdateLGUSaveServerRpc(playerID, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(SaveInfo)));
         }
