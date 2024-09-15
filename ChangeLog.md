@@ -2,6 +2,7 @@
 <summary> 3.10.2 - 2024-09-15 </summary>
 
 - Displayed control binding used for sorting in the store application.
+- Changed colouring of maxed upgrades to dark green to distinguish between maxed upgrades and upgrades that you are unable to purchase due to lack of credits.
 - Fixed issue with Landing Thrusters only applying on host.
 - Fixed issue with sales re-emerging after purchase when leaving and creating a new lobby.
 - Fixed issue with item names being case-sensitive in the config related to Item Progression.
@@ -12,6 +13,7 @@
 - Code refactored.
 
 </details>
+
 <details>
 <summary> 3.10.1 - 2024-08-29 </summary>
 
