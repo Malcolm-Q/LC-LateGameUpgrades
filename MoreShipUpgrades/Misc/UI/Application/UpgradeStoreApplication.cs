@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine.InputSystem;
 
 namespace MoreShipUpgrades.Misc.UI.Application
 {
@@ -33,8 +34,10 @@ namespace MoreShipUpgrades.Misc.UI.Application
 
             if (pagesUpgrades.Length == 0)
             {
-                CursorElement[] elements = new CursorElement[1];
-                elements[0] = CursorElement.Create(name: "Leave", action: () => UnityEngine.Object.Destroy(InteractiveTerminalManager.Instance));
+                CursorElement[] elements =
+                [
+                    CursorElement.Create(name: "Leave", action: () => UnityEngine.Object.Destroy(InteractiveTerminalManager.Instance)),
+                ];
                 CursorMenu cursorMenu = CursorMenu.Create(startingCursorIndex: 0, elements: elements);
                 IScreen screen = new BoxedScreen()
                 {
@@ -108,9 +111,9 @@ namespace MoreShipUpgrades.Misc.UI.Application
             int currentSort = currentCursorMenu.sortingIndex;
             return currentSort switch
             {
-                0 => "Sorted by: Alphabetical",
-                1 => "Sorted by: Price (Ascending)",
-                2 => "Sorted by: Price (Descending)",
+                0 => $"Sorted by: Alphabetical [{InteractiveTerminalAPI.Compat.InputUtils_Compat.ChangeApplicationSortingKey.GetBindingDisplayString()}]",
+                1 => $"Sorted by: Price (Ascending) [{InteractiveTerminalAPI.Compat.InputUtils_Compat.ChangeApplicationSortingKey.GetBindingDisplayString()}]",
+                2 => $"Sorted by: Price (Descending) [{InteractiveTerminalAPI.Compat.InputUtils_Compat.ChangeApplicationSortingKey.GetBindingDisplayString()}]",
                 _ => "",
             };
         }
@@ -191,7 +194,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
         }
         void PurchaseUpgrade(CustomTerminalNode node, int price, Action backAction)
         {
-            terminal.SyncGroupCreditsServerRpc(terminal.groupCredits - price, terminal.numberOfItemsInDropship);
+            terminal.BuyItemsServerRpc([], terminal.groupCredits - price, terminal.numberOfItemsInDropship); // The only vanilla rpc that syncs credits without ownership check
             LguStore.Instance.AddUpgradeSpentCreditsServerRpc(price);
             if (!node.Unlocked)
             {
@@ -201,7 +204,6 @@ namespace MoreShipUpgrades.Misc.UI.Application
             {
                 LguStore.Instance.HandleUpgrade(node, true);
             }
-            if (node.SalePercentage != 1f && UpgradeBus.Instance.PluginConfiguration.SALE_APPLY_ONCE.Value) node.SalePercentage = 1f;
             backAction();
         }
     }

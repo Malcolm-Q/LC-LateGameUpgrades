@@ -20,7 +20,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.BETTER_SCANNER_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().BETTER_SCANNER_OVERRIDE_NAME;
             base.Start();
         }
 
@@ -32,8 +32,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
                 int level = GetUpgradeLevel(UPGRADE_NAME);
                 if (level > 0)
                 {
-                    GoodItemScanCompat.IncreaseScanDistance((int)UpgradeBus.Instance.PluginConfiguration.NODE_DISTANCE_INCREASE);
-                    GoodItemScanCompat.IncreaseEnemyScanDistance((int)UpgradeBus.Instance.PluginConfiguration.NODE_DISTANCE_INCREASE);
+                    LategameConfiguration config = GetConfiguration();
+                    GoodItemScanCompat.IncreaseScanDistance((int)config.NODE_DISTANCE_INCREASE);
+                    GoodItemScanCompat.IncreaseEnemyScanDistance((int)config.NODE_DISTANCE_INCREASE);
                 }
                 if (level == 2) GoodItemScanCompat.ToggleScanThroughWalls(true);
             }
@@ -61,13 +62,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public static string GetBetterScannerInfo(int level, int price)
         {
+            LategameConfiguration config = GetConfiguration();
             switch (level)
             {
-                case 1: return string.Format(AssetBundleHandler.GetInfoFromJSON("Better Scanner1"), level, price, UpgradeBus.Instance.PluginConfiguration.NODE_DISTANCE_INCREASE.Value, UpgradeBus.Instance.PluginConfiguration.SHIP_AND_ENTRANCE_DISTANCE_INCREASE.Value);
+                case 1: return string.Format(AssetBundleHandler.GetInfoFromJSON("Better Scanner1"), level, price, config.NODE_DISTANCE_INCREASE.Value, config.SHIP_AND_ENTRANCE_DISTANCE_INCREASE.Value);
                 case 2: return string.Format(AssetBundleHandler.GetInfoFromJSON("Better Scanner2"), level, price);
                 case 3:
                     {
-                        string result = string.Format(AssetBundleHandler.GetInfoFromJSON("Better Scanner3"), level, price, UpgradeBus.Instance.PluginConfiguration.BETTER_SCANNER_ENEMIES.Value ? " and enemies" : "");
+                        string result = string.Format(AssetBundleHandler.GetInfoFromJSON("Better Scanner3"), level, price, config.BETTER_SCANNER_ENEMIES.Value ? " and enemies" : "");
                         result += "hives and scrap command display the location of the most valuable hives and scrap on the map.\n";
                         return result;
                     }
@@ -89,20 +91,20 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             return stringBuilder.ToString();
         }
 
-        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.BETTER_SCANNER_PRICE.Value <= 0 &&
-                UpgradeBus.Instance.PluginConfiguration.BETTER_SCANNER_PRICE2.Value <= 0 &&
-                UpgradeBus.Instance.PluginConfiguration.BETTER_SCANNER_PRICE3.Value <= 0;
+        public override bool CanInitializeOnStart => GetConfiguration().BETTER_SCANNER_PRICE.Value <= 0 &&
+                GetConfiguration().BETTER_SCANNER_PRICE2.Value <= 0 &&
+                GetConfiguration().BETTER_SCANNER_PRICE3.Value <= 0;
         public new static void RegisterUpgrade()
         {
             SetupGenericPerk<BetterScanner>(UPGRADE_NAME);
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.BETTER_SCANNER_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().BETTER_SCANNER_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
             return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
                                                 configuration.SHARED_UPGRADES.Value || !configuration.BETTER_SCANNER_INDIVIDUAL.Value,

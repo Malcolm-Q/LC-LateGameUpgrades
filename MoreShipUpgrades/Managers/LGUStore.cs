@@ -15,8 +15,6 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Compat;
-using MoreShipUpgrades.UpgradeComponents.Interfaces;
-using HarmonyLib;
 using static MoreShipUpgrades.Managers.ItemProgressionManager;
 using MoreShipUpgrades.Misc.Util;
 using System.Text;
@@ -45,7 +43,7 @@ namespace MoreShipUpgrades.Managers
         /// <summary>
         /// Old save format of Lategame Upgrades
         /// </summary>
-        LGUSaveV1 oldSave;
+        LguSaveV1 oldSave;
         /// <summary>
         /// Player identifier of the client
         /// </summary>
@@ -96,11 +94,10 @@ namespace MoreShipUpgrades.Managers
             if (File.Exists(filePath))
             {
                 string tempJson = File.ReadAllText(filePath);
-                oldSave = JsonConvert.DeserializeObject<LGUSaveV1>(tempJson);
+                oldSave = JsonConvert.DeserializeObject<LguSaveV1>(tempJson);
                 File.Delete(filePath);
             }
             string json = (string)ES3.Load(key: saveDataKey, filePath: saveFile, defaultValue: null);
-            //File.WriteAllText(filePath, json);
             if (json != null)
             {
                 logger.LogInfo($"Loading save file for slot {saveNum}.");
@@ -144,7 +141,8 @@ namespace MoreShipUpgrades.Managers
         [ServerRpc(RequireOwnership = false)]
         public void UpdateLGUSaveServerRpc(ulong id, byte[] json, bool saveFile = false)
         {
-            LguSave.playerSaves[id] = JsonConvert.DeserializeObject<SaveInfo>(Encoding.ASCII.GetString(json));
+            string jsonString = Encoding.ASCII.GetString(json);
+            LguSave.playerSaves[id] = JsonConvert.DeserializeObject<SaveInfo>(jsonString);
             logger.LogInfo($"Received and updated save info for client: {id}");
             if (saveFile) ServerSaveFile();
         }
@@ -452,6 +450,12 @@ namespace MoreShipUpgrades.Managers
 
             SetContributionValue(node.OriginalName, 0);
 
+            if (node.SalePercentage != 1f && UpgradeBus.Instance.PluginConfiguration.SALE_APPLY_ONCE.Value)
+            {
+                node.SalePercentage = 1f;
+                UpgradeBus.Instance.SaleData[node.Name] = node.SalePercentage;
+            }
+
             SaveInfo = new SaveInfo();
             UpdateLGUSaveServerRpc(playerID, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(SaveInfo)));
         }
@@ -524,13 +528,6 @@ namespace MoreShipUpgrades.Managers
         }
 
         [ClientRpc]
-        internal void ResetShipAttributesClientRpc()
-        {
-            logger.LogDebug("Resetting the ship's attributes");
-            UpgradeBus.Instance.UpgradeObjects.Values.Where(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>() is IServerSync).Do(upgrade => upgrade.GetComponent<GameAttributeTierUpgrade>().UnloadUpgradeAttribute());
-        }
-
-        [ClientRpc]
         internal void SetContributionValueClientRpc(string key, int value)
         {
             SetContributionValue(key, value);
@@ -563,14 +560,24 @@ namespace MoreShipUpgrades.Managers
     [Serializable]
     public class SaveInfo
     {
-        public Dictionary<string, bool> activeUpgrades = UpgradeBus.Instance.activeUpgrades;
-        public Dictionary<string, int> upgradeLevels = UpgradeBus.Instance.upgradeLevels;
+        public Dictionary<string, bool> activeUpgrades;
+        public Dictionary<string, int> upgradeLevels;
 
-        public string contractType = ContractManager.Instance.contractType;
-        public string contractLevel = ContractManager.Instance.contractLevel;
-        public Dictionary<string, float> SaleData = UpgradeBus.Instance.SaleData;
+        public string contractType;
+        public string contractLevel;
+        public Dictionary<string, float> SaleData;
 
         public string Version = "V2";
+
+        public SaveInfo()
+        {
+            activeUpgrades = new(UpgradeBus.Instance.activeUpgrades);
+            upgradeLevels = new(UpgradeBus.Instance.upgradeLevels);
+            SaleData = new(UpgradeBus.Instance.SaleData);
+
+            contractType = ContractManager.Instance.contractType;
+            contractLevel = ContractManager.Instance.contractLevel;
+        }
     }
 
     [Serializable]

@@ -9,6 +9,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
     {
         private static int usedMapSeed = -1;
         private static System.Random random = null;
+        ParticleSystem particles;
 
         protected override bool KeepScanNode
         {
@@ -27,29 +28,36 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
                 random = new System.Random(usedMapSeed + 105);
             }
             GetComponent<ScrapValueSyncer>().SetScrapValue(random.Next(minValue: itemProperties.minValue, maxValue: itemProperties.maxValue));
+            particles = GetComponentInChildren<ParticleSystem>();
         }
         public override void EquipItem()
         {
             base.EquipItem();
-            ParticleSystem particles = GetComponentInChildren<ParticleSystem>();
-            if (particles == null) return;
-            particles.Play(true);
+            ToggleParticles(toggle: true);
         }
 
         public override void DiscardItem()
         {
             base.DiscardItem();
-            ParticleSystem particles = GetComponentInChildren<ParticleSystem>();
-            if (particles == null) return;
-            particles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            ToggleParticles(toggle: false);
         }
 
         public override void PocketItem()
         {
             base.PocketItem();
-            ParticleSystem particles = GetComponentInChildren<ParticleSystem>();
-            if (particles == null) return;
-            particles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            ToggleParticles(toggle: false);
+        }
+
+        void ToggleParticles(bool toggle)
+        {
+            if (toggle)
+            {
+                particles.Play(true);
+            }
+            else
+            {
+                particles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            }
         }
 
         public static new void LoadItem()

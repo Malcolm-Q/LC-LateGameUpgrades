@@ -5,7 +5,6 @@ using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
-using System;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
@@ -31,13 +30,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         {
             get
             {
-                return UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_UPGRADE_MODE;
+                return GetConfiguration().BACK_MUSCLES_UPGRADE_MODE;
             }
         }
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().BACK_MUSCLES_OVERRIDE_NAME;
             Instance = this;
         }
         public override void Increment()
@@ -58,17 +57,17 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         }
         public static float DecreaseStrain(float defaultWeight)
         {
-            return DecreaseValue(defaultWeight, UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_ENABLED, UpgradeMode.ReduceCarryStrain, 1f);
+            return DecreaseValue(defaultWeight, GetConfiguration().BACK_MUSCLES_ENABLED, UpgradeMode.ReduceCarryStrain, 1f);
         }
 
         public static float DecreaseCarryLoss(float defaultWeight)
         {
-            return DecreaseValue(defaultWeight, UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_ENABLED, UpgradeMode.ReduceCarryInfluence, 1f);
+            return DecreaseValue(defaultWeight, GetConfiguration().BACK_MUSCLES_ENABLED, UpgradeMode.ReduceCarryInfluence, 1f);
         }
 
         public static float DecreasePossibleWeight(float defaultWeight)
         {
-            return DecreaseValue(defaultWeight, UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_ENABLED, UpgradeMode.ReduceWeight, 0f);
+            return DecreaseValue(defaultWeight, GetConfiguration().BACK_MUSCLES_ENABLED, UpgradeMode.ReduceWeight, 0f);
         }
 
         public static float DecreaseValue(float defaultWeight, bool enabled, UpgradeMode intendedMode, float lowerBound)
@@ -76,14 +75,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             if (!enabled) return defaultWeight;
             if (CurrentUpgradeMode != intendedMode) return defaultWeight;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultWeight;
-            return Mathf.Max(defaultWeight * (UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_REDUCTION.Value - GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_INCREMENT.Value), lowerBound);
+            LategameConfiguration config = GetConfiguration();
+            return Mathf.Max(defaultWeight * (config.CARRY_WEIGHT_REDUCTION.Value - (GetUpgradeLevel(UPGRADE_NAME) * config.CARRY_WEIGHT_INCREMENT.Value)), lowerBound);
         }
 
         public static void UpdatePlayerWeight()
         {
             if (CurrentUpgradeMode != UpgradeMode.ReduceWeight) return;
             PlayerControllerB player = GameNetworkManager.Instance.localPlayerController;
-            if (player.ItemSlots.Length <= 0) return;
+            if (player.ItemSlots.Length == 0) return;
 
             Instance.alteredWeight = 1f;
             for (int i = 0; i < player.ItemSlots.Length; i++)
@@ -104,7 +104,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            Func<int, float> infoFunction = level => (UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_REDUCTION.Value - level * UpgradeBus.Instance.PluginConfiguration.CARRY_WEIGHT_INCREMENT.Value) * 100;
+            static float infoFunction(int level)
+            {
+                LategameConfiguration config = GetConfiguration();
+                return (config.CARRY_WEIGHT_REDUCTION.Value - (level * config.CARRY_WEIGHT_INCREMENT.Value)) * 100;
+            }
             string infoFormat;
             switch (CurrentUpgradeMode)
             {
@@ -135,9 +139,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         {
             get
             {
-                string[] prices = UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_UPGRADE_PRICES.Value.Split(',');
-                bool free = UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-                return free;
+                LategameConfiguration config = GetConfiguration();
+                string[] prices = config.BACK_MUSCLES_UPGRADE_PRICES.Value.Split(',');
+                return config.BACK_MUSCLES_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
 
@@ -147,11 +151,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.BACK_MUSCLES_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().BACK_MUSCLES_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
             return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
                                                 configuration.SHARED_UPGRADES.Value || !configuration.BACK_MUSCLES_INDIVIDUAL.Value,
@@ -161,5 +165,4 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
                                                 configuration.OVERRIDE_UPGRADE_NAMES ? configuration.BACK_MUSCLES_OVERRIDE_NAME : "");
         }
     }
-
 }

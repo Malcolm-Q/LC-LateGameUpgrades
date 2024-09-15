@@ -36,6 +36,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string HEXADECIMAL_RED = "#FF0000";
         internal const string HEXADECIMAL_WHITE = "#FFFFFF";
         internal const string HEXADECIMAL_GREEN = "#00FF00";
+        internal const string HEXADECIMAL_DARK_GREEN = "#026440";
         internal const string HEXADECIMAL_GREY = "#666666";
 
         #endregion

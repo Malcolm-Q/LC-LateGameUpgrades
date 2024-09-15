@@ -1,10 +1,10 @@
-﻿using MoreShipUpgrades.Managers;
+﻿using LCVR;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Items.RadarBooster;
-using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -22,8 +22,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.RadarBooster
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_OVERRIDE_NAME;
-            chargeCooldown = UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_COOLDOWN.Value;
+            LategameConfiguration config = GetConfiguration();
+            overridenUpgradeName = config.CHARGING_BOOSTER_OVERRIDE_NAME;
+            chargeCooldown = config.CHARGING_BOOSTER_COOLDOWN.Value;
             base.Start();
         }
         public override void Load()
@@ -40,7 +41,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.RadarBooster
         public override void Increment()
         {
             base.Increment();
-            chargeCooldown = Mathf.Clamp(chargeCooldown - UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE.Value, 0f, UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_COOLDOWN.Value);
+            LategameConfiguration config = GetConfiguration();
+            chargeCooldown = Mathf.Clamp(chargeCooldown - config.CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE.Value, 0f, config.CHARGING_BOOSTER_COOLDOWN.Value);
         }
         [ServerRpc(RequireOwnership = false)]
         internal void UpdateCooldownServerRpc(NetworkBehaviourReference radarBooster)
@@ -58,23 +60,27 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.RadarBooster
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_COOLDOWN.Value - (level) * UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE.Value;
-            string infoFormat = "LVL {0} - ${1} - Radar boosters will have a recharge cooldown of {2} seconds.\n";
+            static float infoFunction(int level)
+            {
+                LategameConfiguration config = GetConfiguration();
+                return config.CHARGING_BOOSTER_COOLDOWN.Value - (level * config.CHARGING_BOOSTER_INCREMENTAL_COOLDOWN_DECREASE.Value);
+            }
+            const string infoFormat = "LVL {0} - ${1} - Radar boosters will have a recharge cooldown of {2} seconds.\n";
 
-            return $"LVL 1 - ${initialPrice} -  Provides charging stations to the radar boosters. After used, goes on cooldown for {UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_COOLDOWN.Value} seconds\n" + Tools.GenerateInfoForUpgrade(infoFormat, 0, incrementalPrices.ToArray(), infoFunction, skipFirst: true);
+            return $"LVL 1 - ${initialPrice} -  Provides charging stations to the radar boosters. After used, goes on cooldown for {GetConfiguration().CHARGING_BOOSTER_COOLDOWN.Value} seconds\n" + Tools.GenerateInfoForUpgrade(infoFormat, 0, incrementalPrices, infoFunction, skipFirst: true);
         }
         public override bool CanInitializeOnStart
         {
             get
             {
-                string[] prices = UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_PRICES.Value.Split(',');
-                bool free = UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-                return free;
+                LategameConfiguration config = GetConfiguration();
+                string[] prices = config.CHARGING_BOOSTER_PRICES.Value.Split(',');
+                return config.CHARGING_BOOSTER_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().CHARGING_BOOSTER_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -82,7 +88,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.RadarBooster
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
             return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
                                                 shareStatus: true,

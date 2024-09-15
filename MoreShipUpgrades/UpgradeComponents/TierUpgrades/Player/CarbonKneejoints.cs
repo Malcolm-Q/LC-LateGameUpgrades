@@ -14,12 +14,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.CARBON_KNEEJOINTS_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().CARBON_KNEEJOINTS_OVERRIDE_NAME;
         }
         public static float CalculateDecreaseMultiplier()
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.CARBON_KNEEJOINTS_ENABLED || !GetActiveUpgrade(UPGRADE_NAME)) return 0f;
-            return (UpgradeBus.Instance.PluginConfiguration.CARBON_KNEEJOINTS_INITIAL_CROUCH_DEBUFF_DECREASE + (UpgradeBus.Instance.PluginConfiguration.CARBON_KNEEJOINTS_INCREMENTAL_CROUCH_DEBUFF_DECREASE * GetUpgradeLevel(UPGRADE_NAME))) / 100f;
+            LategameConfiguration config = GetConfiguration();
+            if (!config.CARBON_KNEEJOINTS_ENABLED || !GetActiveUpgrade(UPGRADE_NAME)) return 0f;
+            return (config.CARBON_KNEEJOINTS_INITIAL_CROUCH_DEBUFF_DECREASE + (config.CARBON_KNEEJOINTS_INCREMENTAL_CROUCH_DEBUFF_DECREASE * GetUpgradeLevel(UPGRADE_NAME))) / 100f;
         }
         public static float ReduceCrouchMovementSpeedDebuff(float defaultValue)
         {
@@ -29,7 +30,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.CARBON_KNEEJOINTS_INITIAL_CROUCH_DEBUFF_DECREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.CARBON_KNEEJOINTS_INCREMENTAL_CROUCH_DEBUFF_DECREASE.Value);
+            static float infoFunction(int level)
+            {
+                LategameConfiguration config = GetConfiguration();
+                return config.CARBON_KNEEJOINTS_INITIAL_CROUCH_DEBUFF_DECREASE.Value + (level * config.CARBON_KNEEJOINTS_INCREMENTAL_CROUCH_DEBUFF_DECREASE.Value);
+            }
             const string infoFormat = "LVL {0} - ${1} - Reduces the movement speed loss while crouching by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
@@ -38,15 +43,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             get
             {
-                string[] prices = UpgradeBus.Instance.PluginConfiguration.CARBON_KNEEJOINTS_PRICES.Value.Split(',');
-                bool free = UpgradeBus.Instance.PluginConfiguration.CARBON_KNEEJOINTS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
-                return free;
+                LategameConfiguration config = GetConfiguration();
+                string[] prices = config.CARBON_KNEEJOINTS_PRICES.Value.Split(',');
+                return config.CARBON_KNEEJOINTS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
 
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.CARBON_KNEEJOINTS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().CARBON_KNEEJOINTS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -57,7 +62,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
             return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
                                                 configuration.SHARED_UPGRADES || !configuration.CARBON_KNEEJOINTS_INDIVIDUAL,

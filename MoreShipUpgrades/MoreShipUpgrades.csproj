@@ -60,6 +60,7 @@
       <Private>false</Private>
     </Reference>
     <Reference Include="CustomItemBehaviourLibrary">
+      <Publicize>true</Publicize>
       <HintPath>$(LC_PLUGIN_PATH)\WhiteSpike-CustomItemBehaviourLibrary\CustomItemBehaviourLibrary\CustomItemBehaviourLibrary.dll</HintPath>
       <Private>false</Private>
     </Reference>

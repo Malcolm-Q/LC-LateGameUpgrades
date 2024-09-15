@@ -3,7 +3,6 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
-using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Store
@@ -16,34 +15,39 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Store
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().MARKET_INFLUENCE_OVERRIDE_NAME;
             base.Start();
         }
         public static int GetGuaranteedPercentageSale(int defaultPercentage, int maxValue)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_ENABLED) return defaultPercentage;
+            LategameConfiguration config = GetConfiguration();
+            if (!config.MARKET_INFLUENCE_ENABLED) return defaultPercentage;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultPercentage;
-            return Mathf.Clamp(defaultPercentage + UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_INITIAL_PERCENTAGE.Value + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE.Value), 0, maxValue);
+            return Mathf.Clamp(defaultPercentage + config.MARKET_INFLUENCE_INITIAL_PERCENTAGE.Value + (GetUpgradeLevel(UPGRADE_NAME) * config.MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE.Value), 0, maxValue);
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_INITIAL_PERCENTAGE.Value + level * UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE.Value;
-            string infoFormat = "LVL {0} - ${1} - Guarantees the item sales' percentage to be at least {2}%\n";
+            static float infoFunction(int level)
+            {
+                LategameConfiguration config = GetConfiguration();
+                return config.MARKET_INFLUENCE_INITIAL_PERCENTAGE.Value + (level * config.MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE.Value);
+            }
+            const string infoFormat = "LVL {0} - ${1} - Guarantees the item sales' percentage to be at least {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
         public override bool CanInitializeOnStart
         {
             get
             {
-                string[] prices = UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_PRICES.Value.Split(',');
-                bool free = UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-                return free;
+                LategameConfiguration config = GetConfiguration();
+                string[] prices = config.MARKET_INFLUENCE_PRICES.Value.Split(',');
+                return config.MARKET_INFLUENCE_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
 
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.MARKET_INFLUENCE_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().MARKET_INFLUENCE_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -51,7 +55,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Store
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
             return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
                                                 shareStatus: true,

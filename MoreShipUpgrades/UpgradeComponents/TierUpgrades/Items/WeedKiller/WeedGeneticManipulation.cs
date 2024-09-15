@@ -15,17 +15,18 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.WeedKiller
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.WEED_GENETIC_MANIPULATION_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().WEED_GENETIC_MANIPULATION_OVERRIDE_NAME;
             base.Start();
         }
         public static float ComputeWeedKillerEffectiveness()
         {
-            int percentage = UpgradeBus.Instance.PluginConfiguration.WEED_GENETIC_MANIPULATION_INITIAL_EFFECTIVENESS_INCREASE + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.WEED_GENETIC_MANIPULATION_INCREMENTAL_EFFECTIVENESS_INCREASE);
+            LategameConfiguration config = GetConfiguration();
+            int percentage = config.WEED_GENETIC_MANIPULATION_INITIAL_EFFECTIVENESS_INCREASE + (GetUpgradeLevel(UPGRADE_NAME) * config.WEED_GENETIC_MANIPULATION_INCREMENTAL_EFFECTIVENESS_INCREASE);
             return percentage / 100f;
         }
         public static float GetWeedKillerEffectiveness(float defaultValue)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.WEED_GENETIC_MANIPULATION_ENABLED) return defaultValue;
+            if (!GetConfiguration().WEED_GENETIC_MANIPULATION_ENABLED) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             float multiplier = ComputeWeedKillerEffectiveness();
             return Mathf.Clamp(defaultValue * multiplier, defaultValue, float.MaxValue);
@@ -34,19 +35,24 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.WeedKiller
         {
             get
             {
-                string[] prices = UpgradeBus.Instance.PluginConfiguration.WEED_GENETIC_MANIPULATION_PRICES.Value.Split(',');
-                return UpgradeBus.Instance.PluginConfiguration.WEED_GENETIC_MANIPULATION_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
+                LategameConfiguration config = GetConfiguration();
+                string[] prices = config.WEED_GENETIC_MANIPULATION_PRICES.Value.Split(',');
+                return config.WEED_GENETIC_MANIPULATION_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.WEED_GENETIC_MANIPULATION_INITIAL_EFFECTIVENESS_INCREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.WEED_GENETIC_MANIPULATION_INCREMENTAL_EFFECTIVENESS_INCREASE.Value);
+            static float infoFunction(int level)
+            {
+                LategameConfiguration config = GetConfiguration();
+                return config.WEED_GENETIC_MANIPULATION_INITIAL_EFFECTIVENESS_INCREASE.Value + (level * config.WEED_GENETIC_MANIPULATION_INCREMENTAL_EFFECTIVENESS_INCREASE.Value);
+            }
             const string infoFormat = "LVL {0} - ${1} - Effectiveness of the Weed Killer item in eradicating plants is increased by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.WEED_GENETIC_MANIPULATION_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().WEED_GENETIC_MANIPULATION_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -54,7 +60,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.WeedKiller
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
             return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
                                                 shareStatus: true,

@@ -45,7 +45,7 @@ namespace MoreShipUpgrades.Compat
     }
 
     [Serializable]
-    public class LGUSaveV1
+    public class LguSaveV1
     {
         public Dictionary<ulong, SaveInfoV1> playerSaves = [];
     }

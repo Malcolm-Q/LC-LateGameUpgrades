@@ -19,7 +19,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.WALKIE_GPS_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().WALKIE_GPS_OVERRIDE_NAME;
             instance = this;
         }
         internal override void Start()
@@ -36,9 +36,9 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items
             if (!walkieUIActive) return;
 
             Vector3 pos = GameNetworkManager.Instance.localPlayerController.transform.position;
-            x.text = $"X: {pos.x.ToString("F1")}";
-            y.text = $"Y: {pos.y.ToString("F1")}";
-            z.text = $"Z: {pos.z.ToString("F1")}";
+            x.text = $"X: {pos.x:F1}";
+            y.text = $"Y: {pos.y:F1}";
+            z.text = $"Z: {pos.z:F1}";
 
             int num = (int)(TimeOfDay.Instance.normalizedTimeOfDay * (60f * TimeOfDay.Instance.numberOfHours)) + 360;
             int num2 = (int)Mathf.Floor(num / 60f);
@@ -74,10 +74,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items
         {
             return $"${price} - Displays your location and time when holding a walkie talkie.\nEspecially useful for fog.";
         }
-        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.WALKIE_PRICE.Value <= 0;
+        public override bool CanInitializeOnStart => GetConfiguration().WALKIE_PRICE.Value <= 0;
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.WALKIE_GPS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().WALKIE_GPS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -85,7 +85,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
             return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
                                     shareStatus: true,

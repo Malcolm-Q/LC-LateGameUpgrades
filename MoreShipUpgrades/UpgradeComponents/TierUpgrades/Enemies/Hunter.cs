@@ -82,7 +82,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies
         public static void SetupLevels()
         {
             levels = [];
-            string[] tiersList = UpgradeBus.Instance.PluginConfiguration.HUNTER_SAMPLE_TIERS.Value.ToLower().Split('-');
+            string[] tiersList = GetConfiguration().HUNTER_SAMPLE_TIERS.Value.ToLower().Split('-');
             for (int level = 0; level < tiersList.Length; ++level)
             {
                 foreach (string monster in tiersList[level].Split(',').Select(x => x.Trim().ToLower()))
@@ -132,7 +132,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.HUNTER_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().HUNTER_OVERRIDE_NAME;
             Instance = this;
         }
 
@@ -163,15 +163,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies
         {
             get
             {
-                string[] prices = UpgradeBus.Instance.PluginConfiguration.HUNTER_UPGRADE_PRICES.Value.Split(',');
-                bool free = UpgradeBus.Instance.PluginConfiguration.HUNTER_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
-                return free;
+                LategameConfiguration config = GetConfiguration();
+                string[] prices = config.HUNTER_UPGRADE_PRICES.Value.Split(',');
+                return config.HUNTER_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
 
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.HUNTER_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().HUNTER_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -179,7 +179,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
             SetupLevels();
             return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,

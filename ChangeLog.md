@@ -1,11 +1,19 @@
 <details>
-<summary> 3.10.2 - 2024-08-29 </summary>
+<summary> 3.10.2 - 2024-09-15 </summary>
 
-- Possibly fixed issue with Landing Thrusters only applying on host.
+- Displayed control binding used for sorting in the store application.
+- Changed colouring of maxed upgrades to dark green to distinguish between maxed upgrades and upgrades that you are unable to purchase due to lack of credits.
+- Fixed issue with Landing Thrusters only applying on host.
+- Fixed issue with sales re-emerging after purchase when leaving and creating a new lobby.
 - Fixed issue with item names being case-sensitive in the config related to Item Progression.
-
+- Fixed issue with clients buying upgrades wouldn't consume credits due to error in RPC calls.
+- Possibly fixed issue with ChancePerScrap mode due to using integers rather than floats.
+- Fixed issue with Interns enabled configuration not working correctly.
+- Fixed issue with saving not working correctly in relation to individual settings.
+- Code refactored.
 
 </details>
+
 <details>
 <summary> 3.10.1 - 2024-08-29 </summary>
 

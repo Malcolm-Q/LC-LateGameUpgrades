@@ -232,7 +232,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
 
         void PurchaseSpecifiedMoonContract(SelectableLevel level, Action backAction)
         {
-            terminal.SyncGroupCreditsServerRpc(terminal.groupCredits - UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value, terminal.numberOfItemsInDropship);
+            terminal.BuyItemsServerRpc([], terminal.groupCredits - UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value, terminal.numberOfItemsInDropship);
             int i = UnityEngine.Random.Range(0, CommandParser.contracts.Count);
             if (CommandParser.contracts.Count > 1)
             {
@@ -263,7 +263,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
 
         void PurchaseRandomMoonContract(Action backAction)
         {
-            terminal.SyncGroupCreditsServerRpc(terminal.groupCredits - UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value, terminal.numberOfItemsInDropship);
+            terminal.BuyItemsServerRpc([], terminal.groupCredits - UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value, terminal.numberOfItemsInDropship);
             int i = UnityEngine.Random.Range(0, CommandParser.contracts.Count);
             if (CommandParser.contracts.Count > 1)
             {

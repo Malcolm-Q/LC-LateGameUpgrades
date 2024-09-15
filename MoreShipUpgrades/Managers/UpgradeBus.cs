@@ -76,7 +76,6 @@ namespace MoreShipUpgrades.Managers
                 GoodItemScanCompat.Reset();
             }
             ResetPlayerAttributes();
-            if (LguStore.Instance.IsServer || LguStore.Instance.IsHost) LguStore.Instance.ResetShipAttributesClientRpc();
 
             if (PluginConfiguration.BEATS_ENABLED.Value) SickBeats.Instance.EffectsActive = false;
             if (PluginConfiguration.NIGHT_VISION_ENABLED.Value) NightVision.Instance.nightVisionActive = false;
@@ -302,7 +301,6 @@ namespace MoreShipUpgrades.Managers
                 maxUpgrade: prices.Length,
                 originalName: upgradeName,
                 sharedUpgrade: shareStatus);
-
         }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can only be bought once
@@ -337,8 +335,8 @@ namespace MoreShipUpgrades.Managers
         public string SetupUpgradeInfo(BaseUpgrade upgrade = null, int price = -1, int[] incrementalPrices = null)
         {
             string info = "";
-            if (upgrade is IOneTimeUpgradeDisplayInfo upgradeInfo) info += upgradeInfo.GetDisplayInfo(price) + "\n";
-            if (upgrade is ITierUpgradeDisplayInfo tierUpgradeInfo) info += tierUpgradeInfo.GetDisplayInfo(initialPrice: price, maxLevels: incrementalPrices.Length, incrementalPrices: incrementalPrices);
+            if (upgrade is OneTimeUpgrade upgradeInfo) info += upgradeInfo.GetDisplayInfo(price) + "\n";
+            if (upgrade is TierUpgrade tierUpgradeInfo) info += tierUpgradeInfo.GetDisplayInfo(initialPrice: price, maxLevels: incrementalPrices.Length, incrementalPrices: incrementalPrices);
             return info;
         }
         /// <summary>

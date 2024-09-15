@@ -2,8 +2,6 @@
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
-using MoreShipUpgrades.UpgradeComponents.Interfaces;
-using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship
 {
@@ -11,13 +9,13 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship
     {
         public const string UPGRADE_NAME = "Fast Encryption";
         public static FastEncryption instance;
-        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.PAGER_PRICE.Value <= 0;
+        public override bool CanInitializeOnStart => GetConfiguration().PAGER_PRICE.Value <= 0;
 
         const float TRANSMIT_MULTIPLIER = 0.2f;
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.FAST_ENCRYPTION_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().FAST_ENCRYPTION_OVERRIDE_NAME;
             instance = this;
         }
         public static int GetLimitOfCharactersTransmit(int defaultLimit, string message)
@@ -36,7 +34,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.FAST_ENCRYPTION_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().FAST_ENCRYPTION_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -44,7 +42,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
             return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
                                     shareStatus: true,

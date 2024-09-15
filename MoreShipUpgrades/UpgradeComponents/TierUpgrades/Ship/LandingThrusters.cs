@@ -3,7 +3,6 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
-using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
@@ -16,25 +15,31 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().LANDING_THRUSTERS_OVERRIDE_NAME;
         }
         public static float GetInteractMutliplier()
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_ENABLED) return 1f;
-            if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_AFFECT_LANDING) return 1f;
+            LategameConfiguration config = GetConfiguration();
+            if (!config.LANDING_THRUSTERS_ENABLED) return 1f;
+            if (!config.LANDING_THRUSTERS_AFFECT_LANDING) return 1f;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return 1f;
-            return 1f + Mathf.Max(0f, (UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_INITIAL_SPEED_INCREASE + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE)) / 100f);
+            return 1f + Mathf.Max(0f, (config.LANDING_THRUSTERS_INITIAL_SPEED_INCREASE + (GetUpgradeLevel(UPGRADE_NAME) * config.LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE)) / 100f);
         }
         public static float GetLandingSpeedMultiplier()
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_ENABLED) return 1f;
+            LategameConfiguration config = GetConfiguration();
+            if (!config.LANDING_THRUSTERS_ENABLED) return 1f;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return 1f;
-            return 1f + Mathf.Max(0f, (UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_INITIAL_SPEED_INCREASE + (GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE)) / 100f);
+            return 1f + Mathf.Max(0f, (config.LANDING_THRUSTERS_INITIAL_SPEED_INCREASE + (GetUpgradeLevel(UPGRADE_NAME) * config.LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE)) / 100f);
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_INITIAL_SPEED_INCREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE.Value);
-            string infoFormat = "LVL {0} - ${1} - Increases the ship's landing speed by {2}%\n";
+            static float infoFunction(int level)
+            {
+                LategameConfiguration config = GetConfiguration();
+                return config.LANDING_THRUSTERS_INITIAL_SPEED_INCREASE.Value + (level * config.LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE.Value);
+            }
+            const string infoFormat = "LVL {0} - ${1} - Increases the ship's landing speed by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
 
@@ -42,15 +47,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             get
             {
-                string[] prices = UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_PRICES.Value.Split(',');
-                bool free = UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-                return free;
+                LategameConfiguration config = GetConfiguration();
+                string[] prices = config.LANDING_THRUSTERS_PRICES.Value.Split(',');
+                return config.LANDING_THRUSTERS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
 
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().LANDING_THRUSTERS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -58,7 +63,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
             return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
                                                 shareStatus: true,

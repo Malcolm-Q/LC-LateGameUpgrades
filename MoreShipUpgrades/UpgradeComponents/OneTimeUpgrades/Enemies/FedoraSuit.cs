@@ -2,10 +2,8 @@
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
-using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship;
 using System.Collections.Generic;
 using Unity.Netcode;
-using System;
 using GameNetcodeStuff;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies
@@ -16,12 +14,12 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies
         internal static FedoraSuit instance;
 
         internal Dictionary<ulong, bool> wearingFedora;
-        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.FEDORA_SUIT_PRICE.Value <= 0;
+        public override bool CanInitializeOnStart => GetConfiguration().FEDORA_SUIT_PRICE.Value <= 0;
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.FEDORA_SUIT_OVERRIDE_NAME;
-            wearingFedora = new();
+            overridenUpgradeName = GetConfiguration().FEDORA_SUIT_OVERRIDE_NAME;
+            wearingFedora = [];
             instance = this;
         }
 
@@ -62,7 +60,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies
 
         public static bool IsWearingFedoraSuit(PlayerControllerB spottedPlayer)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.FEDORA_SUIT_ENABLED) return false;
+            if (!GetConfiguration().FEDORA_SUIT_ENABLED) return false;
             ulong clientId = spottedPlayer.actualClientId;
             return instance.wearingFedora.GetValueOrDefault(clientId, false);
         }
@@ -72,7 +70,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.FEDORA_SUIT_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().FEDORA_SUIT_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -80,7 +78,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
             return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
                                     shareStatus: configuration.SHARED_UPGRADES.Value || !configuration.FEDORA_SUIT_INDIVIDUAL.Value,

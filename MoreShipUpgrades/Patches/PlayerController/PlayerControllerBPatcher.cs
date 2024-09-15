@@ -129,9 +129,11 @@ namespace MoreShipUpgrades.Patches.PlayerController
                 if (enemy != null && !enemy.isEnemyDead) return;
             }
 
-            if (CustomItemBehaviourLibraryCompat.Enabled && !UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_ALLOW_WHEELBARROWS)
+            if (CustomItemBehaviourLibraryCompat.Enabled
+                && !UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_ALLOW_WHEELBARROWS
+                && CustomItemBehaviourLibraryCompat.CheckForContainers(ref player))
             {
-                if (CustomItemBehaviourLibraryCompat.CheckForContainers(ref player)) return;
+                return;
             }
             int twoHandedCount = 0;
             int maxTwoHandedCount = 1 + UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_INITIAL_TWO_HANDED_ITEMS + (BaseUpgrade.GetUpgradeLevel(DeepPockets.UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_ITEMS);

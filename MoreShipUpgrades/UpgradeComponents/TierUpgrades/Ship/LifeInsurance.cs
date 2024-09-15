@@ -3,10 +3,6 @@ using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
@@ -18,12 +14,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.LIFE_INSURANCE_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().LIFE_INSURANCE_OVERRIDE_NAME;
         }
         public static float CalculateDecreaseMultiplier()
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.LIFE_INSURANCE_ENABLED || !GetActiveUpgrade(UPGRADE_NAME)) return 0f;
-            return (UpgradeBus.Instance.PluginConfiguration.LIFE_INSURANCE_INITIAL_COST_PERCENTAGE_DECREASE + (UpgradeBus.Instance.PluginConfiguration.LIFE_INSURANCE_INCREMENTAL_COST_PERCENTAGE_DECREASE * GetUpgradeLevel(UPGRADE_NAME))) / 100f;
+            LategameConfiguration config = GetConfiguration();
+            if (!config.LIFE_INSURANCE_ENABLED || !GetActiveUpgrade(UPGRADE_NAME)) return 0f;
+            return (config.LIFE_INSURANCE_INITIAL_COST_PERCENTAGE_DECREASE + (config.LIFE_INSURANCE_INCREMENTAL_COST_PERCENTAGE_DECREASE * GetUpgradeLevel(UPGRADE_NAME))) / 100f;
         }
         public static float ReduceCreditCostPercentage(float defaultValue)
         {
@@ -32,7 +29,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.LIFE_INSURANCE_INITIAL_COST_PERCENTAGE_DECREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.LIFE_INSURANCE_INCREMENTAL_COST_PERCENTAGE_DECREASE.Value);
+            static float infoFunction(int level)
+            {
+                LategameConfiguration config = GetConfiguration();
+                return config.LIFE_INSURANCE_INITIAL_COST_PERCENTAGE_DECREASE.Value + (level * config.LIFE_INSURANCE_INCREMENTAL_COST_PERCENTAGE_DECREASE.Value);
+            }
             const string infoFormat = "LVL {0} - ${1} - Reduces the credit loss when leaving a body behind when exiting a moon by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
@@ -41,14 +42,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         {
             get
             {
-                string[] prices = UpgradeBus.Instance.PluginConfiguration.LIFE_INSURANCE_PRICES.Value.Split(',');
-                return UpgradeBus.Instance.PluginConfiguration.LIFE_INSURANCE_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
+                LategameConfiguration config = GetConfiguration();
+                string[] prices = config.LIFE_INSURANCE_PRICES.Value.Split(',');
+                return config.LIFE_INSURANCE_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
 
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.LIFE_INSURANCE_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().LIFE_INSURANCE_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -59,7 +61,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
             return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
                                                 shareStatus: true,

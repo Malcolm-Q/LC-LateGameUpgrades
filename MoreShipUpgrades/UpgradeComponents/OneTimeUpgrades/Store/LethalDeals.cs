@@ -9,11 +9,11 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
     {
         public const string UPGRADE_NAME = "Lethal Deals";
         const int GUARANTEED_ITEMS_AMOUNT = 1;
-        public override bool CanInitializeOnStart => UpgradeBus.Instance.PluginConfiguration.LETHAL_DEALS_PRICE.Value <= 0;
+        public override bool CanInitializeOnStart => GetConfiguration().LETHAL_DEALS_PRICE.Value <= 0;
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.LETHAL_DEALS_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().LETHAL_DEALS_OVERRIDE_NAME;
         }
         public static int GetLethalDealsGuaranteedItems(int amount)
         {
@@ -26,7 +26,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.LETHAL_DEALS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().LETHAL_DEALS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -34,7 +34,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
             return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
                                     shareStatus: true,

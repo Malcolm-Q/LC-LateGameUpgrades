@@ -14,12 +14,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.OXYGEN_CANISTERS_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().OXYGEN_CANISTERS_OVERRIDE_NAME;
         }
         public static float CalculateDecreaseMultiplier()
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.OXYGEN_CANISTERS_ENABLED || !GetActiveUpgrade(UPGRADE_NAME)) return 0f;
-            return (UpgradeBus.Instance.PluginConfiguration.OXYGEN_CANISTERS_INITIAL_OXYGEN_CONSUMPTION_DECREASE + (UpgradeBus.Instance.PluginConfiguration.OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE * GetUpgradeLevel(UPGRADE_NAME)))/100f;
+            LategameConfiguration config = GetConfiguration();
+            if (!config.OXYGEN_CANISTERS_ENABLED || !GetActiveUpgrade(UPGRADE_NAME)) return 0f;
+            return (config.OXYGEN_CANISTERS_INITIAL_OXYGEN_CONSUMPTION_DECREASE + (config.OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE * GetUpgradeLevel(UPGRADE_NAME)))/100f;
         }
         public static float ReduceOxygenConsumption(float defaultValue)
         {
@@ -28,7 +29,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            static float infoFunction(int level) => UpgradeBus.Instance.PluginConfiguration.OXYGEN_CANISTERS_INITIAL_OXYGEN_CONSUMPTION_DECREASE.Value + (level * UpgradeBus.Instance.PluginConfiguration.OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE.Value);
+            static float infoFunction(int level)
+            {
+                LategameConfiguration config = GetConfiguration();
+                return config.OXYGEN_CANISTERS_INITIAL_OXYGEN_CONSUMPTION_DECREASE.Value + (level * config.OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE.Value);
+            }
             const string infoFormat = "LVL {0} - ${1} - Reduces oxygen consumption rate by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
@@ -37,15 +42,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             get
             {
-                string[] prices = UpgradeBus.Instance.PluginConfiguration.OXYGEN_CANISTERS_PRICES.Value.Split(',');
-                bool free = UpgradeBus.Instance.PluginConfiguration.OXYGEN_CANISTERS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
-                return free;
+                LategameConfiguration config = GetConfiguration();
+                string[] prices = config.OXYGEN_CANISTERS_PRICES.Value.Split(',');
+                return config.OXYGEN_CANISTERS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
 
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.OXYGEN_CANISTERS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().OXYGEN_CANISTERS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -56,7 +61,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
             return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
                                                 configuration.SHARED_UPGRADES || !configuration.OXYGEN_CANISTERS_INDIVIDUAL,

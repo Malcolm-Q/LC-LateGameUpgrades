@@ -4,6 +4,7 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
+using LCVR;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
 {
@@ -15,32 +16,37 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = UpgradeBus.Instance.PluginConfiguration.SCAVENGER_INSTINCTS_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().SCAVENGER_INSTINCTS_OVERRIDE_NAME;
         }
         public override bool CanInitializeOnStart
         {
             get
             {
-                string[] prices = UpgradeBus.Instance.PluginConfiguration.SCAVENGER_INSTINCTS_PRICES.Value.Split(',');
-                bool free = UpgradeBus.Instance.PluginConfiguration.SCAVENGER_INSTINCTS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0] == "" || prices[0] == "0");
-                return free;
+                LategameConfiguration config = GetConfiguration();
+                string[] prices = config.SCAVENGER_INSTINCTS_PRICES.Value.Split(',');
+                return config.SCAVENGER_INSTINCTS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
         }
         public static int IncreaseScrapAmount(int defaultValue)
         {
+            LategameConfiguration config = GetConfiguration();
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
-            int additionalScrap = UpgradeBus.Instance.PluginConfiguration.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE.Value + GetUpgradeLevel(UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUN_SCRAP_INCREASE.Value;
+            int additionalScrap = config.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE.Value + (GetUpgradeLevel(UPGRADE_NAME) * config.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUN_SCRAP_INCREASE.Value);
             return Mathf.Clamp(defaultValue + Mathf.CeilToInt(additionalScrap / RoundManager.Instance.scrapAmountMultiplier), defaultValue, int.MaxValue);
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
-            System.Func<int, float> infoFunction = level => UpgradeBus.Instance.PluginConfiguration.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE.Value + level * UpgradeBus.Instance.PluginConfiguration.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUN_SCRAP_INCREASE.Value;
-            string infoFormat = "LVL {0} - ${1} - Increases the average amount of scrap spawns by {2} additional items.\n";
+            static float infoFunction(int level)
+            {
+                LategameConfiguration config = GetConfiguration();
+                return config.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE.Value + (level * config.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUN_SCRAP_INCREASE.Value);
+            }
+            const string infoFormat = "LVL {0} - ${1} - Increases the average amount of scrap spawns by {2} additional items.\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.SCAVENGER_INSTINCTS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().SCAVENGER_INSTINCTS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -48,7 +54,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = UpgradeBus.Instance.PluginConfiguration;
+            LategameConfiguration configuration = GetConfiguration();
 
             return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
                                                 shareStatus: true,
