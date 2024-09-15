@@ -1,4 +1,11 @@
 <details>
+<summary> 3.10.3 - 2024-09-15 </summary>
+
+- Changed upgrade display to show the price number red if the players do not have enough credits to purchase it.
+
+</details>
+
+<details>
 <summary> 3.10.2 - 2024-09-15 </summary>
 
 - Displayed control binding used for sorting in the store application.
