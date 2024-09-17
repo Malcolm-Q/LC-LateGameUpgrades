@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using static Unity.Audio.Handle;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -58,77 +59,79 @@ namespace MoreShipUpgrades.Managers
         }
         static void ExecuteApparaticeLogic(GrabbableObject scrapItem, string scrapName)
         {
-            if (!apparatusItems.ContainsKey(scrapName))
-            {
-                Plugin.mls.LogInfo($"{scrapName} from ItemProperties was not found in the dictionary, looking through scan node...");
-                ScanNodeProperties node = scrapItem.GetComponentInChildren<ScanNodeProperties>();
-                if (node == null)
-                {
-                    Plugin.mls.LogWarning($"{scrapName} doesn't have a scan node, skipping...");
-                    return;
-                }
-                scrapName = node.headerText.ToLower().Trim();
-                if (!apparatusItems.ContainsKey(scrapName))
-                {
-                    Plugin.mls.LogWarning($"{scrapName} from Scan Node was not found in the dictionary.");
-                    return;
-                }
-            }
+            if (!VerifyApparatus(ref scrapItem, ref scrapName)) return;
             int upgrades = apparatusItems[scrapName];
 
             for(int i = 0; i < upgrades; i++)
             {
-                CustomTerminalNode randomNode = PickRandomUpgrade();
-                LguStore.Instance.HandleUpgradeForNoHostClientRpc(randomNode.OriginalName, randomNode.Unlocked);
-                LguStore.Instance.UpdateUpgrades(randomNode, randomNode.Unlocked);
+                RankUpUpgrade(PickRandomUpgrade());
             }
         }
 
         static void ExecuteChancerPerScrapLogic()
         {
             if (UnityEngine.Random.Range(0f, 1f) >= ConfiguredChancePerScrapValue) return;
-            CustomTerminalNode node = SelectChancePerScrapUpgrade();
-            LguStore.Instance.HandleUpgradeForNoHostClientRpc(node.OriginalName, node.Unlocked);
-            LguStore.Instance.UpdateUpgrades(node, node.Unlocked);
+            RankUpUpgrade(SelectChancePerScrapUpgrade());
         }
 
         static void ExecuteSpecificScrapLogic(GrabbableObject scrapItem, string scrapName)
         {
-            if (!UpgradeBus.Instance.scrapToCollectionUpgrade.ContainsKey(scrapName))
+            if (!VerifyScrap(ref scrapItem, ref scrapName)) return;
+            int scrapValue = scrapItem.scrapValue;
+            scrapValue = Mathf.CeilToInt(StartOfRound.Instance.companyBuyingRate * scrapValue);
+            scrapValue = Mathf.CeilToInt(ConfiguredItemContributionMultiplier * scrapValue);
+            foreach (string upgradeName in UpgradeBus.Instance.scrapToCollectionUpgrade[scrapName])
+            {
+                ContributeTowardsUpgrade(upgradeName, scrapValue);
+            }
+        }
+        static void RankUpUpgrade(CustomTerminalNode node)
+        {
+            LguStore.Instance.HandleUpgradeForNoHostClientRpc(node.OriginalName, node.Unlocked);
+            LguStore.Instance.UpdateUpgrades(node, node.Unlocked);
+        }
+        static void ContributeTowardsUpgrade(string upgradeName, int scrapValue)
+        {
+            CustomTerminalNode assignedUpgrade = GetCustomTerminalNode(upgradeName);
+            int contributed = UpgradeBus.Instance.contributionValues[assignedUpgrade.OriginalName];
+            int currentPrice = assignedUpgrade.GetCurrentPrice() + contributed;
+            contributed += scrapValue;
+            while (contributed >= currentPrice && assignedUpgrade.GetRemainingLevels() > 0)
+            {
+                RankUpUpgrade(assignedUpgrade);
+                contributed -= currentPrice;
+                currentPrice = assignedUpgrade.GetCurrentPrice();
+            }
+            LguStore.Instance.SetContributionValueClientRpc(assignedUpgrade.OriginalName, contributed);
+        }
+
+        static bool VerifyScrap(ref GrabbableObject scrapItem, ref string scrapName)
+        {
+            return VerifyItem(UpgradeBus.Instance.scrapToCollectionUpgrade, ref scrapItem, ref scrapName);
+        }
+        static bool VerifyApparatus(ref GrabbableObject scrapItem, ref string scrapName)
+        {
+            return VerifyItem(apparatusItems, ref scrapItem, ref scrapName);
+        }
+        static bool VerifyItem<T>(Dictionary<string, T> collection, ref GrabbableObject scrapItem, ref string scrapName)
+        {
+            if (!collection.ContainsKey(scrapName))
             {
                 Plugin.mls.LogInfo($"{scrapName} from ItemProperties was not found in the dictionary, looking through scan node...");
                 ScanNodeProperties node = scrapItem.GetComponentInChildren<ScanNodeProperties>();
                 if (node == null)
                 {
                     Plugin.mls.LogWarning($"{scrapName} doesn't have a scan node, skipping...");
-                    return;
+                    return false;
                 }
                 scrapName = node.headerText.ToLower().Trim();
-                if (!UpgradeBus.Instance.scrapToCollectionUpgrade.ContainsKey(scrapName))
+                if (!collection.ContainsKey(scrapName))
                 {
                     Plugin.mls.LogWarning($"{scrapName} from Scan Node was not found in the dictionary.");
-                    return;
+                    return false;
                 }
             }
-            if (IsBlacklisted(scrapName)) return;
-            int scrapValue = scrapItem.scrapValue;
-            scrapValue = Mathf.CeilToInt(StartOfRound.Instance.companyBuyingRate * scrapValue);
-            scrapValue = Mathf.CeilToInt(ConfiguredItemContributionMultiplier * scrapValue);
-            foreach (string upgradeName in UpgradeBus.Instance.scrapToCollectionUpgrade[scrapName])
-            {
-                CustomTerminalNode assignedUpgrade = GetCustomTerminalNode(upgradeName);
-                int contributed = UpgradeBus.Instance.contributionValues[assignedUpgrade.OriginalName];
-                int currentPrice = assignedUpgrade.GetCurrentPrice() + contributed;
-                contributed += scrapValue;
-                while (contributed >= currentPrice && assignedUpgrade.GetRemainingLevels() > 0)
-                {
-                    LguStore.Instance.HandleUpgradeForNoHostClientRpc(assignedUpgrade.OriginalName, assignedUpgrade.Unlocked);
-                    LguStore.Instance.UpdateUpgrades(assignedUpgrade, assignedUpgrade.Unlocked);
-                    contributed -= currentPrice;
-                    currentPrice = assignedUpgrade.GetCurrentPrice();
-                }
-                LguStore.Instance.SetContributionValueClientRpc(assignedUpgrade.OriginalName, contributed);
-            }
+            return !IsBlacklisted(scrapName);
         }
 
         public static void CheckCollectionScrap(GrabbableObject scrapItem)
