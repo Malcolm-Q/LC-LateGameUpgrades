@@ -3,6 +3,7 @@ using InteractiveTerminalAPI.UI.Application;
 using InteractiveTerminalAPI.UI.Cursor;
 using InteractiveTerminalAPI.UI.Page;
 using InteractiveTerminalAPI.UI.Screen;
+using MoreShipUpgrades.Input;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.UI.Cursor;
@@ -13,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine.InputSystem;
+using static UnityEngine.InputSystem.InputAction;
 
 namespace MoreShipUpgrades.Misc.UI.Application
 {
@@ -26,13 +28,8 @@ namespace MoreShipUpgrades.Misc.UI.Application
         public override void Initialization()
         {
             CustomTerminalNode[] filteredNodes = UpgradeBus.Instance.terminalNodes.Where(x => x.Visible && (x.UnlockPrice > 0 || (x.OriginalName == NightVision.UPGRADE_NAME && (x.Prices.Length > 0 && x.Prices[0] != 0)))).ToArray();
-            (CustomTerminalNode[][], CursorMenu[], IScreen[]) entries = GetPageEntries(filteredNodes);
 
-            CustomTerminalNode[][] pagesUpgrades = entries.Item1;
-            CursorMenu[] cursorMenus = entries.Item2;
-            IScreen[] screens = entries.Item3;
-
-            if (pagesUpgrades.Length == 0)
+            if (filteredNodes.Length == 0)
             {
                 CursorElement[] elements =
                 [
@@ -60,6 +57,72 @@ namespace MoreShipUpgrades.Misc.UI.Application
                 currentScreen = screen;
                 return;
             }
+
+            List<CursorElement> cursorElements = [];
+            PageCursorElement sharedPage = GetFilteredUpgradeNodes(ref filteredNodes, ref cursorElements, (x) => x.SharedUpgrade, LguConstants.MAIN_SCREEN_TITLE, LguConstants.MAIN_SCREEN_SHARED_UPGRADES_TEXT);
+            PageCursorElement individualPage = GetFilteredUpgradeNodes(ref filteredNodes, ref cursorElements, (x) => !x.SharedUpgrade, LguConstants.MAIN_SCREEN_TITLE, LguConstants.MAIN_SCREEN_INDIVIDUAL_UPGRADES_TEXT);
+
+            if (cursorElements.Count > 1)
+            {
+                CursorElement[] upgradeElements = [.. cursorElements];
+                CursorMenu upgradeCursorMenu = CursorMenu.Create(startingCursorIndex: 0, elements: upgradeElements);
+                IScreen upgradeScreen = new BoxedScreen()
+                {
+                    Title = LguConstants.MAIN_SCREEN_TITLE,
+                    elements =
+                    [
+                        upgradeCursorMenu
+                    ]
+                };
+                initialPage = PageCursorElement.Create(startingPageIndex: 0, elements: [upgradeScreen], cursorMenus: [upgradeCursorMenu]);
+            }
+            else
+            {
+                if (sharedPage == null)
+                {
+                    initialPage = individualPage;
+                }
+                else
+                {
+                    initialPage = sharedPage;
+                }
+            }
+            currentPage = initialPage;
+            currentCursorMenu = currentPage.GetCurrentCursorMenu();
+            currentScreen = currentPage.GetCurrentScreen();
+        }
+        PageCursorElement GetFilteredUpgradeNodes(ref CustomTerminalNode[] nodes, ref List<CursorElement> list, Func<CustomTerminalNode, bool> predicate, string pageTitle, string cursorName)
+        {
+            PageCursorElement page = null;
+            CustomTerminalNode[] filteredNodes = nodes.Where(predicate).ToArray();
+            if (filteredNodes.Length > 0)
+            {
+                page = BuildUpgradePage(filteredNodes, pageTitle);
+                list.Add(CursorElement.Create(name: cursorName, action: () => SwitchToUpgradeScreen(page, previous: true)));
+            }
+            return page;
+        }
+        void SwitchToUpgradeScreen(PageCursorElement page, bool previous)
+        {
+            InteractiveTerminalAPI.Compat.InputUtils_Compat.CursorExitKey.performed -= OnScreenExit;
+            InteractiveTerminalAPI.Compat.InputUtils_Compat.CursorExitKey.performed += OnUpgradeStoreExit;
+            SwitchScreen(page, previous);
+        }
+
+        void OnUpgradeStoreExit(CallbackContext context)
+        {
+            ResetScreen();
+            InteractiveTerminalAPI.Compat.InputUtils_Compat.CursorExitKey.performed += OnScreenExit;
+            InteractiveTerminalAPI.Compat.InputUtils_Compat.CursorExitKey.performed -= OnUpgradeStoreExit;
+        }
+        PageCursorElement BuildUpgradePage(CustomTerminalNode[] nodes, string title)
+        {
+            (CustomTerminalNode[][], CursorMenu[], IScreen[]) entries = GetPageEntries(nodes);
+
+            CustomTerminalNode[][] pagesUpgrades = entries.Item1;
+            CursorMenu[] cursorMenus = entries.Item2;
+            IScreen[] screens = entries.Item3;
+            PageCursorElement page = null;
             for (int i = 0; i < pagesUpgrades.Length; i++)
             {
                 CustomTerminalNode[] upgrades = pagesUpgrades[i];
@@ -74,7 +137,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
                 CursorMenu cursorMenu = cursorMenus[i];
                 screens[i] = new BoxedOutputScreen<string, string>()
                 {
-                    Title = LguConstants.MAIN_SCREEN_TITLE,
+                    Title = title,
                     elements =
                     [
                         new TextElement()
@@ -97,15 +160,15 @@ namespace MoreShipUpgrades.Misc.UI.Application
                     elements[j] = new UpgradeCursorElement()
                     {
                         Node = upgrade,
-                        Action = () => BuyUpgrade(upgrade, PreviousScreen()),
+                        Action = () => BuyUpgrade(upgrade, () => SwitchScreen(page, previous: true)),
                         Active = (x) => CanBuyUpgrade(((UpgradeCursorElement)x).Node)
                     };
                 }
             }
-            currentPage = initialPage;
-            currentCursorMenu = initialPage.GetCurrentCursorMenu();
-            currentScreen = initialPage.GetCurrentScreen();
+            page = PageCursorElement.Create(0, screens, cursorMenus);
+            return page;
         }
+
         string GetCurrentSort()
         {
             int currentSort = currentCursorMenu.sortingIndex;

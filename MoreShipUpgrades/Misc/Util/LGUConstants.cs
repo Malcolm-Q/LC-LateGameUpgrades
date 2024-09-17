@@ -1466,6 +1466,9 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string MAIN_SCREEN_TOP_TEXT = "Select an upgrade to purchase:";
         internal const string MAIN_SCREEN_TOP_TEXT_NO_ENTRIES = "There are no upgrades for purchase.";
 
+        internal const string MAIN_SCREEN_INDIVIDUAL_UPGRADES_TEXT = "Individual Upgrades";
+        internal const string MAIN_SCREEN_SHARED_UPGRADES_TEXT = "Shared Upgrades";
+
         #endregion
 
         #region Upgrade Display
