@@ -67,10 +67,8 @@ namespace MoreShipUpgrades.Misc
 
         private static TerminalNode ExecuteModInformation()
         {
-            string displayText = "Late Game Upgrades\n\nType `lategame store` or `lgu` to view upgrades.\n\nMost of the mod is configurable via the config file in `BepInEx/config/`.";
-            displayText += "\n\nType `lategame commands` to see all commands related to upgrades";
-            displayText += "\n\nUse the info command to get info about an item. EX: `info beekeeper`.";
-            displayText += "\n\nYou must type the exact name of the upgrade (case insensitve).";
+            string displayText = "Late Game Upgrades\n\nType `lategame store` or `lgu` to view upgrades.\n\nMost of the mod is configurable via the config file in `BepInEx/config/com.malco.lethalcompany.moreshipupgrades.cfg`.";
+            displayText += "\n\nType `lategame commands` or 'lgc' to see all commands related to upgrades";
             displayText += "\n\nTo force wipe an lgu save file type `reset lgu`. (will only wipe the clients save).";
             displayText += "\n\nTo reapply any upgrades that failed to apply type `load lgu`.";
             displayText += "\n\nIn the case of credit desync to force an amount of credits type `forceCredits 123`";
