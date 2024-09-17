@@ -1,7 +1,7 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
-using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UI.TerminalNodes;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using UnityEngine;
 using UnityEngine.UI;

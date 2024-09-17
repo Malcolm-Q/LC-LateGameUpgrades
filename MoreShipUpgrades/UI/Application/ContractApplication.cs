@@ -4,11 +4,12 @@ using InteractiveTerminalAPI.UI.Cursor;
 using InteractiveTerminalAPI.UI.Screen;
 using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Util;
 using System;
 using System.Linq;
 
-namespace MoreShipUpgrades.Misc.UI.Application
+namespace MoreShipUpgrades.UI.Application
 {
     internal class ContractApplication : InteractiveTerminalApplication
     {
@@ -42,7 +43,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
                     action: PickContract,
                     active: (_) => ContractManager.Instance.contractType == "None",
                     selectInactive: true
-                ); 
+                );
             cursorElements[2] = CursorElement.Create(
                     name: MAIN_MENU_CURSOR_ELEMENTS[2],
                     description: "",
@@ -72,7 +73,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
             ITextElement[] textElements;
             CursorMenu menu;
             CursorElement[] cursorElements = new CursorElement[CommandParser.contractInfos.Count + 1];
-            for(int i = 0; i < CommandParser.contracts.Count; i++)
+            for (int i = 0; i < CommandParser.contracts.Count; i++)
             {
                 int counter = i;
                 cursorElements[i] = CursorElement.Create(
@@ -194,7 +195,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
             ITextElement[] textElements;
             CursorMenu menu;
             CursorElement[] cursorElements = new CursorElement[levels.Length + 1];
-            for( int i = 0; i < levels.Length; i++ )
+            for (int i = 0; i < levels.Length; i++)
             {
                 int counter = i;
                 cursorElements[i] = CursorElement.Create(

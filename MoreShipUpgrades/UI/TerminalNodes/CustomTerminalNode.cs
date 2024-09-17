@@ -3,7 +3,7 @@ using System;
 using UnityEngine;
 using static Unity.Audio.Handle;
 
-namespace MoreShipUpgrades.Misc.TerminalNodes
+namespace MoreShipUpgrades.UI.TerminalNodes
 {
     /// <summary>
     /// Terminal node used to display the lgu upgrade store
@@ -13,11 +13,11 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         /// <summary>
         /// The name shown in the Lategame Upgrades store
         /// </summary>
-        public string Name {get; set;}
+        public string Name { get; set; }
         /// <summary>
         /// The original name of the upgrade
         /// </summary>
-        public string OriginalName { get; set;}
+        public string OriginalName { get; set; }
         /// <summary>
         /// List of prices for levelling up the upgrade
         /// </summary>
@@ -57,7 +57,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         /// <summary>
         /// Wether it should be shown in the Lategame Upgrades store or not
         /// </summary>
-        public bool Visible {  get; set; }
+        public bool Visible { get; set; }
         protected CustomTerminalNode(string name, int unlockPrice, string description, GameObject prefab, int[] prices = null, int maxUpgrade = 0, string originalName = "", bool sharedUpgrade = false)
         {
             if (prices == null) { prices = []; }

@@ -1,6 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Util;
+using MoreShipUpgrades.UI.TerminalNodes;
 using System;
 using System.Collections.Generic;
 using Unity.Netcode;

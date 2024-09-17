@@ -1,7 +1,8 @@
 ﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
 using System.Collections.Generic;
 
-namespace MoreShipUpgrades.Misc.TerminalNodes
+namespace MoreShipUpgrades.UI.TerminalNodes
 {
     /// <summary>
     /// Handler for Terminal nodes stored in the terminal for customization when required

@@ -5,7 +5,7 @@ using MoreShipUpgrades.Misc.Util;
 using System.Text;
 using UnityEngine;
 
-namespace MoreShipUpgrades.Misc.UI.Cursor
+namespace MoreShipUpgrades.UI.Cursor
 {
     internal class UpgradeCursorElement : CursorElement
     {
@@ -15,7 +15,7 @@ namespace MoreShipUpgrades.Misc.UI.Cursor
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(new string(LguConstants.WHITE_SPACE, 2));
-            string name = Node.Name.Length > LguConstants.NAME_LENGTH ? Node.Name.Substring(0, LguConstants.NAME_LENGTH) : Node.Name + new string(LguConstants.WHITE_SPACE, Mathf.Max(0, LguConstants.NAME_LENGTH-Node.Name.Length));
+            string name = Node.Name.Length > LguConstants.NAME_LENGTH ? Node.Name.Substring(0, LguConstants.NAME_LENGTH) : Node.Name + new string(LguConstants.WHITE_SPACE, Mathf.Max(0, LguConstants.NAME_LENGTH - Node.Name.Length));
             if (!Active(this))
             {
                 if (Node.Unlocked && Node.CurrentUpgrade >= Node.MaxUpgrade)

@@ -1,8 +1,8 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
-using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UI.TerminalNodes;
 using System.Collections.Generic;
 using UnityEngine;
 

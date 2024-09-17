@@ -1,6 +1,6 @@
 ﻿using MoreShipUpgrades.Managers;
 
-namespace MoreShipUpgrades.Misc.TerminalNodes
+namespace MoreShipUpgrades.UI.TerminalNodes
 {
     /// <summary>
     /// Handler that changes the contents of the "help" terminal node
@@ -33,7 +33,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         /// </summary>
         public static string HandleHelpDiscombobulator()
         {
-            if(UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_ENABLED.Value)
+            if (UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_ENABLED.Value)
             {
                 return ATK_HELP_COMMAND + CD_HELP_COMMAND;
             }
@@ -44,7 +44,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         /// </summary>
         public static string HandleHelpContract()
         {
-            if(UpgradeBus.Instance.PluginConfiguration.CONTRACTS_ENABLED.Value)
+            if (UpgradeBus.Instance.PluginConfiguration.CONTRACTS_ENABLED.Value)
             {
                 return string.Format(CONTRACT_HELP_COMMAND + INFO_CONTRACT_HELP_COMMAND, UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value, UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value);
             }
@@ -55,7 +55,7 @@ namespace MoreShipUpgrades.Misc.TerminalNodes
         /// </summary>
         public static string HandleHelpInterns()
         {
-            if(UpgradeBus.Instance.PluginConfiguration.INTERN_ENABLED.Value)
+            if (UpgradeBus.Instance.PluginConfiguration.INTERN_ENABLED.Value)
             {
                 return string.Format(INTERNS_HELP_COMMAND, UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value);
             }

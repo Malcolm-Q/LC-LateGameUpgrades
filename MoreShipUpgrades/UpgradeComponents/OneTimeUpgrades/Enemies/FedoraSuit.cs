@@ -1,10 +1,10 @@
 ﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using System.Collections.Generic;
 using Unity.Netcode;
 using GameNetcodeStuff;
+using MoreShipUpgrades.UI.TerminalNodes;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies
 {
