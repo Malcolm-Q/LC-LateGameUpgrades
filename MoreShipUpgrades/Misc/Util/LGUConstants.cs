@@ -12,6 +12,7 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.RadarBooster;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.WeedKiller;
@@ -197,6 +198,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string JET_FUEL_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, JetFuel.UPGRADE_NAME);
         internal static readonly string QUICK_HANDS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, QuickHands.UPGRADE_NAME);
         internal static readonly string MIDAS_TOUCH_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, MidasTouch.UPGRADE_NAME);
         internal static readonly string CARBON_KNEEJOINTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, CarbonKneejoints.UPGRADE_NAME);
@@ -371,6 +373,25 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Jet Fuel
+
+        internal const string JET_FUEL_ENABLED_KEY = $"Enable {JetFuel.UPGRADE_NAME} Upgrade";
+        internal const bool JET_FUEL_ENABLED_DEFAULT = true;
+        internal const string JET_FUEL_ENABLED_DESCRIPTION = "Tier upgrade which increases the acceleration of the jetpack during flight.";
+
+        internal const string JET_FUEL_PRICE_KEY = $"Price of {JetFuel.UPGRADE_NAME} Upgrade";
+        internal const int JET_FUEL_PRICE_DEFAULT = 400;
+
+        internal const string JET_FUEL_INITIAL_ACCELERATION_INCREASE_KEY = "Initial Acceleration Increase";
+        internal const int JET_FUEL_INITIAL_ACCELERATION_INCREASE_DEFAULT = 20;
+        internal const string JET_FUEL_INITIAL_ACCELERATION_INCREASE_DESCRIPTION = "Initial percentage increase of jetpack acceleration when first purchasing the upgrade";
+
+        internal const string JET_FUEL_INCREMENTAL_ACCELERATION_INCREASE_KEY = "Incremental Acceleration Increase";
+        internal const int JET_FUEL_INCREMENTAL_ACCELERATION_INCREASE_DEFAULT = 20;
+        internal const string JET_FUEL_INCREMENTAL_ACCELERATION_INCREASE_DESCRIPTION = "Incremental percentage increase of jetpack acceleration when purchasing further levels of the upgrade";
+
+        #endregion
 
         #region Quick Hands
 
