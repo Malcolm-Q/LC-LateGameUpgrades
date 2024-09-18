@@ -34,6 +34,7 @@ namespace MoreShipUpgrades.Misc
     public class LategameConfiguration : SyncedConfig2<LategameConfiguration>
     {
         #region Enabled
+        [field: SyncedEntryField] public SyncedEntry<bool> QUICK_HANDS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> MIDAS_TOUCH_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> CARBON_KNEEJOINTS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> LIFE_INSURANCE_ENABLED {  get; set; }
@@ -81,6 +82,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Individual
+        [field: SyncedEntryField] public SyncedEntry<bool> QUICK_HANDS_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> CARBON_KNEEJOINTS_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> RUBBER_BOOTS_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> OXYGEN_CANISTERS_INDIVIDUAL { get; set; }
@@ -112,6 +114,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Initial Prices
+        [field: SyncedEntryField] public SyncedEntry<int> QUICK_HANDS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MIDAS_TOUCH_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CARBON_KNEEJOINTS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> LIFE_INSURANCE_PRICE {  get; set; }
@@ -163,6 +166,10 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<string> QUICK_HANDS_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> QUICK_HANDS_OVERRIDE_NAME {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> QUICK_HANDS_INITIAL_INTERACTION_SPEED_INCREASE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> QUICK_HANDS_INCREMENTAL_INTERACTION_SPEED_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> MIDAS_TOUCH_PRICES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> MIDAS_TOUCH_OVERRIDE_NAME {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MIDAS_TOUCH_INITIAL_SCRAP_VALUE_INCREASE { get; set; }
@@ -462,6 +469,7 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_BLACKLISTED_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_APPARATICE_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> ITEM_PROGRESSION_NO_PURCHASE_UPGRADES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> QUICK_HANDS_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> MIDAS_TOUCH_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> CARBON_KNEEJOINTS_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> LIFE_INSURANCE_ITEM_PROGRESSION_ITEMS {  get; set; }
@@ -562,6 +570,7 @@ namespace MoreShipUpgrades.Misc
 
             topSection = LguConstants.OVERRIDE_NAMES_SECTION;
             OVERRIDE_UPGRADE_NAMES              = cfg.BindSyncedEntry(topSection, LguConstants.OVERRIDE_NAMES_ENABLED_KEY, LguConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LguConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
+            QUICK_HANDS_OVERRIDE_NAME           = cfg.BindSyncedEntry(topSection, LguConstants.QUICK_HANDS_OVERRIDE_NAME_KEY, QuickHands.UPGRADE_NAME);
             MIDAS_TOUCH_OVERRIDE_NAME           = cfg.BindSyncedEntry(topSection, LguConstants.MIDAS_TOUCH_OVERRIDE_NAME_KEY, MidasTouch.UPGRADE_NAME);
             CARBON_KNEEJOINTS_OVERRIDE_NAME     = cfg.BindSyncedEntry(topSection, LguConstants.CARBON_KNEEJOINTS_OVERRIDE_NAME_KEY, CarbonKneejoints.UPGRADE_NAME);
             LIFE_INSURANCE_OVERRIDE_NAME        = cfg.BindSyncedEntry(topSection, LguConstants.LIFE_INSURANCE_OVERRIDE_NAME_KEY, LifeInsurance.UPGRADE_NAME);
@@ -656,6 +665,19 @@ namespace MoreShipUpgrades.Misc
             #endregion
 
             #region Upgrades
+
+            #region Quick Hands
+
+            topSection = QuickHands.UPGRADE_NAME;
+            QUICK_HANDS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.QUICK_HANDS_ENABLED_KEY, LguConstants.QUICK_HANDS_ENABLED_DEFAULT, LguConstants.QUICK_HANDS_ENABLED_DESCRIPTION);
+            QUICK_HANDS_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            QUICK_HANDS_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.QUICK_HANDS_PRICE_KEY, LguConstants.QUICK_HANDS_PRICE_DEFAULT);
+            QUICK_HANDS_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, QuickHands.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
+            QUICK_HANDS_INITIAL_INTERACTION_SPEED_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.QUICK_HANDS_INITIAL_INTERACTION_SPEED_INCREASE_KEY, LguConstants.QUICK_HANDS_INITIAL_INTERACTION_SPEED_INCREASE_DEFAULT, LguConstants.QUICK_HANDS_INITIAL_INTERACTION_SPEED_INCREASE_DESCRIPTION);
+            QUICK_HANDS_INCREMENTAL_INTERACTION_SPEED_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.QUICK_HANDS_INCREMENTAL_INTERACTION_SPEED_INCREASE_KEY, LguConstants.QUICK_HANDS_INCREMENTAL_INTERACTION_SPEED_INCREASE_DEFAULT, LguConstants.QUICK_HANDS_INCREMENTAL_INTERACTION_SPEED_INCREASE_DESCRIPTION);
+            QUICK_HANDS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
 
             #region Midas Touch
 

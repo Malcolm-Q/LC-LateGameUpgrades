@@ -337,5 +337,19 @@ namespace MoreShipUpgrades.Patches.PlayerController
             Tools.FindDiv(ref index, ref codes, addCode: ReduceOxygenConsumption, errorMessage: "Couldn't find the value used to decrease the drowning timer");
             return codes;
         }
+
+        [HarmonyPatch(nameof(PlayerControllerB.ClickHoldInteraction))]
+        [HarmonyTranspiler]
+        static IEnumerable<CodeInstruction> ClickHoldInteractionTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            FieldInfo timeToHoldSpeedMultiplier = typeof(InteractTrigger).GetField(nameof(InteractTrigger.timeToHoldSpeedMultiplier));
+            MethodInfo increaseInteractionSpeed = typeof(QuickHands).GetMethod(nameof(QuickHands.IncreaseInteractionSpeed));
+
+            List<CodeInstruction> codes = new(instructions);
+            int index = 0;
+            Tools.FindField(ref index, ref codes, findField: timeToHoldSpeedMultiplier, addCode: increaseInteractionSpeed, errorMessage: "Couldn't find the interaction speed multiplier saved in the interact trigger");
+
+            return codes;
+        }
     }
 }

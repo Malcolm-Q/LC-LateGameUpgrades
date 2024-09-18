@@ -197,6 +197,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string QUICK_HANDS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, QuickHands.UPGRADE_NAME);
         internal static readonly string MIDAS_TOUCH_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, MidasTouch.UPGRADE_NAME);
         internal static readonly string CARBON_KNEEJOINTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, CarbonKneejoints.UPGRADE_NAME);
         internal static readonly string LIFE_INSURANCE_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, LifeInsurance.UPGRADE_NAME);
@@ -371,7 +372,26 @@ namespace MoreShipUpgrades.Misc.Util
 
         #region Upgrades
 
-        #region Carbon Kneejoints
+        #region Quick Hands
+
+        internal const string QUICK_HANDS_ENABLED_KEY = $"Enable {QuickHands.UPGRADE_NAME} Upgrade";
+        internal const bool QUICK_HANDS_ENABLED_DEFAULT = true;
+        internal const string QUICK_HANDS_ENABLED_DESCRIPTION = "Tier upgrade which increases the interaction speed of the player.";
+
+        internal const string QUICK_HANDS_PRICE_KEY = $"Price of {QuickHands.UPGRADE_NAME} Upgrade";
+        internal const int QUICK_HANDS_PRICE_DEFAULT = 100;
+
+        internal const string QUICK_HANDS_INITIAL_INTERACTION_SPEED_INCREASE_KEY = "Initial Interaction Speed Increase";
+        internal const int QUICK_HANDS_INITIAL_INTERACTION_SPEED_INCREASE_DEFAULT = 20;
+        internal const string QUICK_HANDS_INITIAL_INTERACTION_SPEED_INCREASE_DESCRIPTION = "Initial percentage increase of interaction speed when first purchasing the upgrade";
+
+        internal const string QUICK_HANDS_INCREMENTAL_INTERACTION_SPEED_INCREASE_KEY = "Incremental Interaction Speed Increase";
+        internal const int QUICK_HANDS_INCREMENTAL_INTERACTION_SPEED_INCREASE_DEFAULT = 20;
+        internal const string QUICK_HANDS_INCREMENTAL_INTERACTION_SPEED_INCREASE_DESCRIPTION = "Incremental percentage increase of interaction speed when purchasing further levels of the upgrade";
+
+        #endregion
+
+        #region Midas Touch
 
         internal const string MIDAS_TOUCH_ENABLED_KEY = $"Enable {MidasTouch.UPGRADE_NAME} Upgrade";
         internal const bool MIDAS_TOUCH_ENABLED_DEFAULT = true;
