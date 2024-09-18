@@ -12,9 +12,9 @@ using System.Linq;
 using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Commands;
-using MoreShipUpgrades.Misc.UI.Application;
 using InteractiveTerminalAPI.UI;
 using static BepInEx.BepInDependency;
+using MoreShipUpgrades.UI.Application;
 
 namespace MoreShipUpgrades
 {

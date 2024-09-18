@@ -1,6 +1,6 @@
-﻿using MoreShipUpgrades.Misc.TerminalNodes;
-using MoreShipUpgrades.Misc.Upgrades;
+﻿using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
+using MoreShipUpgrades.UI.TerminalNodes;
 using System;
 using System.Collections.Generic;
 using System.Reflection;

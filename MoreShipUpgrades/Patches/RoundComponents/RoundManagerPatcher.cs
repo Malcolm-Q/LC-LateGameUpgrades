@@ -18,12 +18,20 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         {
             FieldInfo minimumScrap = typeof(SelectableLevel).GetField(nameof(SelectableLevel.minScrap));
             FieldInfo maximumScrap = typeof(SelectableLevel).GetField(nameof(SelectableLevel.maxScrap));
+            FieldInfo scrapValueMultiplier = typeof(RoundManager).GetField(nameof(RoundManager.scrapValueMultiplier));
+
+            MethodInfo increaseScrapValueInt = typeof(MidasTouch).GetMethod(nameof(MidasTouch.IncreaseScrapValueInteger));
+            MethodInfo increaseScrapValue = typeof(MidasTouch).GetMethod(nameof(MidasTouch.IncreaseScrapValue));
             MethodInfo increaseScrap = typeof(ScavengerInstincts).GetMethod(nameof(ScavengerInstincts.IncreaseScrapAmount));
 
             List<CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindField(ref index, ref codes, findField: minimumScrap, addCode: increaseScrap, errorMessage: "Couldn't find level's minimum scrap amount");
             Tools.FindField(ref index, ref codes, findField: maximumScrap, addCode: increaseScrap, errorMessage: "Couldn't find level's maximum scrap amount");
+            Tools.FindField(ref index, ref codes, findField: scrapValueMultiplier, addCode: increaseScrapValue, errorMessage: "Couldn't find the round manager's scrap value multiplier");
+            Tools.FindInteger(ref index, ref codes, findValue: 50, addCode: increaseScrapValueInt, errorMessage: "Couldn't find the minimum value of scrap value used when same item day happens");
+            Tools.FindExplicitInteger(ref index, ref codes, findValue: 170, addCode: increaseScrapValueInt, errorMessage: "Couldn't find the maximum value of scrap value used when same item day happens");
+            Tools.FindField(ref index, ref codes, findField: scrapValueMultiplier, addCode: increaseScrapValue, errorMessage: "Couldn't find the round manager's scrap value multiplier");
             return codes;
         }
 

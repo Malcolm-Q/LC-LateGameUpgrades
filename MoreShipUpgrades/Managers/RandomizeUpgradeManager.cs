@@ -1,4 +1,4 @@
-﻿using MoreShipUpgrades.Misc.TerminalNodes;
+﻿using MoreShipUpgrades.UI.TerminalNodes;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using System;
 

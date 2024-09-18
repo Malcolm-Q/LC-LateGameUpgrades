@@ -197,6 +197,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string MIDAS_TOUCH_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, MidasTouch.UPGRADE_NAME);
         internal static readonly string CARBON_KNEEJOINTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, CarbonKneejoints.UPGRADE_NAME);
         internal static readonly string LIFE_INSURANCE_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, LifeInsurance.UPGRADE_NAME);
         internal static readonly string RUBBER_BOOTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, RubberBoots.UPGRADE_NAME);
@@ -369,6 +370,25 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Carbon Kneejoints
+
+        internal const string MIDAS_TOUCH_ENABLED_KEY = $"Enable {MidasTouch.UPGRADE_NAME} Upgrade";
+        internal const bool MIDAS_TOUCH_ENABLED_DEFAULT = true;
+        internal const string MIDAS_TOUCH_ENABLED_DESCRIPTION = "Tier upgrade which increases the value of the scrap found in the moons.";
+
+        internal const string MIDAS_TOUCH_PRICE_KEY = $"Price of {MidasTouch.UPGRADE_NAME} Upgrade";
+        internal const int MIDAS_TOUCH_PRICE_DEFAULT = 1000;
+
+        internal const string MIDAS_TOUCH_INITIAL_SCRAP_VALUE_INCREASE_KEY = "Initial Scrap Value Increase";
+        internal const int MIDAS_TOUCH_INITIAL_SCRAP_VALUE_INCREASE_DEFAULT = 20;
+        internal const string MIDAS_TOUCH_INITIAL_SCRAP_VALUE_INCREASE_DESCRIPTION = "Initial percentage increase of value of the scrap found in the moons when first purchasing the upgrade";
+
+        internal const string MIDAS_TOUCH_INCREMENTAL_SCRAP_VALUE_INCREASE_KEY = "Incremental Scrap Value Increase";
+        internal const int MIDAS_TOUCH_INCREMENTAL_SCRAP_VALUE_INCREASE_DEFAULT = 20;
+        internal const string MIDAS_TOUCH_INCREMENTAL_SCRAP_VALUE_INCREASE_DESCRIPTION = "Incremental percentage increase of value of the scrap found in the moons when purchasing further levels of the upgrade";
+
+        #endregion
 
         #region Carbon Kneejoints
 

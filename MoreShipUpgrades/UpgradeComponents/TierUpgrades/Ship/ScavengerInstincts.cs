@@ -30,6 +30,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         public static int IncreaseScrapAmount(int defaultValue)
         {
             LategameConfiguration config = GetConfiguration();
+            if (!config.SCAVENGER_INSTINCTS_ENABLED) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             int additionalScrap = config.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE.Value + (GetUpgradeLevel(UPGRADE_NAME) * config.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUN_SCRAP_INCREASE.Value);
             return Mathf.Clamp(defaultValue + Mathf.CeilToInt(additionalScrap / RoundManager.Instance.scrapAmountMultiplier), defaultValue, int.MaxValue);

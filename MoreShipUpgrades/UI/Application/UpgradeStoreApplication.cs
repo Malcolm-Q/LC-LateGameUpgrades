@@ -5,9 +5,9 @@ using InteractiveTerminalAPI.UI.Page;
 using InteractiveTerminalAPI.UI.Screen;
 using MoreShipUpgrades.Input;
 using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc.TerminalNodes;
-using MoreShipUpgrades.Misc.UI.Cursor;
 using MoreShipUpgrades.Misc.Util;
+using MoreShipUpgrades.UI.Cursor;
+using MoreShipUpgrades.UI.TerminalNodes;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using System;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ using System.Text;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
 
-namespace MoreShipUpgrades.Misc.UI.Application
+namespace MoreShipUpgrades.UI.Application
 {
     internal class UpgradeStoreApplication : PageApplication
     {
@@ -27,7 +27,7 @@ namespace MoreShipUpgrades.Misc.UI.Application
         }
         public override void Initialization()
         {
-            CustomTerminalNode[] filteredNodes = UpgradeBus.Instance.terminalNodes.Where(x => x.Visible && (x.UnlockPrice > 0 || (x.OriginalName == NightVision.UPGRADE_NAME && (x.Prices.Length > 0 && x.Prices[0] != 0)))).ToArray();
+            CustomTerminalNode[] filteredNodes = UpgradeBus.Instance.terminalNodes.Where(x => x.Visible && (x.UnlockPrice > 0 || x.OriginalName == NightVision.UPGRADE_NAME && x.Prices.Length > 0 && x.Prices[0] != 0)).ToArray();
 
             if (filteredNodes.Length == 0)
             {

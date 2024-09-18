@@ -1,9 +1,9 @@
 ﻿using CSync.Lib;
 using HarmonyLib;
 using MoreShipUpgrades.Misc;
-using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.Patches.Items;
+using MoreShipUpgrades.UI.TerminalNodes;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
