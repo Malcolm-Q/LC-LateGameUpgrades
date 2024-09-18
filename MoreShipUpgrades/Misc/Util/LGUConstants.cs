@@ -198,6 +198,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string JETPACK_THRUSTERS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, JetpackThrusters.UPGRADE_NAME);
         internal static readonly string JET_FUEL_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, JetFuel.UPGRADE_NAME);
         internal static readonly string QUICK_HANDS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, QuickHands.UPGRADE_NAME);
         internal static readonly string MIDAS_TOUCH_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, MidasTouch.UPGRADE_NAME);
@@ -373,6 +374,25 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Jetpack Thrusters
+
+        internal const string JETPACK_THRUSTERS_ENABLED_KEY = $"Enable {JetpackThrusters.UPGRADE_NAME} Upgrade";
+        internal const bool JETPACK_THRUSTERS_ENABLED_DEFAULT = true;
+        internal const string JETPACK_THRUSTERS_ENABLED_DESCRIPTION = "Tier upgrade which increases the maximum speed of the jetpack during flight.";
+
+        internal const string JETPACK_THRUSTERS_PRICE_KEY = $"Price of {JetpackThrusters.UPGRADE_NAME} Upgrade";
+        internal const int JETPACK_THRUSTERS_PRICE_DEFAULT = 300;
+
+        internal const string JETPACK_THRUSTERS_INITIAL_MAXIMUM_POWER_INCREASE_KEY = "Initial Maximum Speed Increase";
+        internal const int JETPACK_THRUSTERS_INITIAL_MAXIMUM_POWER_INCREASE_DEFAULT = 20;
+        internal const string JETPACK_THRUSTERS_INITIAL_MAXIMUM_POWER_INCREASE_DESCRIPTION = "Initial percentage increase of jetpack's maximum speed during flight when first purchasing the upgrade";
+
+        internal const string JETPACK_THRUSTERS_INCREMENTAL_MAXIMUM_POWER_INCREASE_KEY = "Incremental Maximum Speed Increase";
+        internal const int JETPACK_THRUSTERS_INCREMENTAL_MAXIMUM_POWER_INCREASE_DEFAULT = 20;
+        internal const string JETPACK_THRUSTERS_INCREMENTAL_MAXIMUM_POWER_INCREASE_DESCRIPTION = "Incremental percentage increase of jetpack's maximum speed during flight when purchasing further levels of the upgrade";
+
+        #endregion
 
         #region Jet Fuel
 

@@ -1,6 +1,7 @@
 <details>
 <summary> 3.10.3 - 2024-09-15 </summary>
 
+- Implemented "Jetpack Thrusters" tier upgrade which increases the maximum speed of the jetpack while in flight.
 - Implemented "Jet Fuel" tier upgrade which increases the acceleration of the jetpack while in flight.
 - Implemented "Midas Touch" tier upgrade which increases the value of scrap found in the moons.
 - Implemented "Quick Hands" tier upgrade which increases the player's interaction speed.
