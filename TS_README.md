@@ -229,6 +229,18 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
     * Decreases the movement speed loss when crouching.
     * At 100%, crouching speed will be the same as walking.
 
+* __Midas Touch - $1000__
+    * Increases the value of the scrap found in moon trips.
+
+* __Quick Hands - $100__
+    * Increases the interaction speed of the player on objects.
+    
+* __Jet Fuel - $400__
+    * Increases the acceleration rate of the jetpack while in flight.
+    
+* __Jetpack Thrusters - $300__
+    * Increases the maximum speed of the jetpack while in flight. 
+
 ## Item Progression Mode
 
 This mod offers an alternative mode for obtaining upgrades through selling items to The Company. The following modes are available for playthroughs:

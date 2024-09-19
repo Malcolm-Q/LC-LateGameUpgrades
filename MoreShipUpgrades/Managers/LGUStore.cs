@@ -13,9 +13,7 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
-using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Compat;
-using static MoreShipUpgrades.Managers.ItemProgressionManager;
 using MoreShipUpgrades.Misc.Util;
 using System.Text;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
@@ -23,6 +21,7 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player;
+using MoreShipUpgrades.UI.TerminalNodes;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -217,7 +216,7 @@ namespace MoreShipUpgrades.Managers
         {
             if (alreadyReceivedScrapToUpgrade) return;
             for(int i = 0; i < scraps.Length; i++)
-                AddScrapToUpgrade(upgrades[i].SomeText, scraps[i].SomeText);
+                ItemProgressionManager.AddScrapToUpgrade(upgrades[i].SomeText, scraps[i].SomeText);
             alreadyReceivedScrapToUpgrade = true;
         }
 
@@ -448,7 +447,7 @@ namespace MoreShipUpgrades.Managers
             }
             logger.LogInfo($"Node found ({node.OriginalName}) and unlocked (level = {node.CurrentUpgrade})");
 
-            SetContributionValue(node.OriginalName, 0);
+            ItemProgressionManager.SetContributionValue(node.OriginalName, 0);
 
             if (node.SalePercentage != 1f && UpgradeBus.Instance.PluginConfiguration.SALE_APPLY_ONCE.Value)
             {
@@ -530,13 +529,13 @@ namespace MoreShipUpgrades.Managers
         [ClientRpc]
         internal void SetContributionValueClientRpc(string key, int value)
         {
-            SetContributionValue(key, value);
+            ItemProgressionManager.SetContributionValue(key, value);
         }
 
         [ClientRpc]
         internal void DiscoverItemClientRpc(string scrapName)
         {
-            DiscoverScrap(scrapName);
+            ItemProgressionManager.DiscoverScrap(scrapName);
         }
         [ServerRpc(RequireOwnership = false)]
         internal void RandomizeUpgradesServerRpc()

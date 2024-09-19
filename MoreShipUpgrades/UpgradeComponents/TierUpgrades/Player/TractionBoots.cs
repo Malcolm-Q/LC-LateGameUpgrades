@@ -1,5 +1,4 @@
 ﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using System;
@@ -7,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using MoreShipUpgrades.Misc.Util;
+using MoreShipUpgrades.UI.TerminalNodes;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {

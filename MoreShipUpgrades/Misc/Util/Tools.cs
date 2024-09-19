@@ -110,6 +110,10 @@ namespace MoreShipUpgrades.Misc.Util
         {
             FindCodeInstruction(ref index, ref codes, findValue: findValue, addCode: addCode, skip: skip, requireInstance: requireInstance, notInstruction: notInstruction, andInstruction: andInstruction, orInstruction: orInstruction, errorMessage: errorMessage);
         }
+        public static void FindExplicitInteger(ref int index, ref List<CodeInstruction> codes, int findValue, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
+        {
+            FindCodeInstruction(ref index, ref codes, findValue: findValue, addCode: addCode, skip: skip, requireInstance: requireInstance, notInstruction: notInstruction, andInstruction: andInstruction, orInstruction: orInstruction, errorMessage: errorMessage);
+        }
         public static void FindSub(ref int index, ref List<CodeInstruction> codes, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
         {
             FindCodeInstruction(ref index, ref codes, findValue: OpCodes.Sub, addCode: addCode, skip: skip, notInstruction: notInstruction, andInstruction: andInstruction, orInstruction: orInstruction, requireInstance: requireInstance, errorMessage: errorMessage);
@@ -157,6 +161,10 @@ namespace MoreShipUpgrades.Misc.Util
             {
                 bool result = CheckIntegerCodeInstruction(code, findValue);
                 return result;
+            }
+            if (findValue is int)
+            {
+                return code.opcode == OpCodes.Ldc_I4 && code.operand.Equals(findValue);
             }
             if (findValue is float)
             {

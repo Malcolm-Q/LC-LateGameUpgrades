@@ -27,6 +27,7 @@ using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack;
 
 namespace MoreShipUpgrades.Misc
 {
@@ -34,6 +35,10 @@ namespace MoreShipUpgrades.Misc
     public class LategameConfiguration : SyncedConfig2<LategameConfiguration>
     {
         #region Enabled
+        [field: SyncedEntryField] public SyncedEntry<bool> JETPACK_THRUSTERS_ENABLED {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> JET_FUEL_ENABLED {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> QUICK_HANDS_ENABLED {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> MIDAS_TOUCH_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> CARBON_KNEEJOINTS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> LIFE_INSURANCE_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> RUBBER_BOOTS_ENABLED { get; set; }
@@ -72,7 +77,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<bool> DOOR_HYDRAULICS_BATTERY_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> FASTER_DROP_POD_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SIGURD_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> SIGURD_LAST_DAY_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> EFFICIENT_ENGINES_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> CLIMBING_GLOVES_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> LITHIUM_BATTERIES_ENABLED { get; set; }
@@ -80,6 +84,9 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Individual
+        [field: SyncedEntryField] public SyncedEntry<bool> JETPACK_THURSTERS_INDIVIDUAL {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> JET_FUEL_INDIVIDUAL {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> QUICK_HANDS_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> CARBON_KNEEJOINTS_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> RUBBER_BOOTS_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> OXYGEN_CANISTERS_INDIVIDUAL { get; set; }
@@ -111,6 +118,10 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Initial Prices
+        [field: SyncedEntryField] public SyncedEntry<int> JETPACK_THRUSTERS_PRICE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> JET_FUEL_PRICE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> QUICK_HANDS_PRICE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> MIDAS_TOUCH_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CARBON_KNEEJOINTS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> LIFE_INSURANCE_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> RUBBER_BOOTS_PRICE {  get; set; }
@@ -161,6 +172,22 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<string> JETPACK_THRUSTERS_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> JETPACK_THRUSTERS_OVERRIDE_NAME {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> JETPACK_THRUSTERS_INITIAL_MAXIMUM_POWER_INCREASE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> JETPACK_THRUSTERS_INCREMENTAL_MAXIMUM_POWER_INCREASE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> JET_FUEL_PRICES { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> JET_FUEL_OVERRIDE_NAME {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> JET_FUEL_INITIAL_ACCELERATION_INCREASE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> JET_FUEL_INCREMENTAL_ACCELERATION_INCREASE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> QUICK_HANDS_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> QUICK_HANDS_OVERRIDE_NAME {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> QUICK_HANDS_INITIAL_INTERACTION_SPEED_INCREASE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> QUICK_HANDS_INCREMENTAL_INTERACTION_SPEED_INCREASE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> MIDAS_TOUCH_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> MIDAS_TOUCH_OVERRIDE_NAME {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> MIDAS_TOUCH_INITIAL_SCRAP_VALUE_INCREASE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> MIDAS_TOUCH_INCREMENTAL_SCRAP_VALUE_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> CARBON_KNEEJOINTS_PRICES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> CARBON_KNEEJOINTS_OVERRIDE_NAME {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CARBON_KNEEJOINTS_INITIAL_CROUCH_DEBUFF_DECREASE {  get; set; }
@@ -440,9 +467,8 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_REWARD_QUOTA_MULTIPLIER { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SHOW_UPGRADES_CHAT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> SIGURD_CHANCE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> SIGURD_LAST_DAY_CHANCE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> SIGURD_PERCENT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> SIGURD_LAST_DAY_PERCENT { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<Sigurd.FunctionModes> SIGURD_MODE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SALE_APPLY_ONCE { get; set; }
 
         #endregion
@@ -456,6 +482,11 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_BLACKLISTED_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_APPARATICE_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> ITEM_PROGRESSION_NO_PURCHASE_UPGRADES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> JETPACK_THRUSTERS_ITEM_PROGRESSION_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> JET_FUEL_ITEM_PROGRESSION_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> QUICK_HANDS_ITEM_PROGRESSION_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> MIDAS_TOUCH_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> CARBON_KNEEJOINTS_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> LIFE_INSURANCE_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> RUBBER_BOOTS_ITEM_PROGRESSION_ITEMS {  get; set; }
@@ -536,6 +567,7 @@ namespace MoreShipUpgrades.Misc
             ITEM_PROGRESSION_BLACKLISTED_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_BLACKLISTED_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_BLACKLISTED_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_BLACKLISTED_ITEMS_DESCRIPTION);
             ITEM_PROGRESSION_APPARATICE_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_APPARATICE_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_APPARATICE_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_APPARATICE_ITEMS_DESCRIPTION);
             ITEM_PROGRESSION_NO_PURCHASE_UPGRADES = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_NO_PURCHASE_UPGRADES_KEY, LguConstants.ITEM_PROGRESSION_NO_PURCHASE_UPGRADES_DEFAULT, LguConstants.ITEM_PROGRESSION_NO_PURCHASE_UPGRADES_DESCRIPTION);
+            ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS_DESCRIPTION);
 
             #endregion 
 
@@ -555,6 +587,10 @@ namespace MoreShipUpgrades.Misc
 
             topSection = LguConstants.OVERRIDE_NAMES_SECTION;
             OVERRIDE_UPGRADE_NAMES              = cfg.BindSyncedEntry(topSection, LguConstants.OVERRIDE_NAMES_ENABLED_KEY, LguConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LguConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
+            JETPACK_THRUSTERS_OVERRIDE_NAME     = cfg.BindSyncedEntry(topSection, LguConstants.JETPACK_THRUSTERS_OVERRIDE_NAME_KEY, JetpackThrusters.UPGRADE_NAME);
+            JET_FUEL_OVERRIDE_NAME              = cfg.BindSyncedEntry(topSection, LguConstants.JET_FUEL_OVERRIDE_NAME_KEY, JetFuel.UPGRADE_NAME);
+            QUICK_HANDS_OVERRIDE_NAME           = cfg.BindSyncedEntry(topSection, LguConstants.QUICK_HANDS_OVERRIDE_NAME_KEY, QuickHands.UPGRADE_NAME);
+            MIDAS_TOUCH_OVERRIDE_NAME           = cfg.BindSyncedEntry(topSection, LguConstants.MIDAS_TOUCH_OVERRIDE_NAME_KEY, MidasTouch.UPGRADE_NAME);
             CARBON_KNEEJOINTS_OVERRIDE_NAME     = cfg.BindSyncedEntry(topSection, LguConstants.CARBON_KNEEJOINTS_OVERRIDE_NAME_KEY, CarbonKneejoints.UPGRADE_NAME);
             LIFE_INSURANCE_OVERRIDE_NAME        = cfg.BindSyncedEntry(topSection, LguConstants.LIFE_INSURANCE_OVERRIDE_NAME_KEY, LifeInsurance.UPGRADE_NAME);
             RUBBER_BOOTS_OVERRIDE_NAME          = cfg.BindSyncedEntry(topSection, LguConstants.RUBBER_BOOTS_OVERRIDE_NAME_KEY, RubberBoots.UPGRADE_NAME);
@@ -648,6 +684,57 @@ namespace MoreShipUpgrades.Misc
             #endregion
 
             #region Upgrades
+
+            #region Jetpack Thrusters
+
+            topSection = JetpackThrusters.UPGRADE_NAME;
+            JETPACK_THRUSTERS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.JETPACK_THRUSTERS_ENABLED_KEY, LguConstants.JETPACK_THRUSTERS_ENABLED_DEFAULT, LguConstants.JETPACK_THRUSTERS_ENABLED_DESCRIPTION);
+            JETPACK_THURSTERS_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            JETPACK_THRUSTERS_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.JETPACK_THRUSTERS_PRICE_KEY, LguConstants.JETPACK_THRUSTERS_PRICE_DEFAULT);
+            JETPACK_THRUSTERS_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, JetpackThrusters.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
+            JETPACK_THRUSTERS_INITIAL_MAXIMUM_POWER_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.JETPACK_THRUSTERS_INITIAL_MAXIMUM_POWER_INCREASE_KEY, LguConstants.JETPACK_THRUSTERS_INITIAL_MAXIMUM_POWER_INCREASE_DEFAULT, LguConstants.JETPACK_THRUSTERS_INITIAL_MAXIMUM_POWER_INCREASE_DESCRIPTION);
+            JETPACK_THRUSTERS_INCREMENTAL_MAXIMUM_POWER_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.JETPACK_THRUSTERS_INCREMENTAL_MAXIMUM_POWER_INCREASE_KEY, LguConstants.JETPACK_THRUSTERS_INCREMENTAL_MAXIMUM_POWER_INCREASE_DEFAULT, LguConstants.JETPACK_THRUSTERS_INCREMENTAL_MAXIMUM_POWER_INCREASE_DESCRIPTION);
+            JETPACK_THRUSTERS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
+
+            #region Jet Fuel
+
+            topSection = JetFuel.UPGRADE_NAME;
+            JET_FUEL_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.JET_FUEL_ENABLED_KEY, LguConstants.JET_FUEL_ENABLED_DEFAULT, LguConstants.JET_FUEL_ENABLED_DESCRIPTION);
+            JET_FUEL_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            JET_FUEL_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.JET_FUEL_PRICE_KEY, LguConstants.JET_FUEL_PRICE_DEFAULT);
+            JET_FUEL_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, JetFuel.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
+            JET_FUEL_INITIAL_ACCELERATION_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.JET_FUEL_INITIAL_ACCELERATION_INCREASE_KEY, LguConstants.JET_FUEL_INITIAL_ACCELERATION_INCREASE_DEFAULT, LguConstants.JET_FUEL_INITIAL_ACCELERATION_INCREASE_DESCRIPTION);
+            JET_FUEL_INCREMENTAL_ACCELERATION_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.JET_FUEL_INCREMENTAL_ACCELERATION_INCREASE_KEY, LguConstants.JET_FUEL_INCREMENTAL_ACCELERATION_INCREASE_DEFAULT, LguConstants.JET_FUEL_INCREMENTAL_ACCELERATION_INCREASE_DESCRIPTION);
+            JET_FUEL_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
+
+            #region Quick Hands
+
+            topSection = QuickHands.UPGRADE_NAME;
+            QUICK_HANDS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.QUICK_HANDS_ENABLED_KEY, LguConstants.QUICK_HANDS_ENABLED_DEFAULT, LguConstants.QUICK_HANDS_ENABLED_DESCRIPTION);
+            QUICK_HANDS_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            QUICK_HANDS_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.QUICK_HANDS_PRICE_KEY, LguConstants.QUICK_HANDS_PRICE_DEFAULT);
+            QUICK_HANDS_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, QuickHands.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
+            QUICK_HANDS_INITIAL_INTERACTION_SPEED_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.QUICK_HANDS_INITIAL_INTERACTION_SPEED_INCREASE_KEY, LguConstants.QUICK_HANDS_INITIAL_INTERACTION_SPEED_INCREASE_DEFAULT, LguConstants.QUICK_HANDS_INITIAL_INTERACTION_SPEED_INCREASE_DESCRIPTION);
+            QUICK_HANDS_INCREMENTAL_INTERACTION_SPEED_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.QUICK_HANDS_INCREMENTAL_INTERACTION_SPEED_INCREASE_KEY, LguConstants.QUICK_HANDS_INCREMENTAL_INTERACTION_SPEED_INCREASE_DEFAULT, LguConstants.QUICK_HANDS_INCREMENTAL_INTERACTION_SPEED_INCREASE_DESCRIPTION);
+            QUICK_HANDS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
+
+            #region Midas Touch
+
+            topSection = MidasTouch.UPGRADE_NAME;
+            MIDAS_TOUCH_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.MIDAS_TOUCH_ENABLED_KEY, LguConstants.MIDAS_TOUCH_ENABLED_DEFAULT, LguConstants.MIDAS_TOUCH_ENABLED_DESCRIPTION);
+            MIDAS_TOUCH_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.MIDAS_TOUCH_PRICE_KEY, LguConstants.MIDAS_TOUCH_PRICE_DEFAULT);
+            MIDAS_TOUCH_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, MidasTouch.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
+            MIDAS_TOUCH_INITIAL_SCRAP_VALUE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.MIDAS_TOUCH_INITIAL_SCRAP_VALUE_INCREASE_KEY, LguConstants.MIDAS_TOUCH_INITIAL_SCRAP_VALUE_INCREASE_DEFAULT, LguConstants.MIDAS_TOUCH_INITIAL_SCRAP_VALUE_INCREASE_DESCRIPTION);
+            MIDAS_TOUCH_INCREMENTAL_SCRAP_VALUE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.MIDAS_TOUCH_INCREMENTAL_SCRAP_VALUE_INCREASE_KEY, LguConstants.MIDAS_TOUCH_INCREMENTAL_SCRAP_VALUE_INCREASE_DEFAULT, LguConstants.MIDAS_TOUCH_INCREMENTAL_SCRAP_VALUE_INCREASE_DESCRIPTION);
+            MIDAS_TOUCH_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
 
             #region Carbon Kneejoints
 
@@ -1227,12 +1314,10 @@ namespace MoreShipUpgrades.Misc
 
             topSection = Sigurd.UPGRADE_NAME;
             SIGURD_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.SIGURD_ACCESS_ENABLED_KEY, LguConstants.SIGURD_ACCESS_ENABLED_DEFAULT, LguConstants.SIGURD_ACCESS_ENABLED_DESCRIPTION);
-            SIGURD_LAST_DAY_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.SIGURD_ACCESS_ENABLED_LAST_DAY_KEY, LguConstants.SIGURD_ACCESS_ENABLED_LAST_DAY_DEFAULT, LguConstants.SIGURD_ACCESS_ENABLED_LAST_DAY_DESCRIPTION);
+            SIGURD_MODE = cfg.BindSyncedEntry(topSection, "Sigurd Function Mode", Sigurd.FunctionModes.AllDays, "Supported Modes:\nAllDays: All days have a chance of increased Company Buy Rate\nLastDay: Day of the deadline has a chance of increased COmpany Buy Rate");
             SIGURD_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.SIGURD_ACCESS_PRICE_KEY, LguConstants.SIGURD_ACCESS_PRICE_DEFAULT, LguConstants.SIGURD_ACCESS_PRICE_DESCRIPTION);
             SIGURD_CHANCE = cfg.BindSyncedEntry(topSection, LguConstants.SIGURD_ACCESS_CHANCE_KEY, LguConstants.SIGURD_ACCESS_CHANCE_DEFAULT);
-            SIGURD_LAST_DAY_CHANCE = cfg.BindSyncedEntry(topSection, LguConstants.SIGURD_ACCESS_CHANCE_LAST_DAY_KEY, LguConstants.SIGURD_ACCESS_CHANCE_LAST_DAY_DEFAULT);
             SIGURD_PERCENT = cfg.BindSyncedEntry(topSection, LguConstants.SIGURD_ACCESS_ADDITIONAL_PERCENT_KEY, LguConstants.SIGURD_ACCESS_ADDITIONAL_PERCENT_DEFAULT);
-            SIGURD_LAST_DAY_PERCENT = cfg.BindSyncedEntry(topSection, LguConstants.SIGURD_ACCESS_ADDITIONAL_PERCENT_LAST_DAY_KEY, LguConstants.SIGURD_ACCESS_ADDITIONAL_PERCENT_LAST_DAY_DEFAULT);
             SIGURD_ACCESS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion

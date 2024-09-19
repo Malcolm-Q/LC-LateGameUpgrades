@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace MoreShipUpgrades.Misc.TerminalNodes
+namespace MoreShipUpgrades.UI.TerminalNodes
 {
     internal class TierTerminalNode : CustomTerminalNode
     {

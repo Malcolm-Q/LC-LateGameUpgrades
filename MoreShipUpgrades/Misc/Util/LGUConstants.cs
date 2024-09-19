@@ -12,6 +12,7 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.RadarBooster;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.WeedKiller;
@@ -34,6 +35,7 @@ namespace MoreShipUpgrades.Misc.Util
         #region Hex Colors
 
         internal const string HEXADECIMAL_RED = "#FF0000";
+        internal const string HEXADECIMAL_DARK_RED = "#8B0000";
         internal const string HEXADECIMAL_WHITE = "#FFFFFF";
         internal const string HEXADECIMAL_GREEN = "#00FF00";
         internal const string HEXADECIMAL_DARK_GREEN = "#026440";
@@ -149,6 +151,10 @@ namespace MoreShipUpgrades.Misc.Util
         internal const bool ITEM_PROGRESSION_NO_PURCHASE_UPGRADES_DEFAULT = false;
         internal const string ITEM_PROGRESSION_NO_PURCHASE_UPGRADES_DESCRIPTION = "Prevents the upgrades from being purchaseable in the store to be only used to know how far are they to acquiring one. Only valid if Item Progression mode is toggled on";
 
+        internal const string ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS_KEY = "Always Show Contribution Items";
+        internal const bool ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS_DEFAULT = false;
+        internal const string ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS_DESCRIPTION = "Shows all the items associated to each upgrade regardless if they were sold before or not.";
+
         internal const string ITEM_PROGRESSION_APPARATICE_ITEMS_ENTRY_DELIMITER = ",";
         internal const string ITEM_PROGRESSION_APPARATICE_ITEMS_ATTRIBUTE_DELIMITER = "@";
 
@@ -196,6 +202,10 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string JETPACK_THRUSTERS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, JetpackThrusters.UPGRADE_NAME);
+        internal static readonly string JET_FUEL_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, JetFuel.UPGRADE_NAME);
+        internal static readonly string QUICK_HANDS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, QuickHands.UPGRADE_NAME);
+        internal static readonly string MIDAS_TOUCH_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, MidasTouch.UPGRADE_NAME);
         internal static readonly string CARBON_KNEEJOINTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, CarbonKneejoints.UPGRADE_NAME);
         internal static readonly string LIFE_INSURANCE_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, LifeInsurance.UPGRADE_NAME);
         internal static readonly string RUBBER_BOOTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, RubberBoots.UPGRADE_NAME);
@@ -368,6 +378,82 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Jetpack Thrusters
+
+        internal const string JETPACK_THRUSTERS_ENABLED_KEY = $"Enable {JetpackThrusters.UPGRADE_NAME} Upgrade";
+        internal const bool JETPACK_THRUSTERS_ENABLED_DEFAULT = true;
+        internal const string JETPACK_THRUSTERS_ENABLED_DESCRIPTION = "Tier upgrade which increases the maximum speed of the jetpack during flight.";
+
+        internal const string JETPACK_THRUSTERS_PRICE_KEY = $"Price of {JetpackThrusters.UPGRADE_NAME} Upgrade";
+        internal const int JETPACK_THRUSTERS_PRICE_DEFAULT = 300;
+
+        internal const string JETPACK_THRUSTERS_INITIAL_MAXIMUM_POWER_INCREASE_KEY = "Initial Maximum Speed Increase";
+        internal const int JETPACK_THRUSTERS_INITIAL_MAXIMUM_POWER_INCREASE_DEFAULT = 20;
+        internal const string JETPACK_THRUSTERS_INITIAL_MAXIMUM_POWER_INCREASE_DESCRIPTION = "Initial percentage increase of jetpack's maximum speed during flight when first purchasing the upgrade";
+
+        internal const string JETPACK_THRUSTERS_INCREMENTAL_MAXIMUM_POWER_INCREASE_KEY = "Incremental Maximum Speed Increase";
+        internal const int JETPACK_THRUSTERS_INCREMENTAL_MAXIMUM_POWER_INCREASE_DEFAULT = 20;
+        internal const string JETPACK_THRUSTERS_INCREMENTAL_MAXIMUM_POWER_INCREASE_DESCRIPTION = "Incremental percentage increase of jetpack's maximum speed during flight when purchasing further levels of the upgrade";
+
+        #endregion
+
+        #region Jet Fuel
+
+        internal const string JET_FUEL_ENABLED_KEY = $"Enable {JetFuel.UPGRADE_NAME} Upgrade";
+        internal const bool JET_FUEL_ENABLED_DEFAULT = true;
+        internal const string JET_FUEL_ENABLED_DESCRIPTION = "Tier upgrade which increases the acceleration of the jetpack during flight.";
+
+        internal const string JET_FUEL_PRICE_KEY = $"Price of {JetFuel.UPGRADE_NAME} Upgrade";
+        internal const int JET_FUEL_PRICE_DEFAULT = 400;
+
+        internal const string JET_FUEL_INITIAL_ACCELERATION_INCREASE_KEY = "Initial Acceleration Increase";
+        internal const int JET_FUEL_INITIAL_ACCELERATION_INCREASE_DEFAULT = 20;
+        internal const string JET_FUEL_INITIAL_ACCELERATION_INCREASE_DESCRIPTION = "Initial percentage increase of jetpack acceleration when first purchasing the upgrade";
+
+        internal const string JET_FUEL_INCREMENTAL_ACCELERATION_INCREASE_KEY = "Incremental Acceleration Increase";
+        internal const int JET_FUEL_INCREMENTAL_ACCELERATION_INCREASE_DEFAULT = 20;
+        internal const string JET_FUEL_INCREMENTAL_ACCELERATION_INCREASE_DESCRIPTION = "Incremental percentage increase of jetpack acceleration when purchasing further levels of the upgrade";
+
+        #endregion
+
+        #region Quick Hands
+
+        internal const string QUICK_HANDS_ENABLED_KEY = $"Enable {QuickHands.UPGRADE_NAME} Upgrade";
+        internal const bool QUICK_HANDS_ENABLED_DEFAULT = true;
+        internal const string QUICK_HANDS_ENABLED_DESCRIPTION = "Tier upgrade which increases the interaction speed of the player.";
+
+        internal const string QUICK_HANDS_PRICE_KEY = $"Price of {QuickHands.UPGRADE_NAME} Upgrade";
+        internal const int QUICK_HANDS_PRICE_DEFAULT = 100;
+
+        internal const string QUICK_HANDS_INITIAL_INTERACTION_SPEED_INCREASE_KEY = "Initial Interaction Speed Increase";
+        internal const int QUICK_HANDS_INITIAL_INTERACTION_SPEED_INCREASE_DEFAULT = 20;
+        internal const string QUICK_HANDS_INITIAL_INTERACTION_SPEED_INCREASE_DESCRIPTION = "Initial percentage increase of interaction speed when first purchasing the upgrade";
+
+        internal const string QUICK_HANDS_INCREMENTAL_INTERACTION_SPEED_INCREASE_KEY = "Incremental Interaction Speed Increase";
+        internal const int QUICK_HANDS_INCREMENTAL_INTERACTION_SPEED_INCREASE_DEFAULT = 20;
+        internal const string QUICK_HANDS_INCREMENTAL_INTERACTION_SPEED_INCREASE_DESCRIPTION = "Incremental percentage increase of interaction speed when purchasing further levels of the upgrade";
+
+        #endregion
+
+        #region Midas Touch
+
+        internal const string MIDAS_TOUCH_ENABLED_KEY = $"Enable {MidasTouch.UPGRADE_NAME} Upgrade";
+        internal const bool MIDAS_TOUCH_ENABLED_DEFAULT = true;
+        internal const string MIDAS_TOUCH_ENABLED_DESCRIPTION = "Tier upgrade which increases the value of the scrap found in the moons.";
+
+        internal const string MIDAS_TOUCH_PRICE_KEY = $"Price of {MidasTouch.UPGRADE_NAME} Upgrade";
+        internal const int MIDAS_TOUCH_PRICE_DEFAULT = 1000;
+
+        internal const string MIDAS_TOUCH_INITIAL_SCRAP_VALUE_INCREASE_KEY = "Initial Scrap Value Increase";
+        internal const int MIDAS_TOUCH_INITIAL_SCRAP_VALUE_INCREASE_DEFAULT = 20;
+        internal const string MIDAS_TOUCH_INITIAL_SCRAP_VALUE_INCREASE_DESCRIPTION = "Initial percentage increase of value of the scrap found in the moons when first purchasing the upgrade";
+
+        internal const string MIDAS_TOUCH_INCREMENTAL_SCRAP_VALUE_INCREASE_KEY = "Incremental Scrap Value Increase";
+        internal const int MIDAS_TOUCH_INCREMENTAL_SCRAP_VALUE_INCREASE_DEFAULT = 20;
+        internal const string MIDAS_TOUCH_INCREMENTAL_SCRAP_VALUE_INCREASE_DESCRIPTION = "Incremental percentage increase of value of the scrap found in the moons when purchasing further levels of the upgrade";
+
+        #endregion
 
         #region Carbon Kneejoints
 
@@ -1464,6 +1550,9 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string MAIN_SCREEN_TITLE = "Lategame Upgrades";
         internal const string MAIN_SCREEN_TOP_TEXT = "Select an upgrade to purchase:";
         internal const string MAIN_SCREEN_TOP_TEXT_NO_ENTRIES = "There are no upgrades for purchase.";
+
+        internal const string MAIN_SCREEN_INDIVIDUAL_UPGRADES_TEXT = "Individual Upgrades";
+        internal const string MAIN_SCREEN_SHARED_UPGRADES_TEXT = "Shared Upgrades";
 
         #endregion
 

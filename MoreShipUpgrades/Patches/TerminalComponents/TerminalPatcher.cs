@@ -1,9 +1,9 @@
 ﻿using CSync.Lib;
 using HarmonyLib;
 using MoreShipUpgrades.Misc;
-using MoreShipUpgrades.Misc.TerminalNodes;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.Patches.Items;
+using MoreShipUpgrades.UI.TerminalNodes;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
@@ -39,7 +39,7 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
             MethodInfo bargainConnectionsAmount = typeof(BargainConnections).GetMethod(nameof(BargainConnections.GetBargainConnectionsAdditionalItems));
             MethodInfo lethalDealsGuaranteedItems = typeof(LethalDeals).GetMethod(nameof(LethalDeals.GetLethalDealsGuaranteedItems));
             MethodInfo guaranteedMinimumSale = typeof(MarketInfluence).GetMethod(nameof(MarketInfluence.GetGuaranteedPercentageSale));
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            List<CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindInteger(ref index, ref codes, -10, addCode: lethalDealsGuaranteedItems, errorMessage: "Couldn't find negative value representing no sales");
             Tools.FindInteger(ref index, ref codes, 5, addCode: bargainConnectionsAmount, errorMessage: "Couldn't find first maximum amount of items to go on sale");
@@ -60,7 +60,7 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
         static IEnumerable<CodeInstruction> ParsePlayerSenteceTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo newLimitCharactersTransmit = typeof(FastEncryption).GetMethod(nameof(FastEncryption.GetLimitOfCharactersTransmit));
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            List<CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindInteger(ref index, ref codes, findValue: 10, skip: true, errorMessage: "Couldn't find the 10 value which is used as character limit");
             codes.Insert(index, new CodeInstruction(OpCodes.Call, newLimitCharactersTransmit));
@@ -69,7 +69,7 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
         }
         [HarmonyPostfix]
         [HarmonyPatch(nameof(Terminal.LoadNewNode))]
-        static void LoadNewNodePostfix(Terminal __instance, TerminalNode node) 
+        static void LoadNewNodePostfix(Terminal __instance, TerminalNode node)
         {
             if (node.buyRerouteToMoon != -2 || node.buyVehicleIndex != -1) return;
             string toReplace = EfficientEngines.GetDiscountedMoonPrice(node.itemCost).ToString();
@@ -82,7 +82,7 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
         {
             FieldInfo itemCost = typeof(TerminalNode).GetField(nameof(TerminalNode.itemCost));
             MethodInfo applyMoonDiscount = typeof(EfficientEngines).GetMethod(nameof(EfficientEngines.GetDiscountedMoonPrice));
-            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+            List<CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindField(ref index, ref codes, itemCost, skip: true, errorMessage: "Couldn't find the item cost applied to a specific item with index 7");
             Tools.FindField(ref index, ref codes, itemCost, skip: true, errorMessage: "Couldn't find the item cost used when buying vehicles");
