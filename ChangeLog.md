@@ -1,4 +1,11 @@
 <details>
+<summary> 3.10.4 - 2024-09-19 </summary>
+
+- Fixed text typo in "Jetpack Thrusters" info.
+
+</details>
+
+<details>
 <summary> 3.10.3 - 2024-09-19 </summary>
 
 - Implemented "Jetpack Thrusters" tier upgrade which increases the maximum speed of the jetpack while in flight.

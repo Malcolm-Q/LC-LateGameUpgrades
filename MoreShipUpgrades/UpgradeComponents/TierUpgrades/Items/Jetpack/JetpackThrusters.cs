@@ -34,7 +34,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack
                 LategameConfiguration config = GetConfiguration();
                 return config.JETPACK_THRUSTERS_INITIAL_MAXIMUM_POWER_INCREASE.Value + (level * config.JETPACK_THRUSTERS_INCREMENTAL_MAXIMUM_POWER_INCREASE.Value);
             }
-            const string infoFormat = "LVL {0} - ${1} - The acceleration of the jetpack during flight is increased by {2}%\n";
+            const string infoFormat = "LVL {0} - ${1} - The maximum speed of the jetpack during flight is increased by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
         public static float GetIncreasedMaximumPower()
