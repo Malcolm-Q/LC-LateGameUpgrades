@@ -6,6 +6,7 @@
 - Implemented "Midas Touch" tier upgrade which increases the value of scrap found in the moons.
 - Implemented "Quick Hands" tier upgrade which increases the player's interaction speed.
 - Added configuration to always show items associated to upgrades when Item Progression Mode is toggled on.
+- Changed Sigurd Access' configuration setup to be similar to most upgrades.
 - Changed upgrade display to show the price number red if the players do not have enough credits to purchase it.
 - Changed upgrade store to show first pick between shared and individual upgrades if any are configured as so and show the list of upgrades when selected.
   - If all enabled upgrades are either individual or shared, it will do the same behaviour as before.

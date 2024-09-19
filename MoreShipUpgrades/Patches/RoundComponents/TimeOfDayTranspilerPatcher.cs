@@ -15,10 +15,11 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         [HarmonyTranspiler]
         static IEnumerable<CodeInstruction> SetBuyingRateForDayTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo sigurdChance = typeof(Sigurd).GetMethod(nameof(Sigurd.GetBuyingRateLastDay));
+            MethodInfo sigurdChance = typeof(Sigurd).GetMethod(nameof(Sigurd.GetBuyingRate));
             List<CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindFloat(ref index, ref codes, findValue: 1, addCode: sigurdChance, errorMessage: "Couldn't find the 1 value which is used as buying rate");
+            Tools.FindFloat(ref index, ref codes, findValue: 0.3f, addCode: sigurdChance, errorMessage: "Couldn't find the 0.3f value which is used as buying rate");
             return codes.AsEnumerable();
         }
 

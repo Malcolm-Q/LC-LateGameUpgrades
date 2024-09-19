@@ -77,7 +77,6 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<bool> DOOR_HYDRAULICS_BATTERY_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> FASTER_DROP_POD_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SIGURD_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> SIGURD_LAST_DAY_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> EFFICIENT_ENGINES_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> CLIMBING_GLOVES_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> LITHIUM_BATTERIES_ENABLED { get; set; }
@@ -468,9 +467,8 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_REWARD_QUOTA_MULTIPLIER { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SHOW_UPGRADES_CHAT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> SIGURD_CHANCE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> SIGURD_LAST_DAY_CHANCE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> SIGURD_PERCENT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> SIGURD_LAST_DAY_PERCENT { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<Sigurd.FunctionModes> SIGURD_MODE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SALE_APPLY_ONCE { get; set; }
 
         #endregion
@@ -1316,12 +1314,10 @@ namespace MoreShipUpgrades.Misc
 
             topSection = Sigurd.UPGRADE_NAME;
             SIGURD_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.SIGURD_ACCESS_ENABLED_KEY, LguConstants.SIGURD_ACCESS_ENABLED_DEFAULT, LguConstants.SIGURD_ACCESS_ENABLED_DESCRIPTION);
-            SIGURD_LAST_DAY_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.SIGURD_ACCESS_ENABLED_LAST_DAY_KEY, LguConstants.SIGURD_ACCESS_ENABLED_LAST_DAY_DEFAULT, LguConstants.SIGURD_ACCESS_ENABLED_LAST_DAY_DESCRIPTION);
+            SIGURD_MODE = cfg.BindSyncedEntry(topSection, "Sigurd Function Mode", Sigurd.FunctionModes.AllDays, "Supported Modes:\nAllDays: All days have a chance of increased Company Buy Rate\nLastDay: Day of the deadline has a chance of increased COmpany Buy Rate");
             SIGURD_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.SIGURD_ACCESS_PRICE_KEY, LguConstants.SIGURD_ACCESS_PRICE_DEFAULT, LguConstants.SIGURD_ACCESS_PRICE_DESCRIPTION);
             SIGURD_CHANCE = cfg.BindSyncedEntry(topSection, LguConstants.SIGURD_ACCESS_CHANCE_KEY, LguConstants.SIGURD_ACCESS_CHANCE_DEFAULT);
-            SIGURD_LAST_DAY_CHANCE = cfg.BindSyncedEntry(topSection, LguConstants.SIGURD_ACCESS_CHANCE_LAST_DAY_KEY, LguConstants.SIGURD_ACCESS_CHANCE_LAST_DAY_DEFAULT);
             SIGURD_PERCENT = cfg.BindSyncedEntry(topSection, LguConstants.SIGURD_ACCESS_ADDITIONAL_PERCENT_KEY, LguConstants.SIGURD_ACCESS_ADDITIONAL_PERCENT_DEFAULT);
-            SIGURD_LAST_DAY_PERCENT = cfg.BindSyncedEntry(topSection, LguConstants.SIGURD_ACCESS_ADDITIONAL_PERCENT_LAST_DAY_KEY, LguConstants.SIGURD_ACCESS_ADDITIONAL_PERCENT_LAST_DAY_DEFAULT);
             SIGURD_ACCESS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
