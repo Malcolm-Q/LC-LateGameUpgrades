@@ -151,6 +151,10 @@ namespace MoreShipUpgrades.Misc.Util
         internal const bool ITEM_PROGRESSION_NO_PURCHASE_UPGRADES_DEFAULT = false;
         internal const string ITEM_PROGRESSION_NO_PURCHASE_UPGRADES_DESCRIPTION = "Prevents the upgrades from being purchaseable in the store to be only used to know how far are they to acquiring one. Only valid if Item Progression mode is toggled on";
 
+        internal const string ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS_KEY = "Always Show Contribution Items";
+        internal const bool ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS_DEFAULT = false;
+        internal const string ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS_DESCRIPTION = "Shows all the items associated to each upgrade regardless if they were sold before or not.";
+
         internal const string ITEM_PROGRESSION_APPARATICE_ITEMS_ENTRY_DELIMITER = ",";
         internal const string ITEM_PROGRESSION_APPARATICE_ITEMS_ATTRIBUTE_DELIMITER = "@";
 

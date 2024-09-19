@@ -484,6 +484,7 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_BLACKLISTED_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_APPARATICE_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> ITEM_PROGRESSION_NO_PURCHASE_UPGRADES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> JETPACK_THRUSTERS_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> JET_FUEL_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> QUICK_HANDS_ITEM_PROGRESSION_ITEMS {  get; set; }
@@ -568,6 +569,7 @@ namespace MoreShipUpgrades.Misc
             ITEM_PROGRESSION_BLACKLISTED_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_BLACKLISTED_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_BLACKLISTED_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_BLACKLISTED_ITEMS_DESCRIPTION);
             ITEM_PROGRESSION_APPARATICE_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_APPARATICE_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_APPARATICE_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_APPARATICE_ITEMS_DESCRIPTION);
             ITEM_PROGRESSION_NO_PURCHASE_UPGRADES = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_NO_PURCHASE_UPGRADES_KEY, LguConstants.ITEM_PROGRESSION_NO_PURCHASE_UPGRADES_DEFAULT, LguConstants.ITEM_PROGRESSION_NO_PURCHASE_UPGRADES_DESCRIPTION);
+            ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS_DESCRIPTION);
 
             #endregion 
 

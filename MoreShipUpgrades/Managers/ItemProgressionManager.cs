@@ -231,6 +231,7 @@ namespace MoreShipUpgrades.Managers
 
             foreach (Item item in allItemsList.itemsList)
             {
+                if (!item.isScrap) continue;
                 string itemName = item.itemName.ToLower();
                 if (UpgradeBus.Instance.scrapToCollectionUpgrade.ContainsKey(itemName)) continue;
                 CustomTerminalNode node = PickRandomUpgrade();
@@ -362,7 +363,7 @@ namespace MoreShipUpgrades.Managers
                 string scrapName = pair.Key;
                 foreach (string nodeName in nodes)
                 {
-                    if (nodeName == node.OriginalName && UpgradeBus.Instance.discoveredItems.Contains(scrapName))
+                    if (nodeName == node.OriginalName && (UpgradeBus.Instance.discoveredItems.Contains(scrapName) || UpgradeBus.Instance.PluginConfiguration.ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS))
                         result.Add(scrapName);
                 }
             }
