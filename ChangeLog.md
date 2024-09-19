@@ -1,5 +1,5 @@
 <details>
-<summary> 3.10.3 - 2024-09-15 </summary>
+<summary> 3.10.3 - 2024-09-19 </summary>
 
 - Implemented "Jetpack Thrusters" tier upgrade which increases the maximum speed of the jetpack while in flight.
 - Implemented "Jet Fuel" tier upgrade which increases the acceleration of the jetpack while in flight.
