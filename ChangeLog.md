@@ -1,6 +1,7 @@
 <details>
 <summary> 3.10.4 - 2024-09-19 </summary>
 
+- Added configuration for interns for teleportation restriction on the revived player.
 - Fixed text typo in "Jetpack Thrusters" info.
 
 </details>

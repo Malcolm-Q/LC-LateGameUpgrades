@@ -3,6 +3,7 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Commands;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -13,12 +14,19 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
         internal const string NAME = "Interns";
         public static Interns instance;
 
+        List<PlayerControllerB> recentlyInterned;
         internal string[] internNames, internInterests;
+        public enum TeleportRestriction
+        {
+            None,
+            ExitBuilding,
+            EnterShip,
+        }
         void Start()
         {
             DontDestroyOnLoad(gameObject);
             instance = this;
-
+            recentlyInterned = new();
             internNames = AssetBundleHandler.GetInfoFromJSON("InternNames").Split(",");
             internInterests = AssetBundleHandler.GetInfoFromJSON("InternInterests").Split(",");
         }
@@ -27,7 +35,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
         public void ReviveTargetedPlayerServerRpc()
         {
             ReviveTargetedPlayerClientRpc();
-
             Vector3 vector = RoundManager.Instance.insideAINodes[Random.Range(0, RoundManager.Instance.insideAINodes.Length)].transform.position;
             vector = RoundManager.Instance.GetRandomNavMeshPositionInRadiusSpherical(vector, 10f, default);
             NetworkBehaviourReference netRef = new NetworkBehaviourReference(StartOfRound.Instance.mapScreen.targetedPlayer);
@@ -149,6 +156,43 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
                 player.thisPlayerModelLOD1.enabled = true;
                 player.thisPlayerModelLOD2.enabled = true;
             }
+            recentlyInterned.Add(player);
+        }
+        internal void RemoveRecentlyInterned(PlayerControllerB player)
+        {
+            if (ContainsRecentlyInterned(player))
+                recentlyInterned.Remove(player);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        internal void RemoveRecentlyInternedServerRpc(NetworkBehaviourReference player)
+        {
+            RemoveRecentlyInternedClientRpc(player);
+        }
+
+        [ClientRpc]
+        internal void RemoveRecentlyInternedClientRpc(NetworkBehaviourReference player)
+        {
+            if (player.TryGet(out  PlayerControllerB playerController))
+            {
+                RemoveRecentlyInterned(playerController);
+            }
+        }
+
+        internal void ResetRecentlyInterned()
+        {
+            recentlyInterned.Clear();
+        }
+
+        internal bool ContainsRecentlyInterned(PlayerControllerB player)
+        {
+            return recentlyInterned.Contains(player);
+        }
+        internal void AddRecentlyInterned(PlayerControllerB player)
+        {
+
+            if (!ContainsRecentlyInterned(player))
+                recentlyInterned.Remove(player);
         }
         public static new void RegisterCommand()
         {

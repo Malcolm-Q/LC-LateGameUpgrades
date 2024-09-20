@@ -14,6 +14,8 @@ using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
 using MoreShipUpgrades.Compat;
+using MoreShipUpgrades.UpgradeComponents.Commands;
+using MoreShipUpgrades.Misc;
 
 namespace MoreShipUpgrades.Patches.PlayerController
 {
@@ -26,6 +28,15 @@ namespace MoreShipUpgrades.Patches.PlayerController
         {
             __instance.gameObject.AddComponent<PlayerManager>();
         }
+        [HarmonyPatch(nameof(PlayerControllerB.KillPlayerClientRpc))]
+        [HarmonyPostfix]
+        static void KillPlayerClientRpcPostfix(int playerId)
+        {
+            LategameConfiguration config = UpgradeBus.Instance.PluginConfiguration;
+            if (!config.INTERN_ENABLED || config.INTERNS_TELEPORT_RESTRICTION == Interns.TeleportRestriction.None) return;
+            PlayerControllerB player = StartOfRound.Instance.allPlayerScripts[playerId];
+            Interns.instance.RemoveRecentlyInterned(player);
+        }
         [HarmonyPrefix]
         [HarmonyPatch(nameof(PlayerControllerB.KillPlayer))]
         static void DisableUpgradesOnDeath(PlayerControllerB __instance)
@@ -33,6 +44,10 @@ namespace MoreShipUpgrades.Patches.PlayerController
             if (!__instance.IsOwner) return;
             if (__instance.isPlayerDead) return;
             if (!__instance.AllowPlayerDeath()) return;
+            if (UpgradeBus.Instance.PluginConfiguration.INTERN_ENABLED)
+            {
+                Interns.instance.RemoveRecentlyInterned(__instance);
+            }
             LoseNightVisionOnDeath(ref __instance);
         }
 

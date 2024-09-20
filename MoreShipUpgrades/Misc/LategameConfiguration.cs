@@ -172,6 +172,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<Interns.TeleportRestriction> INTERNS_TELEPORT_RESTRICTION {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> JETPACK_THRUSTERS_PRICES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> JETPACK_THRUSTERS_OVERRIDE_NAME {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> JETPACK_THRUSTERS_INITIAL_MAXIMUM_POWER_INCREASE { get; set; }
@@ -1367,6 +1368,7 @@ namespace MoreShipUpgrades.Misc
             topSection = Interns.NAME;
             INTERN_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.INTERNS_ENABLED_KEY, LguConstants.INTERNS_ENABLED_DEFAULT, LguConstants.INTERNS_ENABLED_DESCRIPTION);
             INTERN_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.INTERNS_PRICE_KEY, LguConstants.INTERNS_PRICE_DEFAULT, LguConstants.INTERNS_PRICE_DESCRIPTION);
+            INTERNS_TELEPORT_RESTRICTION = cfg.BindSyncedEntry(topSection, "Teleport Restriction when using Interns", Interns.TeleportRestriction.None, "Supported modes:\nNone: No restrictions applied.\nExitBuilding: Player must exit the facility to be able to be teleported.\nEnterShip: Player must enter the ship to be able to be teleported.");
 
             #endregion
 
