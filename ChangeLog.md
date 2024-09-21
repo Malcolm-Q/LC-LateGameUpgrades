@@ -3,6 +3,7 @@
 
 - Added configuration for interns for teleportation restriction on the revived player.
 - Fixed text typo in "Jetpack Thrusters" info.
+- Fixed issue with Jet Fuel configuration influencing Jetpack Thrusters in some aspects.
 
 </details>
 

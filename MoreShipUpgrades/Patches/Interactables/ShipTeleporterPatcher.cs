@@ -29,7 +29,7 @@ namespace MoreShipUpgrades.Patches.Interactables
             __instance.buttonTrigger.interactable = !Interns.instance.ContainsRecentlyInterned(playerToBeamUp);
             if (!__instance.buttonTrigger.interactable)
             {
-                __instance.buttonTrigger.disabledHoverTip = $"Recent hired intern must {(config.INTERNS_TELEPORT_RESTRICTION == Interns.TeleportRestriction.ExitBuilding ? "exit the building" : "get back to the ship")} to be teleported";
+                __instance.buttonTrigger.disabledHoverTip = $"[Recent intern must {(config.INTERNS_TELEPORT_RESTRICTION == Interns.TeleportRestriction.ExitBuilding ? "exit the building" : "enter the ship")} first]";
             }
         }
     }

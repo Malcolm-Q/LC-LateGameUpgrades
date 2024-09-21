@@ -45,14 +45,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack
         }
         public static float IncreaseJetpackMaximumPower(float defaultValue)
         {
-            if (!GetConfiguration().JET_FUEL_ENABLED) return defaultValue;
+            if (!GetConfiguration().JETPACK_THRUSTERS_ENABLED) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             float multiplier = GetIncreasedMaximumPower();
             return Mathf.Clamp(defaultValue + (defaultValue * multiplier), defaultValue, float.MaxValue);
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().JET_FUEL_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().JETPACK_THRUSTERS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
