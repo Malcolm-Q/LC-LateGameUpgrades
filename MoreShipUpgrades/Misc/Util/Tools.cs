@@ -130,6 +130,10 @@ namespace MoreShipUpgrades.Misc.Util
         {
             FindCodeInstruction(ref index, ref codes, findValue: OpCodes.Mul, addCode: addCode, skip: skip, notInstruction: notInstruction, andInstruction: andInstruction, orInstruction: orInstruction, requireInstance: requireInstance, errorMessage: errorMessage);
         }
+        public static void FindMulReverse(ref int index, ref List<CodeInstruction> codes, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
+        {
+            FindCodeInstructionReverse(ref index, ref codes, findValue: OpCodes.Mul, addCode: addCode, skip: skip, notInstruction: notInstruction, andInstruction: andInstruction, orInstruction: orInstruction, requireInstance: requireInstance, errorMessage: errorMessage);
+        }
         private static bool CheckCodeInstruction(CodeInstruction code, int localIndex, bool store = false)
         {
             if (!store)

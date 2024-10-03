@@ -172,6 +172,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<bool> SICK_BEATS_APPLY_STAMINA_CONSUMPTION { get; set; }
         [field: SyncedEntryField] public SyncedEntry<Interns.TeleportRestriction> INTERNS_TELEPORT_RESTRICTION {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> JETPACK_THRUSTERS_PRICES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> JETPACK_THRUSTERS_OVERRIDE_NAME {  get; set; }
@@ -1307,6 +1308,7 @@ namespace MoreShipUpgrades.Misc
             BEATS_DMG_INC = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_ADDITIONAL_DAMAGE_KEY, LguConstants.SICK_BEATS_ADDITIONAL_DAMAGE_DEFAULT);
             BEATS_SPEED_INC = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_ADDITIONAL_SPEED_KEY, LguConstants.SICK_BEATS_ADDITIONAL_SPEED_DEFAULT);
             BEATS_RADIUS = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_EFFECT_RADIUS_KEY, LguConstants.SICK_BEATS_EFFECT_RADIUS_DEFAULT, LguConstants.SICK_BEATS_EFFECT_RADIUS_DESCRIPTION);
+            SICK_BEATS_APPLY_STAMINA_CONSUMPTION = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_APPLY_STAMINA_CONSUMPTION_KEY, LguConstants.SICK_BEATS_APPLY_STAMINA_CONSUMPTION_DEFAULT, LguConstants.SICK_BEATS_APPLY_STAMINA_CONSUMPTION_DESCRIPTION);
             SICK_BEATS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion

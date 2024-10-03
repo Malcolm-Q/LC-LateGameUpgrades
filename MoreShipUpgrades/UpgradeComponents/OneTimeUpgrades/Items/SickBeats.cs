@@ -57,6 +57,14 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items
             if (!GetActiveUpgrade(UPGRADE_NAME)) return regenValue;
             return regenValue * Instance.staminaDrainCoefficient;
         }
+        public static float ApplyPossibleDecreasedStaminaDrain(float drainValue)
+        {
+            LategameConfiguration config = GetConfiguration();
+            if (!config.BEATS_ENABLED.Value) return drainValue;
+            if (!GetActiveUpgrade(UPGRADE_NAME)) return drainValue;
+            if (!config.SICK_BEATS_APPLY_STAMINA_CONSUMPTION) return drainValue;
+            return drainValue * (1f - Mathf.Clamp(Instance.staminaDrainCoefficient - 1f, 0f, 1f));
+        }
 
         public static int GetShovelHitForce(int force)
         {
@@ -79,7 +87,8 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items
             if (config.BEATS_SPEED.Value) txt += $"Movement speed increased by {config.BEATS_SPEED_INC.Value}\n";
             if (config.BEATS_DMG.Value) txt += $"Damage inflicted increased by {config.BEATS_DMG_INC.Value}\n";
             if (config.BEATS_DEF.Value) txt += $"Incoming Damage multiplied by {config.BEATS_DEF_CO.Value}\n";
-            if (config.BEATS_STAMINA.Value) txt += $"Stamina Drain multiplied by {config.BEATS_STAMINA_CO.Value}\n";
+            if (config.BEATS_STAMINA.Value) txt += $"Stamina Regeneration multiplied by {config.BEATS_STAMINA_CO.Value}\n";
+            if (config.SICK_BEATS_APPLY_STAMINA_CONSUMPTION) txt += $"Also applies on stamina drain overtime (with the multiplier value of {Mathf.Clamp(config.BEATS_STAMINA_CO - 1f, 0f, 1f)})\n";
             return txt;
         }
         public override bool CanInitializeOnStart => GetConfiguration().BEATS_PRICE.Value <= 0;
