@@ -3,14 +3,21 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {
-    internal class DeepPockets : TierUpgrade
+    internal class DeepPockets : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Deeper Pockets";
         internal const string DEFAULT_PRICES = "750";
+        internal const string WORLD_BUILDING_TEXT = "In the 'GEAR' section of the Company Catalogue, in the middle of the second page, there is an advert for this." +
+            " It's basically just a requisition of carabiners and bungee cords, but it's being marketed aggressively as a life-changing solution for hauling scrap.";
 
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;

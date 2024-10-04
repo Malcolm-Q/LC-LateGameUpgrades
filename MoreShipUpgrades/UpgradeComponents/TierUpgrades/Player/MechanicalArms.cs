@@ -4,14 +4,21 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {
-    internal class MechanicalArms : TierUpgrade
+    internal class MechanicalArms : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Mechanical Arms";
         internal const string PRICES_DEFAULT = "400,600,800";
+        internal const string WORLD_BUILDING_TEXT = "\n\nYou were pricked by a weirdly sharp metal fragment in the facility one day. You fell ill and collapsed for twenty minutes" +
+            " and awoke feeling bizarre. Ever since then, for some reason, you've been able to grab items and open doors from further away.\n\n";
 
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;

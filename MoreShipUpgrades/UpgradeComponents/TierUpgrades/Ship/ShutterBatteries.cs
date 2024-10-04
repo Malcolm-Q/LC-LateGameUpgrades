@@ -3,12 +3,13 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class ShutterBatteries : TierUpgrade
+    internal class ShutterBatteries : TierUpgrade, IUpgradeWorldBuilding
     {
         public const string UPGRADE_NAME = "Shutter Batteries";
         public const string PRICES_DEFAULT = "200,300,400";
@@ -26,6 +27,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public const string INCREMENTAL_SECTION = "Incremental battery boost";
         public const float INCREMENTAL_DEFAULT = 5f;
         public const string INCREMENTAL_DESCRIPTION = "Incremental battery boost for the doors' lock after purchase";
+
+        internal const string WORLD_BUILDING_TEXT = "\n\nService package of maintenance procedures for your Ship's Proprietary Emergency Lockout Door System, the two-button monitor you control the Ship's airlock from while moonside. Opting into all of the procedures will improve the uptime of the lockout function, which may improve your department's Fatality Record Over Time by up to 11%.\n\n";
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         void Awake()
         {
             upgradeName = UPGRADE_NAME;

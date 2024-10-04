@@ -3,13 +3,15 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Store
 {
-    class BargainConnections : TierUpgrade
+    class BargainConnections : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Bargain Connections";
         internal const string PRICES_DEFAULT = "225,300,375";
+        internal const string WORLD_BUILDING_TEXT = "\n\nSubscription to 'Coupon Cutters' magazine. Every once in a while the magazine comes with coupons already cut out from it. Strange.\n\n";
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
@@ -59,6 +61,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Store
                                                 configuration.BARGAIN_CONNECTIONS_PRICE.Value,
                                                 UpgradeBus.ParseUpgradePrices(configuration.BARGAIN_CONNECTIONS_PRICES.Value),
                                                 configuration.OVERRIDE_UPGRADE_NAMES ? configuration.BARGAIN_CONNECTIONS_OVERRIDE_NAME : "");
+        }
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
         }
     }
 }

@@ -5,16 +5,24 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using GameNetcodeStuff;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies
 {
-    internal class FedoraSuit : OneTimeUpgrade
+    internal class FedoraSuit : OneTimeUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Fedora Suit";
+        internal const string WORLD_BUILDING_TEXT = "\n\nValid and more-recent Staff lanyards for {0}," +
+            " indicating to any current and former Company Staff that you are permitted to be within the facility. Doesn't work on turrets, as those are... newer.\n\n";
         internal static FedoraSuit instance;
 
         internal Dictionary<ulong, bool> wearingFedora;
         public override bool CanInitializeOnStart => GetConfiguration().FEDORA_SUIT_PRICE.Value <= 0;
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return string.Format(WORLD_BUILDING_TEXT, shareStatus ? "your crew" : "you");
+        }
         void Awake()
         {
             upgradeName = UPGRADE_NAME;

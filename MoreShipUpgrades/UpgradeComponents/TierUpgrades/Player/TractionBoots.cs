@@ -1,20 +1,25 @@
 ﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {
-    internal class TractionBoots : TierUpgrade
+    internal class TractionBoots : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Traction Boots";
         internal const string PRICES_DEFAULT = "100,150,250";
+        internal const string WORLD_BUILDING_TEXT = "\n\nIn the 'GEAR' section of the Company Catalogue, the first ad on the first page is for these." +
+            " They're magnetic cleats that hook onto the Proprietary Steel Toe & Heel Reinforcements on your boots." +
+            " These things have been known to hook into grated metal flooring and come off without the wearer's notice, so be careful.\n\n";
 
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;

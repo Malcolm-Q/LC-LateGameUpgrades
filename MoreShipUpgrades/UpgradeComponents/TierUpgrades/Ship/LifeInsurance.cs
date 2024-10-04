@@ -4,13 +4,20 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
 {
-    public class LifeInsurance : TierUpgrade
+    public class LifeInsurance : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Life Insurance";
         internal const string DEFAULT_PRICES = "200,250,300";
+        internal const string WORLD_BUILDING_TEXT = "\n\nHigh-grossing departments that operate in sectors of severe risk can optimize body retrieval costs by essentially" +
+            " hiring the cleanup crew on a retainer. These arrangements are made Ship-to-Ship between individual Company Departments and require a lot of phonecalls and paperwork.\n\n";
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         void Awake()
         {
             upgradeName = UPGRADE_NAME;

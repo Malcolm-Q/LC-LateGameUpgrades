@@ -16,8 +16,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public const string UPGRADE_NAME = "Beekeeper";
         public const string PRICES_DEFAULT = "225,280,340";
-        internal const string WORLD_BUILDING_TEXT = "\n\nOn-the-job training package that teaches {0} proper Circuit Bee Nest handling techniques." +
-            " Also comes with a weekly issuance of alkaline pills to partially inoculate {0} against Circuit Bee Venom.\n\n";
+        internal const string WORLD_BUILDING_TEXT = "\n\nOn-the-job training package that instructs {0} how to more safely and efficiently handle Circuit Bee Nests." +
+            " Departments with a LVL {1} Certification in Circuit Bee Nest Handling earn an extra commission for every Nest they sell.\n\n";
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
@@ -49,7 +49,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 
         public string GetWorldBuildingText(bool shareStatus = false)
         {
-            return string.Format(WORLD_BUILDING_TEXT, shareStatus ? "your crew" : "you");
+            return string.Format(WORLD_BUILDING_TEXT, shareStatus ? "your crew" : "you", GetConfiguration().BEEKEEPER_UPGRADE_PRICES.Value.Split(',').Length);
         }
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)

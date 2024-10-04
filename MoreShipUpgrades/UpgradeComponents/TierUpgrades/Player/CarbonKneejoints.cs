@@ -4,13 +4,17 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {
-    internal class CarbonKneejoints : TierUpgrade
+    internal class CarbonKneejoints : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Carbon Kneejoints";
         internal const string DEFAULT_PRICES = "50,100,150";
+        internal const string WORLD_BUILDING_TEXT = "\n\nSpecial kneebrace & lower body harness system that supports your joints. Makes you feel prepared to sneak around. Also makes your butt look amazing.\n\n";
+
+        
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
@@ -71,6 +75,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
                                                 UpgradeBus.ParseUpgradePrices(configuration.CARBON_KNEEJOINTS_PRICES),
                                                 configuration.OVERRIDE_UPGRADE_NAMES ? configuration.CARBON_KNEEJOINTS_OVERRIDE_NAME : "",
                                                 Plugin.networkPrefabs[UPGRADE_NAME]);
+        }
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
         }
     }
 }

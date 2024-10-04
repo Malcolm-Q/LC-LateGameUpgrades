@@ -2,16 +2,24 @@
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship
 {
-    class FastEncryption : OneTimeUpgrade
+    class FastEncryption : OneTimeUpgrade, IUpgradeWorldBuilding
     {
         public const string UPGRADE_NAME = "Fast Encryption";
+        internal const string WORLD_BUILDING_TEXT = "\n\nA small tweak for the signal translator that optimizes the way it compresses text over the Proprietary Network." +
+            " Don't forget that the Company keeps records of all department transmissions for training purposes, and that your on-the-job conversations may be subject to playback and review by your Employer.\n\n";
         public static FastEncryption instance;
         public override bool CanInitializeOnStart => GetConfiguration().PAGER_PRICE.Value <= 0;
 
         const float TRANSMIT_MULTIPLIER = 0.2f;
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         void Awake()
         {
             upgradeName = UPGRADE_NAME;

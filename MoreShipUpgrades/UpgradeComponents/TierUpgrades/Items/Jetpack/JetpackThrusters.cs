@@ -3,15 +3,21 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack
 {
-    internal class JetpackThrusters : TierUpgrade
+    internal class JetpackThrusters : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Jetpack Thrusters";
         internal const string DEFAULT_PRICES = "150,300,400";
+        internal const string WORLD_BUILDING_TEXT = "\n\nOptimization procedure for your jetpack's thrust nozzles that results in a higher terminal velocity at maximum thrust.\n\n";
 
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;

@@ -2,14 +2,22 @@
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
 {
-    internal class LethalDeals : OneTimeUpgrade
+    internal class LethalDeals : OneTimeUpgrade, IUpgradeWorldBuilding
     {
         public const string UPGRADE_NAME = "Lethal Deals";
+        internal const string WORLD_BUILDING_TEXT = "\n\nThe Company Store Loyalty Rewards Program. For a small fee and all of your personally-identifying information," +
+            " you will be made eligible for one GUARANTEED random discount each Store rotation. Comes with a little plastic card for your keychain." +
+            " There's a barcode on it, but the Terminal has nothing to scan the barcode with, so who knows what it's really for.\n\n";
         const int GUARANTEED_ITEMS_AMOUNT = 1;
         public override bool CanInitializeOnStart => GetConfiguration().LETHAL_DEALS_PRICE.Value <= 0;
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         void Awake()
         {
             upgradeName = UPGRADE_NAME;

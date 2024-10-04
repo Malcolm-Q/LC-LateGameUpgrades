@@ -5,14 +5,20 @@ using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
 using LCVR;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
 {
-    internal class ScavengerInstincts : TierUpgrade
+    internal class ScavengerInstincts : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Scavenger Instincts";
         internal const string DEFAULT_PRICES = "800,1000,1200,1400";
+        internal const string WORLD_BUILDING_TEXT = "\n\nAfter spending a lot of time in the facility, you begin to notice certain patterns in the location of valuable objects. Your department's output increases, but the implications are disturbing.\n\n";
 
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         void Awake()
         {
             upgradeName = UPGRADE_NAME;

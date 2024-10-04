@@ -3,15 +3,22 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Store
 {
-    internal class MarketInfluence : TierUpgrade
+    internal class MarketInfluence : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Market Influence";
         internal const string PRICES_DEFAULT = "200,350,500";
+        internal const string WORLD_BUILDING_TEXT = "\n\nBy investing scrip into the Company's subsidiaries that produce your equipment instead of buying the equipment itself," +
+            " you are sometimes awarded coupons in the mail for various Company Store offerings.\n\n";
 
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;

@@ -11,7 +11,12 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.WeedKiller
     {
         internal const string UPGRADE_NAME = "Weed Genetic Manipulation";
         internal const string PRICES_DEFAULT = "100,150,200";
+        internal const string WORLD_BUILDING_TEXT = "\n\nYou figured out that pissing into the Weed Killer makes it more effective. The cost of this upgrade comes from extra portable water requisitions your department needs to order to make the project happen.\n\n";
 
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;

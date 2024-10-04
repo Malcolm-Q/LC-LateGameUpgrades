@@ -5,6 +5,7 @@
 - Fixed text typo in "Jetpack Thrusters" info.
 - Fixed issue with Jet Fuel configuration influencing Jetpack Thrusters in some aspects.
 - Fixed text typo in Sick beats description and added configuration to allow stamina buff apply on stamina drain overtime scenarios.
+- Tweaked world building text on some upgrades and added them aswell. (Again, thank you Nat(discordID:twinkula))
 
 </details>
 

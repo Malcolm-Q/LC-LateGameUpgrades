@@ -17,7 +17,7 @@ using MoreShipUpgrades.UI.TerminalNodes;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {
-    internal class NightVision : TierUpgrade, IPlayerSync
+    internal class NightVision : TierUpgrade, IPlayerSync, IUpgradeWorldBuilding
     {
         float nightBattery;
         PlayerControllerB client;
@@ -32,8 +32,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         public const string SIMPLE_UPGRADE_NAME = "Night Vision";
         public const string UPGRADE_NAME = "NV Headset Batteries";
         public const string PRICES_DEFAULT = "300,400,500";
+        internal const string WORLD_BUILDING_TEXT = "\n\nService package for your crew's Night Vision Headset that optimizes the function of its capacitor," +
+            " leading to improved uptime and shorter recharge period.\n\n";
 
         private static readonly LguLogger logger = new(UPGRADE_NAME);
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         void Awake()
         {
             Instance = this;

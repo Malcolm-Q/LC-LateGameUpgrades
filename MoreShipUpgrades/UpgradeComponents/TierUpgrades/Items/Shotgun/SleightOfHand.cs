@@ -4,14 +4,20 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun
 {
-    internal class SleightOfHand : TierUpgrade
+    internal class SleightOfHand : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Sleight of Hand";
         internal const string PRICES_DEFAULT = "150,200,250";
+        internal const string WORLD_BUILDING_TEXT = "\n\nOn-the-job training package detailing the safe & efficient handling and application of firearms.\n\n";
 
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;

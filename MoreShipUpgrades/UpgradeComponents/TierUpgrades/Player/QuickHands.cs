@@ -3,14 +3,22 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {
-    internal class QuickHands : TierUpgrade
+    internal class QuickHands : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Quick Hands";
         internal const string DEFAULT_PRICES = "100,150,200,250";
+        internal const string WORLD_BUILDING_TEXT = "\n\nThe 'Intern Tremble' is a known reoccuring phenomena among contractors in this field. Employees get nervous while exploring the Ruins" +
+            " and it manifests as a constant shaking in the wrists. In the back of a magazine you found an advert for 'Stress Management Lozenges' and decided to take it up. Your wrists don't shake anymore.\n\n";
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         void Awake()
         {
             upgradeName = UPGRADE_NAME;

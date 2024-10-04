@@ -3,12 +3,13 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items
 {
-    class SickBeats : OneTimeUpgrade
+    class SickBeats : OneTimeUpgrade, IUpgradeWorldBuilding
     {
         internal List<BoomboxItem> boomBoxes = [];
         internal float staminaDrainCoefficient = 1f;
@@ -18,8 +19,15 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items
         internal bool EffectsActive;
 
         public const string UPGRADE_NAME = "Sick Beats";
+        internal const string WORLD_BUILDING_TEXT = "\n\nYou negotiated a trade for a cassette that has music on it you actually enjoy, improving your department's morale by a tangible amount." +
+            " Ship-to-Ship trading with other contractors is difficult and expensive. This cassette costed your department 6 TZP Inhalers and a Lockpicker." +
+            " You left it for them to pick up on Vow, and the next day you collected your cassette from Experimentation on top of the pipe.\n\n";
         internal static SickBeats Instance;
 
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         void Awake()
         {
             upgradeName = UPGRADE_NAME;

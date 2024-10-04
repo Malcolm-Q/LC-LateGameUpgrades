@@ -3,15 +3,22 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
 {
-    internal class MidasTouch : TierUpgrade
+    internal class MidasTouch : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Midas Touch";
         internal const string DEFAULT_PRICES = "1000,1500,1800,2000";
+        internal const string WORLD_BUILDING_TEXT = "\n\nYour commitment to Company Standards & Values 3E-60-92-43 and adherence" +
+            " to Work Code & Ethics 429-A-71-36 has appeased The Company a little bit. The memories attached to objects handled by your department are among The Company's favorites to review.\n\n";
 
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         void Awake()
         {
             upgradeName = UPGRADE_NAME;

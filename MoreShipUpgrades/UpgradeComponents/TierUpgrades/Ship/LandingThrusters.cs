@@ -3,15 +3,22 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class LandingThrusters : TierUpgrade
+    internal class LandingThrusters : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Landing Thrusters";
         internal const string DEFAULT_PRICES = "250,450,650";
+        internal const string WORLD_BUILDING_TEXT = "\n\nOptimization procedure for your Ship's in-atmosphere thrusters that makes quicker landings possible" +
+            " by ordering the autopilot to commit to a longer freefall. Technically more dangerous, but it'll be fine.";
 
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         void Awake()
         {
             upgradeName = UPGRADE_NAME;

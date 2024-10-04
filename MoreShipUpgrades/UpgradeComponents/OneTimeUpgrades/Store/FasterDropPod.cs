@@ -2,16 +2,23 @@
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
 {
-    class FasterDropPod : OneTimeUpgrade
+    class FasterDropPod : OneTimeUpgrade, IUpgradeWorldBuilding
     {
         public const string UPGRADE_NAME = "Drop Pod Thrusters";
+        internal const string WORLD_BUILDING_TEXT = "\n\nPlaces your department on the 'Priority Shipping List'; your purchases should arrive ~30 minutes faster than before." +
+            " It's estimated that for every department that signs up for this package, every department on the standard shipping list has their orders delayed by roughly 1.7 seconds.\n\n";
         public static FasterDropPod Instance;
         public override bool CanInitializeOnStart => GetConfiguration().FASTER_DROP_POD_PRICE.Value <= 0;
 
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;

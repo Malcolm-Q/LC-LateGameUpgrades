@@ -4,13 +4,21 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {
-    public class RubberBoots : TierUpgrade
+    public class RubberBoots : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Rubber Boots";
         internal const string DEFAULT_PRICES = "50,100,200";
+        internal const string WORLD_BUILDING_TEXT = "\n\nIn the 'GEAR' section of the Company Catalogue, the twelfth ad on the fourth page is for this product." +
+            " It's a knee-high boot of rubbery synthetic material that fits over your standard footwear. The boots are flexible enough to be folded for compact storage in a pouch or hip bag.\n\n";
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
