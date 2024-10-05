@@ -4,13 +4,19 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {
-    public class OxygenCanisters : TierUpgrade
+    public class OxygenCanisters : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Oxygen Canisters";
         internal const string DEFAULT_PRICES = "100,200,400";
+        internal const string WORLD_BUILDING_TEXT = "\n\nPremium Condensed Air Tanks from OxyCo that come in a variety of flavors.\n\n";
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         void Awake()
         {
             upgradeName = UPGRADE_NAME;

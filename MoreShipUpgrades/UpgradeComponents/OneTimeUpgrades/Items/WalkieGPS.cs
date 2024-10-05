@@ -2,20 +2,29 @@
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UI.TerminalNodes;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items
 {
-    class WalkieGPS : OneTimeUpgrade
+    class WalkieGPS : OneTimeUpgrade, IUpgradeWorldBuilding
     {
         public const string UPGRADE_NAME = "Walkie GPS";
+        internal const string WORLD_BUILDING_TEXT = "\n\nAnother department was in the shipyard at the same time as yours and they swapped you a handwritten guide" +
+            " on jailbreaking the Company-issued walkie-talkies for 5 TZP Inhalers & 2 Pro Flashlights. Using their method," +
+            " you figured out how to get your walkie-talkie to print debug information that's normally hidden from view," +
+            " the two most useful readouts being Magnetically-Determined Local Time and Sattelite-Estimated Relative Location.\n\n";
         public static WalkieGPS instance;
         bool walkieUIActive;
 
         private GameObject canvas;
         private Text x, y, z, time;
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         void Awake()
         {
             upgradeName = UPGRADE_NAME;

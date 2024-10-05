@@ -4,13 +4,21 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies
 {
-    public class ClayGlasses : TierUpgrade
+    public class ClayGlasses : TierUpgrade, IUpgradeWorldBuilding
     {
         public const string UPGRADE_NAME = "Clay Glasses";
+        internal const string WORLD_BUILDING_TEXT = "\n\nSubscription to 'Prestidigitation Press' magazine. Comes every week." +
+            " The magazines are full of supposed-eyewitness testimony of supernatural occurences." +
+            " Most of the content of the magazine appears blatantly fake to you, but the fact that the Clay Surgeon is mentioned and described in exacting detail sends a shiver down your spine.\n\n";
         internal const string PRICES_DEFAULT = "300,400,500,600";
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;

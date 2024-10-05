@@ -3,14 +3,21 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items
 {
-    internal class LithiumBatteries : TierUpgrade
+    internal class LithiumBatteries : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Lithium Batteries";
         internal const string PRICES_DEFAULT = "150, 200, 250, 300";
+        internal const string WORLD_BUILDING_TEXT = "\n\nHobby-grade rechargeable batteries for your crew-portable electronic equipment." +
+            " There is no battery recollection program offered by the Company, so there's no need to hold onto the old batteries. Just throw them in the ocean.\n\n";
 
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;

@@ -172,6 +172,8 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<bool> SICK_BEATS_APPLY_STAMINA_CONSUMPTION { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<Interns.TeleportRestriction> INTERNS_TELEPORT_RESTRICTION {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> JETPACK_THRUSTERS_PRICES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> JETPACK_THRUSTERS_OVERRIDE_NAME {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> JETPACK_THRUSTERS_INITIAL_MAXIMUM_POWER_INCREASE { get; set; }
@@ -1306,6 +1308,7 @@ namespace MoreShipUpgrades.Misc
             BEATS_DMG_INC = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_ADDITIONAL_DAMAGE_KEY, LguConstants.SICK_BEATS_ADDITIONAL_DAMAGE_DEFAULT);
             BEATS_SPEED_INC = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_ADDITIONAL_SPEED_KEY, LguConstants.SICK_BEATS_ADDITIONAL_SPEED_DEFAULT);
             BEATS_RADIUS = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_EFFECT_RADIUS_KEY, LguConstants.SICK_BEATS_EFFECT_RADIUS_DEFAULT, LguConstants.SICK_BEATS_EFFECT_RADIUS_DESCRIPTION);
+            SICK_BEATS_APPLY_STAMINA_CONSUMPTION = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_APPLY_STAMINA_CONSUMPTION_KEY, LguConstants.SICK_BEATS_APPLY_STAMINA_CONSUMPTION_DEFAULT, LguConstants.SICK_BEATS_APPLY_STAMINA_CONSUMPTION_DESCRIPTION);
             SICK_BEATS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
@@ -1367,6 +1370,7 @@ namespace MoreShipUpgrades.Misc
             topSection = Interns.NAME;
             INTERN_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.INTERNS_ENABLED_KEY, LguConstants.INTERNS_ENABLED_DEFAULT, LguConstants.INTERNS_ENABLED_DESCRIPTION);
             INTERN_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.INTERNS_PRICE_KEY, LguConstants.INTERNS_PRICE_DEFAULT, LguConstants.INTERNS_PRICE_DESCRIPTION);
+            INTERNS_TELEPORT_RESTRICTION = cfg.BindSyncedEntry(topSection, "Teleport Restriction when using Interns", Interns.TeleportRestriction.None, "Supported modes:\nNone: No restrictions applied.\nExitBuilding: Player must exit the facility to be able to be teleported.\nEnterShip: Player must enter the ship to be able to be teleported.");
 
             #endregion
 

@@ -1464,6 +1464,10 @@ namespace MoreShipUpgrades.Misc.Util
         internal const float SICK_BEATS_STAMINA_MULTIPLIER_DEFAULT = 1.25f;
         internal const string SICK_BEATS_STAMINA_MULTIPLIER_DESCRIPTION = "Multiplied to stamina regen.";
 
+        internal const string SICK_BEATS_APPLY_STAMINA_CONSUMPTION_KEY = "Apply Stamina Buff on stamina consumption situations";
+        internal const bool SICK_BEATS_APPLY_STAMINA_CONSUMPTION_DEFAULT = false;
+        internal const string SICK_BEATS_APPLY_STAMINA_CONSUMPTION_DESCRIPTION = "If enabled, moments where stamina is consumed overtime will include the stamina buff in mind";
+
         internal const string SICK_BEATS_ADDITIONAL_DAMAGE_KEY = "Additional Damage Dealt";
         internal const int SICK_BEATS_ADDITIONAL_DAMAGE_DEFAULT = 1;
 

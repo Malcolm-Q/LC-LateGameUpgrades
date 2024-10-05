@@ -3,13 +3,14 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Text;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
 {
-    public class QuantumDisruptor : TierUpgrade
+    public class QuantumDisruptor : TierUpgrade, IUpgradeWorldBuilding
     {
         public enum UpgradeModes
         {
@@ -24,6 +25,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         }
         internal const string UPGRADE_NAME = "Quantum Disruptor";
         internal const string PRICES_DEFAULT = "1200,1500,1800";
+        internal const string WORLD_BUILDING_TEXT = "\n\nSigning the Overtime Risk Waiver and paying forward a series of fees authorizes your department to override the Ship's autopilot system and stay moonside for longer.\n\n";
         internal static QuantumDisruptor Instance { get; set; }
 
         internal static UpgradeModes CurrentMode
@@ -46,6 +48,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         static void SetInstance(QuantumDisruptor instance)
         {
             Instance = instance;
+        }
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
         }
         void Awake()
         {

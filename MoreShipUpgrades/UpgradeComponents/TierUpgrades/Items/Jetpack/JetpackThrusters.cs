@@ -3,15 +3,21 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack
 {
-    internal class JetpackThrusters : TierUpgrade
+    internal class JetpackThrusters : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Jetpack Thrusters";
         internal const string DEFAULT_PRICES = "150,300,400";
+        internal const string WORLD_BUILDING_TEXT = "\n\nOptimization procedure for your jetpack's thrust nozzles that results in a higher terminal velocity at maximum thrust.\n\n";
 
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
@@ -34,7 +40,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack
                 LategameConfiguration config = GetConfiguration();
                 return config.JETPACK_THRUSTERS_INITIAL_MAXIMUM_POWER_INCREASE.Value + (level * config.JETPACK_THRUSTERS_INCREMENTAL_MAXIMUM_POWER_INCREASE.Value);
             }
-            const string infoFormat = "LVL {0} - ${1} - The acceleration of the jetpack during flight is increased by {2}%\n";
+            const string infoFormat = "LVL {0} - ${1} - The maximum speed of the jetpack during flight is increased by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
         public static float GetIncreasedMaximumPower()
@@ -45,14 +51,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack
         }
         public static float IncreaseJetpackMaximumPower(float defaultValue)
         {
-            if (!GetConfiguration().JET_FUEL_ENABLED) return defaultValue;
+            if (!GetConfiguration().JETPACK_THRUSTERS_ENABLED) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             float multiplier = GetIncreasedMaximumPower();
             return Mathf.Clamp(defaultValue + (defaultValue * multiplier), defaultValue, float.MaxValue);
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().JET_FUEL_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().JETPACK_THRUSTERS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {

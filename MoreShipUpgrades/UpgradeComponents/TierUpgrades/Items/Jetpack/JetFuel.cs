@@ -3,15 +3,21 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack
 {
-    internal class JetFuel : TierUpgrade
+    internal class JetFuel : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Jet Fuel";
         internal const string DEFAULT_PRICES = "200,400,500";
+        internal const string WORLD_BUILDING_TEXT = "\n\nOptimization procedure for your jetpack's fuel injector that results in a cleaner and more efficient detonation of the propellant.\n\n";
 
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;

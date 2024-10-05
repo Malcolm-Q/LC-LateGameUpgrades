@@ -4,6 +4,7 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
+using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
@@ -33,6 +34,19 @@ namespace MoreShipUpgrades.Patches.RoundComponents
                 GameObject refStore = Object.Instantiate(UpgradeBus.Instance.modStorePrefab);
                 refStore.GetComponent<NetworkObject>().Spawn();
                 logger.LogDebug("LguStore component initiated...");
+            }
+        }
+
+        [HarmonyPatch(nameof(StartOfRound.LateUpdate))]
+        [HarmonyPostfix]
+        static void LateUpdatePostfix()
+        {
+            LategameConfiguration config = UpgradeBus.Instance.PluginConfiguration;
+            if (!config.INTERN_ENABLED || config.INTERNS_TELEPORT_RESTRICTION != Interns.TeleportRestriction.EnterShip) return;
+            PlayerControllerB player = GameNetworkManager.Instance.localPlayerController;
+            if (Interns.instance.ContainsRecentlyInterned(player) && (player.isInHangarShipRoom || player.isInElevator))
+            {
+                Interns.instance.RemoveRecentlyInternedServerRpc(player);
             }
         }
 
@@ -82,6 +96,10 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             ResetContract(ref __instance);
             QuantumDisruptor.TryResetQuantum(QuantumDisruptor.ResetModes.MoonLanding);
             RandomizeUpgradeManager.RandomizeUpgrades(RandomizeUpgradeManager.RandomizeUpgradeEvents.PerMoonLanding);
+            if (UpgradeBus.Instance.PluginConfiguration.INTERN_ENABLED)
+            {
+                Interns.instance.ResetRecentlyInterned();
+            }
         }
         static void ResetContract(ref StartOfRound __instance)
         {

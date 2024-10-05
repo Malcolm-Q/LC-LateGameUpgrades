@@ -1,4 +1,15 @@
 <details>
+<summary> 3.10.4 - 2024-09-19 </summary>
+
+- Added configuration for interns for teleportation restriction on the revived player.
+- Fixed text typo in "Jetpack Thrusters" info.
+- Fixed issue with Jet Fuel configuration influencing Jetpack Thrusters in some aspects.
+- Fixed text typo in Sick beats description and added configuration to allow stamina buff apply on stamina drain overtime scenarios.
+- Tweaked world building text on some upgrades and added them aswell. (Again, thank you Nat(discordID:twinkula))
+
+</details>
+
+<details>
 <summary> 3.10.3 - 2024-09-19 </summary>
 
 - Implemented "Jetpack Thrusters" tier upgrade which increases the maximum speed of the jetpack while in flight.

@@ -11,12 +11,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
     class BetterScanner : TierUpgrade, IUpgradeWorldBuilding
     {
         public const string UPGRADE_NAME = "Better Scanner";
-        internal const string WORLD_BUILDING_TEXT = "\n\nA serialized Company-Issue Magazine subscription, called 'Stuff Finders'." +
-            " Uniquely, {0} must subscribe to each issue of 'Stuff Finders' individually. Each separate subscription promises and delivers a weekly issuance" +
-            " of a magazine with the exact same information in it as last time, organized in a different order and with slightly different printing qualities each time." +
-            " There are only three 'unique' issues, and each issue only has one or two pieces of actual useful information in it. The rest of the magazine is just ads" +
-            " for The Company's other offerings. There is an extra fee for cancelling a subscription of 'Stuff Finders' before terminating your employment." +
-            " The useful information always comes in the form of an unlabelled service key or Ship terminal hyperlink.\n\n";
+        internal const string WORLD_BUILDING_TEXT = "\n\nSubscription to 'Stuff Finders' magazine, which comes in three tiers; 'Basic Subscription', 'Pro Package', and 'Diamond Membership'." +
+            " The magazine comes every week, but the contents of it are always the same, even the ads. Some departments use unwanted issuances of 'Stuff Finders' as toilet paper.\n\n";
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
@@ -79,7 +75,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 
         public string GetWorldBuildingText(bool shareStatus = false)
         {
-            return string.Format(WORLD_BUILDING_TEXT, shareStatus ? "a department" : "one");
+            return WORLD_BUILDING_TEXT;
         }
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)

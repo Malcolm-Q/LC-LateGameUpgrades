@@ -10,10 +10,11 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
-using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
 using MoreShipUpgrades.Compat;
+using MoreShipUpgrades.UpgradeComponents.Commands;
+using MoreShipUpgrades.Misc;
 
 namespace MoreShipUpgrades.Patches.PlayerController
 {
@@ -26,6 +27,15 @@ namespace MoreShipUpgrades.Patches.PlayerController
         {
             __instance.gameObject.AddComponent<PlayerManager>();
         }
+        [HarmonyPatch(nameof(PlayerControllerB.KillPlayerClientRpc))]
+        [HarmonyPostfix]
+        static void KillPlayerClientRpcPostfix(int playerId)
+        {
+            LategameConfiguration config = UpgradeBus.Instance.PluginConfiguration;
+            if (!config.INTERN_ENABLED || config.INTERNS_TELEPORT_RESTRICTION == Interns.TeleportRestriction.None) return;
+            PlayerControllerB player = StartOfRound.Instance.allPlayerScripts[playerId];
+            Interns.instance.RemoveRecentlyInterned(player);
+        }
         [HarmonyPrefix]
         [HarmonyPatch(nameof(PlayerControllerB.KillPlayer))]
         static void DisableUpgradesOnDeath(PlayerControllerB __instance)
@@ -33,6 +43,10 @@ namespace MoreShipUpgrades.Patches.PlayerController
             if (!__instance.IsOwner) return;
             if (__instance.isPlayerDead) return;
             if (!__instance.AllowPlayerDeath()) return;
+            if (UpgradeBus.Instance.PluginConfiguration.INTERN_ENABLED)
+            {
+                Interns.instance.RemoveRecentlyInterned(__instance);
+            }
             LoseNightVisionOnDeath(ref __instance);
         }
 
@@ -210,6 +224,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         {
             MethodInfo biggerLungsRegenMethod = typeof(BiggerLungs).GetMethod(nameof(BiggerLungs.ApplyPossibleIncreasedStaminaRegen));
             MethodInfo sickBeatsRegenMethod = typeof(SickBeats).GetMethod(nameof(SickBeats.ApplyPossibleIncreasedStaminaRegen));
+            MethodInfo sickBeatsDrainMethod = typeof(SickBeats).GetMethod(nameof(SickBeats.ApplyPossibleDecreasedStaminaDrain));
             MethodInfo additionalSprintTime = typeof(BiggerLungs).GetMethod(nameof(BiggerLungs.GetAdditionalStaminaTime));
             MethodInfo backMusclesStaminaWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreaseStrain));
 
@@ -219,8 +234,10 @@ namespace MoreShipUpgrades.Patches.PlayerController
             List<CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindField(ref index, ref codes, findField: sprintTime, addCode: additionalSprintTime, errorMessage: "Couldn't find the first occurence of sprintTime field");
+            Tools.FindDiv(ref index, ref codes, addCode: sickBeatsDrainMethod, errorMessage: "Couldn't find first mul instruction to include our drain method from Sick Beats");
             Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: backMusclesStaminaWeight, errorMessage: "Couldn't find the occurence of carryWeight field");
             Tools.FindField(ref index, ref codes, findField: sprintTime, addCode: additionalSprintTime, errorMessage: "Couldn't find the second occurence of sprintTime field");
+            Tools.FindDiv(ref index, ref codes, addCode: sickBeatsDrainMethod, errorMessage: "Couldn't find second mul instruction to include our drain method from Sick Beats");
             Tools.FindField(ref index, ref codes, findField: sprintTime, addCode: additionalSprintTime, errorMessage: "Couldn't find the third occurence of sprintTime field");
             Tools.FindMul(ref index, ref codes, addCode: biggerLungsRegenMethod, errorMessage: "Couldn't find first mul instruction to include our regen method from Bigger Lungs");
             codes.Insert(index + 1, new CodeInstruction(OpCodes.Call, sickBeatsRegenMethod));

@@ -4,13 +4,21 @@ using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {
-    internal class HikingBoots : TierUpgrade
+    internal class HikingBoots : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Hiking Boots";
         internal const string PRICES_DEFAULT = "100,150,175";
+        internal const string WORLD_BUILDING_TEXT = "\n\nIn the 'GEAR' section of the Company Catalogue, the very last ad on the thirtieth page is for this product." +
+            " It's a requisition of calf-length boots made of flexible synthetic fiber. Supports your ankles while walking on inclines, allowing your gait to adjust more effortlessly.\n\n";
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         void Awake()
         {
             upgradeName = UPGRADE_NAME;

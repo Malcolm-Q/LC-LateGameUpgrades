@@ -4,14 +4,22 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class ClimbingGloves : TierUpgrade
+    internal class ClimbingGloves : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Climbing Gloves";
         internal const string DEFAULT_PRICES = "200,250,300";
+        internal const string WORLD_BUILDING_TEXT = "\n\nIn the 'GEAR' section of the Company Catalogue, at the bottom of the last page sandwiched between two ads, you find an entry for this product." +
+            " They are Premium Synthetic Proprietary Ladder Gripping Gloves. The sales screed promises a 2% increase in your department's efficiency at outdoor traversal if you buy this.\n\n";
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         void Awake()
         {
             upgradeName = UPGRADE_NAME;

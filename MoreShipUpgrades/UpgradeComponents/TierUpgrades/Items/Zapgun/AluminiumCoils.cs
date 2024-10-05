@@ -2,16 +2,18 @@
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System;
 using System.Text;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Zapgun
 {
-    internal class AluminiumCoils : TierUpgrade
+    internal class AluminiumCoils : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Aluminium Coils";
         internal const string DEFAULT_PRICES = "600, 800, 1000";
+        internal const string WORLD_BUILDING_TEXT = "\n\nOn-the-job training package that instructs your crew on how to more safely and efficiently wield the Zap Gun.\n\n";
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
@@ -122,6 +124,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Zapgun
                                                 configuration.ALUMINIUM_COILS_PRICE.Value,
                                                 UpgradeBus.ParseUpgradePrices(configuration.ALUMINIUM_COILS_PRICES.Value),
                                                 configuration.OVERRIDE_UPGRADE_NAMES ? configuration.ALUMINIUM_COILS_OVERRIDE_NAME : "");
+        }
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
         }
     }
 }

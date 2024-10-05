@@ -4,17 +4,26 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.Items.RadarBooster;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.RadarBooster
 {
-    internal class ChargingBooster : TierUpgrade
+    internal class ChargingBooster : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Charging Booster";
+        internal const string WORLD_BUILDING_TEXT = "Terminal hyperlink that leads to an old, decaying section of the Company Portal." +
+            " The design of the page is bare and archaic, and all text is written in caps." +
+            " There is a barely-labeled transaction window with your payment credentials autofilled. Clicking 'ACCEPT' causes a hissing noise to emanate from your nearby Radar Booster.";
         internal static ChargingBooster Instance { get; private set; }
         internal float chargeCooldown;
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         void Awake()
         {
             Instance = this;

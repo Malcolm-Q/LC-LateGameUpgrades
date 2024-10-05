@@ -3,14 +3,22 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
-    internal class EfficientEngines : TierUpgrade
+    internal class EfficientEngines : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Efficient Engines";
         internal const string DEFAULT_PRICES = "600, 750, 900";
+        internal const string WORLD_BUILDING_TEXT = "\n\nService package for your Ship's autopiloting system that tweaks the parameters by which it routes between moons." +
+            " By default, the autopiloting software is configured to only use the safest routes, but this package will authorize it to use faster but slightly more dangerous \"Liability Routes\" and certain spatial anomalies to expedite travel, conserving fuel costs.\n\n";
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
