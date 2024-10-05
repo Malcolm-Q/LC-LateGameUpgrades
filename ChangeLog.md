@@ -1,4 +1,11 @@
 <details>
+<summary> 3.10.5 - 2024-10-05 </summary>
+
+- Implemented tier upgrade which increases the shotgun's damage output.
+
+</details>
+
+<details>
 <summary> 3.10.4 - 2024-10-05 </summary>
 
 - Added configuration for interns for teleportation restriction on the revived player.

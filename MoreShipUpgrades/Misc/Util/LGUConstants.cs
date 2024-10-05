@@ -202,6 +202,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string HOLLOW_POINT_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, HollowPoint.UPGRADE_NAME);
         internal static readonly string JETPACK_THRUSTERS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, JetpackThrusters.UPGRADE_NAME);
         internal static readonly string JET_FUEL_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, JetFuel.UPGRADE_NAME);
         internal static readonly string QUICK_HANDS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, QuickHands.UPGRADE_NAME);
@@ -378,6 +379,25 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Hollow Point
+
+        internal const string HOLLOW_POINT_ENABLED_KEY = $"Enable {HollowPoint.UPGRADE_NAME} Upgrade";
+        internal const bool HOLLOW_POINT_ENABLED_DEFAULT = true;
+        internal const string HOLLOW_POINT_ENABLED_DESCRIPTION = "Tier upgrade which increases the amount of damage done by the shotgun.";
+
+        internal const string HOLLOW_POINT_PRICE_KEY = $"Price of {HollowPoint.UPGRADE_NAME} Upgrade";
+        internal const int HOLLOW_POINT_PRICE_DEFAULT = 750;
+
+        internal const string HOLLOW_POINT_INITIAL_SHOTGUN_DAMAGE_INCREASE_KEY = "Initial Shotgun Damage Increase";
+        internal const int HOLLOW_POINT_INITIAL_SHOTGUN_DAMAGE_INCREASE_DEFAULT = 1;
+        internal const string HOLLOW_POINT_INITIAL_SHOTGUN_DAMAGE_INCREASE_DESCRIPTION = "Initial damage increase of the shotgun when first purchasing the upgrade";
+
+        internal const string HOLLOW_POINT_INCREMENTAL_SHOTGUN_DAMAGE_INCREASE_KEY = "Incremental Shotgun Damage Increase";
+        internal const int HOLLOW_POINT_INCREMENTAL_SHOTGUN_DAMAGE_INCREASE_DEFAULT = 1;
+        internal const string HOLLOW_POINT_INCREMENTAL_SHOTGUN_DAMAGE_INCREASE_DESCRIPTION = "Incremental damage increase of the shotgun when purchasing further levels of the upgrade";
+
+        #endregion
 
         #region Jetpack Thrusters
 

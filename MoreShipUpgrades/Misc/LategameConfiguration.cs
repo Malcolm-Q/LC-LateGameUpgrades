@@ -35,6 +35,7 @@ namespace MoreShipUpgrades.Misc
     public class LategameConfiguration : SyncedConfig2<LategameConfiguration>
     {
         #region Enabled
+        [field: SyncedEntryField] public SyncedEntry<bool> HOLLOW_POINT_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> JETPACK_THRUSTERS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> JET_FUEL_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> QUICK_HANDS_ENABLED {  get; set; }
@@ -84,6 +85,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Individual
+        [field: SyncedEntryField] public SyncedEntry<bool> HOLLOW_POINT_INDIVIDUAL { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> JETPACK_THURSTERS_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> JET_FUEL_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> QUICK_HANDS_INDIVIDUAL {  get; set; }
@@ -118,6 +120,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Initial Prices
+        [field: SyncedEntryField] public SyncedEntry<int> HOLLOW_POINT_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> JETPACK_THRUSTERS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> JET_FUEL_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> QUICK_HANDS_PRICE {  get; set; }
@@ -172,6 +175,10 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<string> HOLLOW_POINT_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> HOLLOW_POINT_OVERRIDE_NAME {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> HOLLOW_POINT_INITIAL_SHOTGUN_DAMAGE_INCREASE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> HOLLOW_POINT_INCREMENTAL_SHOTGUN_DAMAGE_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SICK_BEATS_APPLY_STAMINA_CONSUMPTION { get; set; }
         [field: SyncedEntryField] public SyncedEntry<Interns.TeleportRestriction> INTERNS_TELEPORT_RESTRICTION {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> JETPACK_THRUSTERS_PRICES {  get; set; }
@@ -485,6 +492,7 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_APPARATICE_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> ITEM_PROGRESSION_NO_PURCHASE_UPGRADES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> HOLLOW_POINT_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> JETPACK_THRUSTERS_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> JET_FUEL_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> QUICK_HANDS_ITEM_PROGRESSION_ITEMS {  get; set; }
@@ -589,6 +597,7 @@ namespace MoreShipUpgrades.Misc
 
             topSection = LguConstants.OVERRIDE_NAMES_SECTION;
             OVERRIDE_UPGRADE_NAMES              = cfg.BindSyncedEntry(topSection, LguConstants.OVERRIDE_NAMES_ENABLED_KEY, LguConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LguConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
+            HOLLOW_POINT_OVERRIDE_NAME          = cfg.BindSyncedEntry(topSection, LguConstants.HOLLOW_POINT_OVERRIDE_NAME_KEY, HollowPoint.UPGRADE_NAME);
             JETPACK_THRUSTERS_OVERRIDE_NAME     = cfg.BindSyncedEntry(topSection, LguConstants.JETPACK_THRUSTERS_OVERRIDE_NAME_KEY, JetpackThrusters.UPGRADE_NAME);
             JET_FUEL_OVERRIDE_NAME              = cfg.BindSyncedEntry(topSection, LguConstants.JET_FUEL_OVERRIDE_NAME_KEY, JetFuel.UPGRADE_NAME);
             QUICK_HANDS_OVERRIDE_NAME           = cfg.BindSyncedEntry(topSection, LguConstants.QUICK_HANDS_OVERRIDE_NAME_KEY, QuickHands.UPGRADE_NAME);
@@ -686,6 +695,19 @@ namespace MoreShipUpgrades.Misc
             #endregion
 
             #region Upgrades
+
+            #region Hollow Point
+
+            topSection = HollowPoint.UPGRADE_NAME;
+            HOLLOW_POINT_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.HOLLOW_POINT_ENABLED_KEY, LguConstants.HOLLOW_POINT_ENABLED_DEFAULT, LguConstants.HOLLOW_POINT_ENABLED_DESCRIPTION);
+            HOLLOW_POINT_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            HOLLOW_POINT_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.HOLLOW_POINT_PRICE_KEY, LguConstants.HOLLOW_POINT_PRICE_DEFAULT);
+            HOLLOW_POINT_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, HollowPoint.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
+            HOLLOW_POINT_INITIAL_SHOTGUN_DAMAGE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.HOLLOW_POINT_INITIAL_SHOTGUN_DAMAGE_INCREASE_KEY, LguConstants.HOLLOW_POINT_INITIAL_SHOTGUN_DAMAGE_INCREASE_DEFAULT, LguConstants.HOLLOW_POINT_INITIAL_SHOTGUN_DAMAGE_INCREASE_DESCRIPTION);
+            HOLLOW_POINT_INCREMENTAL_SHOTGUN_DAMAGE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.HOLLOW_POINT_INCREMENTAL_SHOTGUN_DAMAGE_INCREASE_KEY, LguConstants.HOLLOW_POINT_INCREMENTAL_SHOTGUN_DAMAGE_INCREASE_DEFAULT, LguConstants.HOLLOW_POINT_INCREMENTAL_SHOTGUN_DAMAGE_INCREASE_DESCRIPTION);
+            HOLLOW_POINT_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
 
             #region Jetpack Thrusters
 
