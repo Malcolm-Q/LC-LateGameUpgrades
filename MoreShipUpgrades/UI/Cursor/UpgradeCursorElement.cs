@@ -54,14 +54,15 @@ namespace MoreShipUpgrades.UI.Cursor
             int currentCredits = UpgradeBus.Instance.GetTerminal().groupCredits;
             if (price <= currentCredits)
             {
-                sb.Append(price + "$");
+                sb.Append(price);
+                sb.Append("$");
             }
             else
             {
                 sb.Append(string.Format(LguConstants.COLOR_INITIAL_FORMAT, LguConstants.HEXADECIMAL_DARK_RED));
                 sb.Append(price);
-                sb.Append(LguConstants.COLOR_FINAL_FORMAT);
                 sb.Append("$");
+                sb.Append(LguConstants.COLOR_FINAL_FORMAT);
             }
         }
 

@@ -3,7 +3,6 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using Unity.Netcode;
-using UnityEngine;
 
 namespace MoreShipUpgrades.Patches.TerminalComponents
 {
