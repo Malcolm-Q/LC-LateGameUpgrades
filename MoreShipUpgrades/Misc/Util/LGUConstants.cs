@@ -202,6 +202,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string SILVER_BULLETS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, SilverBullets.UPGRADE_NAME);
         internal static readonly string FUSION_MATTER_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, FusionMatter.UPGRADE_NAME);
         internal static readonly string LONG_BARREL_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, LongBarrel.UPGRADE_NAME);
         internal static readonly string HOLLOW_POINT_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, HollowPoint.UPGRADE_NAME);
@@ -381,6 +382,17 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Silver Bullets
+
+        internal const string SILVER_BULLETS_ENABLED_KEY = $"Enable {SilverBullets.UPGRADE_NAME} Upgrade";
+        internal const bool SILVER_BULLETS_ENABLED_DEFAULT = true;
+        internal const string SILVER_BULLETS_ENABLED_DESCRIPTION = "One time upgrade which allows you to eliminate ghost girl entities with the shotgun.";
+
+        internal const string SILVER_BULLETS_PRICE_KEY = $"Price of {SilverBullets.UPGRADE_NAME} Upgrade";
+        internal const int SILVER_BULLETS_PRICE_DEFAULT = 500;
+
+        #endregion
 
         #region Fusion Matter
 

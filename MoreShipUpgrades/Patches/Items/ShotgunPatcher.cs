@@ -2,7 +2,6 @@
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 

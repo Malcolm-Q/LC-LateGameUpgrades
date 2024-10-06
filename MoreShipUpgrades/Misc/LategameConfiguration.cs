@@ -35,6 +35,7 @@ namespace MoreShipUpgrades.Misc
     public class LategameConfiguration : SyncedConfig2<LategameConfiguration>
     {
         #region Enabled
+        [field: SyncedEntryField] public SyncedEntry<bool> SILVER_BULLETS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> FUSION_MATTER_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> LONG_BARREL_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> HOLLOW_POINT_ENABLED {  get; set; }
@@ -87,6 +88,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Individual
+        [field: SyncedEntryField] public SyncedEntry<bool> SILVER_BULLETS_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> LONG_BARREL_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> HOLLOW_POINT_INDIVIDUAL { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> JETPACK_THURSTERS_INDIVIDUAL {  get; set; }
@@ -123,6 +125,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Initial Prices
+        [field: SyncedEntryField] public SyncedEntry<int> SILVER_BULLETS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> FUSION_MATTER_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> LONG_BARREL_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> HOLLOW_POINT_PRICE {  get; set; }
@@ -180,6 +183,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<string> SILVER_BULLETS_OVERRIDE_NAME {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> FUSION_MATTER_PRICES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> FUSION_MATTER_OVERRIDE_NAME {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> FUSION_MATTER_ITEM_TIERS { get; set; }
@@ -504,6 +508,7 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_APPARATICE_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> ITEM_PROGRESSION_NO_PURCHASE_UPGRADES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> SILVER_BULLETS_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> FUSION_MATTER_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> LONG_BARREL_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> HOLLOW_POINT_ITEM_PROGRESSION_ITEMS {  get; set; }
@@ -611,6 +616,7 @@ namespace MoreShipUpgrades.Misc
 
             topSection = LguConstants.OVERRIDE_NAMES_SECTION;
             OVERRIDE_UPGRADE_NAMES              = cfg.BindSyncedEntry(topSection, LguConstants.OVERRIDE_NAMES_ENABLED_KEY, LguConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LguConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
+            SILVER_BULLETS_OVERRIDE_NAME        = cfg.BindSyncedEntry(topSection, LguConstants.SILVER_BULLETS_OVERRIDE_NAME_KEY, SilverBullets.UPGRADE_NAME);
             FUSION_MATTER_OVERRIDE_NAME         = cfg.BindSyncedEntry(topSection, LguConstants.FUSION_MATTER_OVERRIDE_NAME_KEY, FusionMatter.UPGRADE_NAME);
             LONG_BARREL_OVERRIDE_NAME           = cfg.BindSyncedEntry(topSection, LguConstants.LONG_BARREL_OVERRIDE_NAME_KEY, LongBarrel.UPGRADE_NAME);
             HOLLOW_POINT_OVERRIDE_NAME          = cfg.BindSyncedEntry(topSection, LguConstants.HOLLOW_POINT_OVERRIDE_NAME_KEY, HollowPoint.UPGRADE_NAME);
@@ -711,6 +717,16 @@ namespace MoreShipUpgrades.Misc
             #endregion
 
             #region Upgrades
+
+            #region Fast Encryption
+
+            topSection = SilverBullets.UPGRADE_NAME;
+            SILVER_BULLETS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.SILVER_BULLETS_ENABLED_KEY, LguConstants.SILVER_BULLETS_ENABLED_DEFAULT, LguConstants.SILVER_BULLETS_ENABLED_DESCRIPTION);
+            SILVER_BULLETS_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            SILVER_BULLETS_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.SILVER_BULLETS_PRICE_KEY, LguConstants.SILVER_BULLETS_PRICE_DEFAULT);
+            SILVER_BULLETS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
 
             #region Fusion Matter
 
