@@ -1,6 +1,9 @@
 <details>
 <summary> 3.10.5 - 2024-10-05 </summary>
 
+- Implemented tier upgrade which allows the players to teleport with some items in their inventories according to the tier they are located.
+  - The tiers mechanism is similar if not the same as the Hunter: you specify a list of items which is then separated by another delimiter to separate between tiers.
+  - You specify either the names listed in the Company Store or the name displayed in the scan node (or their internal name stored in the ``Item`` instance of the game's code)
 - Implemented tier upgrade which increases the shotgun's damage output.
 - Implemented tier upgrade which increases the shotgun's overall range and its effective damage ranges.
 

@@ -41,7 +41,6 @@ namespace MoreShipUpgrades.Patches.Items
             Tools.FindFloat(ref index, ref codes, findValue: 0.45f, addCode: getSleightOfHandSpeedBoost, errorMessage: "Couldn't find the third value for WaitForSeconds");
             return codes;
         }
-        [HarmonyDebug]
         [HarmonyPatch(nameof(ShotgunItem.ShootGun))]
         [HarmonyTranspiler]
         static IEnumerable<CodeInstruction> ShootGunTranspiler(IEnumerable<CodeInstruction> instructions)

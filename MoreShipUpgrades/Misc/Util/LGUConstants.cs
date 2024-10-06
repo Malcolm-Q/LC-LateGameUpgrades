@@ -202,6 +202,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string FUSION_MATTER_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, FusionMatter.UPGRADE_NAME);
         internal static readonly string LONG_BARREL_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, LongBarrel.UPGRADE_NAME);
         internal static readonly string HOLLOW_POINT_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, HollowPoint.UPGRADE_NAME);
         internal static readonly string JETPACK_THRUSTERS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, JetpackThrusters.UPGRADE_NAME);
@@ -380,6 +381,28 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Fusion Matter
+
+        internal const string FUSION_MATTER_ENABLED_KEY = $"Enable {FusionMatter.UPGRADE_NAME} Upgrade";
+        internal const bool FUSION_MATTER_ENABLED_DEFAULT = true;
+        internal const string FUSION_MATTER_ENABLED_DESCRIPTION = "Tier upgrade which allows you to teleport with specified items during teleportation (both in and out)";
+
+        internal const string FUSION_MATTER_PRICE_KEY = $"Price of {FusionMatter.UPGRADE_NAME} Upgrade";
+        internal const int FUSION_MATTER_PRICE_DEFAULT = 500;
+
+        internal const string FUSION_MATTER_TIERS_KEY = "Fusion Matter Tiers";
+        internal static readonly string FUSION_MATTER_TIERS_DEFAULT = $"key{FUSION_MATTER_ITEM_DELIMITER} flashlight{FUSION_MATTER_ITEM_DELIMITER} walkie-talkie{FUSION_MATTER_TIER_DELIMITER}" +
+            $"shovel{FUSION_MATTER_ITEM_DELIMITER} pro flashlight{FUSION_MATTER_TIER_DELIMITER}" +
+            $"belt bag{FUSION_MATTER_ITEM_DELIMITER} radar booster";
+        internal static readonly string FUSION_MATTER_TIERS_DESCRIPTION = "List of items that will be kept in the player's inventory once reached a certain level of the upgrade. You can include names shown in their scan nodes or the names shown in the Company store.\n" +
+            $"\'{FUSION_MATTER_ITEM_DELIMITER}\' is used to separate items in a tier.\n" +
+            $"\'{FUSION_MATTER_TIER_DELIMITER}\' is used to separate tiers of the upgrade";
+
+        internal const char FUSION_MATTER_TIER_DELIMITER = '@';
+        internal const char FUSION_MATTER_ITEM_DELIMITER = ',';
+
+        #endregion
 
         #region Long Barrel
 

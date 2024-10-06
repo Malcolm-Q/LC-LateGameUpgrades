@@ -1,8 +1,13 @@
-﻿using GameNetcodeStuff;
+﻿using CustomItemBehaviourLibrary.Misc;
+using GameNetcodeStuff;
 using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Commands;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Emit;
 
 namespace MoreShipUpgrades.Patches.Interactables
 {
@@ -17,6 +22,30 @@ namespace MoreShipUpgrades.Patches.Interactables
             if (!config.INTERN_ENABLED || config.INTERNS_TELEPORT_RESTRICTION == Interns.TeleportRestriction.None) return true;
             PlayerControllerB playerToBeamUp = StartOfRound.Instance.mapScreen.targetedPlayer;
             return !Interns.instance.ContainsRecentlyInterned(playerToBeamUp);
+        }
+
+        [HarmonyPatch(nameof(ShipTeleporter.TeleportPlayerOutWithInverseTeleporter))]
+        [HarmonyTranspiler]
+        static IEnumerable<CodeInstruction> TeleportPlayerOutWithInverseTeleporterTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo SetPlayerTeleporterId = typeof(ShipTeleporter).GetMethod(nameof(ShipTeleporter.SetPlayerTeleporterId), BindingFlags.Instance | BindingFlags.NonPublic);
+            MethodInfo DropAllHeldItems = typeof(PlayerControllerB).GetMethod(nameof(PlayerControllerB.DropAllHeldItems));
+
+            List<CodeInstruction> codes = new(instructions);
+            int index = 0;
+
+            Tools.FindLocalField(ref index, ref codes, localIndex: 0, skip: true, store: true);
+            List<CodeInstruction> setTeleporterIdCodes = new();
+            while(index < codes.Count)
+            {
+                setTeleporterIdCodes.Add(codes[index]);
+                codes.RemoveAt(index);
+                if (setTeleporterIdCodes[setTeleporterIdCodes.Count-1].opcode == OpCodes.Call && (MethodInfo)setTeleporterIdCodes[setTeleporterIdCodes.Count-1].operand == SetPlayerTeleporterId) break;
+            }
+            Tools.FindMethod(ref index, ref codes, findMethod: DropAllHeldItems, skip: true);
+            codes.InsertRange(index + 1, setTeleporterIdCodes);
+
+            return codes;
         }
 
         [HarmonyPatch(nameof(ShipTeleporter.Update))]

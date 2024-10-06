@@ -15,6 +15,8 @@ using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
 using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
+using MoreShipUpgrades.Extensions;
 
 namespace MoreShipUpgrades.Patches.PlayerController
 {
@@ -366,6 +368,38 @@ namespace MoreShipUpgrades.Patches.PlayerController
             int index = 0;
             Tools.FindField(ref index, ref codes, findField: timeToHoldSpeedMultiplier, addCode: increaseInteractionSpeed, errorMessage: "Couldn't find the interaction speed multiplier saved in the interact trigger");
 
+            return codes;
+        }
+
+        [HarmonyPatch(nameof(PlayerControllerB.DropAllHeldItems))]
+        [HarmonyTranspiler]
+        [HarmonyDebug]
+        static IEnumerable<CodeInstruction> DropAllHeldItemsTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo CanHoldItem = typeof(FusionMatter).GetMethod(nameof(FusionMatter.CanHoldItem));
+            MethodInfo IsTeleporting = typeof(PlayerControllerBExtensions).GetMethod(nameof(PlayerControllerBExtensions.IsTeleporting));
+            MethodInfo RemainActivatingItemIfTeleporting = typeof(PlayerControllerBExtensions).GetMethod(nameof(PlayerControllerBExtensions.RemainActivatingItemIfTeleporting));
+            MethodInfo RemainTwoHandedIfTeleporting = typeof(PlayerControllerBExtensions).GetMethod(nameof(PlayerControllerBExtensions.RemainTwoHandedIfTeleporting));
+            MethodInfo RemainCarryWeightIfTeleporting = typeof(PlayerControllerBExtensions).GetMethod(nameof(PlayerControllerBExtensions.RemainCarryWeightIfTeleporting));
+            MethodInfo RemainCurrentlyHeldObjectServerIfTeleporting = typeof(PlayerControllerBExtensions).GetMethod(nameof(PlayerControllerBExtensions.RemainCurrentlyHeldObjectServerIfTeleporting));
+
+            FieldInfo isHoldingObject = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.isHoldingObject));
+            FieldInfo playerBodyAnimator = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.playerBodyAnimator));
+
+            List<CodeInstruction> codes = new(instructions);
+            int index = 0;
+            Tools.FindNull(ref index, ref codes, skip: true);
+            index++;
+            codes.Insert(index, new CodeInstruction(OpCodes.And));
+            codes.Insert(index, new CodeInstruction(OpCodes.Not));
+            codes.Insert(index, new CodeInstruction(OpCodes.Call, CanHoldItem));
+            codes.Insert(index, new CodeInstruction(OpCodes.Ldloc_0));
+            Tools.FindField(ref index, ref codes, findField: isHoldingObject, addCode: IsTeleporting, andInstruction: true, notInstruction: true, requireInstance: true);
+            Tools.FindField(ref index, ref codes, findField: playerBodyAnimator, skip: true);
+            Tools.FindInteger(ref index, ref codes, findValue: 0, addCode: RemainActivatingItemIfTeleporting, orInstruction: true, requireInstance: true);
+            Tools.FindInteger(ref index, ref codes, findValue: 0, addCode: RemainTwoHandedIfTeleporting, orInstruction: true, requireInstance: true);
+            Tools.FindFloat(ref index, ref codes, findValue: 1f, addCode: RemainCarryWeightIfTeleporting, requireInstance: true, instanceBefore: true);
+            Tools.FindNull(ref index, ref codes, addCode: RemainCurrentlyHeldObjectServerIfTeleporting, requireInstance: true, instanceBefore: true);
             return codes;
         }
     }
