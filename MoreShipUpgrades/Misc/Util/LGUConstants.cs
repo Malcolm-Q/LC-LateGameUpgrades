@@ -393,8 +393,8 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string FUSION_MATTER_TIERS_KEY = "Fusion Matter Tiers";
         internal static readonly string FUSION_MATTER_TIERS_DEFAULT = $"key{FUSION_MATTER_ITEM_DELIMITER} flashlight{FUSION_MATTER_ITEM_DELIMITER} walkie-talkie{FUSION_MATTER_TIER_DELIMITER}" +
-            $"shovel{FUSION_MATTER_ITEM_DELIMITER} pro flashlight{FUSION_MATTER_TIER_DELIMITER}" +
-            $"belt bag{FUSION_MATTER_ITEM_DELIMITER} radar booster";
+            $"shovel{FUSION_MATTER_ITEM_DELIMITER} pro-flashlight{FUSION_MATTER_TIER_DELIMITER}" +
+            $"belt bag{FUSION_MATTER_ITEM_DELIMITER} radar-booster";
         internal static readonly string FUSION_MATTER_TIERS_DESCRIPTION = "List of items that will be kept in the player's inventory once reached a certain level of the upgrade. You can include names shown in their scan nodes or the names shown in the Company store.\n" +
             $"\'{FUSION_MATTER_ITEM_DELIMITER}\' is used to separate items in a tier.\n" +
             $"\'{FUSION_MATTER_TIER_DELIMITER}\' is used to separate tiers of the upgrade";

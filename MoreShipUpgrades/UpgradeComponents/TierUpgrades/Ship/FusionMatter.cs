@@ -1,4 +1,6 @@
-﻿using MoreShipUpgrades.Managers;
+﻿using GameNetcodeStuff;
+using MoreShipUpgrades.Extensions;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
@@ -35,14 +37,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
                 }
             }
         }
-        public static bool CanHoldItem(GrabbableObject grabbableObject)
+        public static bool CanHoldItem(GrabbableObject grabbableObject, PlayerControllerB player)
         {
-            if (grabbableObject == null) return false;
+            if (grabbableObject == null || !player.IsTeleporting() || player.isPlayerDead) return false;
             string itemName = grabbableObject.itemProperties.itemName.Trim().ToLower();
             if (levels.TryGetValue(itemName, out int level))
             {
                 Plugin.mls.LogDebug($"{itemName} can be safeguarded by Fusion Matter at level {level+1}");
-                Plugin.mls.LogDebug(GetUpgradeLevel(UPGRADE_NAME) >= level);
                 return GetUpgradeLevel(UPGRADE_NAME) >= level;
             }
 

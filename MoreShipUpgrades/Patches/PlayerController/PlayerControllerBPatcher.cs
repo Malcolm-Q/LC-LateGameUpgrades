@@ -377,7 +377,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         static IEnumerable<CodeInstruction> DropAllHeldItemsTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo CanHoldItem = typeof(FusionMatter).GetMethod(nameof(FusionMatter.CanHoldItem));
-            MethodInfo IsTeleporting = typeof(PlayerControllerBExtensions).GetMethod(nameof(PlayerControllerBExtensions.IsTeleporting));
+            MethodInfo RemainIsHoldingObjectIfTeleporting = typeof(PlayerControllerBExtensions).GetMethod(nameof(PlayerControllerBExtensions.RemainIsHoldingObjectIfTeleporting));
             MethodInfo RemainActivatingItemIfTeleporting = typeof(PlayerControllerBExtensions).GetMethod(nameof(PlayerControllerBExtensions.RemainActivatingItemIfTeleporting));
             MethodInfo RemainTwoHandedIfTeleporting = typeof(PlayerControllerBExtensions).GetMethod(nameof(PlayerControllerBExtensions.RemainTwoHandedIfTeleporting));
             MethodInfo RemainCarryWeightIfTeleporting = typeof(PlayerControllerBExtensions).GetMethod(nameof(PlayerControllerBExtensions.RemainCarryWeightIfTeleporting));
@@ -393,8 +393,9 @@ namespace MoreShipUpgrades.Patches.PlayerController
             codes.Insert(index, new CodeInstruction(OpCodes.And));
             codes.Insert(index, new CodeInstruction(OpCodes.Not));
             codes.Insert(index, new CodeInstruction(OpCodes.Call, CanHoldItem));
+            codes.Insert(index, new CodeInstruction(OpCodes.Ldarg_0));
             codes.Insert(index, new CodeInstruction(OpCodes.Ldloc_0));
-            Tools.FindField(ref index, ref codes, findField: isHoldingObject, addCode: IsTeleporting, andInstruction: true, notInstruction: true, requireInstance: true);
+            Tools.FindField(ref index, ref codes, findField: isHoldingObject, addCode: RemainIsHoldingObjectIfTeleporting, andInstruction: true, notInstruction: true, requireInstance: true);
             Tools.FindField(ref index, ref codes, findField: playerBodyAnimator, skip: true);
             Tools.FindInteger(ref index, ref codes, findValue: 0, addCode: RemainActivatingItemIfTeleporting, orInstruction: true, requireInstance: true);
             Tools.FindInteger(ref index, ref codes, findValue: 0, addCode: RemainTwoHandedIfTeleporting, orInstruction: true, requireInstance: true);
