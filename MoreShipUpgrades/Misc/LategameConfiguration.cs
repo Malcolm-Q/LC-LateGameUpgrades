@@ -35,6 +35,7 @@ namespace MoreShipUpgrades.Misc
     public class LategameConfiguration : SyncedConfig2<LategameConfiguration>
     {
         #region Enabled
+        [field: SyncedEntryField] public SyncedEntry<bool> LONG_BARREL_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> HOLLOW_POINT_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> JETPACK_THRUSTERS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> JET_FUEL_ENABLED {  get; set; }
@@ -85,6 +86,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Individual
+        [field: SyncedEntryField] public SyncedEntry<bool> LONG_BARREL_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> HOLLOW_POINT_INDIVIDUAL { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> JETPACK_THURSTERS_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> JET_FUEL_INDIVIDUAL {  get; set; }
@@ -120,6 +122,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Initial Prices
+        [field: SyncedEntryField] public SyncedEntry<int> LONG_BARREL_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> HOLLOW_POINT_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> JETPACK_THRUSTERS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> JET_FUEL_PRICE {  get; set; }
@@ -175,6 +178,10 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<string> LONG_BARREL_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> LONG_BARREL_OVERRIDE_NAME { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> LONG_BARREL_INITIAL_SHOTGUN_RANGE_INCREASE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> LONG_BARREL_INCREMENTAL_SHOTGUN_RANGE_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> HOLLOW_POINT_PRICES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> HOLLOW_POINT_OVERRIDE_NAME {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> HOLLOW_POINT_INITIAL_SHOTGUN_DAMAGE_INCREASE { get; set; }
@@ -492,6 +499,7 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_APPARATICE_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> ITEM_PROGRESSION_NO_PURCHASE_UPGRADES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> LONG_BARREL_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> HOLLOW_POINT_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> JETPACK_THRUSTERS_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> JET_FUEL_ITEM_PROGRESSION_ITEMS {  get; set; }
@@ -597,6 +605,7 @@ namespace MoreShipUpgrades.Misc
 
             topSection = LguConstants.OVERRIDE_NAMES_SECTION;
             OVERRIDE_UPGRADE_NAMES              = cfg.BindSyncedEntry(topSection, LguConstants.OVERRIDE_NAMES_ENABLED_KEY, LguConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LguConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
+            LONG_BARREL_OVERRIDE_NAME           = cfg.BindSyncedEntry(topSection, LguConstants.LONG_BARREL_OVERRIDE_NAME_KEY, LongBarrel.UPGRADE_NAME);
             HOLLOW_POINT_OVERRIDE_NAME          = cfg.BindSyncedEntry(topSection, LguConstants.HOLLOW_POINT_OVERRIDE_NAME_KEY, HollowPoint.UPGRADE_NAME);
             JETPACK_THRUSTERS_OVERRIDE_NAME     = cfg.BindSyncedEntry(topSection, LguConstants.JETPACK_THRUSTERS_OVERRIDE_NAME_KEY, JetpackThrusters.UPGRADE_NAME);
             JET_FUEL_OVERRIDE_NAME              = cfg.BindSyncedEntry(topSection, LguConstants.JET_FUEL_OVERRIDE_NAME_KEY, JetFuel.UPGRADE_NAME);
@@ -695,6 +704,19 @@ namespace MoreShipUpgrades.Misc
             #endregion
 
             #region Upgrades
+
+            #region Long Barrel
+
+            topSection = LongBarrel.UPGRADE_NAME;
+            LONG_BARREL_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.LONG_BARREL_ENABLED_KEY, LguConstants.LONG_BARREL_ENABLED_DEFAULT, LguConstants.LONG_BARREL_ENABLED_DESCRIPTION);
+            LONG_BARREL_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            LONG_BARREL_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.LONG_BARREL_PRICE_KEY, LguConstants.LONG_BARREL_PRICE_DEFAULT);
+            LONG_BARREL_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, LongBarrel.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
+            LONG_BARREL_INITIAL_SHOTGUN_RANGE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.LONG_BARREL_INITIAL_SHOTGUN_RANGE_INCREASE_KEY, LguConstants.LONG_BARREL_INITIAL_SHOTGUN_RANGE_INCREASE_DEFAULT, LguConstants.LONG_BARREL_INITIAL_SHOTGUN_RANGE_INCREASE_DESCRIPTION);
+            LONG_BARREL_INCREMENTAL_SHOTGUN_RANGE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.LONG_BARREL_INCREMENTAL_SHOTGUN_RANGE_INCREASE_KEY, LguConstants.LONG_BARREL_INCREMENTAL_SHOTGUN_RANGE_INCREASE_DEFAULT, LguConstants.LONG_BARREL_INCREMENTAL_SHOTGUN_RANGE_INCREASE_DESCRIPTION);
+            LONG_BARREL_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
 
             #region Hollow Point
 

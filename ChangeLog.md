@@ -2,6 +2,7 @@
 <summary> 3.10.5 - 2024-10-05 </summary>
 
 - Implemented tier upgrade which increases the shotgun's damage output.
+- Implemented tier upgrade which increases the shotgun's overall range and its effective damage ranges.
 
 </details>
 

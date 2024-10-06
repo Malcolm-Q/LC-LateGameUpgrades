@@ -202,6 +202,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string LONG_BARREL_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, LongBarrel.UPGRADE_NAME);
         internal static readonly string HOLLOW_POINT_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, HollowPoint.UPGRADE_NAME);
         internal static readonly string JETPACK_THRUSTERS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, JetpackThrusters.UPGRADE_NAME);
         internal static readonly string JET_FUEL_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, JetFuel.UPGRADE_NAME);
@@ -379,6 +380,25 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Long Barrel
+
+        internal const string LONG_BARREL_ENABLED_KEY = $"Enable {LongBarrel.UPGRADE_NAME} Upgrade";
+        internal const bool LONG_BARREL_ENABLED_DEFAULT = true;
+        internal const string LONG_BARREL_ENABLED_DESCRIPTION = "Tier upgrade which increases the overall range of the shotgun and its effective damage ranges.";
+
+        internal const string LONG_BARREL_PRICE_KEY = $"Price of {LongBarrel.UPGRADE_NAME} Upgrade";
+        internal const int LONG_BARREL_PRICE_DEFAULT = 500;
+
+        internal const string LONG_BARREL_INITIAL_SHOTGUN_RANGE_INCREASE_KEY = "Initial Shotgun Range Increase";
+        internal const int LONG_BARREL_INITIAL_SHOTGUN_RANGE_INCREASE_DEFAULT = 10;
+        internal const string LONG_BARREL_INITIAL_SHOTGUN_RANGE_INCREASE_DESCRIPTION = "Initial range percentage increase of the shotgun when first purchasing the upgrade";
+
+        internal const string LONG_BARREL_INCREMENTAL_SHOTGUN_RANGE_INCREASE_KEY = "Incremental Shotgun Range Increase";
+        internal const int LONG_BARREL_INCREMENTAL_SHOTGUN_RANGE_INCREASE_DEFAULT = 10;
+        internal const string LONG_BARREL_INCREMENTAL_SHOTGUN_RANGE_INCREASE_DESCRIPTION = "Incremental range percentage increase of the shotgun when purchasing further levels of the upgrade";
+
+        #endregion
 
         #region Hollow Point
 

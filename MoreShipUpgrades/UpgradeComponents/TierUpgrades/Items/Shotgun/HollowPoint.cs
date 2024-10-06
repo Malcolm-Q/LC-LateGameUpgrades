@@ -3,15 +3,11 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun
 {
-    internal class HollowPoint: TierUpgrade
+    public class HollowPoint: TierUpgrade
     {
         internal const string UPGRADE_NAME = "Hollow Point";
         internal const string DEFAULT_PRICES = "800,1000";

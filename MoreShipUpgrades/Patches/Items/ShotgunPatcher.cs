@@ -41,19 +41,23 @@ namespace MoreShipUpgrades.Patches.Items
             Tools.FindFloat(ref index, ref codes, findValue: 0.45f, addCode: getSleightOfHandSpeedBoost, errorMessage: "Couldn't find the third value for WaitForSeconds");
             return codes;
         }
-
+        [HarmonyDebug]
         [HarmonyPatch(nameof(ShotgunItem.ShootGun))]
         [HarmonyTranspiler]
         static IEnumerable<CodeInstruction> ShootGunTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo GetHollowPointDamageBoost = typeof(HollowPoint).GetMethod(nameof(HollowPoint.GetHollowPointDamageBoost));
+            MethodInfo GetLongBarrelRangeBoost = typeof(LongBarrel).GetMethod(nameof(LongBarrel.GetLongBarrelRangeBoost));
             FieldInfo enemyColliders = typeof(ShotgunItem).GetField(nameof(ShotgunItem.enemyColliders), BindingFlags.Instance | BindingFlags.NonPublic);
 
             List<CodeInstruction> codes = new(instructions);
             int index = 0;
 
             Tools.FindField(ref index, ref codes, findField: enemyColliders, skip: true);
+            Tools.FindFloat(ref index, ref codes, findValue: 15f, addCode: GetLongBarrelRangeBoost);
+            Tools.FindFloat(ref index, ref codes, findValue: 3.7f, addCode: GetLongBarrelRangeBoost);
             Tools.FindInteger(ref index, ref codes, findValue: 5, addCode: GetHollowPointDamageBoost);
+            Tools.FindFloat(ref index, ref codes, findValue: 6f, addCode: GetLongBarrelRangeBoost);
             Tools.FindInteger(ref index, ref codes, findValue: 3, addCode: GetHollowPointDamageBoost);
             Tools.FindInteger(ref index, ref codes, findValue: 2, addCode: GetHollowPointDamageBoost);
 
