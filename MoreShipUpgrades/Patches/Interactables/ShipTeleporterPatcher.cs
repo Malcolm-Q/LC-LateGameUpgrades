@@ -4,7 +4,7 @@ using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Commands;
-using System.Collections;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -14,6 +14,14 @@ namespace MoreShipUpgrades.Patches.Interactables
     [HarmonyPatch(typeof(ShipTeleporter))]
     internal static class ShipTeleporterPatcher
     {
+        [HarmonyPatch(nameof(ShipTeleporter.PressButtonEffects))]
+        [HarmonyPostfix]
+        static void PressButtonEffectsPostfix(ShipTeleporter __instance)
+        {
+            __instance.teleporterAnimator.speed *= ParticleInfuser.IncreaseTeleportSpeed();
+            __instance.shipTeleporterAudio.pitch *= ParticleInfuser.IncreaseTeleportSpeed();
+            ParticleInfuser.instance.StartCoroutine(ParticleInfuser.instance.ResetTeleporterSpeed(__instance));
+        }
         [HarmonyPatch(nameof(ShipTeleporter.beamUpPlayer), MethodType.Enumerator)]
         [HarmonyPrefix]
         static bool beamUpPlayerPrefix()
@@ -22,6 +30,33 @@ namespace MoreShipUpgrades.Patches.Interactables
             if (!config.INTERN_ENABLED || config.INTERNS_TELEPORT_RESTRICTION == Interns.TeleportRestriction.None) return true;
             PlayerControllerB playerToBeamUp = StartOfRound.Instance.mapScreen.targetedPlayer;
             return !Interns.instance.ContainsRecentlyInterned(playerToBeamUp);
+        }
+
+        [HarmonyPatch(nameof(ShipTeleporter.beamOutPlayer), MethodType.Enumerator)]
+        [HarmonyTranspiler]
+        static IEnumerable<CodeInstruction> beamOutPlayerTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo DecreaseTeleportTime = typeof(ParticleInfuser).GetMethod(nameof(ParticleInfuser.DecreaseTeleportTime));
+
+            List<CodeInstruction> codes = new(instructions);
+            int index = 0;
+
+            Tools.FindFloat(ref index, ref codes, findValue: 1f, addCode: DecreaseTeleportTime);
+            return codes;
+        }
+
+        [HarmonyPatch(nameof(ShipTeleporter.beamUpPlayer), MethodType.Enumerator)]
+        [HarmonyTranspiler]
+        static IEnumerable<CodeInstruction> beamUpPlayerTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo DecreaseTeleportTime = typeof(ParticleInfuser).GetMethod(nameof(ParticleInfuser.DecreaseTeleportTime));
+
+            List<CodeInstruction> codes = new(instructions);
+            int index = 0;
+
+            Tools.FindFloat(ref index, ref codes, findValue: 3f, addCode: DecreaseTeleportTime);
+            Tools.FindFloat(ref index, ref codes, findValue: 3f, addCode: DecreaseTeleportTime);
+            return codes;
         }
 
         [HarmonyPatch(nameof(ShipTeleporter.TeleportPlayerOutWithInverseTeleporter))]

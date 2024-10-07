@@ -7,6 +7,7 @@
   - You specify either the names listed in the Company Store or the name displayed in the scan node (or their internal name stored in the ``Item`` instance of the game's code)
 - Implemented tier upgrade which increases the shotgun's damage output.
 - Implemented tier upgrade which increases the shotgun's overall range and its effective damage ranges.
+- Implemented tier upgrade which increases the teleporter's speed.
 
 </details>
 

@@ -202,6 +202,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string PARTICLE_INFUSER_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ParticleInfuser.UPGRADE_NAME);
         internal static readonly string SILVER_BULLETS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, SilverBullets.UPGRADE_NAME);
         internal static readonly string FUSION_MATTER_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, FusionMatter.UPGRADE_NAME);
         internal static readonly string LONG_BARREL_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, LongBarrel.UPGRADE_NAME);
@@ -382,6 +383,25 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Particle Infuser
+
+        internal const string PARTICLE_INFUSER_ENABLED_KEY = $"Enable {ParticleInfuser.UPGRADE_NAME} Upgrade";
+        internal const bool PARTICLE_INFUSER_ENABLED_DEFAULT = true;
+        internal const string PARTICLE_INFUSER_ENABLED_DESCRIPTION = "Tier upgrade which increases the overall range of the shotgun and its effective damage ranges.";
+
+        internal const string PARTICLE_INFUSER_PRICE_KEY = $"Price of {ParticleInfuser.UPGRADE_NAME} Upgrade";
+        internal const int PARTICLE_INFUSER_PRICE_DEFAULT = 650;
+
+        internal const string PARTICLE_INFUSER_INITIAL_TELEPORT_SPEED_INCREASE_KEY = "Initial Teleport Speed Increase";
+        internal const int PARTICLE_INFUSER_INITIAL_TELEPORT_SPEED_INCREASE_DEFAULT = 20;
+        internal const string PARTICLE_INFUSER_INITIAL_TELEPORT_SPEED_INCREASE_DESCRIPTION = "Initial speed percentage increase of the teleporters when first purchasing the upgrade";
+
+        internal const string PARTICLE_INFUSER_INCREMENTAL_TELEPORT_SPEED_INCREASE_KEY = "Incremental Teleport Speed Increase";
+        internal const int PARTICLE_INFUSER_INCREMENTAL_TELEPORT_SPEED_INCREASE_DEFAULT = 10;
+        internal const string PARTICLE_INFUSER_INCREMENTAL_TELEPORT_SPEED_INCREASE_DESCRIPTION = "Incremental speed percentage increase of the teleporters when purchasing further levels of the upgrade";
+
+        #endregion
 
         #region Silver Bullets
 
