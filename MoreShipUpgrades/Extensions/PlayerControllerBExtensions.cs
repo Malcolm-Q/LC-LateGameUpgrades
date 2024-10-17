@@ -16,7 +16,6 @@ namespace MoreShipUpgrades.Extensions
                 if (grabbableObject == null) continue;
                 weight = Mathf.Clamp(weight + (grabbableObject.itemProperties.weight - 1f), 0f, 10f);
             }
-            Plugin.mls.LogDebug(weight);
             return weight;
         }
 

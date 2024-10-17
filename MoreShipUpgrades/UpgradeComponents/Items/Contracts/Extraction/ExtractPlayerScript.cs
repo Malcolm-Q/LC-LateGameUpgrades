@@ -55,7 +55,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Extraction
             {
                 return false;
             }
-            if (player.currentlyHeldObjectServer.itemProperties.itemName == "Medkit") return true;
+            if (player.currentlyHeldObjectServer.itemProperties.itemName == "Medic Bag") return true;
             else return false;
         }
 

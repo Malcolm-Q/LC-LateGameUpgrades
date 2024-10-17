@@ -174,6 +174,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             if (MedKitMapItem == null) return;
             Medkit medMapScript = MedKitMapItem.spawnPrefab.AddComponent<Medkit>();
             MedKitMapItem.spawnPrefab.AddComponent<ExtractionContract>();
+            MedKitMapItem.itemName = "Medic Bag";
             medMapScript.itemProperties = MedKitMapItem;
             medMapScript.grabbable = true;
             medMapScript.useCooldown = 2f;

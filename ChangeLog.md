@@ -8,6 +8,7 @@
 - Implemented tier upgrade which increases the shotgun's damage output.
 - Implemented tier upgrade which increases the shotgun's overall range and its effective damage ranges.
 - Implemented tier upgrade which increases the teleporter's speed.
+- Fixed issue with medkit on Extraction contract due to different names.
 
 </details>
 
