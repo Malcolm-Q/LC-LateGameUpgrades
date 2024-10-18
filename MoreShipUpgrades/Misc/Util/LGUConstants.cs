@@ -202,6 +202,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string SCRAP_KEEPER_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ScrapKeeper.UPGRADE_NAME);
         internal static readonly string PARTICLE_INFUSER_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ParticleInfuser.UPGRADE_NAME);
         internal static readonly string SILVER_BULLETS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, SilverBullets.UPGRADE_NAME);
         internal static readonly string FUSION_MATTER_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, FusionMatter.UPGRADE_NAME);
@@ -383,6 +384,25 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        #region Scrap Keeper
+
+        internal const string SCRAP_KEEPER_ENABLED_KEY = $"Enable {ScrapKeeper.UPGRADE_NAME} Upgrade";
+        internal const bool SCRAP_KEEPER_ENABLED_DEFAULT = true;
+        internal const string SCRAP_KEEPER_ENABLED_DESCRIPTION = "Tier upgrade which adds a chance of keeping the scrap item incase of full team wipe.";
+
+        internal const string SCRAP_KEEPER_PRICE_KEY = $"Price of {ScrapKeeper.UPGRADE_NAME} Upgrade";
+        internal const int SCRAP_KEEPER_PRICE_DEFAULT = 1000;
+
+        internal const string SCRAP_KEEPER_INITIAL_KEEP_SCRAP_CHANCE_INCREASE_KEY = "Initial Keep Scrap Chance Increase";
+        internal const int SCRAP_KEEPER_INITIAL_KEEP_SCRAP_CHANCE_INCREASE_DEFAULT = 25;
+        internal const string SCRAP_KEEPER_INITIAL_KEEP_SCRAP_CHANCE_INCREASE_DESCRIPTION = "Initial percentage chance increase of keeping the scrap item when first purchasing the upgrade";
+
+        internal const string SCRAP_KEEPER_INCREMENTAL_KEEP_SCRAP_CHANCE_INCREASE_KEY = "Incremental Keep Scrap Chance Increase";
+        internal const int SCRAP_KEEPER_INCREMENTAL_KEEP_SCRAP_CHANCE_INCREASE_DEFAULT = 25;
+        internal const string SCRAP_KEEPER_INCREMENTAL_KEEP_SCRAP_CHANCE_INCREASE_DESCRIPTION = "Incremental percentage chance increase of keeping the scrap item when purchasing further levels of the upgrade";
+
+        #endregion
 
         #region Particle Infuser
 

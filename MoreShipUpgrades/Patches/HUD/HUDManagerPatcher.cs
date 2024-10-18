@@ -4,6 +4,7 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
 using System.Collections.Generic;
@@ -79,6 +80,19 @@ namespace MoreShipUpgrades.Patches.HUD
             List<CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindFloat(ref index, ref codes, findValue: 0.2f, addCode: ReduceCreditCostPercentage, errorMessage: "Couldn't find the multiplier used to decrease the amount of Company Credits");
+            return codes;
+        }
+
+        [HarmonyTranspiler]
+        [HarmonyPatch(nameof(HUDManager.FillEndGameStats))]
+        static IEnumerable<CodeInstruction> FillEndGameStatsTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            FieldInfo allPlayersDead = typeof(StartOfRound).GetField(nameof(StartOfRound.allPlayersDead));
+
+            MethodInfo CheckIfKeptScrap = typeof(ScrapKeeper).GetMethod(nameof(ScrapKeeper.CheckIfKeptScrap));
+            List<CodeInstruction> codes = new(instructions);
+            int index = 0;
+            Tools.FindField(ref index, ref codes, findField: allPlayersDead, addCode: CheckIfKeptScrap, andInstruction: true, notInstruction: true);
             return codes;
         }
     }
