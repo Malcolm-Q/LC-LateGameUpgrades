@@ -621,7 +621,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const int RUBBER_BOOTS_INITIAL_MOVEMENT_HINDERANCE_DECREASE_DEFAULT = 20;
         internal const string RUBBER_BOOTS_INITIAL_MOVEMENT_HINDERANCE_DECREASE_DESCRIPTION = "Initial percentage decrease of movement hinderance on water surfaces when first purchasing the upgrade";
 
-        internal const string RUBBER_BOOTS_INCREMENTAL_MOVEMENT_HINDERANCE_DECREASE_KEY = "Incremental Oxygen Consumption Decrease";
+        internal const string RUBBER_BOOTS_INCREMENTAL_MOVEMENT_HINDERANCE_DECREASE_KEY = "Incremental Movement Hinderance Decrease";
         internal const int RUBBER_BOOTS_INCREMENTAL_MOVEMENT_HINDERANCE_DECREASE_DEFAULT = 20;
         internal const string RUBBER_BOOTS_INCREMENTAL_MOVEMENT_HINDERANCE_DECREASE_DESCRIPTION = "Incremental percentage decrease of movement hinderance on water surfaces when purchasing further levels of the upgrade";
 

@@ -10,6 +10,7 @@
 - Implemented tier upgrade which increases the teleporter's speed.
 - Implemented tier upgrade which in case of a full team wipe, each scrap item present in the ship has a chance of not being discarded.
 - Fixed issue with medkit on Extraction contract due to different names.
+- Fixed typo in some configuration entries.
 
 </details>
 
