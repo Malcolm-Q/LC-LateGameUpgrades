@@ -1,8 +1,8 @@
-﻿using CustomItemBehaviourLibrary.Misc;
-using GameNetcodeStuff;
+﻿using GameNetcodeStuff;
 using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
 using System.Collections.Generic;
