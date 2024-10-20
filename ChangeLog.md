@@ -1,5 +1,5 @@
 <details>
-<summary> 3.10.5 - 2024-10-05 </summary>
+<summary> 3.10.5 - 2024-10-20 </summary>
 
 - Implemented one time upgrade which allows shotguns eliminate ghost girls.
 - Implemented tier upgrade which allows the players to teleport with some items in their inventories according to the tier they are located.

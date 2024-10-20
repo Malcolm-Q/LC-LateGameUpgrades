@@ -408,7 +408,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string PARTICLE_INFUSER_ENABLED_KEY = $"Enable {ParticleInfuser.UPGRADE_NAME} Upgrade";
         internal const bool PARTICLE_INFUSER_ENABLED_DEFAULT = true;
-        internal const string PARTICLE_INFUSER_ENABLED_DESCRIPTION = "Tier upgrade which increases the overall range of the shotgun and its effective damage ranges.";
+        internal const string PARTICLE_INFUSER_ENABLED_DESCRIPTION = "Tier upgrade which increases the speed of the teleporter during teleportation phase.";
 
         internal const string PARTICLE_INFUSER_PRICE_KEY = $"Price of {ParticleInfuser.UPGRADE_NAME} Upgrade";
         internal const int PARTICLE_INFUSER_PRICE_DEFAULT = 650;

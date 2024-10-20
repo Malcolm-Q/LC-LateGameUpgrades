@@ -241,6 +241,24 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 * __Jetpack Thrusters - $300__
     * Increases the maximum speed of the jetpack while in flight. 
 
+* __Silver Bullets - $500__
+    * Allows the shotgun to kill ghost girls.
+    
+* __Hollow Point - $750__
+    * Increases the damage output of the shotgun.
+   
+* __Long Barrel - $500__
+    * Increases the range of the damage zones and overall range of the shotgun. 
+
+* __Fusion Matter - $500__
+    *  Allows players to teleport with some items in their inventory.
+
+* __Particle Infuser - $650__
+    *  Increases the speed of the teleporters during teleportation phase.
+
+* __Scrap Keeper - $1000__
+    * In case of full team wipe, each scrap has a chance of staying in the ship.
+    
 ## Item Progression Mode
 
 This mod offers an alternative mode for obtaining upgrades through selling items to The Company. The following modes are available for playthroughs:
