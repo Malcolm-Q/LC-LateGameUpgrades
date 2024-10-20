@@ -1,5 +1,6 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
+using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Util;
@@ -63,6 +64,11 @@ namespace MoreShipUpgrades.Patches.Interactables
         [HarmonyTranspiler]
         static IEnumerable<CodeInstruction> TeleportPlayerOutWithInverseTeleporterTranspiler(IEnumerable<CodeInstruction> instructions)
         {
+            if (GeneralImprovementsCompat.Enabled && GeneralImprovementsCompat.PatchedTeleporter())
+            {
+                Plugin.mls.LogInfo("Skipping teleporter patching due to DropAllHeldItems method being removed.");
+                return instructions;
+            }
             MethodInfo SetPlayerTeleporterId = typeof(ShipTeleporter).GetMethod(nameof(ShipTeleporter.SetPlayerTeleporterId), BindingFlags.Instance | BindingFlags.NonPublic);
             MethodInfo DropAllHeldItems = typeof(PlayerControllerB).GetMethod(nameof(PlayerControllerB.DropAllHeldItems));
 

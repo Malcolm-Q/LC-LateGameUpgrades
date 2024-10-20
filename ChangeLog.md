@@ -1,4 +1,18 @@
 <details>
+<summary> 3.10.7 - 2024-10-20 </summary>
+
+- Fixed issue with teleporter patching due to DropAllHeldItems method being removed from vanilla code.
+
+</details>
+
+<details>
+<summary> 3.10.6 - 2024-10-20 </summary>
+
+- Hotfixed issue with another mod
+
+</details>
+
+<details>
 <summary> 3.10.5 - 2024-10-20 </summary>
 
 - Implemented one time upgrade which allows shotguns eliminate ghost girls.
