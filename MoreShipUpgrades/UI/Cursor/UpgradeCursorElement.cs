@@ -10,7 +10,6 @@ namespace MoreShipUpgrades.UI.Cursor
     internal class UpgradeCursorElement : CursorElement
     {
         internal CustomTerminalNode Node { get; set; }
-
         public override string GetText(int availableLength)
         {
             StringBuilder sb = new StringBuilder();

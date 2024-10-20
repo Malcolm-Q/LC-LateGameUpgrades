@@ -202,6 +202,12 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string SCRAP_KEEPER_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ScrapKeeper.UPGRADE_NAME);
+        internal static readonly string PARTICLE_INFUSER_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ParticleInfuser.UPGRADE_NAME);
+        internal static readonly string SILVER_BULLETS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, SilverBullets.UPGRADE_NAME);
+        internal static readonly string FUSION_MATTER_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, FusionMatter.UPGRADE_NAME);
+        internal static readonly string LONG_BARREL_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, LongBarrel.UPGRADE_NAME);
+        internal static readonly string HOLLOW_POINT_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, HollowPoint.UPGRADE_NAME);
         internal static readonly string JETPACK_THRUSTERS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, JetpackThrusters.UPGRADE_NAME);
         internal static readonly string JET_FUEL_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, JetFuel.UPGRADE_NAME);
         internal static readonly string QUICK_HANDS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, QuickHands.UPGRADE_NAME);
@@ -379,6 +385,115 @@ namespace MoreShipUpgrades.Misc.Util
 
         #region Upgrades
 
+        #region Scrap Keeper
+
+        internal const string SCRAP_KEEPER_ENABLED_KEY = $"Enable {ScrapKeeper.UPGRADE_NAME} Upgrade";
+        internal const bool SCRAP_KEEPER_ENABLED_DEFAULT = true;
+        internal const string SCRAP_KEEPER_ENABLED_DESCRIPTION = "Tier upgrade which adds a chance of keeping the scrap item incase of full team wipe.";
+
+        internal const string SCRAP_KEEPER_PRICE_KEY = $"Price of {ScrapKeeper.UPGRADE_NAME} Upgrade";
+        internal const int SCRAP_KEEPER_PRICE_DEFAULT = 1000;
+
+        internal const string SCRAP_KEEPER_INITIAL_KEEP_SCRAP_CHANCE_INCREASE_KEY = "Initial Keep Scrap Chance Increase";
+        internal const int SCRAP_KEEPER_INITIAL_KEEP_SCRAP_CHANCE_INCREASE_DEFAULT = 25;
+        internal const string SCRAP_KEEPER_INITIAL_KEEP_SCRAP_CHANCE_INCREASE_DESCRIPTION = "Initial percentage chance increase of keeping the scrap item when first purchasing the upgrade";
+
+        internal const string SCRAP_KEEPER_INCREMENTAL_KEEP_SCRAP_CHANCE_INCREASE_KEY = "Incremental Keep Scrap Chance Increase";
+        internal const int SCRAP_KEEPER_INCREMENTAL_KEEP_SCRAP_CHANCE_INCREASE_DEFAULT = 25;
+        internal const string SCRAP_KEEPER_INCREMENTAL_KEEP_SCRAP_CHANCE_INCREASE_DESCRIPTION = "Incremental percentage chance increase of keeping the scrap item when purchasing further levels of the upgrade";
+
+        #endregion
+
+        #region Particle Infuser
+
+        internal const string PARTICLE_INFUSER_ENABLED_KEY = $"Enable {ParticleInfuser.UPGRADE_NAME} Upgrade";
+        internal const bool PARTICLE_INFUSER_ENABLED_DEFAULT = true;
+        internal const string PARTICLE_INFUSER_ENABLED_DESCRIPTION = "Tier upgrade which increases the speed of the teleporter during teleportation phase.";
+
+        internal const string PARTICLE_INFUSER_PRICE_KEY = $"Price of {ParticleInfuser.UPGRADE_NAME} Upgrade";
+        internal const int PARTICLE_INFUSER_PRICE_DEFAULT = 650;
+
+        internal const string PARTICLE_INFUSER_INITIAL_TELEPORT_SPEED_INCREASE_KEY = "Initial Teleport Speed Increase";
+        internal const int PARTICLE_INFUSER_INITIAL_TELEPORT_SPEED_INCREASE_DEFAULT = 20;
+        internal const string PARTICLE_INFUSER_INITIAL_TELEPORT_SPEED_INCREASE_DESCRIPTION = "Initial speed percentage increase of the teleporters when first purchasing the upgrade";
+
+        internal const string PARTICLE_INFUSER_INCREMENTAL_TELEPORT_SPEED_INCREASE_KEY = "Incremental Teleport Speed Increase";
+        internal const int PARTICLE_INFUSER_INCREMENTAL_TELEPORT_SPEED_INCREASE_DEFAULT = 10;
+        internal const string PARTICLE_INFUSER_INCREMENTAL_TELEPORT_SPEED_INCREASE_DESCRIPTION = "Incremental speed percentage increase of the teleporters when purchasing further levels of the upgrade";
+
+        #endregion
+
+        #region Silver Bullets
+
+        internal const string SILVER_BULLETS_ENABLED_KEY = $"Enable {SilverBullets.UPGRADE_NAME} Upgrade";
+        internal const bool SILVER_BULLETS_ENABLED_DEFAULT = true;
+        internal const string SILVER_BULLETS_ENABLED_DESCRIPTION = "One time upgrade which allows you to eliminate ghost girl entities with the shotgun.";
+
+        internal const string SILVER_BULLETS_PRICE_KEY = $"Price of {SilverBullets.UPGRADE_NAME} Upgrade";
+        internal const int SILVER_BULLETS_PRICE_DEFAULT = 500;
+
+        #endregion
+
+        #region Fusion Matter
+
+        internal const string FUSION_MATTER_ENABLED_KEY = $"Enable {FusionMatter.UPGRADE_NAME} Upgrade";
+        internal const bool FUSION_MATTER_ENABLED_DEFAULT = true;
+        internal const string FUSION_MATTER_ENABLED_DESCRIPTION = "Tier upgrade which allows you to teleport with specified items during teleportation (both in and out)";
+
+        internal const string FUSION_MATTER_PRICE_KEY = $"Price of {FusionMatter.UPGRADE_NAME} Upgrade";
+        internal const int FUSION_MATTER_PRICE_DEFAULT = 500;
+
+        internal const string FUSION_MATTER_TIERS_KEY = "Fusion Matter Tiers";
+        internal static readonly string FUSION_MATTER_TIERS_DEFAULT = $"key{FUSION_MATTER_ITEM_DELIMITER} flashlight{FUSION_MATTER_ITEM_DELIMITER} walkie-talkie{FUSION_MATTER_TIER_DELIMITER}" +
+            $"shovel{FUSION_MATTER_ITEM_DELIMITER} pro-flashlight{FUSION_MATTER_TIER_DELIMITER}" +
+            $"belt bag{FUSION_MATTER_ITEM_DELIMITER} radar-booster";
+        internal static readonly string FUSION_MATTER_TIERS_DESCRIPTION = "List of items that will be kept in the player's inventory once reached a certain level of the upgrade. You can include names shown in their scan nodes or the names shown in the Company store.\n" +
+            $"\'{FUSION_MATTER_ITEM_DELIMITER}\' is used to separate items in a tier.\n" +
+            $"\'{FUSION_MATTER_TIER_DELIMITER}\' is used to separate tiers of the upgrade";
+
+        internal const char FUSION_MATTER_TIER_DELIMITER = '@';
+        internal const char FUSION_MATTER_ITEM_DELIMITER = ',';
+
+        #endregion
+
+        #region Long Barrel
+
+        internal const string LONG_BARREL_ENABLED_KEY = $"Enable {LongBarrel.UPGRADE_NAME} Upgrade";
+        internal const bool LONG_BARREL_ENABLED_DEFAULT = true;
+        internal const string LONG_BARREL_ENABLED_DESCRIPTION = "Tier upgrade which increases the overall range of the shotgun and its effective damage ranges.";
+
+        internal const string LONG_BARREL_PRICE_KEY = $"Price of {LongBarrel.UPGRADE_NAME} Upgrade";
+        internal const int LONG_BARREL_PRICE_DEFAULT = 500;
+
+        internal const string LONG_BARREL_INITIAL_SHOTGUN_RANGE_INCREASE_KEY = "Initial Shotgun Range Increase";
+        internal const int LONG_BARREL_INITIAL_SHOTGUN_RANGE_INCREASE_DEFAULT = 10;
+        internal const string LONG_BARREL_INITIAL_SHOTGUN_RANGE_INCREASE_DESCRIPTION = "Initial range percentage increase of the shotgun when first purchasing the upgrade";
+
+        internal const string LONG_BARREL_INCREMENTAL_SHOTGUN_RANGE_INCREASE_KEY = "Incremental Shotgun Range Increase";
+        internal const int LONG_BARREL_INCREMENTAL_SHOTGUN_RANGE_INCREASE_DEFAULT = 10;
+        internal const string LONG_BARREL_INCREMENTAL_SHOTGUN_RANGE_INCREASE_DESCRIPTION = "Incremental range percentage increase of the shotgun when purchasing further levels of the upgrade";
+
+        #endregion
+
+        #region Hollow Point
+
+        internal const string HOLLOW_POINT_ENABLED_KEY = $"Enable {HollowPoint.UPGRADE_NAME} Upgrade";
+        internal const bool HOLLOW_POINT_ENABLED_DEFAULT = true;
+        internal const string HOLLOW_POINT_ENABLED_DESCRIPTION = "Tier upgrade which increases the amount of damage done by the shotgun.";
+
+        internal const string HOLLOW_POINT_PRICE_KEY = $"Price of {HollowPoint.UPGRADE_NAME} Upgrade";
+        internal const int HOLLOW_POINT_PRICE_DEFAULT = 750;
+
+        internal const string HOLLOW_POINT_INITIAL_SHOTGUN_DAMAGE_INCREASE_KEY = "Initial Shotgun Damage Increase";
+        internal const int HOLLOW_POINT_INITIAL_SHOTGUN_DAMAGE_INCREASE_DEFAULT = 1;
+        internal const string HOLLOW_POINT_INITIAL_SHOTGUN_DAMAGE_INCREASE_DESCRIPTION = "Initial damage increase of the shotgun when first purchasing the upgrade";
+
+        internal const string HOLLOW_POINT_INCREMENTAL_SHOTGUN_DAMAGE_INCREASE_KEY = "Incremental Shotgun Damage Increase";
+        internal const int HOLLOW_POINT_INCREMENTAL_SHOTGUN_DAMAGE_INCREASE_DEFAULT = 1;
+        internal const string HOLLOW_POINT_INCREMENTAL_SHOTGUN_DAMAGE_INCREASE_DESCRIPTION = "Incremental damage increase of the shotgun when purchasing further levels of the upgrade";
+
+        #endregion
+
         #region Jetpack Thrusters
 
         internal const string JETPACK_THRUSTERS_ENABLED_KEY = $"Enable {JetpackThrusters.UPGRADE_NAME} Upgrade";
@@ -506,7 +621,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const int RUBBER_BOOTS_INITIAL_MOVEMENT_HINDERANCE_DECREASE_DEFAULT = 20;
         internal const string RUBBER_BOOTS_INITIAL_MOVEMENT_HINDERANCE_DECREASE_DESCRIPTION = "Initial percentage decrease of movement hinderance on water surfaces when first purchasing the upgrade";
 
-        internal const string RUBBER_BOOTS_INCREMENTAL_MOVEMENT_HINDERANCE_DECREASE_KEY = "Incremental Oxygen Consumption Decrease";
+        internal const string RUBBER_BOOTS_INCREMENTAL_MOVEMENT_HINDERANCE_DECREASE_KEY = "Incremental Movement Hinderance Decrease";
         internal const int RUBBER_BOOTS_INCREMENTAL_MOVEMENT_HINDERANCE_DECREASE_DEFAULT = 20;
         internal const string RUBBER_BOOTS_INCREMENTAL_MOVEMENT_HINDERANCE_DECREASE_DESCRIPTION = "Incremental percentage decrease of movement hinderance on water surfaces when purchasing further levels of the upgrade";
 

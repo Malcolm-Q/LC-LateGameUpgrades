@@ -331,6 +331,34 @@ namespace MoreShipUpgrades.Managers
                 originalName: upgradeName,
                 sharedUpgrade: shareStatus);
         }
+        /// <summary>
+        /// Generic function where it adds a terminal node for an upgrade that can only be bought once
+        /// </summary>
+        /// <param name="upgradeName"> Name of the upgrade</param>
+        /// <param name="shareStatus"> Wether the upgrade is shared through all players or only for the player who purchased it</param>
+        /// <param name="enabled"> Wether the upgrade is enabled for gameplay or not</param>
+        /// <param name="price"></param>
+        internal CustomTerminalNode SetupOneTimeTerminalNode(string upgradeName,
+                                              bool shareStatus,
+                                              bool enabled,
+                                              int price,
+                                              string overrideName,
+                                              GameObject prefab
+                                              )
+        {
+            if (!enabled) return null;
+            string info = SetupUpgradeInfo(upgrade: prefab.GetComponent<BaseUpgrade>(), price: price);
+            string moreInfo = info;
+            if (UpgradeBus.Instance.PluginConfiguration.SHOW_WORLD_BUILDING_TEXT && prefab.GetComponent<BaseUpgrade>() is IUpgradeWorldBuilding component) moreInfo += "\n\n" + component.GetWorldBuildingText(shareStatus) + "\n";
+
+            return new OneTimeTerminalNode(
+                name: overrideName != "" ? overrideName : upgradeName,
+                unlockPrice: price,
+                description: moreInfo,
+                prefab: prefab,
+                originalName: upgradeName,
+                sharedUpgrade: shareStatus);
+        }
 
         public string SetupUpgradeInfo(BaseUpgrade upgrade = null, int price = -1, int[] incrementalPrices = null)
         {

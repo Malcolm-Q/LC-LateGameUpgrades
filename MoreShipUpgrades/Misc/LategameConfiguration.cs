@@ -35,6 +35,12 @@ namespace MoreShipUpgrades.Misc
     public class LategameConfiguration : SyncedConfig2<LategameConfiguration>
     {
         #region Enabled
+        [field: SyncedEntryField] public SyncedEntry<bool> SCRAP_KEEPER_ENABLED {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> PARTICLE_INFUSER_ENABLED {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> SILVER_BULLETS_ENABLED {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> FUSION_MATTER_ENABLED {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> LONG_BARREL_ENABLED {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> HOLLOW_POINT_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> JETPACK_THRUSTERS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> JET_FUEL_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> QUICK_HANDS_ENABLED {  get; set; }
@@ -84,6 +90,9 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Individual
+        [field: SyncedEntryField] public SyncedEntry<bool> SILVER_BULLETS_INDIVIDUAL {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> LONG_BARREL_INDIVIDUAL {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> HOLLOW_POINT_INDIVIDUAL { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> JETPACK_THURSTERS_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> JET_FUEL_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> QUICK_HANDS_INDIVIDUAL {  get; set; }
@@ -118,6 +127,12 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Initial Prices
+        [field: SyncedEntryField] public SyncedEntry<int> SCRAP_KEEPER_PRICE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> PARTICLE_INFUSER_PRICE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> SILVER_BULLETS_PRICE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> FUSION_MATTER_PRICE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> LONG_BARREL_PRICE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> HOLLOW_POINT_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> JETPACK_THRUSTERS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> JET_FUEL_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> QUICK_HANDS_PRICE {  get; set; }
@@ -172,6 +187,26 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<string> SCRAP_KEEPER_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> SCRAP_KEEPER_OVERRIDE_NAME {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> SCRAP_KEEPER_INITIAL_KEEP_SCRAP_CHANCE_INCREASE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> SCRAP_KEEPER_INCREMENTAL_KEEP_SCRAP_CHANCE_INCREASE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> PARTICLE_INFUSER_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> PARTICLE_INFUSER_OVERRIDE_NAME {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> PARTICLE_INFUSER_INITIAL_TELEPORT_SPEED_INCREASE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> PARTICLE_INFUSER_INCREMENTAL_TELEPORT_SPEED_INCREASE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> SILVER_BULLETS_OVERRIDE_NAME {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> FUSION_MATTER_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> FUSION_MATTER_OVERRIDE_NAME {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> FUSION_MATTER_ITEM_TIERS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> LONG_BARREL_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> LONG_BARREL_OVERRIDE_NAME { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> LONG_BARREL_INITIAL_SHOTGUN_RANGE_INCREASE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> LONG_BARREL_INCREMENTAL_SHOTGUN_RANGE_INCREASE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> HOLLOW_POINT_PRICES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> HOLLOW_POINT_OVERRIDE_NAME {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> HOLLOW_POINT_INITIAL_SHOTGUN_DAMAGE_INCREASE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> HOLLOW_POINT_INCREMENTAL_SHOTGUN_DAMAGE_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SICK_BEATS_APPLY_STAMINA_CONSUMPTION { get; set; }
         [field: SyncedEntryField] public SyncedEntry<Interns.TeleportRestriction> INTERNS_TELEPORT_RESTRICTION {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> JETPACK_THRUSTERS_PRICES {  get; set; }
@@ -485,6 +520,12 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_APPARATICE_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> ITEM_PROGRESSION_NO_PURCHASE_UPGRADES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> SCRAP_KEEPER_ITEM_PROGRESSION_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> PARTICLE_INFUSER_ITEM_PROGRESSION_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> SILVER_BULLETS_ITEM_PROGRESSION_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> FUSION_MATTER_ITEM_PROGRESSION_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> LONG_BARREL_ITEM_PROGRESSION_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> HOLLOW_POINT_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> JETPACK_THRUSTERS_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> JET_FUEL_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> QUICK_HANDS_ITEM_PROGRESSION_ITEMS {  get; set; }
@@ -589,6 +630,12 @@ namespace MoreShipUpgrades.Misc
 
             topSection = LguConstants.OVERRIDE_NAMES_SECTION;
             OVERRIDE_UPGRADE_NAMES              = cfg.BindSyncedEntry(topSection, LguConstants.OVERRIDE_NAMES_ENABLED_KEY, LguConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LguConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
+            SCRAP_KEEPER_OVERRIDE_NAME          = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_KEEPER_OVERRIDE_NAME_KEY, ScrapKeeper.UPGRADE_NAME);
+            PARTICLE_INFUSER_OVERRIDE_NAME      = cfg.BindSyncedEntry(topSection, LguConstants.PARTICLE_INFUSER_OVERRIDE_NAME_KEY, ParticleInfuser.UPGRADE_NAME);
+            SILVER_BULLETS_OVERRIDE_NAME        = cfg.BindSyncedEntry(topSection, LguConstants.SILVER_BULLETS_OVERRIDE_NAME_KEY, SilverBullets.UPGRADE_NAME);
+            FUSION_MATTER_OVERRIDE_NAME         = cfg.BindSyncedEntry(topSection, LguConstants.FUSION_MATTER_OVERRIDE_NAME_KEY, FusionMatter.UPGRADE_NAME);
+            LONG_BARREL_OVERRIDE_NAME           = cfg.BindSyncedEntry(topSection, LguConstants.LONG_BARREL_OVERRIDE_NAME_KEY, LongBarrel.UPGRADE_NAME);
+            HOLLOW_POINT_OVERRIDE_NAME          = cfg.BindSyncedEntry(topSection, LguConstants.HOLLOW_POINT_OVERRIDE_NAME_KEY, HollowPoint.UPGRADE_NAME);
             JETPACK_THRUSTERS_OVERRIDE_NAME     = cfg.BindSyncedEntry(topSection, LguConstants.JETPACK_THRUSTERS_OVERRIDE_NAME_KEY, JetpackThrusters.UPGRADE_NAME);
             JET_FUEL_OVERRIDE_NAME              = cfg.BindSyncedEntry(topSection, LguConstants.JET_FUEL_OVERRIDE_NAME_KEY, JetFuel.UPGRADE_NAME);
             QUICK_HANDS_OVERRIDE_NAME           = cfg.BindSyncedEntry(topSection, LguConstants.QUICK_HANDS_OVERRIDE_NAME_KEY, QuickHands.UPGRADE_NAME);
@@ -686,6 +733,77 @@ namespace MoreShipUpgrades.Misc
             #endregion
 
             #region Upgrades
+
+            #region Scrap Keeper
+
+            topSection = ScrapKeeper.UPGRADE_NAME;
+            SCRAP_KEEPER_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_KEEPER_ENABLED_KEY, LguConstants.SCRAP_KEEPER_ENABLED_DEFAULT, LguConstants.SCRAP_KEEPER_ENABLED_DESCRIPTION);
+            SCRAP_KEEPER_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_KEEPER_PRICE_KEY, LguConstants.SCRAP_KEEPER_PRICE_DEFAULT);
+            SCRAP_KEEPER_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, ScrapKeeper.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
+            SCRAP_KEEPER_INITIAL_KEEP_SCRAP_CHANCE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_KEEPER_INITIAL_KEEP_SCRAP_CHANCE_INCREASE_KEY, LguConstants.SCRAP_KEEPER_INITIAL_KEEP_SCRAP_CHANCE_INCREASE_DEFAULT, LguConstants.SCRAP_KEEPER_INITIAL_KEEP_SCRAP_CHANCE_INCREASE_DESCRIPTION);
+            SCRAP_KEEPER_INCREMENTAL_KEEP_SCRAP_CHANCE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_KEEPER_INCREMENTAL_KEEP_SCRAP_CHANCE_INCREASE_KEY, LguConstants.SCRAP_KEEPER_INCREMENTAL_KEEP_SCRAP_CHANCE_INCREASE_DEFAULT, LguConstants.SCRAP_KEEPER_INCREMENTAL_KEEP_SCRAP_CHANCE_INCREASE_DESCRIPTION);
+            SCRAP_KEEPER_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
+
+            #region Particle Infuser
+
+            topSection = ParticleInfuser.UPGRADE_NAME;
+            PARTICLE_INFUSER_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.PARTICLE_INFUSER_ENABLED_KEY, LguConstants.PARTICLE_INFUSER_ENABLED_DEFAULT, LguConstants.PARTICLE_INFUSER_ENABLED_DESCRIPTION);
+            PARTICLE_INFUSER_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.PARTICLE_INFUSER_PRICE_KEY, LguConstants.PARTICLE_INFUSER_PRICE_DEFAULT);
+            PARTICLE_INFUSER_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, ParticleInfuser.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
+            PARTICLE_INFUSER_INITIAL_TELEPORT_SPEED_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.PARTICLE_INFUSER_INITIAL_TELEPORT_SPEED_INCREASE_KEY, LguConstants.PARTICLE_INFUSER_INITIAL_TELEPORT_SPEED_INCREASE_DEFAULT, LguConstants.PARTICLE_INFUSER_INITIAL_TELEPORT_SPEED_INCREASE_DESCRIPTION);
+            PARTICLE_INFUSER_INCREMENTAL_TELEPORT_SPEED_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.PARTICLE_INFUSER_INCREMENTAL_TELEPORT_SPEED_INCREASE_KEY, LguConstants.PARTICLE_INFUSER_INCREMENTAL_TELEPORT_SPEED_INCREASE_DEFAULT, LguConstants.PARTICLE_INFUSER_INCREMENTAL_TELEPORT_SPEED_INCREASE_DESCRIPTION);
+            PARTICLE_INFUSER_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
+
+            #region Silver Bullets
+
+            topSection = SilverBullets.UPGRADE_NAME;
+            SILVER_BULLETS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.SILVER_BULLETS_ENABLED_KEY, LguConstants.SILVER_BULLETS_ENABLED_DEFAULT, LguConstants.SILVER_BULLETS_ENABLED_DESCRIPTION);
+            SILVER_BULLETS_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            SILVER_BULLETS_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.SILVER_BULLETS_PRICE_KEY, LguConstants.SILVER_BULLETS_PRICE_DEFAULT);
+            SILVER_BULLETS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
+
+            #region Fusion Matter
+
+            topSection = FusionMatter.UPGRADE_NAME;
+            FUSION_MATTER_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.FUSION_MATTER_ENABLED_KEY, LguConstants.FUSION_MATTER_ENABLED_DEFAULT, LguConstants.FUSION_MATTER_ENABLED_DESCRIPTION);
+            FUSION_MATTER_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.FUSION_MATTER_PRICE_KEY, LguConstants.FUSION_MATTER_PRICE_DEFAULT);
+            FUSION_MATTER_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, FusionMatter.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
+            FUSION_MATTER_ITEM_TIERS = cfg.BindSyncedEntry(topSection, LguConstants.FUSION_MATTER_TIERS_KEY, LguConstants.FUSION_MATTER_TIERS_DEFAULT, LguConstants.FUSION_MATTER_TIERS_DESCRIPTION);
+            FUSION_MATTER_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
+
+            #region Long Barrel
+
+            topSection = LongBarrel.UPGRADE_NAME;
+            LONG_BARREL_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.LONG_BARREL_ENABLED_KEY, LguConstants.LONG_BARREL_ENABLED_DEFAULT, LguConstants.LONG_BARREL_ENABLED_DESCRIPTION);
+            LONG_BARREL_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            LONG_BARREL_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.LONG_BARREL_PRICE_KEY, LguConstants.LONG_BARREL_PRICE_DEFAULT);
+            LONG_BARREL_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, LongBarrel.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
+            LONG_BARREL_INITIAL_SHOTGUN_RANGE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.LONG_BARREL_INITIAL_SHOTGUN_RANGE_INCREASE_KEY, LguConstants.LONG_BARREL_INITIAL_SHOTGUN_RANGE_INCREASE_DEFAULT, LguConstants.LONG_BARREL_INITIAL_SHOTGUN_RANGE_INCREASE_DESCRIPTION);
+            LONG_BARREL_INCREMENTAL_SHOTGUN_RANGE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.LONG_BARREL_INCREMENTAL_SHOTGUN_RANGE_INCREASE_KEY, LguConstants.LONG_BARREL_INCREMENTAL_SHOTGUN_RANGE_INCREASE_DEFAULT, LguConstants.LONG_BARREL_INCREMENTAL_SHOTGUN_RANGE_INCREASE_DESCRIPTION);
+            LONG_BARREL_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
+
+            #region Hollow Point
+
+            topSection = HollowPoint.UPGRADE_NAME;
+            HOLLOW_POINT_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.HOLLOW_POINT_ENABLED_KEY, LguConstants.HOLLOW_POINT_ENABLED_DEFAULT, LguConstants.HOLLOW_POINT_ENABLED_DESCRIPTION);
+            HOLLOW_POINT_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            HOLLOW_POINT_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.HOLLOW_POINT_PRICE_KEY, LguConstants.HOLLOW_POINT_PRICE_DEFAULT);
+            HOLLOW_POINT_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, HollowPoint.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
+            HOLLOW_POINT_INITIAL_SHOTGUN_DAMAGE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.HOLLOW_POINT_INITIAL_SHOTGUN_DAMAGE_INCREASE_KEY, LguConstants.HOLLOW_POINT_INITIAL_SHOTGUN_DAMAGE_INCREASE_DEFAULT, LguConstants.HOLLOW_POINT_INITIAL_SHOTGUN_DAMAGE_INCREASE_DESCRIPTION);
+            HOLLOW_POINT_INCREMENTAL_SHOTGUN_DAMAGE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.HOLLOW_POINT_INCREMENTAL_SHOTGUN_DAMAGE_INCREASE_KEY, LguConstants.HOLLOW_POINT_INCREMENTAL_SHOTGUN_DAMAGE_INCREASE_DEFAULT, LguConstants.HOLLOW_POINT_INCREMENTAL_SHOTGUN_DAMAGE_INCREASE_DESCRIPTION);
+            HOLLOW_POINT_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
 
             #region Jetpack Thrusters
 

@@ -5,6 +5,7 @@ using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items;
 
 namespace MoreShipUpgrades.Patches.RoundComponents
 {
@@ -42,6 +43,20 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_AFFECT_LANDING) return;
 
             StartOfRound.Instance.shipAnimator.speed *= LandingThrusters.GetLandingSpeedMultiplier();
+        }
+
+        [HarmonyPatch(nameof(RoundManager.DespawnPropsAtEndOfRound))]
+        [HarmonyTranspiler]
+        static IEnumerable<CodeInstruction> DespawnPropsAtEndOfRoundTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            FieldInfo IsScrap = typeof(Item).GetField(nameof(Item.isScrap));
+
+            MethodInfo CanKeepScrapBasedOnChance = typeof(ScrapKeeper).GetMethod(nameof(ScrapKeeper.CanKeepScrapBasedOnChance));
+
+            List<CodeInstruction> codes = new(instructions);
+            int index = 0;
+            Tools.FindField(ref index, ref codes, findField: IsScrap, addCode: CanKeepScrapBasedOnChance, andInstruction: true, notInstruction: true);
+            return codes;
         }
     }
 }
