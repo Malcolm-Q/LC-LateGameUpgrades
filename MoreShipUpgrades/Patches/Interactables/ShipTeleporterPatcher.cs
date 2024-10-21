@@ -64,11 +64,6 @@ namespace MoreShipUpgrades.Patches.Interactables
         [HarmonyTranspiler]
         static IEnumerable<CodeInstruction> TeleportPlayerOutWithInverseTeleporterTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            if (GeneralImprovementsCompat.Enabled && GeneralImprovementsCompat.PatchedTeleporter())
-            {
-                Plugin.mls.LogInfo("Skipping teleporter patching due to DropAllHeldItems method being removed.");
-                return instructions;
-            }
             MethodInfo SetPlayerTeleporterId = typeof(ShipTeleporter).GetMethod(nameof(ShipTeleporter.SetPlayerTeleporterId), BindingFlags.Instance | BindingFlags.NonPublic);
             MethodInfo DropAllHeldItems = typeof(PlayerControllerB).GetMethod(nameof(PlayerControllerB.DropAllHeldItems));
 
@@ -83,7 +78,11 @@ namespace MoreShipUpgrades.Patches.Interactables
                 codes.RemoveAt(index);
                 if (setTeleporterIdCodes[setTeleporterIdCodes.Count-1].opcode == OpCodes.Call && (MethodInfo)setTeleporterIdCodes[setTeleporterIdCodes.Count-1].operand == SetPlayerTeleporterId) break;
             }
-            Tools.FindMethod(ref index, ref codes, findMethod: DropAllHeldItems, skip: true);
+            Tools.FindMethod(ref index, ref codes, findMethod: DropAllHeldItems, skip: true, errorMessage: "DropAllHeldItems method went missing.");
+            if (index >= codes.Count)
+            {
+                index -= 2;
+            }
             codes.InsertRange(index + 1, setTeleporterIdCodes);
 
             return codes;

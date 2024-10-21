@@ -78,11 +78,6 @@
       <HintPath>$(LC_PLUGIN_PATH)\DaXcess-LethalCompanyVR\LCVR\LCVR.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <Reference Include="GeneralImprovements">
-      <Publicize>true</Publicize>
-      <HintPath>$(LC_PLUGIN_PATH)\ShaosilGaming-GeneralImprovements\GeneralImprovements.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
     
   </ItemGroup>
   <ItemGroup>

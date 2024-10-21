@@ -156,7 +156,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
                 player.thisPlayerModelLOD1.enabled = true;
                 player.thisPlayerModelLOD2.enabled = true;
             }
-            recentlyInterned.Add(player);
+            if (StartOfRound.Instance.currentLevel.spawnEnemiesAndScrap) recentlyInterned.Add(player);
         }
         internal void RemoveRecentlyInterned(PlayerControllerB player)
         {

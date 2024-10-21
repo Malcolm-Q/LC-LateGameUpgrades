@@ -1,4 +1,11 @@
 <details>
+<summary> 3.10.8 - 2024-10-21 </summary>
+
+- Made a better fix for the teleporter patching due to DropAllHeldItems method being removed from vanilla code.
+- Fixed issue with not being able to teleport players when revived in The Company through Interns.
+
+</details>
+<details>
 <summary> 3.10.7 - 2024-10-21 </summary>
 
 - Fixed issue with teleporter patching due to DropAllHeldItems method being removed from vanilla code.
@@ -8,7 +15,7 @@
 <details>
 <summary> 3.10.6 - 2024-10-20 </summary>
 
-- Hotfixed issue with another mod
+- Hotfixed issue with another modF
 
 </details>
 
