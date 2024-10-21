@@ -1,5 +1,5 @@
 <details>
-<summary> 3.10.7 - 2024-10-20 </summary>
+<summary> 3.10.7 - 2024-10-21 </summary>
 
 - Fixed issue with teleporter patching due to DropAllHeldItems method being removed from vanilla code.
 
