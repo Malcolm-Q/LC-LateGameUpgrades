@@ -1,8 +1,9 @@
-﻿using CustomItemBehaviourLibrary.Misc;
-using GameNetcodeStuff;
+﻿using GameNetcodeStuff;
 using HarmonyLib;
+using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
 using System.Collections.Generic;
@@ -77,7 +78,11 @@ namespace MoreShipUpgrades.Patches.Interactables
                 codes.RemoveAt(index);
                 if (setTeleporterIdCodes[setTeleporterIdCodes.Count-1].opcode == OpCodes.Call && (MethodInfo)setTeleporterIdCodes[setTeleporterIdCodes.Count-1].operand == SetPlayerTeleporterId) break;
             }
-            Tools.FindMethod(ref index, ref codes, findMethod: DropAllHeldItems, skip: true);
+            Tools.FindMethod(ref index, ref codes, findMethod: DropAllHeldItems, skip: true, errorMessage: "DropAllHeldItems method went missing.");
+            if (index >= codes.Count)
+            {
+                index -= 2;
+            }
             codes.InsertRange(index + 1, setTeleporterIdCodes);
 
             return codes;
