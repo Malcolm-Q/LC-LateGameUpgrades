@@ -1512,11 +1512,11 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string QUANTUM_DISRUPTOR_PRICE_KEY = $"Price of {QuantumDisruptor.UPGRADE_NAME} Upgrade";
         internal const int QUANTUM_DISRUPTOR_PRICE_DEFAULT = 1000;
 
-        internal const string QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER_KEY = $"How slower time will go by when unlocking the {QuantumDisruptor.UPGRADE_NAME} upgrade";
-        internal const float QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER_DEFAULT = 0.2f;
+        internal const string QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER_KEY = $"How slower (in %) time will go by when unlocking the {QuantumDisruptor.UPGRADE_NAME} upgrade";
+        internal const int QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER_DEFAULT = 20;
 
-        internal const string QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER_KEY = $"How slower time will go by when incrementing the {QuantumDisruptor.UPGRADE_NAME} level";
-        internal const float QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER_DEFAULT = 0.1f;
+        internal const string QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER_KEY = $"How slower (in %) time will go by when incrementing the {QuantumDisruptor.UPGRADE_NAME} level";
+        internal const int QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER_DEFAULT = 10;
 
         internal const string QUANTUM_DISRUPTOR_UPGRADE_MODE_KEY = $"Mode of {QuantumDisruptor.UPGRADE_NAME}";
         internal const QuantumDisruptor.UpgradeModes QUANTUM_DISRUPTOR_UPGRADE_MODE_DEFAULT = QuantumDisruptor.UpgradeModes.SlowdownTime;

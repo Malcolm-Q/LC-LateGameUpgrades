@@ -115,7 +115,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             if (CurrentMode != UpgradeModes.SlowdownTime) return defaultValue;
 
-            float additionalValue = config.QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER + (GetUpgradeLevel(UPGRADE_NAME) * config.QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER);
+            float additionalValue = (config.QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER + (GetUpgradeLevel(UPGRADE_NAME) * config.QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER)) /100f;
             return Mathf.Clamp(defaultValue - (defaultValue*additionalValue), 0.01f, defaultValue);
         }
 
