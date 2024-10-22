@@ -1,4 +1,12 @@
 <details>
+<summary> 3.10.9 - 2024-10-21 </summary>
+
+- Fixed math issue with Quantum Disruptor due to multiplier starting at 1.4 instead of 1.0.
+- Fixed issue with random upgrade seed not being properly loaded when booting up a game lobby.
+
+</details>
+
+<details>
 <summary> 3.10.8 - 2024-10-21 </summary>
 
 - Made a better fix for the teleporter patching due to DropAllHeldItems method being removed from vanilla code.

@@ -8,7 +8,6 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.Cursor;
 using MoreShipUpgrades.UI.TerminalNodes;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +26,7 @@ namespace MoreShipUpgrades.UI.Application
         }
         public override void Initialization()
         {
-            CustomTerminalNode[] filteredNodes = UpgradeBus.Instance.terminalNodes.Where(x => x.Visible && (x.UnlockPrice > 0 || x.OriginalName == NightVision.UPGRADE_NAME && x.Prices.Length > 0 && x.Prices[0] != 0)).ToArray();
+            CustomTerminalNode[] filteredNodes = UpgradeBus.Instance.terminalNodes.Where(x => x.Visible && x.UnlockPrice > 0).ToArray();
 
             if (filteredNodes.Length == 0)
             {
