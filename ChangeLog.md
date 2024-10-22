@@ -23,7 +23,7 @@
 <details>
 <summary> 3.10.6 - 2024-10-20 </summary>
 
-- Hotfixed issue with another modF
+- Hotfixed issue with another mod.
 
 </details>
 
