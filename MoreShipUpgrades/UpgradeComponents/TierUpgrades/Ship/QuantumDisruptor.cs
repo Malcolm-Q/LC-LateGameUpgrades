@@ -116,7 +116,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
             if (CurrentMode != UpgradeModes.SlowdownTime) return defaultValue;
 
             float additionalValue = config.QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER + (GetUpgradeLevel(UPGRADE_NAME) * config.QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER);
-            return Mathf.Clamp(defaultValue - additionalValue, 0.01f, defaultValue);
+            return Mathf.Clamp(defaultValue - (defaultValue*additionalValue), 0.01f, defaultValue);
         }
 
         string GetQuantumDisruptorRevertInfo(int level, int price)
