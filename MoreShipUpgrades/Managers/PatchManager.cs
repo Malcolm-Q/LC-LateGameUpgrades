@@ -41,6 +41,12 @@ namespace MoreShipUpgrades.Managers
                 harmony.PatchAll(typeof(VRControllerPatcher));
                 Plugin.mls.LogInfo("Patched Lethal Company Virtual Reality mod related components for correct behaviour on Back Muscles upgrade in relation to player's weight. If any issues arise related to the weight mechanic when both LGU and Lethal Company Virtual Reality mods are present, report to LGU first.");
             }
+            if (ShipInventoryCompat.Enabled)
+            {
+                Plugin.mls.LogInfo("Ship Inventory mod has been detected. Proceeding to patch...");
+                harmony.PatchAll(typeof(RoundManagerPatchesPatcher));
+                Plugin.mls.LogInfo("Patched ShipInventory mod related components for correct behaviour on Scrap Keeper in relation of keeping items in the chute based on chance. If any issues arise related to the item chute being cleared on team wipe when both LGU and ShipInventory mods are present, report to LGU first.");
+            }
         }
         static void PatchEnemies()
         {
