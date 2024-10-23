@@ -381,14 +381,5 @@ namespace MoreShipUpgrades.Managers
         {
             if (!UpgradeBus.Instance.discoveredItems.Contains(scrapName)) UpgradeBus.Instance.discoveredItems.Add(scrapName);
         }
-
-        internal static void Save()
-        {
-            LguSave save = LguStore.Instance.LguSave;
-            save.scrapToUpgrade = UpgradeBus.Instance.scrapToCollectionUpgrade;
-            save.contributedValues = UpgradeBus.Instance.contributionValues;
-            save.discoveredItems = UpgradeBus.Instance.discoveredItems;
-            LguStore.Instance.LguSave = save;
-        }
     }
 }

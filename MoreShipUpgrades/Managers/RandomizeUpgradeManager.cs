@@ -6,7 +6,6 @@ namespace MoreShipUpgrades.Managers
 {
     public static class RandomizeUpgradeManager
     {
-        static int randomUpgradeSeed;
         static int visibleNodes = 0;
         public enum RandomizeUpgradeEvents
         {
@@ -51,7 +50,7 @@ namespace MoreShipUpgrades.Managers
         internal static void RandomizeUpgrades()
         {
             if (!IsRandomizedEnabled) return;
-            RandomizeUpgrades(randomUpgradeSeed);
+            RandomizeUpgrades(UpgradeBus.Instance.randomUpgradeSeed);
         }
 
         internal static void RandomizeUpgrades(RandomizeUpgradeEvents triggeredEvent)
@@ -103,24 +102,19 @@ namespace MoreShipUpgrades.Managers
         {
             if (seed == 0)
             {
-                randomUpgradeSeed = new Random().Next();
+                Plugin.mls.LogInfo("Random upgrades seed wasn't set, calculating a new seed..");
+                UpgradeBus.Instance.randomUpgradeSeed = new Random().Next();
                 LguStore.Instance.ServerSaveFile();
             }
             else
             {
-                randomUpgradeSeed = seed;
+                UpgradeBus.Instance.randomUpgradeSeed = seed;
             }
         }
 
         internal static int GetRandomUpgradeSeed()
         {
-            return randomUpgradeSeed;
-        }
-        internal static void Save()
-        {
-            LguSave save = LguStore.Instance.LguSave;
-            save.randomUpgradeSeed = randomUpgradeSeed;
-            LguStore.Instance.LguSave = save;
+            return UpgradeBus.Instance.randomUpgradeSeed;
         }
     }
 }

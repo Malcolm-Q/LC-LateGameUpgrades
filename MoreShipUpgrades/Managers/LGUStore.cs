@@ -107,6 +107,7 @@ namespace MoreShipUpgrades.Managers
                 logger.LogInfo($"No save file found for slot {saveNum}. Creating new.");
                 LguSave = new LguSave();
             }
+            RandomizeUpgradeManager.SetRandomUpgradeSeed(LguSave.randomUpgradeSeed);
         }
         /// <summary>
         /// Remote Procedure Call used by clients to notify the server to save everyone's state into the save file
@@ -126,8 +127,7 @@ namespace MoreShipUpgrades.Managers
             LguSave.scrapToUpgrade = UpgradeBus.Instance.scrapToCollectionUpgrade;
             LguSave.contributedValues = UpgradeBus.Instance.contributionValues;
             LguSave.discoveredItems = UpgradeBus.Instance.discoveredItems;
-            ItemProgressionManager.Save();
-            RandomizeUpgradeManager.Save();
+            LguSave.randomUpgradeSeed = RandomizeUpgradeManager.GetRandomUpgradeSeed();
             string json = JsonConvert.SerializeObject(LguSave);
             ES3.Save(key: saveDataKey, value: json, filePath: saveFile);
         }
@@ -420,7 +420,6 @@ namespace MoreShipUpgrades.Managers
                     customNode.Unlocked = true;
                 }
             }
-            RandomizeUpgradeManager.SetRandomUpgradeSeed(LguSave.randomUpgradeSeed);
             RandomizeUpgradeManager.RandomizeUpgrades();
         }
         internal void UpdateUpgrades(CustomTerminalNode node, bool increment = false)
@@ -586,6 +585,7 @@ namespace MoreShipUpgrades.Managers
         public Dictionary<string, List<string>> scrapToUpgrade;
         public Dictionary<string, int> contributedValues;
         public List<string> discoveredItems;
+
         public int randomUpgradeSeed;
     }
 }

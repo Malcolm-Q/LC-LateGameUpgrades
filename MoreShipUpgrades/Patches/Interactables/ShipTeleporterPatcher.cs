@@ -81,7 +81,7 @@ namespace MoreShipUpgrades.Patches.Interactables
             Tools.FindMethod(ref index, ref codes, findMethod: DropAllHeldItems, skip: true, errorMessage: "DropAllHeldItems method went missing.");
             if (index >= codes.Count)
             {
-                index -= 2;
+                return instructions;
             }
             codes.InsertRange(index + 1, setTeleporterIdCodes);
 

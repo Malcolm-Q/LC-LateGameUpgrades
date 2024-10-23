@@ -33,6 +33,7 @@ namespace MoreShipUpgrades.Managers
         internal Dictionary<string, List<string>> scrapToCollectionUpgrade = [];
         internal Dictionary<string, int> contributionValues = [];
         internal List<string> discoveredItems = [];
+        internal int randomUpgradeSeed;
         internal Dictionary<string, float> SaleData = [];
 
         internal AudioClip flashNoise;

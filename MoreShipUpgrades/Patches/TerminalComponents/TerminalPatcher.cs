@@ -41,9 +41,10 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
             MethodInfo guaranteedMinimumSale = typeof(MarketInfluence).GetMethod(nameof(MarketInfluence.GetGuaranteedPercentageSale));
             List<CodeInstruction> codes = new(instructions);
             int index = 0;
-            Tools.FindInteger(ref index, ref codes, -10, addCode: lethalDealsGuaranteedItems, errorMessage: "Couldn't find negative value representing no sales");
+            Tools.FindInteger(ref index, ref codes, -10, addCode: lethalDealsGuaranteedItems, errorMessage: "Couldn't find first negative value representing no sales");
             Tools.FindInteger(ref index, ref codes, 5, addCode: bargainConnectionsAmount, errorMessage: "Couldn't find first maximum amount of items to go on sale");
-            Tools.FindInteger(ref index, ref codes, 5, addCode: bargainConnectionsAmount, errorMessage: "Couldn't find second maximum amount of items to go on sale");
+            Tools.FindInteger(ref index, ref codes, -2, addCode: lethalDealsGuaranteedItems, errorMessage: "Couldn't find second negative value representing no sales");
+            Tools.FindInteger(ref index, ref codes, 9, addCode: bargainConnectionsAmount, errorMessage: "Couldn't find second maximum amount of items to go on sale");
             Tools.FindInteger(ref index, ref codes, findValue: 0, skip: true);
             Tools.FindInteger(ref index, ref codes, findValue: 0, skip: true);
             Tools.FindInteger(ref index, ref codes, findValue: 0, skip: true);
@@ -52,7 +53,7 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
             Tools.FindInteger(ref index, ref codes, findValue: 0, skip: true);
             Tools.FindInteger(ref index, ref codes, findValue: 0, skip: true);
             Tools.FindInteger(ref index, ref codes, 0, addCode: guaranteedMinimumSale, errorMessage: "Couldn't find minimum sale percentage");
-            codes.Insert(index, new CodeInstruction(OpCodes.Ldloc_S, 4));
+            codes.Insert(index, new CodeInstruction(OpCodes.Ldloc_S, 7));
             return codes;
         }
         [HarmonyTranspiler]
