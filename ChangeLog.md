@@ -1,4 +1,10 @@
 <details>
+<summary> 3.10.10 - 2024-10-23 </summary>
+
+- Fixed Quantum showing values times 100 instead of their normal values.
+
+</details>
+<details>
 <summary> 3.10.9 - 2024-10-23 </summary>
 
 - Fixed math issue with Quantum Disruptor due to multiplier starting at 1.4 instead of 1.0.

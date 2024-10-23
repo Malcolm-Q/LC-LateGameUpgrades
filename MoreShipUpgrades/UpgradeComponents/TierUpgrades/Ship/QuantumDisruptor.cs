@@ -156,7 +156,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
                         static float infoFunction(int level)
                         {
                             LategameConfiguration config = GetConfiguration();
-                            return (config.QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER.Value + (level * config.QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER.Value)) * 100f;
+                            return (config.QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER.Value + (level * config.QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER.Value));
                         }
                         const string infoFormat = "LVL {0} - ${1} - Decreases the landed moon's rotation force (time passing) by {2}%\n";
                         return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
