@@ -1,8 +1,10 @@
 <details>
-<summary> 3.10.9 - 2024-10-21 </summary>
+<summary> 3.10.9 - 2024-10-23 </summary>
 
 - Fixed math issue with Quantum Disruptor due to multiplier starting at 1.4 instead of 1.0.
+  - Configuration was changed to consider percentage instead of raw multiplier.
 - Fixed issue with random upgrade seed not being properly loaded when booting up a game lobby.
+- Fixed issue with v65 game release due to sales being changed.
 
 </details>
 
