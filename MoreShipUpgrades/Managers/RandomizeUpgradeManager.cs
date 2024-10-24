@@ -93,7 +93,7 @@ namespace MoreShipUpgrades.Managers
             visibleNodes = 0;
             foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
             {
-                node.Visible = !IsRandomizedEnabled || (node.Unlocked && (node.OriginalName != NightVision.UPGRADE_NAME || node.CurrentUpgrade > 0) && AlwaysShowPurchased);
+                node.Visible = !IsRandomizedEnabled || (node.Unlocked && AlwaysShowPurchased);
                 if (node.Visible) visibleNodes++;
             }
         }
