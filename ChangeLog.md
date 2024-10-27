@@ -1,10 +1,11 @@
 <details>
-<summary> 3.10.10 - 2024-10-23 </summary>
+<summary> 3.10.10 - 2024-10-27 </summary>
 
 - Fixed Quantum showing values times 100 instead of their normal values.
 - Fixed Particle Infuser being disabled leading to incorrect behaviour.
 - Fixed Night Vision Goggles not showing a scan node.
 - Fixed NV Headset upgrade not being shown when purchased in Randomize Upgrades mode on.
+- Fixed issue with upgrades not shown when configured first tier free and remaining with a price.
 - Made Scrap Keeper affect items stored in the chute from [ShipInventory](https://thunderstore.io/c/lethal-company/p/WarperSan/ShipInventory/)
 
 </details>
