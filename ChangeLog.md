@@ -1,4 +1,11 @@
 <details>
+<summary> 3.10.11 - 2024-10-27 </summary>
+
+- Hotfixed issue with patching
+
+</details>
+
+<details>
 <summary> 3.10.10 - 2024-10-27 </summary>
 
 - Fixed Quantum showing values times 100 instead of their normal values.
