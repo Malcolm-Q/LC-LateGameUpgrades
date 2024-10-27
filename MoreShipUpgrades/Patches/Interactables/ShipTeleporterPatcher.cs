@@ -19,6 +19,7 @@ namespace MoreShipUpgrades.Patches.Interactables
         [HarmonyPostfix]
         static void PressButtonEffectsPostfix(ShipTeleporter __instance)
         {
+            if (!UpgradeBus.Instance.PluginConfiguration.PARTICLE_INFUSER_ENABLED) return;
             __instance.teleporterAnimator.speed *= ParticleInfuser.IncreaseTeleportSpeed();
             __instance.shipTeleporterAudio.pitch *= ParticleInfuser.IncreaseTeleportSpeed();
             ParticleInfuser.instance.StartCoroutine(ParticleInfuser.instance.ResetTeleporterSpeed(__instance));

@@ -78,6 +78,11 @@
       <HintPath>$(LC_PLUGIN_PATH)\DaXcess-LethalCompanyVR\LCVR\LCVR.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <Reference Include="ShipInventory">
+      <Publicize>true</Publicize>
+      <HintPath>$(LC_PLUGIN_PATH)\WarperSan-ShipInventory\ShipInventory.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
     
   </ItemGroup>
   <ItemGroup>

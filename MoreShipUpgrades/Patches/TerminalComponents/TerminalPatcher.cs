@@ -1,5 +1,4 @@
-﻿using CSync.Lib;
-using HarmonyLib;
+﻿using HarmonyLib;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.Patches.Items;
