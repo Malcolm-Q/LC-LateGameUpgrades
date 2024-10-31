@@ -1,4 +1,11 @@
 <details>
+<summary> 3.11.0 - 2024-??-?? </summary>
+
+- Implemented tier upgrade which increases the health regeneration cap of the vanilla health regeneration mechanic.
+
+</details>
+
+<details>
 <summary> 3.10.11 - 2024-10-27 </summary>
 
 - Hotfixed issue with patching

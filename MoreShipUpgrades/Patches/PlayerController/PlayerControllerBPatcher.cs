@@ -229,6 +229,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             MethodInfo sickBeatsDrainMethod = typeof(SickBeats).GetMethod(nameof(SickBeats.ApplyPossibleDecreasedStaminaDrain));
             MethodInfo additionalSprintTime = typeof(BiggerLungs).GetMethod(nameof(BiggerLungs.GetAdditionalStaminaTime));
             MethodInfo backMusclesStaminaWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreaseStrain));
+            MethodInfo medicalNanobotsHealthRegenMethod = typeof(MedicalNanobots).GetMethod(nameof(MedicalNanobots.GetIncreasedHealthRegeneration));
 
             FieldInfo sprintTime = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.sprintTime));
             FieldInfo carryWeight = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.carryWeight));
@@ -246,6 +247,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             Tools.FindField(ref index, ref codes, findField: sprintTime, addCode: additionalSprintTime, errorMessage: "Couldn't find the fourth occurence of sprintTime field");
             Tools.FindMul(ref index, ref codes, addCode: biggerLungsRegenMethod, errorMessage: "Couldn't find second mul instruction to include our regen method from Bigger Lungs");
             codes.Insert(index + 1, new CodeInstruction(OpCodes.Call, sickBeatsRegenMethod));
+            Tools.FindInteger(ref index, ref codes, findValue: 20, addCode: medicalNanobotsHealthRegenMethod, errorMessage: "Couldn't find the value used to represent the maximum health regenerable");
             return codes;
         }
 

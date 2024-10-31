@@ -202,6 +202,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string OVERRIDE_NAME_KEY_FORMAT = "Alternative name for {0} upgrade";
 
+        internal static readonly string MEDICAL_NANOBOTS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, MedicalNanobots.UPGRADE_NAME);
         internal static readonly string SCRAP_KEEPER_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ScrapKeeper.UPGRADE_NAME);
         internal static readonly string PARTICLE_INFUSER_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, ParticleInfuser.UPGRADE_NAME);
         internal static readonly string SILVER_BULLETS_OVERRIDE_NAME_KEY = string.Format(OVERRIDE_NAME_KEY_FORMAT, SilverBullets.UPGRADE_NAME);
@@ -384,6 +385,24 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+        #region Medical Nanobots
+
+        internal const string MEDICAL_NANOBOTS_ENABLED_KEY = $"Enable {MedicalNanobots.UPGRADE_NAME} Upgrade";
+        internal const bool MEDICAL_NANOBOTS_ENABLED_DEFAULT = true;
+        internal const string MEDICAL_NANOBOTS_ENABLED_DESCRIPTION = "Tier upgrade which increases the health regeneration cap amount.";
+
+        internal const string MEDICAL_NANOBOTS_PRICE_KEY = $"Price of {MedicalNanobots.UPGRADE_NAME} Upgrade";
+        internal const int MEDICAL_NANOBOTS_PRICE_DEFAULT = 300;
+
+        internal const string MEDICAL_NANOBOTS_INITIAL_HEALTH_REGEN_CAP_INCREASE_KEY = "Initial Health Regeneration Cap Increase";
+        internal const int MEDICAL_NANOBOTS_INITIAL_HEALTH_REGEN_CAP_INCREASE_DEFAULT = 50;
+        internal const string MEDICAL_NANOBOTS_INITIAL_HEALTH_REGEN_CAP_INCREASE_DESCRIPTION = "Initial percentage increase of the health regeneration cap when first purchasing the upgrade.";
+
+        internal const string MEDICAL_NANOBOTS_INCREMENTAL_HEALTH_REGEN_CAP_INCREASE_KEY = "Incremental Health Regeneration Cap Increase";
+        internal const int MEDICAL_NANOBOTS_INCREMENTAL_HEALTH_REGEN_CAP_INCREASE_DEFAULT = 50;
+        internal const string MEDICAL_NANOBOTS_INCREMENTAL_HEALTH_REGEN_CAP_INCREASE_DESCRIPTION = "Incremental percentage increase of the health regeneration cap when purchasing further levels of the upgrade";
+
+        #endregion
 
         #region Scrap Keeper
 
