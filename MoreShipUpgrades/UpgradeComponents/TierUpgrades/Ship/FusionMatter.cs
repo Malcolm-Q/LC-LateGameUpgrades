@@ -5,6 +5,7 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,10 +13,20 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
 {
-    internal class FusionMatter: TierUpgrade
+    internal class FusionMatter: TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Fusion Matter";
         internal const string DEFAULT_PRICES = "650, 700";
+        internal const string WORLD_BUILDING_TEXT = "\n\nBy default, the Ship's onboard Teleporter system is configured not to bring any objects along with it..." +
+            " but isn't it kind of strange how you don't arrive naked anytime you use the Teleporter? As it turns out, this limitation is imposed and not inherent." +
+            " By requesting & signing a handful of certain liability waivers by their technical names and paying forward a series of fees," +
+            " you can expand the capabilities of your Ship's Teleporter. The Teleporter can still only safely transport Company-issued equipment," +
+            " since the rough dimensions of these objects are well-documented. The same cannot be said for salvage materials.\n\n";
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
 
         static private Dictionary<string, int> levels;
 
