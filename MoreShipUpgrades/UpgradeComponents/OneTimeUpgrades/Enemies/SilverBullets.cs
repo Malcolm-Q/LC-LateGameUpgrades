@@ -2,13 +2,19 @@
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies
 {
-    internal class SilverBullets : OneTimeUpgrade
+    internal class SilverBullets : OneTimeUpgrade, IUpgradeWorldBuilding
     {
         public const string UPGRADE_NAME = "Silver Bullets";
+        internal const string WORLD_BUILDING_TEXT = "\n\nSome things are better left unexplained.\n\n";
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         public override bool CanInitializeOnStart => GetConfiguration().SILVER_BULLETS_PRICE.Value <= 0;
         void Awake()
         {

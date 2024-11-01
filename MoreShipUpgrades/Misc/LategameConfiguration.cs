@@ -35,6 +35,7 @@ namespace MoreShipUpgrades.Misc
     public class LategameConfiguration : SyncedConfig2<LategameConfiguration>
     {
         #region Enabled
+        [field: SyncedEntryField] public SyncedEntry<bool> EFFECTIVE_BANDAIDS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> MEDICAL_NANOBOTS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SCRAP_KEEPER_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> PARTICLE_INFUSER_ENABLED {  get; set; }
@@ -91,6 +92,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Individual
+        [field: SyncedEntryField] public SyncedEntry<bool> EFFECTIVE_BANDAIDS_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> MEDICAL_NANOBOTS_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SILVER_BULLETS_INDIVIDUAL {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> LONG_BARREL_INDIVIDUAL {  get; set; }
@@ -129,6 +131,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Initial Prices
+        [field: SyncedEntryField] public SyncedEntry<int> EFFECTIVE_BANDAIDS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MEDICAL_NANOBOTS_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SCRAP_KEEPER_PRICE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> PARTICLE_INFUSER_PRICE {  get; set; }
@@ -190,6 +193,10 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<string> EFFECTIVE_BANDAIDS_PRICES { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> EFFECTIVE_BANDAIDS_OVERRIDE_NAME {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> EFFECTIVE_BANDAIDS_INITIAL_HEALTH_REGEN_AMOUNT_INCREASE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> EFFECTIVE_BANDAIDS_INCREMENTAL_HEALTH_REGEN_AMOUNT_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> MEDICAL_NANOBOTS_PRICES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> MEDICAL_NANOBOTS_OVERRIDE_NAME {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MEDICAL_NANOBOTS_INITIAL_HEALTH_REGEN_CAP_INCREASE {  get; set; }
@@ -527,6 +534,7 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_APPARATICE_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> ITEM_PROGRESSION_NO_PURCHASE_UPGRADES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> EFFECTIVE_BANDAIDS_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> MEDICAL_NANOBOTS_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> SCRAP_KEEPER_ITEM_PROGRESSION_ITEMS {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> PARTICLE_INFUSER_ITEM_PROGRESSION_ITEMS {  get; set; }
@@ -638,7 +646,8 @@ namespace MoreShipUpgrades.Misc
 
             topSection = LguConstants.OVERRIDE_NAMES_SECTION;
             OVERRIDE_UPGRADE_NAMES              = cfg.BindSyncedEntry(topSection, LguConstants.OVERRIDE_NAMES_ENABLED_KEY, LguConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LguConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
-            MEDICAL_NANOBOTS_OVERRIDE_NAME    = cfg.BindSyncedEntry(topSection, LguConstants.MEDICAL_NANOBOTS_OVERRIDE_NAME_KEY, MedicalNanobots.UPGRADE_NAME);
+            EFFECTIVE_BANDAIDS_OVERRIDE_NAME    = cfg.BindSyncedEntry(topSection, LguConstants.EFFECTIVE_BANDAIDS_OVERRIDE_NAME_KEY, EffectiveBandaids.UPGRADE_NAME);
+            MEDICAL_NANOBOTS_OVERRIDE_NAME      = cfg.BindSyncedEntry(topSection, LguConstants.MEDICAL_NANOBOTS_OVERRIDE_NAME_KEY, MedicalNanobots.UPGRADE_NAME);
             SCRAP_KEEPER_OVERRIDE_NAME          = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_KEEPER_OVERRIDE_NAME_KEY, ScrapKeeper.UPGRADE_NAME);
             PARTICLE_INFUSER_OVERRIDE_NAME      = cfg.BindSyncedEntry(topSection, LguConstants.PARTICLE_INFUSER_OVERRIDE_NAME_KEY, ParticleInfuser.UPGRADE_NAME);
             SILVER_BULLETS_OVERRIDE_NAME        = cfg.BindSyncedEntry(topSection, LguConstants.SILVER_BULLETS_OVERRIDE_NAME_KEY, SilverBullets.UPGRADE_NAME);
@@ -744,6 +753,19 @@ namespace MoreShipUpgrades.Misc
             #region Upgrades
 
             #region Effective Bandaids
+
+            topSection = EffectiveBandaids.UPGRADE_NAME;
+            EFFECTIVE_BANDAIDS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.EFFECTIVE_BANDAIDS_ENABLED_KEY, LguConstants.EFFECTIVE_BANDAIDS_ENABLED_DEFAULT, LguConstants.EFFECTIVE_BANDAIDS_ENABLED_DESCRIPTION);
+            EFFECTIVE_BANDAIDS_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            EFFECTIVE_BANDAIDS_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.EFFECTIVE_BANDAIDS_PRICE_KEY, LguConstants.EFFECTIVE_BANDAIDS_PRICE_DEFAULT);
+            EFFECTIVE_BANDAIDS_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, EffectiveBandaids.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
+            EFFECTIVE_BANDAIDS_INITIAL_HEALTH_REGEN_AMOUNT_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.EFFECTIVE_BANDAIDS_INITIAL_HEALTH_REGEN_AMOUNT_INCREASE_KEY, LguConstants.EFFECTIVE_BANDAIDS_INITIAL_HEALTH_REGEN_AMOUNT_INCREASE_DEFAULT, LguConstants.EFFECTIVE_BANDAIDS_INITIAL_HEALTH_REGEN_AMOUNT_INCREASE_DESCRIPTION);
+            EFFECTIVE_BANDAIDS_INCREMENTAL_HEALTH_REGEN_AMOUNT_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.EFFECTIVE_BANDAIDS_INCREMENTAL_HEALTH_REGEN_AMOUNT_INCREASE_KEY, LguConstants.EFFECTIVE_BANDAIDS_INCREMENTAL_HEALTH_REGEN_AMOUNT_INCREASE_DEFAULT, LguConstants.EFFECTIVE_BANDAIDS_INCREMENTAL_HEALTH_REGEN_AMOUNT_INCREASE_DESCRIPTION);
+            EFFECTIVE_BANDAIDS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+
+            #endregion
+
+            #region Medical Nanobots
 
             topSection = MedicalNanobots.UPGRADE_NAME;
             MEDICAL_NANOBOTS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.MEDICAL_NANOBOTS_ENABLED_KEY, LguConstants.MEDICAL_NANOBOTS_ENABLED_DEFAULT, LguConstants.MEDICAL_NANOBOTS_ENABLED_DESCRIPTION);
