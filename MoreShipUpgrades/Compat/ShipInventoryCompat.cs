@@ -1,11 +1,9 @@
-﻿using CustomItemBehaviourLibrary.Misc;
-using HarmonyLib;
+﻿using HarmonyLib;
+using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items;
 using ShipInventory.Patches;
-using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
 namespace MoreShipUpgrades.Compat
 {

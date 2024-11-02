@@ -1,4 +1,20 @@
 <details>
+<summary> 3.11.0 - 2024-??-?? </summary>
+
+- Implemented tier upgrade which increases the health regeneration cap of the vanilla health regeneration mechanic.
+- Implemented tier upgrade which increases the amount of health you regenerate through vanilla health regeneration mechanic.
+- Added world-building text to some upgrades. (Thank you Nat(discordID:twinkula))
+
+</details>
+
+<details>
+<summary> 3.10.11 - 2024-10-27 </summary>
+
+- Hotfixed issue with patching
+
+</details>
+
+<details>
 <summary> 3.10.10 - 2024-10-27 </summary>
 
 - Fixed Quantum showing values times 100 instead of their normal values.

@@ -3,19 +3,26 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
-using System;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Collections;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
 {
-    internal class ParticleInfuser : TierUpgrade
+    internal class ParticleInfuser : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Particle Infuser";
         internal const string DEFAULT_PRICES = "400,600";
         internal static ParticleInfuser instance;
+        internal const string WORLD_BUILDING_TEXT = "\n\nThe original spooling process of the Ship's onboard Teleporter is overly long for legal reasons." +
+            " There are several redundant safety checks that must be completed by the Ship's computer before the Teleporter system can fire. Under duress," +
+            " it's actually more important that the Teleporter operates quickly than safely. Health complications will kill your coworker in a matter of months or years," +
+            " but the facility will kill them in a matter of minutes or even seconds. Any amount of timesaving matters.\n\n";
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
