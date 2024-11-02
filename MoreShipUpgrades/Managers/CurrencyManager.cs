@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MoreShipUpgrades.Misc.Util;
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -25,7 +26,7 @@ namespace MoreShipUpgrades.Managers
         public static string GetNewCreditFormat(string format)
         {
             if (!Enabled) return format;
-            return format + $" - {Instance.GetCurrencyAmount()}";
+            return format + $" - {Instance.GetCurrencyAmount()} {LguConstants.ALTERNATIVE_CURRENCY_ALIAS}";
         }
 
         public float GetCreditRatio()
@@ -48,11 +49,17 @@ namespace MoreShipUpgrades.Managers
             currencyAmount = amount;
         }
 
+        [ClientRpc]
+        public void AddCurrencyAmountFromQuotaClientRpc(int quotaFullfilled)
+        {
+            AddCurrencyAmountFromQuota(quotaFullfilled);
+        }
+
         public void AddCurrencyAmountFromQuota(int quota)
         {
             AddCurrencyAmount(GetCurrencyAmountFromQuota(quota));
 
-            HUDManager.Instance.DisplayTip("Player Credits", $"You currently have {GetCurrencyAmount()} player credits to use in the upgrade shop.");
+            HUDManager.Instance.DisplayTip("Player Credits", $"You currently have {GetCurrencyAmount()} {LguConstants.ALTERNATIVE_CURRENCY_ALIAS}s to use in the upgrade shop.");
         }
 
         public void AddCurrencyAmount(int amount)
@@ -68,6 +75,27 @@ namespace MoreShipUpgrades.Managers
         public int GetCurrencyAmount()
         {
             return currencyAmount;
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void TradePlayerCreditsServerRpc(ulong tradingClientId, int playerCreditAmount)
+        {
+            ClientRpcParams clientRpcParams = new ClientRpcParams()
+            {
+                Send = new ClientRpcSendParams
+                {
+                    TargetClientIds = [tradingClientId]
+                }
+            };
+            TradePlayerCreditsClientRpc(playerCreditAmount, clientRpcParams);
+        }
+
+        [ClientRpc]
+        public void TradePlayerCreditsClientRpc(int playerCreditAmount, ClientRpcParams clientRpcParams = default)
+        {
+            AddCurrencyAmount(playerCreditAmount);
+
+            HUDManager.Instance.DisplayTip("Player Credits", $"You have received {playerCreditAmount} {LguConstants.ALTERNATIVE_CURRENCY_ALIAS}s from a player. You currently have {GetCurrencyAmount()} {LguConstants.ALTERNATIVE_CURRENCY_ALIAS}s to use in the upgrade shop.");
         }
     }
 }

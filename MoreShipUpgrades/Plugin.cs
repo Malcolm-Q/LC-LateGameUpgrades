@@ -82,6 +82,8 @@ namespace MoreShipUpgrades
             InputUtilsCompat.Init();
             PatchManager.PatchMainVersion();
 
+            if (config.ALTERNATIVE_CURRENCY_ENABLED)
+                InteractiveTerminalManager.RegisterApplication<TradePlayerCreditsApplication>(["trade", "trade player credits", "lgu trade"], caseSensitive: false);
             InteractiveTerminalManager.RegisterApplication<UpgradeStoreApplication>(["lgu", "lategame store"], caseSensitive: false);
             InteractiveTerminalManager.RegisterApplication<ContractApplication>("contracts", caseSensitive: false);
             if (!config.CONTRACT_PROVIDE_RANDOM_ONLY)

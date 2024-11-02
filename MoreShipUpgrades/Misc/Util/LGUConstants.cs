@@ -1698,6 +1698,12 @@ namespace MoreShipUpgrades.Misc.Util
 
         #endregion
 
+        #region Alternative Currency
+
+        internal const string ALTERNATIVE_CURRENCY_ALIAS = "PC";
+
+        #endregion
+
         #region LGU Store Interactive UI
 
         internal const string COLOR_INITIAL_FORMAT = "<color={0}>";

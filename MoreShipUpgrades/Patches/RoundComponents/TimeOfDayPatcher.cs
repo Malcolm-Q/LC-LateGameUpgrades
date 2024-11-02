@@ -50,10 +50,9 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         [HarmonyPrefix]
         static void SetNewProfitQuotaPrefix(TimeOfDay __instance)
         {
-            CurrencyManager.Instance.AddCurrencyAmountFromQuota(__instance.quotaFulfilled);
-
             if (!__instance.IsHost) return;
 
+            CurrencyManager.Instance.AddCurrencyAmountFromQuotaClientRpc(__instance.quotaFulfilled);
             ItemProgressionManager.CheckNewQuota(__instance.quotaFulfilled);
         }
     }

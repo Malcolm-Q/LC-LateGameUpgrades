@@ -70,11 +70,15 @@ namespace MoreShipUpgrades.UI.Cursor
             if (currencyPrice <= currentPlayerCredits)
             {
                 sb.Append(currencyPrice);
+                sb.Append(LguConstants.WHITE_SPACE);
+                sb.Append(LguConstants.ALTERNATIVE_CURRENCY_ALIAS);
             }
             else
             {
                 sb.Append(string.Format(LguConstants.COLOR_INITIAL_FORMAT, LguConstants.HEXADECIMAL_DARK_RED));
                 sb.Append(currencyPrice);
+                sb.Append(LguConstants.WHITE_SPACE);
+                sb.Append(LguConstants.ALTERNATIVE_CURRENCY_ALIAS);
                 sb.Append(LguConstants.COLOR_FINAL_FORMAT);
             }
         }
