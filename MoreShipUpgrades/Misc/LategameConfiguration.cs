@@ -600,10 +600,25 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<RandomizeUpgradeManager.RandomizeUpgradeEvents> RANDOMIZE_UPGRADES_CHANGE_UPGRADES_EVENT {  get; set; }
         #endregion
 
+        #region Alternative Currency
+
+        [field: SyncedEntryField] public SyncedEntry<bool> ALTERNATIVE_CURRENCY_ENABLED {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> ALTERNATIVE_CURRENCY_CREDITS_TO_CURRENCY_RATIO { get; set; }
+
+        #endregion
+
         #region Configuration Bindings
         public LategameConfiguration(ConfigFile cfg) : base(Metadata.GUID)
         {
             string topSection;
+
+            #region Alternative Currency
+
+            topSection = "_Alternative Currency_";
+            ALTERNATIVE_CURRENCY_ENABLED = cfg.BindSyncedEntry(topSection, "Enable Alternative Currency System", false, "Allows purchasing Lategame Upgrades with another currency other than Company Credits");
+            ALTERNATIVE_CURRENCY_CREDITS_TO_CURRENCY_RATIO = cfg.BindSyncedEntry(topSection, "Credits to Alternative Currency Ratio", 100, "How much a single unit of Alternative Currency is worth in Company Credits");
+
+            #endregion
 
             #region Randomize Upgrades
 

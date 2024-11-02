@@ -372,6 +372,8 @@ namespace MoreShipUpgrades.Managers
             ContractManager.Instance.contractLevel = SaveInfo.contractLevel;
             ContractManager.Instance.contractType = SaveInfo.contractType;
 
+            CurrencyManager.Instance.SetCurrencyAmount(SaveInfo.currencyAmount);
+
             UpgradeBus.Instance.SaleData = SaveInfo.SaleData;
             UpgradeBus.Instance.LoadSales();
 
@@ -567,6 +569,8 @@ namespace MoreShipUpgrades.Managers
 
         public string Version = "V2";
 
+        public int currencyAmount;
+
         public SaveInfo()
         {
             activeUpgrades = new(UpgradeBus.Instance.activeUpgrades);
@@ -575,6 +579,8 @@ namespace MoreShipUpgrades.Managers
 
             contractType = ContractManager.Instance.contractType;
             contractLevel = ContractManager.Instance.contractLevel;
+
+            currencyAmount = CurrencyManager.Instance.GetCurrencyAmount();
         }
     }
 
