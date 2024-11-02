@@ -51,6 +51,8 @@ namespace MoreShipUpgrades.Managers
         public void AddCurrencyAmountFromQuota(int quota)
         {
             AddCurrencyAmount(GetCurrencyAmountFromQuota(quota));
+
+            HUDManager.Instance.DisplayTip("Player Credits", $"You currently have {GetCurrencyAmount()} player credits to use in the upgrade shop.");
         }
 
         public void AddCurrencyAmount(int amount)
