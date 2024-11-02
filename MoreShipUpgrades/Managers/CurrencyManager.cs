@@ -48,6 +48,11 @@ namespace MoreShipUpgrades.Managers
             currencyAmount = amount;
         }
 
+        public void AddCurrencyAmountFromQuota(int quota)
+        {
+            AddCurrencyAmount(GetCurrencyAmountFromQuota(quota));
+        }
+
         public void AddCurrencyAmount(int amount)
         {
             currencyAmount += amount;

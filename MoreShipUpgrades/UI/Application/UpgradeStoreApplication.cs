@@ -298,21 +298,28 @@ namespace MoreShipUpgrades.UI.Application
                 ErrorMessage(node.Name, node.Description, backAction, " ");
                 return;
             }
-            CursorElement[] elements =
+            if (CurrencyManager.Enabled)
             {
-            CursorElement.Create("Purchase with Company Credits", "", () => ConfirmPurchaseUpgrade(node, price, backAction), active: (_) => CanBuyUpgradeWithGroupCredits(node), selectInactive: false),
-            CursorElement.Create("Purchase with Player Credits", "", () => ConfirmPurchaseUpgradeAlternateCurrency(node, price, backAction), active: (_) => CanBuyUpgradeWithPlayerCredits(node), selectInactive: false),
-            CursorElement.Create("Cancel", "", backAction)
-            };
-            CursorMenu cursorMenu = CursorMenu.Create(0, '>', elements);
-            ITextElement[] elements2 =
+                CursorElement[] elements =
+                {
+                CursorElement.Create("Purchase with Company Credits", "", () => ConfirmPurchaseUpgrade(node, price, backAction), active: (_) => CanBuyUpgradeWithGroupCredits(node), selectInactive: false),
+                CursorElement.Create("Purchase with Player Credits", "", () => ConfirmPurchaseUpgradeAlternateCurrency(node, CurrencyManager.Instance.GetCurrencyAmountFromCredits(price), backAction), active: (_) => CanBuyUpgradeWithPlayerCredits(node), selectInactive: false),
+                CursorElement.Create("Cancel", "", backAction)
+                };
+                CursorMenu cursorMenu = CursorMenu.Create(0, '>', elements);
+                ITextElement[] elements2 =
+                {
+                TextElement.Create(node.Description + discoveredItems),
+                TextElement.Create(" "),
+                cursorMenu
+                };
+                IScreen screen = BoxedScreen.Create(node.Name, elements2);
+                SwitchScreen(screen, cursorMenu, previous: false);
+            }
+            else
             {
-            TextElement.Create(node.Description + discoveredItems),
-            TextElement.Create(" "),
-            cursorMenu
-            };
-            IScreen screen = BoxedScreen.Create(node.Name, elements2);
-            SwitchScreen(screen, cursorMenu, previous: false);
+                ConfirmPurchaseUpgrade(node, price, backAction);
+            }
         }
         void ConfirmPurchaseUpgrade(CustomTerminalNode node, int price, Action backAction)
         {
