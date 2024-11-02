@@ -1720,6 +1720,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string NOT_ENOUGH_CREDITS = "You do not have enough credits to purchase this upgrade.";
         internal const string REACHED_MAX_LEVEL = "You have reached the maximum level of this upgrade.";
         internal const string PURCHASE_UPGRADE_FORMAT = "Do you wish to purchase this upgrade for {0} credits?";
+        internal const string PURCHASE_UPGRADE_ALTERNATE_FORMAT = "Do you wish to purchase this upgrade for {0} player credits?";
 
         #endregion
 

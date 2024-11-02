@@ -63,6 +63,20 @@ namespace MoreShipUpgrades.UI.Cursor
                 sb.Append("$");
                 sb.Append(LguConstants.COLOR_FINAL_FORMAT);
             }
+            if (!CurrencyManager.Enabled) return;
+            sb.Append("/");
+            int currencyPrice = CurrencyManager.Instance.GetCurrencyAmountFromCredits(price);
+            int currentPlayerCredits = CurrencyManager.Instance.GetCurrencyAmount();
+            if (currencyPrice <= currentPlayerCredits)
+            {
+                sb.Append(currencyPrice);
+            }
+            else
+            {
+                sb.Append(string.Format(LguConstants.COLOR_INITIAL_FORMAT, LguConstants.HEXADECIMAL_DARK_RED));
+                sb.Append(currencyPrice);
+                sb.Append(LguConstants.COLOR_FINAL_FORMAT);
+            }
         }
 
         void AppendSaleText(ref StringBuilder sb)

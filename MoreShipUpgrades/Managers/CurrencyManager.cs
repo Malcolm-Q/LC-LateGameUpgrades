@@ -9,7 +9,7 @@ namespace MoreShipUpgrades.Managers
         public static CurrencyManager Instance;
         int currencyAmount;
 
-        void Start()
+        void Awake()
         {
             Instance = this;
         }
@@ -35,7 +35,12 @@ namespace MoreShipUpgrades.Managers
 
         public int GetCurrencyAmountFromQuota(int quotaFullfilled)
         {
-            return Mathf.RoundToInt(GetCreditRatio() * quotaFullfilled);
+            return Mathf.RoundToInt(GetCreditRatio() *  quotaFullfilled);
+        }
+
+        public int GetCurrencyAmountFromCredits(int credits)
+        {
+            return Mathf.CeilToInt(GetCreditRatio() * credits);
         }
 
         public void SetCurrencyAmount(int amount)
