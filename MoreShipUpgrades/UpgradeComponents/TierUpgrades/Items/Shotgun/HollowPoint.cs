@@ -3,14 +3,20 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun
 {
-    public class HollowPoint: TierUpgrade
+    public class HollowPoint : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Hollow Point";
         internal const string DEFAULT_PRICES = "800,1000";
+        internal const string WORLD_BUILDING_TEXT = "\n\nBy trading expedition notes and a few ration tickets with another crew during sale, you have acquired a set of instructions on how to make something called 'Cruelty Slugs'. The Company really shouldn't know about these... please keep this to yourselves.\n\n";
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
@@ -71,5 +77,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun
                                                 configuration.OVERRIDE_UPGRADE_NAMES ? configuration.HOLLOW_POINT_OVERRIDE_NAME : "",
                                                 Plugin.networkPrefabs[UPGRADE_NAME]);
         }
+
     }
 }

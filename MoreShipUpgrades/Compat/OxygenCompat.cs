@@ -2,10 +2,8 @@
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using Oxygen.GameObjects;
-using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
 namespace MoreShipUpgrades.Compat
 {

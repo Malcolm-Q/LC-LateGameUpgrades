@@ -3,15 +3,21 @@ using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items
 {
-    public class ScrapKeeper : TierUpgrade
+    public class ScrapKeeper : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Scrap Keeper";
         internal const string PRICES_DEFAULT = "1000,1500,3000";
+        internal const string WORLD_BUILDING_TEXT = "\n\nIn the race to the bottom of all possible operating costs, The Company has made many compromises. Some of these compromises end up being pretty questionable, and it's up to individual departments to handle these problems on their own. There is a design flaw in the standard-issue Company Ship that causes it to empty its contents when it's forced to leave a moon and there is no-one onboard to ensure the doors close at the right time. You'd think this would be a simple fix, but for so many reasons it'd be a waste of both our time to describe, no. No, it very much isn't.\n\n";
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
