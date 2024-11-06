@@ -339,9 +339,11 @@ namespace MoreShipUpgrades.Managers
 
         internal static void InitializeContributionValues()
         {
-            UpgradeBus.Instance.contributionValues.Clear();
             foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
-                UpgradeBus.Instance.contributionValues.Add(node.OriginalName, 0);
+            {
+                if (!UpgradeBus.Instance.contributionValues.ContainsKey(node.OriginalName))
+                    UpgradeBus.Instance.contributionValues.Add(node.OriginalName, 0);
+            }
         }
 
         internal static void SetContributionValue(string key, int value)

@@ -4,6 +4,7 @@
 - Implemented tier upgrade which increases the health regeneration cap of the vanilla health regeneration mechanic.
 - Implemented tier upgrade which increases the amount of health you regenerate through vanilla health regeneration mechanic.
 - Added world-building text to some upgrades. (Thank you Nat(discordID:twinkula))
+- Fixed contribution values from Item Progression mode not being used correctly during save reboot.
 
 </details>
 

@@ -108,6 +108,9 @@ namespace MoreShipUpgrades.Managers
                 LguSave = new LguSave();
             }
             RandomizeUpgradeManager.SetRandomUpgradeSeed(LguSave.randomUpgradeSeed);
+            UpgradeBus.Instance.discoveredItems = LguSave.discoveredItems;
+            UpgradeBus.Instance.contributionValues = LguSave.contributedValues;
+            UpgradeBus.Instance.scrapToCollectionUpgrade = LguSave.scrapToUpgrade;
         }
         /// <summary>
         /// Remote Procedure Call used by clients to notify the server to save everyone's state into the save file
@@ -359,9 +362,6 @@ namespace MoreShipUpgrades.Managers
             }
             UpgradeBus.Instance.activeUpgrades = SaveInfo.activeUpgrades;
             UpgradeBus.Instance.upgradeLevels = SaveInfo.upgradeLevels;
-            UpgradeBus.Instance.discoveredItems = LguSave.discoveredItems;
-            UpgradeBus.Instance.contributionValues = LguSave.contributedValues;
-            UpgradeBus.Instance.scrapToCollectionUpgrade = LguSave.scrapToUpgrade;
 
             if (oldSave != null && oldSave.playerSaves.ContainsKey(playerID))
             {
