@@ -34,14 +34,34 @@ namespace MoreShipUpgrades.Managers
             return 1f / UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_CURRENCY_CREDITS_TO_CURRENCY_RATIO;
         }
 
+        public float GetQuotaRatio()
+        {
+            return 1f / UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_CURRENCY_QUOTA_TO_CURRENCY_RATIO;
+        }
+
+        public float GetCreditConversionRatio()
+        {
+            return 1f / UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_CURRENCY_CONVERSION_CREDITS_TO_CURRENCY_RATIO;
+        }
+
         public int GetCurrencyAmountFromQuota(int quotaFullfilled)
         {
-            return Mathf.RoundToInt(GetCreditRatio() *  quotaFullfilled);
+            return Mathf.RoundToInt(GetQuotaRatio() *  quotaFullfilled);
         }
 
         public int GetCurrencyAmountFromCredits(int credits)
         {
             return Mathf.CeilToInt(GetCreditRatio() * credits);
+        }
+
+        public int GetCurrencyAmountFromCreditsConversion(int convertedCredits)
+        {
+            return Mathf.CeilToInt(GetCreditConversionRatio() * convertedCredits);
+        }
+
+        public int GetCreditsFromCurrencyAmountConversion(int convertedCurrencyAmount)
+        {
+            return Mathf.CeilToInt(convertedCurrencyAmount / GetCreditConversionRatio());
         }
 
         public void SetCurrencyAmount(int amount)
