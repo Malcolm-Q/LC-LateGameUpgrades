@@ -96,7 +96,7 @@ namespace MoreShipUpgrades.Managers
             int contributed = UpgradeBus.Instance.contributionValues[assignedUpgrade.OriginalName];
             int currentPrice = assignedUpgrade.GetCurrentPrice() + contributed;
             contributed += scrapValue;
-            while (contributed >= currentPrice && assignedUpgrade.GetRemainingLevels() > 0)
+            while (contributed >= currentPrice && assignedUpgrade.GetRemainingLevels() > 0 && assignedUpgrade.Visible)
             {
                 RankUpUpgrade(assignedUpgrade);
                 contributed -= currentPrice;
@@ -121,13 +121,13 @@ namespace MoreShipUpgrades.Managers
                 ScanNodeProperties node = scrapItem.GetComponentInChildren<ScanNodeProperties>();
                 if (node == null)
                 {
-                    Plugin.mls.LogWarning($"{scrapName} doesn't have a scan node, skipping...");
+                    Plugin.mls.LogInfo($"{scrapName} doesn't have a scan node, skipping...");
                     return false;
                 }
                 scrapName = node.headerText.ToLower().Trim();
                 if (!collection.ContainsKey(scrapName))
                 {
-                    Plugin.mls.LogWarning($"{scrapName} from Scan Node was not found in the dictionary.");
+                    Plugin.mls.LogInfo($"{scrapName} from Scan Node was not found in the dictionary.");
                     return false;
                 }
             }
@@ -293,6 +293,7 @@ namespace MoreShipUpgrades.Managers
                 selectedNode = possibleNode;
                 return;
             }
+
             switch (CurrentChancePerScrapMode)
             {
                 case ChancePerScrapModes.LowestLevel:
@@ -322,7 +323,7 @@ namespace MoreShipUpgrades.Managers
             {
                 int tries = 0;
                 node = PickRandomUpgrade();
-                while (node.MaxUpgrade <= node.CurrentUpgrade && tries < UpgradeBus.Instance.terminalNodes.Count*2)
+                while ((node.MaxUpgrade <= node.CurrentUpgrade) && tries < UpgradeBus.Instance.terminalNodes.Count*2)
                 {
                     node = PickRandomUpgrade();
                     tries++;

@@ -5,6 +5,7 @@
 - Implemented tier upgrade which increases the amount of health you regenerate through vanilla health regeneration mechanic.
 - Added world-building text to some upgrades. (Thank you Nat(discordID:twinkula))
 - Fixed contribution values from Item Progression mode not being used correctly during save reboot.
+- Item Progression modes of UniqueScrap and CustomScrap will not rank up upgrades hidden from Randomize Upgrades mode.
 
 </details>
 
