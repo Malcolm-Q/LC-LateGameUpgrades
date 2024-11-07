@@ -467,6 +467,7 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<float> BEATS_SPEED_INC { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> BEATS_RADIUS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> BEATS_DMG_INC { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> SICK_BEATS_BOOMBOX_ATTRACT_SOUND {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SNARE_FLEA_SAMPLE_MINIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SNARE_FLEA_SAMPLE_MAXIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> BUNKER_SPIDER_SAMPLE_MINIMUM_VALUE { get; set; }
@@ -1471,6 +1472,7 @@ namespace MoreShipUpgrades.Misc
             BEATS_SPEED_INC = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_ADDITIONAL_SPEED_KEY, LguConstants.SICK_BEATS_ADDITIONAL_SPEED_DEFAULT);
             BEATS_RADIUS = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_EFFECT_RADIUS_KEY, LguConstants.SICK_BEATS_EFFECT_RADIUS_DEFAULT, LguConstants.SICK_BEATS_EFFECT_RADIUS_DESCRIPTION);
             SICK_BEATS_APPLY_STAMINA_CONSUMPTION = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_APPLY_STAMINA_CONSUMPTION_KEY, LguConstants.SICK_BEATS_APPLY_STAMINA_CONSUMPTION_DEFAULT, LguConstants.SICK_BEATS_APPLY_STAMINA_CONSUMPTION_DESCRIPTION);
+            SICK_BEATS_BOOMBOX_ATTRACT_SOUND = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_BOOMBOX_ATTRACT_SOUND_KEY, LguConstants.SICK_BEATS_BOOMBOX_ATTRACT_SOUND_DEFAULT, LguConstants.SICK_BEATS_BOOMBOX_ATTRACT_SOUND_DESCRIPTION);
             SICK_BEATS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion

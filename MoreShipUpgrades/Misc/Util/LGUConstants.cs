@@ -1633,6 +1633,10 @@ namespace MoreShipUpgrades.Misc.Util
         internal const float SICK_BEATS_EFFECT_RADIUS_DEFAULT = 15f;
         internal const string SICK_BEATS_EFFECT_RADIUS_DESCRIPTION = "Radius in unity units players will be effected by an active boombox.";
 
+        internal const string SICK_BEATS_BOOMBOX_ATTRACT_SOUND_KEY = "Boombox Attract Sound Toggle";
+        internal const bool SICK_BEATS_BOOMBOX_ATTRACT_SOUND_DEFAULT = true;
+        internal const string SICK_BEATS_BOOMBOX_ATTRACT_SOUND_DESCRIPTION = "After the upgrade has been purchased, wether the boombox attracts nearby enemies to its location or not";
+
         #endregion
 
         #region Sigurd Access

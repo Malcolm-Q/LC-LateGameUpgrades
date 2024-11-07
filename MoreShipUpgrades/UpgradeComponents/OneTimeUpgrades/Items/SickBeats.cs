@@ -59,6 +59,14 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items
                 Instance.damageBoost = 0;
             }
         }
+        public static float MuteBoomboxToEnemies(float defaultRange)
+        {
+            LategameConfiguration config = GetConfiguration();
+            if (!config.BEATS_ENABLED) return defaultRange;
+            if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultRange;
+            if (config.SICK_BEATS_BOOMBOX_ATTRACT_SOUND) return defaultRange;
+            return 0f;
+        }
         public static float ApplyPossibleIncreasedStaminaRegen(float regenValue)
         {
             if (!GetConfiguration().BEATS_ENABLED.Value) return regenValue;
