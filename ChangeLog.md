@@ -6,6 +6,7 @@
 - Added world-building text to some upgrades. (Thank you Nat(discordID:twinkula))
 - Fixed contribution values from Item Progression mode not being used correctly during save reboot.
 - Item Progression modes of UniqueScrap and CustomScrap will not rank up upgrades hidden from Randomize Upgrades mode.
+- Made Efficient Engines discount price effect also apply on [Lethal Constellations](https://thunderstore.io/c/lethal-company/p/darmuh/LethalConstellations/)'s constellation prices.
 
 </details>
 
