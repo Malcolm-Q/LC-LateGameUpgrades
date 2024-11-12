@@ -22,18 +22,15 @@ namespace MoreShipUpgrades.Compat
 
         static internal void ToggleScanThroughWalls(bool scanThroughWalls)
         {
-            CheatsAPI.noLineOfSightDistance += scanThroughWalls ? (int)UpgradeBus.Instance.PluginConfiguration.NODE_DISTANCE_INCREASE : 0;
+            CheatsAPI.noLineOfSightDistance += scanThroughWalls ? (int)UpgradeBus.Instance.PluginConfiguration.NODE_DISTANCE_INCREASE : -(int)UpgradeBus.Instance.PluginConfiguration.NODE_DISTANCE_INCREASE;
         }
 
         internal static void Reset()
         {
             if (!BaseUpgrade.GetActiveUpgrade(BetterScanner.UPGRADE_NAME)) return;
+            IncreaseScanDistance((int)-UpgradeBus.Instance.PluginConfiguration.NODE_DISTANCE_INCREASE);
+            IncreaseEnemyScanDistance((int)-UpgradeBus.Instance.PluginConfiguration.NODE_DISTANCE_INCREASE);
             int level = BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME);
-            if (level > 0)
-            {
-                IncreaseScanDistance((int)-UpgradeBus.Instance.PluginConfiguration.NODE_DISTANCE_INCREASE);
-                IncreaseEnemyScanDistance((int)-UpgradeBus.Instance.PluginConfiguration.NODE_DISTANCE_INCREASE);
-            }
             if (level == 2)
             {
                 ToggleScanThroughWalls(false);

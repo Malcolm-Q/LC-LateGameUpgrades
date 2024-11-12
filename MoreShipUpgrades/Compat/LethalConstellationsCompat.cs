@@ -26,7 +26,6 @@ namespace MoreShipUpgrades.Compat
         {
             FieldInfo constelPrice = typeof(LethalConstellations.PluginCore.ClassMapper).GetField(nameof(LethalConstellations.PluginCore.ClassMapper.constelPrice));
             MethodInfo efficientEnginesPriceReduction = typeof(EfficientEngines).GetMethod(nameof(EfficientEngines.GetDiscountedMoonPrice));
-
             int index = 0;
             List<CodeInstruction> codes = new(instructions);
 
