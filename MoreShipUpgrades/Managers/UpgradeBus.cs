@@ -72,10 +72,6 @@ namespace MoreShipUpgrades.Managers
         public void ResetAllValues(bool wipeObjRefs = true)
         {
             if (LguStore.Instance == null) return; // Quitting the game
-            if (GoodItemScanCompat.Enabled)
-            {
-                GoodItemScanCompat.Reset();
-            }
             ResetPlayerAttributes();
 
             if (PluginConfiguration.BEATS_ENABLED.Value) SickBeats.Instance.EffectsActive = false;
