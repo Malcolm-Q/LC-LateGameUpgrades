@@ -354,7 +354,7 @@ namespace MoreShipUpgrades.Managers
         }
         internal static int GetCurrentContribution(CustomTerminalNode node)
         {
-            return UpgradeBus.Instance.contributionValues[node.OriginalName];
+            return UpgradeBus.Instance.contributionValues.GetValueOrDefault(node.OriginalName, 0);
         }
 
         internal static List<string> GetDiscoveredItems(CustomTerminalNode node)

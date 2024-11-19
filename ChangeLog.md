@@ -9,6 +9,7 @@
 - Made Efficient Engines discount price effect also apply on [Lethal Constellations](https://thunderstore.io/c/lethal-company/p/darmuh/LethalConstellations/)'s constellation prices.
 - Added configuration for Sick Beats to make the boombox music not attract nearby enemies when purchased.
 - Fixed issue with GoodItemScan Compat with wrong logic being applied.
+- Fixed issue with Item Progression leading to upgrades not having a contribution value assigned to them.
 
 </details>
 

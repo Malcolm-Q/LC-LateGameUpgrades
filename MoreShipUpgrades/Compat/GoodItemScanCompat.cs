@@ -1,7 +1,5 @@
 ﻿using GoodItemScan;
 using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc.Upgrades;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 
 namespace MoreShipUpgrades.Compat
 {
