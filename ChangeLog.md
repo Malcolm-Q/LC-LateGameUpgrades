@@ -12,6 +12,7 @@
   - It checks both the internal names stored in its data or the header text shown in the scan node for equality in the blacklist.
 - Fixed issue with GoodItemScan Compat with wrong logic being applied.
 - Fixed issue with Item Progression leading to upgrades not having a contribution value assigned to them.
+- Fixed issue with Contract objects showing radar icons even when they are destroyed.
 
 </details>
 

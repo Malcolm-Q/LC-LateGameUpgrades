@@ -1,5 +1,4 @@
 ﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Util;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +15,11 @@ namespace MoreShipUpgrades.UpgradeComponents.Contracts
         {
             if (ContractManager.Instance.contractType != contractType || StartOfRound.Instance.currentLevel.PlanetName != ContractManager.Instance.contractLevel)
             {
+                GrabbableObject grabbableObject = GetComponent<GrabbableObject>();
+                if (grabbableObject != null && grabbableObject.radarIcon != null)
+                {
+                    Destroy(grabbableObject.radarIcon);
+                }
                 gameObject.SetActive(false);
                 Destroy(gameObject);
                 return;
