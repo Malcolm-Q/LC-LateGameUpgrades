@@ -154,7 +154,7 @@ namespace MoreShipUpgrades.Managers
         public void HandleSpawns()
         {
             int i = 0;
-            foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
+            foreach (CustomTerminalNode node in UpgradeBus.GetUpgradeNodes())
             {
                 i++;
                 GameObject go = Instantiate(node.Prefab, Vector3.zero, Quaternion.identity);
@@ -406,7 +406,7 @@ namespace MoreShipUpgrades.Managers
         {
             yield return new WaitForSeconds(4f);
             logger.LogInfo("Applying loaded upgrades...");
-            foreach (CustomTerminalNode customNode in UpgradeBus.Instance.terminalNodes)
+            foreach (CustomTerminalNode customNode in UpgradeBus.GetUpgradeNodes())
             {
                 bool activeUpgrade = UpgradeBus.Instance.activeUpgrades.GetValueOrDefault(customNode.OriginalName, false);
                 int upgradeLevel = UpgradeBus.Instance.upgradeLevels.GetValueOrDefault(customNode.OriginalName, 0);
@@ -480,7 +480,7 @@ namespace MoreShipUpgrades.Managers
         public void HandleUpgradeClientRpc(string name, bool increment)
         {
             logger.LogInfo($"Received client request to handle shared upgrade for: {name} increment: {increment}");
-            foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
+            foreach (CustomTerminalNode node in UpgradeBus.GetUpgradeNodes())
                 if (node.OriginalName == name) UpdateUpgrades(node, increment);
         }
         [ClientRpc]
@@ -488,7 +488,7 @@ namespace MoreShipUpgrades.Managers
         {
             if (IsHost) return;
             logger.LogInfo($"Received client request to handle shared upgrade for: {name} increment: {increment}");
-            foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
+            foreach (CustomTerminalNode node in UpgradeBus.GetUpgradeNodes())
                 if (node.OriginalName == name) UpdateUpgrades(node, increment);
         }
 
@@ -504,7 +504,7 @@ namespace MoreShipUpgrades.Managers
             logger.LogInfo($"Generating sales with seed: {seed} on this client...");
             UnityEngine.Random.InitState(seed);
             UpgradeBus.Instance.SaleData = [];
-            foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
+            foreach (CustomTerminalNode node in UpgradeBus.GetUpgradeNodes())
             {
                 if (UnityEngine.Random.value > UpgradeBus.Instance.PluginConfiguration.SALE_PERC.Value)
                 {

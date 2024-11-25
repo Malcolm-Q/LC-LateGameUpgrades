@@ -3,6 +3,7 @@ using InteractiveTerminalAPI.UI.Application;
 using InteractiveTerminalAPI.UI.Cursor;
 using InteractiveTerminalAPI.UI.Page;
 using InteractiveTerminalAPI.UI.Screen;
+using MoreShipUpgrades.API;
 using MoreShipUpgrades.Input;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Util;
@@ -26,7 +27,7 @@ namespace MoreShipUpgrades.UI.Application
         }
         public override void Initialization()
         {
-            CustomTerminalNode[] filteredNodes = UpgradeBus.Instance.terminalNodes.Where(x => x.Visible && (x.UnlockPrice > 0 || x.Prices.Length > 0)).ToArray();
+            CustomTerminalNode[] filteredNodes = UpgradeApi.GetPurchaseableUpgradeNodes().ToArray();
 
             if (filteredNodes.Length == 0)
             {
@@ -258,14 +259,7 @@ namespace MoreShipUpgrades.UI.Application
         {
             terminal.BuyItemsServerRpc([], terminal.groupCredits - price, terminal.numberOfItemsInDropship); // The only vanilla rpc that syncs credits without ownership check
             LguStore.Instance.AddUpgradeSpentCreditsServerRpc(price);
-            if (!node.Unlocked)
-            {
-                LguStore.Instance.HandleUpgrade(node);
-            }
-            else if (node.Unlocked && node.MaxUpgrade > node.CurrentUpgrade)
-            {
-                LguStore.Instance.HandleUpgrade(node, true);
-            }
+            UpgradeApi.TriggerUpgradeRankup(node);
             backAction();
         }
     }

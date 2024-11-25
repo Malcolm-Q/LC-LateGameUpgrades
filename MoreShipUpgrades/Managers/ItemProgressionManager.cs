@@ -1,4 +1,5 @@
-﻿using MoreShipUpgrades.Misc.Upgrades;
+﻿using MoreShipUpgrades.API;
+using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
 using System;
@@ -90,9 +91,14 @@ namespace MoreShipUpgrades.Managers
             LguStore.Instance.HandleUpgradeForNoHostClientRpc(node.OriginalName, node.Unlocked);
             LguStore.Instance.UpdateUpgrades(node, node.Unlocked);
         }
-        static void ContributeTowardsUpgrade(string upgradeName, int scrapValue)
+        internal static void ContributeTowardsUpgrade(string upgradeName, int scrapValue)
         {
-            CustomTerminalNode assignedUpgrade = GetCustomTerminalNode(upgradeName);
+            CustomTerminalNode assignedUpgrade = UpgradeBus.Instance.GetUpgradeNode(upgradeName);
+            ContributeTowardsUpgrade(assignedUpgrade, scrapValue);
+        }
+
+        internal static void ContributeTowardsUpgrade(CustomTerminalNode assignedUpgrade, int scrapValue)
+        {
             int contributed = UpgradeBus.Instance.contributionValues[assignedUpgrade.OriginalName];
             int currentPrice = assignedUpgrade.GetCurrentPrice() + contributed;
             contributed += scrapValue;
@@ -180,7 +186,7 @@ namespace MoreShipUpgrades.Managers
         {
             CustomTerminalNode currentNode = null;
             int currentDelta = int.MaxValue;
-            foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
+            foreach (CustomTerminalNode node in UpgradeBus.GetUpgradeNodes())
             {
                 int price = node.GetCurrentPrice();
                 int delta = fullfilledQuota - price;
@@ -222,7 +228,8 @@ namespace MoreShipUpgrades.Managers
 
         public static CustomTerminalNode PickRandomUpgrade()
         {
-            return UpgradeBus.Instance.terminalNodes[UnityEngine.Random.Range(0, UpgradeBus.Instance.terminalNodes.Count)];
+            List<CustomTerminalNode> upgradeNodes = UpgradeBus.GetUpgradeNodes();
+            return upgradeNodes[UnityEngine.Random.Range(0, upgradeNodes.Count)];
         }
         static void AssignRandomScrap()
         {
@@ -318,12 +325,13 @@ namespace MoreShipUpgrades.Managers
         }
         public static CustomTerminalNode SelectChancePerScrapUpgrade()
         {
+            List<CustomTerminalNode> upgradeNodes = UpgradeBus.GetUpgradeNodes();
             CustomTerminalNode node = null;
             if (CurrentChancePerScrapMode == ChancePerScrapModes.Random)
             {
                 int tries = 0;
                 node = PickRandomUpgrade();
-                while ((node.MaxUpgrade <= node.CurrentUpgrade) && tries < UpgradeBus.Instance.terminalNodes.Count*2)
+                while ((node.MaxUpgrade <= node.CurrentUpgrade) && tries < upgradeNodes.Count*2)
                 {
                     node = PickRandomUpgrade();
                     tries++;
@@ -331,7 +339,7 @@ namespace MoreShipUpgrades.Managers
                 return node;
             }
 
-            foreach (CustomTerminalNode randomNode in UpgradeBus.Instance.terminalNodes)
+            foreach (CustomTerminalNode randomNode in upgradeNodes)
             {
                 SelectTerminalNode(ref node, randomNode);
             }
@@ -340,7 +348,7 @@ namespace MoreShipUpgrades.Managers
 
         internal static void InitializeContributionValues()
         {
-            foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
+            foreach (CustomTerminalNode node in UpgradeBus.GetUpgradeNodes())
             {
                 if (!UpgradeBus.Instance.contributionValues.ContainsKey(node.OriginalName))
                     UpgradeBus.Instance.contributionValues.Add(node.OriginalName, 0);
@@ -371,13 +379,6 @@ namespace MoreShipUpgrades.Managers
                 }
             }
             return result;
-        }
-
-        internal static CustomTerminalNode GetCustomTerminalNode(string name)
-        {
-            foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
-                if (node.OriginalName == name) return node;
-            return null;
         }
 
         internal static void DiscoverScrap(string scrapName)

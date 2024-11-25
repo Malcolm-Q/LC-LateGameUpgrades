@@ -3,6 +3,11 @@
 
 - Implemented tier upgrade which increases the health regeneration cap of the vanilla health regeneration mechanic.
 - Implemented tier upgrade which increases the amount of health you regenerate through vanilla health regeneration mechanic.
+- Implemented API to facilitate modding around LGU's upgrades.
+  - Allows retrieving data related to the upgrades of the session (All, Visible, Purchaseable, Rankable);
+  - Allows requesting triggering upgrade rank up;
+  - Allows contributing towards an upgrade.
+  - Requests require the name of the upgrade (either original or overriden) or the node associated to the upgrade to be considered valid.
 - Added world-building text to some upgrades. (Thank you Nat(discordID:twinkula))
 - Fixed contribution values from Item Progression mode not being used correctly during save reboot.
 - Item Progression modes of UniqueScrap and CustomScrap will not rank up upgrades hidden from Randomize Upgrades mode.

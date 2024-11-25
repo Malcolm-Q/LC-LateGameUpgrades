@@ -46,7 +46,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
                 HUDManager.Instance.chatText.text += "<color=#FF0000>Night vision is already active!</color>";
                 return;
             }
-            if (UpgradeBus.Instance.terminalNodes.First((x) => x.OriginalName == NightVision.UPGRADE_NAME).SharedUpgrade)
+            if (UpgradeBus.GetUpgradeNodes().First((x) => x.OriginalName == NightVision.UPGRADE_NAME).SharedUpgrade)
             {
                 NightVision.Instance.EnableNightVisionServerRpc();
             }

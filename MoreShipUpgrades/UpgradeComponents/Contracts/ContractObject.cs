@@ -26,8 +26,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Contracts
             }
             if (SetPosition && IsHost)
             {
-                // make sure physicsprop is disabled if using this!
-                // and add a networktransform or set up rpcs to do this on client
                 List<EntranceTeleport> mainDoors = FindObjectsOfType<EntranceTeleport>().Where(obj => obj.gameObject.transform.position.y <= -170).ToList();
                 EnemyVent[] vents = FindObjectsOfType<EnemyVent>();
                 EnemyVent spawnVent = null;

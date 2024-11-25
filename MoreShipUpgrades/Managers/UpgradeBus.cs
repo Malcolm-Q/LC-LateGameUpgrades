@@ -115,6 +115,34 @@ namespace MoreShipUpgrades.Managers
             }
         }
 
+        internal CustomTerminalNode GetUpgradeNode(string upgradeName)
+        {
+            foreach (CustomTerminalNode node in terminalNodes)
+            {
+                if (node.OriginalName == upgradeName || node.Name == upgradeName) return node;
+            }
+            return null;
+        }
+
+        internal static bool ContainsUpgradeNode(CustomTerminalNode node)
+        {
+            foreach (CustomTerminalNode loadedNode in Instance.GetTerminalNodes())
+            {
+                if (loadedNode.OriginalName == node.OriginalName && loadedNode.Name == node.Name) return true;
+            }
+            return false;
+        }
+
+        internal List<CustomTerminalNode> GetTerminalNodes()
+        {
+            return terminalNodes;
+        }
+
+        internal static List<CustomTerminalNode> GetUpgradeNodes()
+        {
+            return Instance.GetTerminalNodes();
+        }
+
         internal void LoadSales()
         {
             if(SaleData.Count == 0)
