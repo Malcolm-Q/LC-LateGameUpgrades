@@ -60,6 +60,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
                 EnemyAICollisionDetect component = array[i].GetComponent<EnemyAICollisionDetect>();
                 if (component == null) continue;
                 EnemyAI enemy = component.mainScript;
+                if (IsEnemyBlacklisted(enemy)) continue;
                 if (CanDealDamage())
                 {
                     int forceValue = config.DISCOMBOBULATOR_INITIAL_DAMAGE.Value + (config.DISCOMBOBULATOR_DAMAGE_INCREASE.Value * (GetUpgradeLevel(UPGRADE_NAME) - config.DISCOMBOBULATOR_DAMAGE_LEVEL.Value));
@@ -67,6 +68,27 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
                 }
                 if (!enemy.isEnemyDead) enemy.SetEnemyStunned(true, config.DISCOMBOBULATOR_STUN_DURATION.Value + (config.DISCOMBOBULATOR_INCREMENT.Value * GetUpgradeLevel(UPGRADE_NAME)), null);
             }
+        }
+
+        bool IsEnemyBlacklisted(EnemyAI enemy)
+        {
+            string enemyName = enemy.enemyType.enemyName;
+            string[] blacklistedEnemies = GetConfiguration().DISCOMBOBULATOR_BLACKLIST_ENEMIES.Value.Split(",");
+            if (ContainsEnemyName(enemyName, blacklistedEnemies)) return true;
+            ScanNodeProperties scanNode = enemy.gameObject.GetComponentInChildren<ScanNodeProperties>();
+            if (scanNode == null) return false;
+            enemyName = scanNode.headerText;
+            return ContainsEnemyName(enemyName, blacklistedEnemies);
+        }
+
+        bool ContainsEnemyName(string enemyName, string[] blacklistedEnemies)
+        {
+            for (int i = 0; i < blacklistedEnemies.Length; i++)
+            {
+                string blacklistedEnemy = blacklistedEnemies[i];
+                if (enemyName.Equals(blacklistedEnemy, System.StringComparison.OrdinalIgnoreCase)) return true;
+            }
+            return false;
         }
 
         void PlayAudio(ref Terminal terminal)

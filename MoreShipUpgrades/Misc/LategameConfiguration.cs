@@ -193,6 +193,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<string> DISCOMBOBULATOR_BLACKLIST_ENEMIES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> EFFECTIVE_BANDAIDS_PRICES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> EFFECTIVE_BANDAIDS_OVERRIDE_NAME {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> EFFECTIVE_BANDAIDS_INITIAL_HEALTH_REGEN_AMOUNT_INCREASE {  get; set; }
@@ -1223,6 +1224,7 @@ namespace MoreShipUpgrades.Misc
             DISCOMBOBULATOR_DAMAGE_LEVEL = cfg.BindSyncedEntry(topSection, LguConstants.DISCOMBOBULATOR_APPLY_DAMAGE_LEVEL_KEY, LguConstants.DISCOMBOBULATOR_APPLY_DAMAGE_LEVEL_DEFAULT, LguConstants.DISCOMBOBULATOR_APPLY_DAMAGE_LEVEL_DESCRIPTION);
             DISCOMBOBULATOR_INITIAL_DAMAGE = cfg.BindSyncedEntry(topSection, LguConstants.DISCOMBOBULATOR_INITIAL_DAMAGE_KEY, LguConstants.DISCOMBOBULATOR_INITIAL_DAMAGE_DEFAULT, LguConstants.DISCOMBOBULATOR_INITIAL_DAMAGE_DESCRIPTION);
             DISCOMBOBULATOR_DAMAGE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.DISCOMBOBULATOR_INCREMENTAL_DAMAGE_KEY, LguConstants.DISCOMBOBULATOR_INCREMENTAL_DAMAGE_DEFAULT, LguConstants.DISCOMBOBULATOR_INCREMENTAL_DAMAGE_DESCRIPTION);
+            DISCOMBOBULATOR_BLACKLIST_ENEMIES = cfg.BindSyncedEntry(topSection, "Blacklisted Enemies", "", "Enemies that aren't affected by Discombobulator. Either the internal name (EnemyType.enemyName) or the name shown in the scan node if it has one. Each enemy is separated by a comma (',')");
             DISCOMBOBULATOR_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion

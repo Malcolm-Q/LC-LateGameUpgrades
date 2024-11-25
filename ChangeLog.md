@@ -8,6 +8,8 @@
 - Item Progression modes of UniqueScrap and CustomScrap will not rank up upgrades hidden from Randomize Upgrades mode.
 - Made Efficient Engines discount price effect also apply on [Lethal Constellations](https://thunderstore.io/c/lethal-company/p/darmuh/LethalConstellations/)'s constellation prices.
 - Added configuration for Sick Beats to make the boombox music not attract nearby enemies when purchased.
+- Added configuration for Discombobulator to blacklist enemies from its effect when fired.
+  - It checks both the internal names stored in its data or the header text shown in the scan node for equality in the blacklist.
 - Fixed issue with GoodItemScan Compat with wrong logic being applied.
 - Fixed issue with Item Progression leading to upgrades not having a contribution value assigned to them.
 
