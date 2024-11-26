@@ -18,6 +18,7 @@
 - Fixed issue with GoodItemScan Compat with wrong logic being applied.
 - Fixed issue with Item Progression leading to upgrades not having a contribution value assigned to them.
 - Fixed issue with Contract objects showing radar icons even when they are destroyed.
+- Fixed issue with Fusion Matter ignoring Back Muscles weight reduction when keeping items in your inventory.
 
 </details>
 

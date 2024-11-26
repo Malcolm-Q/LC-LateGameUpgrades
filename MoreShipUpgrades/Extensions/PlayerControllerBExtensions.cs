@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ namespace MoreShipUpgrades.Extensions
             foreach (GrabbableObject grabbableObject in player.ItemSlots)
             {
                 if (grabbableObject == null) continue;
-                weight = Mathf.Clamp(weight + (grabbableObject.itemProperties.weight - 1f), 0f, 10f);
+                weight = Mathf.Clamp(weight + BackMuscles.DecreasePossibleWeight(grabbableObject.itemProperties.weight - 1f), 0f, 10f);
             }
             return weight;
         }
