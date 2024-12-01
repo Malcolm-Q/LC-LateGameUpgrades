@@ -259,6 +259,12 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 
 * __Scrap Keeper - $1000__
     * In case of full team wipe, each scrap has a chance of staying in the ship.
+
+* __Medical Nanobots - $300__
+    * Increases the health regeneration cap of the vanilla health regeneration mechanic.
+    
+* __Effective Bandaids - $250__
+    * Increases the amount of health regenerated from the vanilla health regeneration mechanic. 
     
 ## Item Progression Mode
 
