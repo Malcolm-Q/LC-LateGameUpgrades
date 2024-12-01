@@ -1,5 +1,5 @@
 <details>
-<summary> 3.11.0 - 2024-??-?? </summary>
+<summary> 3.11.0 - 2024-12-01 </summary>
 
 - Implemented tier upgrade which increases the health regeneration cap of the vanilla health regeneration mechanic.
 - Implemented tier upgrade which increases the amount of health you regenerate through vanilla health regeneration mechanic.
