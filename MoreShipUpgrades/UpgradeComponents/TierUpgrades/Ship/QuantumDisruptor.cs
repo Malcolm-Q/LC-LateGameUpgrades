@@ -212,6 +212,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
             if (!Instance.IsHost) return;
             Instance.TryResetValues(mode);
         }
+        [ServerRpc(RequireOwnership = false)]
+        internal void RevertTimeServerRpc()
+        {
+            RevertTimeClientRpc();
+        }
         [ClientRpc]
         internal void RevertTimeClientRpc()
         {

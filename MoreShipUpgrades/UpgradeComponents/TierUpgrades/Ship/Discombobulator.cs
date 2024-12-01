@@ -42,7 +42,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         }
 
         [ClientRpc]
-        private void UseDiscombobulatorClientRpc()
+        internal void UseDiscombobulatorClientRpc()
         {
             Terminal terminal = UpgradeBus.Instance.GetTerminal();
             PlayAudio(ref terminal);
@@ -132,6 +132,16 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
                 string[] prices = config.DISCO_UPGRADE_PRICES.Value.Split(',');
                 return config.DISCOMBOBULATOR_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
             }
+        }
+        [ServerRpc(RequireOwnership = false)]
+        public void SetCooldownServerRpc(float cooldown)
+        {
+            SetCooldownClientRpc(cooldown);
+        }
+        [ClientRpc]
+        public void SetCooldownClientRpc(float cooldown)
+        {
+            flashCooldown = Mathf.Clamp(cooldown, 0f, GetConfiguration().DISCOMBOBULATOR_COOLDOWN);
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {

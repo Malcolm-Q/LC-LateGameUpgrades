@@ -3,11 +3,24 @@
 
 - Implemented tier upgrade which increases the health regeneration cap of the vanilla health regeneration mechanic.
 - Implemented tier upgrade which increases the amount of health you regenerate through vanilla health regeneration mechanic.
-- Implemented API (UpgradeApi) to facilitate modding around LGU's upgrades.
+- Implemented Upgrade API to facilitate modding around LGU's upgrades.
   - Allows retrieving data related to the upgrades of the session (All, Visible, Purchaseable, Rankable);
   - Allows requests of triggering upgrade rank up;
   - Allows requests of contributing towards an upgrade.
   - Requests require the name of the upgrade (either original or overriden) or the node associated to the upgrade to be considered valid.
+- Implemented Discombobulator API to facilitate triggering callbacks to the Discombobulator upgrade.
+  - Allows checking if the discombobulator can be fired to stun nearby enemies.
+  - Allows checking if the Discombobulator upgrade is enabled in the configuration.
+  - Allows requests of firing the Discombobulator mechanic (so long as it is able to fire);
+  - Allows requests of setting/incrementing/decrementing the current cooldown of the Discombobulator.
+    - The calculated value will not pass the boundaries of zero to the configured maximum cooldown of the Discombobulator.
+- Implemented Quantum Disruptor API to facilitate triggering callbacks to the Quantum Disruptor upgrade (more specifically the revert mode)
+  - Allows checking if the Quantum Disruptor upgrade is enabled in the configuration.
+  - Allows checking if the Quantum Disruptor revert time command is enabled in the configuration.
+  - Allows checking the reset mode used to reset the revert time usages value.
+  - Allows checking the current/maximum amount of revert time usages per moon landing and amount of hours reduced per usage.
+  - Allows checking if the Quantum Disruptor revert time command can be executed. (along with display message in case of error)
+  - Allows requests of firing the Quantum Disruptor revert time command.
 - Added world-building text to some upgrades. (Thank you Nat(discordID:twinkula))
 - Fixed contribution values from Item Progression mode not being used correctly during save reboot.
 - Item Progression modes of UniqueScrap and CustomScrap will not rank up upgrades hidden from Randomize Upgrades mode.
@@ -19,6 +32,7 @@
 - Fixed issue with Item Progression leading to upgrades not having a contribution value assigned to them.
 - Fixed issue with Contract objects showing radar icons even when they are destroyed.
 - Fixed issue with Fusion Matter ignoring Back Muscles weight reduction when keeping items in your inventory.
+- Fixed issue with Quantum Disruptor Revert Time command not being able to be called by non-host players.
 
 </details>
 

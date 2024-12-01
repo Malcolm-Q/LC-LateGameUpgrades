@@ -436,6 +436,7 @@ namespace MoreShipUpgrades.Misc
                 return;
             }
             if (terminal.IsHost || terminal.IsServer) QuantumDisruptor.Instance.RevertTimeClientRpc();
+            else QuantumDisruptor.Instance.RevertTimeServerRpc();
             outputNode = DisplayTerminalMessage($"Successfully reverted back current moon's time by {QuantumDisruptor.Instance.hoursToReduce}. You currently have {QuantumDisruptor.Instance.currentUsages} out of {QuantumDisruptor.Instance.availableUsages} usages.\n");
         }
         private static TerminalNode LookupDemon(string secondWord, string thirdWord)
