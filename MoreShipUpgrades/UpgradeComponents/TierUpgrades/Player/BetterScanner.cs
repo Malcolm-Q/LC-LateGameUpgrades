@@ -25,10 +25,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             base.Load();
             if (GoodItemScanCompat.Enabled)
             {
-                int level = GetUpgradeLevel(UPGRADE_NAME);
                 LategameConfiguration config = GetConfiguration();
                 GoodItemScanCompat.IncreaseScanDistance((int)config.NODE_DISTANCE_INCREASE);
                 GoodItemScanCompat.IncreaseEnemyScanDistance((int)config.NODE_DISTANCE_INCREASE);
+                int level = GetUpgradeLevel(UPGRADE_NAME);
                 if (level == 2) GoodItemScanCompat.ToggleScanThroughWalls(true);
             }
         }
