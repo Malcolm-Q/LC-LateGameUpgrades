@@ -33,6 +33,7 @@
 - Fixed issue with Contract objects showing radar icons even when they are destroyed.
 - Fixed issue with Fusion Matter ignoring Back Muscles weight reduction when keeping items in your inventory.
 - Fixed issue with Quantum Disruptor Revert Time command not being able to be called by non-host players.
+- Fixed issue with Interns Teleport Restriction configuration making the teleport cooldown ignored.
 
 </details>
 

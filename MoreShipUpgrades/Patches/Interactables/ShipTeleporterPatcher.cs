@@ -94,9 +94,9 @@ namespace MoreShipUpgrades.Patches.Interactables
         static void UpdatePostfix(ShipTeleporter __instance)
         {
             LategameConfiguration config = UpgradeBus.Instance.PluginConfiguration;
-            if (!config.INTERN_ENABLED || config.INTERNS_TELEPORT_RESTRICTION == Interns.TeleportRestriction.None) return;
+            if (!config.INTERN_ENABLED || config.INTERNS_TELEPORT_RESTRICTION == Interns.TeleportRestriction.None || !__instance.buttonTrigger.interactable) return;
             PlayerControllerB playerToBeamUp = StartOfRound.Instance.mapScreen.targetedPlayer;
-            __instance.buttonTrigger.interactable = !Interns.instance.ContainsRecentlyInterned(playerToBeamUp);
+            __instance.buttonTrigger.interactable &= !Interns.instance.ContainsRecentlyInterned(playerToBeamUp);
             if (!__instance.buttonTrigger.interactable)
             {
                 __instance.buttonTrigger.disabledHoverTip = $"[Recent intern must {(config.INTERNS_TELEPORT_RESTRICTION == Interns.TeleportRestriction.ExitBuilding ? "exit the building" : "enter the ship")} first]";
