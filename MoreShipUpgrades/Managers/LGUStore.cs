@@ -67,6 +67,8 @@ namespace MoreShipUpgrades.Managers
                 UpdateUpgradeBus();
                 UpgradeBus.Instance.Reconstruct();
                 HandleSpawns();
+                receivedSave = true;
+                alreadyReceivedScrapToUpgrade = true;
             }
             else
             {

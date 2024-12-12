@@ -1,4 +1,11 @@
 <details>
+<summary> 3.11.1 - 2024-12-08 </summary>
+
+- Fixed issue with host's save being changed whenever the first client joined the lobby.
+
+</details>
+
+<details>
 <summary> 3.11.0 - 2024-12-01 </summary>
 
 - Implemented tier upgrade which increases the health regeneration cap of the vanilla health regeneration mechanic.
