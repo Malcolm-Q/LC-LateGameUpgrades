@@ -2,6 +2,7 @@
 <summary> 3.11.1 - 2024-12-08 </summary>
 
 - Fixed issue with host's save being changed whenever the first client joined the lobby.
+- Fixed issue with NV configuration cases where it would error (leaving prices configuration as blank).
 
 </details>
 

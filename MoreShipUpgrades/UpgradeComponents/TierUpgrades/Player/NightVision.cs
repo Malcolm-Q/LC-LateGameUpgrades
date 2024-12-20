@@ -262,8 +262,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
                                                 configuration.SHARED_UPGRADES.Value || !configuration.NIGHT_VISION_INDIVIDUAL.Value,
                                                 configuration.NIGHT_VISION_ENABLED.Value,
-                                                prices[0],
-                                                prices[1..],
+                                                prices.Length > 0 ? prices[0] : 0,
+                                                prices.Length > 1 ? prices[1..] : [],
                                                 configuration.OVERRIDE_UPGRADE_NAMES ? configuration.NIGHT_VISION_OVERRIDE_NAME : "");
         }
 
