@@ -47,6 +47,15 @@ namespace MoreShipUpgrades.Managers
                 harmony.PatchAll(typeof(RoundManagerPatchesPatcher));
                 Plugin.mls.LogInfo("Patched ShipInventory mod related components for correct behaviour on Scrap Keeper in relation of keeping items in the chute based on chance. If any issues arise related to the item chute being cleared on team wipe when both LGU and ShipInventory mods are present, report to LGU first.");
             }
+            if (BrutalCompanyMinusExtraCompat.Enabled)
+            {
+                Plugin.mls.LogInfo(BrutalCompanyMinusExtraCompat.BeforePatchMessage);
+                harmony.PatchAll(typeof(BrutalCompanyMinusExtraCompat.ManagerSpawnPatcher));
+                harmony.PatchAll(typeof(BrutalCompanyMinusExtraCompat.GrabbableTurretPatcher));
+                harmony.PatchAll(typeof(BrutalCompanyMinusExtraCompat.GrabbableLandminePatcher));
+                harmony.PatchAll(typeof(BrutalCompanyMinusExtraCompat.LevelModificationsPatcher));
+                Plugin.mls.LogInfo(BrutalCompanyMinusExtraCompat.SuccessfulPatchMessage);
+            }
         }
         static void PatchEnemies()
         {
