@@ -94,6 +94,7 @@ namespace MoreShipUpgrades.Managers
         internal static void ContributeTowardsUpgrade(string upgradeName, int scrapValue)
         {
             CustomTerminalNode assignedUpgrade = UpgradeBus.Instance.GetUpgradeNode(upgradeName);
+            if (!assignedUpgrade.Visible) return;
             ContributeTowardsUpgrade(assignedUpgrade, scrapValue);
         }
 
@@ -102,7 +103,7 @@ namespace MoreShipUpgrades.Managers
             int contributed = UpgradeBus.Instance.contributionValues[assignedUpgrade.OriginalName];
             int currentPrice = assignedUpgrade.GetCurrentPrice() + contributed;
             contributed += scrapValue;
-            while (contributed >= currentPrice && assignedUpgrade.GetRemainingLevels() > 0 && assignedUpgrade.Visible)
+            while (contributed >= currentPrice && assignedUpgrade.GetRemainingLevels() > 0)
             {
                 RankUpUpgrade(assignedUpgrade);
                 contributed -= currentPrice;
