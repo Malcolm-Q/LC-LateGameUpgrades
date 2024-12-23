@@ -28,6 +28,7 @@ namespace MoreShipUpgrades
     [BepInDependency(Oxygen.OxygenBase.modGUID, DependencyFlags.SoftDependency)]
     [BepInDependency(LCVR.Plugin.PLUGIN_GUID, DependencyFlags.SoftDependency)]
     [BepInDependency(ShipInventory.MyPluginInfo.PLUGIN_GUID, DependencyFlags.SoftDependency)]
+    [BepInDependency(BrutalCompanyMinus.Plugin.GUID, DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
         internal static ManualLogSource mls;
