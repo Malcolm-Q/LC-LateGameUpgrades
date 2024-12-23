@@ -53,6 +53,16 @@ namespace MoreShipUpgrades.Managers
                 harmony.PatchAll(typeof(LevelStuffPatcher));
                 Plugin.mls.LogInfo("Patched Lethal Constellations mod related components for correct behaviour on Efficient Engines to affect constellation prices. If any issues arise related to this mechanic with both mods installed, report to LGU first.");
             }
+            
+            if (BrutalCompanyMinusExtraCompat.Enabled)
+            {
+                Plugin.mls.LogInfo(BrutalCompanyMinusExtraCompat.BeforePatchMessage);
+                harmony.PatchAll(typeof(BrutalCompanyMinusExtraCompat.ManagerSpawnPatcher));
+                harmony.PatchAll(typeof(BrutalCompanyMinusExtraCompat.GrabbableTurretPatcher));
+                harmony.PatchAll(typeof(BrutalCompanyMinusExtraCompat.GrabbableLandminePatcher));
+                harmony.PatchAll(typeof(BrutalCompanyMinusExtraCompat.LevelModificationsPatcher));
+                Plugin.mls.LogInfo(BrutalCompanyMinusExtraCompat.SuccessfulPatchMessage);
+            }
         }
         static void PatchEnemies()
         {

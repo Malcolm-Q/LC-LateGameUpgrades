@@ -11,25 +11,20 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
 {
     class Beekeeper : TierUpgrade, IUpgradeWorldBuilding
     {
-        internal bool increaseHivePrice = false;
         internal static Beekeeper Instance;
 
         public const string UPGRADE_NAME = "Beekeeper";
         public const string PRICES_DEFAULT = "225,280,340";
         internal const string WORLD_BUILDING_TEXT = "\n\nOn-the-job training package that instructs {0} how to more safely and efficiently handle Circuit Bee Nests." +
             " Departments with a LVL {1} Certification in Circuit Bee Nest Handling earn an extra commission for every Nest they sell.\n\n";
+
+        protected bool CanIncreaseHivePrice => GetUpgradeLevel(UPGRADE_NAME) == GetConfiguration().BEEKEEPER_UPGRADE_PRICES.Value.Split(',').Length;
+
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
             overridenUpgradeName = GetConfiguration().BEEKEEPER_OVERRIDE_NAME;
             Instance = this;
-        }
-
-        public override void Increment()
-        {
-            base.Increment();
-            if (GetUpgradeLevel(UPGRADE_NAME) == GetConfiguration().BEEKEEPER_UPGRADE_PRICES.Value.Split(',').Length)
-                ToggleIncreaseHivePriceServerRpc();
         }
 
         public static int CalculateBeeDamage(int damageNumber)
@@ -43,7 +38,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public static int GetHiveScrapValue(int originalValue)
         {
             LategameConfiguration config = GetConfiguration();
-            if (!config.BEEKEEPER_ENABLED.Value || !Instance.increaseHivePrice) return originalValue;
+            if (!config.BEEKEEPER_ENABLED.Value || !Instance.CanIncreaseHivePrice) return originalValue;
             return (int)(originalValue * config.BEEKEEPER_HIVE_VALUE_INCREASE.Value);
         }
 
@@ -62,17 +57,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction) + $"\nOn maximum level, applies a {(GetConfiguration().BEEKEEPER_HIVE_VALUE_INCREASE - 1f)*100f:F0}% scrap value increase on beehives.";
         }
-        [ServerRpc(RequireOwnership = false)]
-        public void ToggleIncreaseHivePriceServerRpc()
-        {
-            ToggleIncreaseHivePriceClientRpc();
-        }
 
-        [ClientRpc]
-        public void ToggleIncreaseHivePriceClientRpc()
-        {
-            increaseHivePrice = true;
-        }
         public override bool CanInitializeOnStart
         {
             get
