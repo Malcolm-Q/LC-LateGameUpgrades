@@ -1,8 +1,10 @@
 <details>
 <summary> 3.11.1 - 2024-12-08 </summary>
 
+- Added compatibility with [Brutal Company Minus](https://thunderstore.io/c/lethal-company/p/DrinkableWater/Brutal_Company_Minus/) related to Midas Touch upgrade where the generated scrap items (both from events and hazards) would ignore the upgrade's state. (Thank you [TI](https://github.com/tixomirof))
 - Fixed issue with host's save being changed whenever the first client joined the lobby.
 - Fixed issue with NV configuration cases where it would error (leaving prices configuration as blank).
+- Fixed issue with Beekeeper's increased scrap value of hives not working correctly. (Thank you [TI](https://github.com/tixomirof))
 
 </details>
 
