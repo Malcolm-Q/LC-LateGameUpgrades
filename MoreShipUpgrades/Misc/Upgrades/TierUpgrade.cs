@@ -9,7 +9,6 @@ namespace MoreShipUpgrades.Misc.Upgrades
     {
 
         #region Overriden Methods
-
         public override void Unwind()
         {
             base.Unwind();

@@ -1,5 +1,5 @@
-﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
+﻿using MoreShipUpgrades.Configuration.Interfaces;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
@@ -27,7 +27,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun
         {
             get
             {
-                TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().HollowPointConfiguration;
+                ITierUpgradeConfiguration upgradeConfig = GetConfiguration().HollowPointConfiguration;
                 string[] prices = upgradeConfig.Prices.Value.Split(',');
                 return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
@@ -36,7 +36,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun
         {
             static float infoFunction(int level)
             {
-                TierPrimitiveUpgradeConfiguration<int> config = GetConfiguration().HollowPointConfiguration;
+                ITierEffectUpgrade<int> config = GetConfiguration().HollowPointConfiguration;
                 return config.InitialEffect.Value + (level * config.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - Damage dealt by the shotgun is increased by {2}\n";
@@ -44,7 +44,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun
         }
         public static int ComputeHollowPointDamageBoost()
         {
-            TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().HollowPointConfiguration;
+            ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().HollowPointConfiguration;
             return upgradeConfig.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfig.IncrementalEffect);
         }
         public static int GetHollowPointDamageBoost(int defaultValue)

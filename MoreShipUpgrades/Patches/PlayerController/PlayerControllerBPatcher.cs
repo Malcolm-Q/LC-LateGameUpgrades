@@ -14,9 +14,9 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
 using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.UpgradeComponents.Commands;
-using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
 using MoreShipUpgrades.Extensions;
+using MoreShipUpgrades.Configuration;
 
 namespace MoreShipUpgrades.Patches.PlayerController
 {
@@ -146,13 +146,13 @@ namespace MoreShipUpgrades.Patches.PlayerController
             }
 
             if (CustomItemBehaviourLibraryCompat.Enabled
-                && !UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_ALLOW_WHEELBARROWS
+                && !UpgradeBus.Instance.PluginConfiguration.DeeperPocketsConfiguration.AllowWheelbarrows
                 && CustomItemBehaviourLibraryCompat.CheckForContainers(ref player))
             {
                 return;
             }
             int twoHandedCount = 0;
-            int maxTwoHandedCount = 1 + UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_INITIAL_TWO_HANDED_ITEMS + (BaseUpgrade.GetUpgradeLevel(DeepPockets.UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_ITEMS);
+            int maxTwoHandedCount = 1 + UpgradeBus.Instance.PluginConfiguration.DeeperPocketsConfiguration.InitialEffect + (BaseUpgrade.GetUpgradeLevel(DeepPockets.UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.DeeperPocketsConfiguration.IncrementalEffect);
 
             for(int i = 0; i < player.ItemSlots.Length && twoHandedCount < maxTwoHandedCount; i++)
             {

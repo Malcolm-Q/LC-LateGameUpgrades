@@ -1,5 +1,6 @@
-﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
+﻿using MoreShipUpgrades.Configuration.Abstractions.TIerUpgrades;
+using MoreShipUpgrades.Configuration.Interfaces;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
@@ -26,13 +27,12 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public static float GetIncreasedInteractionSpeedMultiplier()
         {
-            TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().QuickHandsConfiguration;
+            ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().QuickHandsConfiguration;
             return (upgradeConfig.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfig.IncrementalEffect)) / 100f;
         }
         public static float IncreaseInteractionSpeed(float defaultValue)
         {
-            TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().QuickHandsConfiguration;
-            if (!upgradeConfig.Enabled) return defaultValue;
+            if (!GetConfiguration().QuickHandsConfiguration.Enabled) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             float multiplier = GetIncreasedInteractionSpeedMultiplier();
             return (int)Mathf.Clamp(defaultValue + (defaultValue * multiplier), defaultValue, float.MaxValue);
@@ -41,7 +41,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             static float infoFunction(int level)
             {
-                TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().QuickHandsConfiguration;
+                ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().QuickHandsConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - Increases interaction speed of the player by {2}%\n";
@@ -52,7 +52,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             get
             {
-                TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().QuickHandsConfiguration;
+                ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().QuickHandsConfiguration;
                 string[] prices = upgradeConfig.Prices.Value.Split(',');
                 return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }

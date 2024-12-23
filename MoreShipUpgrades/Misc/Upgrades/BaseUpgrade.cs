@@ -1,4 +1,6 @@
-﻿using MoreShipUpgrades.Managers;
+﻿using MoreShipUpgrades.Configuration;
+using MoreShipUpgrades.Configuration.Interfaces;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
 using System;

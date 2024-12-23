@@ -1,4 +1,5 @@
 ﻿using MoreShipUpgrades.Compat;
+using MoreShipUpgrades.Configuration;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;

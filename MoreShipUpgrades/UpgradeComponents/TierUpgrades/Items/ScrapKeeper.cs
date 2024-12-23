@@ -1,10 +1,9 @@
-﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
+﻿using MoreShipUpgrades.Configuration.Interfaces;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items
@@ -28,7 +27,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items
         {
             get
             {
-                TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().ScrapKeeperConfiguration;
+                ITierUpgradeConfiguration upgradeConfig = GetConfiguration().ScrapKeeperConfiguration;
                 string[] prices = upgradeConfig.Prices.Value.Split(',');
                 return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
@@ -37,7 +36,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items
         {
             static float infoFunction(int level)
             {
-                TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().ScrapKeeperConfiguration;
+                ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().ScrapKeeperConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - In case of a full team wipe, each scrap present in the ship has a {2}% chance of not being discarded.\n";
@@ -45,13 +44,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items
         }
         public static float ComputeScrapKeeperKeepScrapChance()
         {
-            TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().ScrapKeeperConfiguration;
+            ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().ScrapKeeperConfiguration;
             int percentage = upgradeConfig.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfig.IncrementalEffect);
             return percentage / 100f;
         }
         public static bool CanKeepScrapBasedOnChance()
         {
-            TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().EffectiveBandaidsConfiguration;
+            IUpgradeConfiguration upgradeConfig = GetConfiguration().EffectiveBandaidsConfiguration;
             if (!upgradeConfig.Enabled) return false;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return false;
             float scrapChance = Mathf.Clamp(ComputeScrapKeeperKeepScrapChance(), 0f, 1f);

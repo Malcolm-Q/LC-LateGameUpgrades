@@ -32,7 +32,7 @@ namespace MoreShipUpgrades.Extensions
         public static bool CheckIfCurrentlyTwoHandedInInventory(this PlayerControllerB player)
         {
             int twoHandedCount = 0;
-            int maxTwoHandedCount = 1 + UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_INITIAL_TWO_HANDED_ITEMS + (BaseUpgrade.GetUpgradeLevel(DeepPockets.UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_ITEMS);
+            int maxTwoHandedCount = 1 + UpgradeBus.Instance.PluginConfiguration.DeeperPocketsConfiguration.InitialEffect + (BaseUpgrade.GetUpgradeLevel(DeepPockets.UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.DeeperPocketsConfiguration.IncrementalEffect);
 
             for (int i = 0; i < player.ItemSlots.Length && twoHandedCount < maxTwoHandedCount; i++)
             {

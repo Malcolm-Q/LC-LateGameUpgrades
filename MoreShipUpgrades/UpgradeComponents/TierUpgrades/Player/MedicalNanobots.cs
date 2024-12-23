@@ -1,5 +1,6 @@
-﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
+﻿using MoreShipUpgrades.Configuration.Abstractions.TIerUpgrades;
+using MoreShipUpgrades.Configuration.Interfaces;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
@@ -23,8 +24,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             static float infoFunction(int level)
             {
-                LategameConfiguration config = GetConfiguration();
-                TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().MedicalNanobotsConfiguration;
+                ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().MedicalNanobotsConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - Increases the player's health regeneration cap by {2}%\n";
@@ -32,7 +32,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public static int GetIncreasedHealthRegeneration(int defaultValue)
         {
-            TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().MedicalNanobotsConfiguration;
+            ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().MedicalNanobotsConfiguration;
             if (!upgradeConfig.Enabled) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             float percentage = (upgradeConfig.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfig.IncrementalEffect))/100f;
@@ -43,7 +43,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             get
             {
-                TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().EffectiveBandaidsConfiguration;
+                ITierUpgradeConfiguration upgradeConfig = GetConfiguration().MedicalNanobotsConfiguration;
                 string[] prices = upgradeConfig.Prices.Value.Split(',');
                 return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }

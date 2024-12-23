@@ -13,6 +13,7 @@ using UnityEngine.UI;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.Configuration;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {

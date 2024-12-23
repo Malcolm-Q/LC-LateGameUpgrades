@@ -1,5 +1,6 @@
-﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
+﻿using MoreShipUpgrades.Configuration.Abstractions.TIerUpgrades;
+using MoreShipUpgrades.Configuration.Interfaces;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
@@ -31,12 +32,12 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         }
         public static float GetIncreasedTeleportSpeedMultiplier()
         {
-            TierPrimitiveUpgradeConfiguration<int> upgradeConfiguration = GetConfiguration().ParticleInfuserConfiguration;
+            ITierEffectUpgrade<int> upgradeConfiguration = GetConfiguration().ParticleInfuserConfiguration;
             return (upgradeConfiguration.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfiguration.IncrementalEffect)) / 100f;
         }
         public static float DecreaseTeleportTime(float defaultValue)
         {
-            TierPrimitiveUpgradeConfiguration<int> upgradeConfiguration = GetConfiguration().ParticleInfuserConfiguration;
+            ITierEffectUpgrade<int> upgradeConfiguration = GetConfiguration().ParticleInfuserConfiguration;
             if (!upgradeConfiguration.Enabled) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             float multiplier = GetIncreasedTeleportSpeedMultiplier();
@@ -44,7 +45,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         }
         public static float IncreaseTeleportSpeed()
         {
-            TierPrimitiveUpgradeConfiguration<int> upgradeConfiguration = GetConfiguration().ParticleInfuserConfiguration;
+            ITierEffectUpgrade<int> upgradeConfiguration = GetConfiguration().ParticleInfuserConfiguration;
             if (!upgradeConfiguration.Enabled) return 1f;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return 1f;
             float multiplier = GetIncreasedTeleportSpeedMultiplier();
@@ -54,7 +55,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         {
             static float infoFunction(int level)
             {
-                TierPrimitiveUpgradeConfiguration<int> upgradeConfiguration = GetConfiguration().ParticleInfuserConfiguration;
+                ITierEffectUpgrade<int> upgradeConfiguration = GetConfiguration().ParticleInfuserConfiguration;
                 return upgradeConfiguration.InitialEffect.Value + (level * upgradeConfiguration.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - Increases the teleporter's speed by {2}%\n";
@@ -65,7 +66,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         {
             get
             {
-                TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().ParticleInfuserConfiguration;
+                ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().ParticleInfuserConfiguration;
                 string[] prices = upgradeConfig.Prices.Value.Split(',');
                 return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }

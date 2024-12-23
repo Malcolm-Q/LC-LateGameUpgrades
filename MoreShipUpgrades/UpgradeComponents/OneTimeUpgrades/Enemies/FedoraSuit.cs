@@ -1,11 +1,11 @@
 ﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using System.Collections.Generic;
 using Unity.Netcode;
 using GameNetcodeStuff;
 using MoreShipUpgrades.UI.TerminalNodes;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
+using MoreShipUpgrades.Configuration;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies
 {
@@ -17,7 +17,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies
         internal static FedoraSuit instance;
 
         internal Dictionary<ulong, bool> wearingFedora;
-        public override bool CanInitializeOnStart => GetConfiguration().FEDORA_SUIT_PRICE.Value <= 0;
+        public override bool CanInitializeOnStart => GetConfiguration().FedoraSuitConfiguration.Price.Value <= 0;
 
         public string GetWorldBuildingText(bool shareStatus = false)
         {
@@ -26,7 +26,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = GetConfiguration().FEDORA_SUIT_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().FedoraSuitConfiguration.OverrideName;
             wearingFedora = [];
             instance = this;
         }
@@ -68,7 +68,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies
 
         public static bool IsWearingFedoraSuit(PlayerControllerB spottedPlayer)
         {
-            if (!GetConfiguration().FEDORA_SUIT_ENABLED) return false;
+            if (!GetConfiguration().FedoraSuitConfiguration.Enabled) return false;
             ulong clientId = spottedPlayer.actualClientId;
             return instance.wearingFedora.GetValueOrDefault(clientId, false);
         }
@@ -78,7 +78,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().FEDORA_SUIT_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().FedoraSuitConfiguration.ItemProgressionItems.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -86,13 +86,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = GetConfiguration();
-
-            return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
-                                    shareStatus: configuration.SHARED_UPGRADES.Value || !configuration.FEDORA_SUIT_INDIVIDUAL.Value,
-                                    configuration.FEDORA_SUIT_ENABLED.Value,
-                                    configuration.FEDORA_SUIT_PRICE.Value,
-                                    configuration.OVERRIDE_UPGRADE_NAMES ? configuration.FEDORA_SUIT_OVERRIDE_NAME : "");
+            return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME, GetConfiguration().FedoraSuitConfiguration);
         }
     }
 }

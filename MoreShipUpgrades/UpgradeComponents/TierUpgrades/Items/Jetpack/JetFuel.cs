@@ -1,5 +1,6 @@
-﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
+﻿using MoreShipUpgrades.Configuration.Abstractions.TIerUpgrades;
+using MoreShipUpgrades.Configuration.Interfaces;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
@@ -28,7 +29,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack
         {
             get
             {
-                TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().JetFuelConfiguration;
+                ITierUpgradeConfiguration upgradeConfig = GetConfiguration().JetFuelConfiguration;
                 string[] prices = upgradeConfig.Prices.Value.Split(',');
                 return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
@@ -37,7 +38,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack
         {
             static float infoFunction(int level)
             {
-                TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().JetFuelConfiguration;
+                ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().JetFuelConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - The acceleration of the jetpack during flight is increased by {2}%\n";
@@ -45,7 +46,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack
         }
         public static float GetIncreasedAcceleration()
         {
-            TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().JetFuelConfiguration;
+            ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().JetFuelConfiguration;
             int percentage = upgradeConfig.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfig.IncrementalEffect);
             return percentage / 100f;
         }

@@ -1,10 +1,11 @@
 ﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
 using MoreShipUpgrades.UI.TerminalNodes;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
+using MoreShipUpgrades.Configuration.Abstractions.TIerUpgrades;
+using MoreShipUpgrades.Configuration.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {
@@ -26,7 +27,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public static float CalculateDecreaseMultiplier()
         {
-            TierPrimitiveUpgradeConfiguration<int> config = GetConfiguration().RubberBootsConfiguration;
+            ITierEffectUpgrade<int> config = GetConfiguration().RubberBootsConfiguration;
             if (!config.Enabled || !GetActiveUpgrade(UPGRADE_NAME)) return 0f;
             return (config.InitialEffect + (config.IncrementalEffect * GetUpgradeLevel(UPGRADE_NAME))) / 100f;
         }
@@ -45,7 +46,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             static float infoFunction(int level)
             {
-                TierPrimitiveUpgradeConfiguration<int> config = GetConfiguration().RubberBootsConfiguration;
+                ITierEffectUpgrade<int> config = GetConfiguration().RubberBootsConfiguration;
                 return config.InitialEffect.Value + (level * config.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - Reduces the movement debuff when walking on water surfaces by {2}%\n";
@@ -56,7 +57,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             get
             {
-                TierPrimitiveUpgradeConfiguration<int> config = GetConfiguration().RubberBootsConfiguration;
+                ITierEffectUpgrade<int> config = GetConfiguration().RubberBootsConfiguration;
                 string[] prices = config.Prices.Value.Split(',');
                 return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }

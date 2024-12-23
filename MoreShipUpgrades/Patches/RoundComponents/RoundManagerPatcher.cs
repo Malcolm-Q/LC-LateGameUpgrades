@@ -39,8 +39,8 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         [HarmonyPrefix]
         static void FinishGeneratingLevelPrefix()
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_ENABLED) return;
-            if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_AFFECT_LANDING) return;
+            if (!UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.Enabled) return;
+            if (!UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.AffectLanding) return;
 
             StartOfRound.Instance.shipAnimator.speed *= LandingThrusters.GetLandingSpeedMultiplier();
         }

@@ -1,9 +1,10 @@
-﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
+﻿using CSync.Lib;
+using MoreShipUpgrades.Configuration;
+using MoreShipUpgrades.Configuration.Interfaces;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UI.TerminalNodes;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
-using System;
 using System.Text;
 using UnityEngine;
 
@@ -12,70 +13,78 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Zapgun
     internal class AluminiumCoils : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Aluminium Coils";
-        internal const string DEFAULT_PRICES = "600, 800, 1000";
+        internal const string DEFAULT_PRICES = "750,600, 800, 1000";
         internal const string WORLD_BUILDING_TEXT = "\n\nOn-the-job training package that instructs your crew on how to more safely and efficiently wield the Zap Gun.\n\n";
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = GetConfiguration().ALUMINIUM_COILS_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().AluminiumCoilConfiguration.OverrideName;
             base.Start();
         }
         public static float ApplyDifficultyDecrease(float defaultDifficulty)
         {
-            LategameConfiguration config = GetConfiguration();
-            if (!config.ALUMINIUM_COILS_ENABLED) return defaultDifficulty;
+            ITierMultipleEffectUpgrade<int,float> config = GetConfiguration().AluminiumCoilConfiguration;
+            if (!config.Enabled) return defaultDifficulty;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultDifficulty;
-            float multiplier = 1f - ((config.ALUMINIUM_COILS_INITIAL_DIFFICULTY_DECREASE.Value + (GetUpgradeLevel(UPGRADE_NAME) * config.ALUMINIUM_COILS_INCREMENTAL_DIFFICULTY_DECREASE.Value)) / 100f);
+            (SyncedEntry<int>, SyncedEntry<int>) difficultyPair = config.GetEffectPair(0);
+            float multiplier = 1f - ((difficultyPair.Item1.Value + (GetUpgradeLevel(UPGRADE_NAME) * difficultyPair.Item2.Value)) / 100f);
             return Mathf.Clamp(defaultDifficulty * multiplier, 0f, defaultDifficulty);
         }
 
         public static float ApplyCooldownDecrease(float defaultCooldown)
         {
-            LategameConfiguration config = GetConfiguration();
-            if (!config.ALUMINIUM_COILS_ENABLED) return defaultCooldown;
+            ITierMultipleEffectUpgrade<int, float> config = GetConfiguration().AluminiumCoilConfiguration;
+            if (!config.Enabled) return defaultCooldown;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultCooldown;
-            float multiplier = 1f - ((config.ALUMINIUM_COILS_INITIAL_COOLDOWN_DECREASE.Value + (GetUpgradeLevel(UPGRADE_NAME) * config.ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_DECREASE.Value)) / 100f);
+            (SyncedEntry<int>, SyncedEntry<int>) cooldownPair = config.GetEffectPair(1);
+            float multiplier = 1f - ((cooldownPair.Item1.Value + (GetUpgradeLevel(UPGRADE_NAME) * cooldownPair.Item2.Value)) / 100f);
             return Mathf.Clamp(defaultCooldown * multiplier, 0f, defaultCooldown);
         }
 
         public static float ApplyIncreasedStunTimer(float defaultStunTimer)
         {
-            LategameConfiguration config = GetConfiguration();
-            if (!config.ALUMINIUM_COILS_ENABLED) return defaultStunTimer;
+            ITierMultipleEffectUpgrade<int, float> config = GetConfiguration().AluminiumCoilConfiguration;
+            if (!config.Enabled) return defaultStunTimer;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultStunTimer;
-            float additionalStunTimer = config.ALUMINIUM_COILS_INITIAL_STUN_TIMER_INCREASE.Value + (GetUpgradeLevel(UPGRADE_NAME) * config.ALUMINIUM_COILS_INCREMENTAL_STUN_TIMER_INCREASE.Value);
+            (SyncedEntry<float>, SyncedEntry<float>) stunTimerPair = config.GetSecondEffectPair(0);
+            float additionalStunTimer = stunTimerPair.Item1.Value + (GetUpgradeLevel(UPGRADE_NAME) * stunTimerPair.Item2.Value);
             return defaultStunTimer + additionalStunTimer;
         }
 
         public static float ApplyIncreasedStunRange(float defaultRange)
         {
-            LategameConfiguration config = GetConfiguration();
-            if (!config.ALUMINIUM_COILS_ENABLED) return defaultRange;
+            ITierMultipleEffectUpgrade<int, float> config = GetConfiguration().AluminiumCoilConfiguration;
+            if (!config.Enabled) return defaultRange;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultRange;
-            float AdditionalRange = config.ALUMINIUM_COILS_INITIAL_RANGE_INCREASE.Value + (GetUpgradeLevel(UPGRADE_NAME) * config.ALUMINIUM_COILS_INCREMENTAL_RANGE_INCREASE.Value);
+            (SyncedEntry<float>, SyncedEntry<float>) rangePair = config.GetSecondEffectPair(1);
+            float AdditionalRange = rangePair.Item1.Value + (GetUpgradeLevel(UPGRADE_NAME) * rangePair.Item2.Value);
             return defaultRange + AdditionalRange;
         }
         string GetAluminiumCoilsInfo(int level, int price)
         {
             static float difficultyInfo(int level)
             {
-                LategameConfiguration config = GetConfiguration();
-                return config.ALUMINIUM_COILS_INITIAL_DIFFICULTY_DECREASE.Value + (level * config.ALUMINIUM_COILS_INCREMENTAL_DIFFICULTY_DECREASE.Value);
+                ITierMultipleEffectUpgrade<int, float> config = GetConfiguration().AluminiumCoilConfiguration;
+                (SyncedEntry<int>, SyncedEntry<int>) difficultyPair = config.GetEffectPair(0);
+                return difficultyPair.Item1.Value + (level * difficultyPair.Item2.Value);
             }
             static float rangeInfo(int level)
             {
-                LategameConfiguration config = GetConfiguration();
-                return config.ALUMINIUM_COILS_INITIAL_RANGE_INCREASE.Value + (level * config.ALUMINIUM_COILS_INCREMENTAL_RANGE_INCREASE.Value);
+                ITierMultipleEffectUpgrade<int, float> config = GetConfiguration().AluminiumCoilConfiguration;
+                (SyncedEntry<float>, SyncedEntry<float>) rangePair = config.GetSecondEffectPair(1);
+                return rangePair.Item1.Value + (level * rangePair.Item2.Value);
             }
             static float stunTimerInfo(int level)
             {
-                LategameConfiguration config = GetConfiguration();
-                return config.ALUMINIUM_COILS_INITIAL_STUN_TIMER_INCREASE.Value + (level * config.ALUMINIUM_COILS_INCREMENTAL_STUN_TIMER_INCREASE.Value);
+                ITierMultipleEffectUpgrade<int, float> config = GetConfiguration().AluminiumCoilConfiguration;
+                (SyncedEntry<float>, SyncedEntry<float>) stunTimerPair = config.GetSecondEffectPair(0);
+                return stunTimerPair.Item1.Value + (level * stunTimerPair.Item2.Value);
             }
             static float cooldownInfo(int level)
             {
-                LategameConfiguration config = GetConfiguration();
-                return config.ALUMINIUM_COILS_INITIAL_COOLDOWN_DECREASE.Value + (level * config.ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_DECREASE.Value);
+                ITierMultipleEffectUpgrade<int, float> config = GetConfiguration().AluminiumCoilConfiguration;
+                (SyncedEntry<int>, SyncedEntry<int>) cooldownPair = config.GetEffectPair(1);
+                return cooldownPair.Item1.Value + (level * cooldownPair.Item2.Value);
             }
             StringBuilder sb = new();
             sb.Append($"LVL {level} - ${price}: Upgrades to zap gun:\n");
@@ -99,9 +108,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Zapgun
         {
             get
             {
-                LategameConfiguration config = GetConfiguration();
-                string[] prices = config.ALUMINIUM_COILS_PRICES.Value.Split(',');
-                return config.ALUMINIUM_COILS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
+                ITierMultipleEffectUpgrade<int, float> config = GetConfiguration().AluminiumCoilConfiguration;
+                string[] prices = config.Prices.Value.Split(',');
+                return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
         }
 
@@ -112,18 +121,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Zapgun
 
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().ALUMINIUM_COILS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().AluminiumCoilConfiguration.ItemProgressionItems.Value.Split(","));
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = GetConfiguration();
-
-            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
-                                                configuration.SHARED_UPGRADES.Value || !configuration.ALUMINIUM_COILS_INDIVIDUAL.Value,
-                                                configuration.ALUMINIUM_COILS_ENABLED.Value,
-                                                configuration.ALUMINIUM_COILS_PRICE.Value,
-                                                UpgradeBus.ParseUpgradePrices(configuration.ALUMINIUM_COILS_PRICES.Value),
-                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.ALUMINIUM_COILS_OVERRIDE_NAME : "");
+            return UpgradeBus.Instance.SetupMultiplePurchaseableTerminalNode(UPGRADE_NAME, GetConfiguration().AluminiumCoilConfiguration);
         }
 
         public string GetWorldBuildingText(bool shareStatus = false)

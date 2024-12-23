@@ -1,8 +1,8 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
 using MoreShipUpgrades.Compat;
+using MoreShipUpgrades.Configuration;
 using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;

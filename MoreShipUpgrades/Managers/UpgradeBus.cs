@@ -2,6 +2,10 @@
 using LethalLib.Extras;
 using LethalLib.Modules;
 using MoreShipUpgrades.Compat;
+using MoreShipUpgrades.Configuration;
+using MoreShipUpgrades.Configuration.Abstractions.OneTimeUpgrades;
+using MoreShipUpgrades.Configuration.Abstractions.TIerUpgrades;
+using MoreShipUpgrades.Configuration.Interfaces;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
@@ -77,7 +81,7 @@ namespace MoreShipUpgrades.Managers
 
             if (PluginConfiguration.BEATS_ENABLED.Value) SickBeats.Instance.EffectsActive = false;
             if (PluginConfiguration.NIGHT_VISION_ENABLED.Value) NightVision.Instance.nightVisionActive = false;
-            if (PluginConfiguration.FEDORA_SUIT_ENABLED) FedoraSuit.instance.wearingFedora.Clear();
+            if (PluginConfiguration.FedoraSuitConfiguration.Enabled) FedoraSuit.instance.wearingFedora.Clear();
             ContractManager.Instance.ResetAllValues();
 
             if (PluginConfiguration.DISCOMBOBULATOR_ENABLED.Value) Discombobulator.instance.flashCooldown = 0f;
@@ -288,22 +292,7 @@ namespace MoreShipUpgrades.Managers
                                                         )
         {
             GameObject multiPerk = AssetBundleHandler.GetPerkGameObject(upgradeName) ;
-            if (!multiPerk) return null;
-
-            if (!enabled) return null;
-
-            string moreInfo = SetupUpgradeInfo(upgrade: multiPerk.GetComponent<BaseUpgrade>(), price: initialPrice, incrementalPrices: prices);
-            if (UpgradeBus.Instance.PluginConfiguration.SHOW_WORLD_BUILDING_TEXT && multiPerk.GetComponent<BaseUpgrade>() is IUpgradeWorldBuilding component) moreInfo += "\n\n" + component.GetWorldBuildingText(shareStatus) + "\n";
-
-            return new TierTerminalNode(
-                name: overrideName != "" ? overrideName : upgradeName,
-                unlockPrice: initialPrice,
-                description: moreInfo,
-                prefab: multiPerk,
-                prices: prices,
-                maxUpgrade: prices.Length,
-                originalName: upgradeName,
-                sharedUpgrade: shareStatus);
+            return SetupMultiplePurchasableTerminalNode(upgradeName, shareStatus, enabled, initialPrice, prices, overrideName, multiPerk);
         }
         internal CustomTerminalNode SetupMultiplePurchasableTerminalNode(string upgradeName,
                                                                         bool shareStatus,
@@ -313,6 +302,7 @@ namespace MoreShipUpgrades.Managers
                                                                         string overrideName,
                                                                         GameObject prefab)
         {
+            if (prefab == null) return null;
             if (!enabled) return null;
 
             string moreInfo = SetupUpgradeInfo(upgrade: prefab.GetComponent<BaseUpgrade>(), price: initialPrice, incrementalPrices: prices);
@@ -328,9 +318,14 @@ namespace MoreShipUpgrades.Managers
                 originalName: upgradeName,
                 sharedUpgrade: shareStatus);
         }
-        public CustomTerminalNode SetupMultiplePurchaseableTerminalNode(string upgradeName, TierUpgradeConfiguration configuration, GameObject prefab)
+        public CustomTerminalNode SetupMultiplePurchaseableTerminalNode(string upgradeName, ITierUpgradeConfiguration configuration)
         {
-            bool shareStatus = configuration is not IIndividualUpgrade individualConfig || (PluginConfiguration.SHARED_UPGRADES || !individualConfig.Individual);
+            GameObject multiPerk = AssetBundleHandler.GetPerkGameObject(upgradeName);
+            return SetupMultiplePurchaseableTerminalNode(upgradeName, configuration, multiPerk);
+        }
+        public CustomTerminalNode SetupMultiplePurchaseableTerminalNode(string upgradeName, ITierUpgradeConfiguration configuration, GameObject prefab)
+        {
+            bool shareStatus = configuration is not IIndividualUpgradeConfiguration individualConfig || (PluginConfiguration.SHARED_UPGRADES || !individualConfig.Individual);
             int[] prices = ParseUpgradePrices(configuration.Prices);
             int initialPrice = prices.Length > 0 ? prices[0] : -1;
             int[] incrementalPrices = prices.Length > 1 ? prices[1..] : [];
@@ -343,9 +338,14 @@ namespace MoreShipUpgrades.Managers
                 overrideName: PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? configuration.OverrideName : "",
                 prefab: prefab);
         }
-        public CustomTerminalNode SetupOneTimeTerminalNode(string upgradeName, OneTimeUpgradeConfiguration configuration, GameObject prefab)
+        public CustomTerminalNode SetupOneTimeTerminalNode(string upgradeName, IOneTimeUpgradeConfiguration configuration)
         {
-            bool shareStatus = configuration is not IIndividualUpgrade individualConfig || (PluginConfiguration.SHARED_UPGRADES || !individualConfig.Individual);
+            GameObject oneTimePerk = AssetBundleHandler.GetPerkGameObject(upgradeName);
+            return SetupOneTimeTerminalNode(upgradeName, configuration, oneTimePerk);
+        }
+        public CustomTerminalNode SetupOneTimeTerminalNode(string upgradeName, IOneTimeUpgradeConfiguration configuration, GameObject prefab)
+        {
+            bool shareStatus = configuration is not IIndividualUpgradeConfiguration individualConfig || (PluginConfiguration.SHARED_UPGRADES || !individualConfig.Individual);
 
             return SetupOneTimeTerminalNode(upgradeName,
                 shareStatus: shareStatus,

@@ -1,5 +1,6 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
+using MoreShipUpgrades.Configuration;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
@@ -134,21 +135,21 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         [HarmonyPrefix]
         static void ShipLeavePrefix(StartOfRound __instance)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_ENABLED) return;
-            if (UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_AFFECT_LANDING && !UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_AFFECT_DEPARTING)
+            if (!UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.Enabled) return;
+            if (UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.AffectLanding && !UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.AffectDeparture)
             {
                 __instance.shipAnimator.speed /= LandingThrusters.GetLandingSpeedMultiplier();
                 return;
             }
-            if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_AFFECT_LANDING && UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_AFFECT_DEPARTING)
+            if (!UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.AffectLanding && UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.AffectDeparture)
                 __instance.shipAnimator.speed *= LandingThrusters.GetLandingSpeedMultiplier();
         }
         [HarmonyPatch(nameof(StartOfRound.EndOfGame))]
         [HarmonyPostfix]
         static void EndOfGamePostfix(StartOfRound __instance)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_ENABLED) return;
-            if (!UpgradeBus.Instance.PluginConfiguration.LANDING_THRUSTERS_AFFECT_DEPARTING) return;
+            if (!UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.Enabled) return;
+            if (!UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.AffectDeparture) return;
 
             __instance.shipAnimator.speed /= LandingThrusters.GetLandingSpeedMultiplier();
         }

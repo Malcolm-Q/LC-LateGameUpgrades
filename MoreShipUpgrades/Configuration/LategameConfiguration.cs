@@ -28,159 +28,47 @@ using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack;
+using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Configuration.Abstractions.OneTimeUpgrades;
+using MoreShipUpgrades.Configuration.Abstractions.TIerUpgrades;
+using MoreShipUpgrades.Configuration.Interfaces;
+using MoreShipUpgrades.Configuration.Custom;
 
-namespace MoreShipUpgrades.Misc
+namespace MoreShipUpgrades.Configuration
 {
-    #region Core Upgrade Configurations
-    public interface IIndividualUpgrade
-    {
-        public SyncedEntry<bool> Individual { get; set; }
-    }
-    public interface ITierEffectUpgrade<T>
-    {
-        public SyncedEntry<T> InitialEffect {  get; set; }
-        public SyncedEntry<T> IncrementalEffect {  get; set; }
-    }
-    public interface ITierCollectionUpgrade
-    {
-        public SyncedEntry<string> TierCollection { get; set; }
-    }
-    public abstract class UpgradeConfiguration(ConfigFile cfg, string topSection, string enabledDescription)
-    {
-        [field: SyncedEntryField] public SyncedEntry<bool> Enabled { get; set; } = cfg.BindSyncedEntry(topSection, string.Format(LguConstants.ENABLED_FORMAT, topSection), true, enabledDescription);
-        [field: SyncedEntryField] public SyncedEntry<int> MinimumSalePercentage { get; set; } = cfg.BindSyncedEntry(topSection, "Minimum Sale Percentage", 60, "Minimum percentage achieved when the upgrade goes on sale");
-        [field: SyncedEntryField] public SyncedEntry<int> MaximumSalePercentage { get; set; } = cfg.BindSyncedEntry(topSection, "Maximum Sale Percentage", 90, "Maximum percentage achieved when the upgrade goes on sale");
-        [field: SyncedEntryField] public SyncedEntry<string> OverrideName { get; set; } = cfg.BindSyncedEntry(topSection, string.Format(LguConstants.OVERRIDE_NAME_KEY_FORMAT, topSection), topSection);
-        [field: SyncedEntryField] public SyncedEntry<string> ItemProgressionItems { get; set; } = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-    }
-    #endregion
-
-    #region One Time Upgrade Configurations
-    public class OneTimeUpgradeConfiguration : UpgradeConfiguration
-    {
-        public OneTimeUpgradeConfiguration(ConfigFile cfg, string topSection, string enabledDescription, int defaultPrice) : base(cfg, topSection, enabledDescription)
-        {
-            Price = cfg.BindSyncedEntry(topSection, string.Format(LguConstants.PRICE_FORMAT, topSection), defaultPrice);
-        }
-
-        [field: SyncedEntryField] public SyncedEntry<int> Price { get; set; }
-    }
-    public class OneTimeIndividualUpgradeConfiguration : OneTimeUpgradeConfiguration, IIndividualUpgrade
-    {
-        [field: SyncedEntryField] public SyncedEntry<bool> Individual { get; set; }
-        public OneTimeIndividualUpgradeConfiguration(ConfigFile cfg, string topSection, string enabledDescription, int defaultPrice) : base(cfg, topSection, enabledDescription, defaultPrice)
-        {
-            Individual = cfg.BindSyncedEntry(topSection,
-            BaseUpgrade.INDIVIDUAL_SECTION,
-            BaseUpgrade.INDIVIDUAL_DEFAULT,
-            BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-        }
-    }
-
-    public class OneTimePrimitiveUpgradeConfiguration<T> : OneTimeUpgradeConfiguration
-    {
-        public OneTimePrimitiveUpgradeConfiguration(ConfigFile cfg, string topSection, string enabledDescription, int defaultPrice) : base(cfg, topSection, enabledDescription, defaultPrice)
-        {
-        }
-
-        [field: SyncedEntryField] public SyncedEntry<T> Effect {  get; set; }
-    }
-    public class OneTimeIndividualPrimitiveUpgradeConfiguration<T> : OneTimePrimitiveUpgradeConfiguration<T>
-    {
-        [field: SyncedEntryField] public SyncedEntry<bool> Individual { get; set; }
-        public OneTimeIndividualPrimitiveUpgradeConfiguration(ConfigFile cfg, string topSection, string enabledDescription, int defaultPrice) : base(cfg, topSection, enabledDescription, defaultPrice)
-        {
-            Individual = cfg.BindSyncedEntry(topSection,
-            BaseUpgrade.INDIVIDUAL_SECTION,
-            BaseUpgrade.INDIVIDUAL_DEFAULT,
-            BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-        }
-    }
-    #endregion
-
-    #region Tier Upgrade Configurations
-    public class TierUpgradeConfiguration : UpgradeConfiguration
-    {
-        [field: SyncedEntryField] public SyncedEntry<string> Prices { get; set; }
-        public TierUpgradeConfiguration(ConfigFile cfg, string topSection, string enabledDescription, string defaultPrices) : base(cfg, topSection, enabledDescription)
-        {
-            Prices = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, defaultPrices, BaseUpgrade.PRICES_DESCRIPTION);
-        }
-    }
-    public class TierIndividualUpgradeConfiguration : TierUpgradeConfiguration, IIndividualUpgrade
-    {
-        [field: SyncedEntryField] public SyncedEntry<bool> Individual { get; set; }
-        public TierIndividualUpgradeConfiguration(ConfigFile cfg, string topSection, string enabledDescription, string defaultPrices) : base(cfg, topSection, enabledDescription, defaultPrices)
-        {
-            Individual = cfg.BindSyncedEntry(topSection,
-            BaseUpgrade.INDIVIDUAL_SECTION,
-            BaseUpgrade.INDIVIDUAL_DEFAULT,
-            BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-        }
-    }
-    public class TierCollectionUpgradeConfiguration : TierUpgradeConfiguration, ITierCollectionUpgrade
-    {
-        public TierCollectionUpgradeConfiguration(ConfigFile cfg, string topSection, string enabledDescription, string defaultPrices) : base(cfg, topSection, enabledDescription, defaultPrices)
-        {
-        }
-        [field: SyncedEntryField] public SyncedEntry<string> TierCollection { get; set; }
-    }
-    public class TierPrimitiveUpgradeConfiguration<T> : TierUpgradeConfiguration, ITierEffectUpgrade<T>
-    {
-        public TierPrimitiveUpgradeConfiguration(ConfigFile cfg, string topSection, string enabledDescription, string defaultPrices) : base(cfg, topSection, enabledDescription, defaultPrices)
-        {
-        }
-
-        [field: SyncedEntryField] public SyncedEntry<T> InitialEffect { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<T> IncrementalEffect { get; set; }
-    }
-    public class TierIndividualPrimitiveUpgradeConfiguration<T> : TierPrimitiveUpgradeConfiguration<T>, IIndividualUpgrade
-    {
-        [field: SyncedEntryField] public SyncedEntry<bool> Individual { get; set; }
-        public TierIndividualPrimitiveUpgradeConfiguration(ConfigFile cfg, string topSection, string enabledDescription, string defaultPrices) : base(cfg, topSection, enabledDescription, defaultPrices)
-        {
-            Individual = cfg.BindSyncedEntry(topSection,
-            BaseUpgrade.INDIVIDUAL_SECTION,
-            BaseUpgrade.INDIVIDUAL_DEFAULT,
-            BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-        }
-    }
-
-    #endregion
-
     [DataContract]
     public class LategameConfiguration : SyncedConfig2<LategameConfiguration>
     {
-        public TierIndividualPrimitiveUpgradeConfiguration<int> EffectiveBandaidsConfiguration { get; set; }
-        public TierIndividualPrimitiveUpgradeConfiguration<int> MedicalNanobotsConfiguration {  get; set; }
-        public TierPrimitiveUpgradeConfiguration<int> ScrapKeeperConfiguration {  get; set; }
-        public TierPrimitiveUpgradeConfiguration<int> ParticleInfuserConfiguration {  get; set; }
-        public OneTimeIndividualUpgradeConfiguration SilverBulletsConfiguration {  get; set; }
-        public TierCollectionUpgradeConfiguration FusionMatterConfiguration {  get; set; }
-        public TierIndividualPrimitiveUpgradeConfiguration<int> LongBarrelConfiguration {  get; set; }
-        public TierIndividualPrimitiveUpgradeConfiguration<int> HollowPointConfiguration {  get; set; }
-        public TierIndividualPrimitiveUpgradeConfiguration<int> JetpackThrustersConfiguration {  get; set; }
-        public TierIndividualPrimitiveUpgradeConfiguration<int> JetFuelConfiguration {  get; set; }
-        public TierIndividualPrimitiveUpgradeConfiguration<int> QuickHandsConfiguration {  get; set; }
-        public TierPrimitiveUpgradeConfiguration<int> MidasTouchConfiguration {  get; set; }
-        public TierPrimitiveUpgradeConfiguration<int> CarbonKneejointsConfiguration {  get; set; }
-        public TierPrimitiveUpgradeConfiguration<int> LifeInsuranceConfiguration {  get; set; }
-        public TierIndividualPrimitiveUpgradeConfiguration<int> RubberBootsConfiguration {  get; set; }
+        public ITierEffectUpgrade<int> EffectiveBandaidsConfiguration { get; set; }
+        public ITierEffectUpgrade<int> MedicalNanobotsConfiguration { get; set; }
+        public ITierEffectUpgrade<int> ScrapKeeperConfiguration { get; set; }
+        public ITierEffectUpgrade<int> ParticleInfuserConfiguration { get; set; }
+        public IOneTimeUpgradeConfiguration SilverBulletsConfiguration { get; set; }
+        public ITierCollectionUpgrade FusionMatterConfiguration { get; set; }
+        public ITierEffectUpgrade<int> LongBarrelConfiguration { get; set; }
+        public ITierEffectUpgrade<int> HollowPointConfiguration { get; set; }
+        public ITierEffectUpgrade<int> JetpackThrustersConfiguration { get; set; }
+        public ITierEffectUpgrade<int> JetFuelConfiguration { get; set; }
+        public ITierEffectUpgrade<int> QuickHandsConfiguration { get; set; }
+        public ITierEffectUpgrade<int> MidasTouchConfiguration { get; set; }
+        public ITierEffectUpgrade<int> CarbonKneejointsConfiguration { get; set; }
+        public ITierEffectUpgrade<int> LifeInsuranceConfiguration { get; set; }
+        public ITierEffectUpgrade<int> RubberBootsConfiguration { get; set; }
+        public ITierEffectUpgrade<int> OxygenCanistersConfiguration {  get; set; }
+        public ITierEffectUpgrade<int> SleightOfHandConfiguration {  get; set; }
+        public ITierEffectUpgrade<int> HikingBootsConfiguration { get; set; }
+        public ITierEffectUpgrade<int> TractionBootsConfiguration { get; set; }
+        public IOneTimeUpgradeConfiguration FedoraSuitConfiguration {  get; set; }
+        public ITierEffectUpgrade<int> WeedGeneticManipulationConfiguration {  get; set; }
+        public ITierEffectUpgrade<float> ClayGlassesConfiguration {  get; set; }
+        public ITierEffectUpgrade<float> MechanicalArmsConfiguration {  get; set; }
+        public ITierEffectUpgrade<int> ScavengerInstictsConfiguration {  get; set; }
+        public LandingThrusterUpgradeConfiguration LandingThrustersConfiguration {  get; set; }
+        public ITierEffectUpgrade<int> ReinforcedBootsConfiguration { get; set; }
+        public DeeperPocketsUpgradeConfiguration DeeperPocketsConfiguration {  get; set; }
+        public ITierMultipleEffectUpgrade<int, float> AluminiumCoilConfiguration {  get; set; }
 
         #region Enabled
-        [field: SyncedEntryField] public SyncedEntry<bool> OXYGEN_CANISTERS_ENABLED {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> SLEIGHT_OF_HAND_ENABLED {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> HIKING_BOOTS_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> TRACTION_BOOTS_ENABLED {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> FEDORA_SUIT_ENABLED {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> WEED_GENETIC_MANIPULATION_ENABLED {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> CLAY_GLASSES_ENABLED {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> MECHANICAL_ARMS_ENABLED {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> SCAVENGER_INSTINCTS_ENABLED {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> LANDING_THRUSTERS_ENABLED {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> REINFORCED_BOOTS_ENABLED {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> DEEPER_POCKETS_ENABLED {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> ALUMINIUM_COILS_ENABLED {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> CHARGING_BOOSTER_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> MARKET_INFLUENCE_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> BARGAIN_CONNECTIONS_ENABLED { get; set; }
@@ -204,22 +92,12 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<bool> FASTER_DROP_POD_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SIGURD_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> EFFICIENT_ENGINES_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> CLIMBING_GLOVES_ENABLED {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> CLIMBING_GLOVES_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> LITHIUM_BATTERIES_ENABLED { get; set; }
 
         #endregion
 
         #region Individual
-        [field: SyncedEntryField] public SyncedEntry<bool> OXYGEN_CANISTERS_INDIVIDUAL { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> SLEIGHT_OF_HAND_INDIVIDUAL {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> HIKING_BOOTS_INDIVIDUAL {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> TRACTION_BOOTS_INDIVIDUAL {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> FEDORA_SUIT_INDIVIDUAL {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> CLAY_GLASSES_INDIVIDUAL {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> MECHANICAL_ARMS_INDIVIDUAL {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> REINFORCED_BOOTS_INDIVIDUAL {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> DEEPER_POCKETS_INDIVIDUAL {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> ALUMINIUM_COILS_INDIVIDUAL { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> BEEKEEPER_INDIVIDUAL { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> PROTEIN_INDIVIDUAL { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> BIGGER_LUNGS_INDIVIDUAL { get; set; }
@@ -239,20 +117,7 @@ namespace MoreShipUpgrades.Misc
         #endregion
 
         #region Initial Prices
-        [field: SyncedEntryField] public SyncedEntry<int> OXYGEN_CANISTERS_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> SLEIGHT_OF_HAND_PRICE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> HIKING_BOOTS_PRICE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> TRACTION_BOOTS_PRICE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> FEDORA_SUIT_PRICE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> WEED_GENETIC_MANIPULATION_PRICE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> CLAY_GLASSES_PRICE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> MECHANICAL_ARMS_PRICE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> SCAVENGER_INSTINCTS_PRICE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> LANDING_THRUSTERS_PRICE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> REINFORCED_BOOTS_PRICE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> DEEPER_POCKETS_PRICE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> ALUMINIUM_COILS_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> CLIMBING_GLOVES_PRICE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> CLIMBING_GLOVES_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CHARGING_BOOSTER_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MARKET_INFLUENCE_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> BARGAIN_CONNECTIONS_PRICE { get; set; }
@@ -281,75 +146,26 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<int> FASTER_DROP_POD_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SIGURD_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> EFFICIENT_ENGINES_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> LITHIUM_BATTERIES_PRICE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> LITHIUM_BATTERIES_PRICE { get; set; }
 
         #endregion
 
         #region Attributes
-        [field: SyncedEntryField] public SyncedEntry<string> DISCOMBOBULATOR_BLACKLIST_ENEMIES {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> DISCOMBOBULATOR_BLACKLIST_ENEMIES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SICK_BEATS_APPLY_STAMINA_CONSUMPTION { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<Interns.TeleportRestriction> INTERNS_TELEPORT_RESTRICTION {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> OXYGEN_CANISTERS_PRICES {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> OXYGEN_CANISTERS_OVERRIDE_NAME {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> OXYGEN_CANISTERS_INITIAL_OXYGEN_CONSUMPTION_DECREASE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> SLEIGHT_OF_HAND_PRICES {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> SLEIGHT_OF_HAND_OVERRIDE_NAME {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> SLEIGHT_OF_HAND_INITIAL_INCREASE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> SLEIGHT_OF_HAND_INCREMENTAL_INCREASE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> CONTRACT_PROVIDE_RANDOM_ONLY {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> SHOW_WORLD_BUILDING_TEXT {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> HIKING_BOOTS_PRICES {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> HIKING_BOOTS_OVERRIDE_NAME { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> HIKING_BOOTS_INITIAL_DECREASE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> HIKING_BOOTS_INCREMENTAL_DECREASE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> TRACTION_BOOTS_PRICES {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> TRACTION_BOOTS_OVERRIDE_NAME {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> TRACTION_BOOTS_INITIAL_INCREASE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> TRACTION_BOOTS_INCREMENTAL_INCREASE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> FEDORA_SUIT_OVERRIDE_NAME {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> WEED_GENETIC_MANIPULATION_PRICES { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> WEED_GENETIC_MANIPULATION_OVERRIDE_NAME {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> WEED_GENETIC_MANIPULATION_INITIAL_EFFECTIVENESS_INCREASE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> WEED_GENETIC_MANIPULATION_INCREMENTAL_EFFECTIVENESS_INCREASE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> CLAY_GLASSES_OVERRIDE_NAME { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> CLAY_GLASSES_PRICES {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> CLAY_GLASSES_DISTANCE_INITIAL_INCREASE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> CLAY_GLASSES_DISTANCE_INCREMENTAL_INCREASE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<Interns.TeleportRestriction> INTERNS_TELEPORT_RESTRICTION { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> CONTRACT_PROVIDE_RANDOM_ONLY { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> SHOW_WORLD_BUILDING_TEXT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<LightningRod.UpgradeMode> LIGHTNING_ROD_UPGRADE_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<BackMuscles.UpgradeMode> BACK_MUSCLES_UPGRADE_MODE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> MECHANICAL_ARMS_PRICES {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> MECHANICAL_ARMS_INITIAL_RANGE_INCREASE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> MECHANICAL_ARMS_OVERRIDE_NAME {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> SCAVENGER_INSTINCTS_OVERRIDE_NAME { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> SCAVENGER_INSTINCTS_PRICES {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> SCAVENGER_INSTINCTS_INCREMENTAL_AMOUN_SCRAP_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> MEDKIT_SCAN_NODE { get; set; }
 
-        [field: SyncedEntryField] public SyncedEntry<QuantumDisruptor.ResetModes> QUANTUM_DISRUPTOR_RESET_MODE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<QuantumDisruptor.ResetModes> QUANTUM_DISRUPTOR_RESET_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<QuantumDisruptor.UpgradeModes> QUANTUM_DISRUPTOR_UPGRADE_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> QUANTUM_DISRUPTOR_INITIAL_HOURS_REVERT_ON_USE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_REVERT_ON_USE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> QUANTUM_DISRUPTOR_INITIAL_USES { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> QUANTUM_DISRUPTOR_INCREMENTAL_USES {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> LANDING_THRUSTERS_OVERRIDE_NAME {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> LANDING_THRUSTERS_PRICES {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> LANDING_THRUSTERS_INITIAL_SPEED_INCREASE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> LANDING_THRUSTERS_AFFECT_LANDING {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> LANDING_THRUSTERS_AFFECT_DEPARTING { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> REINFORCED_BOOTS_OVERRIDE_NAME {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> REINFORCED_BOOTS_PRICES {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> DEEPER_POCKETS_OVERRIDE_NAME { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> DEEPER_POCKETS_PRICES { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> DEEPER_POCKETS_INITIAL_TWO_HANDED_ITEMS {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> DEEPER_POCKETS_ALLOW_WHEELBARROWS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> ALUMINIUM_COILS_OVERRIDE_NAME { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> QUANTUM_DISRUPTOR_INCREMENTAL_USES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> BACK_MUSCLES_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> BARGAIN_CONNECTIONS_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> BEEKEEPER_OVERRIDE_NAME { get; set; }
@@ -378,24 +194,15 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<string> SICK_BEATS_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> SIGURD_ACCESS_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> WALKIE_GPS_OVERRIDE_NAME { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> OVERRIDE_UPGRADE_NAMES {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> ALUMINIUM_COILS_PRICES {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> ALUMINIUM_COILS_INITIAL_COOLDOWN_DECREASE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_DECREASE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> ALUMINIUM_COILS_INITIAL_DIFFICULTY_DECREASE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> ALUMINIUM_COILS_INITIAL_STUN_TIMER_INCREASE {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> ALUMINIUM_COILS_INCREMENTAL_STUN_TIMER_INCREASE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> ALUMINIUM_COILS_INCREMENTAL_DIFFICULTY_DECREASE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> ALUMINIUM_COILS_INITIAL_RANGE_INCREASE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> ALUMINIUM_COILS_INCREMENTAL_RANGE_INCREASE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> OVERRIDE_UPGRADE_NAMES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> LITHIUM_BATTERIES_PRICES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> LITHIUM_BATTERIES_INITIAL_MULTIPLIER { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> EFFICIENT_ENGINES_PRICES {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> EFFICIENT_ENGINES_INITIAL_DISCOUNT {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> EFFICIENT_ENGINES_PRICES { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> EFFICIENT_ENGINES_INITIAL_DISCOUNT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> EFFICIENT_ENGINES_INCREMENTAL_DISCOUNT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> CLIMBING_GLOVES_PRICES {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> INITIAL_CLIMBING_SPEED_BOOST {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> CLIMBING_GLOVES_PRICES { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<float> INITIAL_CLIMBING_SPEED_BOOST { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> INCREMENTAL_CLIMBING_SPEED_BOOST { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> CHARGING_BOOSTER_PRICES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> CHARGING_BOOSTER_COOLDOWN { get; set; }
@@ -425,7 +232,7 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<float> DISCOMBOBULATOR_STUN_DURATION { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> DISCOMBOBULATOR_NOTIFY_CHAT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> NIGHT_VIS_COLOR { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> NIGHT_VIS_UI_TEXT_COLOR {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> NIGHT_VIS_UI_TEXT_COLOR { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> NIGHT_VIS_UI_BAR_COLOR { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> NIGHT_VIS_DRAIN_SPEED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> NIGHT_VIS_REGEN_SPEED { get; set; }
@@ -505,7 +312,7 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<float> BEATS_SPEED_INC { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> BEATS_RADIUS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> BEATS_DMG_INC { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> SICK_BEATS_BOOMBOX_ATTRACT_SOUND {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> SICK_BEATS_BOOMBOX_ATTRACT_SOUND { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SNARE_FLEA_SAMPLE_MINIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SNARE_FLEA_SAMPLE_MAXIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> BUNKER_SPIDER_SAMPLE_MINIMUM_VALUE { get; set; }
@@ -552,13 +359,13 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<string> BARGAIN_CONNECTIONS_PRICES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> FASTER_DROP_POD_TIMER { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> FASTER_DROP_POD_INITIAL_TIMER { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> FASTER_DROP_POD_LEAVE_TIMER {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<float> FASTER_DROP_POD_LEAVE_TIMER { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> EXTRACTION_CONTRACT_AMOUNT_MEDKITS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_REWARD_QUOTA_MULTIPLIER { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SHOW_UPGRADES_CHAT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> SIGURD_CHANCE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> SIGURD_PERCENT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<Sigurd.FunctionModes> SIGURD_MODE {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<Sigurd.FunctionModes> SIGURD_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SALE_APPLY_ONCE { get; set; }
 
         #endregion
@@ -570,34 +377,21 @@ namespace MoreShipUpgrades.Misc
         [field: SyncedEntryField] public SyncedEntry<float> SCRAP_UPGRADE_CHANCE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<ItemProgressionManager.ChancePerScrapModes> SCRAP_UPGRADE_CHANCE_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_BLACKLISTED_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_APPARATICE_ITEMS {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> ITEM_PROGRESSION_NO_PURCHASE_UPGRADES {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> OXYGEN_CANISTERS_ITEM_PROGRESSION_ITEMS {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> SLEIGHT_OF_HAND_ITEM_PROGRESSION_ITEMS {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> HIKING_BOOTS_ITEM_PROGRESSION_ITEMS {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> TRACTION_BOOTS_ITEM_PROGRESSION_ITEMS {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> FEDORA_SUIT_ITEM_PROGRESSION_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> WEED_GENETIC_MANIPULATION_ITEM_PROGRESSION_ITEMS {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> CLAY_GLASSES_ITEM_PROGRESSION_ITEMS {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> ALUMINIUM_COILS_ITEM_PROGRESSION_ITEMS {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_APPARATICE_ITEMS { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> ITEM_PROGRESSION_NO_PURCHASE_UPGRADES { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> BACK_MUSCLES_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> BARGAIN_CONNECTIONS_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> BEEKEEPER_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> BETTER_SCANNER_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> CHARGING_BOOSTER_ITEM_PROGRESSION_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> DEEPER_POCKETS_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> DISCOMBOBULATOR_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> EFFICIENT_ENGINES_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> HUNTER_ITEM_PROGRESSION_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> LANDING_THRUSTERS_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> LITHIUM_BATTERIES_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> MARKET_INFLUENCE_ITEM_PROGRESSION_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> MECHANICAL_ARMS_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> NIGHT_VISION_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> PROTEIN_POWDER_ITEM_PROGRESSION_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> REINFORCED_BOOTS_ITEM_PROGRESSION_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> SCAVENGER_INSTINCTS_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> BIGGER_LUNGS_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> CLIMBING_GLOVES_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> SHUTTER_BATTERIES_ITEM_PROGRESSION_ITEMS { get; set; }
@@ -620,8 +414,8 @@ namespace MoreShipUpgrades.Misc
         #region Randomize Upgrades
         [field: SyncedEntryField] public SyncedEntry<bool> RANDOMIZE_UPGRADES_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> RANDOMIZE_UPGRADES_AMOUNT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> RANDOMIZE_UPGRADES_ALWAYS_SHOW_PURCHASED {  get; set; }
-        [field: SyncedEntryField] public SyncedEntry<RandomizeUpgradeManager.RandomizeUpgradeEvents> RANDOMIZE_UPGRADES_CHANGE_UPGRADES_EVENT {  get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> RANDOMIZE_UPGRADES_ALWAYS_SHOW_PURCHASED { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<RandomizeUpgradeManager.RandomizeUpgradeEvents> RANDOMIZE_UPGRADES_CHANGE_UPGRADES_EVENT { get; set; }
         #endregion
 
         #region Configuration Bindings
@@ -670,19 +464,6 @@ namespace MoreShipUpgrades.Misc
 
             topSection = LguConstants.OVERRIDE_NAMES_SECTION;
             OVERRIDE_UPGRADE_NAMES = cfg.BindSyncedEntry(topSection, LguConstants.OVERRIDE_NAMES_ENABLED_KEY, LguConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LguConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
-            OXYGEN_CANISTERS_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.OXYGEN_CANISTERS_OVERRIDE_NAME_KEY, OxygenCanisters.UPGRADE_NAME);
-            SLEIGHT_OF_HAND_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.SLEIGHT_OF_HAND_OVERRIDE_NAME_KEY, SleightOfHand.UPGRADE_NAME);
-            HIKING_BOOTS_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.HIKING_BOOTS_OVERRIDE_NAME_KEY, HikingBoots.UPGRADE_NAME);
-            TRACTION_BOOTS_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.TRACTION_BOOTS_OVERRIDE_NAME_KEY, TractionBoots.UPGRADE_NAME);
-            FEDORA_SUIT_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.FEDORA_SUIT_OVERRIDE_NAME_KEY, FedoraSuit.UPGRADE_NAME);
-            WEED_GENETIC_MANIPULATION_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.WEED_GENETIC_MANIPULATION_OVERRIDE_NAME_KEY, WeedGeneticManipulation.UPGRADE_NAME);
-            CLAY_GLASSES_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.CLAY_GLASSES_OVERRIDE_NAME_KEY, ClayGlasses.UPGRADE_NAME);
-            MECHANICAL_ARMS_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.MECHANICAL_ARMS_OVERRIDE_NAME_KEY, MechanicalArms.UPGRADE_NAME);
-            SCAVENGER_INSTINCTS_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.SCAVENGER_INSTINCTS_OVERRIDE_NAME_KEY, ScavengerInstincts.UPGRADE_NAME);
-            LANDING_THRUSTERS_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.LANDING_THRUSTERS_OVERRIDE_NAME_KEY, LandingThrusters.UPGRADE_NAME);
-            REINFORCED_BOOTS_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.REINFORCED_BOOTS_OVERRIDE_NAME_KEY, ReinforcedBoots.UPGRADE_NAME);
-            DEEPER_POCKETS_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.DEEPER_POCKETS_OVERRIDE_NAME_KEY, DeepPockets.UPGRADE_NAME);
-            ALUMINIUM_COILS_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.ALUMINIUM_COILS_OVERRIDE_NAME_KEY, AluminiumCoils.UPGRADE_NAME);
             BACK_MUSCLES_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.BACK_MUSCLES_OVERRIDE_NAME_KEY, BackMuscles.UPGRADE_NAME);
             BARGAIN_CONNECTIONS_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.BARGAIN_CONNECTIONS_OVERRIDE_NAME_KEY, BargainConnections.UPGRADE_NAME);
             BEEKEEPER_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.BEEKEEPER_OVERRIDE_NAME_KEY, Beekeeper.UPGRADE_NAME);
@@ -761,19 +542,12 @@ namespace MoreShipUpgrades.Misc
 
             #region Upgrades
 
-            #region Effective Bandaids
-
             topSection = EffectiveBandaids.UPGRADE_NAME;
-
             EffectiveBandaidsConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.EFFECTIVE_BANDAIDS_ENABLED_DESCRIPTION, EffectiveBandaids.DEFAULT_PRICES)
             {
                 InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.EFFECTIVE_BANDAIDS_INITIAL_HEALTH_REGEN_AMOUNT_INCREASE_KEY, LguConstants.EFFECTIVE_BANDAIDS_INITIAL_HEALTH_REGEN_AMOUNT_INCREASE_DEFAULT, LguConstants.EFFECTIVE_BANDAIDS_INITIAL_HEALTH_REGEN_AMOUNT_INCREASE_DESCRIPTION),
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.EFFECTIVE_BANDAIDS_INCREMENTAL_HEALTH_REGEN_AMOUNT_INCREASE_KEY, LguConstants.EFFECTIVE_BANDAIDS_INCREMENTAL_HEALTH_REGEN_AMOUNT_INCREASE_DEFAULT, LguConstants.EFFECTIVE_BANDAIDS_INCREMENTAL_HEALTH_REGEN_AMOUNT_INCREASE_DESCRIPTION),
             };
-
-            #endregion
-
-            #region Medical Nanobots
 
             topSection = MedicalNanobots.UPGRADE_NAME;
             MedicalNanobotsConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.MEDICAL_NANOBOTS_ENABLED_DESCRIPTION, MedicalNanobots.DEFAULT_PRICES)
@@ -781,9 +555,6 @@ namespace MoreShipUpgrades.Misc
                 InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.MEDICAL_NANOBOTS_INITIAL_HEALTH_REGEN_CAP_INCREASE_KEY, LguConstants.MEDICAL_NANOBOTS_INITIAL_HEALTH_REGEN_CAP_INCREASE_DEFAULT, LguConstants.MEDICAL_NANOBOTS_INITIAL_HEALTH_REGEN_CAP_INCREASE_DESCRIPTION),
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.MEDICAL_NANOBOTS_INCREMENTAL_HEALTH_REGEN_CAP_INCREASE_KEY, LguConstants.MEDICAL_NANOBOTS_INCREMENTAL_HEALTH_REGEN_CAP_INCREASE_DEFAULT, LguConstants.MEDICAL_NANOBOTS_INCREMENTAL_HEALTH_REGEN_CAP_INCREASE_DESCRIPTION),
             };
-            #endregion
-
-            #region Scrap Keeper
 
             topSection = ScrapKeeper.UPGRADE_NAME;
             ScrapKeeperConfiguration = new TierPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.SCRAP_KEEPER_ENABLED_DESCRIPTION, ScrapKeeper.PRICES_DEFAULT)
@@ -792,10 +563,6 @@ namespace MoreShipUpgrades.Misc
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_KEEPER_INCREMENTAL_KEEP_SCRAP_CHANCE_INCREASE_KEY, LguConstants.SCRAP_KEEPER_INCREMENTAL_KEEP_SCRAP_CHANCE_INCREASE_DEFAULT, LguConstants.SCRAP_KEEPER_INCREMENTAL_KEEP_SCRAP_CHANCE_INCREASE_DESCRIPTION)
             };
 
-            #endregion
-
-            #region Particle Infuser
-
             topSection = ParticleInfuser.UPGRADE_NAME;
             ParticleInfuserConfiguration = new TierPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.PARTICLE_INFUSER_ENABLED_DESCRIPTION, ParticleInfuser.DEFAULT_PRICES)
             {
@@ -803,16 +570,8 @@ namespace MoreShipUpgrades.Misc
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.PARTICLE_INFUSER_INCREMENTAL_TELEPORT_SPEED_INCREASE_KEY, LguConstants.PARTICLE_INFUSER_INCREMENTAL_TELEPORT_SPEED_INCREASE_DEFAULT, LguConstants.PARTICLE_INFUSER_INCREMENTAL_TELEPORT_SPEED_INCREASE_DESCRIPTION),
             };
 
-            #endregion
-
-            #region Silver Bullets
-
             topSection = SilverBullets.UPGRADE_NAME;
             SilverBulletsConfiguration = new OneTimeIndividualUpgradeConfiguration(cfg, topSection, LguConstants.SILVER_BULLETS_ENABLED_DESCRIPTION, LguConstants.SILVER_BULLETS_PRICE_DEFAULT);
-
-            #endregion
-
-            #region Fusion Matter
 
             topSection = FusionMatter.UPGRADE_NAME;
             FusionMatterConfiguration = new TierCollectionUpgradeConfiguration(cfg, topSection, LguConstants.FUSION_MATTER_ENABLED_DESCRIPTION, FusionMatter.DEFAULT_PRICES)
@@ -820,30 +579,18 @@ namespace MoreShipUpgrades.Misc
                 TierCollection = cfg.BindSyncedEntry(topSection, LguConstants.FUSION_MATTER_TIERS_KEY, LguConstants.FUSION_MATTER_TIERS_DEFAULT, LguConstants.FUSION_MATTER_TIERS_DESCRIPTION),
             };
 
-            #endregion
-
-            #region Long Barrel
-
             topSection = LongBarrel.UPGRADE_NAME;
             LongBarrelConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.LONG_BARREL_ENABLED_DESCRIPTION, LongBarrel.DEFAULT_PRICES)
             {
                 InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.LONG_BARREL_INITIAL_SHOTGUN_RANGE_INCREASE_KEY, LguConstants.LONG_BARREL_INITIAL_SHOTGUN_RANGE_INCREASE_DEFAULT, LguConstants.LONG_BARREL_INITIAL_SHOTGUN_RANGE_INCREASE_DESCRIPTION),
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.LONG_BARREL_INCREMENTAL_SHOTGUN_RANGE_INCREASE_KEY, LguConstants.LONG_BARREL_INCREMENTAL_SHOTGUN_RANGE_INCREASE_DEFAULT, LguConstants.LONG_BARREL_INCREMENTAL_SHOTGUN_RANGE_INCREASE_DESCRIPTION),
             };
-            #endregion
-
-            #region Hollow Point
-
             topSection = HollowPoint.UPGRADE_NAME;
             HollowPointConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.HOLLOW_POINT_ENABLED_DESCRIPTION, HollowPoint.DEFAULT_PRICES)
             {
                 InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.HOLLOW_POINT_INITIAL_SHOTGUN_DAMAGE_INCREASE_KEY, LguConstants.HOLLOW_POINT_INITIAL_SHOTGUN_DAMAGE_INCREASE_DEFAULT, LguConstants.HOLLOW_POINT_INITIAL_SHOTGUN_DAMAGE_INCREASE_DESCRIPTION),
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.HOLLOW_POINT_INCREMENTAL_SHOTGUN_DAMAGE_INCREASE_KEY, LguConstants.HOLLOW_POINT_INCREMENTAL_SHOTGUN_DAMAGE_INCREASE_DEFAULT, LguConstants.HOLLOW_POINT_INCREMENTAL_SHOTGUN_DAMAGE_INCREASE_DESCRIPTION),
             };
-
-            #endregion
-
-            #region Jetpack Thrusters
 
             topSection = JetpackThrusters.UPGRADE_NAME;
             JetpackThrustersConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.JETPACK_THRUSTERS_ENABLED_DESCRIPTION, JetpackThrusters.DEFAULT_PRICES)
@@ -852,20 +599,12 @@ namespace MoreShipUpgrades.Misc
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.JETPACK_THRUSTERS_INCREMENTAL_MAXIMUM_POWER_INCREASE_KEY, LguConstants.JETPACK_THRUSTERS_INCREMENTAL_MAXIMUM_POWER_INCREASE_DEFAULT, LguConstants.JETPACK_THRUSTERS_INCREMENTAL_MAXIMUM_POWER_INCREASE_DESCRIPTION),
             };
 
-            #endregion
-
-            #region Jet Fuel
-
             topSection = JetFuel.UPGRADE_NAME;
             JetFuelConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.JET_FUEL_ENABLED_DESCRIPTION, JetFuel.DEFAULT_PRICES)
             {
                 InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.JET_FUEL_INITIAL_ACCELERATION_INCREASE_KEY, LguConstants.JET_FUEL_INITIAL_ACCELERATION_INCREASE_DEFAULT, LguConstants.JET_FUEL_INITIAL_ACCELERATION_INCREASE_DESCRIPTION),
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.JET_FUEL_INCREMENTAL_ACCELERATION_INCREASE_KEY, LguConstants.JET_FUEL_INCREMENTAL_ACCELERATION_INCREASE_DEFAULT, LguConstants.JET_FUEL_INCREMENTAL_ACCELERATION_INCREASE_DESCRIPTION),
             };
-
-            #endregion
-
-            #region Quick Hands
 
             topSection = QuickHands.UPGRADE_NAME;
             QuickHandsConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.QUICK_HANDS_ENABLED_DESCRIPTION, QuickHands.DEFAULT_PRICES)
@@ -874,10 +613,6 @@ namespace MoreShipUpgrades.Misc
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.QUICK_HANDS_INCREMENTAL_INTERACTION_SPEED_INCREASE_KEY, LguConstants.QUICK_HANDS_INCREMENTAL_INTERACTION_SPEED_INCREASE_DEFAULT, LguConstants.QUICK_HANDS_INCREMENTAL_INTERACTION_SPEED_INCREASE_DESCRIPTION),
             };
 
-            #endregion
-
-            #region Midas Touch
-
             topSection = MidasTouch.UPGRADE_NAME;
             MidasTouchConfiguration = new TierPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.MIDAS_TOUCH_ENABLED_DESCRIPTION, MidasTouch.DEFAULT_PRICES)
             {
@@ -885,19 +620,12 @@ namespace MoreShipUpgrades.Misc
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.MIDAS_TOUCH_INCREMENTAL_SCRAP_VALUE_INCREASE_KEY, LguConstants.MIDAS_TOUCH_INCREMENTAL_SCRAP_VALUE_INCREASE_DEFAULT, LguConstants.MIDAS_TOUCH_INCREMENTAL_SCRAP_VALUE_INCREASE_DESCRIPTION),
             };
 
-            #endregion
-
-            #region Carbon Kneejoints
-
             topSection = CarbonKneejoints.UPGRADE_NAME;
             CarbonKneejointsConfiguration = new TierPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.CARBON_KNEEJOINTS_ENABLED_DESCRIPTION, CarbonKneejoints.DEFAULT_PRICES)
             {
                 InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.CARBON_KNEEJOINTS_INITIAL_CROUCH_DEBUFF_DECREASE_KEY, LguConstants.CARBON_KNEEJOINTS_INITIAL_CROUCH_DEBUFF_DECREASE_DEFAULT, LguConstants.CARBON_KNEEJOINTS_INITIAL_CROUCH_DEBUFF_DECREASE_DESCRIPTION),
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.CARBON_KNEEJOINTS_INCREMENTAL_CROUCH_DEBUFF_DECREASE_KEY, LguConstants.CARBON_KNEEJOINTS_INCREMENTAL_CROUCH_DEBUFF_DECREASE_DEFAULT, LguConstants.CARBON_KNEEJOINTS_INCREMENTAL_CROUCH_DEBUFF_DECREASE_DESCRIPTION),
             };
-            #endregion
-
-            #region Life Insurance
 
             topSection = LifeInsurance.UPGRADE_NAME;
             LifeInsuranceConfiguration = new TierPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.LIFE_INSURANCE_ENABLED_DESCRIPTION, LifeInsurance.DEFAULT_PRICES)
@@ -906,185 +634,115 @@ namespace MoreShipUpgrades.Misc
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.LIFE_INSURANCE_INCREMENTAL_COST_PERCENTAGE_DECREASE_KEY, LguConstants.LIFE_INSURANCE_INCREMENTAL_COST_PERCENTAGE_DECREASE_DEFAULT, LguConstants.LIFE_INSURANCE_INCREMENTAL_COST_PERCENTAGE_DECREASE_DESCRIPTION),
             };
 
-            #endregion
-
-            #region Rubber Boots
-
             topSection = RubberBoots.UPGRADE_NAME;
             RubberBootsConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.RUBBER_BOOTS_ENABLED_DESCRIPTION, RubberBoots.DEFAULT_PRICES)
             {
                 InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.RUBBER_BOOTS_INITIAL_MOVEMENT_HINDERANCE_DECREASE_KEY, LguConstants.RUBBER_BOOTS_INITIAL_MOVEMENT_HINDERANCE_DECREASE_DEFAULT, LguConstants.RUBBER_BOOTS_INITIAL_MOVEMENT_HINDERANCE_DECREASE_DESCRIPTION),
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.RUBBER_BOOTS_INCREMENTAL_MOVEMENT_HINDERANCE_DECREASE_KEY, LguConstants.RUBBER_BOOTS_INCREMENTAL_MOVEMENT_HINDERANCE_DECREASE_DEFAULT, LguConstants.RUBBER_BOOTS_INCREMENTAL_MOVEMENT_HINDERANCE_DECREASE_DESCRIPTION),
             };
-            #endregion
-
-            #region Oxygen Canisters
 
             topSection = OxygenCanisters.UPGRADE_NAME;
-            OXYGEN_CANISTERS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.OXYGEN_CANISTERS_ENABLED_KEY, LguConstants.OXYGEN_CANISTERS_ENABLED_DEFAULT, LguConstants.OXYGEN_CANISTERS_ENABLED_DESCRIPTION);
-            OXYGEN_CANISTERS_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            OXYGEN_CANISTERS_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.OXYGEN_CANISTERS_PRICE_KEY, LguConstants.OXYGEN_CANISTERS_PRICE_DEFAULT);
-            OXYGEN_CANISTERS_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, OxygenCanisters.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
-            OXYGEN_CANISTERS_INITIAL_OXYGEN_CONSUMPTION_DECREASE = cfg.BindSyncedEntry(topSection, LguConstants.OXYGEN_CANISTERS_INITIAL_OXYGEN_CONSUMPTION_DECREASE_KEY, LguConstants.OXYGEN_CANISTERS_INITIAL_OXYGEN_CONSUMPTION_DECREASE_DEFAULT, LguConstants.OXYGEN_CANISTERS_INITIAL_OXYGEN_CONSUMPTION_DECREASE_DESCRIPTION);
-            OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE = cfg.BindSyncedEntry(topSection, LguConstants.OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE_KEY, LguConstants.OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE_DEFAULT, LguConstants.OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE_DESCRIPTION);
-            OXYGEN_CANISTERS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
-
-            #region Sleight Of Hand
-
+            OxygenCanistersConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.OXYGEN_CANISTERS_ENABLED_DESCRIPTION, OxygenCanisters.DEFAULT_PRICES)
+            {
+                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.OXYGEN_CANISTERS_INITIAL_OXYGEN_CONSUMPTION_DECREASE_KEY, LguConstants.OXYGEN_CANISTERS_INITIAL_OXYGEN_CONSUMPTION_DECREASE_DEFAULT, LguConstants.OXYGEN_CANISTERS_INITIAL_OXYGEN_CONSUMPTION_DECREASE_DESCRIPTION),
+                IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE_KEY, LguConstants.OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE_DEFAULT, LguConstants.OXYGEN_CANISTERS_INCREMENTAL_OXYGEN_CONSUMPTION_DECREASE_DESCRIPTION),
+            };
             topSection = SleightOfHand.UPGRADE_NAME;
-            SLEIGHT_OF_HAND_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.SLEIGHT_OF_HAND_ENABLED_KEY, LguConstants.SLEIGHT_OF_HAND_ENABLED_DEFAULT, LguConstants.SLEIGHT_OF_HAND_ENABLED_DESCRIPTION);
-            SLEIGHT_OF_HAND_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            SLEIGHT_OF_HAND_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.SLEIGHT_OF_HAND_PRICE_KEY, LguConstants.SLEIGHT_OF_HAND_PRICE_DEFAULT);
-            SLEIGHT_OF_HAND_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, SleightOfHand.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            SLEIGHT_OF_HAND_INITIAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.SLEIGHT_OF_HAND_INITIAL_INCREASE_KEY, LguConstants.SLEIGHT_OF_HAND_INITIAL_INCREASE_DEFAULT, LguConstants.SLEIGHT_OF_HAND_INITIAL_INCREASE_DESCRIPTION);
-            SLEIGHT_OF_HAND_INCREMENTAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.SLEIGHT_OF_HAND_INCREMENTAL_INCREASE_KEY, LguConstants.SLEIGHT_OF_HAND_INCREMENTAL_INCREASE_DEFAULT, LguConstants.SLEIGHT_OF_HAND_INCREMENTAL_INCREASE_DESCRIPTION);
-            SLEIGHT_OF_HAND_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
-
-            #region Hiking Boots
+            SleightOfHandConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.SLEIGHT_OF_HAND_ENABLED_DESCRIPTION, SleightOfHand.PRICES_DEFAULT)
+            {
+                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.SLEIGHT_OF_HAND_INITIAL_INCREASE_KEY, LguConstants.SLEIGHT_OF_HAND_INITIAL_INCREASE_DEFAULT, LguConstants.SLEIGHT_OF_HAND_INITIAL_INCREASE_DESCRIPTION),
+                IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.SLEIGHT_OF_HAND_INCREMENTAL_INCREASE_KEY, LguConstants.SLEIGHT_OF_HAND_INCREMENTAL_INCREASE_DEFAULT, LguConstants.SLEIGHT_OF_HAND_INCREMENTAL_INCREASE_DESCRIPTION),
+            };
 
             topSection = HikingBoots.UPGRADE_NAME;
-            HIKING_BOOTS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.HIKING_BOOTS_ENABLED_KEY, LguConstants.HIKING_BOOTS_ENABLED_DEFAULT, LguConstants.HIKING_BOOTS_ENABLED_DESCRIPTION);
-            HIKING_BOOTS_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            HIKING_BOOTS_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.HIKING_BOOTS_PRICE_KEY, LguConstants.HIKING_BOOTS_PRICE_DEFAULT);
-            HIKING_BOOTS_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, HikingBoots.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            HIKING_BOOTS_INITIAL_DECREASE = cfg.BindSyncedEntry(topSection, LguConstants.HIKING_BOOTS_INITIAL_DECREASE_KEY, LguConstants.HIKING_BOOTS_INITIAL_DECREASE_DEFAULT, LguConstants.HIKING_BOOTS_INITIAL_DECREASE_DESCRIPTION);
-            HIKING_BOOTS_INCREMENTAL_DECREASE = cfg.BindSyncedEntry(topSection, LguConstants.HIKING_BOOTS_INCREMENTAL_DECREASE_KEY, LguConstants.HIKING_BOOTS_INCREMENTAL_DECREASE_DEFAULT, LguConstants.HIKING_BOOTS_INCREMENTAL_DECREASE_DESCRIPTION);
-            HIKING_BOOTS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+            HikingBootsConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.HIKING_BOOTS_ENABLED_DESCRIPTION, HikingBoots.PRICES_DEFAULT)
+            {
+                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.HIKING_BOOTS_INITIAL_DECREASE_KEY, LguConstants.HIKING_BOOTS_INITIAL_DECREASE_DEFAULT, LguConstants.HIKING_BOOTS_INITIAL_DECREASE_DESCRIPTION),
+                IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.HIKING_BOOTS_INCREMENTAL_DECREASE_KEY, LguConstants.HIKING_BOOTS_INCREMENTAL_DECREASE_DEFAULT, LguConstants.HIKING_BOOTS_INCREMENTAL_DECREASE_DESCRIPTION),
+            };
 
-            #endregion
-
-            #region Traction Boots
             topSection = TractionBoots.UPGRADE_NAME;
-            TRACTION_BOOTS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.TRACTION_BOOTS_ENABLED_KEY, LguConstants.TRACTION_BOOTS_ENABLED_DEFAULT, LguConstants.TRACTION_BOOTS_ENABLED_DESCRIPTION);
-            TRACTION_BOOTS_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            TRACTION_BOOTS_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.TRACTION_BOOTS_PRICE_KEY, LguConstants.TRACTION_BOOTS_PRICE_DEFAULT);
-            TRACTION_BOOTS_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, TractionBoots.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            TRACTION_BOOTS_INITIAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.TRACTION_BOOTS_INITIAL_INCREASE_KEY, LguConstants.TRACTION_BOOTS_INITIAL_INCREASE_DEFAULT, LguConstants.TRACTION_BOOTS_INITIAL_INCREASE_DESCRIPTION);
-            TRACTION_BOOTS_INCREMENTAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.TRACTION_BOOTS_INCREMENTAL_INCREASE_KEY, LguConstants.TRACTION_BOOTS_INCREMENTAL_INCREASE_DEFAULT, LguConstants.TRACTION_BOOTS_INCREMENTAL_INCREASE_DESCRIPTION);
-            TRACTION_BOOTS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-            #endregion
-
-            #region Fedora Suit
+            TractionBootsConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.TRACTION_BOOTS_ENABLED_DESCRIPTION, TractionBoots.PRICES_DEFAULT)
+            {
+                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.TRACTION_BOOTS_INITIAL_INCREASE_KEY, LguConstants.TRACTION_BOOTS_INITIAL_INCREASE_DEFAULT, LguConstants.TRACTION_BOOTS_INITIAL_INCREASE_DESCRIPTION),
+                IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.TRACTION_BOOTS_INCREMENTAL_INCREASE_KEY, LguConstants.TRACTION_BOOTS_INCREMENTAL_INCREASE_DEFAULT, LguConstants.TRACTION_BOOTS_INCREMENTAL_INCREASE_DESCRIPTION),
+            };
 
             topSection = FedoraSuit.UPGRADE_NAME;
-            FEDORA_SUIT_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.FEDORA_SUIT_ENABLED_KEY, LguConstants.FEDORA_SUIT_ENABLED_DEFAULT, LguConstants.FEDORA_SUIT_ENABLED_DESCRIPTION);
-            FEDORA_SUIT_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            FEDORA_SUIT_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.FEDORA_SUIT_PRICE_KEY, LguConstants.FEDORA_SUIT_PRICE_DEFAULT);
-            FEDORA_SUIT_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
-
-            #region Weed Genetic Manipulation
+            FedoraSuitConfiguration = new OneTimeIndividualUpgradeConfiguration(cfg, topSection, LguConstants.FEDORA_SUIT_ENABLED_DESCRIPTION, LguConstants.FEDORA_SUIT_PRICE_DEFAULT);
 
             topSection = WeedGeneticManipulation.UPGRADE_NAME;
-            WEED_GENETIC_MANIPULATION_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.WEED_GENETIC_MANIPULATION_ENABLED_KEY, LguConstants.WEED_GENETIC_MANIPULATION_ENABLED_DEFAULT, LguConstants.WEED_GENETIC_MANIPULATION_ENABLED_DESCRIPTION);
-            WEED_GENETIC_MANIPULATION_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.WEED_GENETIC_MANIPULATION_PRICE_KEY, LguConstants.WEED_GENETIC_MANIPULATION_PRICE_DEFAULT);
-            WEED_GENETIC_MANIPULATION_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, WeedGeneticManipulation.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            WEED_GENETIC_MANIPULATION_INITIAL_EFFECTIVENESS_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.WEED_GENETIC_INITIAL_EFFECTIVENESS_INCREASE_KEY, LguConstants.WEED_GENETIC_INITIAL_EFFECTIVENESS_INCREASE_DEFAULT, LguConstants.WEED_GENETIC_INITIAL_EFFECTIVENESS_INCREASE_DESCRIPTION);
-            WEED_GENETIC_MANIPULATION_INCREMENTAL_EFFECTIVENESS_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.WEED_GENETIC_INCREMENTAL_EFFECTIVENESS_INCREASE_KEY, LguConstants.WEED_GENETIC_INCREMENTAL_EFFECTIVENESS_INCREASE_DEFAULT, LguConstants.WEED_GENETIC_INCREMENTAL_EFFECTIVENESS_INCREASE_DESCRIPTION);
-            WEED_GENETIC_MANIPULATION_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
-
-            #region Clay Glasses
+            WeedGeneticManipulationConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.WEED_GENETIC_MANIPULATION_ENABLED_DESCRIPTION, WeedGeneticManipulation.PRICES_DEFAULT)
+            {
+                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.WEED_GENETIC_INITIAL_EFFECTIVENESS_INCREASE_KEY, LguConstants.WEED_GENETIC_INITIAL_EFFECTIVENESS_INCREASE_DEFAULT, LguConstants.WEED_GENETIC_INITIAL_EFFECTIVENESS_INCREASE_DESCRIPTION),
+                IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.WEED_GENETIC_INCREMENTAL_EFFECTIVENESS_INCREASE_KEY, LguConstants.WEED_GENETIC_INCREMENTAL_EFFECTIVENESS_INCREASE_DEFAULT, LguConstants.WEED_GENETIC_INCREMENTAL_EFFECTIVENESS_INCREASE_DESCRIPTION),
+            };
 
             topSection = ClayGlasses.UPGRADE_NAME;
-            CLAY_GLASSES_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.CLAY_GLASSES_ENABLED_KEY, LguConstants.CLAY_GLASSES_ENABLED_DEFAULT, LguConstants.CLAY_GLASSES_ENABLED_DESCRIPTION);
-            CLAY_GLASSES_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            CLAY_GLASSES_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.CLAY_GLASSES_PRICE_KEY, LguConstants.CLAY_GLASSES_PRICE_DEFAULT);
-            CLAY_GLASSES_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, ClayGlasses.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            CLAY_GLASSES_DISTANCE_INITIAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.CLAY_GLASSES_DISTANCE_INITIAL_INCREASE_KEY, LguConstants.CLAY_GLASSES_DISTANCE_INITIAL_INCREASE_DEFAULT, LguConstants.CLAY_GLASSES_DISTANCE_INITIAL_INCREASE_DESCRIPTION);
-            CLAY_GLASSES_DISTANCE_INCREMENTAL_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.CLAY_GLASSES_DISTANCE_INCREMENTAL_INCREASE_KEY, LguConstants.CLAY_GLASSES_DISTANCE_INCREMENTAL_INCREASE_DEFAULT, LguConstants.CLAY_GLASSES_DISTANCE_INCREMENTAL_INCREASE_DESCRIPTION);
-            CLAY_GLASSES_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
-
-            #region Mechanical Arms
+            ClayGlassesConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<float>(cfg, topSection, LguConstants.CLAY_GLASSES_ENABLED_DESCRIPTION, ClayGlasses.PRICES_DEFAULT)
+            {
+                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.CLAY_GLASSES_DISTANCE_INITIAL_INCREASE_KEY, LguConstants.CLAY_GLASSES_DISTANCE_INITIAL_INCREASE_DEFAULT, LguConstants.CLAY_GLASSES_DISTANCE_INITIAL_INCREASE_DESCRIPTION),
+                IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.CLAY_GLASSES_DISTANCE_INCREMENTAL_INCREASE_KEY, LguConstants.CLAY_GLASSES_DISTANCE_INCREMENTAL_INCREASE_DEFAULT, LguConstants.CLAY_GLASSES_DISTANCE_INCREMENTAL_INCREASE_DESCRIPTION),
+            };
 
             topSection = MechanicalArms.UPGRADE_NAME;
-            MECHANICAL_ARMS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.MECHANICAL_ARMS_ENABLED_KEY, LguConstants.MECHANICAL_ARMS_ENABLED_DEFAULT, LguConstants.MECHANICAL_ARMS_ENABLED_DESCRIPTION);
-            MECHANICAL_ARMS_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            MECHANICAL_ARMS_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.MECHANICAL_ARMS_PRICE_KEY, LguConstants.MECHANICAL_ARMS_PRICE_DEFAULT);
-            MECHANICAL_ARMS_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, MechanicalArms.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            MECHANICAL_ARMS_INITIAL_RANGE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.MECHANICAL_ARMS_INITIAL_RANGE_INCREASE_KEY, LguConstants.MECHANICAL_ARMS_INITIAL_RANGE_INCREASE_DEFAULT, LguConstants.MECHANICAL_ARMS_INITIAL_RANGE_INCREASE_DESCRIPTION);
-            MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE_KEY, LguConstants.MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE_DEFAULT, LguConstants.MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE_DESCRIPTION);
-            MECHANICAL_ARMS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-            #endregion
+            MechanicalArmsConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<float>(cfg, topSection, LguConstants.MECHANICAL_ARMS_ENABLED_DESCRIPTION, MechanicalArms.PRICES_DEFAULT)
+            {
+                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.MECHANICAL_ARMS_INITIAL_RANGE_INCREASE_KEY, LguConstants.MECHANICAL_ARMS_INITIAL_RANGE_INCREASE_DEFAULT, LguConstants.MECHANICAL_ARMS_INITIAL_RANGE_INCREASE_DESCRIPTION),
+                IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE_KEY, LguConstants.MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE_DEFAULT, LguConstants.MECHANICAL_ARMS_INCREMENTAL_RANGE_INCREASE_DESCRIPTION),
+            };
 
-            #region Scavenger Instincts
             topSection = ScavengerInstincts.UPGRADE_NAME;
-            SCAVENGER_INSTINCTS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.SCAVENGER_INSTINCTS_ENABLED_KEY, LguConstants.SCAVENGER_INSTINCTS_ENABLED_DEFAULT, LguConstants.SCAVENGER_INSTINCTS_ENABLED_DESCRIPTION);
-            SCAVENGER_INSTINCTS_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.SCAVENGER_INSTINCTS_PRICE_KEY, LguConstants.SCAVENGER_INSTINCTS_PRICE_DEFAULT);
-            SCAVENGER_INSTINCTS_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, ScavengerInstincts.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
-            SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE_KEY, LguConstants.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE_DEFAULT, LguConstants.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE_DESCRIPTION);
-            SCAVENGER_INSTINCTS_INCREMENTAL_AMOUN_SCRAP_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUNT_SCRAP_INCREASE_KEY, LguConstants.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUNT_SCRAP_INCREASE_DEFAULT, LguConstants.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUNT_SCRAP_INCREASE_DESCRIPTION);
-            SCAVENGER_INSTINCTS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
-
-            #region Landing Thrusters
+            ScavengerInstictsConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.SCAVENGER_INSTINCTS_ENABLED_DESCRIPTION, ScavengerInstincts.DEFAULT_PRICES)
+            {
+                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE_KEY, LguConstants.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE_DEFAULT, LguConstants.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE_DESCRIPTION),
+                IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUNT_SCRAP_INCREASE_KEY, LguConstants.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUNT_SCRAP_INCREASE_DEFAULT, LguConstants.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUNT_SCRAP_INCREASE_DESCRIPTION),
+            };
 
             topSection = LandingThrusters.UPGRADE_NAME;
-            LANDING_THRUSTERS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.LANDING_THRUSTERS_ENABLED_KEY, LguConstants.LANDING_THRUSTERS_ENABLED_DEFAULT, LguConstants.LANDING_THRUSTERS_ENABLED_DESCRIPTION);
-            LANDING_THRUSTERS_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.LANDING_THURSTERS_PRICE_KEY, LguConstants.LANDING_THRUSTERS_PRICE_DEFAULT);
-            LANDING_THRUSTERS_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, LandingThrusters.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
-            LANDING_THRUSTERS_INITIAL_SPEED_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.LANDING_THRUSTERS_INITIAL_SPEED_INCREASE_KEY, LguConstants.LANDING_THRUSTERS_INITIAL_SPEED_INCREASE_DEFAULT, LguConstants.LANDING_THRUSTERS_INITIAL_SPEED_INCREASE_DESCRIPTION);
-            LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE_KEY, LguConstants.LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE_DEFAULT, LguConstants.LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE_DESCRIPTION);
-            LANDING_THRUSTERS_AFFECT_LANDING = cfg.BindSyncedEntry(topSection, LguConstants.LANDING_THRUSTERS_AFFECT_LANDING_KEY, LguConstants.LANDING_THRUSTERS_AFFECT_LANDING_DEFAULT, LguConstants.LANDING_THRUSTERS_AFFECT_LANDING_DESCRIPTION);
-            LANDING_THRUSTERS_AFFECT_DEPARTING = cfg.BindSyncedEntry(topSection, LguConstants.LANDING_THRUSTERS_AFFECT_DEPARTING_KEY, LguConstants.LANDING_THRUSTERS_AFFECT_DEPARTING_DEFAULT, LguConstants.LANDING_THRUSTERS_AFFECT_DEPARTING_DESCRIPTION);
-            LANDING_THRUSTERS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
-
-            #region Reinforced Boots
+            LandingThrustersConfiguration = new LandingThrusterUpgradeConfiguration(cfg, topSection, LguConstants.LANDING_THRUSTERS_ENABLED_DESCRIPTION, LandingThrusters.DEFAULT_PRICES)
+            {
+                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.LANDING_THRUSTERS_INITIAL_SPEED_INCREASE_KEY, LguConstants.LANDING_THRUSTERS_INITIAL_SPEED_INCREASE_DEFAULT, LguConstants.LANDING_THRUSTERS_INITIAL_SPEED_INCREASE_DESCRIPTION),
+                IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE_KEY, LguConstants.LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE_DEFAULT, LguConstants.LANDING_THRUSTERS_INCREMENTAL_SPEED_INCREASE_DESCRIPTION),
+            };
 
             topSection = ReinforcedBoots.UPGRADE_NAME;
-            REINFORCED_BOOTS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.REINFORCED_BOOTS_ENABLED_KEY, LguConstants.REINFORCED_BOOTS_ENABLED_DEFAULT, LguConstants.REINFORCED_BOOTS_ENABLED_DESCRIPTION);
-            REINFORCED_BOOTS_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            REINFORCED_BOOTS_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.REINFORCED_BOOTS_PRICE_KEY, LguConstants.REINFORCED_BOOTS_PRICE_DEFAULT);
-            REINFORCED_BOOTS_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, ReinforcedBoots.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
-            REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION = cfg.BindSyncedEntry(topSection, LguConstants.REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION_KEY, LguConstants.REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION_DEFAULT, LguConstants.REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION_DESCRIPTION);
-            REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION = cfg.BindSyncedEntry(topSection, LguConstants.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION_KEY, LguConstants.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION_DEFAULT, LguConstants.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION_DESCRIPTION);
-            REINFORCED_BOOTS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
-
-            #region Deeper Pockets
-
+            ReinforcedBootsConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.REINFORCED_BOOTS_ENABLED_DESCRIPTION, ReinforcedBoots.DEFAULT_PRICES)
+            {
+                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION_KEY, LguConstants.REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION_DEFAULT, LguConstants.REINFORCED_BOOTS_INITIAL_DAMAGE_REDUCTION_DESCRIPTION),
+                IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION_KEY, LguConstants.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION_DEFAULT, LguConstants.REINFORCED_BOOTS_INCREMENTAL_DAMAGE_REDUCTION_DESCRIPTION),
+            };
             topSection = DeepPockets.UPGRADE_NAME;
-            DEEPER_POCKETS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.DEEPER_POCKETS_ENABLED_KEY, LguConstants.DEEPER_POCKETS_ENABLED_DEFAULT, LguConstants.DEEPER_POCKETS_ENABLED_DESCRIPTION);
-            DEEPER_POCKETS_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            DEEPER_POCKETS_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.DEEPER_POCKETS_PRICE_KEY, LguConstants.DEEPER_POCKETS_PRICE_DEFAULT);
-            DEEPER_POCKETS_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, DeepPockets.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
-            DEEPER_POCKETS_INITIAL_TWO_HANDED_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.DEEPER_POCKETS_INITIAL_TWO_HANDED_AMOUNT_KEY, LguConstants.DEEPER_POCKETS_INITIAL_TWO_HANDED_AMOUNT_DEFAULT, LguConstants.DEEPER_POCKETS_INITIAL_TWO_HANDED_AMOUNT_DESCRIPTION);
-            DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_KEY, LguConstants.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_DEFAULT, LguConstants.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_DESCRIPTION);
-            DEEPER_POCKETS_ALLOW_WHEELBARROWS = cfg.BindSyncedEntry(topSection, LguConstants.DEEPER_POCKETS_ALLOW_WHEELBARROWS_KEY, LguConstants.DEEPER_POCKETS_ALLOW_WHEELBARROWS_DEFAULT, LguConstants.DEEPER_POCKETS_ALLOW_WHEELBARROWS_DESCRIPTION);
-            DEEPER_POCKETS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
-
-            #region Aluminium Coils
+            DeeperPocketsConfiguration = new DeeperPocketsUpgradeConfiguration(cfg, topSection, LguConstants.DEEPER_POCKETS_ENABLED_DESCRIPTION, DeepPockets.DEFAULT_PRICES)
+            {
+                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.DEEPER_POCKETS_INITIAL_TWO_HANDED_AMOUNT_KEY, LguConstants.DEEPER_POCKETS_INITIAL_TWO_HANDED_AMOUNT_DEFAULT, LguConstants.DEEPER_POCKETS_INITIAL_TWO_HANDED_AMOUNT_DESCRIPTION),
+                IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_KEY, LguConstants.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_DEFAULT, LguConstants.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_AMOUNT_DESCRIPTION),
+            };
 
             topSection = AluminiumCoils.UPGRADE_NAME;
-            ALUMINIUM_COILS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.ALUMINIUM_COILS_ENABLED_KEY, LguConstants.ALUMINIUM_COILS_ENABLED_DEFAULT, LguConstants.ALUMINIUM_COILS_ENABLED_DESCRIPTION);
-            ALUMINIUM_COILS_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            ALUMINIUM_COILS_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.ALUMINIUM_COILS_PRICE_KEY, LguConstants.ALUMINIUM_COILS_PRICE_DEFAULT);
-            ALUMINIUM_COILS_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, AluminiumCoils.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
-            ALUMINIUM_COILS_INITIAL_DIFFICULTY_DECREASE = cfg.BindSyncedEntry(topSection, LguConstants.ALUMINIUM_COILS_INITIAL_DIFFICULTY_MULTIPLIER_KEY, LguConstants.ALUMINIUM_COILS_INITIAL_DIFFICULTY_MULTIPLIER_DEFAULT, LguConstants.ALUMINIUM_COILS_INITIAL_DIFFICULTY_MULTIPLIER_DESCRIPTION);
-            ALUMINIUM_COILS_INCREMENTAL_DIFFICULTY_DECREASE = cfg.BindSyncedEntry(topSection, LguConstants.ALUMINIUM_COILS_INCREMENTAL_DIFFICULTY_MULTIPLIER_KEY, LguConstants.ALUMINIUM_COILS_INCREMENTAL_DIFFICULTY_MULTIPLIER_DEFAULT, LguConstants.ALUMINIUM_COILS_INCREMENTAL_DIFFICULTY_MULTIPLIER_DESCRIPTION);
-            ALUMINIUM_COILS_INITIAL_STUN_TIMER_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.ALUMINIUM_COILS_INITIAL_STUN_TIMER_KEY, LguConstants.ALUMINIUM_COILS_INITIAL_STUN_TIMER_DEFAULT);
-            ALUMINIUM_COILS_INCREMENTAL_STUN_TIMER_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.ALUMINIUM_COILS_INCREMENTAL_STUN_TIMER_KEY, LguConstants.ALUMINIUM_COILS_INCREMENTAL_STUN_TIMER_DEFAULT);
-            ALUMINIUM_COILS_INITIAL_RANGE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.ALUMINIUM_COILS_INITIAL_RANGE_KEY, LguConstants.ALUMINIUM_COILS_INITIAL_RANGE_DEFAULT);
-            ALUMINIUM_COILS_INCREMENTAL_RANGE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.ALUMINIUM_COILS_INCREMENTAL_RANGE_KEY, LguConstants.ALUMINIUM_COILS_INCREMENTAL_RANGE_DEFAULT);
-            ALUMINIUM_COILS_INITIAL_COOLDOWN_DECREASE = cfg.BindSyncedEntry(topSection, LguConstants.ALUMINIUM_COILS_INITIAL_COOLDOWN_KEY, LguConstants.ALUMINIUM_COILS_INITIAL_COOLDOWN_DEFAULT, LguConstants.ALUMINIUM_COILS_INITIAL_COOLDOWN_DESCRIPTION);
-            ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_DECREASE = cfg.BindSyncedEntry(topSection, LguConstants.ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_KEY, LguConstants.ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_DEFAULT, LguConstants.ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_DESCRIPTION);
-            ALUMINIUM_COILS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
+            AluminiumCoilConfiguration = new TierIndividualMultiplePrimitiveUpgradeConfiguration<int, float>(cfg, topSection, LguConstants.ALUMINIUM_COILS_ENABLED_DESCRIPTION, AluminiumCoils.DEFAULT_PRICES)
+            {
+                InitialEffects =
+                [
+                    cfg.BindSyncedEntry(topSection, LguConstants.ALUMINIUM_COILS_INITIAL_DIFFICULTY_MULTIPLIER_KEY, LguConstants.ALUMINIUM_COILS_INITIAL_DIFFICULTY_MULTIPLIER_DEFAULT, LguConstants.ALUMINIUM_COILS_INITIAL_DIFFICULTY_MULTIPLIER_DESCRIPTION),
+                    cfg.BindSyncedEntry(topSection, LguConstants.ALUMINIUM_COILS_INITIAL_COOLDOWN_KEY, LguConstants.ALUMINIUM_COILS_INITIAL_COOLDOWN_DEFAULT, LguConstants.ALUMINIUM_COILS_INITIAL_COOLDOWN_DESCRIPTION)
+                ],
+                IncrementalEffects =
+                [
+                    cfg.BindSyncedEntry(topSection, LguConstants.ALUMINIUM_COILS_INCREMENTAL_DIFFICULTY_MULTIPLIER_KEY, LguConstants.ALUMINIUM_COILS_INCREMENTAL_DIFFICULTY_MULTIPLIER_DEFAULT, LguConstants.ALUMINIUM_COILS_INCREMENTAL_DIFFICULTY_MULTIPLIER_DESCRIPTION),
+                    cfg.BindSyncedEntry(topSection, LguConstants.ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_KEY, LguConstants.ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_DEFAULT, LguConstants.ALUMINIUM_COILS_INCREMENTAL_COOLDOWN_DESCRIPTION)
+                ],
+                InitialSecondEffects =
+                [
+                    cfg.BindSyncedEntry(topSection, LguConstants.ALUMINIUM_COILS_INITIAL_STUN_TIMER_KEY, LguConstants.ALUMINIUM_COILS_INITIAL_STUN_TIMER_DEFAULT),
+                    cfg.BindSyncedEntry(topSection, LguConstants.ALUMINIUM_COILS_INITIAL_RANGE_KEY, LguConstants.ALUMINIUM_COILS_INITIAL_RANGE_DEFAULT),
+                ],
+                IncrementalSecondEffects =
+                [
+                    cfg.BindSyncedEntry(topSection, LguConstants.ALUMINIUM_COILS_INCREMENTAL_STUN_TIMER_KEY, LguConstants.ALUMINIUM_COILS_INCREMENTAL_STUN_TIMER_DEFAULT),
+                    cfg.BindSyncedEntry(topSection, LguConstants.ALUMINIUM_COILS_INCREMENTAL_RANGE_KEY, LguConstants.ALUMINIUM_COILS_INCREMENTAL_RANGE_DEFAULT),
+                ]
+            };
 
             #region Back Muscles
 
@@ -1096,7 +754,7 @@ namespace MoreShipUpgrades.Misc
             BACK_MUSCLES_UPGRADE_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, BackMuscles.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
             BACK_MUSCLES_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
             BACK_MUSCLES_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-            BACK_MUSCLES_UPGRADE_MODE = cfg.BindSyncedEntry(topSection, LguConstants.BACK_MUSCLES_UPGRADE_MODE_KEY , LguConstants.BACK_MUSCLES_UPGRADE_MODE_DEFAULT, LguConstants.BACK_MUSCLES_UPGRADE_MODE_DESCRIPTION);
+            BACK_MUSCLES_UPGRADE_MODE = cfg.BindSyncedEntry(topSection, LguConstants.BACK_MUSCLES_UPGRADE_MODE_KEY, LguConstants.BACK_MUSCLES_UPGRADE_MODE_DEFAULT, LguConstants.BACK_MUSCLES_UPGRADE_MODE_DESCRIPTION);
 
             #endregion
 
@@ -1177,12 +835,12 @@ namespace MoreShipUpgrades.Misc
             #region Climbing Gloves
 
             topSection = ClimbingGloves.UPGRADE_NAME;
-            CLIMBING_GLOVES_ENABLED             = cfg.BindSyncedEntry(topSection, LguConstants.CLIMBING_GLOVES_ENABLED_KEY, LguConstants.CLIMBING_GLOVES_ENABLED_DEFAULT, LguConstants.CLIMBING_GLOVES_ENABLED_DESCRIPTION);
-            CLIMBING_GLOVES_INDIVIDUAL          = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            CLIMBING_GLOVES_PRICE               = cfg.BindSyncedEntry(topSection, LguConstants.CLIMBING_GLOVES_PRICE_KEY, LguConstants.CLIMBING_GLOVES_PRICE_DEFAULT);
-            CLIMBING_GLOVES_PRICES              = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, ClimbingGloves.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
-            INITIAL_CLIMBING_SPEED_BOOST        = cfg.BindSyncedEntry(topSection, LguConstants.CLIMBING_GLOVES_INITIAL_MULTIPLIER_KEY, LguConstants.CLIMBING_GLOVES_INITIAL_MULTIPLIER_DEFAULT, LguConstants.CLIMBING_GLOVES_INITIAL_MULTIPLIER_DESCRIPTION);
-            INCREMENTAL_CLIMBING_SPEED_BOOST    = cfg.BindSyncedEntry(topSection, LguConstants.CLIMBING_GLOVES_INCREMENTAL_MULTIPLIER_KEY, LguConstants.CLIMBING_GLOVES_INCREMENTAL_MULTIPLIER_DEFAULT);
+            CLIMBING_GLOVES_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.CLIMBING_GLOVES_ENABLED_KEY, LguConstants.CLIMBING_GLOVES_ENABLED_DEFAULT, LguConstants.CLIMBING_GLOVES_ENABLED_DESCRIPTION);
+            CLIMBING_GLOVES_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
+            CLIMBING_GLOVES_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.CLIMBING_GLOVES_PRICE_KEY, LguConstants.CLIMBING_GLOVES_PRICE_DEFAULT);
+            CLIMBING_GLOVES_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, ClimbingGloves.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
+            INITIAL_CLIMBING_SPEED_BOOST = cfg.BindSyncedEntry(topSection, LguConstants.CLIMBING_GLOVES_INITIAL_MULTIPLIER_KEY, LguConstants.CLIMBING_GLOVES_INITIAL_MULTIPLIER_DEFAULT, LguConstants.CLIMBING_GLOVES_INITIAL_MULTIPLIER_DESCRIPTION);
+            INCREMENTAL_CLIMBING_SPEED_BOOST = cfg.BindSyncedEntry(topSection, LguConstants.CLIMBING_GLOVES_INCREMENTAL_MULTIPLIER_KEY, LguConstants.CLIMBING_GLOVES_INCREMENTAL_MULTIPLIER_DEFAULT);
             CLIMBING_GLOVES_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion

@@ -1,5 +1,6 @@
-﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
+﻿using MoreShipUpgrades.Configuration.Abstractions.TIerUpgrades;
+using MoreShipUpgrades.Configuration.Interfaces;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
@@ -27,7 +28,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun
         {
             get
             {
-                TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().LongBarrelConfiguration;
+                ITierUpgradeConfiguration upgradeConfig = GetConfiguration().LongBarrelConfiguration;
                 string[] prices = upgradeConfig.Prices.Value.Split(',');
                 return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
@@ -36,7 +37,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun
         {
             static float infoFunction(int level)
             {
-                TierPrimitiveUpgradeConfiguration<int> config = GetConfiguration().LongBarrelConfiguration;
+                ITierEffectUpgrade<int> config = GetConfiguration().LongBarrelConfiguration;
                 return config.InitialEffect.Value + (level * config.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - Shotgun's range and its effective damage ranges are increased by {2}%\n";
@@ -44,7 +45,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun
         }
         public static float ComputeLongBarrelRangeBoost()
         {
-            TierPrimitiveUpgradeConfiguration<int> config = GetConfiguration().LongBarrelConfiguration;
+            ITierEffectUpgrade<int> config = GetConfiguration().LongBarrelConfiguration;
             int percentage = config.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * config.IncrementalEffect);
             return percentage / 100f;
         }

@@ -2,16 +2,17 @@
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
-using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UI.TerminalNodes;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
+using MoreShipUpgrades.Configuration;
+using MoreShipUpgrades.Configuration.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {
     internal class HikingBoots : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Hiking Boots";
-        internal const string PRICES_DEFAULT = "100,150,175";
+        internal const string PRICES_DEFAULT = "75,100,150,175";
         internal const string WORLD_BUILDING_TEXT = "\n\nIn the 'GEAR' section of the Company Catalogue, the very last ad on the thirtieth page is for this product." +
             " It's a requisition of calf-length boots made of flexible synthetic fiber. Supports your ankles while walking on inclines, allowing your gait to adjust more effortlessly.\n\n";
 
@@ -22,16 +23,16 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = GetConfiguration().HIKING_BOOTS_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().HikingBootsConfiguration.OverrideName;
         }
         static float ComputeUphillSlopeDebuffMultiplier()
         {
-            LategameConfiguration config = GetConfiguration();
-            return 1f - ((config.HIKING_BOOTS_INITIAL_DECREASE + (GetUpgradeLevel(UPGRADE_NAME) * config.HIKING_BOOTS_INCREMENTAL_DECREASE))/100f);
+            ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().EffectiveBandaidsConfiguration;
+            return 1f - ((upgradeConfig.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfig.IncrementalEffect))/100f);
         }
         public static float ReduceUphillSlopeDebuff(float defaultValue)
         {
-            if (!GetConfiguration().HIKING_BOOTS_ENABLED) return defaultValue;
+            if (!GetConfiguration().HikingBootsConfiguration.Enabled) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             float multiplier = ComputeUphillSlopeDebuffMultiplier();
             return Mathf.Clamp(defaultValue * multiplier, 0f, defaultValue);
@@ -40,8 +41,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             static float infoFunction(int level)
             {
-                LategameConfiguration config = GetConfiguration();
-                return config.HIKING_BOOTS_INITIAL_DECREASE.Value + (level * config.HIKING_BOOTS_INCREMENTAL_DECREASE.Value);
+                ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().EffectiveBandaidsConfiguration;
+                return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - Reduces the movement speed change when going through slopes by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
@@ -51,15 +52,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             get
             {
-                LategameConfiguration config = GetConfiguration();
-                string[] prices = config.HIKING_BOOTS_PRICES.Value.Split(',');
-                return config.HIKING_BOOTS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
+                ITierUpgradeConfiguration upgradeConfig = GetConfiguration().HikingBootsConfiguration;
+                string[] prices = upgradeConfig.Prices.Value.Split(',');
+                return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
         }
 
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().HIKING_BOOTS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().HikingBootsConfiguration.ItemProgressionItems.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -67,14 +68,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = GetConfiguration();
-
-            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
-                                                configuration.SHARED_UPGRADES || !configuration.HIKING_BOOTS_INDIVIDUAL,
-                                                configuration.HIKING_BOOTS_ENABLED,
-                                                configuration.HIKING_BOOTS_PRICE,
-                                                UpgradeBus.ParseUpgradePrices(configuration.HIKING_BOOTS_PRICES),
-                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.HIKING_BOOTS_OVERRIDE_NAME : "");
+            return UpgradeBus.Instance.SetupMultiplePurchaseableTerminalNode(UPGRADE_NAME, GetConfiguration().HikingBootsConfiguration);
         }
     }
 }

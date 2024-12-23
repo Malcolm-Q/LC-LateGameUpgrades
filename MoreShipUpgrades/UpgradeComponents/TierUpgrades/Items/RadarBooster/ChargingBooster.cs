@@ -1,6 +1,6 @@
 ﻿using LCVR;
+using MoreShipUpgrades.Configuration;
 using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;

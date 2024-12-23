@@ -1,5 +1,5 @@
-﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
+﻿using MoreShipUpgrades.Configuration.Interfaces;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
@@ -28,7 +28,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack
         {
             get
             {
-                TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().JetpackThrustersConfiguration;
+                ITierUpgradeConfiguration upgradeConfig = GetConfiguration().JetpackThrustersConfiguration;
                 string[] prices = upgradeConfig.Prices.Value.Split(',');
                 return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
@@ -37,7 +37,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack
         {
             static float infoFunction(int level)
             {
-                TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().JetpackThrustersConfiguration;
+                ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().JetpackThrustersConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - The maximum speed of the jetpack during flight is increased by {2}%\n";
@@ -45,7 +45,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack
         }
         public static float GetIncreasedMaximumPower()
         {
-            TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().JetpackThrustersConfiguration;
+            ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().JetpackThrustersConfiguration;
             int percentage = upgradeConfig.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfig.IncrementalEffect);
             return percentage / 100f;
         }
