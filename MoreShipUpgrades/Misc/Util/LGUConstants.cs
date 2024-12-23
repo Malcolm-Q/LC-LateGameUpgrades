@@ -387,6 +387,9 @@ namespace MoreShipUpgrades.Misc.Util
 
         #region Upgrades
 
+        internal const string ENABLED_FORMAT = "Enable {0} Upgrade";
+        internal const string PRICE_FORMAT = "Price of {0} Upgrade";
+
         #region Effective Bandaids
 
         internal const string EFFECTIVE_BANDAIDS_ENABLED_KEY = $"Enable {EffectiveBandaids.UPGRADE_NAME} Upgrade";

@@ -11,7 +11,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
     public class RubberBoots : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Rubber Boots";
-        internal const string DEFAULT_PRICES = "50,100,200";
+        internal const string DEFAULT_PRICES = "50,50,100,200";
         internal const string WORLD_BUILDING_TEXT = "\n\nIn the 'GEAR' section of the Company Catalogue, the twelfth ad on the fourth page is for this product." +
             " It's a knee-high boot of rubbery synthetic material that fits over your standard footwear. The boots are flexible enough to be folded for compact storage in a pouch or hip bag.\n\n";
 
@@ -22,13 +22,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = GetConfiguration().RUBBER_BOOTS_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().RubberBootsConfiguration.OverrideName;
         }
         public static float CalculateDecreaseMultiplier()
         {
-            LategameConfiguration config = GetConfiguration();
-            if (!config.RUBBER_BOOTS_ENABLED || !GetActiveUpgrade(UPGRADE_NAME)) return 0f;
-            return (config.RUBBER_BOOTS_INITIAL_MOVEMENT_HINDERANCE_DECREASE + (config.RUBBER_BOOTS_INCREMENTAL_MOVEMENT_HINDERANCE_DECREASE * GetUpgradeLevel(UPGRADE_NAME))) / 100f;
+            TierPrimitiveUpgradeConfiguration<int> config = GetConfiguration().RubberBootsConfiguration;
+            if (!config.Enabled || !GetActiveUpgrade(UPGRADE_NAME)) return 0f;
+            return (config.InitialEffect + (config.IncrementalEffect * GetUpgradeLevel(UPGRADE_NAME))) / 100f;
         }
         public static int ClearMovementHinderance(int defaultValue)
         {
@@ -45,8 +45,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             static float infoFunction(int level)
             {
-                LategameConfiguration config = GetConfiguration();
-                return config.RUBBER_BOOTS_INITIAL_MOVEMENT_HINDERANCE_DECREASE.Value + (level * config.RUBBER_BOOTS_INCREMENTAL_MOVEMENT_HINDERANCE_DECREASE.Value);
+                TierPrimitiveUpgradeConfiguration<int> config = GetConfiguration().RubberBootsConfiguration;
+                return config.InitialEffect.Value + (level * config.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - Reduces the movement debuff when walking on water surfaces by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
@@ -56,15 +56,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             get
             {
-                LategameConfiguration config = GetConfiguration();
-                string[] prices = config.RUBBER_BOOTS_PRICES.Value.Split(',');
-                return config.RUBBER_BOOTS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
+                TierPrimitiveUpgradeConfiguration<int> config = GetConfiguration().RubberBootsConfiguration;
+                string[] prices = config.Prices.Value.Split(',');
+                return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
         }
 
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().RUBBER_BOOTS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().RubberBootsConfiguration.ItemProgressionItems.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -75,15 +75,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = GetConfiguration();
-
-            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
-                                                configuration.SHARED_UPGRADES || !configuration.RUBBER_BOOTS_INDIVIDUAL,
-                                                configuration.RUBBER_BOOTS_ENABLED,
-                                                configuration.RUBBER_BOOTS_PRICE,
-                                                UpgradeBus.ParseUpgradePrices(configuration.RUBBER_BOOTS_PRICES),
-                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.RUBBER_BOOTS_OVERRIDE_NAME : "",
-                                                Plugin.networkPrefabs[UPGRADE_NAME]);
+            return UpgradeBus.Instance.SetupMultiplePurchaseableTerminalNode(UPGRADE_NAME, GetConfiguration().RubberBootsConfiguration, Plugin.networkPrefabs[UPGRADE_NAME]);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
     internal class ParticleInfuser : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Particle Infuser";
-        internal const string DEFAULT_PRICES = "400,600";
+        internal const string DEFAULT_PRICES = "650,400,600";
         internal static ParticleInfuser instance;
         internal const string WORLD_BUILDING_TEXT = "\n\nThe original spooling process of the Ship's onboard Teleporter is overly long for legal reasons." +
             " There are several redundant safety checks that must be completed by the Ship's computer before the Teleporter system can fire. Under duress," +
@@ -26,26 +26,26 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = GetConfiguration().PARTICLE_INFUSER_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().ParticleInfuserConfiguration.OverrideName;
             instance = this;
         }
         public static float GetIncreasedTeleportSpeedMultiplier()
         {
-            LategameConfiguration config = GetConfiguration();
-            return (config.PARTICLE_INFUSER_INITIAL_TELEPORT_SPEED_INCREASE + (GetUpgradeLevel(UPGRADE_NAME) * config.PARTICLE_INFUSER_INCREMENTAL_TELEPORT_SPEED_INCREASE)) / 100f;
+            TierPrimitiveUpgradeConfiguration<int> upgradeConfiguration = GetConfiguration().ParticleInfuserConfiguration;
+            return (upgradeConfiguration.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfiguration.IncrementalEffect)) / 100f;
         }
         public static float DecreaseTeleportTime(float defaultValue)
         {
-            LategameConfiguration config = GetConfiguration();
-            if (!config.PARTICLE_INFUSER_ENABLED) return defaultValue;
+            TierPrimitiveUpgradeConfiguration<int> upgradeConfiguration = GetConfiguration().ParticleInfuserConfiguration;
+            if (!upgradeConfiguration.Enabled) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             float multiplier = GetIncreasedTeleportSpeedMultiplier();
             return Mathf.Clamp(defaultValue - (defaultValue * multiplier), 0f, defaultValue);
         }
         public static float IncreaseTeleportSpeed()
         {
-            LategameConfiguration config = GetConfiguration();
-            if (!config.PARTICLE_INFUSER_ENABLED) return 1f;
+            TierPrimitiveUpgradeConfiguration<int> upgradeConfiguration = GetConfiguration().ParticleInfuserConfiguration;
+            if (!upgradeConfiguration.Enabled) return 1f;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return 1f;
             float multiplier = GetIncreasedTeleportSpeedMultiplier();
             return Mathf.Clamp(3f + multiplier, 1f, float.MaxValue);
@@ -54,8 +54,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         {
             static float infoFunction(int level)
             {
-                LategameConfiguration config = GetConfiguration();
-                return config.PARTICLE_INFUSER_INITIAL_TELEPORT_SPEED_INCREASE.Value + (level * config.PARTICLE_INFUSER_INCREMENTAL_TELEPORT_SPEED_INCREASE.Value);
+                TierPrimitiveUpgradeConfiguration<int> upgradeConfiguration = GetConfiguration().ParticleInfuserConfiguration;
+                return upgradeConfiguration.InitialEffect.Value + (level * upgradeConfiguration.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - Increases the teleporter's speed by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
@@ -65,15 +65,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         {
             get
             {
-                LategameConfiguration config = GetConfiguration();
-                string[] prices = config.PARTICLE_INFUSER_PRICES.Value.Split(',');
-                return config.PARTICLE_INFUSER_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
+                TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().ParticleInfuserConfiguration;
+                string[] prices = upgradeConfig.Prices.Value.Split(',');
+                return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
         }
 
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().PARTICLE_INFUSER_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().ParticleInfuserConfiguration.ItemProgressionItems.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -84,15 +84,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = GetConfiguration();
-
-            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
-                                                shareStatus: true,
-                                                configuration.PARTICLE_INFUSER_ENABLED,
-                                                configuration.PARTICLE_INFUSER_PRICE,
-                                                UpgradeBus.ParseUpgradePrices(configuration.PARTICLE_INFUSER_PRICES),
-                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.PARTICLE_INFUSER_OVERRIDE_NAME : "",
-                                                Plugin.networkPrefabs[UPGRADE_NAME]);
+            return UpgradeBus.Instance.SetupMultiplePurchaseableTerminalNode(UPGRADE_NAME, GetConfiguration().ParticleInfuserConfiguration, Plugin.networkPrefabs[UPGRADE_NAME]);
         }
 
         public IEnumerator ResetTeleporterSpeed(ShipTeleporter teleporter)

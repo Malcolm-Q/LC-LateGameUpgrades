@@ -16,6 +16,7 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
@@ -326,6 +327,32 @@ namespace MoreShipUpgrades.Managers
                 maxUpgrade: prices.Length,
                 originalName: upgradeName,
                 sharedUpgrade: shareStatus);
+        }
+        public CustomTerminalNode SetupMultiplePurchaseableTerminalNode(string upgradeName, TierUpgradeConfiguration configuration, GameObject prefab)
+        {
+            bool shareStatus = configuration is not IIndividualUpgrade individualConfig || (PluginConfiguration.SHARED_UPGRADES || !individualConfig.Individual);
+            int[] prices = ParseUpgradePrices(configuration.Prices);
+            int initialPrice = prices.Length > 0 ? prices[0] : -1;
+            int[] incrementalPrices = prices.Length > 1 ? prices[1..] : [];
+
+            return SetupMultiplePurchasableTerminalNode(upgradeName,
+                shareStatus: shareStatus,
+                enabled: configuration.Enabled,
+                initialPrice: initialPrice,
+                prices: incrementalPrices,
+                overrideName: PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? configuration.OverrideName : "",
+                prefab: prefab);
+        }
+        public CustomTerminalNode SetupOneTimeTerminalNode(string upgradeName, OneTimeUpgradeConfiguration configuration, GameObject prefab)
+        {
+            bool shareStatus = configuration is not IIndividualUpgrade individualConfig || (PluginConfiguration.SHARED_UPGRADES || !individualConfig.Individual);
+
+            return SetupOneTimeTerminalNode(upgradeName,
+                shareStatus: shareStatus,
+                enabled: configuration.Enabled,
+                price: configuration.Price,
+                overrideName: PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? configuration.OverrideName : "",
+                prefab: prefab);
         }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can only be bought once

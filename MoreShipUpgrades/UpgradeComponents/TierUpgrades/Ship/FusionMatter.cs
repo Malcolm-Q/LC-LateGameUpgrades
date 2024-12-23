@@ -16,7 +16,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
     internal class FusionMatter: TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Fusion Matter";
-        internal const string DEFAULT_PRICES = "650, 700";
+        internal const string DEFAULT_PRICES = "500, 650, 700";
         internal const string WORLD_BUILDING_TEXT = "\n\nBy default, the Ship's onboard Teleporter system is configured not to bring any objects along with it..." +
             " but isn't it kind of strange how you don't arrive naked anytime you use the Teleporter? As it turns out, this limitation is imposed and not inherent." +
             " By requesting & signing a handful of certain liability waivers by their technical names and paying forward a series of fees," +
@@ -33,7 +33,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         internal static void SetupLevels()
         {
             levels = [];
-            string[] tiersList = GetConfiguration().FUSION_MATTER_ITEM_TIERS.Value.ToLower().Split(LguConstants.FUSION_MATTER_TIER_DELIMITER);
+            string[] tiersList = GetConfiguration().FusionMatterConfiguration.TierCollection.Value.ToLower().Split(LguConstants.FUSION_MATTER_TIER_DELIMITER);
             for (int level = 0; level < tiersList.Length; ++level)
             {
                 foreach (string itemName in tiersList[level].Split(LguConstants.FUSION_MATTER_ITEM_DELIMITER).Select(x => x.Trim().ToLower()))
@@ -77,7 +77,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = GetConfiguration().FUSION_MATTER_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().FusionMatterConfiguration.OverrideName;
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
@@ -102,15 +102,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         {
             get
             {
-                LategameConfiguration config = GetConfiguration();
-                string[] prices = config.FUSION_MATTER_PRICES.Value.Split(',');
-                return config.FUSION_MATTER_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
+                string[] prices = GetConfiguration().FusionMatterConfiguration.Prices.Value.Split(',');
+                return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
         }
 
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().FUSION_MATTER_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().FusionMatterConfiguration.ItemProgressionItems.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -121,16 +120,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = GetConfiguration();
-
             SetupLevels();
-            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
-                                                shareStatus: true,
-                                                configuration.FUSION_MATTER_ENABLED,
-                                                configuration.FUSION_MATTER_PRICE,
-                                                UpgradeBus.ParseUpgradePrices(configuration.FUSION_MATTER_PRICES),
-                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.FUSION_MATTER_OVERRIDE_NAME : "",
-                                                Plugin.networkPrefabs[UPGRADE_NAME]);
+            return UpgradeBus.Instance.SetupMultiplePurchaseableTerminalNode(UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.FusionMatterConfiguration, Plugin.networkPrefabs[UPGRADE_NAME]);
         }
     }
 }

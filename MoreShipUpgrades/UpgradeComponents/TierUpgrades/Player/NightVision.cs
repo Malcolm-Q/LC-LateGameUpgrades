@@ -12,7 +12,6 @@ using MoreShipUpgrades.Input;
 using UnityEngine.UI;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
-using LethalLib;
 using MoreShipUpgrades.UI.TerminalNodes;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player

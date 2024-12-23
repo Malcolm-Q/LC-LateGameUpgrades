@@ -11,7 +11,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
     internal class MidasTouch : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Midas Touch";
-        internal const string DEFAULT_PRICES = "1000,1500,1800,2000";
+        internal const string DEFAULT_PRICES = "1000,1000,1500,1800,2000";
         internal const string WORLD_BUILDING_TEXT = "\n\nYour commitment to Company Standards & Values 3E-60-92-43 and adherence" +
             " to Work Code & Ethics 429-A-71-36 has appeased The Company a little bit. The memories attached to objects handled by your department are among The Company's favorites to review.\n\n";
 
@@ -22,34 +22,34 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = GetConfiguration().MIDAS_TOUCH_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().MidasTouchConfiguration.OverrideName;
         }
         public override bool CanInitializeOnStart
         {
             get
             {
-                LategameConfiguration config = GetConfiguration();
-                string[] prices = config.MIDAS_TOUCH_PRICES.Value.Split(',');
-                return config.MIDAS_TOUCH_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
+                TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().MidasTouchConfiguration;
+                string[] prices = upgradeConfig.Prices.Value.Split(',');
+                return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
         }
         static float GetIncreasedScrapValueMultiplier()
         {
-            LategameConfiguration config = GetConfiguration();
-            return (config.MIDAS_TOUCH_INITIAL_SCRAP_VALUE_INCREASE + (GetUpgradeLevel(UPGRADE_NAME) * config.MIDAS_TOUCH_INCREMENTAL_SCRAP_VALUE_INCREASE)) / 100f;
+            TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().MidasTouchConfiguration;
+            return (upgradeConfig.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfig.IncrementalEffect)) / 100f;
         }
         public static float IncreaseScrapValue(float defaultValue)
         {
-            LategameConfiguration config = GetConfiguration();
-            if (!config.MIDAS_TOUCH_ENABLED) return defaultValue;
+            TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().MidasTouchConfiguration;
+            if (!upgradeConfig.Enabled) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             float additionalScrapValueMultiplier = GetIncreasedScrapValueMultiplier();
             return Mathf.Clamp(defaultValue + (defaultValue * additionalScrapValueMultiplier), defaultValue, float.MaxValue);
         }
         public static int IncreaseScrapValueInteger(int defaultValue)
         {
-            LategameConfiguration config = GetConfiguration();
-            if (!config.MIDAS_TOUCH_ENABLED) return defaultValue;
+            TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().MidasTouchConfiguration;
+            if (!upgradeConfig.Enabled) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             float additionalScrapValueMultiplier = 1f + GetIncreasedScrapValueMultiplier();
             return Mathf.Clamp(Mathf.CeilToInt(defaultValue * additionalScrapValueMultiplier), defaultValue, int.MaxValue);
@@ -58,15 +58,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         {
             static float infoFunction(int level)
             {
-                LategameConfiguration config = GetConfiguration();
-                return config.MIDAS_TOUCH_INITIAL_SCRAP_VALUE_INCREASE.Value + (level * config.MIDAS_TOUCH_INCREMENTAL_SCRAP_VALUE_INCREASE.Value);
+                TierPrimitiveUpgradeConfiguration<int> upgradeConfig = GetConfiguration().MidasTouchConfiguration;
+                return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - Increases the value of the scrap found in the moons by {2}%.\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().MIDAS_TOUCH_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().MidasTouchConfiguration.ItemProgressionItems.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -77,15 +77,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = GetConfiguration();
-
-            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
-                                                shareStatus: true,
-                                                configuration.MIDAS_TOUCH_ENABLED,
-                                                configuration.MIDAS_TOUCH_PRICE,
-                                                UpgradeBus.ParseUpgradePrices(configuration.MIDAS_TOUCH_PRICES),
-                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.MIDAS_TOUCH_OVERRIDE_NAME : "",
-                                                Plugin.networkPrefabs[UPGRADE_NAME]);
+            return UpgradeBus.Instance.SetupMultiplePurchaseableTerminalNode(UPGRADE_NAME, GetConfiguration().MidasTouchConfiguration, Plugin.networkPrefabs[UPGRADE_NAME]);
         }
     }
 }

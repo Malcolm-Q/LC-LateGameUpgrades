@@ -1,5 +1,4 @@
 ﻿using MoreShipUpgrades.Managers;
-using System.Runtime.CompilerServices;
 
 namespace MoreShipUpgrades.Misc.Upgrades
 {
@@ -8,6 +7,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
     /// </summary>
     public abstract class TierUpgrade : BaseUpgrade
     {
+
         #region Overriden Methods
 
         public override void Unwind()
