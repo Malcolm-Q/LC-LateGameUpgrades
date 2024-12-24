@@ -1,4 +1,7 @@
-﻿using MoreShipUpgrades.Configuration;
+﻿using CSync.Lib;
+using MoreShipUpgrades.Configuration;
+using MoreShipUpgrades.Configuration.Custom;
+using MoreShipUpgrades.Configuration.Interfaces;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
@@ -24,7 +27,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
             NewQuota,
         }
         internal const string UPGRADE_NAME = "Quantum Disruptor";
-        internal const string PRICES_DEFAULT = "1200,1500,1800";
+        internal const string PRICES_DEFAULT = "1000,1200,1500,1800";
         internal const string WORLD_BUILDING_TEXT = "\n\nSigning the Overtime Risk Waiver and paying forward a series of fees authorizes your department to override the Ship's autopilot system and stay moonside for longer.\n\n";
         internal static QuantumDisruptor Instance { get; set; }
 
@@ -32,14 +35,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         {
             get
             {
-                return GetConfiguration().QUANTUM_DISRUPTOR_UPGRADE_MODE;
+                return GetConfiguration().QuantumDisruptorConfiguration.AlternativeMode;
             }
         }
         internal static ResetModes CurrentResetMode
         {
             get
             {
-                return GetConfiguration().QUANTUM_DISRUPTOR_RESET_MODE.Value;
+                return GetConfiguration().QuantumDisruptorConfiguration.ResetMode;
             }
         }
         internal int availableUsages = -1;
@@ -58,7 +61,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         {
             SetInstance(this);
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = GetConfiguration().QUANTUM_DISRUPTOR_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().QuantumDisruptorConfiguration.OverrideName;
         }
 
         public override void Unwind()
@@ -83,9 +86,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
                 case UpgradeModes.SlowdownTime: base.Increment(); break;
                 case UpgradeModes.RevertTime:
                     {
-                        LategameConfiguration config = GetConfiguration();
-                        availableUsages += config.QUANTUM_DISRUPTOR_INCREMENTAL_USES;
-                        hoursToReduce += config.QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_REVERT_ON_USE;
+                        QuantumDisruptorUpgradeConfiguration config = GetConfiguration().QuantumDisruptorConfiguration;
+                        (SyncedEntry<int>, SyncedEntry<int>) usagePair = config.GetEffectPair(1);
+                        (SyncedEntry<int>, SyncedEntry<int>) revertHoursPair = config.GetEffectPair(2);
+                        availableUsages += usagePair.Item2;
+                        hoursToReduce += revertHoursPair.Item2;
                         base.Increment();
                         break;
                     }
@@ -99,9 +104,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
                 case UpgradeModes.SlowdownTime: base.Load(); break;
                 case UpgradeModes.RevertTime:
                     {
-                        LategameConfiguration config = GetConfiguration();
-                        availableUsages = config.QUANTUM_DISRUPTOR_INITIAL_USES.Value + (GetUpgradeLevel(UPGRADE_NAME) * config.QUANTUM_DISRUPTOR_INCREMENTAL_USES);
-                        hoursToReduce = config.QUANTUM_DISRUPTOR_INITIAL_HOURS_REVERT_ON_USE.Value + (GetUpgradeLevel(UPGRADE_NAME) * config.QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_REVERT_ON_USE);
+                        QuantumDisruptorUpgradeConfiguration config = GetConfiguration().QuantumDisruptorConfiguration;
+                        (SyncedEntry<int>, SyncedEntry<int>) usagePair = config.GetEffectPair(1);
+                        (SyncedEntry<int>, SyncedEntry<int>) revertHoursPair = config.GetEffectPair(2);
+                        availableUsages = usagePair.Item1 + (GetUpgradeLevel(UPGRADE_NAME) * usagePair.Item2);
+                        hoursToReduce = revertHoursPair.Item1 + (GetUpgradeLevel(UPGRADE_NAME) * revertHoursPair.Item2);
                         base.Load();
                         break;
                     }
@@ -110,12 +117,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
 
         public static float GetGlobalSpeedMultiplier(float defaultValue)
         {
-            LategameConfiguration config = GetConfiguration();
-            if (!config.QUANTUM_DISRUPTOR_ENABLED) return defaultValue;
+            QuantumDisruptorUpgradeConfiguration config = GetConfiguration().QuantumDisruptorConfiguration;
+            if (!config.Enabled) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             if (CurrentMode != UpgradeModes.SlowdownTime) return defaultValue;
 
-            float additionalValue = (config.QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER + (GetUpgradeLevel(UPGRADE_NAME) * config.QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER)) /100f;
+            (SyncedEntry<int>, SyncedEntry<int>) slowMultiplierPair = config.GetEffectPair(0);
+            float additionalValue = (slowMultiplierPair.Item1 + (GetUpgradeLevel(UPGRADE_NAME) * slowMultiplierPair.Item2)) /100f;
             return Mathf.Clamp(defaultValue - (defaultValue*additionalValue), 0.01f, defaultValue);
         }
 
@@ -123,13 +131,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         {
             static float infoFunctionUsages(int level)
             {
-                LategameConfiguration config = GetConfiguration();
-                return config.QUANTUM_DISRUPTOR_INITIAL_USES.Value + (level * config.QUANTUM_DISRUPTOR_INCREMENTAL_USES.Value);
+                QuantumDisruptorUpgradeConfiguration config = GetConfiguration().QuantumDisruptorConfiguration;
+                (SyncedEntry<int>, SyncedEntry<int>) usagePair = config.GetEffectPair(1);
+                return usagePair.Item1.Value + (level * usagePair.Item2.Value);
             }
             static float infoFunctionHours(int level)
             {
-                LategameConfiguration config = GetConfiguration();
-                return config.QUANTUM_DISRUPTOR_INITIAL_HOURS_REVERT_ON_USE.Value + (level * config.QUANTUM_DISRUPTOR_INCREMENTAL_HOURS_REVERT_ON_USE.Value);
+                QuantumDisruptorUpgradeConfiguration config = GetConfiguration().QuantumDisruptorConfiguration;
+                (SyncedEntry<int>, SyncedEntry<int>) revertHoursPair = config.GetEffectPair(2);
+                return revertHoursPair.Item1.Value + (level * revertHoursPair.Item2.Value);
             }
 
             string resetString = string.Empty;
@@ -155,8 +165,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
                     {
                         static float infoFunction(int level)
                         {
-                            LategameConfiguration config = GetConfiguration();
-                            return (config.QUANTUM_DISRUPTOR_INITIAL_MULTIPLIER.Value + (level * config.QUANTUM_DISRUPTOR_INCREMENTAL_MULTIPLIER.Value));
+                            (SyncedEntry<int>, SyncedEntry<int>) slowMultiplierPair = GetConfiguration().QuantumDisruptorConfiguration.GetEffectPair(0);
+                            return (slowMultiplierPair.Item1.Value + (level * slowMultiplierPair.Item2.Value));
                         }
                         const string infoFormat = "LVL {0} - ${1} - Decreases the landed moon's rotation force (time passing) by {2}%\n";
                         return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
@@ -176,9 +186,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         {
             get
             {
-                LategameConfiguration config = GetConfiguration();
-                string[] prices = config.QUANTUM_DISRUPTOR_PRICES.Value.Split(',');
-                return config.QUANTUM_DISRUPTOR_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
+                QuantumDisruptorUpgradeConfiguration upgradeConfig = GetConfiguration().QuantumDisruptorConfiguration;
+                string[] prices = upgradeConfig.Prices.Value.Split(',');
+                return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
         }
 
@@ -207,8 +217,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         }
         internal static void TryResetQuantum(ResetModes mode)
         {
-            LategameConfiguration config = GetConfiguration();
-            if (!config.QUANTUM_DISRUPTOR_ENABLED) return;
+            QuantumDisruptorUpgradeConfiguration upgradeConfig = GetConfiguration().QuantumDisruptorConfiguration;
+            if (!upgradeConfig.Enabled) return;
             if (!Instance.IsHost) return;
             Instance.TryResetValues(mode);
         }
@@ -242,7 +252,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().QUANTUM_DISRUPTOR_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().QuantumDisruptorConfiguration.ItemProgressionItems.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -250,14 +260,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = GetConfiguration();
-
-            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
-                                                shareStatus: true,
-                                                configuration.QUANTUM_DISRUPTOR_ENABLED.Value,
-                                                configuration.QUANTUM_DISRUPTOR_PRICE.Value,
-                                                UpgradeBus.ParseUpgradePrices(configuration.QUANTUM_DISRUPTOR_PRICES.Value),
-                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.QUANTUM_DISRUPTOR_OVERRIDE_NAME : "");
+            return UpgradeBus.Instance.SetupMultiplePurchaseableTerminalNode(UPGRADE_NAME, GetConfiguration().QuantumDisruptorConfiguration);
         }
     }
 }

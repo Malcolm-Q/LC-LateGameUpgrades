@@ -4,7 +4,7 @@ using MoreShipUpgrades.Configuration.Interfaces;
 
 namespace MoreShipUpgrades.Configuration.Abstractions.TIerUpgrades
 {
-    public class TierPrimitiveUpgradeConfiguration<T> : TierUpgradeConfiguration, ITierEffectUpgrade<T>
+    public class TierPrimitiveUpgradeConfiguration<T> : TierUpgradeConfiguration, ITierEffectUpgradeConfiguration<T>
     {
         public TierPrimitiveUpgradeConfiguration(ConfigFile cfg, string topSection, string enabledDescription, string defaultPrices) : base(cfg, topSection, enabledDescription, defaultPrices)
         {

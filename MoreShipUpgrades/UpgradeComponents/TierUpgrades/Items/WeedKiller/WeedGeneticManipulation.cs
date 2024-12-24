@@ -26,7 +26,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.WeedKiller
         }
         public static float ComputeWeedKillerEffectiveness()
         {
-            ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().WeedGeneticManipulationConfiguration;
+            ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().WeedGeneticManipulationConfiguration;
             int percentage = upgradeConfig.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfig.IncrementalEffect);
             return percentage / 100f;
         }
@@ -41,7 +41,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.WeedKiller
         {
             get
             {
-                ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().WeedGeneticManipulationConfiguration;
+                ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().WeedGeneticManipulationConfiguration;
                 string[] prices = upgradeConfig.Prices.Value.Split(',');
                 return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
@@ -50,7 +50,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.WeedKiller
         {
             static float infoFunction(int level)
             {
-                ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().WeedGeneticManipulationConfiguration;
+                ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().WeedGeneticManipulationConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - Effectiveness of the Weed Killer item in eradicating plants is increased by {2}%\n";

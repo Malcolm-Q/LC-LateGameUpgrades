@@ -37,7 +37,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack
         {
             static float infoFunction(int level)
             {
-                ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().JetpackThrustersConfiguration;
+                ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().JetpackThrustersConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - The maximum speed of the jetpack during flight is increased by {2}%\n";
@@ -45,7 +45,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack
         }
         public static float GetIncreasedMaximumPower()
         {
-            ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().JetpackThrustersConfiguration;
+            ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().JetpackThrustersConfiguration;
             int percentage = upgradeConfig.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfig.IncrementalEffect);
             return percentage / 100f;
         }

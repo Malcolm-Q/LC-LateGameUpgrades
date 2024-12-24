@@ -29,7 +29,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 
         public static float ComputeAdditionalTractionForce()
         {
-            ITierEffectUpgrade<int> config = GetConfiguration().TractionBootsConfiguration;
+            ITierEffectUpgradeConfiguration<int> config = GetConfiguration().TractionBootsConfiguration;
             return 1f + ((config.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * config.IncrementalEffect)) / 100f);
         }
 
@@ -45,7 +45,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             static float infoFunction(int level)
             {
-                ITierEffectUpgrade<int> config = GetConfiguration().TractionBootsConfiguration;
+                ITierEffectUpgradeConfiguration<int> config = GetConfiguration().TractionBootsConfiguration;
                 return config.InitialEffect.Value + (level * config.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - Increases the player's traction to the ground by {2}%\n";
@@ -55,7 +55,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             get
             {
-                ITierEffectUpgrade<int> config = GetConfiguration().TractionBootsConfiguration;
+                ITierEffectUpgradeConfiguration<int> config = GetConfiguration().TractionBootsConfiguration;
                 string[] prices = config.Prices.Value.Split(',');
                 return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }

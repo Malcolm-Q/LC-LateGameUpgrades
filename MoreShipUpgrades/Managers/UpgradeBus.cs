@@ -85,7 +85,7 @@ namespace MoreShipUpgrades.Managers
             ContractManager.Instance.ResetAllValues();
 
             if (PluginConfiguration.DISCOMBOBULATOR_ENABLED.Value) Discombobulator.instance.flashCooldown = 0f;
-            if (PluginConfiguration.BACK_MUSCLES_ENABLED.Value) BackMuscles.Instance.alteredWeight = 1f;
+            if (PluginConfiguration.BackMusclesConfiguration.Enabled.Value) BackMuscles.Instance.alteredWeight = 1f;
             if (PluginConfiguration.LIGHTNING_ROD_ENABLED) LightningRod.instance.ResetValues();
             if (wipeObjRefs) {
                 UpgradeObjects = [];

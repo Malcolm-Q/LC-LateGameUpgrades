@@ -27,7 +27,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public static float GetIncreasedInteractionSpeedMultiplier()
         {
-            ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().QuickHandsConfiguration;
+            ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().QuickHandsConfiguration;
             return (upgradeConfig.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfig.IncrementalEffect)) / 100f;
         }
         public static float IncreaseInteractionSpeed(float defaultValue)
@@ -41,7 +41,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             static float infoFunction(int level)
             {
-                ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().QuickHandsConfiguration;
+                ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().QuickHandsConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - Increases interaction speed of the player by {2}%\n";
@@ -52,7 +52,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             get
             {
-                ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().QuickHandsConfiguration;
+                ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().QuickHandsConfiguration;
                 string[] prices = upgradeConfig.Prices.Value.Split(',');
                 return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }

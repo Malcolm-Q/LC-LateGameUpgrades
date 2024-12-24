@@ -1,4 +1,6 @@
-﻿using MoreShipUpgrades.Configuration;
+﻿using CSync.Lib;
+using MoreShipUpgrades.Configuration;
+using MoreShipUpgrades.Configuration.Interfaces;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
@@ -12,19 +14,20 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
     internal class RunningShoes : TierUpgrade, IUpgradeWorldBuilding
     {
         public const string UPGRADE_NAME = "Running Shoes";
-        public const string PRICES_DEFAULT = "500,750,1000";
+        public const string PRICES_DEFAULT = "650,500,750,1000";
         internal const string WORLD_BUILDING_TEXT = "\n\nA new pair of boots {0} a whole new lease on life. In this instance," +
             " it might also result in fewer wet sock incidents and consequent trenchfoot. After all, who knows how many people have walked in {1} shoes?\n\n";
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = GetConfiguration().RUNNING_SHOES_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().RunningShoesConfiguration.OverrideName;
         }
         public static float ApplyPossibleReducedNoiseRange(float defaultValue)
         {
-            LategameConfiguration config = GetConfiguration();
-            if (!(config.RUNNING_SHOES_ENABLED && GetActiveUpgrade(UPGRADE_NAME) && GetUpgradeLevel(UPGRADE_NAME) == config.RUNNING_SHOES_UPGRADE_PRICES.Value.Split(',').Length)) return defaultValue;
-            return Mathf.Clamp(defaultValue - config.NOISE_REDUCTION.Value, 0f, defaultValue);
+            ITierMultipleEffectUpgradeConfiguration<float> config = GetConfiguration().RunningShoesConfiguration;
+            if (!(config.Enabled && GetActiveUpgrade(UPGRADE_NAME) && GetUpgradeLevel(UPGRADE_NAME) == config.Prices.Value.Split(',').Length)) return defaultValue;
+            (SyncedEntry<float>, SyncedEntry<float>) noiseReductionPair = config.GetEffectPair(1);
+            return Mathf.Clamp(defaultValue - noiseReductionPair.Item1.Value, 0f, defaultValue);
         }
 
         public string GetWorldBuildingText(bool shareStatus = false)
@@ -36,8 +39,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             static float infoFunction(int level)
             {
-                LategameConfiguration config = GetConfiguration();
-                return config.MOVEMENT_SPEED_UNLOCK.Value + (level * config.MOVEMENT_INCREMENT.Value);
+                ITierMultipleEffectUpgradeConfiguration<float> config = GetConfiguration().RunningShoesConfiguration;
+                (SyncedEntry<float>, SyncedEntry<float>) movementSpeedPair = config.GetEffectPair(0);
+                return movementSpeedPair.Item1.Value + (level * movementSpeedPair.Item2.Value);
             }
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
@@ -45,10 +49,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 
         public static float GetAdditionalMovementSpeed(float defaultValue)
         {
-            LategameConfiguration config = GetConfiguration();
-            if (!config.RUNNING_SHOES_ENABLED) return defaultValue;
+            ITierMultipleEffectUpgradeConfiguration<float> config = GetConfiguration().RunningShoesConfiguration;
+            if (!config.Enabled) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
-            float additionalValue = config.MOVEMENT_SPEED_UNLOCK + (GetUpgradeLevel(UPGRADE_NAME) * config.MOVEMENT_INCREMENT);
+            (SyncedEntry<float>, SyncedEntry<float>) movementSpeedPair = config.GetEffectPair(0);
+            float additionalValue = movementSpeedPair.Item1 + (GetUpgradeLevel(UPGRADE_NAME) * movementSpeedPair.Item2);
             return Mathf.Clamp(defaultValue + additionalValue, defaultValue, float.MaxValue);
         }
 
@@ -56,15 +61,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             get
             {
-                LategameConfiguration config = GetConfiguration();
-                string[] prices = config.RUNNING_SHOES_UPGRADE_PRICES.Value.Split(',');
-                return config.RUNNING_SHOES_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
+                ITierMultipleEffectUpgradeConfiguration<float> config = GetConfiguration().RunningShoesConfiguration;
+                string[] prices = config.Prices.Value.Split(',');
+                return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
         }
 
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().RUNNING_SHOES_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().RunningShoesConfiguration.ItemProgressionItems.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -72,14 +77,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = GetConfiguration();
-
-            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
-                                                configuration.SHARED_UPGRADES.Value || !configuration.RUNNING_SHOES_INDIVIDUAL.Value,
-                                                configuration.RUNNING_SHOES_ENABLED.Value,
-                                                configuration.RUNNING_SHOES_PRICE.Value,
-                                                UpgradeBus.ParseUpgradePrices(configuration.RUNNING_SHOES_UPGRADE_PRICES.Value),
-                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.RUNNING_SHOES_OVERRIDE_NAME : "");
+            return UpgradeBus.Instance.SetupMultiplePurchaseableTerminalNode(UPGRADE_NAME, GetConfiguration().RunningShoesConfiguration);
         }
     }
 }

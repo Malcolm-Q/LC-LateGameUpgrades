@@ -38,7 +38,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack
         {
             static float infoFunction(int level)
             {
-                ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().JetFuelConfiguration;
+                ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().JetFuelConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - The acceleration of the jetpack during flight is increased by {2}%\n";
@@ -46,7 +46,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack
         }
         public static float GetIncreasedAcceleration()
         {
-            ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().JetFuelConfiguration;
+            ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().JetFuelConfiguration;
             int percentage = upgradeConfig.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfig.IncrementalEffect);
             return percentage / 100f;
         }

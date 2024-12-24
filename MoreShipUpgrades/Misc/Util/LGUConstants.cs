@@ -1322,7 +1322,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string CHARGING_BOOSTER_PRICE_KEY = $"Price of {ChargingBooster.UPGRADE_NAME} Upgrade";
         internal const int CHARGING_BOOSTER_PRICE_DEFAULT = 300;
 
-        internal const string CHARGING_BOOSTER_PRICES_DEFAULT = "250,300,400";
+        internal const string CHARGING_BOOSTER_PRICES_DEFAULT = "300,250,300,400";
 
         internal const string CHARGING_BOOSTER_COOLDOWN_KEY = "Cooldown of the charging station in radar boosters when used";
         internal const float CHARGING_BOOSTER_COOLDOWN_DEFAULT = 90f;

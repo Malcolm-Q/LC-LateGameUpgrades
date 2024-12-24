@@ -2,7 +2,7 @@
 
 namespace MoreShipUpgrades.Configuration.Interfaces
 {
-    public interface ITierCollectionUpgrade : ITierUpgradeConfiguration
+    public interface ITierCollectionUpgradeConfiguration : ITierUpgradeConfiguration
     {
         public SyncedEntry<string> TierCollection { get; set; }
     }

@@ -23,7 +23,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public static float CalculateDecreaseMultiplier()
         {
-            ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().CarbonKneejointsConfiguration;
+            ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().CarbonKneejointsConfiguration;
             if (!upgradeConfig.Enabled || !GetActiveUpgrade(UPGRADE_NAME)) return 0f;
             return (upgradeConfig.InitialEffect + (upgradeConfig.IncrementalEffect * GetUpgradeLevel(UPGRADE_NAME))) / 100f;
         }
@@ -37,7 +37,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             static float infoFunction(int level)
             {
-                ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().CarbonKneejointsConfiguration;
+                ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().CarbonKneejointsConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - Reduces the movement speed loss while crouching by {2}%\n";

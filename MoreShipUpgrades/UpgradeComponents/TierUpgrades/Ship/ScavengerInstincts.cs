@@ -29,14 +29,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         {
             get
             {
-                ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().ScavengerInstictsConfiguration;
+                ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().ScavengerInstictsConfiguration;
                 string[] prices = upgradeConfig.Prices.Value.Split(',');
                 return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
         }
         public static int IncreaseScrapAmount(int defaultValue)
         {
-            ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().ScavengerInstictsConfiguration;
+            ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().ScavengerInstictsConfiguration;
             if (!upgradeConfig.Enabled) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             int additionalScrap = upgradeConfig.InitialEffect.Value + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfig.IncrementalEffect.Value);
@@ -46,7 +46,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         {
             static float infoFunction(int level)
             {
-                ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().ScavengerInstictsConfiguration;
+                ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().ScavengerInstictsConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - Increases the average amount of scrap spawns by {2} additional items.\n";

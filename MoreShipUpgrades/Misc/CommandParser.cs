@@ -423,7 +423,7 @@ namespace MoreShipUpgrades.Misc
         }
         private static void ExecuteQuantumCommands(ref Terminal terminal, ref TerminalNode outputNode)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_ENABLED) return;
+            if (!UpgradeBus.Instance.PluginConfiguration.QuantumDisruptorConfiguration.Enabled) return;
             if (!BaseUpgrade.GetActiveUpgrade(QuantumDisruptor.UPGRADE_NAME))
             {
                 outputNode = DisplayTerminalMessage("You need \'Quantum Disruptor\' upgrade active to use this command.\n");

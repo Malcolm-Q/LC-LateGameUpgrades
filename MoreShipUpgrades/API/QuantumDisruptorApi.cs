@@ -8,7 +8,7 @@ namespace MoreShipUpgrades.API
 
         public static bool IsQuantumDisruptorEnabled()
         {
-            return UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_ENABLED;
+            return UpgradeBus.Instance.PluginConfiguration.QuantumDisruptorConfiguration.Enabled;
         }
 
         public static bool IsQuantumDisruptorCommandEnabled()

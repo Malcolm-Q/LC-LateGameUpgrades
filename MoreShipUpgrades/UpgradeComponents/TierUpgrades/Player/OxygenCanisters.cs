@@ -25,7 +25,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public static float CalculateDecreaseMultiplier()
         {
-            ITierEffectUpgrade<int> config = GetConfiguration().OxygenCanistersConfiguration;
+            ITierEffectUpgradeConfiguration<int> config = GetConfiguration().OxygenCanistersConfiguration;
             if (!config.Enabled || !GetActiveUpgrade(UPGRADE_NAME)) return 0f;
             return (config.InitialEffect + (config.IncrementalEffect * GetUpgradeLevel(UPGRADE_NAME)))/100f;
         }
@@ -38,7 +38,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             static float infoFunction(int level)
             {
-                ITierEffectUpgrade<int> config = GetConfiguration().OxygenCanistersConfiguration;
+                ITierEffectUpgradeConfiguration<int> config = GetConfiguration().OxygenCanistersConfiguration;
                 return config.InitialEffect.Value + (level * config.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - Reduces oxygen consumption rate by {2}%\n";
@@ -49,7 +49,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             get
             {
-                ITierEffectUpgrade<int> config = GetConfiguration().OxygenCanistersConfiguration;
+                ITierEffectUpgradeConfiguration<int> config = GetConfiguration().OxygenCanistersConfiguration;
                 string[] prices = config.Prices.Value.Split(',');
                 return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }

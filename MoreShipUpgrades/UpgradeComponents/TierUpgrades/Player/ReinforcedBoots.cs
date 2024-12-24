@@ -28,7 +28,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public static int ReduceFallDamage(int defaultValue)
         {
-            ITierEffectUpgrade<int> config = GetConfiguration().ReinforcedBootsConfiguration;
+            ITierEffectUpgradeConfiguration<int> config = GetConfiguration().ReinforcedBootsConfiguration;
             if (!config.Enabled) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             float multiplier = 1f - ((config.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * config.IncrementalEffect)) / 100f);
@@ -38,7 +38,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             static float infoFunction(int level)
             {
-                ITierEffectUpgrade<int> config = GetConfiguration().ReinforcedBootsConfiguration;
+                ITierEffectUpgradeConfiguration<int> config = GetConfiguration().ReinforcedBootsConfiguration;
                 return config.InitialEffect.Value + (level * config.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - Reduces fall damage by {2}%\n";

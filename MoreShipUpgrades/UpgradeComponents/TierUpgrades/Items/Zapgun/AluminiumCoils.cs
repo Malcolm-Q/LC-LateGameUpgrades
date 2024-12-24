@@ -23,7 +23,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Zapgun
         }
         public static float ApplyDifficultyDecrease(float defaultDifficulty)
         {
-            ITierMultipleEffectUpgrade<int,float> config = GetConfiguration().AluminiumCoilConfiguration;
+            ITierMultipleEffectUpgradeConfiguration<int,float> config = GetConfiguration().AluminiumCoilConfiguration;
             if (!config.Enabled) return defaultDifficulty;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultDifficulty;
             (SyncedEntry<int>, SyncedEntry<int>) difficultyPair = config.GetEffectPair(0);
@@ -33,7 +33,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Zapgun
 
         public static float ApplyCooldownDecrease(float defaultCooldown)
         {
-            ITierMultipleEffectUpgrade<int, float> config = GetConfiguration().AluminiumCoilConfiguration;
+            ITierMultipleEffectUpgradeConfiguration<int, float> config = GetConfiguration().AluminiumCoilConfiguration;
             if (!config.Enabled) return defaultCooldown;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultCooldown;
             (SyncedEntry<int>, SyncedEntry<int>) cooldownPair = config.GetEffectPair(1);
@@ -43,7 +43,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Zapgun
 
         public static float ApplyIncreasedStunTimer(float defaultStunTimer)
         {
-            ITierMultipleEffectUpgrade<int, float> config = GetConfiguration().AluminiumCoilConfiguration;
+            ITierMultipleEffectUpgradeConfiguration<int, float> config = GetConfiguration().AluminiumCoilConfiguration;
             if (!config.Enabled) return defaultStunTimer;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultStunTimer;
             (SyncedEntry<float>, SyncedEntry<float>) stunTimerPair = config.GetSecondEffectPair(0);
@@ -53,7 +53,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Zapgun
 
         public static float ApplyIncreasedStunRange(float defaultRange)
         {
-            ITierMultipleEffectUpgrade<int, float> config = GetConfiguration().AluminiumCoilConfiguration;
+            ITierMultipleEffectUpgradeConfiguration<int, float> config = GetConfiguration().AluminiumCoilConfiguration;
             if (!config.Enabled) return defaultRange;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultRange;
             (SyncedEntry<float>, SyncedEntry<float>) rangePair = config.GetSecondEffectPair(1);
@@ -64,25 +64,25 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Zapgun
         {
             static float difficultyInfo(int level)
             {
-                ITierMultipleEffectUpgrade<int, float> config = GetConfiguration().AluminiumCoilConfiguration;
+                ITierMultipleEffectUpgradeConfiguration<int, float> config = GetConfiguration().AluminiumCoilConfiguration;
                 (SyncedEntry<int>, SyncedEntry<int>) difficultyPair = config.GetEffectPair(0);
                 return difficultyPair.Item1.Value + (level * difficultyPair.Item2.Value);
             }
             static float rangeInfo(int level)
             {
-                ITierMultipleEffectUpgrade<int, float> config = GetConfiguration().AluminiumCoilConfiguration;
+                ITierMultipleEffectUpgradeConfiguration<int, float> config = GetConfiguration().AluminiumCoilConfiguration;
                 (SyncedEntry<float>, SyncedEntry<float>) rangePair = config.GetSecondEffectPair(1);
                 return rangePair.Item1.Value + (level * rangePair.Item2.Value);
             }
             static float stunTimerInfo(int level)
             {
-                ITierMultipleEffectUpgrade<int, float> config = GetConfiguration().AluminiumCoilConfiguration;
+                ITierMultipleEffectUpgradeConfiguration<int, float> config = GetConfiguration().AluminiumCoilConfiguration;
                 (SyncedEntry<float>, SyncedEntry<float>) stunTimerPair = config.GetSecondEffectPair(0);
                 return stunTimerPair.Item1.Value + (level * stunTimerPair.Item2.Value);
             }
             static float cooldownInfo(int level)
             {
-                ITierMultipleEffectUpgrade<int, float> config = GetConfiguration().AluminiumCoilConfiguration;
+                ITierMultipleEffectUpgradeConfiguration<int, float> config = GetConfiguration().AluminiumCoilConfiguration;
                 (SyncedEntry<int>, SyncedEntry<int>) cooldownPair = config.GetEffectPair(1);
                 return cooldownPair.Item1.Value + (level * cooldownPair.Item2.Value);
             }
@@ -108,7 +108,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Zapgun
         {
             get
             {
-                ITierMultipleEffectUpgrade<int, float> config = GetConfiguration().AluminiumCoilConfiguration;
+                ITierMultipleEffectUpgradeConfiguration<int, float> config = GetConfiguration().AluminiumCoilConfiguration;
                 string[] prices = config.Prices.Value.Split(',');
                 return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }

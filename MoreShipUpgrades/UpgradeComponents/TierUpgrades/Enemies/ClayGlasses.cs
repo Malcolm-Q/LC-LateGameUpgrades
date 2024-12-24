@@ -30,14 +30,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies
         {
             get
             {
-                ITierEffectUpgrade<float> upgradeConfig = GetConfiguration().ClayGlassesConfiguration;
+                ITierEffectUpgradeConfiguration<float> upgradeConfig = GetConfiguration().ClayGlassesConfiguration;
                 string[] prices = upgradeConfig.Prices.Value.Split(',');
                 return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
         }
         public static float GetAdditionalMaximumDistance(float defaultValue)
         {
-            ITierEffectUpgrade<float> upgradeConfig = GetConfiguration().ClayGlassesConfiguration;
+            ITierEffectUpgradeConfiguration<float> upgradeConfig = GetConfiguration().ClayGlassesConfiguration;
             if (!upgradeConfig.Enabled) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             float additionalValue = upgradeConfig.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfig.IncrementalEffect);
@@ -48,7 +48,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies
         {
             static float infoFunction(int level)
             {
-                ITierEffectUpgrade<float> upgradeConfig = GetConfiguration().ClayGlassesConfiguration;
+                ITierEffectUpgradeConfiguration<float> upgradeConfig = GetConfiguration().ClayGlassesConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - The maximum distance to spot a \"Clay Surgeon\" entity is increased by {2} additional units.\n";

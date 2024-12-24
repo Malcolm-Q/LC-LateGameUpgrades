@@ -36,7 +36,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items
         {
             static float infoFunction(int level)
             {
-                ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().ScrapKeeperConfiguration;
+                ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().ScrapKeeperConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - In case of a full team wipe, each scrap present in the ship has a {2}% chance of not being discarded.\n";
@@ -44,7 +44,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items
         }
         public static float ComputeScrapKeeperKeepScrapChance()
         {
-            ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().ScrapKeeperConfiguration;
+            ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().ScrapKeeperConfiguration;
             int percentage = upgradeConfig.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfig.IncrementalEffect);
             return percentage / 100f;
         }

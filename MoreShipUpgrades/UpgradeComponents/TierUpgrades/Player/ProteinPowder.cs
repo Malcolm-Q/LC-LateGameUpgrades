@@ -1,4 +1,6 @@
-﻿using MoreShipUpgrades.Configuration;
+﻿using CSync.Lib;
+using MoreShipUpgrades.Configuration;
+using MoreShipUpgrades.Configuration.Interfaces;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
@@ -32,7 +34,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         public const int INCREMENT_FORCE_DEFAULT = 1;
         public const string INCREMENT_FORCE_DESCRIPTION = $"Every time {UPGRADE_NAME} is upgraded this value will be added to the value above.";
 
-        public const string PRICES_DEFAULT = "700";
+        public const string PRICES_DEFAULT = "1000,700";
 
         public const string CRIT_CHANCE_SECTION = "Chance of dealing a crit which will instakill the enemy.";
         public const float CRIT_CHANCE_DEFAULT = 0.01f;
@@ -41,29 +43,31 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = GetConfiguration().PROTEIN_POWDER_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().ProteinPowderConfiguration.OverrideName;
             base.Start();
         }
 
         public static int GetShovelHitForce(int force)
         {
-            LategameConfiguration config = GetConfiguration();
-            if (!config.PROTEIN_ENABLED.Value) return force;
+            ITierMultipleEffectUpgradeConfiguration<int, float> config = GetConfiguration().ProteinPowderConfiguration;
+            if (!config.Enabled.Value) return force;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return force;
-            int proteinForce = TryToCritEnemy() ? CRIT_DAMAGE_VALUE : config.PROTEIN_UNLOCK_FORCE.Value + (config.PROTEIN_INCREMENT.Value * GetUpgradeLevel(UPGRADE_NAME));
+            (SyncedEntry<int>, SyncedEntry<int>) forcePair = config.GetEffectPair(0);
+            int proteinForce = TryToCritEnemy() ? CRIT_DAMAGE_VALUE : forcePair.Item1.Value + (forcePair.Item2.Value * GetUpgradeLevel(UPGRADE_NAME));
             return force + proteinForce;
         }
 
         private static bool TryToCritEnemy()
         {
-            LategameConfiguration config = GetConfiguration();
-            string[] prices = config.PROTEIN_UPGRADE_PRICES.Value.Split(',');
+            ITierMultipleEffectUpgradeConfiguration<int, float> config = GetConfiguration().ProteinPowderConfiguration;
+            string[] prices = config.Prices.Value.Split(',');
             int maximumLevel = prices.Length;
             int currentLevel = GetUpgradeLevel(UPGRADE_NAME);
 
             if (currentLevel != maximumLevel && !(prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"))) return false;
 
-            return UnityEngine.Random.value < config.PROTEIN_CRIT_CHANCE.Value;
+            (SyncedEntry<float>, SyncedEntry<float>) critPair = config.GetSecondEffectPair(0);
+            return UnityEngine.Random.value < critPair.Item1.Value;
         }
 
         public string GetWorldBuildingText(bool shareStatus = false)
@@ -75,8 +79,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             static float infoFunction(int level)
             {
-                LategameConfiguration config = GetConfiguration();
-                return config.PROTEIN_UNLOCK_FORCE.Value + (config.PROTEIN_INCREMENT.Value * level);
+                ITierMultipleEffectUpgradeConfiguration<int, float> config = GetConfiguration().ProteinPowderConfiguration;
+                (SyncedEntry<int>, SyncedEntry<int>) forcePair = config.GetEffectPair(0);
+                return forcePair.Item1.Value + (forcePair.Item2.Value * level);
             }
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
@@ -85,15 +90,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         {
             get
             {
-                LategameConfiguration config = GetConfiguration();
-                string[] prices = config.PROTEIN_UPGRADE_PRICES.Value.Split(',');
-                return config.PROTEIN_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
+                ITierUpgradeConfiguration upgradeConfig = GetConfiguration().ProteinPowderConfiguration;
+                string[] prices = upgradeConfig.Prices.Value.Split(',');
+                return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
         }
 
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().PROTEIN_POWDER_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().ProteinPowderConfiguration.ItemProgressionItems.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -101,14 +106,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = GetConfiguration();
-
-            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
-                                                configuration.SHARED_UPGRADES.Value || !configuration.PROTEIN_INDIVIDUAL.Value,
-                                                configuration.PROTEIN_ENABLED.Value,
-                                                configuration.PROTEIN_PRICE.Value,
-                                                UpgradeBus.ParseUpgradePrices(configuration.PROTEIN_UPGRADE_PRICES.Value),
-                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.PROTEIN_POWDER_OVERRIDE_NAME : "");
+            return UpgradeBus.Instance.SetupMultiplePurchaseableTerminalNode(UPGRADE_NAME, GetConfiguration().ProteinPowderConfiguration);
         }
     }
 }

@@ -29,7 +29,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun
         {
             get
             {
-                ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().SleightOfHandConfiguration;
+                ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().SleightOfHandConfiguration;
                 string[] prices = upgradeConfig.Prices.Value.Split(',');
                 return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
@@ -38,7 +38,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun
         {
             static float infoFunction(int level)
             {
-                ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().SleightOfHandConfiguration;
+                ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().SleightOfHandConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - The reload speed of weaponry is increased by {2}%\n";
@@ -46,7 +46,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun
         }
         public static float ComputeSleightOfHandSpeedBoost()
         {
-            ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().SleightOfHandConfiguration;
+            ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().SleightOfHandConfiguration;
             int percentage = upgradeConfig.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfig.IncrementalEffect);
             return percentage / 100f;
         }

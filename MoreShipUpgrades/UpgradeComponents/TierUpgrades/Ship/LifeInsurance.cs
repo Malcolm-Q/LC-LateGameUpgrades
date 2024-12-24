@@ -26,7 +26,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         }
         public static float CalculateDecreaseMultiplier()
         {
-            ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().LifeInsuranceConfiguration;
+            ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().LifeInsuranceConfiguration;
             if (!upgradeConfig.Enabled || !GetActiveUpgrade(UPGRADE_NAME)) return 0f;
             return (upgradeConfig.InitialEffect + (upgradeConfig.IncrementalEffect * GetUpgradeLevel(UPGRADE_NAME))) / 100f;
         }
@@ -39,7 +39,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         {
             static float infoFunction(int level)
             {
-                ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().LifeInsuranceConfiguration;
+                ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().LifeInsuranceConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - Reduces the credit loss when leaving a body behind when exiting a moon by {2}%\n";
@@ -50,7 +50,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         {
             get
             {
-                ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().LifeInsuranceConfiguration;
+                ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().LifeInsuranceConfiguration;
                 string[] prices = upgradeConfig.Prices.Value.Split(',');
                 return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }

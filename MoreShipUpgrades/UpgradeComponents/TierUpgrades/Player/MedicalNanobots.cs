@@ -24,7 +24,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             static float infoFunction(int level)
             {
-                ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().MedicalNanobotsConfiguration;
+                ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().MedicalNanobotsConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - Increases the player's health regeneration cap by {2}%\n";
@@ -32,7 +32,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public static int GetIncreasedHealthRegeneration(int defaultValue)
         {
-            ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().MedicalNanobotsConfiguration;
+            ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().MedicalNanobotsConfiguration;
             if (!upgradeConfig.Enabled) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             float percentage = (upgradeConfig.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfig.IncrementalEffect))/100f;

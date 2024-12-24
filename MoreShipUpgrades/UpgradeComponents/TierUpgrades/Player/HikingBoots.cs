@@ -27,7 +27,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         static float ComputeUphillSlopeDebuffMultiplier()
         {
-            ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().EffectiveBandaidsConfiguration;
+            ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().EffectiveBandaidsConfiguration;
             return 1f - ((upgradeConfig.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfig.IncrementalEffect))/100f);
         }
         public static float ReduceUphillSlopeDebuff(float defaultValue)
@@ -41,7 +41,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             static float infoFunction(int level)
             {
-                ITierEffectUpgrade<int> upgradeConfig = GetConfiguration().EffectiveBandaidsConfiguration;
+                ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().EffectiveBandaidsConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - Reduces the movement speed change when going through slopes by {2}%\n";

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace MoreShipUpgrades.Configuration.Abstractions.TIerUpgrades
 {
-    public class TierMultiplePrimitiveUpgradeConfiguration<T> : TierUpgradeConfiguration, ITierMultipleEffectUpgrade<T>
+    public class TierMultiplePrimitiveUpgradeConfiguration<T> : TierUpgradeConfiguration, ITierMultipleEffectUpgradeConfiguration<T>
     {
         public TierMultiplePrimitiveUpgradeConfiguration(ConfigFile cfg, string topSection, string enabledDescription, string defaultPrices) : base(cfg, topSection, enabledDescription, defaultPrices)
         {
@@ -32,7 +32,7 @@ namespace MoreShipUpgrades.Configuration.Abstractions.TIerUpgrades
             return (InitialEffects[index], IncrementalEffects[index]);
         }
     }
-    public class TierMultiplePrimitiveUpgradeConfiguration<K,T> : TierMultiplePrimitiveUpgradeConfiguration<K>, ITierMultipleEffectUpgrade<K,T>
+    public class TierMultiplePrimitiveUpgradeConfiguration<K,T> : TierMultiplePrimitiveUpgradeConfiguration<K>, ITierMultipleEffectUpgradeConfiguration<K,T>
     {
         public TierMultiplePrimitiveUpgradeConfiguration(ConfigFile cfg, string topSection, string enabledDescription, string defaultPrices) : base(cfg, topSection, enabledDescription, defaultPrices)
         {

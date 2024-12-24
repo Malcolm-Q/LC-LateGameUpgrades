@@ -27,7 +27,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public static float GetIncreasedGrabDistance(float defaultValue)
         {
-            ITierEffectUpgrade<float> upgradeConfig = GetConfiguration().MechanicalArmsConfiguration;
+            ITierEffectUpgradeConfiguration<float> upgradeConfig = GetConfiguration().MechanicalArmsConfiguration;
             if (!upgradeConfig.Enabled) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             float increasedRange = upgradeConfig.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfig.IncrementalEffect);
@@ -37,7 +37,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             static float infoFunction(int level)
             {
-                ITierEffectUpgrade<float> upgradeConfig = GetConfiguration().MechanicalArmsConfiguration;
+                ITierEffectUpgradeConfiguration<float> upgradeConfig = GetConfiguration().MechanicalArmsConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - Increases the player's interaction range by {2} units.\n";
@@ -47,7 +47,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             get
             {
-                ITierEffectUpgrade<float> upgradeConfig = GetConfiguration().MechanicalArmsConfiguration;
+                ITierEffectUpgradeConfiguration<float> upgradeConfig = GetConfiguration().MechanicalArmsConfiguration;
                 string[] prices = upgradeConfig.Prices.Value.Split(',');
                 return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }

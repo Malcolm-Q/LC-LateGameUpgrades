@@ -27,7 +27,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public static float CalculateDecreaseMultiplier()
         {
-            ITierEffectUpgrade<int> config = GetConfiguration().RubberBootsConfiguration;
+            ITierEffectUpgradeConfiguration<int> config = GetConfiguration().RubberBootsConfiguration;
             if (!config.Enabled || !GetActiveUpgrade(UPGRADE_NAME)) return 0f;
             return (config.InitialEffect + (config.IncrementalEffect * GetUpgradeLevel(UPGRADE_NAME))) / 100f;
         }
@@ -46,7 +46,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             static float infoFunction(int level)
             {
-                ITierEffectUpgrade<int> config = GetConfiguration().RubberBootsConfiguration;
+                ITierEffectUpgradeConfiguration<int> config = GetConfiguration().RubberBootsConfiguration;
                 return config.InitialEffect.Value + (level * config.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - Reduces the movement debuff when walking on water surfaces by {2}%\n";
@@ -57,7 +57,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             get
             {
-                ITierEffectUpgrade<int> config = GetConfiguration().RubberBootsConfiguration;
+                ITierEffectUpgradeConfiguration<int> config = GetConfiguration().RubberBootsConfiguration;
                 string[] prices = config.Prices.Value.Split(',');
                 return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
