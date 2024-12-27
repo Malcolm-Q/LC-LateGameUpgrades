@@ -6,6 +6,8 @@ using MoreShipUpgrades.Configuration;
 using MoreShipUpgrades.Configuration.Abstractions.OneTimeUpgrades;
 using MoreShipUpgrades.Configuration.Abstractions.TIerUpgrades;
 using MoreShipUpgrades.Configuration.Interfaces;
+using MoreShipUpgrades.Configuration.Interfaces.OneTimeUpgrades;
+using MoreShipUpgrades.Configuration.Interfaces.TierUpgrades;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
@@ -86,7 +88,7 @@ namespace MoreShipUpgrades.Managers
 
             if (PluginConfiguration.DISCOMBOBULATOR_ENABLED.Value) Discombobulator.instance.flashCooldown = 0f;
             if (PluginConfiguration.BackMusclesConfiguration.Enabled.Value) BackMuscles.Instance.alteredWeight = 1f;
-            if (PluginConfiguration.LIGHTNING_ROD_ENABLED) LightningRod.instance.ResetValues();
+            if (PluginConfiguration.LightningRodConfiguration.Enabled) LightningRod.instance.ResetValues();
             if (wipeObjRefs) {
                 UpgradeObjects = [];
                 discoveredItems.Clear();

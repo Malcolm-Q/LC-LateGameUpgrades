@@ -57,7 +57,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
         {
             PlayerControllerB player = StartOfRound.Instance.mapScreen.targetedPlayer;
             int health = 100;
-            if (UpgradeBus.Instance.PluginConfiguration.PLAYER_HEALTH_ENABLED)
+            if (UpgradeBus.Instance.PluginConfiguration.StimpackConfiguration.Enabled)
             {
                 bool playerRegistered = Stimpack.Instance.playerHealthLevels.ContainsKey(player.playerSteamId);
                 health = playerRegistered ? Stimpack.GetHealthFromPlayer(100, player.playerSteamId) : 100;

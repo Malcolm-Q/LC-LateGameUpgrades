@@ -1,7 +1,7 @@
 ﻿using BepInEx.Configuration;
 using CSync.Extensions;
 using CSync.Lib;
-using MoreShipUpgrades.Configuration.Interfaces;
+using MoreShipUpgrades.Configuration.Interfaces.OneTimeUpgrades;
 using MoreShipUpgrades.Misc.Util;
 
 namespace MoreShipUpgrades.Configuration.Abstractions.OneTimeUpgrades

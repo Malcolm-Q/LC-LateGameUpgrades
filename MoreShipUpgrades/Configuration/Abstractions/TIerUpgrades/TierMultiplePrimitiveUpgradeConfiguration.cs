@@ -1,6 +1,6 @@
 ﻿using BepInEx.Configuration;
 using CSync.Lib;
-using MoreShipUpgrades.Configuration.Interfaces;
+using MoreShipUpgrades.Configuration.Interfaces.TierUpgrades;
 using System;
 using System.Collections.Generic;
 

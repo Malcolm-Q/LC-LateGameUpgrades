@@ -1,6 +1,6 @@
 ﻿using CSync.Lib;
 
-namespace MoreShipUpgrades.Configuration.Interfaces
+namespace MoreShipUpgrades.Configuration.Interfaces.TierUpgrades
 {
     public interface ITierCollectionUpgradeConfiguration : ITierUpgradeConfiguration
     {

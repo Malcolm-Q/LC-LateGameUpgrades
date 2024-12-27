@@ -5,7 +5,7 @@ using UnityEngine;
 using MoreShipUpgrades.UI.TerminalNodes;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.Configuration.Abstractions.TIerUpgrades;
-using MoreShipUpgrades.Configuration.Interfaces;
+using MoreShipUpgrades.Configuration.Interfaces.TierUpgrades;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
 {

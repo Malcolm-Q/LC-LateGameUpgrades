@@ -1,4 +1,5 @@
 ﻿using MoreShipUpgrades.Configuration;
+using MoreShipUpgrades.Configuration.Interfaces.TierUpgrades;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
@@ -12,14 +13,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
     internal class StrongLegs : TierUpgrade, IUpgradeWorldBuilding
     {
         public const string UPGRADE_NAME = "Strong Legs";
-        public const string PRICES_DEFAULT = "150,190,250";
+        public const string PRICES_DEFAULT = "300,150,190,250";
         internal const string WORLD_BUILDING_TEXT = "\n\nOne-time issuance of {0}." +
             " Comes with a vague list of opt-in maintenance procedures offered by The Company, which includes such gems as 'actuation optimization'," +
             " 'weight & balance personalization', and similar nigh-meaningless corpo-tech jargon. All of it is expensive.\n\n";
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = GetConfiguration().STRONG_LEGS_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().StrongLegsConfiguration.OverrideName;
         }
         public string GetWorldBuildingText(bool shareStatus = false)
         {
@@ -30,8 +31,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             static float infoFunction(int level)
             {
-                LategameConfiguration config = GetConfiguration();
-                return config.JUMP_FORCE_UNLOCK.Value + (level * config.JUMP_FORCE_INCREMENT.Value);
+                ITierEffectUpgradeConfiguration<float> config = GetConfiguration().StrongLegsConfiguration;
+                return config.InitialEffect.Value + (level * config.IncrementalEffect.Value);
             }
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
@@ -40,23 +41,23 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             get
             {
-                LategameConfiguration config = GetConfiguration();
-                string[] prices = config.STRONG_LEGS_UPGRADE_PRICES.Value.Split(',');
-                return config.STRONG_LEGS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
+                ITierEffectUpgradeConfiguration<float> upgradeConfig = GetConfiguration().StrongLegsConfiguration;
+                string[] prices = upgradeConfig.Prices.Value.Split(',');
+                return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
         }
         public static float GetAdditionalJumpForce(float defaultValue)
         {
-            LategameConfiguration config = GetConfiguration();
-            if (!config.STRONG_LEGS_ENABLED) return defaultValue;
+            ITierEffectUpgradeConfiguration<float> upgradeConfig = GetConfiguration().StrongLegsConfiguration;
+            if (!upgradeConfig.Enabled) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
-            float additionalValue = config.JUMP_FORCE_UNLOCK + (GetUpgradeLevel(UPGRADE_NAME) * config.JUMP_FORCE_INCREMENT);
+            float additionalValue = upgradeConfig.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfig.IncrementalEffect);
             return Mathf.Clamp(defaultValue + additionalValue, defaultValue, float.MaxValue);
         }
 
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().STRONG_LEGS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().StrongLegsConfiguration.ItemProgressionItems.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -64,14 +65,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = GetConfiguration();
-
-            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
-                                                configuration.SHARED_UPGRADES.Value || !configuration.STRONG_LEGS_INDIVIDUAL.Value,
-                                                configuration.STRONG_LEGS_ENABLED.Value,
-                                                configuration.STRONG_LEGS_PRICE.Value,
-                                                UpgradeBus.ParseUpgradePrices(configuration.STRONG_LEGS_UPGRADE_PRICES.Value),
-                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.STRONG_LEGS_OVERRIDE_NAME : "");
+            return UpgradeBus.Instance.SetupMultiplePurchaseableTerminalNode(UPGRADE_NAME, GetConfiguration().StrongLegsConfiguration);
         }
     }
 }

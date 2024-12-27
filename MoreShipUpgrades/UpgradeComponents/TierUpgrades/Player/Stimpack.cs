@@ -1,5 +1,6 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Configuration;
+using MoreShipUpgrades.Configuration.Interfaces.TierUpgrades;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
@@ -29,7 +30,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         public const string PRICE_SECTION = $"{UPGRADE_NAME} Price";
         public const int PRICE_DEFAULT = 600;
 
-        public const string PRICES_DEFAULT = "300, 450, 600";
+        public const string PRICES_DEFAULT = "600,300, 450, 600";
 
         public const string ADDITIONAL_HEALTH_UNLOCK_SECTION = "Initial health boost";
         public const int ADDITIONAL_HEALTH_UNLOCK_DEFAULT = 20;
@@ -41,14 +42,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
 
         void Awake()
         {
-            LategameConfiguration config = GetConfiguration();
+            ITierEffectUpgradeConfiguration<int> config = GetConfiguration().StimpackConfiguration;
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = config.STIMPACK_OVERRIDE_NAME;
+            overridenUpgradeName = config.OverrideName;
             logger = new LguLogger(UPGRADE_NAME);
             Instance = this;
             changingAttribute = GameAttribute.PLAYER_HEALTH;
-            initialValue = config.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK.Value;
-            incrementalValue = config.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT.Value;
+            initialValue = config.InitialEffect.Value;
+            incrementalValue = config.IncrementalEffect.Value;
         }
         public override void Load()
         {
@@ -73,13 +74,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         }
         public static int CheckForAdditionalHealth(int health)
         {
-            LategameConfiguration config = GetConfiguration();
-            if (!config.PLAYER_HEALTH_ENABLED.Value) return health; // this is stupid to check
+            ITierEffectUpgradeConfiguration<int> config = GetConfiguration().StimpackConfiguration;
+            if (!config.Enabled.Value) return health; // this is stupid to check
             PlayerControllerB player = UpgradeBus.Instance.GetLocalPlayer();
             if (!Instance.playerHealthLevels.ContainsKey(player.playerSteamId)) return health;
             int currentLevel = Instance.playerHealthLevels[player.playerSteamId];
 
-            return health + config.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK.Value + (currentLevel * config.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT.Value);
+            return health + config.InitialEffect.Value + (currentLevel * config.IncrementalEffect.Value);
         }
         /// <summary>
         /// Returns the maximum health possible for the player with given steam identifier <br></br>
@@ -91,8 +92,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         public static int GetHealthFromPlayer(int health, ulong steamId)
         {
             int currentLevel = Instance.playerHealthLevels[steamId];
-            LategameConfiguration config = GetConfiguration();
-            return health + config.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK.Value + (currentLevel * config.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT.Value);
+            ITierEffectUpgradeConfiguration<int> config = GetConfiguration().StimpackConfiguration;
+            return health + config.InitialEffect.Value + (currentLevel * config.IncrementalEffect.Value);
         }
         public string GetWorldBuildingText(bool shareStatus = false)
         {
@@ -103,8 +104,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         {
             static float infoFunction(int level)
             {
-                LategameConfiguration config = GetConfiguration();
-                return config.PLAYER_HEALTH_ADDITIONAL_HEALTH_UNLOCK.Value + (level * config.PLAYER_HEALTH_ADDITIONAL_HEALTH_INCREMENT.Value);
+                ITierEffectUpgradeConfiguration<int> config = GetConfiguration().StimpackConfiguration;
+                return config.InitialEffect.Value + (level * config.IncrementalEffect.Value);
             }
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
@@ -134,15 +135,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         {
             get
             {
-                LategameConfiguration config = GetConfiguration();
-                string[] prices = config.PLAYER_HEALTH_UPGRADE_PRICES.Value.Split(',');
-                return config.PLAYER_HEALTH_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
+                ITierUpgradeConfiguration upgradeConfig = GetConfiguration().StimpackConfiguration;
+                string[] prices = upgradeConfig.Prices.Value.Split(',');
+                return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
         }
 
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().STIMPACK_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().StimpackConfiguration.ItemProgressionItems.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -150,14 +151,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = GetConfiguration();
-
-            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
-                                                configuration.SHARED_UPGRADES.Value || !configuration.PLAYER_HEALTH_INDIVIDUAL.Value,
-                                                configuration.PLAYER_HEALTH_ENABLED.Value,
-                                                configuration.PLAYER_HEALTH_PRICE.Value,
-                                                UpgradeBus.ParseUpgradePrices(configuration.PLAYER_HEALTH_UPGRADE_PRICES.Value),
-                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.STIMPACK_OVERRIDE_NAME : "");
+            return UpgradeBus.Instance.SetupMultiplePurchaseableTerminalNode(UPGRADE_NAME, GetConfiguration().StimpackConfiguration);
         }
     }
 }

@@ -149,7 +149,7 @@ namespace MoreShipUpgrades.API
 
         public static bool IsHunterEnabled()
         {
-            return UpgradeBus.Instance.PluginConfiguration.HUNTER_ENABLED.Value;
+            return UpgradeBus.Instance.PluginConfiguration.HunterConfiguration.Enabled.Value;
         }
 
         internal static void RegisterSampleItem<T>(Item sampleItem, string monsterName, bool registerNetworkPrefab = false, double weight = 50) where T : GrabbableObject
@@ -255,12 +255,12 @@ namespace MoreShipUpgrades.API
                 Plugin.mls.LogWarning($"Defaulting the hunter level to 1 for the sample item for the enemy \"{monsterName}\"...");
                 hunterLevel = 1;
             }
-            if (hunterLevel > UpgradeBus.Instance.PluginConfiguration.HUNTER_UPGRADE_PRICES.Value.Split(",").Length)
+            if (hunterLevel > UpgradeBus.Instance.PluginConfiguration.HunterConfiguration.Prices.Value.Split(",").Length)
             {
                 Plugin.mls.LogWarning($"Provided hunter level is too high for sample registration.");
                 Plugin.mls.LogWarning($"Defaulting the hunter level to the maximum allowed level for the sample item for the enemy \"{monsterName}\"...");
                 Plugin.mls.LogWarning($"This is a configuration error, not a developer error as they cannot predict what is the maximum level Hunter upgrade can be without messing with internals (for now anyways).");
-                hunterLevel = UpgradeBus.Instance.PluginConfiguration.HUNTER_UPGRADE_PRICES.Value.Split(",").Length;
+                hunterLevel = UpgradeBus.Instance.PluginConfiguration.HunterConfiguration.Prices.Value.Split(",").Length;
             }
             if (weight <= 0)
             {
