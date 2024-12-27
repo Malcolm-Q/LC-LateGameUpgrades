@@ -1,6 +1,4 @@
 ﻿using CSync.Lib;
-using LCVR;
-using MoreShipUpgrades.Configuration;
 using MoreShipUpgrades.Configuration.Interfaces.TierUpgrades;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;

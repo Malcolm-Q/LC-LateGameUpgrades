@@ -83,6 +83,9 @@ namespace MoreShipUpgrades.Configuration
         public ITierCollectionUpgradeConfiguration HunterConfiguration {  get; set; }
         public ITierEffectUpgradeConfiguration<int> StimpackConfiguration { get; set; }
         public ITierEffectUpgradeConfiguration<float> ShutterBatteriesConfiguration {  get; set; }
+        public ITierEffectUpgradeConfiguration<int> EfficientEnginesConfiguration {  get; set; }
+        public ITierEffectUpgradeConfiguration<float> ClimblingGlovesConfiguration { get; set; }
+        public ITierEffectUpgradeConfiguration<int> LithiumBatteriesConfiguration { get; set; }
         #region Enabled
         [field: SyncedEntryField] public SyncedEntry<bool> CONTRACTS_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> NIGHT_VISION_ENABLED { get; set; }
@@ -91,9 +94,6 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<bool> MALWARE_BROADCASTER_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> FASTER_DROP_POD_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SIGURD_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> EFFICIENT_ENGINES_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> CLIMBING_GLOVES_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> LITHIUM_BATTERIES_ENABLED { get; set; }
 
         #endregion
 
@@ -103,13 +103,10 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<bool> DISCOMBOBULATOR_INDIVIDUAL { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> MALWARE_BROADCASTER_INDIVIDUAL { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> LOCKSMITH_INDIVIDUAL { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> CLIMBING_GLOVES_INDIVIDUAL { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> LITHIUM_BATTERIES_INDIVIDUAL { get; set; }
 
         #endregion
 
         #region Initial Prices
-        [field: SyncedEntryField] public SyncedEntry<int> CLIMBING_GLOVES_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> NIGHT_VISION_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> BETTER_SCANNER_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> DISCOMBOBULATOR_PRICE { get; set; }
@@ -119,8 +116,6 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_SPECIFY_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> FASTER_DROP_POD_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SIGURD_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> EFFICIENT_ENGINES_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> LITHIUM_BATTERIES_PRICE { get; set; }
 
         #endregion
 
@@ -133,10 +128,7 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<bool> MEDKIT_SCAN_NODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> BETTER_SCANNER_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> DISCOMBOBULATOR_OVERRIDE_NAME { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> EFFICIENT_ENGINES_OVERRIDE_NAME { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> LITHIUM_BATTERIES_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> NIGHT_VISION_OVERRIDE_NAME { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> CLIMBING_GLOVES_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> FAST_ENCRYPTION_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> DROP_POD_THRUSTERS_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> LOCKSMITH_OVERRIDE_NAME { get; set; }
@@ -145,15 +137,6 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<string> SIGURD_ACCESS_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> WALKIE_GPS_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> OVERRIDE_UPGRADE_NAMES { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> LITHIUM_BATTERIES_PRICES { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> LITHIUM_BATTERIES_INITIAL_MULTIPLIER { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> EFFICIENT_ENGINES_PRICES { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> EFFICIENT_ENGINES_INITIAL_DISCOUNT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> EFFICIENT_ENGINES_INCREMENTAL_DISCOUNT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> CLIMBING_GLOVES_PRICES { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> INITIAL_CLIMBING_SPEED_BOOST { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> INCREMENTAL_CLIMBING_SPEED_BOOST { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> DESTROY_TRAP { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> DISARM_TIME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> EXPLODE_TRAP { get; set; }
@@ -285,10 +268,7 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<bool> ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> BETTER_SCANNER_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> DISCOMBOBULATOR_ITEM_PROGRESSION_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> EFFICIENT_ENGINES_ITEM_PROGRESSION_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> LITHIUM_BATTERIES_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> NIGHT_VISION_ITEM_PROGRESSION_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> CLIMBING_GLOVES_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> FAST_ENCRYPTION_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> DROP_POD_THRUSTERS_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> LOCKSMITH_ITEM_PROGRESSION_ITEMS { get; set; }
@@ -354,10 +334,7 @@ namespace MoreShipUpgrades.Configuration
             OVERRIDE_UPGRADE_NAMES = cfg.BindSyncedEntry(topSection, LguConstants.OVERRIDE_NAMES_ENABLED_KEY, LguConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LguConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
             BETTER_SCANNER_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.BETTER_SCANNER_OVERRIDE_NAME_KEY, BetterScanner.UPGRADE_NAME);
             DISCOMBOBULATOR_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.DISCOMBOBULATOR_OVERRIDE_NAME_KEY, Discombobulator.UPGRADE_NAME);
-            EFFICIENT_ENGINES_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.EFFICIENT_ENGINES_OVERRIDE_NAME_KEY, EfficientEngines.UPGRADE_NAME);
-            LITHIUM_BATTERIES_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.LITHIUM_BATTERIES_OVERRIDE_NAME_KEY, LithiumBatteries.UPGRADE_NAME);
             NIGHT_VISION_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_OVERRIDE_NAME_KEY, NightVision.UPGRADE_NAME);
-            CLIMBING_GLOVES_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.CLIMBING_GLOVES_OVERRIDE_NAME_KEY, ClimbingGloves.UPGRADE_NAME);
             FAST_ENCRYPTION_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.FAST_ENCRYPTION_OVERRIDE_NAME_KEY, FastEncryption.UPGRADE_NAME);
             DROP_POD_THRUSTERS_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.DROP_POD_THRUSTERS_OVERRIDE_NAME_KEY, FasterDropPod.UPGRADE_NAME);
             LOCKSMITH_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.LOCKSMITH_OVERRIDE_NAME_KEY, LockSmith.UPGRADE_NAME);
@@ -702,18 +679,12 @@ namespace MoreShipUpgrades.Configuration
                 ]
             };
 
-            #region Climbing Gloves
-
             topSection = ClimbingGloves.UPGRADE_NAME;
-            CLIMBING_GLOVES_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.CLIMBING_GLOVES_ENABLED_KEY, LguConstants.CLIMBING_GLOVES_ENABLED_DEFAULT, LguConstants.CLIMBING_GLOVES_ENABLED_DESCRIPTION);
-            CLIMBING_GLOVES_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            CLIMBING_GLOVES_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.CLIMBING_GLOVES_PRICE_KEY, LguConstants.CLIMBING_GLOVES_PRICE_DEFAULT);
-            CLIMBING_GLOVES_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, ClimbingGloves.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
-            INITIAL_CLIMBING_SPEED_BOOST = cfg.BindSyncedEntry(topSection, LguConstants.CLIMBING_GLOVES_INITIAL_MULTIPLIER_KEY, LguConstants.CLIMBING_GLOVES_INITIAL_MULTIPLIER_DEFAULT, LguConstants.CLIMBING_GLOVES_INITIAL_MULTIPLIER_DESCRIPTION);
-            INCREMENTAL_CLIMBING_SPEED_BOOST = cfg.BindSyncedEntry(topSection, LguConstants.CLIMBING_GLOVES_INCREMENTAL_MULTIPLIER_KEY, LguConstants.CLIMBING_GLOVES_INCREMENTAL_MULTIPLIER_DEFAULT);
-            CLIMBING_GLOVES_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
+            ClimblingGlovesConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<float>(cfg, topSection, LguConstants.CLIMBING_GLOVES_ENABLED_DESCRIPTION, ClimbingGloves.DEFAULT_PRICES)
+            {
+                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.CLIMBING_GLOVES_INITIAL_MULTIPLIER_KEY, LguConstants.CLIMBING_GLOVES_INITIAL_MULTIPLIER_DEFAULT, LguConstants.CLIMBING_GLOVES_INITIAL_MULTIPLIER_DESCRIPTION),
+                IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.CLIMBING_GLOVES_INCREMENTAL_MULTIPLIER_KEY, LguConstants.CLIMBING_GLOVES_INCREMENTAL_MULTIPLIER_DEFAULT),
+            };
 
             #region Discombobulator
 
@@ -747,17 +718,12 @@ namespace MoreShipUpgrades.Configuration
 
             #endregion
 
-            #region Efficient Engines
-
             topSection = EfficientEngines.UPGRADE_NAME;
-            EFFICIENT_ENGINES_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.EFFICIENT_ENGINES_ENABLED_KEY, LguConstants.EFFICIENT_ENGINES_ENABLED_DEFAULT, LguConstants.EFFICIENT_ENGINES_ENABLED_DESCRIPTION);
-            EFFICIENT_ENGINES_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.EFFICIENT_ENGINES_PRICE_KEY, LguConstants.EFFICIENT_ENGINES_PRICE_DEFAULT);
-            EFFICIENT_ENGINES_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, EfficientEngines.DEFAULT_PRICES, BaseUpgrade.PRICES_DESCRIPTION);
-            EFFICIENT_ENGINES_INITIAL_DISCOUNT = cfg.BindSyncedEntry(topSection, LguConstants.EFFICIENT_ENGINES_INITIAL_MULTIPLIER_KEY, LguConstants.EFFICIENT_ENGINES_INITIAL_MULTIPLIER_DEFAULT);
-            EFFICIENT_ENGINES_INCREMENTAL_DISCOUNT = cfg.BindSyncedEntry(topSection, LguConstants.EFFICIENT_ENGINES_INCREMENTAL_MULTIPLIER_KEY, LguConstants.EFFICIENT_ENGINES_INCREMENTAL_MULTIPLIER_DEFAULT);
-            EFFICIENT_ENGINES_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
+            EfficientEnginesConfiguration = new TierPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.EFFICIENT_ENGINES_ENABLED_DESCRIPTION, EfficientEngines.DEFAULT_PRICES)
+            {
+                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.EFFICIENT_ENGINES_INITIAL_MULTIPLIER_KEY, LguConstants.EFFICIENT_ENGINES_INITIAL_MULTIPLIER_DEFAULT),
+                IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.EFFICIENT_ENGINES_INCREMENTAL_MULTIPLIER_KEY, LguConstants.EFFICIENT_ENGINES_INCREMENTAL_MULTIPLIER_DEFAULT),
+            };
 
             #region Fast Encryption
 
@@ -814,18 +780,12 @@ namespace MoreShipUpgrades.Configuration
                 AlternativeMode = cfg.BindSyncedEntry(topSection, LightningRod.UPGRADE_MODE_SECTION, LightningRod.UPGRADE_MODE_DEFAULT, LightningRod.UPGRADE_MODE_DESCRIPTION)
             };
 
-            #region Lithium Batteries
-
             topSection = LithiumBatteries.UPGRADE_NAME;
-            LITHIUM_BATTERIES_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.LITHIUM_BATTERIES_ENABLED_KEY, LguConstants.LITHIUM_BATTERIES_ENABLED_DEFAULT, LguConstants.LITHIUM_BATTERIES_ENABLED_DESCRIPTION);
-            LITHIUM_BATTERIES_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            LITHIUM_BATTERIES_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.LITHIUM_BATTERIES_PRICE_KEY, LguConstants.LITHIUM_BATTERIES_PRICE_DEFAULT);
-            LITHIUM_BATTERIES_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, LithiumBatteries.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            LITHIUM_BATTERIES_INITIAL_MULTIPLIER = cfg.BindSyncedEntry(topSection, LguConstants.LITHIUM_BATTERIES_INITIAL_MULTIPLIER_KEY, LguConstants.LITHIUM_BATTERIES_INITIAL_MULTIPLIER_DEFAULT, LguConstants.LITHIUM_BATTERIES_INITIAL_MULTIPLIER_DESCRIPTION);
-            LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER = cfg.BindSyncedEntry(topSection, LguConstants.LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER_KEY, LguConstants.LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER_DEFAULT, LguConstants.LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER_DESCRIPTION);
-            LITHIUM_BATTERIES_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
+            LithiumBatteriesConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.LITHIUM_BATTERIES_ENABLED_DESCRIPTION, LithiumBatteries.PRICES_DEFAULT)
+            {
+                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.LITHIUM_BATTERIES_INITIAL_MULTIPLIER_KEY, LguConstants.LITHIUM_BATTERIES_INITIAL_MULTIPLIER_DEFAULT, LguConstants.LITHIUM_BATTERIES_INITIAL_MULTIPLIER_DESCRIPTION),
+                IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER_KEY, LguConstants.LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER_DEFAULT, LguConstants.LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER_DESCRIPTION),
+            };
 
             #region Locksmith
 

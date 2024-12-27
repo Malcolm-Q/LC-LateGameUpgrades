@@ -2,10 +2,8 @@
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
-using LCVR;
 using MoreShipUpgrades.UI.TerminalNodes;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
-using MoreShipUpgrades.Configuration;
 using MoreShipUpgrades.Configuration.Interfaces.TierUpgrades;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
