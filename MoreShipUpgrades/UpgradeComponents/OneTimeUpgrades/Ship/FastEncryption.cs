@@ -12,7 +12,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship
         internal const string WORLD_BUILDING_TEXT = "\n\nA small tweak for the signal translator that optimizes the way it compresses text over the Proprietary Network." +
             " Don't forget that the Company keeps records of all department transmissions for training purposes, and that your on-the-job conversations may be subject to playback and review by your Employer.\n\n";
         public static FastEncryption instance;
-        public override bool CanInitializeOnStart => GetConfiguration().PAGER_PRICE.Value <= 0;
+        public override bool CanInitializeOnStart => GetConfiguration().FastEncryptionConfiguration.Price.Value <= 0;
 
         const float TRANSMIT_MULTIPLIER = 0.2f;
 
@@ -23,7 +23,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = GetConfiguration().FAST_ENCRYPTION_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().FastEncryptionConfiguration.OverrideName;
             instance = this;
         }
         public static int GetLimitOfCharactersTransmit(int defaultLimit, string message)
@@ -42,7 +42,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().FAST_ENCRYPTION_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().FastEncryptionConfiguration.ItemProgressionItems.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -50,13 +50,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = GetConfiguration();
-
-            return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
-                                    shareStatus: true,
-                                    configuration.PAGER_ENABLED.Value,
-                                    configuration.PAGER_PRICE.Value,
-                                    configuration.OVERRIDE_UPGRADE_NAMES ? configuration.FAST_ENCRYPTION_OVERRIDE_NAME : "");
+            return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME, GetConfiguration().FastEncryptionConfiguration);
         }
     }
 }

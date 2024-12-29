@@ -86,6 +86,8 @@ namespace MoreShipUpgrades.Configuration
         public ITierEffectUpgradeConfiguration<int> EfficientEnginesConfiguration {  get; set; }
         public ITierEffectUpgradeConfiguration<float> ClimblingGlovesConfiguration { get; set; }
         public ITierEffectUpgradeConfiguration<int> LithiumBatteriesConfiguration { get; set; }
+        public IOneTimeUpgradeConfiguration LocksmithConfiguration { get; set; }
+        public IOneTimeUpgradeConfiguration FastEncryptionConfiguration {  get; set; }
         #region Enabled
         [field: SyncedEntryField] public SyncedEntry<bool> CONTRACTS_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> NIGHT_VISION_ENABLED { get; set; }
@@ -102,7 +104,6 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<bool> BETTER_SCANNER_INDIVIDUAL { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> DISCOMBOBULATOR_INDIVIDUAL { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> MALWARE_BROADCASTER_INDIVIDUAL { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> LOCKSMITH_INDIVIDUAL { get; set; }
 
         #endregion
 
@@ -129,9 +130,7 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<string> BETTER_SCANNER_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> DISCOMBOBULATOR_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> NIGHT_VISION_OVERRIDE_NAME { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> FAST_ENCRYPTION_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> DROP_POD_THRUSTERS_OVERRIDE_NAME { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> LOCKSMITH_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> MALWARE_BROADCASTER_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> SICK_BEATS_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> SIGURD_ACCESS_OVERRIDE_NAME { get; set; }
@@ -163,9 +162,7 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<float> NIGHT_VIS_BATTERY_INCREMENT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> DISCOMBOBULATOR_INCREMENT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> INTERN_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> LOCKSMITH_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> INTERN_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> LOCKSMITH_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> SALE_PERC { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> LOSE_NIGHT_VIS_ON_DEATH { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> NIGHT_VISION_DROP_ON_DEATH { get; set; }
@@ -177,8 +174,6 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<int> BETTER_SCANNER_PRICE2 { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> BETTER_SCANNER_PRICE3 { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> BETTER_SCANNER_ENEMIES { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> PAGER_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> PAGER_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> VERBOSE_ENEMIES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> MEDKIT_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MEDKIT_PRICE { get; set; }
@@ -269,9 +264,7 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<string> BETTER_SCANNER_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> DISCOMBOBULATOR_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> NIGHT_VISION_ITEM_PROGRESSION_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> FAST_ENCRYPTION_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> DROP_POD_THRUSTERS_ITEM_PROGRESSION_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> LOCKSMITH_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> MALWARE_BROADCASTER_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> SICK_BEATS_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> SIGURD_ACCESS_ITEM_PROGRESSION_ITEMS { get; set; }
@@ -335,9 +328,7 @@ namespace MoreShipUpgrades.Configuration
             BETTER_SCANNER_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.BETTER_SCANNER_OVERRIDE_NAME_KEY, BetterScanner.UPGRADE_NAME);
             DISCOMBOBULATOR_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.DISCOMBOBULATOR_OVERRIDE_NAME_KEY, Discombobulator.UPGRADE_NAME);
             NIGHT_VISION_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_OVERRIDE_NAME_KEY, NightVision.UPGRADE_NAME);
-            FAST_ENCRYPTION_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.FAST_ENCRYPTION_OVERRIDE_NAME_KEY, FastEncryption.UPGRADE_NAME);
             DROP_POD_THRUSTERS_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.DROP_POD_THRUSTERS_OVERRIDE_NAME_KEY, FasterDropPod.UPGRADE_NAME);
-            LOCKSMITH_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.LOCKSMITH_OVERRIDE_NAME_KEY, LockSmith.UPGRADE_NAME);
             MALWARE_BROADCASTER_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.MALWARE_BROADCASTER_OVERRIDE_NAME_KEY, MalwareBroadcaster.UPGRADE_NAME);
             SICK_BEATS_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_OVERRIDE_NAME_KEY, SickBeats.UPGRADE_NAME);
             SIGURD_ACCESS_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.SIGURD_ACCESS_OVERRIDE_NAME_KEY, Sigurd.UPGRADE_NAME);
@@ -725,14 +716,8 @@ namespace MoreShipUpgrades.Configuration
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.EFFICIENT_ENGINES_INCREMENTAL_MULTIPLIER_KEY, LguConstants.EFFICIENT_ENGINES_INCREMENTAL_MULTIPLIER_DEFAULT),
             };
 
-            #region Fast Encryption
-
             topSection = FastEncryption.UPGRADE_NAME;
-            PAGER_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.FAST_ENCRYPTION_ENABLED_KEY, LguConstants.FAST_ENCRYPTION_ENABLED_DEFAULT, LguConstants.FAST_ENCRYPTION_ENABLED_DESCRIPTION);
-            PAGER_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.FAST_ENCRYPTION_PRICE_KEY, LguConstants.FAST_ENCRYPTION_PRICE_DEFAULT);
-            FAST_ENCRYPTION_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
+            FastEncryptionConfiguration = new OneTimeUpgradeConfiguration(cfg, topSection, LguConstants.FAST_ENCRYPTION_ENABLED_DESCRIPTION, LguConstants.FAST_ENCRYPTION_PRICE_DEFAULT);
 
             #region Hunter
 
@@ -787,15 +772,8 @@ namespace MoreShipUpgrades.Configuration
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER_KEY, LguConstants.LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER_DEFAULT, LguConstants.LITHIUM_BATTERIES_INCREMENTAL_MULTIPLIER_DESCRIPTION),
             };
 
-            #region Locksmith
-
             topSection = LockSmith.UPGRADE_NAME;
-            LOCKSMITH_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.LOCKSMITH_ENABLED_KEY, LguConstants.LOCKSMITH_ENABLED_DEFAULT, LguConstants.LOCKSMITH_ENABLED_DESCRIPTION);
-            LOCKSMITH_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.LOCKSMITH_PRICE_KEY, LguConstants.LOCKSMITH_PRICE_DEFAULT, LguConstants.LOCKSMITH_PRICE_DESCRIPTION);
-            LOCKSMITH_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            LOCKSMITH_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
+            LocksmithConfiguration = new OneTimeIndividualUpgradeConfiguration(cfg, topSection, LguConstants.LOCKSMITH_ENABLED_DESCRIPTION, LguConstants.LOCKSMITH_PRICE_DEFAULT);
 
             #region Malware Broadcaster
 

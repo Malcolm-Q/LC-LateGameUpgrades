@@ -12,7 +12,7 @@ namespace MoreShipUpgrades.Patches.Interactables
         [HarmonyPostfix]
         static void UpdatePostfix(DoorLock __instance)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.LOCKSMITH_ENABLED) return;
+            if (!UpgradeBus.Instance.PluginConfiguration.LocksmithConfiguration.Enabled) return;
             if (!BaseUpgrade.GetActiveUpgrade(LockSmith.UPGRADE_NAME)) return;
             if (__instance.isLocked && !__instance.isPickingLock)
             {
