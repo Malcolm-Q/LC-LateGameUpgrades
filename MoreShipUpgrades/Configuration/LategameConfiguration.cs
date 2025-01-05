@@ -88,14 +88,16 @@ namespace MoreShipUpgrades.Configuration
         public ITierEffectUpgradeConfiguration<int> LithiumBatteriesConfiguration { get; set; }
         public IOneTimeUpgradeConfiguration LocksmithConfiguration { get; set; }
         public IOneTimeUpgradeConfiguration FastEncryptionConfiguration {  get; set; }
+        public DropPodThrustersUpgradeConfiguration DropPodThrustersConfiguration { get; set; }
+        public SigurdAccessUpgradeConfiguration SigurdAccessConfiguration { get; set; }
+        public IOneTimeUpgradeConfiguration WalkieGpsConfiguration {  get; set; }
+
         #region Enabled
         [field: SyncedEntryField] public SyncedEntry<bool> CONTRACTS_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> NIGHT_VISION_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> BETTER_SCANNER_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> DISCOMBOBULATOR_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> MALWARE_BROADCASTER_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> FASTER_DROP_POD_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> SIGURD_ENABLED { get; set; }
 
         #endregion
 
@@ -112,11 +114,8 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<int> BETTER_SCANNER_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> DISCOMBOBULATOR_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MALWARE_BROADCASTER_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> WALKIE_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_SPECIFY_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> FASTER_DROP_POD_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> SIGURD_PRICE { get; set; }
 
         #endregion
 
@@ -130,11 +129,8 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<string> BETTER_SCANNER_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> DISCOMBOBULATOR_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> NIGHT_VISION_OVERRIDE_NAME { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> DROP_POD_THRUSTERS_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> MALWARE_BROADCASTER_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> SICK_BEATS_OVERRIDE_NAME { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> SIGURD_ACCESS_OVERRIDE_NAME { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> WALKIE_GPS_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> OVERRIDE_UPGRADE_NAMES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> DESTROY_TRAP { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> DISARM_TIME { get; set; }
@@ -169,8 +165,6 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<string> NIGHT_VISION_UPGRADE_PRICES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> DISCO_UPGRADE_PRICES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SHARED_UPGRADES { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> WALKIE_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> WALKIE_INDIVIDUAL { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> BETTER_SCANNER_PRICE2 { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> BETTER_SCANNER_PRICE3 { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> BETTER_SCANNER_ENEMIES { get; set; }
@@ -238,15 +232,9 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<bool> EXTRACTION_CONTRACT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> DEFUSAL_CONTRACT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> MAIN_OBJECT_FURTHEST { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> FASTER_DROP_POD_TIMER { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> FASTER_DROP_POD_INITIAL_TIMER { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> FASTER_DROP_POD_LEAVE_TIMER { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> EXTRACTION_CONTRACT_AMOUNT_MEDKITS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_REWARD_QUOTA_MULTIPLIER { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SHOW_UPGRADES_CHAT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> SIGURD_CHANCE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> SIGURD_PERCENT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<Sigurd.FunctionModes> SIGURD_MODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SALE_APPLY_ONCE { get; set; }
 
         #endregion
@@ -264,11 +252,8 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<string> BETTER_SCANNER_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> DISCOMBOBULATOR_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> NIGHT_VISION_ITEM_PROGRESSION_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> DROP_POD_THRUSTERS_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> MALWARE_BROADCASTER_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> SICK_BEATS_ITEM_PROGRESSION_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> SIGURD_ACCESS_ITEM_PROGRESSION_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> WALKIE_GPS_ITEM_PROGRESSION_ITEMS { get; set; }
 
         #endregion
 
@@ -328,11 +313,8 @@ namespace MoreShipUpgrades.Configuration
             BETTER_SCANNER_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.BETTER_SCANNER_OVERRIDE_NAME_KEY, BetterScanner.UPGRADE_NAME);
             DISCOMBOBULATOR_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.DISCOMBOBULATOR_OVERRIDE_NAME_KEY, Discombobulator.UPGRADE_NAME);
             NIGHT_VISION_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_OVERRIDE_NAME_KEY, NightVision.UPGRADE_NAME);
-            DROP_POD_THRUSTERS_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.DROP_POD_THRUSTERS_OVERRIDE_NAME_KEY, FasterDropPod.UPGRADE_NAME);
             MALWARE_BROADCASTER_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.MALWARE_BROADCASTER_OVERRIDE_NAME_KEY, MalwareBroadcaster.UPGRADE_NAME);
             SICK_BEATS_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_OVERRIDE_NAME_KEY, SickBeats.UPGRADE_NAME);
-            SIGURD_ACCESS_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.SIGURD_ACCESS_OVERRIDE_NAME_KEY, Sigurd.UPGRADE_NAME);
-            WALKIE_GPS_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.WALKIE_GPS_OVERRIDE_NAME_KEY, WalkieGPS.UPGRADE_NAME);
 
             #endregion
 
@@ -697,17 +679,8 @@ namespace MoreShipUpgrades.Configuration
 
             #endregion
 
-            #region Drop Pod Thrusters
-
             topSection = FasterDropPod.UPGRADE_NAME;
-            FASTER_DROP_POD_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.DROP_POD_THRUSTERS_ENABLED_KEY, LguConstants.DROP_POD_THRUSTERS_ENABLED_DEFAULT, LguConstants.DROP_POD_THRUSTERS_ENABLED_DESCRIPTION);
-            FASTER_DROP_POD_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.DROP_POD_THRUSTERS_PRICE_KEY, LguConstants.DROP_POD_THRUSTERS_PRICE_DEFAULT, LguConstants.DROP_POD_THRUSTERS_PRICE_DESCRIPTION);
-            FASTER_DROP_POD_TIMER = cfg.BindSyncedEntry(topSection, LguConstants.DROP_POD_THRUSTERS_TIME_DECREASE_KEY, LguConstants.DROP_POD_THRUSTERS_TIME_DECREASE_DEFAULT);
-            FASTER_DROP_POD_INITIAL_TIMER = cfg.BindSyncedEntry(topSection, LguConstants.DROP_POD_THRUSTERS_FIRST_TIME_DECREASE_KEY, LguConstants.DROP_POD_THRUSTERS_FIRST_TIME_DECREASE_DEFAULT);
-            FASTER_DROP_POD_LEAVE_TIMER = cfg.BindSyncedEntry(topSection, LguConstants.DROP_POD_THRUSTERS_LEAVE_TIMER_KEY, LguConstants.DROP_POD_THRUSTERS_LEAVE_TIMER_DEFAULT, LguConstants.DROP_POD_THRUSTERS_LEAVE_TIMER_DESCRIPTION);
-            DROP_POD_THRUSTERS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
+            DropPodThrustersConfiguration = new DropPodThrustersUpgradeConfiguration(cfg, topSection, LguConstants.DROP_POD_THRUSTERS_ENABLED_DESCRIPTION, LguConstants.DROP_POD_THRUSTERS_PRICE_DEFAULT);
 
             topSection = EfficientEngines.UPGRADE_NAME;
             EfficientEnginesConfiguration = new TierPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.EFFICIENT_ENGINES_ENABLED_DESCRIPTION, EfficientEngines.DEFAULT_PRICES)
@@ -906,17 +879,13 @@ namespace MoreShipUpgrades.Configuration
 
             #endregion
 
-            #region Sigurd Access
-
             topSection = Sigurd.UPGRADE_NAME;
-            SIGURD_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.SIGURD_ACCESS_ENABLED_KEY, LguConstants.SIGURD_ACCESS_ENABLED_DEFAULT, LguConstants.SIGURD_ACCESS_ENABLED_DESCRIPTION);
-            SIGURD_MODE = cfg.BindSyncedEntry(topSection, "Sigurd Function Mode", Sigurd.FunctionModes.AllDays, "Supported Modes:\nAllDays: All days have a chance of increased Company Buy Rate\nLastDay: Day of the deadline has a chance of increased COmpany Buy Rate");
-            SIGURD_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.SIGURD_ACCESS_PRICE_KEY, LguConstants.SIGURD_ACCESS_PRICE_DEFAULT, LguConstants.SIGURD_ACCESS_PRICE_DESCRIPTION);
-            SIGURD_CHANCE = cfg.BindSyncedEntry(topSection, LguConstants.SIGURD_ACCESS_CHANCE_KEY, LguConstants.SIGURD_ACCESS_CHANCE_DEFAULT);
-            SIGURD_PERCENT = cfg.BindSyncedEntry(topSection, LguConstants.SIGURD_ACCESS_ADDITIONAL_PERCENT_KEY, LguConstants.SIGURD_ACCESS_ADDITIONAL_PERCENT_DEFAULT);
-            SIGURD_ACCESS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
+            SigurdAccessConfiguration = new SigurdAccessUpgradeConfiguration(cfg, topSection, LguConstants.SIGURD_ACCESS_ENABLED_DESCRIPTION, LguConstants.SIGURD_ACCESS_PRICE_DEFAULT)
+            {
+                Effect = cfg.BindSyncedEntry(topSection, LguConstants.SIGURD_ACCESS_ADDITIONAL_PERCENT_KEY, LguConstants.SIGURD_ACCESS_ADDITIONAL_PERCENT_DEFAULT),
+                Chance = cfg.BindSyncedEntry(topSection, LguConstants.SIGURD_ACCESS_CHANCE_KEY, LguConstants.SIGURD_ACCESS_CHANCE_DEFAULT),
+                AlternativeMode = cfg.BindSyncedEntry(topSection, "Sigurd Function Mode", Sigurd.FunctionModes.AllDays, "Supported Modes:\nAllDays: All days have a chance of increased Company Buy Rate\nLastDay: Day of the deadline has a chance of increased COmpany Buy Rate"),
+            };
 
             topSection = Stimpack.UPGRADE_NAME;
             StimpackConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<int>(cfg, topSection, Stimpack.ENABLED_DESCRIPTION, Stimpack.PRICES_DEFAULT)
@@ -931,15 +900,8 @@ namespace MoreShipUpgrades.Configuration
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.STRONG_LEGS_INCREMENTAL_JUMP_FORCE_KEY, LguConstants.STRONG_LEGS_INCREMENTAL_JUMP_FORCE_DEFAULT, LguConstants.STRONG_LEGS_INCREMENTAL_JUMP_FORCE_DESCRIPTION),
             };
 
-            #region Walkie GPS
-
             topSection = WalkieGPS.UPGRADE_NAME;
-            WALKIE_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.WALKIE_GPS_ENABLED_KEY, LguConstants.WALKIE_GPS_ENABLED_DEFAULT, LguConstants.WALKIE_GPS_ENABLED_DESCRIPTION);
-            WALKIE_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.WALKIE_GPS_PRICE_KEY, LguConstants.WALKIE_GPS_PRICE_DEFAULT, LguConstants.WALKIE_GPS_PRICE_DESCRIPTION);
-            WALKIE_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            WALKIE_GPS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
+            WalkieGpsConfiguration = new OneTimeIndividualUpgradeConfiguration(cfg, topSection, LguConstants.WALKIE_GPS_ENABLED_DESCRIPTION, LguConstants.WALKIE_GPS_PRICE_DEFAULT);
 
             #endregion
 

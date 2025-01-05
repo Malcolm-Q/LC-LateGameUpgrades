@@ -212,7 +212,7 @@ namespace MoreShipUpgrades.UI.Application
         }
         static bool CanBuyUpgrade(CustomTerminalNode node)
         {
-            if (UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_ITEM_PROGRESSION && UpgradeBus.Instance.PluginConfiguration.ITEM_PROGRESSION_NO_PURCHASE_UPGRADES) return true;
+            if (UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_ITEM_PROGRESSION && UpgradeBus.Instance.PluginConfiguration.ITEM_PROGRESSION_NO_PURCHASE_UPGRADES) return false;
             bool maxLevel = node.CurrentUpgrade >= node.MaxUpgrade;
             if (maxLevel && node.Unlocked)
                 return false;

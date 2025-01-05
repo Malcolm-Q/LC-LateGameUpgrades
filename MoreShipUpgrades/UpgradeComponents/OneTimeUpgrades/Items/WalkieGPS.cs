@@ -28,7 +28,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = GetConfiguration().WALKIE_GPS_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().WalkieGpsConfiguration.OverrideName;
             instance = this;
         }
         internal override void Start()
@@ -83,10 +83,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items
         {
             return $"${price} - Displays your location and time when holding a walkie talkie.\nEspecially useful for fog.";
         }
-        public override bool CanInitializeOnStart => GetConfiguration().WALKIE_PRICE.Value <= 0;
+        public override bool CanInitializeOnStart => GetConfiguration().WalkieGpsConfiguration.Price.Value <= 0;
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().WALKIE_GPS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().WalkieGpsConfiguration.ItemProgressionItems.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -94,13 +94,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = GetConfiguration();
-
-            return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
-                                    shareStatus: true,
-                                    configuration.WALKIE_ENABLED.Value,
-                                    configuration.WALKIE_PRICE.Value,
-                                    configuration.OVERRIDE_UPGRADE_NAMES ? configuration.WALKIE_GPS_OVERRIDE_NAME : "");
+            return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME, GetConfiguration().WalkieGpsConfiguration);
         }
     }
 }
