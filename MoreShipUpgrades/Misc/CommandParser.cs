@@ -1,4 +1,5 @@
 ﻿using GameNetcodeStuff;
+using MoreShipUpgrades.Configuration.Custom;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
@@ -46,12 +47,13 @@ namespace MoreShipUpgrades.Misc
             RoundManager.Instance.PlayAudibleNoise(terminal.transform.position, 60f, 0.8f, 0, false, 14155);
             Discombobulator.instance.UseDiscombobulatorServerRpc();
 
-            Collider[] array = Physics.OverlapSphere(terminal.transform.position, UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_RADIUS.Value, 524288);
+            DiscombobulatorUpgradeConfiguration config = UpgradeBus.Instance.PluginConfiguration.DiscombobulatorUpgradeConfiguration;
+            Collider[] array = Physics.OverlapSphere(terminal.transform.position, config.Radius.Value, 524288);
             if (array.Length == 0) return DisplayTerminalMessage(LguConstants.DISCOMBOBULATOR_NO_ENEMIES);
 
-            if (UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_NOTIFY_CHAT.Value)
+            if (config.NotifyChat.Value)
             {
-                terminal.StartCoroutine(CountDownChat(UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_STUN_DURATION.Value + (UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_INCREMENT.Value * BaseUpgrade.GetUpgradeLevel(Discombobulator.UPGRADE_NAME))));
+                terminal.StartCoroutine(CountDownChat(config.InitialEffect.Value + (config.IncrementalEffect.Value * BaseUpgrade.GetUpgradeLevel(Discombobulator.UPGRADE_NAME))));
             }
             return DisplayTerminalMessage(string.Format(LguConstants.DISCOMBULATOR_HIT_ENEMIES, array.Length));
         }

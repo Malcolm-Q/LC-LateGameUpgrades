@@ -7,7 +7,7 @@ namespace MoreShipUpgrades.API
     {
         public static bool IsDiscombobulatorEnabled()
         {
-            return UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_ENABLED;
+            return UpgradeBus.Instance.PluginConfiguration.DiscombobulatorUpgradeConfiguration.Enabled;
         }
 
         public static bool CanFireDiscombobulator()

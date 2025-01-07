@@ -86,7 +86,7 @@ namespace MoreShipUpgrades.Managers
             if (PluginConfiguration.FedoraSuitConfiguration.Enabled) FedoraSuit.instance.wearingFedora.Clear();
             ContractManager.Instance.ResetAllValues();
 
-            if (PluginConfiguration.DISCOMBOBULATOR_ENABLED.Value) Discombobulator.instance.flashCooldown = 0f;
+            if (PluginConfiguration.DiscombobulatorUpgradeConfiguration.Enabled.Value) Discombobulator.instance.flashCooldown = 0f;
             if (PluginConfiguration.BackMusclesConfiguration.Enabled.Value) BackMuscles.Instance.alteredWeight = 1f;
             if (PluginConfiguration.LightningRodConfiguration.Enabled) LightningRod.instance.ResetValues();
             if (wipeObjRefs) {

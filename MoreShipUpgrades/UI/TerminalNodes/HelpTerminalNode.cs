@@ -33,7 +33,7 @@ namespace MoreShipUpgrades.UI.TerminalNodes
         /// </summary>
         public static string HandleHelpDiscombobulator()
         {
-            if (UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_ENABLED.Value)
+            if (UpgradeBus.Instance.PluginConfiguration.DiscombobulatorUpgradeConfiguration.Enabled.Value)
             {
                 return ATK_HELP_COMMAND + CD_HELP_COMMAND;
             }

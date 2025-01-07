@@ -15,14 +15,14 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
         {
             if (!BaseUpgrade.GetActiveUpgrade(MalwareBroadcaster.UPGRADE_NAME)) { return true; }
             if (!MalwareBroadcaster.IsMapHazard(ref __instance)) return true;
-            if (UpgradeBus.Instance.PluginConfiguration.DESTROY_TRAP.Value)
+            if (UpgradeBus.Instance.PluginConfiguration.MalwareBroadcasterUpgradeConfiguration.DestroyTraps.Value)
             {
                 MalwareBroadcaster.instance.ReqDestroyObjectServerRpc(new NetworkObjectReference(__instance.gameObject.GetComponentInParent<NetworkObject>()));
                 return false;
             }
             if (!___inCooldown)
             {
-                ___codeAccessCooldownTimer = UpgradeBus.Instance.PluginConfiguration.DISARM_TIME.Value;
+                ___codeAccessCooldownTimer = UpgradeBus.Instance.PluginConfiguration.MalwareBroadcasterUpgradeConfiguration.DisarmTime.Value;
             }
             return true;
         }

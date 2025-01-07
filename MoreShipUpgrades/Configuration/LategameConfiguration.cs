@@ -91,56 +91,42 @@ namespace MoreShipUpgrades.Configuration
         public DropPodThrustersUpgradeConfiguration DropPodThrustersConfiguration { get; set; }
         public SigurdAccessUpgradeConfiguration SigurdAccessConfiguration { get; set; }
         public IOneTimeUpgradeConfiguration WalkieGpsConfiguration {  get; set; }
+        public DiscombobulatorUpgradeConfiguration DiscombobulatorUpgradeConfiguration { get; set; }
+        public MalwareBroadcasterUpgradeConfiguration MalwareBroadcasterUpgradeConfiguration {  get; set; }
 
         #region Enabled
         [field: SyncedEntryField] public SyncedEntry<bool> CONTRACTS_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> NIGHT_VISION_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> BETTER_SCANNER_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> DISCOMBOBULATOR_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> MALWARE_BROADCASTER_ENABLED { get; set; }
 
         #endregion
 
         #region Individual
         [field: SyncedEntryField] public SyncedEntry<bool> NIGHT_VISION_INDIVIDUAL { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> BETTER_SCANNER_INDIVIDUAL { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> DISCOMBOBULATOR_INDIVIDUAL { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> MALWARE_BROADCASTER_INDIVIDUAL { get; set; }
 
         #endregion
 
         #region Initial Prices
         [field: SyncedEntryField] public SyncedEntry<int> NIGHT_VISION_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> BETTER_SCANNER_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> DISCOMBOBULATOR_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> MALWARE_BROADCASTER_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_SPECIFY_PRICE { get; set; }
 
         #endregion
 
         #region Attributes
-        [field: SyncedEntryField] public SyncedEntry<string> DISCOMBOBULATOR_BLACKLIST_ENEMIES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SICK_BEATS_APPLY_STAMINA_CONSUMPTION { get; set; }
         [field: SyncedEntryField] public SyncedEntry<Interns.TeleportRestriction> INTERNS_TELEPORT_RESTRICTION { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> CONTRACT_PROVIDE_RANDOM_ONLY { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SHOW_WORLD_BUILDING_TEXT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> MEDKIT_SCAN_NODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> BETTER_SCANNER_OVERRIDE_NAME { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> DISCOMBOBULATOR_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> NIGHT_VISION_OVERRIDE_NAME { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> MALWARE_BROADCASTER_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> SICK_BEATS_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> OVERRIDE_UPGRADE_NAMES { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> DESTROY_TRAP { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> DISARM_TIME { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> EXPLODE_TRAP { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> NODE_DISTANCE_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> SHIP_AND_ENTRANCE_DISTANCE_INCREASE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> DISCOMBOBULATOR_COOLDOWN { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> DISCOMBOBULATOR_RADIUS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> DISCOMBOBULATOR_STUN_DURATION { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> DISCOMBOBULATOR_NOTIFY_CHAT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> NIGHT_VIS_COLOR { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> NIGHT_VIS_UI_TEXT_COLOR { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> NIGHT_VIS_UI_BAR_COLOR { get; set; }
@@ -156,14 +142,12 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<float> NIGHT_VIS_DRAIN_INCREMENT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> NIGHT_VIS_REGEN_INCREMENT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> NIGHT_VIS_BATTERY_INCREMENT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> DISCOMBOBULATOR_INCREMENT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> INTERN_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> INTERN_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> SALE_PERC { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> LOSE_NIGHT_VIS_ON_DEATH { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> NIGHT_VISION_DROP_ON_DEATH { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> NIGHT_VISION_UPGRADE_PRICES { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> DISCO_UPGRADE_PRICES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SHARED_UPGRADES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> BETTER_SCANNER_PRICE2 { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> BETTER_SCANNER_PRICE3 { get; set; }
@@ -173,9 +157,6 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<int> MEDKIT_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MEDKIT_HEAL_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MEDKIT_USES { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> DISCOMBOBULATOR_DAMAGE_LEVEL { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> DISCOMBOBULATOR_INITIAL_DAMAGE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> DISCOMBOBULATOR_DAMAGE_INCREASE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> KEEP_UPGRADES_AFTER_FIRED_CUTSCENE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_BUG_REWARD { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_EXOR_REWARD { get; set; }
@@ -250,9 +231,7 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<bool> ITEM_PROGRESSION_NO_PURCHASE_UPGRADES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> BETTER_SCANNER_ITEM_PROGRESSION_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> DISCOMBOBULATOR_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> NIGHT_VISION_ITEM_PROGRESSION_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> MALWARE_BROADCASTER_ITEM_PROGRESSION_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<string> SICK_BEATS_ITEM_PROGRESSION_ITEMS { get; set; }
 
         #endregion
@@ -311,9 +290,7 @@ namespace MoreShipUpgrades.Configuration
             topSection = LguConstants.OVERRIDE_NAMES_SECTION;
             OVERRIDE_UPGRADE_NAMES = cfg.BindSyncedEntry(topSection, LguConstants.OVERRIDE_NAMES_ENABLED_KEY, LguConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LguConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
             BETTER_SCANNER_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.BETTER_SCANNER_OVERRIDE_NAME_KEY, BetterScanner.UPGRADE_NAME);
-            DISCOMBOBULATOR_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.DISCOMBOBULATOR_OVERRIDE_NAME_KEY, Discombobulator.UPGRADE_NAME);
             NIGHT_VISION_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_OVERRIDE_NAME_KEY, NightVision.UPGRADE_NAME);
-            MALWARE_BROADCASTER_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.MALWARE_BROADCASTER_OVERRIDE_NAME_KEY, MalwareBroadcaster.UPGRADE_NAME);
             SICK_BEATS_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_OVERRIDE_NAME_KEY, SickBeats.UPGRADE_NAME);
 
             #endregion
@@ -612,6 +589,7 @@ namespace MoreShipUpgrades.Configuration
             BETTER_SCANNER_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
 
             #endregion
+
             topSection = BiggerLungs.UPGRADE_NAME;
             BiggerLungsConfiguration = new BiggerLungsUpgradeConfiguration(cfg, topSection, LguConstants.BIGGER_LUNGS_ENABLED_DESCRIPTION, BiggerLungs.PRICES_DEFAULT)
             {
@@ -659,25 +637,12 @@ namespace MoreShipUpgrades.Configuration
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.CLIMBING_GLOVES_INCREMENTAL_MULTIPLIER_KEY, LguConstants.CLIMBING_GLOVES_INCREMENTAL_MULTIPLIER_DEFAULT),
             };
 
-            #region Discombobulator
-
             topSection = Discombobulator.UPGRADE_NAME;
-            DISCOMBOBULATOR_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.DISCOMBOBULATOR_ENABLED_KEY, LguConstants.DISCOMBOBULATOR_ENABLED_DEFAULT, LguConstants.DISCOMBOBULATOR_ENABLED_DESCRIPTION);
-            DISCOMBOBULATOR_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.DISCOMBOBULATOR_PRICE_KEY, LguConstants.DISCOMBOBULATOR_PRICE_DEFAULT);
-            DISCOMBOBULATOR_COOLDOWN = cfg.BindSyncedEntry(topSection, LguConstants.DISCOMBOBULATOR_COOLDOWN_KEY, LguConstants.DISCOMBOBULATOR_COOLDOWN_DEFAULT);
-            DISCOMBOBULATOR_RADIUS = cfg.BindSyncedEntry(topSection, LguConstants.DISCOMBOBULATOR_EFFECT_RADIUS_KEY, LguConstants.DISCOMBOBULATOR_EFFECT_RADIUS_DEFAULT);
-            DISCOMBOBULATOR_STUN_DURATION = cfg.BindSyncedEntry(topSection, LguConstants.DISCOMBOBULATOR_STUN_DURATION_KEY, LguConstants.DISCOMBOBULATOR_STUN_DURATION_DEFAULT);
-            DISCOMBOBULATOR_NOTIFY_CHAT = cfg.BindSyncedEntry(topSection, LguConstants.DISCOMBOBULATOR_NOTIFY_CHAT_KEY, LguConstants.DISCOMBOBULATOR_NOTIFY_CHAT_DEFAULT);
-            DISCOMBOBULATOR_INCREMENT = cfg.BindSyncedEntry(topSection, LguConstants.DISCOMBOBULATOR_INCREMENTAL_STUN_TIME_KEY, LguConstants.DISCOMBOBULATOR_INCREMENTAL_STUN_TIME_DEFAULT, LguConstants.DISCOMBOBULATOR_INCREMENTAL_STUN_TIME_DESCRIPTION);
-            DISCO_UPGRADE_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, Discombobulator.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            DISCOMBOBULATOR_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            DISCOMBOBULATOR_DAMAGE_LEVEL = cfg.BindSyncedEntry(topSection, LguConstants.DISCOMBOBULATOR_APPLY_DAMAGE_LEVEL_KEY, LguConstants.DISCOMBOBULATOR_APPLY_DAMAGE_LEVEL_DEFAULT, LguConstants.DISCOMBOBULATOR_APPLY_DAMAGE_LEVEL_DESCRIPTION);
-            DISCOMBOBULATOR_INITIAL_DAMAGE = cfg.BindSyncedEntry(topSection, LguConstants.DISCOMBOBULATOR_INITIAL_DAMAGE_KEY, LguConstants.DISCOMBOBULATOR_INITIAL_DAMAGE_DEFAULT, LguConstants.DISCOMBOBULATOR_INITIAL_DAMAGE_DESCRIPTION);
-            DISCOMBOBULATOR_DAMAGE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.DISCOMBOBULATOR_INCREMENTAL_DAMAGE_KEY, LguConstants.DISCOMBOBULATOR_INCREMENTAL_DAMAGE_DEFAULT, LguConstants.DISCOMBOBULATOR_INCREMENTAL_DAMAGE_DESCRIPTION);
-            DISCOMBOBULATOR_BLACKLIST_ENEMIES = cfg.BindSyncedEntry(topSection, "Blacklisted Enemies", "", "Enemies that aren't affected by Discombobulator. Either the internal name (EnemyType.enemyName) or the name shown in the scan node if it has one. Each enemy is separated by a comma (',')");
-            DISCOMBOBULATOR_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
+            DiscombobulatorUpgradeConfiguration = new DiscombobulatorUpgradeConfiguration(cfg, topSection, LguConstants.DISCOMBOBULATOR_ENABLED_DESCRIPTION, Discombobulator.PRICES_DEFAULT)
+            {
+                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.DISCOMBOBULATOR_COOLDOWN_KEY, LguConstants.DISCOMBOBULATOR_COOLDOWN_DEFAULT),
+                IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.DISCOMBOBULATOR_INCREMENTAL_STUN_TIME_KEY, LguConstants.DISCOMBOBULATOR_INCREMENTAL_STUN_TIME_DEFAULT, LguConstants.DISCOMBOBULATOR_INCREMENTAL_STUN_TIME_DESCRIPTION),
+            };
 
             topSection = FasterDropPod.UPGRADE_NAME;
             DropPodThrustersConfiguration = new DropPodThrustersUpgradeConfiguration(cfg, topSection, LguConstants.DROP_POD_THRUSTERS_ENABLED_DESCRIPTION, LguConstants.DROP_POD_THRUSTERS_PRICE_DEFAULT);
@@ -748,18 +713,8 @@ namespace MoreShipUpgrades.Configuration
             topSection = LockSmith.UPGRADE_NAME;
             LocksmithConfiguration = new OneTimeIndividualUpgradeConfiguration(cfg, topSection, LguConstants.LOCKSMITH_ENABLED_DESCRIPTION, LguConstants.LOCKSMITH_PRICE_DEFAULT);
 
-            #region Malware Broadcaster
-
             topSection = MalwareBroadcaster.UPGRADE_NAME;
-            MALWARE_BROADCASTER_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.MALWARE_BROADCASTER_ENABLED_KEY, LguConstants.MALWARE_BROADCASTER_ENABLED_DEFAULT, LguConstants.MALWARE_BROADCASTER_ENABLED_DESCRIPTION);
-            MALWARE_BROADCASTER_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.MALWARE_BROADCASTER_PRICE_KEY, LguConstants.MALWARE_BROADCASTER_PRICE_DEFAULT);
-            DESTROY_TRAP = cfg.BindSyncedEntry(topSection, LguConstants.MALWARE_BROADCASTER_DESTROY_TRAPS_KEY, LguConstants.MALWARE_BROADCASTER_DESTROY_TRAPS_DEFAULT, LguConstants.MALWARE_BROADCASTER_DESTROY_TRAPS_DESCRIPTION);
-            DISARM_TIME = cfg.BindSyncedEntry(topSection, LguConstants.MALWARE_BROADCASTER_DISARM_TIME_KEY, LguConstants.MALWARE_BROADCASTER_DISARM_TIME_DEFAULT, LguConstants.MALWARE_BROADCASTER_DISARM_TIME_DESCRIPTION);
-            EXPLODE_TRAP = cfg.BindSyncedEntry(topSection, LguConstants.MALWARE_BROADCASTER_EXPLODE_TRAPS_KEY, LguConstants.MALWARE_BROADCASTER_EXPLODE_TRAPS_DEFAULT, LguConstants.MALWARE_BROADCASTER_EXPLODE_TRAPS_DESCRIPTION);
-            MALWARE_BROADCASTER_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            MALWARE_BROADCASTER_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
+            MalwareBroadcasterUpgradeConfiguration = new(cfg, topSection, LguConstants.MALWARE_BROADCASTER_ENABLED_DESCRIPTION, LguConstants.MALWARE_BROADCASTER_PRICE_DEFAULT);
 
             topSection = MarketInfluence.UPGRADE_NAME;
             MarketInfluenceConfiguration = new TierPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.MARKET_INFLUENCE_ENABLED_DESCRIPTION, MarketInfluence.PRICES_DEFAULT)
