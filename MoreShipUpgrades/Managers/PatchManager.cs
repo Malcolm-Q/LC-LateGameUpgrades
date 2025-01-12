@@ -92,6 +92,7 @@ namespace MoreShipUpgrades.Managers
             harmony.PatchAll(typeof(SteamValveHazardPatch));
             harmony.PatchAll(typeof(EntranceTeleportPatcher));
             harmony.PatchAll(typeof(ShipTeleporterPatcher));
+            harmony.PatchAll(typeof(VehicleControllerPatcher));
             Plugin.mls.LogInfo("Interactables have been patched");
         }
 

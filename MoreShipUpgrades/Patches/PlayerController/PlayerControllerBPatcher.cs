@@ -196,6 +196,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             if (!UpgradeBus.Instance.PluginConfiguration.BEATS_ENABLED.Value) return;
             if (!BaseUpgrade.GetActiveUpgrade(SickBeats.UPGRADE_NAME) || __instance != GameNetworkManager.Instance.localPlayerController) return;
             SickBeats.Instance.boomBoxes.RemoveAll(b => b == null);
+            SickBeats.Instance.vehicleControllers.RemoveAll(c => c == null);
             bool result = false;
             if (__instance.isPlayerDead)
             {
@@ -209,6 +210,16 @@ namespace MoreShipUpgrades.Patches.PlayerController
                 if (!boom.isPlayingMusic) continue;
 
                 if (Vector3.Distance(boom.transform.position, __instance.transform.position) >= UpgradeBus.Instance.PluginConfiguration.BEATS_RADIUS.Value) continue;
+
+                result = true;
+                break;
+            }
+
+            foreach (VehicleController radio in SickBeats.Instance.vehicleControllers)
+            {
+                if (!radio.radioOn) continue;
+
+                if (Vector3.Distance(radio.transform.position, __instance.transform.position) >= UpgradeBus.Instance.PluginConfiguration.BEATS_RADIUS.Value) continue;
 
                 result = true;
                 break;

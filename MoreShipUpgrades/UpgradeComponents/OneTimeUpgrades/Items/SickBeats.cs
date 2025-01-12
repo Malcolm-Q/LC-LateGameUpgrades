@@ -12,6 +12,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items
     class SickBeats : OneTimeUpgrade, IUpgradeWorldBuilding
     {
         internal List<BoomboxItem> boomBoxes = [];
+        internal List<VehicleController> vehicleControllers = [];
         internal float staminaDrainCoefficient = 1f;
         internal float incomingDamageCoefficient = 1f;
         internal int damageBoost;
