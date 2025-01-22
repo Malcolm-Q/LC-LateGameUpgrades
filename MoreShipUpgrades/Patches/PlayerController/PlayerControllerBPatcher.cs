@@ -54,7 +54,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
         static void LoseNightVisionOnDeath(ref PlayerControllerB __instance)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.LOSE_NIGHT_VIS_ON_DEATH.Value) return;
+            if (!UpgradeBus.Instance.PluginConfiguration.NightVisionUpgradeConfiguration.LoseOnDeath.Value) return;
 
             if (__instance != UpgradeBus.Instance.GetLocalPlayer()) return;
             if (!BaseUpgrade.GetActiveUpgrade("Night Vision")) return;
@@ -63,7 +63,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             Plugin.mls.LogDebug($"Local player we are deactivating to: {UpgradeBus.Instance.GetLocalPlayer().playerUsername}");
 
             UpgradeBus.Instance.UpgradeObjects[NightVision.UPGRADE_NAME].GetComponent<NightVision>().DisableOnClient();
-            if (!UpgradeBus.Instance.PluginConfiguration.NIGHT_VISION_DROP_ON_DEATH.Value) return;
+            if (!UpgradeBus.Instance.PluginConfiguration.NightVisionUpgradeConfiguration.DropOnDeath.Value) return;
             NightVision.Instance.SpawnNightVisionItemOnDeathServerRpc(__instance.transform.position);
         }
 
@@ -193,7 +193,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
         [HarmonyPatch(nameof(PlayerControllerB.Update))]
         static void CheckForBoomboxes(PlayerControllerB __instance)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.BEATS_ENABLED.Value) return;
+            if (!UpgradeBus.Instance.PluginConfiguration.SickBeatsUpgradeConfiguration.Enabled.Value) return;
             if (!BaseUpgrade.GetActiveUpgrade(SickBeats.UPGRADE_NAME) || __instance != GameNetworkManager.Instance.localPlayerController) return;
             SickBeats.Instance.boomBoxes.RemoveAll(b => b == null);
             SickBeats.Instance.vehicleControllers.RemoveAll(c => c == null);
@@ -209,7 +209,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             {
                 if (!boom.isPlayingMusic) continue;
 
-                if (Vector3.Distance(boom.transform.position, __instance.transform.position) >= UpgradeBus.Instance.PluginConfiguration.BEATS_RADIUS.Value) continue;
+                if (Vector3.Distance(boom.transform.position, __instance.transform.position) >= UpgradeBus.Instance.PluginConfiguration.SickBeatsUpgradeConfiguration.Radius.Value) continue;
 
                 result = true;
                 break;
@@ -219,7 +219,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             {
                 if (!radio.radioOn) continue;
 
-                if (Vector3.Distance(radio.transform.position, __instance.transform.position) >= UpgradeBus.Instance.PluginConfiguration.BEATS_RADIUS.Value) continue;
+                if (Vector3.Distance(radio.transform.position, __instance.transform.position) >= UpgradeBus.Instance.PluginConfiguration.SickBeatsUpgradeConfiguration.Radius.Value) continue;
 
                 result = true;
                 break;

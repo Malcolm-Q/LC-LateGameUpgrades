@@ -11,7 +11,7 @@ namespace MoreShipUpgrades.Patches.Items
         [HarmonyPrefix]
         static void SetRadioOnLocalClientPrefix(VehicleController __instance)
         {
-            if (UpgradeBus.Instance.PluginConfiguration.BEATS_ENABLED.Value && !SickBeats.Instance.vehicleControllers.Contains(__instance)) SickBeats.Instance.vehicleControllers.Add(__instance);
+            if (UpgradeBus.Instance.PluginConfiguration.SickBeatsUpgradeConfiguration.Enabled.Value && !SickBeats.Instance.vehicleControllers.Contains(__instance)) SickBeats.Instance.vehicleControllers.Add(__instance);
         }
     }
 }

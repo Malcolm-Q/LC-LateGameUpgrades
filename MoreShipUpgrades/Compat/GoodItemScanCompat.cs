@@ -20,7 +20,7 @@ namespace MoreShipUpgrades.Compat
 
         static internal void ToggleScanThroughWalls(bool scanThroughWalls)
         {
-            CheatsAPI.noLineOfSightDistance += scanThroughWalls ? (int)UpgradeBus.Instance.PluginConfiguration.NODE_DISTANCE_INCREASE : -(int)UpgradeBus.Instance.PluginConfiguration.NODE_DISTANCE_INCREASE;
+            CheatsAPI.noLineOfSightDistance += scanThroughWalls ? (int)UpgradeBus.Instance.PluginConfiguration.BetterScannerUpgradeConfiguration.NodeRangeIncrease : -(int)UpgradeBus.Instance.PluginConfiguration.BetterScannerUpgradeConfiguration.NodeRangeIncrease;
         }
     }
 }

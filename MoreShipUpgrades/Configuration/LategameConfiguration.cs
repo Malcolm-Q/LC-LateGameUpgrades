@@ -93,66 +93,29 @@ namespace MoreShipUpgrades.Configuration
         public IOneTimeUpgradeConfiguration WalkieGpsConfiguration {  get; set; }
         public DiscombobulatorUpgradeConfiguration DiscombobulatorUpgradeConfiguration { get; set; }
         public MalwareBroadcasterUpgradeConfiguration MalwareBroadcasterUpgradeConfiguration {  get; set; }
-
+        public NightVisionUpgradeConfiguration NightVisionUpgradeConfiguration { get; set; }
+        public SickBeatsUpgradeConfiguration SickBeatsUpgradeConfiguration {  get; set; }
+        public BetterScannerUpgradeConfiguration BetterScannerUpgradeConfiguration {  get; set; }
         #region Enabled
         [field: SyncedEntryField] public SyncedEntry<bool> CONTRACTS_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> NIGHT_VISION_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> BETTER_SCANNER_ENABLED { get; set; }
 
         #endregion
-
-        #region Individual
-        [field: SyncedEntryField] public SyncedEntry<bool> NIGHT_VISION_INDIVIDUAL { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> BETTER_SCANNER_INDIVIDUAL { get; set; }
-
-        #endregion
-
         #region Initial Prices
-        [field: SyncedEntryField] public SyncedEntry<int> NIGHT_VISION_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> BETTER_SCANNER_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_SPECIFY_PRICE { get; set; }
 
         #endregion
 
         #region Attributes
-        [field: SyncedEntryField] public SyncedEntry<bool> SICK_BEATS_APPLY_STAMINA_CONSUMPTION { get; set; }
         [field: SyncedEntryField] public SyncedEntry<Interns.TeleportRestriction> INTERNS_TELEPORT_RESTRICTION { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> CONTRACT_PROVIDE_RANDOM_ONLY { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SHOW_WORLD_BUILDING_TEXT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> MEDKIT_SCAN_NODE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> BETTER_SCANNER_OVERRIDE_NAME { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> NIGHT_VISION_OVERRIDE_NAME { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> SICK_BEATS_OVERRIDE_NAME { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> OVERRIDE_UPGRADE_NAMES { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> NODE_DISTANCE_INCREASE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> SHIP_AND_ENTRANCE_DISTANCE_INCREASE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> NIGHT_VIS_COLOR { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> NIGHT_VIS_UI_TEXT_COLOR { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> NIGHT_VIS_UI_BAR_COLOR { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> NIGHT_VIS_DRAIN_SPEED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> NIGHT_VIS_REGEN_SPEED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> NIGHT_BATTERY_MAX { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> NIGHT_VIS_RANGE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> NIGHT_VIS_RANGE_INCREMENT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> NIGHT_VIS_INTENSITY { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> NIGHT_VIS_INTENSITY_INCREMENT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> NIGHT_VIS_STARTUP { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> NIGHT_VIS_EXHAUST { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> NIGHT_VIS_DRAIN_INCREMENT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> NIGHT_VIS_REGEN_INCREMENT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> NIGHT_VIS_BATTERY_INCREMENT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> INTERN_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> INTERN_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> SALE_PERC { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> LOSE_NIGHT_VIS_ON_DEATH { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> NIGHT_VISION_DROP_ON_DEATH { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> NIGHT_VISION_UPGRADE_PRICES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SHARED_UPGRADES { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> BETTER_SCANNER_PRICE2 { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> BETTER_SCANNER_PRICE3 { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> BETTER_SCANNER_ENEMIES { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> VERBOSE_ENEMIES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> MEDKIT_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MEDKIT_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MEDKIT_HEAL_VALUE { get; set; }
@@ -165,19 +128,6 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_EXTRACT_REWARD { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> CONTRACT_EXTRACT_WEIGHT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_DATA_REWARD { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> BEATS_INDIVIDUAL { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> BEATS_ENABLED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> BEATS_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> BEATS_SPEED { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> BEATS_DMG { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> BEATS_STAMINA { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> BEATS_STAMINA_CO { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> BEATS_DEF { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> BEATS_DEF_CO { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> BEATS_SPEED_INC { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> BEATS_RADIUS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> BEATS_DMG_INC { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> SICK_BEATS_BOOMBOX_ATTRACT_SOUND { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SNARE_FLEA_SAMPLE_MINIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SNARE_FLEA_SAMPLE_MAXIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> BUNKER_SPIDER_SAMPLE_MINIMUM_VALUE { get; set; }
@@ -232,9 +182,6 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<string> ITEM_PROGRESSION_APPARATICE_ITEMS { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> ITEM_PROGRESSION_NO_PURCHASE_UPGRADES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> BETTER_SCANNER_ITEM_PROGRESSION_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> NIGHT_VISION_ITEM_PROGRESSION_ITEMS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<string> SICK_BEATS_ITEM_PROGRESSION_ITEMS { get; set; }
 
         #endregion
 
@@ -286,16 +233,7 @@ namespace MoreShipUpgrades.Configuration
             SHOW_WORLD_BUILDING_TEXT = cfg.BindSyncedEntry(topSection, LguConstants.SHOW_WORLD_BUILDING_TEXT_KEY, LguConstants.SHOW_WORLD_BUILDING_TEXT_DEFAULT, LguConstants.SHOW_WORLD_BUILDING_TEXT_DESCRIPTION);
             BuyableUpgradeOnce = cfg.BindSyncedEntry(topSection, LguConstants.BUYABLE_UPGRADES_ONCE_KEY, LguConstants.BUYABLE_UPGRADES_ONCE_DEFAULT, LguConstants.BUYABLE_UPGRADES_ONCE_DESCRIPTION);
             ShowLockedUpgrades = cfg.BindSyncedEntry(topSection, LguConstants.SHOW_LOCKED_UPGRADES_KEY, LguConstants.SHOW_LOCKED_UPGRADES_DEFAULT, LguConstants.SHOW_LOCKED_UPGRADES_DESCRIPTION);
-
-            #endregion
-
-            #region Override Names
-
-            topSection = LguConstants.OVERRIDE_NAMES_SECTION;
             OVERRIDE_UPGRADE_NAMES = cfg.BindSyncedEntry(topSection, LguConstants.OVERRIDE_NAMES_ENABLED_KEY, LguConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LguConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
-            BETTER_SCANNER_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.BETTER_SCANNER_OVERRIDE_NAME_KEY, BetterScanner.UPGRADE_NAME);
-            NIGHT_VISION_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_OVERRIDE_NAME_KEY, NightVision.UPGRADE_NAME);
-            SICK_BEATS_OVERRIDE_NAME = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_OVERRIDE_NAME_KEY, SickBeats.UPGRADE_NAME);
 
             #endregion
 
@@ -578,21 +516,8 @@ namespace MoreShipUpgrades.Configuration
                 ],
             };
 
-            #region Better Scanner
-
             topSection = BetterScanner.UPGRADE_NAME;
-            BETTER_SCANNER_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.BETTER_SCANNER_ENABLED_KEY, LguConstants.BETTER_SCANNER_ENABLED_DEFAULT, LguConstants.BETTER_SCANNER_ENABLED_DESCRIPTION);
-            BETTER_SCANNER_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.BETTER_SCANNER_PRICE_KEY, LguConstants.BETTER_SCANNER_PRICE_DEFAULT);
-            SHIP_AND_ENTRANCE_DISTANCE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.BETTER_SCANNER_OUTSIDE_NODE_DISTANCE_INCREASE_KEY, LguConstants.BETTER_SCANNER_OUTSIDE_NODE_DISTANCE_INCREASE_DEFAULT, LguConstants.BETTER_SCANNER_OUTSIDE_NODE_DISTANCE_INCREASE_DESCRIPTION);
-            NODE_DISTANCE_INCREASE = cfg.BindSyncedEntry(topSection, LguConstants.BETTER_SCANNER_NODE_DISTANCE_INCREASE_KEY, LguConstants.BETTER_SCANNER_NODE_DISTANCE_INCREASE_DEFAULT, LguConstants.BETTER_SCANNER_NODE_DISTANCE_INCREASE_DESCRIPTION);
-            BETTER_SCANNER_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            BETTER_SCANNER_PRICE2 = cfg.BindSyncedEntry(topSection, LguConstants.BETTER_SCANNER_SECOND_TIER_PRICE_KEY, LguConstants.BETTER_SCANNER_SECOND_TIER_PRICE_DEFAULT, LguConstants.BETTER_SCANNER_SECOND_TIER_PRICE_DESCRIPTION);
-            BETTER_SCANNER_PRICE3 = cfg.BindSyncedEntry(topSection, LguConstants.BETTER_SCANNER_THIRD_TIER_PRICE_KEY, LguConstants.BETTER_SCANNER_THIRD_TIER_PRICE_DEFAULT, LguConstants.BETTER_SCANNER_THIRD_TIER_PRICE_DESCRIPTION);
-            BETTER_SCANNER_ENEMIES = cfg.BindSyncedEntry(topSection, LguConstants.BETTER_SCANNER_ENEMIES_THROUGH_WALLS_KEY, LguConstants.BETTER_SCANNER_ENEMIES_THROUGH_WALLS_DEFAULT, LguConstants.BETTER_SCANNER_ENEMIES_THROUGH_WALLS_DESCRIPTION);
-            VERBOSE_ENEMIES = cfg.BindSyncedEntry(topSection, LguConstants.BETTER_SCANNER_VERBOSE_ENEMIES_KEY, LguConstants.BETTER_SCANNER_VERBOSE_ENEMIES_DEFAULT, LguConstants.BETTER_SCANNER_VERBOSE_ENEMIES_DESCRIPTION);
-            BETTER_SCANNER_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
+            BetterScannerUpgradeConfiguration = new BetterScannerUpgradeConfiguration(cfg, topSection, LguConstants.BETTER_SCANNER_ENABLED_DESCRIPTION, LguConstants.BETTER_SCANNER_PRICE_DEFAULT);
 
             topSection = BiggerLungs.UPGRADE_NAME;
             BiggerLungsConfiguration = new BiggerLungsUpgradeConfiguration(cfg, topSection, LguConstants.BIGGER_LUNGS_ENABLED_DESCRIPTION, BiggerLungs.PRICES_DEFAULT)
@@ -727,33 +652,26 @@ namespace MoreShipUpgrades.Configuration
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE_KEY, LguConstants.MARKET_INFLUENCE_INCREMENTAL_PERCENTAGE_DEFAULT),
             };
 
-            #region Night Vision
-
             topSection = "Night Vision";
-            NIGHT_VISION_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_ENABLED_KEY, LguConstants.NIGHT_VISION_ENABLED_DEFAULT, LguConstants.NIGHT_VISION_ENABLED_DESCRIPTION);
-            NIGHT_VISION_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_PRICE_KEY, LguConstants.NIGHT_VISION_PRICE_DEFAULT);
-            NIGHT_BATTERY_MAX = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_BATTERY_MAX_KEY, LguConstants.NIGHT_VISION_BATTERY_MAX_DEFAULT, LguConstants.NIGHT_VISION_BATTERY_MAX_DESCRIPTION);
-            NIGHT_VIS_DRAIN_SPEED = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_DRAIN_SPEED_KEY, LguConstants.NIGHT_VISION_DRAIN_SPEED_DEFAULT, LguConstants.NIGHT_VISION_DRAIN_SPEED_DESCRIPTION);
-            NIGHT_VIS_REGEN_SPEED = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_REGEN_SPEED_KEY, LguConstants.NIGHT_VISION_REGEN_SPEED_DEFAULT, LguConstants.NIGHT_VISION_REGEN_SPEED_DESCRIPTION);
-            NIGHT_VIS_COLOR = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_COLOR_KEY, LguConstants.NIGHT_VISION_COLOR_DEFAULT, LguConstants.NIGHT_VISION_COLOR_DESCRIPTION);
-            NIGHT_VIS_UI_TEXT_COLOR = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_UI_TEXT_COLOR_KEY, LguConstants.NIGHT_VISION_UI_TEXT_COLOR_DEFAULT, LguConstants.NIGHT_VISION_UI_TEXT_COLOR_DESCRIPTION);
-            NIGHT_VIS_UI_BAR_COLOR = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_UI_BAR_COLOR_KEY, LguConstants.NIGHT_VISION_UI_BAR_COLOR_DEFAULT, LguConstants.NIGHT_VISION_UI_BAR_COLOR_DESCRIPTION);
-            NIGHT_VIS_RANGE = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_RANGE_KEY, LguConstants.NIGHT_VISION_RANGE_DEFAULT, LguConstants.NIGHT_VISION_RANGE_DESCRIPTION);
-            NIGHT_VIS_RANGE_INCREMENT = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_RANGE_INCREMENT_KEY, LguConstants.NIGHT_VISION_RANGE_INCREMENT_DEFAULT, LguConstants.NIGHT_VISION_RANGE_INCREMENT_DESCRIPTION);
-            NIGHT_VIS_INTENSITY = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_INTENSITY_KEY, LguConstants.NIGHT_VISION_INTENSITY_DEFAULT, LguConstants.NIGHT_VISION_INTENSITY_DESCRIPTION);
-            NIGHT_VIS_INTENSITY_INCREMENT = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_INTENSITY_INCREMENT_KEY, LguConstants.NIGHT_VISION_INTENSITY_INCREMENT_DEFAULT, LguConstants.NIGHT_VISION_INTENSITY_INCREMENT_DESCRIPTION);
-            NIGHT_VIS_STARTUP = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_STARTUP_KEY, LguConstants.NIGHT_VISION_STARTUP_DEFAULT, LguConstants.NIGHT_VISION_STARTUP_DESCRIPTION);
-            NIGHT_VIS_EXHAUST = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_EXHAUST_KEY, LguConstants.NIGHT_VISION_EXHAUST_DEFAULT, LguConstants.NIGHT_VISION_EXHAUST_DESCRIPTION);
-            NIGHT_VIS_DRAIN_INCREMENT = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_DRAIN_INCREMENT_KEY, LguConstants.NIGHT_VISION_DRAIN_INCREMENT_DEFAULT, LguConstants.NIGHT_VISION_DRAIN_INCREMENT_DESCRIPTION);
-            NIGHT_VIS_REGEN_INCREMENT = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_REGEN_INCREMENT_KEY, LguConstants.NIGHT_VISION_REGEN_INCREMENT_DEFAULT, LguConstants.NIGHT_VISION_REGEN_INCREMENT_DESCRIPTION);
-            NIGHT_VIS_BATTERY_INCREMENT = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_BATTERY_INCREMENT_KEY, LguConstants.NIGHT_VISION_BATTERY_INCREMENT_DEFAULT, LguConstants.NIGHT_VISION_BATTERY_INCREMENT_DESCRIPTION);
-            LOSE_NIGHT_VIS_ON_DEATH = cfg.BindSyncedEntry(topSection, LguConstants.LOSE_NIGHT_VISION_ON_DEATH_KEY, LguConstants.LOSE_NIGHT_VISION_ON_DEATH_DEFAULT, LguConstants.LOSE_NIGHT_VISION_ON_DEATH_DESCRIPTION);
-            NIGHT_VISION_DROP_ON_DEATH = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_DROP_ON_DEATH_KEY, LguConstants.NIGHT_VISION_DROP_ON_DEATH_DEFAULT, LguConstants.NIGHT_VISION_DROP_ON_DEATH_DESCRIPTION);
-            NIGHT_VISION_UPGRADE_PRICES = cfg.BindSyncedEntry(topSection, BaseUpgrade.PRICES_SECTION, NightVision.PRICES_DEFAULT, BaseUpgrade.PRICES_DESCRIPTION);
-            NIGHT_VISION_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            NIGHT_VISION_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
+            NightVisionUpgradeConfiguration = new NightVisionUpgradeConfiguration(cfg, topSection, LguConstants.NIGHT_VISION_ENABLED_DESCRIPTION, NightVision.PRICES_DEFAULT)
+            {
+                InitialEffects =
+                [
+                    cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_BATTERY_MAX_KEY, LguConstants.NIGHT_VISION_BATTERY_MAX_DEFAULT, LguConstants.NIGHT_VISION_BATTERY_MAX_DESCRIPTION),
+                    cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_DRAIN_SPEED_KEY, LguConstants.NIGHT_VISION_DRAIN_SPEED_DEFAULT, LguConstants.NIGHT_VISION_DRAIN_SPEED_DESCRIPTION),
+                    cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_REGEN_SPEED_KEY, LguConstants.NIGHT_VISION_REGEN_SPEED_DEFAULT, LguConstants.NIGHT_VISION_REGEN_SPEED_DESCRIPTION),
+                    cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_RANGE_KEY, LguConstants.NIGHT_VISION_RANGE_DEFAULT, LguConstants.NIGHT_VISION_RANGE_DESCRIPTION),
+                    cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_INTENSITY_KEY, LguConstants.NIGHT_VISION_INTENSITY_DEFAULT, LguConstants.NIGHT_VISION_INTENSITY_DESCRIPTION),
+                ],
+                IncrementalEffects =
+                [
+                    cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_BATTERY_INCREMENT_KEY, LguConstants.NIGHT_VISION_BATTERY_INCREMENT_DEFAULT, LguConstants.NIGHT_VISION_BATTERY_INCREMENT_DESCRIPTION),
+                    cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_DRAIN_INCREMENT_KEY, LguConstants.NIGHT_VISION_DRAIN_INCREMENT_DEFAULT, LguConstants.NIGHT_VISION_DRAIN_INCREMENT_DESCRIPTION),
+                    cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_REGEN_INCREMENT_KEY, LguConstants.NIGHT_VISION_REGEN_INCREMENT_DEFAULT, LguConstants.NIGHT_VISION_REGEN_INCREMENT_DESCRIPTION),
+                    cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_RANGE_INCREMENT_KEY, LguConstants.NIGHT_VISION_RANGE_INCREMENT_DEFAULT, LguConstants.NIGHT_VISION_RANGE_INCREMENT_DESCRIPTION),
+                    cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_INTENSITY_INCREMENT_KEY, LguConstants.NIGHT_VISION_INTENSITY_INCREMENT_DEFAULT, LguConstants.NIGHT_VISION_INTENSITY_INCREMENT_DESCRIPTION),
+                ]
+            };
 
             topSection = ProteinPowder.UPGRADE_NAME;
             ProteinPowderConfiguration = new TierIndividualMultiplePrimitiveUpgradeConfiguration<int, float>(cfg, topSection, ProteinPowder.ENABLED_DESCRIPTION, ProteinPowder.PRICES_DEFAULT)
@@ -817,26 +735,8 @@ namespace MoreShipUpgrades.Configuration
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, ShutterBatteries.INCREMENTAL_SECTION, ShutterBatteries.INCREMENTAL_DEFAULT, ShutterBatteries.INCREMENTAL_DESCRIPTION),
             };
 
-            #region Sick Beats
-
             topSection = SickBeats.UPGRADE_NAME;
-            BEATS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_ENABLED_KEY, LguConstants.SICK_BEATS_ENABLED_DEFAULT, LguConstants.SICK_BEATS_ENABLED_DESCRIPTION);
-            BEATS_INDIVIDUAL = cfg.BindSyncedEntry(topSection, BaseUpgrade.INDIVIDUAL_SECTION, BaseUpgrade.INDIVIDUAL_DEFAULT, BaseUpgrade.INDIVIDUAL_DESCRIPTION);
-            BEATS_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_PRICE_KEY, LguConstants.SICK_BEATS_PRICE_DEFAULT);
-            BEATS_SPEED = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_SPEED_KEY, LguConstants.SICK_BEATS_SPEED_DEFAULT);
-            BEATS_DMG = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_DAMAGE_KEY, LguConstants.SICK_BEATS_DAMAGE_DEFAULT);
-            BEATS_STAMINA = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_STAMINA_KEY, LguConstants.SICK_BEATS_STAMINA_DEFAULT);
-            BEATS_DEF = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_DEFENSE_KEY, LguConstants.SICK_BEATS_DEFENSE_DEFAULT);
-            BEATS_DEF_CO = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_DEFENSE_MULTIPLIER_KEY, LguConstants.SICK_BEATS_DEFENSE_MULTIPLIER_DEFAULT, LguConstants.SICK_BEATS_DEFENSE_MULTIPLIER_DESCRIPTION);
-            BEATS_STAMINA_CO = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_STAMINA_MULTIPLIER_KEY, LguConstants.SICK_BEATS_STAMINA_MULTIPLIER_DEFAULT, LguConstants.SICK_BEATS_STAMINA_MULTIPLIER_DESCRIPTION);
-            BEATS_DMG_INC = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_ADDITIONAL_DAMAGE_KEY, LguConstants.SICK_BEATS_ADDITIONAL_DAMAGE_DEFAULT);
-            BEATS_SPEED_INC = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_ADDITIONAL_SPEED_KEY, LguConstants.SICK_BEATS_ADDITIONAL_SPEED_DEFAULT);
-            BEATS_RADIUS = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_EFFECT_RADIUS_KEY, LguConstants.SICK_BEATS_EFFECT_RADIUS_DEFAULT, LguConstants.SICK_BEATS_EFFECT_RADIUS_DESCRIPTION);
-            SICK_BEATS_APPLY_STAMINA_CONSUMPTION = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_APPLY_STAMINA_CONSUMPTION_KEY, LguConstants.SICK_BEATS_APPLY_STAMINA_CONSUMPTION_DEFAULT, LguConstants.SICK_BEATS_APPLY_STAMINA_CONSUMPTION_DESCRIPTION);
-            SICK_BEATS_BOOMBOX_ATTRACT_SOUND = cfg.BindSyncedEntry(topSection, LguConstants.SICK_BEATS_BOOMBOX_ATTRACT_SOUND_KEY, LguConstants.SICK_BEATS_BOOMBOX_ATTRACT_SOUND_DEFAULT, LguConstants.SICK_BEATS_BOOMBOX_ATTRACT_SOUND_DESCRIPTION);
-            SICK_BEATS_ITEM_PROGRESSION_ITEMS = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
-
-            #endregion
+            SickBeatsUpgradeConfiguration = new SickBeatsUpgradeConfiguration(cfg, topSection, LguConstants.SICK_BEATS_ENABLED_DESCRIPTION, LguConstants.SICK_BEATS_PRICE_DEFAULT);
 
             topSection = Sigurd.UPGRADE_NAME;
             SigurdAccessConfiguration = new SigurdAccessUpgradeConfiguration(cfg, topSection, LguConstants.SIGURD_ACCESS_ENABLED_DESCRIPTION, LguConstants.SIGURD_ACCESS_PRICE_DEFAULT)

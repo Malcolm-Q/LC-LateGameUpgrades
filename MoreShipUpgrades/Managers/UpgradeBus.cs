@@ -82,8 +82,8 @@ namespace MoreShipUpgrades.Managers
             if (LguStore.Instance == null) return; // Quitting the game
             ResetPlayerAttributes();
 
-            if (PluginConfiguration.BEATS_ENABLED.Value) SickBeats.Instance.EffectsActive = false;
-            if (PluginConfiguration.NIGHT_VISION_ENABLED.Value) NightVision.Instance.nightVisionActive = false;
+            if (PluginConfiguration.SickBeatsUpgradeConfiguration.Enabled.Value) SickBeats.Instance.EffectsActive = false;
+            if (PluginConfiguration.NightVisionUpgradeConfiguration.Enabled.Value) NightVision.Instance.nightVisionActive = false;
             if (PluginConfiguration.FedoraSuitConfiguration.Enabled) FedoraSuit.instance.wearingFedora.Clear();
             ContractManager.Instance.ResetAllValues();
 
@@ -188,7 +188,7 @@ namespace MoreShipUpgrades.Managers
         internal void AlterStoreItems()
         {
             AlterStoreItem(Medkit.ITEM_NAME, PluginConfiguration.MEDKIT_ENABLED, PluginConfiguration.MEDKIT_PRICE);
-            AlterStoreItem(NightVisionGoggles.ITEM_NAME, PluginConfiguration.NIGHT_VISION_ENABLED, PluginConfiguration.NIGHT_VISION_PRICE);
+            AlterStoreItem(NightVisionGoggles.ITEM_NAME, PluginConfiguration.NightVisionUpgradeConfiguration.Enabled, PluginConfiguration.NightVisionUpgradeConfiguration.ItemPrice);
         }
 
         void SyncAvailableContracts()

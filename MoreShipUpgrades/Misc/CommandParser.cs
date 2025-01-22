@@ -223,7 +223,7 @@ namespace MoreShipUpgrades.Misc
             if (enemies.Length == 0) return DisplayTerminalMessage("0 enemies detected\n\n");
 
             Dictionary<string, int> enemyCount = [];
-            if (!UpgradeBus.Instance.PluginConfiguration.VERBOSE_ENEMIES.Value)
+            if (!UpgradeBus.Instance.PluginConfiguration.BetterScannerUpgradeConfiguration.VerboseEnemies.Value)
             {
                 logger.LogInfo("Scan Enemies: Verbose mode = true");
                 enemyCount.Add("Outside Enemies", 0);
