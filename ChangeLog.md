@@ -14,6 +14,9 @@
   - All: any kind of item will be kept in the player's inventory during teleportation
   - Tools: Items which are not considered scrap will be kept in the player's inventory during teleportation
   - Scrap: Items which are considered scrap will be kept in the player's inventory during teleportation
+- Implemented configuration to restrict upgrades being buyable to the first ever purchasing player.
+  - Upgrades which are restricted will appear disabled in the store and if prompted, will show a message stating the upgrade can only be bought by somebody else. 
+  - Added configuration to show/hide upgrades restricted to other players.
 </details>
 
 <details>

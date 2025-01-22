@@ -235,6 +235,10 @@ namespace MoreShipUpgrades.Managers
             if (receivedSave)
             {
                 logger.LogInfo("Save file already received from host, disregarding.");
+                foreach (CustomTerminalNode node in UpgradeBus.Instance.lockedUpgrades.Keys)
+                {
+                    LockUpgradeServerRpc(node.OriginalName, UpgradeBus.Instance.lockedUpgrades[node]);
+                }
                 return;
             }
             receivedSave = true;
@@ -416,7 +420,11 @@ namespace MoreShipUpgrades.Managers
                 customNode.CurrentUpgrade = upgradeLevel;
                 BaseUpgrade comp = UpgradeBus.Instance.UpgradeObjects[customNode.OriginalName].GetComponent<BaseUpgrade>();
                 bool free = comp.CanInitializeOnStart;
-                if (activeUpgrade || free) comp.Load();
+                if (activeUpgrade || free)
+                {
+                    comp.Load();
+                    if (!customNode.SharedUpgrade) LockUpgradeServerRpc(customNode.OriginalName, UpgradeBus.Instance.GetLocalPlayer().actualClientId);
+                }
                 if (free)
                 {
                     customNode.Unlocked = true;
@@ -468,7 +476,22 @@ namespace MoreShipUpgrades.Managers
                 return;
             }
             logger.LogInfo($"{node.OriginalName} is not registered as a shared upgrade! Unlocking on this client only...");
+            LockUpgradeServerRpc(node.OriginalName, UpgradeBus.Instance.GetLocalPlayer().actualClientId);
             UpdateUpgrades(node, increment);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void LockUpgradeServerRpc(string upgradeName, ulong purchasingClientId)
+        {
+            LockUpgradeClientRpc(upgradeName, purchasingClientId);
+        }
+
+        [ClientRpc]
+        private void LockUpgradeClientRpc(string upgradeName, ulong purchasingClientId)
+        {
+            if (UpgradeBus.Instance.GetLocalPlayer().actualClientId == purchasingClientId) return;
+            CustomTerminalNode node = UpgradeBus.Instance.GetUpgradeNode(upgradeName);
+            if (!UpgradeBus.Instance.lockedUpgrades.Keys.Contains(node)) UpgradeBus.Instance.lockedUpgrades.Add(node, purchasingClientId);
         }
 
         [ServerRpc(RequireOwnership = false)]

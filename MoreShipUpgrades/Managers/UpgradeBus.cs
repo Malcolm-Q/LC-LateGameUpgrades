@@ -52,6 +52,7 @@ namespace MoreShipUpgrades.Managers
         internal readonly List<Type> commandTypes = [];
         internal readonly List<Type> itemTypes = [];
         internal List<CustomTerminalNode> terminalNodes = [];
+        internal Dictionary<CustomTerminalNode, ulong> lockedUpgrades = [];
         internal Dictionary<string, GameObject> UpgradeObjects = [];
         internal Dictionary<string, Item> ItemsToSync = [];
         internal AssetBundle UpgradeAssets;

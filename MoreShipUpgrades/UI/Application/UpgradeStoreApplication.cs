@@ -60,7 +60,7 @@ namespace MoreShipUpgrades.UI.Application
 
             List<CursorElement> cursorElements = [];
             PageCursorElement sharedPage = GetFilteredUpgradeNodes(ref filteredNodes, ref cursorElements, (x) => x.SharedUpgrade, LguConstants.MAIN_SCREEN_TITLE, LguConstants.MAIN_SCREEN_SHARED_UPGRADES_TEXT);
-            PageCursorElement individualPage = GetFilteredUpgradeNodes(ref filteredNodes, ref cursorElements, (x) => !x.SharedUpgrade, LguConstants.MAIN_SCREEN_TITLE, LguConstants.MAIN_SCREEN_INDIVIDUAL_UPGRADES_TEXT);
+            PageCursorElement individualPage = GetFilteredUpgradeNodes(ref filteredNodes, ref cursorElements, (x) => !x.SharedUpgrade && (!UpgradeBus.Instance.lockedUpgrades.Keys.Contains(x) || UpgradeBus.Instance.PluginConfiguration.ShowLockedUpgrades), LguConstants.MAIN_SCREEN_TITLE, LguConstants.MAIN_SCREEN_INDIVIDUAL_UPGRADES_TEXT);
 
             if (cursorElements.Count > 1)
             {
@@ -213,6 +213,7 @@ namespace MoreShipUpgrades.UI.Application
         static bool CanBuyUpgrade(CustomTerminalNode node)
         {
             if (UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_ITEM_PROGRESSION && UpgradeBus.Instance.PluginConfiguration.ITEM_PROGRESSION_NO_PURCHASE_UPGRADES) return false;
+            if (UpgradeBus.Instance.PluginConfiguration.BuyableUpgradeOnce && UpgradeBus.Instance.lockedUpgrades.Keys.Contains(node)) return false;
             bool maxLevel = node.CurrentUpgrade >= node.MaxUpgrade;
             if (maxLevel && node.Unlocked)
                 return false;
@@ -236,6 +237,12 @@ namespace MoreShipUpgrades.UI.Application
                 ErrorMessage(node.Name, node.Description, backAction, LguConstants.NOT_ENOUGH_CREDITS);
                 return;
             }
+            if (UpgradeBus.Instance.PluginConfiguration.BuyableUpgradeOnce && UpgradeBus.Instance.lockedUpgrades.Keys.Contains(node))
+            {
+                ErrorMessage(node.Name, node.Description, backAction, LguConstants.LOCKED_UPGRADE);
+                return;
+            }
+
             StringBuilder discoveredItems = new();
             List<string> items = ItemProgressionManager.GetDiscoveredItems(node);
             if (items.Count > 0)

@@ -217,6 +217,8 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_REWARD_QUOTA_MULTIPLIER { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SHOW_UPGRADES_CHAT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SALE_APPLY_ONCE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> BuyableUpgradeOnce { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> ShowLockedUpgrades { get; set; }
 
         #endregion
 
@@ -282,6 +284,8 @@ namespace MoreShipUpgrades.Configuration
             SHOW_UPGRADES_CHAT = cfg.BindSyncedEntry(topSection, LguConstants.SHOW_UPGRADES_CHAT_KEY, LguConstants.SHOW_UPGRADES_CHAT_DEFAULT, LguConstants.SHOW_UPGRADES_CHAT_DESCRIPTION);
             SALE_APPLY_ONCE = cfg.BindSyncedEntry(topSection, LguConstants.SALE_APPLY_ONCE_KEY, LguConstants.SALE_APPLY_ONCE_DEFAULT, LguConstants.SALE_APPLY_ONCE_DESCRIPTION);
             SHOW_WORLD_BUILDING_TEXT = cfg.BindSyncedEntry(topSection, LguConstants.SHOW_WORLD_BUILDING_TEXT_KEY, LguConstants.SHOW_WORLD_BUILDING_TEXT_DEFAULT, LguConstants.SHOW_WORLD_BUILDING_TEXT_DESCRIPTION);
+            BuyableUpgradeOnce = cfg.BindSyncedEntry(topSection, LguConstants.BUYABLE_UPGRADES_ONCE_KEY, LguConstants.BUYABLE_UPGRADES_ONCE_DEFAULT, LguConstants.BUYABLE_UPGRADES_ONCE_DESCRIPTION);
+            ShowLockedUpgrades = cfg.BindSyncedEntry(topSection, LguConstants.SHOW_LOCKED_UPGRADES_KEY, LguConstants.SHOW_LOCKED_UPGRADES_DEFAULT, LguConstants.SHOW_LOCKED_UPGRADES_DESCRIPTION);
 
             #endregion
 

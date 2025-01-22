@@ -191,6 +191,14 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string SHOW_WORLD_BUILDING_TEXT_KEY = "Show World Building text in Upgrade information";
         internal const bool SHOW_WORLD_BUILDING_TEXT_DEFAULT = true;
         internal const string SHOW_WORLD_BUILDING_TEXT_DESCRIPTION = "When viewing an upgrade's information, wether show world-building text along with pratical information or not.";
+
+        internal const string BUYABLE_UPGRADES_ONCE_KEY = "Limited Buyable Upgrades";
+        internal const bool BUYABLE_UPGRADES_ONCE_DEFAULT = false;
+        internal const string BUYABLE_UPGRADES_ONCE_DESCRIPTION = "If toggled on, the upgrade bought for the first time will only be buyable after by the purchasing player. This is only relevant to individual upgrades";
+
+        internal const string SHOW_LOCKED_UPGRADES_KEY = "Show Locked Upgrades";
+        internal const bool SHOW_LOCKED_UPGRADES_DEFAULT = true;
+        internal const string SHOW_LOCKED_UPGRADES_DESCRIPTION = "If toggled off, upgrades which are locked to other crew members for purchase will not appear in the store";
         #endregion
 
         #region Name Overrides
@@ -1726,6 +1734,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string NOT_ENOUGH_CREDITS = "You do not have enough credits to purchase this upgrade.";
         internal const string REACHED_MAX_LEVEL = "You have reached the maximum level of this upgrade.";
+        internal const string LOCKED_UPGRADE = "This upgrade has been assigned to another crew member.";
         internal const string PURCHASE_UPGRADE_FORMAT = "Do you wish to purchase this upgrade for {0} credits?";
 
         #endregion
