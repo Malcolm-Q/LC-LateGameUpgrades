@@ -2,6 +2,7 @@
 using MoreShipUpgrades.UI.TerminalNodes;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace MoreShipUpgrades.API
 {
@@ -26,7 +27,7 @@ namespace MoreShipUpgrades.API
         public static void ContributeTowardsUpgrade(CustomTerminalNode node, int scrapValue)
         {
             if (!CheckGeneralNodeConditions(node)) return;
-            ItemProgressionManager.ContributeTowardsUpgrade(node, scrapValue);
+            ItemProgressionManager.ContributeTowardsUpgrade(node, Mathf.CeilToInt(scrapValue * UpgradeBus.Instance.PluginConfiguration.ITEM_PROGRESSION_CONTRIBUTION_MULTIPLIER));
         }
 
         public static bool CheckGeneralNodeConditions(CustomTerminalNode node)

@@ -340,6 +340,13 @@ This mod offers a "Randomize Upgrade" mode where a set amount of upgrades are pi
 ## API
 * Hunter
     * You can register your own items to the Hunter upgrade for them to spawn on enemy kills! Just follow the wiki page associated with ``Hunter API``.
+* Discombobulator
+    * You can manipulate the discombobulator feature to your liking such as altering the cooldown or attempt to trigger it.
+* Quantum Disruptor
+    * You can attempt to trigger the Quantum Disruptor's Revert Time feature when configurated for it.
+* Upgrades
+    * You can contribute towards an upgrade for some amount of value which is affected by the configured item progression multiplier
+    * You can trigger a rank up of an upgrade.
 
 ## Items/Commands moved to their own Mods
 - [Peeper](https://thunderstore.io/c/lethal-company/p/WhiteSpike/Peeper/)

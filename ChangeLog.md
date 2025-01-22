@@ -1,5 +1,5 @@
 <details>
-<summary> 3.11.1 - 2024-12-08 </summary>
+<summary> 3.11.1 - 2025-01-22 </summary>
 
 - Added compatibility with [Brutal Company Minus](https://thunderstore.io/c/lethal-company/p/DrinkableWater/Brutal_Company_Minus/) related to Midas Touch upgrade where the generated scrap items (both from events and hazards) would ignore the upgrade's state. (Thank you [TI](https://github.com/tixomirof))
 - Added Company Cruiser's Radio (and other possible vehicles which follow the same logic as Company Cruiser) to the Sick Beats interaction to obtain buffs from the upgrade.
