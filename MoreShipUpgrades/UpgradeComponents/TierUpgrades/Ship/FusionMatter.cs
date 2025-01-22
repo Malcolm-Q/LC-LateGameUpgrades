@@ -23,16 +23,25 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
             " you can expand the capabilities of your Ship's Teleporter. The Teleporter can still only safely transport Company-issued equipment," +
             " since the rough dimensions of these objects are well-documented. The same cannot be said for salvage materials.\n\n";
 
+        public enum ItemCategories
+        {
+            All,
+            Tools,
+            Scrap
+        }
+
         public string GetWorldBuildingText(bool shareStatus = false)
         {
             return WORLD_BUILDING_TEXT;
         }
 
         static private Dictionary<string, int> levels;
+        static private Dictionary<ItemCategories, int> categoryLevels;
 
         internal static void SetupLevels()
         {
             levels = [];
+            categoryLevels = [];
             string[] tiersList = GetConfiguration().FusionMatterConfiguration.TierCollection.Value.ToLower().Split(LguConstants.FUSION_MATTER_TIER_DELIMITER);
             for (int level = 0; level < tiersList.Length; ++level)
             {
@@ -42,15 +51,41 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
                         Plugin.mls.LogWarning($"{itemName} is already registered in the tiers collection of {UPGRADE_NAME}");
                     else
                     {
-                        Plugin.mls.LogInfo($"Registering {itemName} item under level {level} of {UPGRADE_NAME}");
-                        levels[itemName] = level;
+                        if (System.Enum.TryParse(itemName, ignoreCase: true, out ItemCategories category) && !categoryLevels.ContainsKey(category))
+                        {
+                            Plugin.mls.LogInfo($"Registering \"{itemName}\" category under level {level} of {UPGRADE_NAME}");
+                            categoryLevels[category] = level;
+                        }
+                        else
+                        {
+                            Plugin.mls.LogInfo($"Registering {itemName} item under level {level} of {UPGRADE_NAME}");
+                            levels[itemName] = level;
+                        }
                     }
                 }
             }
         }
+        public static bool IsItemWithinCategory(GrabbableObject grabbableObject, ItemCategories category)
+        {
+            switch(category)
+            {
+                case ItemCategories.All: return true;
+                case ItemCategories.Tools: return !grabbableObject.itemProperties.isScrap;
+                case ItemCategories.Scrap: return grabbableObject.itemProperties.isScrap;
+            }
+            return false;
+        }
+
         public static bool CanHoldItem(GrabbableObject grabbableObject, PlayerControllerB player)
         {
             if (grabbableObject == null || !player.IsTeleporting() || player.isPlayerDead) return false;
+            bool result = false;
+            foreach (KeyValuePair<ItemCategories,int> category in categoryLevels)
+            {
+                result |= IsItemWithinCategory(grabbableObject, category.Key) && GetUpgradeLevel(UPGRADE_NAME) >= category.Value;
+            }
+            if (result) return result;
+
             string itemName = grabbableObject.itemProperties.itemName.Trim().ToLower();
             if (levels.TryGetValue(itemName, out int level))
             {
@@ -90,9 +125,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
 
         public static string GetFusionMatterInfo(int level, int price)
         {
-            string itemList = string.Join(", ",
-                levels.Where(item => item.Value == level)
-                .Select(item => item.Key));
+            IEnumerable<string> levelKeys = levels.Where(item => item.Value == level).Select(item => item.Key);
+            IEnumerable<string> categoryLevelKeys = categoryLevels.Where(category => category.Value == level).Select(category => category.Key.ToString());
+            string itemList = string.Join(", ", levelKeys.Concat(categoryLevelKeys));
 
             return string.Format("LVL {0} - ${1} - Allows safekeeping the following items when teleporting: {2}\n",
                 level + 1, price, itemList);

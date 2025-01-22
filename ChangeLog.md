@@ -10,7 +10,10 @@
 - Fixed issue with Reinforced Boots not applying when the player is using a jetpack.
 - Altered interaction between Randomize Upgrades mode and Item Progression modes of UniqueScrap and CustomScrap to not add contribution to the hidden upgrades at all
   - Earlier behaviour was you would still gain contribution towards the upgrade, it would just not trigger the purchase. Problems appeared though as after being visible in the store, it would display a negative price value due to the high amount of contribution you gained. 
-
+- Implemented item categories in Fusion Matter item configurations:
+  - All: any kind of item will be kept in the player's inventory during teleportation
+  - Tools: Items which are not considered scrap will be kept in the player's inventory during teleportation
+  - Scrap: Items which are considered scrap will be kept in the player's inventory during teleportation
 </details>
 
 <details>
