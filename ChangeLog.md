@@ -6,6 +6,8 @@
 - Fixed issue with host's save being changed whenever the first client joined the lobby.
 - Fixed issue with NV configuration cases where it would error (leaving prices configuration as blank).
 - Fixed issue with Beekeeper's increased scrap value of hives not working correctly. (Thank you [TI](https://github.com/tixomirof))
+- Fixed issue with random contract not working correctly when free moons setting was enabled.
+- Fixed issue with Reinforced Boots not applying when the player is using a jetpack.
 - Altered interaction between Randomize Upgrades mode and Item Progression modes of UniqueScrap and CustomScrap to not add contribution to the hidden upgrades at all
   - Earlier behaviour was you would still gain contribution towards the upgrade, it would just not trigger the purchase. Problems appeared though as after being visible in the store, it would display a negative price value due to the high amount of contribution you gained. 
 

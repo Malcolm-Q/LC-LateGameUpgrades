@@ -325,6 +325,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             MethodInfo additionalTractionForce = typeof(TractionBoots).GetMethod(nameof(TractionBoots.GetAdditionalTractionForce));
             MethodInfo uphillSlopeMultiplier = typeof(HikingBoots).GetMethod(nameof(HikingBoots.ReduceUphillSlopeDebuff));
             MethodInfo ReduceCrouchMovementSpeedDebuff = typeof(CarbonKneejoints).GetMethod(nameof(CarbonKneejoints.ReduceCrouchMovementSpeedDebuff));
+            MethodInfo ReduceFallDamage = typeof(ReinforcedBoots).GetMethod(nameof(ReinforcedBoots.ReduceFallDamage));
 
             FieldInfo carryWeight = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.carryWeight));
             FieldInfo movementSpeed = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.movementSpeed));
@@ -344,6 +345,9 @@ namespace MoreShipUpgrades.Patches.PlayerController
             Tools.FindFloat(ref index, ref codes, findValue: 5f, addCode: additionalTractionForce, errorMessage: "Couldn't find the numerator used when sprinting");
             Tools.FindFloat(ref index, ref codes, findValue: 10f, addCode: additionalTractionForce, errorMessage: "Couldn't find the numerator used when walking");
             Tools.FindField(ref index, ref codes, findField: jumpForce, addCode: additionalJumpForce, errorMessage: "Couldn't find occurence of jump force field");
+            Tools.FindInteger(ref index, ref codes, findValue: 85, addCode: ReduceFallDamage, errorMessage: "Couldn't find first occurence of fall damage when using jetpack");
+            Tools.FindInteger(ref index, ref codes, findValue: 30, addCode: ReduceFallDamage, errorMessage: "Couldn't find second occurence of fall damage when using jetpack");
+            Tools.FindInteger(ref index, ref codes, findValue: 30, addCode: ReduceFallDamage, errorMessage: "Couldn't find third occurence of fall damage when using jetpack");
             Tools.FindField(ref index, ref codes, findField: climbSpeed, addCode: additionalClimbSpeed, errorMessage: "Couldn't find occurence of climb speed field");
             return codes;
         }
