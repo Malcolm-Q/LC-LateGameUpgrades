@@ -1,5 +1,6 @@
-﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
+﻿using MoreShipUpgrades.Configuration.Abstractions.TIerUpgrades;
+using MoreShipUpgrades.Configuration.Interfaces.TierUpgrades;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
@@ -11,7 +12,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
     internal class QuickHands : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Quick Hands";
-        internal const string DEFAULT_PRICES = "100,150,200,250";
+        internal const string DEFAULT_PRICES = "100,100,150,200,250";
         internal const string WORLD_BUILDING_TEXT = "\n\nThe 'Intern Tremble' is a known reoccuring phenomena among contractors in this field. Employees get nervous while exploring the Ruins" +
             " and it manifests as a constant shaking in the wrists. In the back of a magazine you found an advert for 'Stress Management Lozenges' and decided to take it up. Your wrists don't shake anymore.\n\n";
 
@@ -22,17 +23,16 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = GetConfiguration().QUICK_HANDS_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().QuickHandsConfiguration.OverrideName;
         }
         public static float GetIncreasedInteractionSpeedMultiplier()
         {
-            LategameConfiguration config = GetConfiguration();
-            return (config.QUICK_HANDS_INITIAL_INTERACTION_SPEED_INCREASE + (GetUpgradeLevel(UPGRADE_NAME) * config.QUICK_HANDS_INCREMENTAL_INTERACTION_SPEED_INCREASE)) / 100f;
+            ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().QuickHandsConfiguration;
+            return (upgradeConfig.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfig.IncrementalEffect)) / 100f;
         }
         public static float IncreaseInteractionSpeed(float defaultValue)
         {
-            LategameConfiguration config = GetConfiguration();
-            if (!config.QUICK_HANDS_ENABLED) return defaultValue;
+            if (!GetConfiguration().QuickHandsConfiguration.Enabled) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             float multiplier = GetIncreasedInteractionSpeedMultiplier();
             return (int)Mathf.Clamp(defaultValue + (defaultValue * multiplier), defaultValue, float.MaxValue);
@@ -41,8 +41,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             static float infoFunction(int level)
             {
-                LategameConfiguration config = GetConfiguration();
-                return config.QUICK_HANDS_INITIAL_INTERACTION_SPEED_INCREASE.Value + (level * config.QUICK_HANDS_INCREMENTAL_INTERACTION_SPEED_INCREASE.Value);
+                ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().QuickHandsConfiguration;
+                return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - Increases interaction speed of the player by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
@@ -52,15 +52,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             get
             {
-                LategameConfiguration config = GetConfiguration();
-                string[] prices = config.QUICK_HANDS_PRICES.Value.Split(',');
-                return config.QUICK_HANDS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
+                ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().QuickHandsConfiguration;
+                string[] prices = upgradeConfig.Prices.Value.Split(',');
+                return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
         }
 
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().QUICK_HANDS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().QuickHandsConfiguration.ItemProgressionItems.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -71,15 +71,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = GetConfiguration();
-
-            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
-                                                configuration.SHARED_UPGRADES || !configuration.QUICK_HANDS_INDIVIDUAL,
-                                                configuration.QUICK_HANDS_ENABLED,
-                                                configuration.QUICK_HANDS_PRICE,
-                                                UpgradeBus.ParseUpgradePrices(configuration.QUICK_HANDS_PRICES),
-                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.QUICK_HANDS_OVERRIDE_NAME : "",
-                                                Plugin.networkPrefabs[UPGRADE_NAME]);
+            return UpgradeBus.Instance.SetupMultiplePurchaseableTerminalNode(UPGRADE_NAME, GetConfiguration().QuickHandsConfiguration, Plugin.networkPrefabs[UPGRADE_NAME]);
         }
     }
 }

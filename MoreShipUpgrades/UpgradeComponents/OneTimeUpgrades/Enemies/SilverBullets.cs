@@ -15,11 +15,11 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies
         {
             return WORLD_BUILDING_TEXT;
         }
-        public override bool CanInitializeOnStart => GetConfiguration().SILVER_BULLETS_PRICE.Value <= 0;
+        public override bool CanInitializeOnStart => GetConfiguration().SilverBulletsConfiguration.Price <= 0;
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = GetConfiguration().SILVER_BULLETS_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().SilverBulletsConfiguration.OverrideName;
         }
         public override string GetDisplayInfo(int price = -1)
         {
@@ -27,7 +27,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().SILVER_BULLETS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().SilverBulletsConfiguration.OverrideName.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -38,14 +38,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = GetConfiguration();
-
-            return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
-                                    shareStatus: configuration.SHARED_UPGRADES || !configuration.SILVER_BULLETS_INDIVIDUAL,
-                                    configuration.SILVER_BULLETS_ENABLED.Value,
-                                    configuration.SILVER_BULLETS_PRICE.Value,
-                                    configuration.OVERRIDE_UPGRADE_NAMES ? configuration.SILVER_BULLETS_OVERRIDE_NAME : "",
-                                    Plugin.networkPrefabs[UPGRADE_NAME]);
+            return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME, GetConfiguration().SilverBulletsConfiguration, Plugin.networkPrefabs[UPGRADE_NAME]);
         }
     }
 }

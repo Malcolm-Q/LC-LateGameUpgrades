@@ -1,4 +1,6 @@
 ﻿using MoreShipUpgrades.Compat;
+using MoreShipUpgrades.Configuration;
+using MoreShipUpgrades.Configuration.Custom;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
@@ -16,7 +18,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = GetConfiguration().BETTER_SCANNER_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().BetterScannerUpgradeConfiguration.OverrideName;
             base.Start();
         }
 
@@ -25,13 +27,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             base.Load();
             if (GoodItemScanCompat.Enabled)
             {
+                BetterScannerUpgradeConfiguration config = GetConfiguration().BetterScannerUpgradeConfiguration;
+                GoodItemScanCompat.IncreaseScanDistance((int)config.NodeRangeIncrease);
+                GoodItemScanCompat.IncreaseEnemyScanDistance((int)config.NodeRangeIncrease);
                 int level = GetUpgradeLevel(UPGRADE_NAME);
-                if (level > 0)
-                {
-                    LategameConfiguration config = GetConfiguration();
-                    GoodItemScanCompat.IncreaseScanDistance((int)config.NODE_DISTANCE_INCREASE);
-                    GoodItemScanCompat.IncreaseEnemyScanDistance((int)config.NODE_DISTANCE_INCREASE);
-                }
                 if (level == 2) GoodItemScanCompat.ToggleScanThroughWalls(true);
             }
         }
@@ -58,14 +57,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public static string GetBetterScannerInfo(int level, int price)
         {
-            LategameConfiguration config = GetConfiguration();
+            BetterScannerUpgradeConfiguration config = GetConfiguration().BetterScannerUpgradeConfiguration;
             switch (level)
             {
-                case 1: return string.Format(AssetBundleHandler.GetInfoFromJSON("Better Scanner1"), level, price, config.NODE_DISTANCE_INCREASE.Value, config.SHIP_AND_ENTRANCE_DISTANCE_INCREASE.Value);
+                case 1: return string.Format(AssetBundleHandler.GetInfoFromJSON("Better Scanner1"), level, price, config.NodeRangeIncrease.Value, config.OutsideNodesRangeIncrease.Value);
                 case 2: return string.Format(AssetBundleHandler.GetInfoFromJSON("Better Scanner2"), level, price);
                 case 3:
                     {
-                        string result = string.Format(AssetBundleHandler.GetInfoFromJSON("Better Scanner3"), level, price, config.BETTER_SCANNER_ENEMIES.Value ? " and enemies" : "");
+                        string result = string.Format(AssetBundleHandler.GetInfoFromJSON("Better Scanner3"), level, price, config.SeeEnemiesThroughWalls.Value ? " and enemies" : "");
                         result += "hives and scrap command display the location of the most valuable hives and scrap on the map.\n";
                         return result;
                     }
@@ -87,27 +86,27 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             return stringBuilder.ToString();
         }
 
-        public override bool CanInitializeOnStart => GetConfiguration().BETTER_SCANNER_PRICE.Value <= 0 &&
-                GetConfiguration().BETTER_SCANNER_PRICE2.Value <= 0 &&
-                GetConfiguration().BETTER_SCANNER_PRICE3.Value <= 0;
+        public override bool CanInitializeOnStart => GetConfiguration().BetterScannerUpgradeConfiguration.Price.Value <= 0 &&
+                GetConfiguration().BetterScannerUpgradeConfiguration.SecondPrice.Value <= 0 &&
+                GetConfiguration().BetterScannerUpgradeConfiguration.ThirdPrice.Value <= 0;
         public new static void RegisterUpgrade()
         {
             SetupGenericPerk<BetterScanner>(UPGRADE_NAME);
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().BETTER_SCANNER_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().BetterScannerUpgradeConfiguration.ItemProgressionItems.Value.Split(","));
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = GetConfiguration();
+            BetterScannerUpgradeConfiguration configuration = GetConfiguration().BetterScannerUpgradeConfiguration;
 
             return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
-                                                configuration.SHARED_UPGRADES.Value || !configuration.BETTER_SCANNER_INDIVIDUAL.Value,
-                                                configuration.BETTER_SCANNER_ENABLED.Value,
-                                                configuration.BETTER_SCANNER_PRICE.Value,
-                                                [configuration.BETTER_SCANNER_PRICE2.Value, configuration.BETTER_SCANNER_PRICE3.Value],
-                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.BETTER_SCANNER_OVERRIDE_NAME : ""
+                                                GetConfiguration().SHARED_UPGRADES.Value || !configuration.Individual.Value,
+                                                configuration.Enabled.Value,
+                                                configuration.Price.Value,
+                                                [configuration.SecondPrice.Value, configuration.ThirdPrice.Value],
+                                                GetConfiguration().OVERRIDE_UPGRADE_NAMES ? configuration.OverrideName : ""
                                                 );
         }
     }

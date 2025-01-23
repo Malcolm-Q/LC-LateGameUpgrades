@@ -1,5 +1,5 @@
-﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
+﻿using MoreShipUpgrades.Configuration.Interfaces.TierUpgrades;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
@@ -11,7 +11,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack
     internal class JetpackThrusters : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Jetpack Thrusters";
-        internal const string DEFAULT_PRICES = "150,300,400";
+        internal const string DEFAULT_PRICES = "300,150,300,400";
         internal const string WORLD_BUILDING_TEXT = "\n\nOptimization procedure for your jetpack's thrust nozzles that results in a higher terminal velocity at maximum thrust.\n\n";
 
         public string GetWorldBuildingText(bool shareStatus = false)
@@ -21,44 +21,44 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = GetConfiguration().JETPACK_THRUSTERS_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().JetpackThrustersConfiguration.OverrideName;
             base.Start();
         }
         public override bool CanInitializeOnStart
         {
             get
             {
-                LategameConfiguration config = GetConfiguration();
-                string[] prices = config.JETPACK_THRUSTERS_PRICES.Value.Split(',');
-                return config.JETPACK_THRUSTERS_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
+                ITierUpgradeConfiguration upgradeConfig = GetConfiguration().JetpackThrustersConfiguration;
+                string[] prices = upgradeConfig.Prices.Value.Split(',');
+                return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
             static float infoFunction(int level)
             {
-                LategameConfiguration config = GetConfiguration();
-                return config.JETPACK_THRUSTERS_INITIAL_MAXIMUM_POWER_INCREASE.Value + (level * config.JETPACK_THRUSTERS_INCREMENTAL_MAXIMUM_POWER_INCREASE.Value);
+                ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().JetpackThrustersConfiguration;
+                return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
             const string infoFormat = "LVL {0} - ${1} - The maximum speed of the jetpack during flight is increased by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
         }
         public static float GetIncreasedMaximumPower()
         {
-            LategameConfiguration config = GetConfiguration();
-            int percentage = config.JETPACK_THRUSTERS_INITIAL_MAXIMUM_POWER_INCREASE + (GetUpgradeLevel(UPGRADE_NAME) * config.JETPACK_THRUSTERS_INCREMENTAL_MAXIMUM_POWER_INCREASE);
+            ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().JetpackThrustersConfiguration;
+            int percentage = upgradeConfig.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfig.IncrementalEffect);
             return percentage / 100f;
         }
         public static float IncreaseJetpackMaximumPower(float defaultValue)
         {
-            if (!GetConfiguration().JETPACK_THRUSTERS_ENABLED) return defaultValue;
+            if (!GetConfiguration().JetpackThrustersConfiguration.Enabled) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             float multiplier = GetIncreasedMaximumPower();
             return Mathf.Clamp(defaultValue + (defaultValue * multiplier), defaultValue, float.MaxValue);
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().JETPACK_THRUSTERS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().JetpackThrustersConfiguration.ItemProgressionItems.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -69,14 +69,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = GetConfiguration();
-
-            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
-                                                shareStatus: configuration.SHARED_UPGRADES.Value || !configuration.JETPACK_THURSTERS_INDIVIDUAL.Value,
-                                                configuration.JETPACK_THRUSTERS_ENABLED,
-                                                configuration.JETPACK_THRUSTERS_PRICE,
-                                                UpgradeBus.ParseUpgradePrices(configuration.JETPACK_THRUSTERS_PRICES),
-                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.JETPACK_THRUSTERS_OVERRIDE_NAME : "",
+            return UpgradeBus.Instance.SetupMultiplePurchaseableTerminalNode(UPGRADE_NAME, GetConfiguration().JetpackThrustersConfiguration,
                                                 Plugin.networkPrefabs[UPGRADE_NAME]);
         }
     }

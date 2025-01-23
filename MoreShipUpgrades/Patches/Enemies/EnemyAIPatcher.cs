@@ -35,7 +35,7 @@ namespace MoreShipUpgrades.Patches.Enemies
         [HarmonyPostfix]
         private static void HitEnemyPostifx(EnemyAI __instance, int hitID)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.SILVER_BULLETS_ENABLED) return;
+            if (!UpgradeBus.Instance.PluginConfiguration.SilverBulletsConfiguration.Enabled) return;
             if (!BaseUpgrade.GetActiveUpgrade(SilverBullets.UPGRADE_NAME)) return; // Upgrade isn't active
             if (hitID != -1) return; // Shotgun doesn't set a hitID so it's set at -1
             if (__instance is not DressGirlAI) return;

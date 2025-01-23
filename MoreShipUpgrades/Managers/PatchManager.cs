@@ -47,6 +47,13 @@ namespace MoreShipUpgrades.Managers
                 harmony.PatchAll(typeof(RoundManagerPatchesPatcher));
                 Plugin.mls.LogInfo("Patched ShipInventory mod related components for correct behaviour on Scrap Keeper in relation of keeping items in the chute based on chance. If any issues arise related to the item chute being cleared on team wipe when both LGU and ShipInventory mods are present, report to LGU first.");
             }
+            if (LethalConstellationsCompat.Enabled)
+            {
+                Plugin.mls.LogInfo("Lethal Constellations has been detected. Proceeding to patch...");
+                harmony.PatchAll(typeof(LevelStuffPatcher));
+                Plugin.mls.LogInfo("Patched Lethal Constellations mod related components for correct behaviour on Efficient Engines to affect constellation prices. If any issues arise related to this mechanic with both mods installed, report to LGU first.");
+            }
+            
             if (BrutalCompanyMinusExtraCompat.Enabled)
             {
                 Plugin.mls.LogInfo(BrutalCompanyMinusExtraCompat.BeforePatchMessage);
@@ -85,6 +92,7 @@ namespace MoreShipUpgrades.Managers
             harmony.PatchAll(typeof(SteamValveHazardPatch));
             harmony.PatchAll(typeof(EntranceTeleportPatcher));
             harmony.PatchAll(typeof(ShipTeleporterPatcher));
+            harmony.PatchAll(typeof(VehicleControllerPatcher));
             Plugin.mls.LogInfo("Interactables have been patched");
         }
 

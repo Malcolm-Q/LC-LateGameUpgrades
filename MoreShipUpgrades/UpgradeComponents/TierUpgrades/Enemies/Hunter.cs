@@ -1,4 +1,6 @@
 ﻿using MoreShipUpgrades.API;
+using MoreShipUpgrades.Configuration;
+using MoreShipUpgrades.Configuration.Interfaces.TierUpgrades;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
@@ -82,7 +84,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies
         public static void SetupLevels()
         {
             levels = [];
-            string[] tiersList = GetConfiguration().HUNTER_SAMPLE_TIERS.Value.ToLower().Split('-');
+            string[] tiersList = GetConfiguration().HunterConfiguration.TierCollection.Value.ToLower().Split('-');
             for (int level = 0; level < tiersList.Length; ++level)
             {
                 foreach (string monster in tiersList[level].Split(',').Select(x => x.Trim().ToLower()))
@@ -132,7 +134,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = GetConfiguration().HUNTER_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().HunterConfiguration.OverrideName;
             Instance = this;
         }
 
@@ -163,15 +165,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies
         {
             get
             {
-                LategameConfiguration config = GetConfiguration();
-                string[] prices = config.HUNTER_UPGRADE_PRICES.Value.Split(',');
-                return config.HUNTER_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
+                ITierUpgradeConfiguration upgradeConfig = GetConfiguration().HunterConfiguration;
+                string[] prices = upgradeConfig.Prices.Value.Split(',');
+                return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
         }
 
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().HUNTER_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().HunterConfiguration.ItemProgressionItems.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -179,15 +181,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = GetConfiguration();
-
             SetupLevels();
-            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
-                                                shareStatus: true,
-                                                configuration.HUNTER_ENABLED.Value,
-                                                configuration.HUNTER_PRICE.Value,
-                                                UpgradeBus.ParseUpgradePrices(configuration.HUNTER_UPGRADE_PRICES.Value),
-                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.HUNTER_OVERRIDE_NAME : "");
+            return UpgradeBus.Instance.SetupMultiplePurchaseableTerminalNode(UPGRADE_NAME, GetConfiguration().HunterConfiguration);
         }
     }
 }

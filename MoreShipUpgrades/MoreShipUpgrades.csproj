@@ -83,6 +83,14 @@
       <HintPath>$(LC_PLUGIN_PATH)\WarperSan-ShipInventory\ShipInventory.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <Reference Include="BrutalCompanyMinus" Publicize="true">
+      <HintPath>$(LC_PLUGIN_PATH)\UnloadedHangar-Brutal_Company_Minus_Extra\BrutalCompanyMinus.dll</HintPath>
+    </Reference>
+    <Reference Include="LethalConstellations">
+      <Publicize>true</Publicize>
+      <HintPath>$(LC_PLUGIN_PATH)\darmuh-LethalConstellations\LethalConstellations.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
     
   </ItemGroup>
   <ItemGroup>

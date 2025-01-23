@@ -1,8 +1,8 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
 using MoreShipUpgrades.Compat;
+using MoreShipUpgrades.Configuration;
 using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
@@ -19,7 +19,7 @@ namespace MoreShipUpgrades.Patches.Interactables
         [HarmonyPostfix]
         static void PressButtonEffectsPostfix(ShipTeleporter __instance)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.PARTICLE_INFUSER_ENABLED) return;
+            if (!UpgradeBus.Instance.PluginConfiguration.ParticleInfuserConfiguration.Enabled) return;
             __instance.teleporterAnimator.speed *= ParticleInfuser.IncreaseTeleportSpeed();
             __instance.shipTeleporterAudio.pitch *= ParticleInfuser.IncreaseTeleportSpeed();
             ParticleInfuser.instance.StartCoroutine(ParticleInfuser.instance.ResetTeleporterSpeed(__instance));
@@ -94,9 +94,9 @@ namespace MoreShipUpgrades.Patches.Interactables
         static void UpdatePostfix(ShipTeleporter __instance)
         {
             LategameConfiguration config = UpgradeBus.Instance.PluginConfiguration;
-            if (!config.INTERN_ENABLED || config.INTERNS_TELEPORT_RESTRICTION == Interns.TeleportRestriction.None) return;
+            if (!config.INTERN_ENABLED || config.INTERNS_TELEPORT_RESTRICTION == Interns.TeleportRestriction.None || !__instance.buttonTrigger.interactable) return;
             PlayerControllerB playerToBeamUp = StartOfRound.Instance.mapScreen.targetedPlayer;
-            __instance.buttonTrigger.interactable = !Interns.instance.ContainsRecentlyInterned(playerToBeamUp);
+            __instance.buttonTrigger.interactable &= !Interns.instance.ContainsRecentlyInterned(playerToBeamUp);
             if (!__instance.buttonTrigger.interactable)
             {
                 __instance.buttonTrigger.disabledHoverTip = $"[Recent intern must {(config.INTERNS_TELEPORT_RESTRICTION == Interns.TeleportRestriction.ExitBuilding ? "exit the building" : "enter the ship")} first]";

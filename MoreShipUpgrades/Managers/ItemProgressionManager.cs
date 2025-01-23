@@ -1,4 +1,5 @@
-﻿using MoreShipUpgrades.Misc.Upgrades;
+﻿using MoreShipUpgrades.API;
+using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
 using System;
@@ -90,9 +91,15 @@ namespace MoreShipUpgrades.Managers
             LguStore.Instance.HandleUpgradeForNoHostClientRpc(node.OriginalName, node.Unlocked);
             LguStore.Instance.UpdateUpgrades(node, node.Unlocked);
         }
-        static void ContributeTowardsUpgrade(string upgradeName, int scrapValue)
+        internal static void ContributeTowardsUpgrade(string upgradeName, int scrapValue)
         {
-            CustomTerminalNode assignedUpgrade = GetCustomTerminalNode(upgradeName);
+            CustomTerminalNode assignedUpgrade = UpgradeBus.Instance.GetUpgradeNode(upgradeName);
+            if (!assignedUpgrade.Visible) return;
+            ContributeTowardsUpgrade(assignedUpgrade, scrapValue);
+        }
+
+        internal static void ContributeTowardsUpgrade(CustomTerminalNode assignedUpgrade, int scrapValue)
+        {
             int contributed = UpgradeBus.Instance.contributionValues[assignedUpgrade.OriginalName];
             int currentPrice = assignedUpgrade.GetCurrentPrice() + contributed;
             contributed += scrapValue;
@@ -121,13 +128,13 @@ namespace MoreShipUpgrades.Managers
                 ScanNodeProperties node = scrapItem.GetComponentInChildren<ScanNodeProperties>();
                 if (node == null)
                 {
-                    Plugin.mls.LogWarning($"{scrapName} doesn't have a scan node, skipping...");
+                    Plugin.mls.LogInfo($"{scrapName} doesn't have a scan node, skipping...");
                     return false;
                 }
                 scrapName = node.headerText.ToLower().Trim();
                 if (!collection.ContainsKey(scrapName))
                 {
-                    Plugin.mls.LogWarning($"{scrapName} from Scan Node was not found in the dictionary.");
+                    Plugin.mls.LogInfo($"{scrapName} from Scan Node was not found in the dictionary.");
                     return false;
                 }
             }
@@ -180,7 +187,7 @@ namespace MoreShipUpgrades.Managers
         {
             CustomTerminalNode currentNode = null;
             int currentDelta = int.MaxValue;
-            foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
+            foreach (CustomTerminalNode node in UpgradeBus.GetUpgradeNodes())
             {
                 int price = node.GetCurrentPrice();
                 int delta = fullfilledQuota - price;
@@ -222,7 +229,8 @@ namespace MoreShipUpgrades.Managers
 
         public static CustomTerminalNode PickRandomUpgrade()
         {
-            return UpgradeBus.Instance.terminalNodes[UnityEngine.Random.Range(0, UpgradeBus.Instance.terminalNodes.Count)];
+            List<CustomTerminalNode> upgradeNodes = UpgradeBus.GetUpgradeNodes();
+            return upgradeNodes[UnityEngine.Random.Range(0, upgradeNodes.Count)];
         }
         static void AssignRandomScrap()
         {
@@ -293,6 +301,7 @@ namespace MoreShipUpgrades.Managers
                 selectedNode = possibleNode;
                 return;
             }
+
             switch (CurrentChancePerScrapMode)
             {
                 case ChancePerScrapModes.LowestLevel:
@@ -317,12 +326,13 @@ namespace MoreShipUpgrades.Managers
         }
         public static CustomTerminalNode SelectChancePerScrapUpgrade()
         {
+            List<CustomTerminalNode> upgradeNodes = UpgradeBus.GetUpgradeNodes();
             CustomTerminalNode node = null;
             if (CurrentChancePerScrapMode == ChancePerScrapModes.Random)
             {
                 int tries = 0;
                 node = PickRandomUpgrade();
-                while (node.MaxUpgrade <= node.CurrentUpgrade && tries < UpgradeBus.Instance.terminalNodes.Count*2)
+                while ((node.MaxUpgrade <= node.CurrentUpgrade) && tries < upgradeNodes.Count*2)
                 {
                     node = PickRandomUpgrade();
                     tries++;
@@ -330,7 +340,7 @@ namespace MoreShipUpgrades.Managers
                 return node;
             }
 
-            foreach (CustomTerminalNode randomNode in UpgradeBus.Instance.terminalNodes)
+            foreach (CustomTerminalNode randomNode in upgradeNodes)
             {
                 SelectTerminalNode(ref node, randomNode);
             }
@@ -339,9 +349,11 @@ namespace MoreShipUpgrades.Managers
 
         internal static void InitializeContributionValues()
         {
-            UpgradeBus.Instance.contributionValues.Clear();
-            foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
-                UpgradeBus.Instance.contributionValues.Add(node.OriginalName, 0);
+            foreach (CustomTerminalNode node in UpgradeBus.GetUpgradeNodes())
+            {
+                if (!UpgradeBus.Instance.contributionValues.ContainsKey(node.OriginalName))
+                    UpgradeBus.Instance.contributionValues.Add(node.OriginalName, 0);
+            }
         }
 
         internal static void SetContributionValue(string key, int value)
@@ -351,7 +363,7 @@ namespace MoreShipUpgrades.Managers
         }
         internal static int GetCurrentContribution(CustomTerminalNode node)
         {
-            return UpgradeBus.Instance.contributionValues[node.OriginalName];
+            return UpgradeBus.Instance.contributionValues.GetValueOrDefault(node.OriginalName, 0);
         }
 
         internal static List<string> GetDiscoveredItems(CustomTerminalNode node)
@@ -361,6 +373,7 @@ namespace MoreShipUpgrades.Managers
             {
                 List<string> nodes = pair.Value;
                 string scrapName = pair.Key;
+                if (scrapName.Length == 0) continue;
                 foreach (string nodeName in nodes)
                 {
                     if (nodeName == node.OriginalName && (UpgradeBus.Instance.discoveredItems.Contains(scrapName) || UpgradeBus.Instance.PluginConfiguration.ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS))
@@ -368,13 +381,6 @@ namespace MoreShipUpgrades.Managers
                 }
             }
             return result;
-        }
-
-        internal static CustomTerminalNode GetCustomTerminalNode(string name)
-        {
-            foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
-                if (node.OriginalName == name) return node;
-            return null;
         }
 
         internal static void DiscoverScrap(string scrapName)

@@ -259,6 +259,12 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 
 * __Scrap Keeper - $1000__
     * In case of full team wipe, each scrap has a chance of staying in the ship.
+
+* __Medical Nanobots - $300__
+    * Increases the health regeneration cap of the vanilla health regeneration mechanic.
+    
+* __Effective Bandaids - $250__
+    * Increases the amount of health regenerated from the vanilla health regeneration mechanic. 
     
 ## Item Progression Mode
 
@@ -334,6 +340,13 @@ This mod offers a "Randomize Upgrade" mode where a set amount of upgrades are pi
 ## API
 * Hunter
     * You can register your own items to the Hunter upgrade for them to spawn on enemy kills! Just follow the wiki page associated with ``Hunter API``.
+* Discombobulator
+    * You can manipulate the discombobulator feature to your liking such as altering the cooldown or attempt to trigger it.
+* Quantum Disruptor
+    * You can attempt to trigger the Quantum Disruptor's Revert Time feature when configurated for it.
+* Upgrades
+    * You can contribute towards an upgrade for some amount of value which is affected by the configured item progression multiplier
+    * You can trigger a rank up of an upgrade.
 
 ## Items/Commands moved to their own Mods
 - [Peeper](https://thunderstore.io/c/lethal-company/p/WhiteSpike/Peeper/)

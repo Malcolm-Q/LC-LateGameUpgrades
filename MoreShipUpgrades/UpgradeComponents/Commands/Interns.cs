@@ -16,6 +16,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
 
         List<PlayerControllerB> recentlyInterned;
         internal string[] internNames, internInterests;
+        internal int currentUsages;
+        internal float revivalTimer;
         public enum TeleportRestriction
         {
             None,
@@ -29,6 +31,14 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
             recentlyInterned = new();
             internNames = AssetBundleHandler.GetInfoFromJSON("InternNames").Split(",");
             internInterests = AssetBundleHandler.GetInfoFromJSON("InternInterests").Split(",");
+            currentUsages = 0;
+            revivalTimer = 0f;
+        }
+
+        void Update()
+        {
+            if (revivalTimer > 0f)
+                revivalTimer -= Time.deltaTime;
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -55,9 +65,11 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
         [ClientRpc]
         private void ReviveTargetedPlayerClientRpc()
         {
+            currentUsages++;
+            revivalTimer = UpgradeBus.Instance.PluginConfiguration.INTERNS_INTERVAL_BETWEEN_REVIVES;
             PlayerControllerB player = StartOfRound.Instance.mapScreen.targetedPlayer;
             int health = 100;
-            if (UpgradeBus.Instance.PluginConfiguration.PLAYER_HEALTH_ENABLED)
+            if (UpgradeBus.Instance.PluginConfiguration.StimpackConfiguration.Enabled)
             {
                 bool playerRegistered = Stimpack.Instance.playerHealthLevels.ContainsKey(player.playerSteamId);
                 health = playerRegistered ? Stimpack.GetHealthFromPlayer(100, player.playerSteamId) : 100;

@@ -1,9 +1,74 @@
 <details>
-<summary> 3.11.0 - 2024-??-?? </summary>
+<summary> 3.11.2 - 2025-01-23 </summary>
+
+- Previous mentioned compatibility was actually for [Brutal Company Minus Extra](https://thunderstore.io/c/lethal-company/p/UnloadedHangar/Brutal_Company_Minus_Extra/). Oops.
+- Fixed Sick Beats icon not disappearing when disconnecting.
+- Fixed discovered items displaying even when there isn't any associations made.
+- Fixed discovered items not displaying if you weren't in conditions of purchasing the upgrade.
+- Implemented configuration for interns:
+  - Amount of revives allowed per moon landing. "-1" represents infinite.
+  - Delay (in seconds) between each player revive.
+
+
+</details>
+
+<details>
+<summary> 3.11.1 - 2025-01-22 </summary>
+
+- Added compatibility with [Brutal Company Minus](https://thunderstore.io/c/lethal-company/p/DrinkableWater/Brutal_Company_Minus/) related to Midas Touch upgrade where the generated scrap items (both from events and hazards) would ignore the upgrade's state. (Thank you [TI](https://github.com/tixomirof))
+- Added Company Cruiser's Radio (and other possible vehicles which follow the same logic as Company Cruiser) to the Sick Beats interaction to obtain buffs from the upgrade.
+- Fixed issue with host's save being changed whenever the first client joined the lobby.
+- Fixed issue with NV configuration cases where it would error (leaving prices configuration as blank).
+- Fixed issue with Beekeeper's increased scrap value of hives not working correctly. (Thank you [TI](https://github.com/tixomirof))
+- Fixed issue with random contract not working correctly when free moons setting was enabled.
+- Fixed issue with Reinforced Boots not applying when the player is using a jetpack.
+- Altered interaction between Randomize Upgrades mode and Item Progression modes of UniqueScrap and CustomScrap to not add contribution to the hidden upgrades at all
+  - Earlier behaviour was you would still gain contribution towards the upgrade, it would just not trigger the purchase. Problems appeared though as after being visible in the store, it would display a negative price value due to the high amount of contribution you gained. 
+- Implemented item categories in Fusion Matter item configurations:
+  - All: any kind of item will be kept in the player's inventory during teleportation
+  - Tools: Items which are not considered scrap will be kept in the player's inventory during teleportation
+  - Scrap: Items which are considered scrap will be kept in the player's inventory during teleportation
+- Implemented configuration to restrict upgrades being buyable to the first ever purchasing player.
+  - Upgrades which are restricted will appear disabled in the store and if prompted, will show a message stating the upgrade can only be bought by somebody else. 
+  - Added configuration to show/hide upgrades restricted to other players.
+</details>
+
+<details>
+<summary> 3.11.0 - 2024-12-01 </summary>
 
 - Implemented tier upgrade which increases the health regeneration cap of the vanilla health regeneration mechanic.
 - Implemented tier upgrade which increases the amount of health you regenerate through vanilla health regeneration mechanic.
+- Implemented Upgrade API to facilitate modding around LGU's upgrades.
+  - Allows retrieving data related to the upgrades of the session (All, Visible, Purchaseable, Rankable);
+  - Allows requests of triggering upgrade rank up;
+  - Allows requests of contributing towards an upgrade.
+  - Requests require the name of the upgrade (either original or overriden) or the node associated to the upgrade to be considered valid.
+- Implemented Discombobulator API to facilitate triggering callbacks to the Discombobulator upgrade.
+  - Allows checking if the discombobulator can be fired to stun nearby enemies.
+  - Allows checking if the Discombobulator upgrade is enabled in the configuration.
+  - Allows requests of firing the Discombobulator mechanic (so long as it is able to fire);
+  - Allows requests of setting/incrementing/decrementing the current cooldown of the Discombobulator.
+    - The calculated value will not pass the boundaries of zero to the configured maximum cooldown of the Discombobulator.
+- Implemented Quantum Disruptor API to facilitate triggering callbacks to the Quantum Disruptor upgrade (more specifically the revert mode)
+  - Allows checking if the Quantum Disruptor upgrade is enabled in the configuration.
+  - Allows checking if the Quantum Disruptor revert time command is enabled in the configuration.
+  - Allows checking the reset mode used to reset the revert time usages value.
+  - Allows checking the current/maximum amount of revert time usages per moon landing and amount of hours reduced per usage.
+  - Allows checking if the Quantum Disruptor revert time command can be executed. (along with display message in case of error)
+  - Allows requests of firing the Quantum Disruptor revert time command.
 - Added world-building text to some upgrades. (Thank you Nat(discordID:twinkula))
+- Fixed contribution values from Item Progression mode not being used correctly during save reboot.
+- Item Progression modes of UniqueScrap and CustomScrap will not rank up upgrades hidden from Randomize Upgrades mode.
+- Made Efficient Engines discount price effect also apply on [Lethal Constellations](https://thunderstore.io/c/lethal-company/p/darmuh/LethalConstellations/)'s constellation prices.
+- Added configuration for Sick Beats to make the boombox music not attract nearby enemies when purchased.
+- Added configuration for Discombobulator to blacklist enemies from its effect when fired.
+  - It checks both the internal names stored in its data or the header text shown in the scan node for equality in the blacklist.
+- Fixed issue with GoodItemScan Compat with wrong logic being applied.
+- Fixed issue with Item Progression leading to upgrades not having a contribution value assigned to them.
+- Fixed issue with Contract objects showing radar icons even when they are destroyed.
+- Fixed issue with Fusion Matter ignoring Back Muscles weight reduction when keeping items in your inventory.
+- Fixed issue with Quantum Disruptor Revert Time command not being able to be called by non-host players.
+- Fixed issue with Interns Teleport Restriction configuration making the teleport cooldown ignored.
 
 </details>
 

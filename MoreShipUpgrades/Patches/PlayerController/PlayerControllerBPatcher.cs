@@ -14,9 +14,9 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
 using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.UpgradeComponents.Commands;
-using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
 using MoreShipUpgrades.Extensions;
+using MoreShipUpgrades.Configuration;
 
 namespace MoreShipUpgrades.Patches.PlayerController
 {
@@ -54,7 +54,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
         static void LoseNightVisionOnDeath(ref PlayerControllerB __instance)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.LOSE_NIGHT_VIS_ON_DEATH.Value) return;
+            if (!UpgradeBus.Instance.PluginConfiguration.NightVisionUpgradeConfiguration.LoseOnDeath.Value) return;
 
             if (__instance != UpgradeBus.Instance.GetLocalPlayer()) return;
             if (!BaseUpgrade.GetActiveUpgrade("Night Vision")) return;
@@ -63,7 +63,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             Plugin.mls.LogDebug($"Local player we are deactivating to: {UpgradeBus.Instance.GetLocalPlayer().playerUsername}");
 
             UpgradeBus.Instance.UpgradeObjects[NightVision.UPGRADE_NAME].GetComponent<NightVision>().DisableOnClient();
-            if (!UpgradeBus.Instance.PluginConfiguration.NIGHT_VISION_DROP_ON_DEATH.Value) return;
+            if (!UpgradeBus.Instance.PluginConfiguration.NightVisionUpgradeConfiguration.DropOnDeath.Value) return;
             NightVision.Instance.SpawnNightVisionItemOnDeathServerRpc(__instance.transform.position);
         }
 
@@ -146,13 +146,13 @@ namespace MoreShipUpgrades.Patches.PlayerController
             }
 
             if (CustomItemBehaviourLibraryCompat.Enabled
-                && !UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_ALLOW_WHEELBARROWS
+                && !UpgradeBus.Instance.PluginConfiguration.DeeperPocketsConfiguration.AllowWheelbarrows
                 && CustomItemBehaviourLibraryCompat.CheckForContainers(ref player))
             {
                 return;
             }
             int twoHandedCount = 0;
-            int maxTwoHandedCount = 1 + UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_INITIAL_TWO_HANDED_ITEMS + (BaseUpgrade.GetUpgradeLevel(DeepPockets.UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_ITEMS);
+            int maxTwoHandedCount = 1 + UpgradeBus.Instance.PluginConfiguration.DeeperPocketsConfiguration.InitialEffect + (BaseUpgrade.GetUpgradeLevel(DeepPockets.UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.DeeperPocketsConfiguration.IncrementalEffect);
 
             for(int i = 0; i < player.ItemSlots.Length && twoHandedCount < maxTwoHandedCount; i++)
             {
@@ -193,9 +193,10 @@ namespace MoreShipUpgrades.Patches.PlayerController
         [HarmonyPatch(nameof(PlayerControllerB.Update))]
         static void CheckForBoomboxes(PlayerControllerB __instance)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.BEATS_ENABLED.Value) return;
+            if (!UpgradeBus.Instance.PluginConfiguration.SickBeatsUpgradeConfiguration.Enabled.Value) return;
             if (!BaseUpgrade.GetActiveUpgrade(SickBeats.UPGRADE_NAME) || __instance != GameNetworkManager.Instance.localPlayerController) return;
             SickBeats.Instance.boomBoxes.RemoveAll(b => b == null);
+            SickBeats.Instance.vehicleControllers.RemoveAll(c => c == null);
             bool result = false;
             if (__instance.isPlayerDead)
             {
@@ -208,7 +209,17 @@ namespace MoreShipUpgrades.Patches.PlayerController
             {
                 if (!boom.isPlayingMusic) continue;
 
-                if (Vector3.Distance(boom.transform.position, __instance.transform.position) >= UpgradeBus.Instance.PluginConfiguration.BEATS_RADIUS.Value) continue;
+                if (Vector3.Distance(boom.transform.position, __instance.transform.position) >= UpgradeBus.Instance.PluginConfiguration.SickBeatsUpgradeConfiguration.Radius.Value) continue;
+
+                result = true;
+                break;
+            }
+
+            foreach (VehicleController radio in SickBeats.Instance.vehicleControllers)
+            {
+                if (!radio.radioOn) continue;
+
+                if (Vector3.Distance(radio.transform.position, __instance.transform.position) >= UpgradeBus.Instance.PluginConfiguration.SickBeatsUpgradeConfiguration.Radius.Value) continue;
 
                 result = true;
                 break;
@@ -314,6 +325,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             MethodInfo additionalTractionForce = typeof(TractionBoots).GetMethod(nameof(TractionBoots.GetAdditionalTractionForce));
             MethodInfo uphillSlopeMultiplier = typeof(HikingBoots).GetMethod(nameof(HikingBoots.ReduceUphillSlopeDebuff));
             MethodInfo ReduceCrouchMovementSpeedDebuff = typeof(CarbonKneejoints).GetMethod(nameof(CarbonKneejoints.ReduceCrouchMovementSpeedDebuff));
+            MethodInfo ReduceFallDamage = typeof(ReinforcedBoots).GetMethod(nameof(ReinforcedBoots.ReduceFallDamage));
 
             FieldInfo carryWeight = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.carryWeight));
             FieldInfo movementSpeed = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.movementSpeed));
@@ -333,6 +345,9 @@ namespace MoreShipUpgrades.Patches.PlayerController
             Tools.FindFloat(ref index, ref codes, findValue: 5f, addCode: additionalTractionForce, errorMessage: "Couldn't find the numerator used when sprinting");
             Tools.FindFloat(ref index, ref codes, findValue: 10f, addCode: additionalTractionForce, errorMessage: "Couldn't find the numerator used when walking");
             Tools.FindField(ref index, ref codes, findField: jumpForce, addCode: additionalJumpForce, errorMessage: "Couldn't find occurence of jump force field");
+            Tools.FindInteger(ref index, ref codes, findValue: 85, addCode: ReduceFallDamage, errorMessage: "Couldn't find first occurence of fall damage when using jetpack");
+            Tools.FindInteger(ref index, ref codes, findValue: 30, addCode: ReduceFallDamage, errorMessage: "Couldn't find second occurence of fall damage when using jetpack");
+            Tools.FindInteger(ref index, ref codes, findValue: 30, addCode: ReduceFallDamage, errorMessage: "Couldn't find third occurence of fall damage when using jetpack");
             Tools.FindField(ref index, ref codes, findField: climbSpeed, addCode: additionalClimbSpeed, errorMessage: "Couldn't find occurence of climb speed field");
             return codes;
         }

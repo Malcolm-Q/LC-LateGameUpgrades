@@ -74,7 +74,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         private void AttemptToHealPlayer()
         {
             int health = 100;
-            if (UpgradeBus.Instance.PluginConfiguration.PLAYER_HEALTH_ENABLED.Value) health = Stimpack.Instance.playerHealthLevels.ContainsKey(playerHeldBy.playerSteamId) ? Stimpack.GetHealthFromPlayer(100, playerHeldBy.playerSteamId) : health;
+            if (UpgradeBus.Instance.PluginConfiguration.StimpackConfiguration.Enabled.Value) health = Stimpack.Instance.playerHealthLevels.ContainsKey(playerHeldBy.playerSteamId) ? Stimpack.GetHealthFromPlayer(100, playerHeldBy.playerSteamId) : health;
             if (!CanUseMedkit(health)) return;
             UseMedkit(health);
         }

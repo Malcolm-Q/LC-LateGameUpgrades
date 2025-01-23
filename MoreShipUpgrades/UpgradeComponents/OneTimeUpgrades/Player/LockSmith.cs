@@ -1,5 +1,5 @@
-﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
+﻿using MoreShipUpgrades.Configuration;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UI.TerminalNodes;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
@@ -24,11 +24,12 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player
         public DoorLock currentDoor;
         bool canPick;
         public int timesStruck;
-        public override bool CanInitializeOnStart => GetConfiguration().LOCKSMITH_PRICE.Value <= 0;
+        public override bool CanInitializeOnStart => GetConfiguration().LocksmithConfiguration.Price.Value <= 0;
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = GetConfiguration().LOCKSMITH_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().LocksmithConfiguration.OverrideName;
+
             instance = this;
         }
         internal override void Start()
@@ -148,7 +149,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().LOCKSMITH_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().LocksmithConfiguration.ItemProgressionItems.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -156,13 +157,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = GetConfiguration();
-
-            return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
-                                    configuration.SHARED_UPGRADES.Value || !configuration.LOCKSMITH_INDIVIDUAL.Value,
-                                    configuration.LOCKSMITH_ENABLED.Value,
-                                    configuration.LOCKSMITH_PRICE.Value,
-                                    configuration.OVERRIDE_UPGRADE_NAMES ? configuration.LOCKSMITH_OVERRIDE_NAME : "");
+            return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME, GetConfiguration().LocksmithConfiguration);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
+using MoreShipUpgrades.Configuration;
 using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 
 namespace MoreShipUpgrades.Patches.Interactables
