@@ -483,6 +483,7 @@ namespace MoreShipUpgrades.Managers
         [ServerRpc(RequireOwnership = false)]
         private void LockUpgradeServerRpc(string upgradeName, ulong purchasingClientId)
         {
+            if (!UpgradeBus.Instance.PluginConfiguration.BuyableUpgradeOnce) return;
             LockUpgradeClientRpc(upgradeName, purchasingClientId);
         }
 
