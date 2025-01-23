@@ -82,7 +82,11 @@ namespace MoreShipUpgrades.Managers
             if (LguStore.Instance == null) return; // Quitting the game
             ResetPlayerAttributes();
 
-            if (PluginConfiguration.SickBeatsUpgradeConfiguration.Enabled.Value) SickBeats.Instance.EffectsActive = false;
+            if (PluginConfiguration.SickBeatsUpgradeConfiguration.Enabled.Value)
+            {
+                SickBeats.Instance.EffectsActive = false;
+                SickBeats.Instance.BoomboxIcon.SetActive(false);
+            }
             if (PluginConfiguration.NightVisionUpgradeConfiguration.Enabled.Value) NightVision.Instance.nightVisionActive = false;
             if (PluginConfiguration.FedoraSuitConfiguration.Enabled) FedoraSuit.instance.wearingFedora.Clear();
             ContractManager.Instance.ResetAllValues();

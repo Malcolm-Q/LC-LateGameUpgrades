@@ -84,7 +84,7 @@
       <Private>false</Private>
     </Reference>
     <Reference Include="BrutalCompanyMinus" Publicize="true">
-      <HintPath>$(LC_PLUGIN_PATH)\DrinkableWater-Brutal_Company_Minus\BrutalCompanyMinus.dll</HintPath>
+      <HintPath>$(LC_PLUGIN_PATH)\UnloadedHangar-Brutal_Company_Minus_Extra\BrutalCompanyMinus.dll</HintPath>
     </Reference>
     <Reference Include="LethalConstellations">
       <Publicize>true</Publicize>

@@ -226,41 +226,37 @@ namespace MoreShipUpgrades.UI.Application
         {
             int groupCredits = UpgradeBus.Instance.GetTerminal().groupCredits;
             bool maxLevel = node.CurrentUpgrade >= node.MaxUpgrade;
-            if (maxLevel && node.Unlocked)
-            {
-                ErrorMessage(node.Name, node.Description, backAction, LguConstants.REACHED_MAX_LEVEL);
-                return;
-            }
-            int price = node.GetCurrentPrice();
-            if (groupCredits < price)
-            {
-                ErrorMessage(node.Name, node.Description, backAction, LguConstants.NOT_ENOUGH_CREDITS);
-                return;
-            }
-            if (UpgradeBus.Instance.PluginConfiguration.BuyableUpgradeOnce && UpgradeBus.Instance.lockedUpgrades.Keys.Contains(node))
-            {
-                ErrorMessage(node.Name, node.Description, backAction, LguConstants.LOCKED_UPGRADE);
-                return;
-            }
 
             StringBuilder discoveredItems = new();
             List<string> items = ItemProgressionManager.GetDiscoveredItems(node);
             if (items.Count > 0)
             {
                 discoveredItems.Append("\n\nDiscovered items: ");
-                for (int i = 0; i < items.Count; i++)
-                {
-                    string item = items[i];
-                    discoveredItems.Append(item);
-                    if (i < items.Count - 1) discoveredItems.Append(", ");
-                }
+                discoveredItems.Append(string.Join(",", items));
+            }
+            string finalText = node.Description + discoveredItems;
+            if (maxLevel && node.Unlocked)
+            {
+                ErrorMessage(node.Name, finalText, backAction, LguConstants.REACHED_MAX_LEVEL);
+                return;
+            }
+            int price = node.GetCurrentPrice();
+            if (groupCredits < price)
+            {
+                ErrorMessage(node.Name, finalText, backAction, LguConstants.NOT_ENOUGH_CREDITS);
+                return;
+            }
+            if (UpgradeBus.Instance.PluginConfiguration.BuyableUpgradeOnce && UpgradeBus.Instance.lockedUpgrades.Keys.Contains(node))
+            {
+                ErrorMessage(node.Name, finalText, backAction, LguConstants.LOCKED_UPGRADE);
+                return;
             }
             if (UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_ITEM_PROGRESSION && UpgradeBus.Instance.PluginConfiguration.ITEM_PROGRESSION_NO_PURCHASE_UPGRADES)
             {
-                ErrorMessage(node.Name, node.Description, backAction, " ");
+                ErrorMessage(node.Name, finalText, backAction, " ");
                 return;
             }
-            Confirm(node.Name, node.Description + discoveredItems, () => PurchaseUpgrade(node, price, backAction), backAction, string.Format(LguConstants.PURCHASE_UPGRADE_FORMAT, price));
+            Confirm(node.Name, finalText, () => PurchaseUpgrade(node, price, backAction), backAction, string.Format(LguConstants.PURCHASE_UPGRADE_FORMAT, price));
         }
         void PurchaseUpgrade(CustomTerminalNode node, int price, Action backAction)
         {

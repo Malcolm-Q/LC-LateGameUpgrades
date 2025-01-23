@@ -43,6 +43,12 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items
             BoomboxIcon = transform.GetChild(0).GetChild(0).gameObject;
         }
 
+        public override void Unwind()
+        {
+            base.Unwind();
+            Instance.BoomboxIcon.SetActive(false);
+        }
+
         public static void HandlePlayerEffects(PlayerControllerB player)
         {
             SickBeatsUpgradeConfiguration config = GetConfiguration().SickBeatsUpgradeConfiguration;

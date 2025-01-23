@@ -373,6 +373,7 @@ namespace MoreShipUpgrades.Managers
             {
                 List<string> nodes = pair.Value;
                 string scrapName = pair.Key;
+                if (scrapName.Length == 0) continue;
                 foreach (string nodeName in nodes)
                 {
                     if (nodeName == node.OriginalName && (UpgradeBus.Instance.discoveredItems.Contains(scrapName) || UpgradeBus.Instance.PluginConfiguration.ITEM_PROGRESSION_ALWAYS_SHOW_ITEMS))
