@@ -1,15 +1,20 @@
 <details>
 <summary> 3.11.2 - 2025-01-23 </summary>
 
-- Previous mentioned compatibility was actually for [Brutal Company Minus Extra](https://thunderstore.io/c/lethal-company/p/UnloadedHangar/Brutal_Company_Minus_Extra/). Oops.
+- Previous mentioned compatibility was actually meant for [Brutal Company Minus Extra](https://thunderstore.io/c/lethal-company/p/UnloadedHangar/Brutal_Company_Minus_Extra/). Oops.
 - Fixed Sick Beats icon not disappearing when disconnecting.
 - Fixed discovered items displaying even when there isn't any associations made.
 - Fixed discovered items not displaying if you weren't in conditions of purchasing the upgrade.
+- Fixed logic in restricted upgrades configuration where the upgrades would disappear from the store.
 - Implemented configuration for interns:
   - Amount of revives allowed per moon landing. "-1" represents infinite.
-  - Delay (in seconds) between each player revive.
+  - Time delay between each player revive.
+  - Delay before the revive is performed after the purchase.
 
-
+- Side note:
+  - Previous version (3.11.1) has configuration changes in its structure so it's highly likely your configurations are reset according to the new changes such as:
+    - Initial price is merged with tier prices in upgrades with multiple tiers.
+    - Override names configurations have been moved to each upgrade section.
 </details>
 
 <details>

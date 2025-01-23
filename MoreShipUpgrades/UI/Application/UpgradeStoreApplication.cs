@@ -60,7 +60,7 @@ namespace MoreShipUpgrades.UI.Application
 
             List<CursorElement> cursorElements = [];
             PageCursorElement sharedPage = GetFilteredUpgradeNodes(ref filteredNodes, ref cursorElements, (x) => x.SharedUpgrade, LguConstants.MAIN_SCREEN_TITLE, LguConstants.MAIN_SCREEN_SHARED_UPGRADES_TEXT);
-            PageCursorElement individualPage = GetFilteredUpgradeNodes(ref filteredNodes, ref cursorElements, (x) => !x.SharedUpgrade && (!UpgradeBus.Instance.lockedUpgrades.Keys.Contains(x) || UpgradeBus.Instance.PluginConfiguration.ShowLockedUpgrades), LguConstants.MAIN_SCREEN_TITLE, LguConstants.MAIN_SCREEN_INDIVIDUAL_UPGRADES_TEXT);
+            PageCursorElement individualPage = GetFilteredUpgradeNodes(ref filteredNodes, ref cursorElements, (x) => !x.SharedUpgrade && (UpgradeBus.Instance.PluginConfiguration.ShowLockedUpgrades || !UpgradeBus.Instance.lockedUpgrades.Keys.Contains(x)), LguConstants.MAIN_SCREEN_TITLE, LguConstants.MAIN_SCREEN_INDIVIDUAL_UPGRADES_TEXT);
 
             if (cursorElements.Count > 1)
             {
