@@ -121,10 +121,13 @@ namespace MoreShipUpgrades.Misc
                 return DisplayTerminalMessage(string.Format(LguConstants.INTERNS_NOT_ENOUGH_CREDITS_FORMAT, UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value, terminal.groupCredits));
 
             if (Interns.instance.revivalTimer > 0f)
-                return DisplayTerminalMessage(string.Format("We currently cannot provide you with a new intern. Please try again later. ({0} seconds)", Interns.instance.revivalTimer.ToString("F2")));
+                return DisplayTerminalMessage(string.Format("We currently cannot provide you with a new intern. Please try again later. ({0} seconds)\n\n", Interns.instance.revivalTimer.ToString("F2")));
 
             if (UpgradeBus.Instance.PluginConfiguration.INTERNS_USAGES_PER_LANDING != -1 && Interns.instance.currentUsages >= UpgradeBus.Instance.PluginConfiguration.INTERNS_USAGES_PER_LANDING)
-                return DisplayTerminalMessage(string.Format("You have depleted your interns for the current moon landing ({0} usages). They will be replenished on the next moon landing", Interns.instance.currentUsages));
+                return DisplayTerminalMessage(string.Format("You have depleted your interns for the current moon landing ({0} usages). They will be replenished on the next moon landing\n\n", Interns.instance.currentUsages));
+
+            if (Interns.instance.delayReviveTimer > 0f)
+                return DisplayTerminalMessage(string.Format($"An intern is being dispatched to replace {Interns.instance.delayedRevivePlayer.playerUsername} in {Interns.instance.delayReviveTimer.ToString("F2")} seconds.\n\n"));
 
             PlayerControllerB player = StartOfRound.Instance.mapScreen.targetedPlayer;
             if (!player.isPlayerDead) return DisplayTerminalMessage(string.Format(LguConstants.INTERNS_PLAYER_ALREADY_ALIVE_FORMAT, player.playerUsername));
@@ -133,7 +136,9 @@ namespace MoreShipUpgrades.Misc
             string name = Interns.instance.internNames[UnityEngine.Random.Range(0, Interns.instance.internNames.Length)];
             string interest = Interns.instance.internInterests[UnityEngine.Random.Range(0, Interns.instance.internInterests.Length)];
             logger.LogInfo($"Successfully executed intern command for {player.playerUsername}!");
-            return DisplayTerminalMessage($"{player.playerUsername} has been replaced with:\n\nNAME: {name}\nAGE: {UnityEngine.Random.Range(19, 76)}\nIQ: {UnityEngine.Random.Range(2, 160)}\nINTERESTS: {interest}\n\n{name} HAS BEEN TELEPORTED INSIDE THE FACILITY, PLEASE ACQUAINTANCE YOURSELF ACCORDINGLY");
+            return DisplayTerminalMessage($"{player.playerUsername} has been replaced with:\n\nNAME: {name}\n" +
+                $"AGE: {UnityEngine.Random.Range(19, 76)}\nIQ: {UnityEngine.Random.Range(2, 160)}\n" +
+                $"INTERESTS: {interest}\n\n{name} HAS BEEN DISPATCHED TO YOUR LOCATION, PLEASE ACQUAINTANCE YOURSELF ACCORDINGLY\n\n");
         }
         private static TerminalNode ExecuteLoadLGUCommand(string text, ref Terminal terminal)
         {

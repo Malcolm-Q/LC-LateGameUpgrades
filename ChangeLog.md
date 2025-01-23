@@ -8,8 +8,8 @@
 - Fixed logic in restricted upgrades configuration where the upgrades would disappear from the store.
 - Implemented configuration for interns:
   - Amount of revives allowed per moon landing. "-1" represents infinite.
-  - Delay (in seconds) between each player revive.
-
+  - Time delay between each player revive.
+  - Delay before the revive is performed after the purchase.
 
 </details>
 

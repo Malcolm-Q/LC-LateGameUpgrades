@@ -18,6 +18,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
         internal string[] internNames, internInterests;
         internal int currentUsages;
         internal float revivalTimer;
+        internal float delayReviveTimer;
+        internal PlayerControllerB delayedRevivePlayer;
         public enum TeleportRestriction
         {
             None,
@@ -33,21 +35,66 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
             internInterests = AssetBundleHandler.GetInfoFromJSON("InternInterests").Split(",");
             currentUsages = 0;
             revivalTimer = 0f;
+            delayReviveTimer = 0f;
+            delayedRevivePlayer = null;
         }
 
         void Update()
         {
             if (revivalTimer > 0f)
                 revivalTimer -= Time.deltaTime;
+
+            if (delayReviveTimer > 0f)
+            {
+                delayReviveTimer -= Time.deltaTime;
+            }
+
+            if (delayReviveTimer <= 0f && delayedRevivePlayer != null)
+            {
+                ReviveDelayedPlayer();
+            }
         }
 
         [ServerRpc(RequireOwnership = false)]
         public void ReviveTargetedPlayerServerRpc()
         {
+            if (UpgradeBus.Instance.PluginConfiguration.INTERNS_DELAY_BEFORE_REVIVE > 0f)
+            {
+                SetDelayedReviveClientRpc(UpgradeBus.Instance.PluginConfiguration.INTERNS_DELAY_BEFORE_REVIVE, new NetworkBehaviourReference(StartOfRound.Instance.mapScreen.targetedPlayer));
+                return;
+            }
             ReviveTargetedPlayerClientRpc();
             Vector3 vector = RoundManager.Instance.insideAINodes[Random.Range(0, RoundManager.Instance.insideAINodes.Length)].transform.position;
             vector = RoundManager.Instance.GetRandomNavMeshPositionInRadiusSpherical(vector, 10f, default);
             NetworkBehaviourReference netRef = new NetworkBehaviourReference(StartOfRound.Instance.mapScreen.targetedPlayer);
+
+            TelePlayerClientRpc(vector, netRef);
+        }
+        [ClientRpc]
+        void SetDelayedReviveClientRpc(float delayedRevive, NetworkBehaviourReference netRef)
+        {
+            SetDelayedRevive(delayedRevive, netRef);
+        }
+
+        void SetDelayedRevive(float delayedTimer, NetworkBehaviourReference netRef)
+        {
+            netRef.TryGet(out PlayerControllerB player);
+            if (player != null)
+            {
+                delayReviveTimer = delayedTimer;
+                delayedRevivePlayer = player;
+            }
+        }
+
+        public void ReviveDelayedPlayer()
+        {
+            NetworkBehaviourReference netRef = new NetworkBehaviourReference(delayedRevivePlayer);
+            delayedRevivePlayer = null;
+            if (!IsServer || !IsHost) return;
+
+            ReviveTargetedPlayerClientRpc(netRef);
+            Vector3 vector = RoundManager.Instance.insideAINodes[Random.Range(0, RoundManager.Instance.insideAINodes.Length)].transform.position;
+            vector = RoundManager.Instance.GetRandomNavMeshPositionInRadiusSpherical(vector, 10f, default);
 
             TelePlayerClientRpc(vector, netRef);
         }
@@ -61,13 +108,24 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
                 player.transform.GetComponent<PlayerControllerB>().TeleportPlayer(vector);
             }
         }
+        [ClientRpc]
+        private void ReviveTargetedPlayerClientRpc(NetworkBehaviourReference playerRef)
+        {
+            playerRef.TryGet(out PlayerControllerB player);
+            if (player == null) return;
 
+            ReviveTargetedPlayer(player);
+        }
         [ClientRpc]
         private void ReviveTargetedPlayerClientRpc()
         {
+            PlayerControllerB player = StartOfRound.Instance.mapScreen.targetedPlayer;
+            ReviveTargetedPlayer(player);
+        }
+        void ReviveTargetedPlayer(PlayerControllerB player)
+        {
             currentUsages++;
             revivalTimer = UpgradeBus.Instance.PluginConfiguration.INTERNS_INTERVAL_BETWEEN_REVIVES;
-            PlayerControllerB player = StartOfRound.Instance.mapScreen.targetedPlayer;
             int health = 100;
             if (UpgradeBus.Instance.PluginConfiguration.StimpackConfiguration.Enabled)
             {
@@ -170,6 +228,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
             }
             if (StartOfRound.Instance.currentLevel.spawnEnemiesAndScrap) recentlyInterned.Add(player);
         }
+
         internal void RemoveRecentlyInterned(PlayerControllerB player)
         {
             if (ContainsRecentlyInterned(player))
