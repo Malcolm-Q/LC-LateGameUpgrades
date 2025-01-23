@@ -11,6 +11,10 @@
   - Time delay between each player revive.
   - Delay before the revive is performed after the purchase.
 
+- Side note:
+  - Previous version (3.11.1) has configuration changes in its structure so it's highly likely your configurations are reset according to the new changes such as:
+    - Initial price is merged with tier prices in upgrades with multiple tiers.
+    - Override names configurations have been moved to each upgrade section.
 </details>
 
 <details>
