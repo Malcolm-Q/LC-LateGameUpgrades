@@ -1,14 +1,8 @@
-﻿using GameNetcodeStuff;
-using HarmonyLib;
-using MoreShipUpgrades.Managers;
+﻿using HarmonyLib;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Text;
-using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Misc.Util
@@ -16,6 +10,7 @@ namespace MoreShipUpgrades.Misc.Util
     internal static class Tools
     {
         static LguLogger logger = new LguLogger(nameof(Tools));
+
         public static void FindCodeInstructionReverse(ref int index, ref List<CodeInstruction> codes, object findValue, MethodInfo addCode, bool skip = false, bool requireInstance = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, string errorMessage = "Not found")
         {
             bool found = false;
@@ -271,9 +266,8 @@ namespace MoreShipUpgrades.Misc.Util
             Landmine.SpawnExplosion(explosionPosition, spawnExplosionEffect, killRange, damageRange, nonLethalDamage, physicsForce, overridePrefab, goThroughCar: goThroughCar);
         }
 
-        internal static void SetupGameObject<T>(string name) where T : Component
+        internal static void SetupGameObject<T>(string name) where T : UnityEngine.Component
         {
-            // soon I want to move this to use NetworkPrefabs.CreateNetworkPrefab
             GameObject gameObject = AssetBundleHandler.GetPerkGameObject(name);
             if (!gameObject) return;
 

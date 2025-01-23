@@ -120,6 +120,12 @@ namespace MoreShipUpgrades.Misc
             if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value)
                 return DisplayTerminalMessage(string.Format(LguConstants.INTERNS_NOT_ENOUGH_CREDITS_FORMAT, UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value, terminal.groupCredits));
 
+            if (Interns.instance.revivalTimer > 0f)
+                return DisplayTerminalMessage(string.Format("We currently cannot provide you with a new intern. Please try again later. ({0} seconds)", Interns.instance.revivalTimer.ToString("F2")));
+
+            if (UpgradeBus.Instance.PluginConfiguration.INTERNS_USAGES_PER_LANDING != -1 && Interns.instance.currentUsages >= UpgradeBus.Instance.PluginConfiguration.INTERNS_USAGES_PER_LANDING)
+                return DisplayTerminalMessage(string.Format("You have depleted your interns for the current moon landing ({0} usages). They will be replenished on the next moon landing", Interns.instance.currentUsages));
+
             PlayerControllerB player = StartOfRound.Instance.mapScreen.targetedPlayer;
             if (!player.isPlayerDead) return DisplayTerminalMessage(string.Format(LguConstants.INTERNS_PLAYER_ALREADY_ALIVE_FORMAT, player.playerUsername));
             terminal.BuyItemsServerRpc([], terminal.groupCredits - UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value, terminal.numberOfItemsInDropship);

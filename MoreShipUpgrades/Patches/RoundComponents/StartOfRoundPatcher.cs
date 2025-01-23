@@ -97,6 +97,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             ResetContract(ref __instance);
             QuantumDisruptor.TryResetQuantum(QuantumDisruptor.ResetModes.MoonLanding);
             RandomizeUpgradeManager.RandomizeUpgrades(RandomizeUpgradeManager.RandomizeUpgradeEvents.PerMoonLanding);
+            Interns.instance.currentUsages = 0;
             if (UpgradeBus.Instance.PluginConfiguration.INTERN_ENABLED)
             {
                 Interns.instance.ResetRecentlyInterned();

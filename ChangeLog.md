@@ -1,4 +1,13 @@
 <details>
+<summary> 3.11.2 - 2025-01-23 </summary>
+
+- Implemented configuration for interns:
+  - Amount of revives allowed per moon landing. "-1" represents infinite.
+  - Delay (in seconds) between each player revive.
+
+</details>
+
+<details>
 <summary> 3.11.1 - 2025-01-22 </summary>
 
 - Added compatibility with [Brutal Company Minus](https://thunderstore.io/c/lethal-company/p/DrinkableWater/Brutal_Company_Minus/) related to Midas Touch upgrade where the generated scrap items (both from events and hazards) would ignore the upgrade's state. (Thank you [TI](https://github.com/tixomirof))

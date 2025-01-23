@@ -107,6 +107,8 @@ namespace MoreShipUpgrades.Configuration
         #endregion
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<int> INTERNS_USAGES_PER_LANDING { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<float> INTERNS_INTERVAL_BETWEEN_REVIVES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<Interns.TeleportRestriction> INTERNS_TELEPORT_RESTRICTION { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> CONTRACT_PROVIDE_RANDOM_ONLY { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SHOW_WORLD_BUILDING_TEXT { get; set; }
@@ -772,6 +774,8 @@ namespace MoreShipUpgrades.Configuration
             INTERN_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.INTERNS_ENABLED_KEY, LguConstants.INTERNS_ENABLED_DEFAULT, LguConstants.INTERNS_ENABLED_DESCRIPTION);
             INTERN_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.INTERNS_PRICE_KEY, LguConstants.INTERNS_PRICE_DEFAULT, LguConstants.INTERNS_PRICE_DESCRIPTION);
             INTERNS_TELEPORT_RESTRICTION = cfg.BindSyncedEntry(topSection, "Teleport Restriction when using Interns", Interns.TeleportRestriction.None, "Supported modes:\nNone: No restrictions applied.\nExitBuilding: Player must exit the facility to be able to be teleported.\nEnterShip: Player must enter the ship to be able to be teleported.");
+            INTERNS_USAGES_PER_LANDING = cfg.BindSyncedEntry(topSection, "Interns Revives per Landing", -1, "Amount of times you can use the command per landing. Once the amount is reached, you can no longer revive more teammates. Use \"-1\" for infinite");
+            INTERNS_INTERVAL_BETWEEN_REVIVES = cfg.BindSyncedEntry(topSection, "Interval between Revives", 0f, "Time interval (in seconds) between each revival");
 
             #endregion
 
