@@ -1,4 +1,11 @@
 <details>
+<summary> 3.11.3 - 2025-01-23 </summary>
+
+- Fixed Night Vision not working as expected due to mistake between initial and incremental values.
+
+</details>
+
+<details>
 <summary> 3.11.2 - 2025-01-23 </summary>
 
 - Previous mentioned compatibility was actually meant for [Brutal Company Minus Extra](https://thunderstore.io/c/lethal-company/p/UnloadedHangar/Brutal_Company_Minus_Extra/). Oops.
