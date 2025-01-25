@@ -16,6 +16,7 @@ namespace MoreShipUpgrades.Compat
     public static class BrutalCompanyMinusExtraCompat // pull request 22.12.2024 from tixomirof
     {
         public static bool Enabled =>
+            BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey(BCMERebornGUID) ||
             BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey(BrutalCompanyMinus.Plugin.GUID);
         public static string BeforePatchMessage =>
             "Brutal Company Minus Extra has been detected. Proceeding to patch...";
@@ -24,6 +25,8 @@ namespace MoreShipUpgrades.Compat
             "on Midas Touch upgrade for scrap that is spawned by Brutal's events/ScrapAmount multiplier stat. " + 
             "If any issues arise related to the scrap value calculation when both LGU and BCME mods are present, " +
             "report to LGU first.";
+
+        public const string BCMERebornGUID = "SoftDiamond.BrutalCompanyMinusExtraReborn";
 
         #region Compat Tool Classes
         class GrabbableHazardState
