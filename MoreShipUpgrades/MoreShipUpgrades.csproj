@@ -91,6 +91,14 @@
       <HintPath>$(LC_PLUGIN_PATH)\darmuh-LethalConstellations\LethalConstellations.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <Reference Include="com.github.zehsteam.ToilHead">
+      <Publicize>true</Publicize>
+      <HintPath>$(LC_PLUGIN_PATH)\Zehs-Toilhead\com.github.zehsteam.ToilHead.dll</HintPath>
+    </Reference>
+    <Reference Include="MissileTurret">
+      <Publicize>true</Publicize>
+      <HintPath>$(LC_PLUGIN_PATH)\Garf-MissileTurrets\MissileTurret.dll</HintPath>
+    </Reference>
     
   </ItemGroup>
   <ItemGroup>

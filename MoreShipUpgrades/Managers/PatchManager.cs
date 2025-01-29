@@ -63,6 +63,13 @@ namespace MoreShipUpgrades.Managers
                 harmony.PatchAll(typeof(BrutalCompanyMinusExtraCompat.LevelModificationsPatcher));
                 Plugin.mls.LogInfo(BrutalCompanyMinusExtraCompat.SuccessfulPatchMessage);
             }
+
+            if (ToilheadCompat.Enabled)
+            {
+                Plugin.mls.LogInfo("Toilhead has been detected. Proceeding to patch...");
+                harmony.PatchAll(typeof(ToilheadCompat.FollowTerminalAccessibleObjectBehaviourPatcher));
+                Plugin.mls.LogInfo("Patched Toilhead mod related components for correct behaviour on Malware Broadcaster to allow destroying and increased down time. If any issues arise related to turret enemies, report to LGU first.");
+            }
         }
         static void PatchEnemies()
         {

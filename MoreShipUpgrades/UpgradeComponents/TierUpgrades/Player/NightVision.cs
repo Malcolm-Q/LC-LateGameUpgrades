@@ -137,7 +137,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             NightVisionUpgradeConfiguration config = GetConfiguration().NightVisionUpgradeConfiguration;
             client.nightVision.color = Tools.ConvertValueToColor(config.LightColour.LocalValue, Color.green);
             client.nightVision.range = config.InitialEffects[3].Value + (GetUpgradeLevel(UPGRADE_NAME) * config.IncrementalEffects[3].Value);
-            client.nightVision.intensity = config.IncrementalEffects[4].Value + (GetUpgradeLevel(UPGRADE_NAME) * config.IncrementalEffects[4].Value);
+            client.nightVision.intensity = config.InitialEffects[4].Value + (GetUpgradeLevel(UPGRADE_NAME) * config.IncrementalEffects[4].Value);
             nightBattery -= config.StartupPercentage.Value; // 0.1f
         }
 
