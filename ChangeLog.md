@@ -3,6 +3,7 @@
 
 - Fixed Night Vision not working as expected due to mistake between initial and incremental values.
 - Added compatibility with [Zehs](https://thunderstore.io/c/lethal-company/p/Zehs/)' [Toilhead](https://thunderstore.io/c/lethal-company/p/Zehs/ToilHead/) in Malware Broadcaster interaction.
+- Added compatibility with [Garf](https://thunderstore.io/c/lethal-company/p/Garf/)'s [MissileTurrets](https://thunderstore.io/c/lethal-company/p/Garf/MissileTurrets/) in Malware Broadcaster interaction.
 
 </details>
 
