@@ -55,6 +55,7 @@ namespace MoreShipUpgrades
             {
                 foreach (var method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static))
                 {
+                    if (method.Name == nameof(ToilheadCompat.FollowTerminalAccessibleObjectBehaviourPatcher.DestroyObject)) continue;
                     var attributes = method.GetCustomAttributes(typeof(RuntimeInitializeOnLoadMethodAttribute), false);
                     if (attributes.Length > 0)
                     {
