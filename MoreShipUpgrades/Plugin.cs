@@ -31,6 +31,7 @@ namespace MoreShipUpgrades
     [BepInDependency(ShipInventory.MyPluginInfo.PLUGIN_GUID, DependencyFlags.SoftDependency)]
     [BepInDependency(BrutalCompanyMinus.Plugin.GUID, DependencyFlags.SoftDependency)]
     [BepInDependency(com.github.zehsteam.ToilHead.MyPluginInfo.PLUGIN_GUID, DependencyFlags.SoftDependency)]
+    [BepInDependency(BrutalCompanyMinusExtraCompat.BCMERebornGUID, DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
         internal static ManualLogSource mls;

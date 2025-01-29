@@ -105,6 +105,7 @@ namespace MoreShipUpgrades.Managers
 
         static void PatchItems()
         {
+            harmony.PatchAll(typeof(BeltBagItemPatcher));
             harmony.PatchAll(typeof(BoomBoxPatcher));
             harmony.PatchAll(typeof(DropPodPatcher));
             harmony.PatchAll(typeof(GrabbableObjectPatcher));
