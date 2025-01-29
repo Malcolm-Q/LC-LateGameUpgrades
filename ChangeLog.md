@@ -3,6 +3,8 @@
 
 - Hotfixed LGU breaking due to compatibilities compilation issues.
 
+</details>
+
 <details>
 <summary> 3.11.3 - 2025-01-29 </summary>
 
