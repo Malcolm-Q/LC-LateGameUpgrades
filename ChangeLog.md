@@ -2,6 +2,7 @@
 <summary> 3.11.3 - 2025-01-23 </summary>
 
 - Fixed Night Vision not working as expected due to mistake between initial and incremental values.
+- Added compatibility with [Zehs](https://thunderstore.io/c/lethal-company/p/Zehs/)' [Toilhead](https://thunderstore.io/c/lethal-company/p/Zehs/ToilHead/) in Malware Broadcaster interaction.
 
 </details>
 

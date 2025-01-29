@@ -1,5 +1,6 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
+using LethalLevelLoader;
 using MoreShipUpgrades.Configuration;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;

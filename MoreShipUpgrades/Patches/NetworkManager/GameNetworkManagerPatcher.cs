@@ -37,5 +37,15 @@ namespace MoreShipUpgrades.Patches.NetworkManager
             LguStore.Instance.ServerSaveFile();
             PlayerManager.instance.ResetUpgradeSpentCredits();
         }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(nameof(GameNetworkManager.SaveGame))]
+        static void a()
+        {
+            foreach (GrabbableObject upgrade in UnityEngine.Object.FindObjectsByType<GrabbableObject>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            {
+                Plugin.mls.LogDebug(upgrade.itemProperties.itemName);
+            }
+        }
     }
 }
