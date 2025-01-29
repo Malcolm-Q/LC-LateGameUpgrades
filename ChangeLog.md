@@ -4,6 +4,8 @@
 - Fixed Night Vision not working as expected due to mistake between initial and incremental values.
 - Added compatibility with [Zehs](https://thunderstore.io/c/lethal-company/p/Zehs/)' [Toilhead](https://thunderstore.io/c/lethal-company/p/Zehs/ToilHead/) in Malware Broadcaster interaction.
 - Added compatibility with [Garf](https://thunderstore.io/c/lethal-company/p/Garf/)'s [MissileTurrets](https://thunderstore.io/c/lethal-company/p/Garf/MissileTurrets/) in Malware Broadcaster interaction.
+- Fixed Belt Bag interaction distance not increasing with Mechanical Arms upgrade. (Thanks [tixomirof](https://github.com/tixomirof))
+- Added compatibility with [SoftDiamond](https://thunderstore.io/c/lethal-company/p/SoftDiamond/)'s [Brutal Company Minus Extra Reborn](https://thunderstore.io/c/lethal-company/p/SoftDiamond/BrutalCompanyMinusExtraReborn/) in Midas Touch interaction. (Thanks [tixomirof](https://github.com/tixomirof))
 
 </details>
 
