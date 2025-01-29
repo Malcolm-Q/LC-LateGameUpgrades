@@ -4,6 +4,7 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace MoreShipUpgrades.Compat
 {
@@ -20,7 +21,7 @@ namespace MoreShipUpgrades.Compat
             static bool DestroyObject(ref FollowTerminalAccessibleObjectBehaviour __instance)
             {
                 if (!BaseUpgrade.GetActiveUpgrade(MalwareBroadcaster.UPGRADE_NAME)) { return true; }
-                if (!MalwareBroadcaster.IsMapHazard(ref __instance)) return true;
+                if (!IsMapHazard(ref __instance)) return true;
                 if (UpgradeBus.Instance.PluginConfiguration.MalwareBroadcasterUpgradeConfiguration.DestroyTraps.Value)
                 {
                     MalwareBroadcaster.instance.ReqDestroyObjectServerRpc(new NetworkObjectReference(__instance.gameObject.GetComponentInParent<NetworkObject>()));
@@ -32,6 +33,16 @@ namespace MoreShipUpgrades.Compat
                 }
                 return true;
             }
+        }
+        internal static bool IsMapHazard(ref FollowTerminalAccessibleObjectBehaviour possibleHazard)
+        {
+            bool hasMapHazardLayer = possibleHazard.gameObject.layer == LayerMask.NameToLayer("MapHazards");
+            if (hasMapHazardLayer) return true;
+
+            bool parentHasMapHazardLayer = possibleHazard.transform.parent != null && possibleHazard.transform.parent.gameObject.layer == LayerMask.NameToLayer("MapHazards");
+            if (parentHasMapHazardLayer) return true;
+
+            return false;
         }
     }
 }
