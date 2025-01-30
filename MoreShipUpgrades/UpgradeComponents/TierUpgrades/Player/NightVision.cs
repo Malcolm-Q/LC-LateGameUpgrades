@@ -147,12 +147,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             batteryExhaustion = false;
         }
 
-        public override void Increment()
-        {
-            base.Increment();
-            LguStore.Instance.UpdateLGUSaveServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(new SaveInfo())));
-        }
-
         public override void Load()
         {
             base.Load();
@@ -192,7 +186,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             if (client == null) { client = GameNetworkManager.Instance.localPlayerController; }
             transform.GetChild(0).gameObject.SetActive(true);
             UpgradeBus.Instance.activeUpgrades["Night Vision"] = true;
-            LguStore.Instance.UpdateLGUSaveServerRpc(client.playerSteamId, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(new SaveInfo())));
             HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Press {Keybinds.NvgAction.GetBindingDisplayString()} to toggle Night Vision!!!</color>";
         }
 
