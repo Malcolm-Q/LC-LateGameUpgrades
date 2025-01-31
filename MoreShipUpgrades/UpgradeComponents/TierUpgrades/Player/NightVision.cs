@@ -192,13 +192,15 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         public void DisableOnClient()
         {
             nightVisionActive = false;
-            client.nightVision.color = nightVisColor;
-            client.nightVision.range = nightVisRange;
-            client.nightVision.intensity = nightVisIntensity;
+            if (client != null && client.nightVision != null)
+            {
+                client.nightVision.color = nightVisColor;
+                client.nightVision.range = nightVisRange;
+                client.nightVision.intensity = nightVisIntensity;
+            }
 
             transform.GetChild(0).gameObject.SetActive(false);
             UpgradeBus.Instance.activeUpgrades["Night Vision"] = false;
-            LguStore.Instance.UpdateLGUSaveServerRpc(client.playerSteamId, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(new SaveInfo())));
             client = null;
         }
 
