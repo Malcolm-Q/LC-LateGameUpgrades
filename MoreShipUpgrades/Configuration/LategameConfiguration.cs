@@ -572,7 +572,7 @@ namespace MoreShipUpgrades.Configuration
             topSection = Discombobulator.UPGRADE_NAME;
             DiscombobulatorUpgradeConfiguration = new DiscombobulatorUpgradeConfiguration(cfg, topSection, LguConstants.DISCOMBOBULATOR_ENABLED_DESCRIPTION, Discombobulator.PRICES_DEFAULT)
             {
-                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.DISCOMBOBULATOR_COOLDOWN_KEY, LguConstants.DISCOMBOBULATOR_COOLDOWN_DEFAULT),
+                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.DISCOMBOBULATOR_STUN_DURATION_KEY, LguConstants.DISCOMBOBULATOR_STUN_DURATION_DEFAULT),
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.DISCOMBOBULATOR_INCREMENTAL_STUN_TIME_KEY, LguConstants.DISCOMBOBULATOR_INCREMENTAL_STUN_TIME_DEFAULT, LguConstants.DISCOMBOBULATOR_INCREMENTAL_STUN_TIME_DESCRIPTION),
             };
 

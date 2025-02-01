@@ -1,4 +1,9 @@
 <details>
+<summary> 3.11.5 - 2025-02-01 </summary>
+
+- Fixed Discombobulator configuration using cooldown as stun timer.
+
+<details>
 <summary> 3.11.4 - 2025-01-29 </summary>
 
 - Hotfixed LGU breaking due to compatibilities compilation issues.
