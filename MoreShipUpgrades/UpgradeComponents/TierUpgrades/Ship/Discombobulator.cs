@@ -48,7 +48,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         {
             Terminal terminal = UpgradeBus.Instance.GetTerminal();
             PlayAudio(ref terminal);
-            flashCooldown = GetConfiguration().DiscombobulatorUpgradeConfiguration.InitialEffect.Value;
+            flashCooldown = GetConfiguration().DiscombobulatorUpgradeConfiguration.Cooldown.Value;
             StunNearbyEnemies(ref terminal);
         }
 
