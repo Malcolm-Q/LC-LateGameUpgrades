@@ -58,7 +58,7 @@ namespace MoreShipUpgrades.UI.Application
                 currentScreen = screen;
                 return;
             }
-            if (CurrencyManager.Instance.GetCurrencyAmount() <= 0)
+            if (CurrencyManager.Instance.CurrencyAmount <= 0)
             {
                 CursorElement[] elements =
                 [
@@ -136,7 +136,7 @@ namespace MoreShipUpgrades.UI.Application
 
         void TradePlayerCredits(PlayerControllerB tradingPlayer, Action backAction)
         {
-            int playerCredits = CurrencyManager.Instance.GetCurrencyAmount();
+            int playerCredits = CurrencyManager.Instance.CurrencyAmount;
             CursorElement[] elements =
                 {
                 CursorElement.Create("Give 1 Player Credit", "", () => ConfirmTradePlayerCredits(tradingPlayer, 1, backAction), selectInactive: false),
@@ -164,7 +164,7 @@ namespace MoreShipUpgrades.UI.Application
         {
             CurrencyManager.Instance.RemoveCurrencyAmount(playerCreditAmount);
             CurrencyManager.Instance.TradePlayerCreditsServerRpc(tradingPlayer.actualClientId, playerCreditAmount);
-            if (CurrencyManager.Instance.GetCurrencyAmount() <= 0)
+            if (CurrencyManager.Instance.CurrencyAmount <= 0)
                 UnityEngine.Object.Destroy(InteractiveTerminalManager.Instance);
             else backAction();
         }

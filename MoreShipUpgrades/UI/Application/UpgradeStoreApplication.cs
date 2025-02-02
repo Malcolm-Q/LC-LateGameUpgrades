@@ -224,7 +224,7 @@ namespace MoreShipUpgrades.UI.Application
 
             if (!CurrencyManager.Enabled) return canBeBoughtWithGroupCredits;
 
-            int playerCredits = CurrencyManager.Instance.GetCurrencyAmount();
+            int playerCredits = CurrencyManager.Instance.CurrencyAmount;
             int playerPrice = CurrencyManager.Instance.GetCurrencyAmountFromCredits(price);
             bool canBeBoughtWithPlayerCredits = playerCredits >= playerPrice;
             return canBeBoughtWithGroupCredits || canBeBoughtWithPlayerCredits;
@@ -252,7 +252,7 @@ namespace MoreShipUpgrades.UI.Application
 
             int price = node.GetCurrentPrice();
 
-            int playerCredits = CurrencyManager.Instance.GetCurrencyAmount();
+            int playerCredits = CurrencyManager.Instance.CurrencyAmount;
             int playerPrice = CurrencyManager.Instance.GetCurrencyAmountFromCredits(price);
             bool canBeBoughtWithPlayerCredits = playerCredits >= playerPrice;
             return canBeBoughtWithPlayerCredits;
@@ -260,29 +260,6 @@ namespace MoreShipUpgrades.UI.Application
         public void BuyUpgrade(CustomTerminalNode node, Action backAction)
         {
             int groupCredits = UpgradeBus.Instance.GetTerminal().groupCredits;
-            bool maxLevel = node.CurrentUpgrade >= node.MaxUpgrade;
-            if (maxLevel && node.Unlocked)
-            {
-                ErrorMessage(node.Name, node.Description, backAction, LguConstants.REACHED_MAX_LEVEL);
-                return;
-            }
-            int price = node.GetCurrentPrice();
-            if (groupCredits < price)
-            {
-                if (!CurrencyManager.Enabled)
-                {
-                    ErrorMessage(node.Name, node.Description, backAction, LguConstants.NOT_ENOUGH_CREDITS);
-                    return;
-                }
-
-                int currencyPrice = CurrencyManager.Instance.GetCurrencyAmountFromCredits(price);
-                int playerCredits = CurrencyManager.Instance.GetCurrencyAmount();
-                if (playerCredits < currencyPrice) 
-                {
-                    ErrorMessage(node.Name, node.Description, backAction, LguConstants.NOT_ENOUGH_CREDITS);
-                    return;
-                }
-            }
             StringBuilder discoveredItems = new();
             List<string> items = ItemProgressionManager.GetDiscoveredItems(node);
             if (items.Count > 0)
@@ -291,6 +268,7 @@ namespace MoreShipUpgrades.UI.Application
                 discoveredItems.Append(string.Join(",", items));
             }
             string finalText = node.Description + discoveredItems;
+            bool maxLevel = node.CurrentUpgrade >= node.MaxUpgrade;
             if (maxLevel && node.Unlocked)
             {
                 ErrorMessage(node.Name, finalText, backAction, LguConstants.REACHED_MAX_LEVEL);
@@ -299,8 +277,19 @@ namespace MoreShipUpgrades.UI.Application
             int price = node.GetCurrentPrice();
             if (groupCredits < price)
             {
-                ErrorMessage(node.Name, finalText, backAction, LguConstants.NOT_ENOUGH_CREDITS);
-                return;
+                if (!CurrencyManager.Enabled)
+                {
+                    ErrorMessage(node.Name, finalText, backAction, LguConstants.NOT_ENOUGH_CREDITS);
+                    return;
+                }
+
+                int currencyPrice = CurrencyManager.Instance.GetCurrencyAmountFromCredits(price);
+                int playerCredits = CurrencyManager.Instance.CurrencyAmount;
+                if (playerCredits < currencyPrice) 
+                {
+                    ErrorMessage(node.Name, finalText, backAction, LguConstants.NOT_ENOUGH_CREDITS);
+                    return;
+                }
             }
             if (UpgradeBus.Instance.PluginConfiguration.BuyableUpgradeOnce && UpgradeBus.Instance.lockedUpgrades.Keys.Contains(node))
             {

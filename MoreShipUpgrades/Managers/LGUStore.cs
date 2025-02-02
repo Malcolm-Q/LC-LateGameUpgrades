@@ -378,7 +378,7 @@ namespace MoreShipUpgrades.Managers
             ContractManager.Instance.contractLevel = SaveInfo.contractLevel;
             ContractManager.Instance.contractType = SaveInfo.contractType;
 
-            CurrencyManager.Instance.SetCurrencyAmount(SaveInfo.currencyAmount);
+            CurrencyManager.Instance.CurrencyAmount = SaveInfo.currencyAmount;
 
             UpgradeBus.Instance.SaleData = SaveInfo.SaleData;
             UpgradeBus.Instance.LoadSales();
@@ -606,7 +606,7 @@ namespace MoreShipUpgrades.Managers
             contractType = ContractManager.Instance.contractType;
             contractLevel = ContractManager.Instance.contractLevel;
 
-            currencyAmount = CurrencyManager.Instance.GetCurrencyAmount();
+            currencyAmount = CurrencyManager.Instance.CurrencyAmount;
         }
     }
 

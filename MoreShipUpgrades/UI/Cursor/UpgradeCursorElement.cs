@@ -66,7 +66,7 @@ namespace MoreShipUpgrades.UI.Cursor
             if (!CurrencyManager.Enabled) return;
             sb.Append("/");
             int currencyPrice = CurrencyManager.Instance.GetCurrencyAmountFromCredits(price);
-            int currentPlayerCredits = CurrencyManager.Instance.GetCurrencyAmount();
+            int currentPlayerCredits = CurrencyManager.Instance.CurrencyAmount;
             if (currencyPrice <= currentPlayerCredits)
             {
                 sb.Append(currencyPrice);

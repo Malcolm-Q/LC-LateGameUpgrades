@@ -1,5 +1,4 @@
 ﻿using MoreShipUpgrades.Misc.Util;
-using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -8,11 +7,38 @@ namespace MoreShipUpgrades.Managers
     public class CurrencyManager : NetworkBehaviour
     {
         public static CurrencyManager Instance;
+
+        bool showCurrencyAmount;
+        public bool ShowCurrentAmount
+        {
+            get
+            {
+                return showCurrencyAmount;
+            }
+            set
+            {
+                Plugin.mls.LogDebug($"Setting bool to show alternative currency from {showCurrencyAmount} to {value}");
+                showCurrencyAmount = value;
+            }
+        }
+
         int currencyAmount;
+        public int CurrencyAmount
+        {
+            get
+            {
+                return currencyAmount;
+            }
+            set
+            {
+                currencyAmount = value;
+            }
+        }
 
         void Awake()
         {
             Instance = this;
+            showCurrencyAmount = false;
         }
 
         public static bool Enabled
@@ -26,7 +52,8 @@ namespace MoreShipUpgrades.Managers
         public static string GetNewCreditFormat(string format)
         {
             if (!Enabled) return format;
-            return format + $" - {Instance.GetCurrencyAmount()} {LguConstants.ALTERNATIVE_CURRENCY_ALIAS}";
+            if (!Instance.ShowCurrentAmount) return format;
+            return $"{Instance.CurrencyAmount} {LguConstants.ALTERNATIVE_CURRENCY_ALIAS}";
         }
 
         public float GetCreditRatio()
@@ -64,11 +91,6 @@ namespace MoreShipUpgrades.Managers
             return Mathf.CeilToInt(convertedCurrencyAmount / GetCreditConversionRatio());
         }
 
-        public void SetCurrencyAmount(int amount)
-        {
-            currencyAmount = amount;
-        }
-
         [ClientRpc]
         public void AddCurrencyAmountFromQuotaClientRpc(int quotaFullfilled)
         {
@@ -79,22 +101,17 @@ namespace MoreShipUpgrades.Managers
         {
             AddCurrencyAmount(GetCurrencyAmountFromQuota(quota));
 
-            HUDManager.Instance.DisplayTip("Player Credits", $"You currently have {GetCurrencyAmount()} {LguConstants.ALTERNATIVE_CURRENCY_ALIAS}s to use in the upgrade shop.");
+            HUDManager.Instance.DisplayTip("Player Credits", $"You currently have {CurrencyAmount} {LguConstants.ALTERNATIVE_CURRENCY_ALIAS}s to use in the upgrade shop.");
         }
 
         public void AddCurrencyAmount(int amount)
         {
-            currencyAmount += amount;
+            CurrencyAmount += amount;
         }
 
         public void RemoveCurrencyAmount(int amount)
         {
-            currencyAmount -= amount;
-        }
-
-        public int GetCurrencyAmount()
-        {
-            return currencyAmount;
+            CurrencyAmount -= amount;
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -115,7 +132,7 @@ namespace MoreShipUpgrades.Managers
         {
             AddCurrencyAmount(playerCreditAmount);
 
-            HUDManager.Instance.DisplayTip("Player Credits", $"You have received {playerCreditAmount} {LguConstants.ALTERNATIVE_CURRENCY_ALIAS}s from a player. You currently have {GetCurrencyAmount()} {LguConstants.ALTERNATIVE_CURRENCY_ALIAS}s to use in the upgrade shop.");
+            HUDManager.Instance.DisplayTip("Player Credits", $"You have received {playerCreditAmount} {LguConstants.ALTERNATIVE_CURRENCY_ALIAS}s from a player. You currently have {CurrencyAmount} {LguConstants.ALTERNATIVE_CURRENCY_ALIAS}s to use in the upgrade shop.");
         }
     }
 }

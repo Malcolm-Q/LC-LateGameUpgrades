@@ -17,6 +17,8 @@ namespace MoreShipUpgrades.Compat
         /// </summary>
         public static InputAction NvgKey => IngameKeybinds.Instance.NvgKey;
 
+        public static InputAction ShowAlternativeCounterKey => IngameKeybinds.Instance.ShowAlternativeCounterKey;
+
         /// <summary>
         /// Initialization of the compatibility class
         /// </summary>

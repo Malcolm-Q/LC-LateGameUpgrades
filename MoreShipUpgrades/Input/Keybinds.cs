@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
 using MoreShipUpgrades.Compat;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
@@ -25,6 +26,8 @@ namespace MoreShipUpgrades.Input
         /// </summary>
         public static InputAction NvgAction;
 
+        public static InputAction ShowAlternativeCounterAction;
+
         public static PlayerControllerB localPlayerController => StartOfRound.Instance?.localPlayerController;
 
         /// <summary>
@@ -37,6 +40,7 @@ namespace MoreShipUpgrades.Input
             Asset = InputUtilsCompat.Asset;
             ActionMap = Asset.actionMaps[0];
             NvgAction = InputUtilsCompat.NvgKey;
+            ShowAlternativeCounterAction = InputUtilsCompat.ShowAlternativeCounterKey;
         }
         /// <summary>
         /// Turn on relevant control bindings when starting a game
@@ -47,6 +51,8 @@ namespace MoreShipUpgrades.Input
         {
             Asset.Enable();
             NvgAction.performed += OnNvgActionPerformed;
+            ShowAlternativeCounterAction.started += OnShowAlternativeCurrencyStarted;
+            ShowAlternativeCounterAction.canceled += OnShowAlternativeCurrencyCanceled;
         }
 
         /// <summary>
@@ -58,6 +64,8 @@ namespace MoreShipUpgrades.Input
         {
             Asset.Disable();
             NvgAction.performed -= OnNvgActionPerformed;
+            ShowAlternativeCounterAction.started -= OnShowAlternativeCurrencyStarted;
+            ShowAlternativeCounterAction.canceled -= OnShowAlternativeCurrencyCanceled;
         }
 
         /// <summary>
@@ -76,5 +84,27 @@ namespace MoreShipUpgrades.Input
                 NightVision.Instance.Toggle();
             }
         }
+
+        private static void OnShowAlternativeCurrencyStarted(CallbackContext context)
+        {
+            if (localPlayerController == null || !localPlayerController.isPlayerControlled || (localPlayerController.IsServer && !localPlayerController.isHostPlayerObject))
+            {
+                return;
+            }
+
+            if (CurrencyManager.Enabled)
+                CurrencyManager.Instance.ShowCurrentAmount = true;
+        }
+        private static void OnShowAlternativeCurrencyCanceled(CallbackContext context)
+        {
+            if (localPlayerController == null || !localPlayerController.isPlayerControlled || (localPlayerController.IsServer && !localPlayerController.isHostPlayerObject))
+            {
+                return;
+            }
+
+            if (CurrencyManager.Enabled)
+                CurrencyManager.Instance.ShowCurrentAmount = false;
+        }
+
     }
 }
