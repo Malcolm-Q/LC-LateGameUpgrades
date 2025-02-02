@@ -17,7 +17,6 @@ namespace MoreShipUpgrades.Managers
             }
             set
             {
-                Plugin.mls.LogDebug($"Setting bool to show alternative currency from {showCurrencyAmount} to {value}");
                 showCurrencyAmount = value;
             }
         }

@@ -16,6 +16,7 @@ using InteractiveTerminalAPI.UI;
 using static BepInEx.BepInDependency;
 using MoreShipUpgrades.UI.Application;
 using MoreShipUpgrades.Configuration;
+using ExtendDeadline.Misc.UI.Application;
 
 namespace MoreShipUpgrades
 {
@@ -88,7 +89,10 @@ namespace MoreShipUpgrades
             PatchManager.PatchMainVersion();
 
             if (config.ALTERNATIVE_CURRENCY_ENABLED)
+            {
                 InteractiveTerminalManager.RegisterApplication<TradePlayerCreditsApplication>(["trade", "trade player credits", "lgu trade"], caseSensitive: false);
+                InteractiveTerminalManager.RegisterApplication<ConvertPlayerCreditApplication>(["convert", "PC"], caseSensitive: false);
+            }
             InteractiveTerminalManager.RegisterApplication<UpgradeStoreApplication>(["lgu", "lategame store"], caseSensitive: false);
             InteractiveTerminalManager.RegisterApplication<ContractApplication>("contracts", caseSensitive: false);
             if (!config.CONTRACT_PROVIDE_RANDOM_ONLY)

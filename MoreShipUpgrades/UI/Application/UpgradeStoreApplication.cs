@@ -347,7 +347,7 @@ namespace MoreShipUpgrades.UI.Application
         }
         void PurchaseUpgrade(CustomTerminalNode node, int price, Action backAction)
         {
-            terminal.BuyItemsServerRpc([], terminal.groupCredits - price, terminal.numberOfItemsInDropship); // The only vanilla rpc that syncs credits without ownership check
+            LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits - price);
             LguStore.Instance.AddUpgradeSpentCreditsServerRpc(price);
             UpgradeApi.TriggerUpgradeRankup(node);
             backAction();

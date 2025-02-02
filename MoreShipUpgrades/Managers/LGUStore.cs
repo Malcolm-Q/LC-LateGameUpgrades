@@ -581,6 +581,13 @@ namespace MoreShipUpgrades.Managers
         {
             PlayerManager.instance.IncreaseUpgradeSpentCredits(price);
         }
+
+        [ServerRpc(RequireOwnership =false)]
+        internal void SyncCreditsServerRpc(int newAmount)
+        {
+            Terminal terminal = UpgradeBus.Instance.GetTerminal();
+            terminal.SyncGroupCreditsClientRpc(newAmount, terminal.numberOfItemsInDropship);
+        }
     }
 
     [Serializable]

@@ -5,15 +5,8 @@ using InteractiveTerminalAPI.UI.Cursor;
 using InteractiveTerminalAPI.UI.Page;
 using InteractiveTerminalAPI.UI.Screen;
 using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc.Util;
-using MoreShipUpgrades.UI.Cursor;
-using MoreShipUpgrades.UI.TerminalNodes;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Xml.Linq;
-using static Unity.Audio.Handle;
 
 namespace MoreShipUpgrades.UI.Application
 {
@@ -26,7 +19,6 @@ namespace MoreShipUpgrades.UI.Application
         const string TRADE_PLAYER_TEXT = "How many player credits do you wish to provide for selected player?";
         const string TRADE_CREDITS_INFO_TEXT = "Select the player you wish to provide player credits to:";
         const string CONFIRM_TRADE_PLAYER_TEXT = "Do you wish to trade {0} player credits to {1}?";
-
         public override void Initialization()
         {
             PlayerControllerB[] activePlayers = StartOfRound.Instance.allPlayerScripts.Where(x => (x.isPlayerControlled || x.isPlayerDead) && x != GameNetworkManager.Instance.localPlayerController).ToArray();
