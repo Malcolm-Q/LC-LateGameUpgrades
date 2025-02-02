@@ -2,6 +2,7 @@
 <summary> 3.11.5 - 2025-02-01 </summary>
 
 - Fixed Discombobulator configuration using cooldown as stun timer.
+- Added configuration for Discombobulator to apply the stun time as absolute due to enemies' stun resistance.
 
 <details>
 <summary> 3.11.4 - 2025-01-29 </summary>

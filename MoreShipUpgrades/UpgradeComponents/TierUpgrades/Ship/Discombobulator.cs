@@ -68,7 +68,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
                     int forceValue = config.InitialDamage.Value + (config.IncrementalDamage.Value * (GetUpgradeLevel(UPGRADE_NAME) - config.DamageLevel.Value));
                     enemy.HitEnemy(forceValue);
                 }
-                if (!enemy.isEnemyDead) enemy.SetEnemyStunned(true, config.InitialEffect.Value + (config.IncrementalEffect.Value * GetUpgradeLevel(UPGRADE_NAME)), null);
+                float actualDuration = config.InitialEffect.Value + (config.IncrementalEffect.Value * GetUpgradeLevel(UPGRADE_NAME));
+                if (config.Absolute) actualDuration /= enemy.enemyType.stunTimeMultiplier;
+
+                if (!enemy.isEnemyDead) enemy.SetEnemyStunned(true, actualDuration, null);
             }
         }
 
