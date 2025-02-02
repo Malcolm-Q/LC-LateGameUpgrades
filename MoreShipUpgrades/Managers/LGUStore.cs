@@ -67,6 +67,8 @@ namespace MoreShipUpgrades.Managers
                 UpdateUpgradeBus();
                 UpgradeBus.Instance.Reconstruct();
                 HandleSpawns();
+                receivedSave = true;
+                alreadyReceivedScrapToUpgrade = true;
             }
             else
             {
@@ -108,6 +110,9 @@ namespace MoreShipUpgrades.Managers
                 LguSave = new LguSave();
             }
             RandomizeUpgradeManager.SetRandomUpgradeSeed(LguSave.randomUpgradeSeed);
+            UpgradeBus.Instance.discoveredItems = LguSave.discoveredItems;
+            UpgradeBus.Instance.contributionValues = LguSave.contributedValues;
+            UpgradeBus.Instance.scrapToCollectionUpgrade = LguSave.scrapToUpgrade;
         }
         /// <summary>
         /// Remote Procedure Call used by clients to notify the server to save everyone's state into the save file
@@ -151,7 +156,7 @@ namespace MoreShipUpgrades.Managers
         public void HandleSpawns()
         {
             int i = 0;
-            foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
+            foreach (CustomTerminalNode node in UpgradeBus.GetUpgradeNodes())
             {
                 i++;
                 GameObject go = Instantiate(node.Prefab, Vector3.zero, Quaternion.identity);
@@ -230,6 +235,10 @@ namespace MoreShipUpgrades.Managers
             if (receivedSave)
             {
                 logger.LogInfo("Save file already received from host, disregarding.");
+                foreach (CustomTerminalNode node in UpgradeBus.Instance.lockedUpgrades.Keys)
+                {
+                    LockUpgradeServerRpc(node.OriginalName, UpgradeBus.Instance.lockedUpgrades[node]);
+                }
                 return;
             }
             receivedSave = true;
@@ -359,9 +368,6 @@ namespace MoreShipUpgrades.Managers
             }
             UpgradeBus.Instance.activeUpgrades = SaveInfo.activeUpgrades;
             UpgradeBus.Instance.upgradeLevels = SaveInfo.upgradeLevels;
-            UpgradeBus.Instance.discoveredItems = LguSave.discoveredItems;
-            UpgradeBus.Instance.contributionValues = LguSave.contributedValues;
-            UpgradeBus.Instance.scrapToCollectionUpgrade = LguSave.scrapToUpgrade;
 
             if (oldSave != null && oldSave.playerSaves.ContainsKey(playerID))
             {
@@ -408,7 +414,7 @@ namespace MoreShipUpgrades.Managers
         {
             yield return new WaitForSeconds(4f);
             logger.LogInfo("Applying loaded upgrades...");
-            foreach (CustomTerminalNode customNode in UpgradeBus.Instance.terminalNodes)
+            foreach (CustomTerminalNode customNode in UpgradeBus.GetUpgradeNodes())
             {
                 bool activeUpgrade = UpgradeBus.Instance.activeUpgrades.GetValueOrDefault(customNode.OriginalName, false);
                 int upgradeLevel = UpgradeBus.Instance.upgradeLevels.GetValueOrDefault(customNode.OriginalName, 0);
@@ -416,7 +422,11 @@ namespace MoreShipUpgrades.Managers
                 customNode.CurrentUpgrade = upgradeLevel;
                 BaseUpgrade comp = UpgradeBus.Instance.UpgradeObjects[customNode.OriginalName].GetComponent<BaseUpgrade>();
                 bool free = comp.CanInitializeOnStart;
-                if (activeUpgrade || free) comp.Load();
+                if (activeUpgrade || free)
+                {
+                    comp.Load();
+                    if (!customNode.SharedUpgrade) LockUpgradeServerRpc(customNode.OriginalName, UpgradeBus.Instance.GetLocalPlayer().actualClientId);
+                }
                 if (free)
                 {
                     customNode.Unlocked = true;
@@ -468,7 +478,23 @@ namespace MoreShipUpgrades.Managers
                 return;
             }
             logger.LogInfo($"{node.OriginalName} is not registered as a shared upgrade! Unlocking on this client only...");
+            LockUpgradeServerRpc(node.OriginalName, UpgradeBus.Instance.GetLocalPlayer().actualClientId);
             UpdateUpgrades(node, increment);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void LockUpgradeServerRpc(string upgradeName, ulong purchasingClientId)
+        {
+            if (!UpgradeBus.Instance.PluginConfiguration.BuyableUpgradeOnce) return;
+            LockUpgradeClientRpc(upgradeName, purchasingClientId);
+        }
+
+        [ClientRpc]
+        private void LockUpgradeClientRpc(string upgradeName, ulong purchasingClientId)
+        {
+            if (UpgradeBus.Instance.GetLocalPlayer().actualClientId == purchasingClientId) return;
+            CustomTerminalNode node = UpgradeBus.Instance.GetUpgradeNode(upgradeName);
+            if (!UpgradeBus.Instance.lockedUpgrades.Keys.Contains(node)) UpgradeBus.Instance.lockedUpgrades.Add(node, purchasingClientId);
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -482,7 +508,7 @@ namespace MoreShipUpgrades.Managers
         public void HandleUpgradeClientRpc(string name, bool increment)
         {
             logger.LogInfo($"Received client request to handle shared upgrade for: {name} increment: {increment}");
-            foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
+            foreach (CustomTerminalNode node in UpgradeBus.GetUpgradeNodes())
                 if (node.OriginalName == name) UpdateUpgrades(node, increment);
         }
         [ClientRpc]
@@ -490,7 +516,7 @@ namespace MoreShipUpgrades.Managers
         {
             if (IsHost) return;
             logger.LogInfo($"Received client request to handle shared upgrade for: {name} increment: {increment}");
-            foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
+            foreach (CustomTerminalNode node in UpgradeBus.GetUpgradeNodes())
                 if (node.OriginalName == name) UpdateUpgrades(node, increment);
         }
 
@@ -506,7 +532,7 @@ namespace MoreShipUpgrades.Managers
             logger.LogInfo($"Generating sales with seed: {seed} on this client...");
             UnityEngine.Random.InitState(seed);
             UpgradeBus.Instance.SaleData = [];
-            foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
+            foreach (CustomTerminalNode node in UpgradeBus.GetUpgradeNodes())
             {
                 if (UnityEngine.Random.value > UpgradeBus.Instance.PluginConfiguration.SALE_PERC.Value)
                 {

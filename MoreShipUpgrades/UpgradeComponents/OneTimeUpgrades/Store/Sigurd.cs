@@ -1,5 +1,6 @@
-﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
+﻿using MoreShipUpgrades.Configuration;
+using MoreShipUpgrades.Configuration.Custom;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UI.TerminalNodes;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
@@ -18,7 +19,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
         internal override void Start()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = GetConfiguration().SIGURD_ACCESS_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().SigurdAccessConfiguration.OverrideName;
             base.Start();
         }
 
@@ -35,10 +36,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
 
         public static float GetBuyingRate(float defaultValue)
         {
-            LategameConfiguration config = GetConfiguration();
-            if (!config.SIGURD_ENABLED.Value) return defaultValue;
+            SigurdAccessUpgradeConfiguration config = GetConfiguration().SigurdAccessConfiguration;
+            if (!config.Enabled.Value) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
-            switch(config.SIGURD_MODE.Value)
+            switch(config.AlternativeMode.Value)
             {
                 case FunctionModes.LastDay:
                     {
@@ -52,8 +53,8 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
             }
 
             System.Random random = new(StartOfRound.Instance.randomMapSeed);
-            if (random.Next(0, 100) < Mathf.Clamp(config.SIGURD_CHANCE.Value, 0, 100))
-                return defaultValue + (config.SIGURD_PERCENT.Value / 100f);
+            if (random.Next(0, 100) < Mathf.Clamp(config.Chance.Value, 0, 100))
+                return defaultValue + (config.Effect.Value / 100f);
             return defaultValue;
         }
 
@@ -67,10 +68,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
             return WORLD_BUILDING_TEXT;
         }
 
-        public override bool CanInitializeOnStart => (GetConfiguration().SIGURD_ENABLED.Value) && GetConfiguration().SIGURD_PRICE.Value <= 0;
+        public override bool CanInitializeOnStart => (GetConfiguration().SigurdAccessConfiguration.Enabled.Value) && GetConfiguration().SigurdAccessConfiguration.Price.Value <= 0;
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().SIGURD_ACCESS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().SigurdAccessConfiguration.ItemProgressionItems.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -78,13 +79,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = GetConfiguration();
-
-            return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
-                                    shareStatus: true,
-                                    configuration.SIGURD_ENABLED.Value,
-                                    configuration.SIGURD_PRICE.Value,
-                                    configuration.OVERRIDE_UPGRADE_NAMES ? configuration.SIGURD_ACCESS_OVERRIDE_NAME : "");
+            return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME, GetConfiguration().SigurdAccessConfiguration);
         }
     }
 }

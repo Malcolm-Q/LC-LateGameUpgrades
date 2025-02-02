@@ -144,22 +144,23 @@ namespace MoreShipUpgrades.Managers
                 for (int i = 0; i < routeKeyword.compatibleNouns.Length && lvl == Instance.contractLevel; i++)
                 {
                     TerminalNode routeMoon = routeKeyword.compatibleNouns[i].result;
-                    int itemCost = routeMoon.itemCost;
-                    if (UpgradeBus.Instance.PluginConfiguration.CONTRACT_FREE_MOONS_ONLY.Value && itemCost != 0)
-                    {
-                        logger.LogDebug($"Criteria algorithm skipped a choice due to configuration only allowing free moons (Choice: {level.PlanetName})");
-                        break;
-                    }
+
                     CompatibleNoun[] additionalNodes = routeMoon.terminalOptions;
                     for (int j = 0; j < additionalNodes.Length && lvl == Instance.contractLevel; j++)
                     {
                         TerminalNode confirmNode = additionalNodes[j].result;
                         if (confirmNode == null) continue;
-                        if (confirmNode.buyRerouteToMoon != levelIndex) continue;
-
-                        logger.LogDebug($"Criteria algorithm made a choice and decided to assign contract on {level.PlanetName}");
-                        lvl = level.PlanetName;
+                        if (confirmNode.buyRerouteToMoon == levelIndex) break;
                     }
+
+                    int itemCost = routeMoon.itemCost;
+                    if (UpgradeBus.Instance.PluginConfiguration.CONTRACT_FREE_MOONS_ONLY.Value && itemCost != 0)
+                    {
+                        logger.LogDebug($"Criteria algorithm skipped a choice due to configuration only allowing free moons (Choice: {level.PlanetName}, Attached Price: {itemCost})");
+                        break;
+                    }
+                    logger.LogDebug($"Criteria algorithm made a choice and decided to assign contract on {level.PlanetName}");
+                    lvl = level.PlanetName;
                 }
                 if (lvl != Instance.contractLevel) break;
                 allUsed = true;

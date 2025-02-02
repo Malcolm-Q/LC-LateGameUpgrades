@@ -3,6 +3,7 @@ using InteractiveTerminalAPI.UI.Application;
 using InteractiveTerminalAPI.UI.Cursor;
 using InteractiveTerminalAPI.UI.Page;
 using InteractiveTerminalAPI.UI.Screen;
+using MoreShipUpgrades.API;
 using MoreShipUpgrades.Input;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Util;
@@ -26,7 +27,7 @@ namespace MoreShipUpgrades.UI.Application
         }
         public override void Initialization()
         {
-            CustomTerminalNode[] filteredNodes = UpgradeBus.Instance.terminalNodes.Where(x => x.Visible && (x.UnlockPrice > 0 || x.Prices.Length > 0)).ToArray();
+            CustomTerminalNode[] filteredNodes = UpgradeApi.GetPurchaseableUpgradeNodes().ToArray();
 
             if (filteredNodes.Length == 0)
             {
@@ -59,7 +60,7 @@ namespace MoreShipUpgrades.UI.Application
 
             List<CursorElement> cursorElements = [];
             PageCursorElement sharedPage = GetFilteredUpgradeNodes(ref filteredNodes, ref cursorElements, (x) => x.SharedUpgrade, LguConstants.MAIN_SCREEN_TITLE, LguConstants.MAIN_SCREEN_SHARED_UPGRADES_TEXT);
-            PageCursorElement individualPage = GetFilteredUpgradeNodes(ref filteredNodes, ref cursorElements, (x) => !x.SharedUpgrade, LguConstants.MAIN_SCREEN_TITLE, LguConstants.MAIN_SCREEN_INDIVIDUAL_UPGRADES_TEXT);
+            PageCursorElement individualPage = GetFilteredUpgradeNodes(ref filteredNodes, ref cursorElements, (x) => !x.SharedUpgrade && (UpgradeBus.Instance.PluginConfiguration.ShowLockedUpgrades || !UpgradeBus.Instance.lockedUpgrades.Keys.Contains(x)), LguConstants.MAIN_SCREEN_TITLE, LguConstants.MAIN_SCREEN_INDIVIDUAL_UPGRADES_TEXT);
 
             if (cursorElements.Count > 1)
             {
@@ -211,7 +212,8 @@ namespace MoreShipUpgrades.UI.Application
         }
         static bool CanBuyUpgrade(CustomTerminalNode node)
         {
-            if (UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_ITEM_PROGRESSION && UpgradeBus.Instance.PluginConfiguration.ITEM_PROGRESSION_NO_PURCHASE_UPGRADES) return true;
+            if (UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_ITEM_PROGRESSION && UpgradeBus.Instance.PluginConfiguration.ITEM_PROGRESSION_NO_PURCHASE_UPGRADES) return false;
+            if (UpgradeBus.Instance.PluginConfiguration.BuyableUpgradeOnce && UpgradeBus.Instance.lockedUpgrades.Keys.Contains(node)) return false;
             bool maxLevel = node.CurrentUpgrade >= node.MaxUpgrade;
             if (maxLevel && node.Unlocked)
                 return false;
@@ -286,16 +288,28 @@ namespace MoreShipUpgrades.UI.Application
             if (items.Count > 0)
             {
                 discoveredItems.Append("\n\nDiscovered items: ");
-                for (int i = 0; i < items.Count; i++)
-                {
-                    string item = items[i];
-                    discoveredItems.Append(item);
-                    if (i < items.Count - 1) discoveredItems.Append(", ");
-                }
+                discoveredItems.Append(string.Join(",", items));
+            }
+            string finalText = node.Description + discoveredItems;
+            if (maxLevel && node.Unlocked)
+            {
+                ErrorMessage(node.Name, finalText, backAction, LguConstants.REACHED_MAX_LEVEL);
+                return;
+            }
+            int price = node.GetCurrentPrice();
+            if (groupCredits < price)
+            {
+                ErrorMessage(node.Name, finalText, backAction, LguConstants.NOT_ENOUGH_CREDITS);
+                return;
+            }
+            if (UpgradeBus.Instance.PluginConfiguration.BuyableUpgradeOnce && UpgradeBus.Instance.lockedUpgrades.Keys.Contains(node))
+            {
+                ErrorMessage(node.Name, finalText, backAction, LguConstants.LOCKED_UPGRADE);
+                return;
             }
             if (UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_ITEM_PROGRESSION && UpgradeBus.Instance.PluginConfiguration.ITEM_PROGRESSION_NO_PURCHASE_UPGRADES)
             {
-                ErrorMessage(node.Name, node.Description, backAction, " ");
+                ErrorMessage(node.Name, finalText, backAction, " ");
                 return;
             }
             if (CurrencyManager.Enabled)
@@ -346,14 +360,7 @@ namespace MoreShipUpgrades.UI.Application
         {
             terminal.BuyItemsServerRpc([], terminal.groupCredits - price, terminal.numberOfItemsInDropship); // The only vanilla rpc that syncs credits without ownership check
             LguStore.Instance.AddUpgradeSpentCreditsServerRpc(price);
-            if (!node.Unlocked)
-            {
-                LguStore.Instance.HandleUpgrade(node);
-            }
-            else if (node.Unlocked && node.MaxUpgrade > node.CurrentUpgrade)
-            {
-                LguStore.Instance.HandleUpgrade(node, true);
-            }
+            UpgradeApi.TriggerUpgradeRankup(node);
             backAction();
         }
     }

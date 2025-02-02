@@ -37,13 +37,13 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         [HarmonyPostfix]
         private static void SetBuyingRateForDayPatch()
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.SIGURD_ENABLED.Value) return;
+            if (!UpgradeBus.Instance.PluginConfiguration.SigurdAccessConfiguration.Enabled.Value) return;
             if (!BaseUpgrade.GetActiveUpgrade(Sigurd.UPGRADE_NAME)) return;
             if (TimeOfDay.Instance.daysUntilDeadline == 0) return;
 
             System.Random random = new(StartOfRound.Instance.randomMapSeed);
-            if (random.Next(0, 100) < Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.SIGURD_CHANCE.Value, 0, 100))
-                StartOfRound.Instance.companyBuyingRate += (UpgradeBus.Instance.PluginConfiguration.SIGURD_PERCENT.Value / 100);
+            if (random.Next(0, 100) < Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.SigurdAccessConfiguration.Chance.Value, 0, 100))
+                StartOfRound.Instance.companyBuyingRate += (UpgradeBus.Instance.PluginConfiguration.SigurdAccessConfiguration.Effect.Value / 100);
         }
 
         [HarmonyPatch(nameof(TimeOfDay.SetNewProfitQuota))]

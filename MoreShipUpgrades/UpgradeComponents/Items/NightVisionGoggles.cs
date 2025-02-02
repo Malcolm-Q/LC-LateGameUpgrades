@@ -26,8 +26,8 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
 
         public string GetDisplayInfo()
         {
-            string grantStatus = UpgradeBus.Instance.PluginConfiguration.NIGHT_VISION_INDIVIDUAL.Value || !UpgradeBus.Instance.PluginConfiguration.SHARED_UPGRADES.Value ? "one" : "all";
-            string loseOnDeath = UpgradeBus.Instance.PluginConfiguration.LOSE_NIGHT_VIS_ON_DEATH.Value ? "be" : "not be";
+            string grantStatus = UpgradeBus.Instance.PluginConfiguration.NightVisionUpgradeConfiguration.Individual.Value || !UpgradeBus.Instance.PluginConfiguration.SHARED_UPGRADES.Value ? "one" : "all";
+            string loseOnDeath = UpgradeBus.Instance.PluginConfiguration.NightVisionUpgradeConfiguration.LoseOnDeath.Value ? "be" : "not be";
             return string.Format(AssetBundleHandler.GetInfoFromJSON("Night Vision"), grantStatus, loseOnDeath);
         }
 
@@ -40,13 +40,13 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         {
             base.ItemActivate(used, buttonDown);
             if (!buttonDown) return;
-            if (!UpgradeBus.Instance.PluginConfiguration.NIGHT_VISION_ENABLED) return;
+            if (!UpgradeBus.Instance.PluginConfiguration.NightVisionUpgradeConfiguration.Enabled) return;
             if (BaseUpgrade.GetActiveUpgrade("Night Vision"))
             {
                 HUDManager.Instance.chatText.text += "<color=#FF0000>Night vision is already active!</color>";
                 return;
             }
-            if (UpgradeBus.Instance.terminalNodes.First((x) => x.OriginalName == NightVision.UPGRADE_NAME).SharedUpgrade)
+            if (UpgradeBus.GetUpgradeNodes().First((x) => x.OriginalName == NightVision.UPGRADE_NAME).SharedUpgrade)
             {
                 NightVision.Instance.EnableNightVisionServerRpc();
             }
@@ -62,7 +62,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             Item nightVisionItem = AssetBundleHandler.GetItemObject("Night Vision");
             if (nightVisionItem == null) return;
 
-            nightVisionItem.creditsWorth = UpgradeBus.Instance.PluginConfiguration.NIGHT_VISION_PRICE.Value;
+            nightVisionItem.creditsWorth = UpgradeBus.Instance.PluginConfiguration.NightVisionUpgradeConfiguration.ItemPrice.Value;
             nightVisionItem.spawnPrefab.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             nightVisionItem.itemId = 492014;
             NightVisionGoggles visScript = nightVisionItem.spawnPrefab.AddComponent<NightVisionGoggles>();

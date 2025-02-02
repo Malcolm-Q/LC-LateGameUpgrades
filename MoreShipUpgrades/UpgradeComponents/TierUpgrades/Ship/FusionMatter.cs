@@ -16,12 +16,19 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
     internal class FusionMatter: TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Fusion Matter";
-        internal const string DEFAULT_PRICES = "650, 700";
+        internal const string DEFAULT_PRICES = "500, 650, 700";
         internal const string WORLD_BUILDING_TEXT = "\n\nBy default, the Ship's onboard Teleporter system is configured not to bring any objects along with it..." +
             " but isn't it kind of strange how you don't arrive naked anytime you use the Teleporter? As it turns out, this limitation is imposed and not inherent." +
             " By requesting & signing a handful of certain liability waivers by their technical names and paying forward a series of fees," +
             " you can expand the capabilities of your Ship's Teleporter. The Teleporter can still only safely transport Company-issued equipment," +
             " since the rough dimensions of these objects are well-documented. The same cannot be said for salvage materials.\n\n";
+
+        public enum ItemCategories
+        {
+            All,
+            Tools,
+            Scrap
+        }
 
         public string GetWorldBuildingText(bool shareStatus = false)
         {
@@ -29,11 +36,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         }
 
         static private Dictionary<string, int> levels;
+        static private Dictionary<ItemCategories, int> categoryLevels;
 
         internal static void SetupLevels()
         {
             levels = [];
-            string[] tiersList = GetConfiguration().FUSION_MATTER_ITEM_TIERS.Value.ToLower().Split(LguConstants.FUSION_MATTER_TIER_DELIMITER);
+            categoryLevels = [];
+            string[] tiersList = GetConfiguration().FusionMatterConfiguration.TierCollection.Value.ToLower().Split(LguConstants.FUSION_MATTER_TIER_DELIMITER);
             for (int level = 0; level < tiersList.Length; ++level)
             {
                 foreach (string itemName in tiersList[level].Split(LguConstants.FUSION_MATTER_ITEM_DELIMITER).Select(x => x.Trim().ToLower()))
@@ -42,15 +51,41 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
                         Plugin.mls.LogWarning($"{itemName} is already registered in the tiers collection of {UPGRADE_NAME}");
                     else
                     {
-                        Plugin.mls.LogInfo($"Registering {itemName} item under level {level} of {UPGRADE_NAME}");
-                        levels[itemName] = level;
+                        if (System.Enum.TryParse(itemName, ignoreCase: true, out ItemCategories category) && !categoryLevels.ContainsKey(category))
+                        {
+                            Plugin.mls.LogInfo($"Registering \"{itemName}\" category under level {level} of {UPGRADE_NAME}");
+                            categoryLevels[category] = level;
+                        }
+                        else
+                        {
+                            Plugin.mls.LogInfo($"Registering {itemName} item under level {level} of {UPGRADE_NAME}");
+                            levels[itemName] = level;
+                        }
                     }
                 }
             }
         }
+        public static bool IsItemWithinCategory(GrabbableObject grabbableObject, ItemCategories category)
+        {
+            switch(category)
+            {
+                case ItemCategories.All: return true;
+                case ItemCategories.Tools: return !grabbableObject.itemProperties.isScrap;
+                case ItemCategories.Scrap: return grabbableObject.itemProperties.isScrap;
+            }
+            return false;
+        }
+
         public static bool CanHoldItem(GrabbableObject grabbableObject, PlayerControllerB player)
         {
             if (grabbableObject == null || !player.IsTeleporting() || player.isPlayerDead) return false;
+            bool result = false;
+            foreach (KeyValuePair<ItemCategories,int> category in categoryLevels)
+            {
+                result |= IsItemWithinCategory(grabbableObject, category.Key) && GetUpgradeLevel(UPGRADE_NAME) >= category.Value;
+            }
+            if (result) return result;
+
             string itemName = grabbableObject.itemProperties.itemName.Trim().ToLower();
             if (levels.TryGetValue(itemName, out int level))
             {
@@ -77,7 +112,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = GetConfiguration().FUSION_MATTER_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().FusionMatterConfiguration.OverrideName;
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {
@@ -90,9 +125,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
 
         public static string GetFusionMatterInfo(int level, int price)
         {
-            string itemList = string.Join(", ",
-                levels.Where(item => item.Value == level)
-                .Select(item => item.Key));
+            IEnumerable<string> levelKeys = levels.Where(item => item.Value == level).Select(item => item.Key);
+            IEnumerable<string> categoryLevelKeys = categoryLevels.Where(category => category.Value == level).Select(category => category.Key.ToString());
+            string itemList = string.Join(", ", levelKeys.Concat(categoryLevelKeys));
 
             return string.Format("LVL {0} - ${1} - Allows safekeeping the following items when teleporting: {2}\n",
                 level + 1, price, itemList);
@@ -102,15 +137,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         {
             get
             {
-                LategameConfiguration config = GetConfiguration();
-                string[] prices = config.FUSION_MATTER_PRICES.Value.Split(',');
-                return config.FUSION_MATTER_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
+                string[] prices = GetConfiguration().FusionMatterConfiguration.Prices.Value.Split(',');
+                return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
         }
 
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().FUSION_MATTER_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().FusionMatterConfiguration.ItemProgressionItems.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -121,16 +155,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = GetConfiguration();
-
             SetupLevels();
-            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
-                                                shareStatus: true,
-                                                configuration.FUSION_MATTER_ENABLED,
-                                                configuration.FUSION_MATTER_PRICE,
-                                                UpgradeBus.ParseUpgradePrices(configuration.FUSION_MATTER_PRICES),
-                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.FUSION_MATTER_OVERRIDE_NAME : "",
-                                                Plugin.networkPrefabs[UPGRADE_NAME]);
+            return UpgradeBus.Instance.SetupMultiplePurchaseableTerminalNode(UPGRADE_NAME, UpgradeBus.Instance.PluginConfiguration.FusionMatterConfiguration, Plugin.networkPrefabs[UPGRADE_NAME]);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ namespace MoreShipUpgrades.Extensions
             foreach (GrabbableObject grabbableObject in player.ItemSlots)
             {
                 if (grabbableObject == null) continue;
-                weight = Mathf.Clamp(weight + (grabbableObject.itemProperties.weight - 1f), 0f, 10f);
+                weight = Mathf.Clamp(weight + BackMuscles.DecreasePossibleWeight(grabbableObject.itemProperties.weight - 1f), 0f, 10f);
             }
             return weight;
         }
@@ -31,7 +32,7 @@ namespace MoreShipUpgrades.Extensions
         public static bool CheckIfCurrentlyTwoHandedInInventory(this PlayerControllerB player)
         {
             int twoHandedCount = 0;
-            int maxTwoHandedCount = 1 + UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_INITIAL_TWO_HANDED_ITEMS + (BaseUpgrade.GetUpgradeLevel(DeepPockets.UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.DEEPER_POCKETS_INCREMENTAL_TWO_HANDED_ITEMS);
+            int maxTwoHandedCount = 1 + UpgradeBus.Instance.PluginConfiguration.DeeperPocketsConfiguration.InitialEffect + (BaseUpgrade.GetUpgradeLevel(DeepPockets.UPGRADE_NAME) * UpgradeBus.Instance.PluginConfiguration.DeeperPocketsConfiguration.IncrementalEffect);
 
             for (int i = 0; i < player.ItemSlots.Length && twoHandedCount < maxTwoHandedCount; i++)
             {

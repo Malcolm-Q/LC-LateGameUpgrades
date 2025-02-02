@@ -1,4 +1,6 @@
 ﻿using GameNetcodeStuff;
+using MoreShipUpgrades.Configuration;
+using MoreShipUpgrades.Configuration.Interfaces.TierUpgrades;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
@@ -14,7 +16,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         internal float alteredWeight = 1f;
         internal static BackMuscles Instance;
         public const string UPGRADE_NAME = "Back Muscles";
-        public const string PRICES_DEFAULT = "600,700,800";
+        public const string PRICES_DEFAULT = "715,600,700,800";
         internal const string WORLD_BUILDING_TEXT = "\n\nCompany-issued hydraulic girdles which are only awarded to high-performing {0} who can afford to opt in." +
             " Highly valued by all employees of The Company for their combination of miraculous health-preserving benefits and artificial, intentionally-implemented scarcity." +
             " Sardonically called the 'Back Muscles Upgrade' by some. Comes with a user manual, which mostly contains minimalistic ads for girdle maintenance contractors." +
@@ -30,13 +32,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         {
             get
             {
-                return GetConfiguration().BACK_MUSCLES_UPGRADE_MODE;
+                return GetConfiguration().BackMusclesConfiguration.AlternativeMode;
             }
         }
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = GetConfiguration().BACK_MUSCLES_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().BackMusclesConfiguration.OverrideName;
             Instance = this;
         }
         public override void Increment()
@@ -57,17 +59,17 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         }
         public static float DecreaseStrain(float defaultWeight)
         {
-            return DecreaseValue(defaultWeight, GetConfiguration().BACK_MUSCLES_ENABLED, UpgradeMode.ReduceCarryStrain, 1f);
+            return DecreaseValue(defaultWeight, GetConfiguration().BackMusclesConfiguration.Enabled, UpgradeMode.ReduceCarryStrain, 1f);
         }
 
         public static float DecreaseCarryLoss(float defaultWeight)
         {
-            return DecreaseValue(defaultWeight, GetConfiguration().BACK_MUSCLES_ENABLED, UpgradeMode.ReduceCarryInfluence, 1f);
+            return DecreaseValue(defaultWeight, GetConfiguration().BackMusclesConfiguration.Enabled, UpgradeMode.ReduceCarryInfluence, 1f);
         }
 
         public static float DecreasePossibleWeight(float defaultWeight)
         {
-            return DecreaseValue(defaultWeight, GetConfiguration().BACK_MUSCLES_ENABLED, UpgradeMode.ReduceWeight, 0f);
+            return DecreaseValue(defaultWeight, GetConfiguration().BackMusclesConfiguration.Enabled, UpgradeMode.ReduceWeight, 0f);
         }
 
         public static float DecreaseValue(float defaultWeight, bool enabled, UpgradeMode intendedMode, float lowerBound)
@@ -75,8 +77,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             if (!enabled) return defaultWeight;
             if (CurrentUpgradeMode != intendedMode) return defaultWeight;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultWeight;
-            LategameConfiguration config = GetConfiguration();
-            return Mathf.Max(defaultWeight * (config.CARRY_WEIGHT_REDUCTION.Value - (GetUpgradeLevel(UPGRADE_NAME) * config.CARRY_WEIGHT_INCREMENT.Value)), lowerBound);
+            ITierAlternativeEffectUpgradeConfiguration<float, UpgradeMode> config = GetConfiguration().BackMusclesConfiguration;
+            return Mathf.Max(defaultWeight * (config.InitialEffect.Value - (GetUpgradeLevel(UPGRADE_NAME) * config.IncrementalEffect.Value)), lowerBound);
         }
 
         public static void UpdatePlayerWeight()
@@ -106,8 +108,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         {
             static float infoFunction(int level)
             {
-                LategameConfiguration config = GetConfiguration();
-                return (config.CARRY_WEIGHT_REDUCTION.Value - (level * config.CARRY_WEIGHT_INCREMENT.Value)) * 100;
+                ITierAlternativeEffectUpgradeConfiguration<float, UpgradeMode> config = GetConfiguration().BackMusclesConfiguration;
+                return (config.InitialEffect.Value - (level * config.IncrementalEffect.Value)) * 100;
             }
             string infoFormat;
             switch (CurrentUpgradeMode)
@@ -139,9 +141,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         {
             get
             {
-                LategameConfiguration config = GetConfiguration();
-                string[] prices = config.BACK_MUSCLES_UPGRADE_PRICES.Value.Split(',');
-                return config.BACK_MUSCLES_PRICE.Value <= 0 && prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0");
+                ITierAlternativeEffectUpgradeConfiguration<float, UpgradeMode> config = GetConfiguration().BackMusclesConfiguration;
+                string[] prices = config.Prices.Value.Split(',');
+                return prices.Length == 0 || (prices.Length == 1 && (prices[0].Length == 0 || prices[0] == "0"));
             }
         }
 
@@ -151,18 +153,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().BACK_MUSCLES_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().BackMusclesConfiguration.ItemProgressionItems.Value.Split(","));
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = GetConfiguration();
-
-            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
-                                                configuration.SHARED_UPGRADES.Value || !configuration.BACK_MUSCLES_INDIVIDUAL.Value,
-                                                configuration.BACK_MUSCLES_ENABLED.Value,
-                                                configuration.BACK_MUSCLES_PRICE.Value,
-                                                UpgradeBus.ParseUpgradePrices(configuration.BACK_MUSCLES_UPGRADE_PRICES.Value),
-                                                configuration.OVERRIDE_UPGRADE_NAMES ? configuration.BACK_MUSCLES_OVERRIDE_NAME : "");
+            return UpgradeBus.Instance.SetupMultiplePurchaseableTerminalNode(UPGRADE_NAME, GetConfiguration().BackMusclesConfiguration);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using GameNetcodeStuff;
+using MoreShipUpgrades.Configuration.Custom;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
@@ -46,12 +47,13 @@ namespace MoreShipUpgrades.Misc
             RoundManager.Instance.PlayAudibleNoise(terminal.transform.position, 60f, 0.8f, 0, false, 14155);
             Discombobulator.instance.UseDiscombobulatorServerRpc();
 
-            Collider[] array = Physics.OverlapSphere(terminal.transform.position, UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_RADIUS.Value, 524288);
+            DiscombobulatorUpgradeConfiguration config = UpgradeBus.Instance.PluginConfiguration.DiscombobulatorUpgradeConfiguration;
+            Collider[] array = Physics.OverlapSphere(terminal.transform.position, config.Radius.Value, 524288);
             if (array.Length == 0) return DisplayTerminalMessage(LguConstants.DISCOMBOBULATOR_NO_ENEMIES);
 
-            if (UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_NOTIFY_CHAT.Value)
+            if (config.NotifyChat.Value)
             {
-                terminal.StartCoroutine(CountDownChat(UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_STUN_DURATION.Value + (UpgradeBus.Instance.PluginConfiguration.DISCOMBOBULATOR_INCREMENT.Value * BaseUpgrade.GetUpgradeLevel(Discombobulator.UPGRADE_NAME))));
+                terminal.StartCoroutine(CountDownChat(config.InitialEffect.Value + (config.IncrementalEffect.Value * BaseUpgrade.GetUpgradeLevel(Discombobulator.UPGRADE_NAME))));
             }
             return DisplayTerminalMessage(string.Format(LguConstants.DISCOMBULATOR_HIT_ENEMIES, array.Length));
         }
@@ -118,6 +120,15 @@ namespace MoreShipUpgrades.Misc
             if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value)
                 return DisplayTerminalMessage(string.Format(LguConstants.INTERNS_NOT_ENOUGH_CREDITS_FORMAT, UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value, terminal.groupCredits));
 
+            if (Interns.instance.revivalTimer > 0f)
+                return DisplayTerminalMessage(string.Format("We currently cannot provide you with a new intern. Please try again later. ({0} seconds)\n\n", Interns.instance.revivalTimer.ToString("F2")));
+
+            if (UpgradeBus.Instance.PluginConfiguration.INTERNS_USAGES_PER_LANDING != -1 && Interns.instance.currentUsages >= UpgradeBus.Instance.PluginConfiguration.INTERNS_USAGES_PER_LANDING)
+                return DisplayTerminalMessage(string.Format("You have depleted your interns for the current moon landing ({0} usages). They will be replenished on the next moon landing\n\n", Interns.instance.currentUsages));
+
+            if (Interns.instance.delayReviveTimer > 0f)
+                return DisplayTerminalMessage(string.Format($"An intern is being dispatched to replace {Interns.instance.delayedRevivePlayer.playerUsername} in {Interns.instance.delayReviveTimer.ToString("F2")} seconds.\n\n"));
+
             PlayerControllerB player = StartOfRound.Instance.mapScreen.targetedPlayer;
             if (!player.isPlayerDead) return DisplayTerminalMessage(string.Format(LguConstants.INTERNS_PLAYER_ALREADY_ALIVE_FORMAT, player.playerUsername));
             terminal.BuyItemsServerRpc([], terminal.groupCredits - UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value, terminal.numberOfItemsInDropship);
@@ -125,7 +136,9 @@ namespace MoreShipUpgrades.Misc
             string name = Interns.instance.internNames[UnityEngine.Random.Range(0, Interns.instance.internNames.Length)];
             string interest = Interns.instance.internInterests[UnityEngine.Random.Range(0, Interns.instance.internInterests.Length)];
             logger.LogInfo($"Successfully executed intern command for {player.playerUsername}!");
-            return DisplayTerminalMessage($"{player.playerUsername} has been replaced with:\n\nNAME: {name}\nAGE: {UnityEngine.Random.Range(19, 76)}\nIQ: {UnityEngine.Random.Range(2, 160)}\nINTERESTS: {interest}\n\n{name} HAS BEEN TELEPORTED INSIDE THE FACILITY, PLEASE ACQUAINTANCE YOURSELF ACCORDINGLY");
+            return DisplayTerminalMessage($"{player.playerUsername} has been replaced with:\n\nNAME: {name}\n" +
+                $"AGE: {UnityEngine.Random.Range(19, 76)}\nIQ: {UnityEngine.Random.Range(2, 160)}\n" +
+                $"INTERESTS: {interest}\n\n{name} HAS BEEN DISPATCHED TO YOUR LOCATION, PLEASE ACQUAINTANCE YOURSELF ACCORDINGLY\n\n");
         }
         private static TerminalNode ExecuteLoadLGUCommand(string text, ref Terminal terminal)
         {
@@ -221,7 +234,7 @@ namespace MoreShipUpgrades.Misc
             if (enemies.Length == 0) return DisplayTerminalMessage("0 enemies detected\n\n");
 
             Dictionary<string, int> enemyCount = [];
-            if (!UpgradeBus.Instance.PluginConfiguration.VERBOSE_ENEMIES.Value)
+            if (!UpgradeBus.Instance.PluginConfiguration.BetterScannerUpgradeConfiguration.VerboseEnemies.Value)
             {
                 logger.LogInfo("Scan Enemies: Verbose mode = true");
                 enemyCount.Add("Outside Enemies", 0);
@@ -423,7 +436,7 @@ namespace MoreShipUpgrades.Misc
         }
         private static void ExecuteQuantumCommands(ref Terminal terminal, ref TerminalNode outputNode)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.QUANTUM_DISRUPTOR_ENABLED) return;
+            if (!UpgradeBus.Instance.PluginConfiguration.QuantumDisruptorConfiguration.Enabled) return;
             if (!BaseUpgrade.GetActiveUpgrade(QuantumDisruptor.UPGRADE_NAME))
             {
                 outputNode = DisplayTerminalMessage("You need \'Quantum Disruptor\' upgrade active to use this command.\n");
@@ -436,6 +449,7 @@ namespace MoreShipUpgrades.Misc
                 return;
             }
             if (terminal.IsHost || terminal.IsServer) QuantumDisruptor.Instance.RevertTimeClientRpc();
+            else QuantumDisruptor.Instance.RevertTimeServerRpc();
             outputNode = DisplayTerminalMessage($"Successfully reverted back current moon's time by {QuantumDisruptor.Instance.hoursToReduce}. You currently have {QuantumDisruptor.Instance.currentUsages} out of {QuantumDisruptor.Instance.availableUsages} usages.\n");
         }
         private static TerminalNode LookupDemon(string secondWord, string thirdWord)

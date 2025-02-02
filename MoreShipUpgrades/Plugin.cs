@@ -15,6 +15,7 @@ using MoreShipUpgrades.Misc.Commands;
 using InteractiveTerminalAPI.UI;
 using static BepInEx.BepInDependency;
 using MoreShipUpgrades.UI.Application;
+using MoreShipUpgrades.Configuration;
 
 namespace MoreShipUpgrades
 {
@@ -28,6 +29,9 @@ namespace MoreShipUpgrades
     [BepInDependency(Oxygen.OxygenBase.modGUID, DependencyFlags.SoftDependency)]
     [BepInDependency(LCVR.Plugin.PLUGIN_GUID, DependencyFlags.SoftDependency)]
     [BepInDependency(ShipInventory.MyPluginInfo.PLUGIN_GUID, DependencyFlags.SoftDependency)]
+    [BepInDependency(BrutalCompanyMinus.Plugin.GUID, DependencyFlags.SoftDependency)]
+    [BepInDependency(com.github.zehsteam.ToilHead.MyPluginInfo.PLUGIN_GUID, DependencyFlags.SoftDependency)]
+    [BepInDependency(BrutalCompanyMinusExtraCompat.BCMERebornGUID, DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
         internal static ManualLogSource mls;
@@ -51,6 +55,7 @@ namespace MoreShipUpgrades
             {
                 foreach (var method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static))
                 {
+                    if (method.Name == nameof(ToilheadCompat.FollowTerminalAccessibleObjectBehaviourPatcher.DestroyObject)) continue;
                     var attributes = method.GetCustomAttributes(typeof(RuntimeInitializeOnLoadMethodAttribute), false);
                     if (attributes.Length > 0)
                     {

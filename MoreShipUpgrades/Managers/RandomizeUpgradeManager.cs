@@ -1,6 +1,6 @@
 ﻿using MoreShipUpgrades.UI.TerminalNodes;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using System;
+using System.Collections.Generic;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -67,9 +67,10 @@ namespace MoreShipUpgrades.Managers
             Random rand = new(seed);
             ResetAllUpgrades();
             int maximumUpgrade = ConfiguredUpgradeAmount;
-            if (UpgradeBus.Instance.terminalNodes.Count - visibleNodes < maximumUpgrade)
+            List<CustomTerminalNode> upgradeNodes = UpgradeBus.GetUpgradeNodes();
+            if (upgradeNodes.Count - visibleNodes < maximumUpgrade)
             {
-                foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
+                foreach (CustomTerminalNode node in upgradeNodes)
                     node.Visible = true;
             }
             else
@@ -77,7 +78,7 @@ namespace MoreShipUpgrades.Managers
                 int upgradeCounter = 0;
                 while (upgradeCounter < maximumUpgrade)
                 {
-                    CustomTerminalNode selectedNode = UpgradeBus.Instance.terminalNodes[rand.Next(0, UpgradeBus.Instance.terminalNodes.Count)];
+                    CustomTerminalNode selectedNode = upgradeNodes[rand.Next(0, upgradeNodes.Count)];
                     if (selectedNode.Visible) continue;
                     if (upgradeCounter < maximumUpgrade && rand.NextDouble() > UPGRADE_PICK_PROBABILITY)
                     {
@@ -91,7 +92,7 @@ namespace MoreShipUpgrades.Managers
         static void ResetAllUpgrades()
         {
             visibleNodes = 0;
-            foreach (CustomTerminalNode node in UpgradeBus.Instance.terminalNodes)
+            foreach (CustomTerminalNode node in UpgradeBus.GetUpgradeNodes())
             {
                 node.Visible = !IsRandomizedEnabled || (node.Unlocked && AlwaysShowPurchased);
                 if (node.Visible) visibleNodes++;

@@ -191,6 +191,14 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string SHOW_WORLD_BUILDING_TEXT_KEY = "Show World Building text in Upgrade information";
         internal const bool SHOW_WORLD_BUILDING_TEXT_DEFAULT = true;
         internal const string SHOW_WORLD_BUILDING_TEXT_DESCRIPTION = "When viewing an upgrade's information, wether show world-building text along with pratical information or not.";
+
+        internal const string BUYABLE_UPGRADES_ONCE_KEY = "Limited Buyable Upgrades";
+        internal const bool BUYABLE_UPGRADES_ONCE_DEFAULT = false;
+        internal const string BUYABLE_UPGRADES_ONCE_DESCRIPTION = "If toggled on, the upgrade bought for the first time will only be buyable after by the purchasing player. This is only relevant to individual upgrades";
+
+        internal const string SHOW_LOCKED_UPGRADES_KEY = "Show Locked Upgrades";
+        internal const bool SHOW_LOCKED_UPGRADES_DEFAULT = true;
+        internal const string SHOW_LOCKED_UPGRADES_DESCRIPTION = "If toggled off, upgrades which are locked to other crew members for purchase will not appear in the store";
         #endregion
 
         #region Name Overrides
@@ -386,6 +394,9 @@ namespace MoreShipUpgrades.Misc.Util
         #endregion
 
         #region Upgrades
+
+        internal const string ENABLED_FORMAT = "Enable {0} Upgrade";
+        internal const string PRICE_FORMAT = "Price of {0} Upgrade";
 
         #region Effective Bandaids
 
@@ -1319,7 +1330,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string CHARGING_BOOSTER_PRICE_KEY = $"Price of {ChargingBooster.UPGRADE_NAME} Upgrade";
         internal const int CHARGING_BOOSTER_PRICE_DEFAULT = 300;
 
-        internal const string CHARGING_BOOSTER_PRICES_DEFAULT = "250,300,400";
+        internal const string CHARGING_BOOSTER_PRICES_DEFAULT = "300,250,300,400";
 
         internal const string CHARGING_BOOSTER_COOLDOWN_KEY = "Cooldown of the charging station in radar boosters when used";
         internal const float CHARGING_BOOSTER_COOLDOWN_DEFAULT = 90f;
@@ -1633,6 +1644,10 @@ namespace MoreShipUpgrades.Misc.Util
         internal const float SICK_BEATS_EFFECT_RADIUS_DEFAULT = 15f;
         internal const string SICK_BEATS_EFFECT_RADIUS_DESCRIPTION = "Radius in unity units players will be effected by an active boombox.";
 
+        internal const string SICK_BEATS_BOOMBOX_ATTRACT_SOUND_KEY = "Boombox Attract Sound Toggle";
+        internal const bool SICK_BEATS_BOOMBOX_ATTRACT_SOUND_DEFAULT = true;
+        internal const string SICK_BEATS_BOOMBOX_ATTRACT_SOUND_DESCRIPTION = "After the upgrade has been purchased, wether the boombox attracts nearby enemies to its location or not";
+
         #endregion
 
         #region Sigurd Access
@@ -1725,6 +1740,7 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string NOT_ENOUGH_CREDITS = "You do not have enough credits to purchase this upgrade.";
         internal const string REACHED_MAX_LEVEL = "You have reached the maximum level of this upgrade.";
+        internal const string LOCKED_UPGRADE = "This upgrade has been assigned to another crew member.";
         internal const string PURCHASE_UPGRADE_FORMAT = "Do you wish to purchase this upgrade for {0} credits?";
         internal const string PURCHASE_UPGRADE_ALTERNATE_FORMAT = "Do you wish to purchase this upgrade for {0} player credits?";
 

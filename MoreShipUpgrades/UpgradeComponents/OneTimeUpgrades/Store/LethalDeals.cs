@@ -1,5 +1,4 @@
 ﻿using MoreShipUpgrades.Managers;
-using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UI.TerminalNodes;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
@@ -13,7 +12,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
             " you will be made eligible for one GUARANTEED random discount each Store rotation. Comes with a little plastic card for your keychain." +
             " There's a barcode on it, but the Terminal has nothing to scan the barcode with, so who knows what it's really for.\n\n";
         const int GUARANTEED_ITEMS_AMOUNT = 1;
-        public override bool CanInitializeOnStart => GetConfiguration().LETHAL_DEALS_PRICE.Value <= 0;
+        public override bool CanInitializeOnStart => GetConfiguration().LethalDealsConfiguration.Price.Value <= 0;
         public string GetWorldBuildingText(bool shareStatus = false)
         {
             return WORLD_BUILDING_TEXT;
@@ -21,7 +20,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
-            overridenUpgradeName = GetConfiguration().LETHAL_DEALS_OVERRIDE_NAME;
+            overridenUpgradeName = GetConfiguration().LethalDealsConfiguration.OverrideName;
         }
         public static int GetLethalDealsGuaranteedItems(int amount)
         {
@@ -34,7 +33,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {
-            return (UPGRADE_NAME, GetConfiguration().LETHAL_DEALS_ITEM_PROGRESSION_ITEMS.Value.Split(","));
+            return (UPGRADE_NAME, GetConfiguration().LethalDealsConfiguration.ItemProgressionItems.Value.Split(","));
         }
         public new static void RegisterUpgrade()
         {
@@ -42,13 +41,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
         }
         public new static CustomTerminalNode RegisterTerminalNode()
         {
-            LategameConfiguration configuration = GetConfiguration();
-
-            return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME,
-                                    shareStatus: true,
-                                    configuration.LETHAL_DEALS_ENABLED.Value,
-                                    configuration.LETHAL_DEALS_PRICE.Value,
-                                    configuration.OVERRIDE_UPGRADE_NAMES ? configuration.LETHAL_DEALS_OVERRIDE_NAME : "");
+            return UpgradeBus.Instance.SetupOneTimeTerminalNode(UPGRADE_NAME, GetConfiguration().LethalDealsConfiguration);
         }
     }
 }

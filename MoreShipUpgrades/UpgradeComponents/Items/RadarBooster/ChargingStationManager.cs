@@ -68,7 +68,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.RadarBooster
         void OnChargeInteract(PlayerControllerB interactingPlayer)
         {
             GrabbableObject heldObject = interactingPlayer.currentlyHeldObjectServer;
-            heldObject.insertedBattery.charge = Mathf.Clamp(heldObject.insertedBattery.charge + (UpgradeBus.Instance.PluginConfiguration.CHARGING_BOOSTER_CHARGE_PERCENTAGE.Value/100f), 0f, 1f);
+            heldObject.insertedBattery.charge = Mathf.Clamp(heldObject.insertedBattery.charge + (UpgradeBus.Instance.PluginConfiguration.ChargingBoosterConfiguration.GetSecondEffectPair(0).Item1.Value/100f), 0f, 1f);
             cooldown = ChargingBooster.Instance.chargeCooldown;
             ChargingBooster.Instance.UpdateCooldownServerRpc(new NetworkBehaviourReference(GetComponent<RadarBoosterItem>()));
         }
