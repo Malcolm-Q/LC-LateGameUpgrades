@@ -3,6 +3,7 @@
 
 - Fixed Discombobulator configuration using cooldown as stun timer.
 - Added configuration for Discombobulator to apply the stun time as absolute due to enemies' stun resistance.
+- Made Contracts' Enabled Configuration influence the registration of related applications
 
 <details>
 <summary> 3.11.4 - 2025-01-29 </summary>
