@@ -2,11 +2,11 @@
 <summary> 3.11.5 - 2025-02-01 </summary>
 
 - Fixed Discombobulator configuration using cooldown as stun timer.
+- Fixed issue with host not seeing items being teleported with clients through Fusion Matter.
 - Added configuration for Discombobulator to apply the stun time as absolute due to enemies' stun resistance.
 - Made Contracts' Enabled Configuration influence the registration of related applications
 - Walkie GPS' UI stays on until you no longer have a walkie in your inventory.
 - Changed Walkie GPS' UI  to not collide with vanilla's item UI.
-- Fixed issue with host not seeing items being teleported with clients through Fusion Matter.
 
 <details>
 <summary> 3.11.4 - 2025-01-29 </summary>
