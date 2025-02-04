@@ -3,7 +3,6 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
-using System.Net;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Extensions
