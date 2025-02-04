@@ -6,6 +6,7 @@
 - Made Contracts' Enabled Configuration influence the registration of related applications
 - Walkie GPS' UI stays on until you no longer have a walkie in your inventory.
 - Changed Walkie GPS' UI  to not collide with vanilla's item UI.
+- Fixed issue with host not seeing items being teleported with clients through Fusion Matter.
 
 <details>
 <summary> 3.11.4 - 2025-01-29 </summary>
