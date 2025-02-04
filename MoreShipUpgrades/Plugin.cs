@@ -78,7 +78,6 @@ namespace MoreShipUpgrades
             UpgradeBus.Instance.UpgradeAssets = UpgradeAssets;
             UpgradeBus.Instance.SetConfiguration(config);
             SetupModStore(ref UpgradeAssets);
-
             SetupItems(ref types);
             SetupCommands(ref types);
             SetupPerks(ref types);

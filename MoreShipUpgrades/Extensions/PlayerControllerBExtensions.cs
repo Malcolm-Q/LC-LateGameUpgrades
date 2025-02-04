@@ -3,6 +3,7 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
+using System.Net;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Extensions
@@ -18,6 +19,17 @@ namespace MoreShipUpgrades.Extensions
                 weight = Mathf.Clamp(weight + BackMuscles.DecreasePossibleWeight(grabbableObject.itemProperties.weight - 1f), 0f, 10f);
             }
             return weight;
+        }
+
+        public static bool ContainsItemOfType<T>(this PlayerControllerB player, T excludingItem = null) where T : GrabbableObject
+        {
+            foreach(GrabbableObject grabbableObject in player.ItemSlots)
+            {
+                if (grabbableObject == null) continue;
+                if (excludingItem != null && grabbableObject == excludingItem) continue;
+                if (grabbableObject is T) return true;
+            }
+            return false;
         }
 
         public static bool CheckIfCurrentlyHeldObjectIsInInventory(this PlayerControllerB player)
