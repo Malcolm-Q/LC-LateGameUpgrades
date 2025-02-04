@@ -277,7 +277,7 @@ namespace MoreShipUpgrades.UI.Application
             int price = node.GetCurrentPrice();
             if (groupCredits < price)
             {
-                if (!CurrencyManager.Enabled)
+                if (!node.AlternateCurrency)
                 {
                     ErrorMessage(node.Name, finalText, backAction, LguConstants.NOT_ENOUGH_CREDITS);
                     return;
@@ -301,28 +301,31 @@ namespace MoreShipUpgrades.UI.Application
                 ErrorMessage(node.Name, finalText, backAction, " ");
                 return;
             }
-            if (CurrencyManager.Enabled)
+            CursorElement[] elements;
+            if (node.AlternateCurrency)
             {
-                CursorElement[] elements =
-                {
-                CursorElement.Create("Purchase with Company Credits", "", () => ConfirmPurchaseUpgrade(node, price, backAction), active: (_) => CanBuyUpgradeWithGroupCredits(node), selectInactive: false),
-                CursorElement.Create("Purchase with Player Credits", "", () => ConfirmPurchaseUpgradeAlternateCurrency(node, CurrencyManager.Instance.GetCurrencyAmountFromCredits(price), backAction), active: (_) => CanBuyUpgradeWithPlayerCredits(node), selectInactive: false),
-                CursorElement.Create("Cancel", "", backAction)
-                };
-                CursorMenu cursorMenu = CursorMenu.Create(0, '>', elements);
-                ITextElement[] elements2 =
-                {
-                TextElement.Create(node.Description + discoveredItems),
-                TextElement.Create(" "),
-                cursorMenu
-                };
-                IScreen screen = BoxedScreen.Create(node.Name, elements2);
-                SwitchScreen(screen, cursorMenu, previous: false);
+                elements = [
+                    CursorElement.Create("Purchase with Company Credits", "", () => ConfirmPurchaseUpgrade(node, price, backAction), active: (_) => CanBuyUpgradeWithGroupCredits(node), selectInactive: false),
+                    CursorElement.Create("Purchase with Player Credits", "", () => ConfirmPurchaseUpgradeAlternateCurrency(node, CurrencyManager.Instance.GetCurrencyAmountFromCredits(price), backAction), active: (_) => CanBuyUpgradeWithPlayerCredits(node), selectInactive: false),
+                    CursorElement.Create("Cancel", "", backAction)
+                    ];
             }
             else
             {
-                ConfirmPurchaseUpgrade(node, price, backAction);
+                elements = [
+                    CursorElement.Create("Purchase with Company Credits", "", () => ConfirmPurchaseUpgrade(node, price, backAction), active: (_) => CanBuyUpgradeWithGroupCredits(node), selectInactive: false),
+                    CursorElement.Create("Cancel", "", backAction)
+                    ];
             }
+            CursorMenu cursorMenu = CursorMenu.Create(0, '>', elements);
+            ITextElement[] elements2 =
+            {
+            TextElement.Create(finalText),
+            TextElement.Create(" "),
+            cursorMenu
+            };
+            IScreen screen = BoxedScreen.Create(node.Name, elements2);
+            SwitchScreen(screen, cursorMenu, previous: false);
         }
         void ConfirmPurchaseUpgrade(CustomTerminalNode node, int price, Action backAction)
         {

@@ -63,7 +63,7 @@ namespace MoreShipUpgrades.UI.Cursor
                 sb.Append("$");
                 sb.Append(LguConstants.COLOR_FINAL_FORMAT);
             }
-            if (!CurrencyManager.Enabled) return;
+            if (!Node.AlternateCurrency) return;
             sb.Append("/");
             int currencyPrice = CurrencyManager.Instance.GetCurrencyAmountFromCredits(price);
             int currentPlayerCredits = CurrencyManager.Instance.CurrencyAmount;

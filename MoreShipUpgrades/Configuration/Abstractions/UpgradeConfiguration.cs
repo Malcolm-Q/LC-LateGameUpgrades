@@ -13,5 +13,6 @@ namespace MoreShipUpgrades.Configuration.Abstractions
         [field: SyncedEntryField] public SyncedEntry<int> MaximumSalePercentage { get; set; } = cfg.BindSyncedEntry(topSection, "Maximum Sale Percentage", 90, "Maximum percentage achieved when the upgrade goes on sale");
         [field: SyncedEntryField] public SyncedEntry<string> OverrideName { get; set; } = cfg.BindSyncedEntry(topSection, string.Format(LguConstants.OVERRIDE_NAME_KEY_FORMAT, topSection), topSection);
         [field: SyncedEntryField] public SyncedEntry<string> ItemProgressionItems { get; set; } = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+        [field: SyncedEntryField] public SyncedEntry<bool> AlternateCurrency { get; set; } = cfg.BindSyncedEntry(topSection, "Allow Alternate Currency", true, "If enabled, allows purchasing upgrades with Player Credits. Only relevant when Alternate Currency mode is enabled.");
     }
 }

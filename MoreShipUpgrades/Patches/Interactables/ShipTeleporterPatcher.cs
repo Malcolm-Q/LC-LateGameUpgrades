@@ -1,6 +1,5 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
-using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.Configuration;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Util;
@@ -39,7 +38,6 @@ namespace MoreShipUpgrades.Patches.Interactables
         [HarmonyDebug]
         static IEnumerable<CodeInstruction> beamOutPlayerTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            MethodInfo SetPlayerTeleporterId = typeof(ShipTeleporter).GetMethod(nameof(ShipTeleporter.SetPlayerTeleporterId), BindingFlags.Instance | BindingFlags.NonPublic);
             MethodInfo DecreaseTeleportTime = typeof(ParticleInfuser).GetMethod(nameof(ParticleInfuser.DecreaseTeleportTime));
 
             List<CodeInstruction> codes = new(instructions);

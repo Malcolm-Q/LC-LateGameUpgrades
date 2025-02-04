@@ -8,6 +8,7 @@ namespace MoreShipUpgrades.Configuration.Interfaces
         SyncedEntry<int> MinimumSalePercentage { get; set; }
         SyncedEntry<int> MaximumSalePercentage { get; set; }
         SyncedEntry<string> OverrideName { get; set; }
+        SyncedEntry<bool> AlternateCurrency { get; set; }
         SyncedEntry<string> ItemProgressionItems { get; set; }
     }
 }

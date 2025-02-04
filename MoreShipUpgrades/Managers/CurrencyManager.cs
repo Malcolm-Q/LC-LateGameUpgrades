@@ -1,4 +1,5 @@
-﻿using MoreShipUpgrades.Misc.Util;
+﻿using GameNetcodeStuff;
+using MoreShipUpgrades.Misc.Util;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -114,7 +115,7 @@ namespace MoreShipUpgrades.Managers
         }
 
         [ServerRpc(RequireOwnership = false)]
-        public void TradePlayerCreditsServerRpc(ulong tradingClientId, int playerCreditAmount)
+        public void TradePlayerCreditsServerRpc(ulong tradingClientId, int playerCreditAmount, ServerRpcParams serverRpcParams = default)
         {
             ClientRpcParams clientRpcParams = new ClientRpcParams()
             {
@@ -123,15 +124,16 @@ namespace MoreShipUpgrades.Managers
                     TargetClientIds = [tradingClientId]
                 }
             };
-            TradePlayerCreditsClientRpc(playerCreditAmount, clientRpcParams);
+            TradePlayerCreditsClientRpc(serverRpcParams.Receive.SenderClientId, playerCreditAmount, clientRpcParams);
         }
 
         [ClientRpc]
-        public void TradePlayerCreditsClientRpc(int playerCreditAmount, ClientRpcParams clientRpcParams = default)
+        public void TradePlayerCreditsClientRpc(ulong traderClientId, int playerCreditAmount, ClientRpcParams clientRpcParams = default)
         {
             AddCurrencyAmount(playerCreditAmount);
+            PlayerControllerB traderPlayer = StartOfRound.Instance.allPlayerScripts[traderClientId];
 
-            HUDManager.Instance.DisplayTip("Player Credits", $"You have received {playerCreditAmount} {LguConstants.ALTERNATIVE_CURRENCY_ALIAS}s from a player. You currently have {CurrencyAmount} {LguConstants.ALTERNATIVE_CURRENCY_ALIAS}s to use in the upgrade shop.");
+            HUDManager.Instance.DisplayTip("Player Credits", $"You have received {playerCreditAmount} {LguConstants.ALTERNATIVE_CURRENCY_ALIAS}s from {traderPlayer.playerUsername}. You currently have {CurrencyAmount} {LguConstants.ALTERNATIVE_CURRENCY_ALIAS}s to use in the upgrade shop.");
         }
     }
 }
