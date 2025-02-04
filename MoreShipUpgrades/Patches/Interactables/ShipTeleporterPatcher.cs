@@ -36,14 +36,16 @@ namespace MoreShipUpgrades.Patches.Interactables
 
         [HarmonyPatch(nameof(ShipTeleporter.beamOutPlayer), MethodType.Enumerator)]
         [HarmonyTranspiler]
+        [HarmonyDebug]
         static IEnumerable<CodeInstruction> beamOutPlayerTranspiler(IEnumerable<CodeInstruction> instructions)
         {
+            MethodInfo SetPlayerTeleporterId = typeof(ShipTeleporter).GetMethod(nameof(ShipTeleporter.SetPlayerTeleporterId), BindingFlags.Instance | BindingFlags.NonPublic);
             MethodInfo DecreaseTeleportTime = typeof(ParticleInfuser).GetMethod(nameof(ParticleInfuser.DecreaseTeleportTime));
 
             List<CodeInstruction> codes = new(instructions);
             int index = 0;
-
             Tools.FindFloat(ref index, ref codes, findValue: 1f, addCode: DecreaseTeleportTime);
+
             return codes;
         }
 
@@ -87,6 +89,15 @@ namespace MoreShipUpgrades.Patches.Interactables
             codes.InsertRange(index + 1, setTeleporterIdCodes);
 
             return codes;
+        }
+
+        [HarmonyPatch(nameof(ShipTeleporter.TeleportPlayerOutWithInverseTeleporter))]
+        [HarmonyPrefix]
+        static void TeleportPlayerOutWithInverseTeleporterPrefix(ShipTeleporter __instance, int playerObj)
+        {
+            if (StartOfRound.Instance.allPlayerScripts[playerObj].isPlayerDead) return;
+            __instance.SetPlayerTeleporterId(StartOfRound.Instance.allPlayerScripts[playerObj], 2);
+
         }
 
         [HarmonyPatch(nameof(ShipTeleporter.Update))]

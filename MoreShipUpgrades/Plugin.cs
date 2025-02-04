@@ -79,7 +79,6 @@ namespace MoreShipUpgrades
             UpgradeBus.Instance.UpgradeAssets = UpgradeAssets;
             UpgradeBus.Instance.SetConfiguration(config);
             SetupModStore(ref UpgradeAssets);
-
             SetupItems(ref types);
             SetupCommands(ref types);
             SetupPerks(ref types);
@@ -94,9 +93,12 @@ namespace MoreShipUpgrades
                 InteractiveTerminalManager.RegisterApplication<ConvertPlayerCreditApplication>(["convert", "PC"], caseSensitive: false);
             }
             InteractiveTerminalManager.RegisterApplication<UpgradeStoreApplication>(["lgu", "lategame store"], caseSensitive: false);
-            InteractiveTerminalManager.RegisterApplication<ContractApplication>("contracts", caseSensitive: false);
-            if (!config.CONTRACT_PROVIDE_RANDOM_ONLY)
-                InteractiveTerminalManager.RegisterApplication<ContractApplication>("contract", caseSensitive: false);
+            if (config.CONTRACTS_ENABLED)
+            {
+                InteractiveTerminalManager.RegisterApplication<ContractApplication>("contracts", caseSensitive: false);
+                if (!config.CONTRACT_PROVIDE_RANDOM_ONLY)
+                    InteractiveTerminalManager.RegisterApplication<ContractApplication>("contract", caseSensitive: false);
+            }
 
             mls.LogInfo($"{Metadata.NAME} {Metadata.VERSION} has been loaded successfully.");
         }
