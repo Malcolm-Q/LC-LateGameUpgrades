@@ -47,8 +47,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 ITierEffectUpgradeConfiguration<float> config = GetConfiguration().ShutterBatteriesConfiguration;
                 return config.InitialEffect.Value + (level * config.IncrementalEffect.Value);
             }
-            const string infoFormat = "LVL {0} - ${1} - Increases the door's hydraulic capacity to remain closed by {2} units\n";
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            const string infoFormat = "LVL {0} - {1} - Increases the door's hydraulic capacity to remain closed by {2} units\n";
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().ShutterBatteriesConfiguration.PurchaseMode);
         }
         public override bool CanInitializeOnStart
         {

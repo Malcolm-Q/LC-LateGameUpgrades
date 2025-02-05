@@ -145,7 +145,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies
                 .Select(item => item.Key));
 
             return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME),
-                level + 1, price, monsterList);
+                level + 1, GetUpgradePrice(price, GetConfiguration().HunterConfiguration.PurchaseMode), monsterList);
         }
 
         public string GetWorldBuildingText(bool shareStatus = false)

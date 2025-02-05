@@ -60,7 +60,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 return 100 * (damageReductionPair.Item1.Value - (level * damageReductionPair.Item2.Value));
             }
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction) + $"\nOn maximum level, applies a {(GetConfiguration().BeekeeperConfiguration.GetEffectPair(1).Item1 - 1f)*100f:F0}% scrap value increase on beehives.";
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().BeekeeperConfiguration.PurchaseMode) + $"\nOn maximum level, applies a {(GetConfiguration().BeekeeperConfiguration.GetEffectPair(1).Item1 - 1f)*100f:F0}% scrap value increase on beehives.";
         }
 
         public override bool CanInitializeOnStart

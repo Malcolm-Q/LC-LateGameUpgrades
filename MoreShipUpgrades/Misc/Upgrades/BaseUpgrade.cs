@@ -112,6 +112,19 @@ namespace MoreShipUpgrades.Misc.Upgrades
         /// <returns>Wether the upgrade can be loaded immediately upon game being loaded or not</returns>
         public abstract bool CanInitializeOnStart { get; }
 
+        public static string GetUpgradePrice(int price, PurchaseMode mode)
+        {
+            if (!GetConfiguration().ALTERNATIVE_CURRENCY_ENABLED) return $"${price}";
+
+            switch (mode)
+            {
+                case PurchaseMode.Both: return $"${price}/{CurrencyManager.Instance.GetCurrencyAmountFromCreditsConversion(price)} PC";
+                case PurchaseMode.AlternateCurrency: return $"{CurrencyManager.Instance.GetCurrencyAmountFromCreditsConversion(price)} PC";
+                case PurchaseMode.CompanyCredits: return $"${price}";
+                default: return string.Empty;
+            }
+        }
+
         /// <summary>
         /// Registers the associated upgrade to the game to be initialized correctly
         /// <para></para>

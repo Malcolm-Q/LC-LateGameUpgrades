@@ -32,8 +32,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
                 DeeperPocketsUpgradeConfiguration config = GetConfiguration().DeeperPocketsConfiguration;
                 return config.InitialEffect.Value + (level * config.IncrementalEffect.Value);
             }
-            const string infoFormat = "LVL {0} - ${1} - Increases the two handed carry capacity of the player by {2}\n";
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            const string infoFormat = "LVL {0} - {1} - Increases the two handed carry capacity of the player by {2}\n";
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().DeeperPocketsConfiguration.PurchaseMode);
         }
 
         public override bool CanInitializeOnStart

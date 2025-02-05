@@ -29,7 +29,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
         }
         public override string GetDisplayInfo(int price = -1)
         {
-            return $"${price} - Guarantees at least one item will be on sale in the store.";
+            return $"${GetUpgradePrice(price, GetConfiguration().LethalDealsConfiguration.PurchaseMode)} - Guarantees at least one item will be on sale in the store.";
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {

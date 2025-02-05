@@ -47,8 +47,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
                 ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().ScavengerInstictsConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
-            const string infoFormat = "LVL {0} - ${1} - Increases the average amount of scrap spawns by {2} additional items.\n";
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            const string infoFormat = "LVL {0} - {1} - Increases the average amount of scrap spawns by {2} additional items.\n";
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().ScavengerInstictsConfiguration.PurchaseMode);
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {

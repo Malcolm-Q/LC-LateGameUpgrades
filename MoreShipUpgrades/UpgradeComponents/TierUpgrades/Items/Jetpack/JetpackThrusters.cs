@@ -40,8 +40,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack
                 ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().JetpackThrustersConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
-            const string infoFormat = "LVL {0} - ${1} - The maximum speed of the jetpack during flight is increased by {2}%\n";
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            const string infoFormat = "LVL {0} - {1} - The maximum speed of the jetpack during flight is increased by {2}%\n";
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().JetpackThrustersConfiguration.PurchaseMode);
         }
         public static float GetIncreasedMaximumPower()
         {

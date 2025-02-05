@@ -295,11 +295,13 @@ namespace MoreShipUpgrades.Managers
                                                         bool enabled,
                                                         int initialPrice,
                                                         int[] prices,
-                                                        string overrideName = ""
+                                                        string overrideName = "",
+                                                        bool alternateCurrency = true,
+                                                        PurchaseMode purchaseMode = default
                                                         )
         {
             GameObject multiPerk = AssetBundleHandler.GetPerkGameObject(upgradeName) ;
-            return SetupMultiplePurchasableTerminalNode(upgradeName, shareStatus, enabled, initialPrice, prices, overrideName, multiPerk);
+            return SetupMultiplePurchasableTerminalNode(upgradeName, shareStatus, enabled, initialPrice, prices, overrideName, multiPerk, alternateCurrency, purchaseMode);
         }
         internal CustomTerminalNode SetupMultiplePurchasableTerminalNode(string upgradeName,
                                                                         bool shareStatus,
@@ -308,7 +310,8 @@ namespace MoreShipUpgrades.Managers
                                                                         int[] prices,
                                                                         string overrideName,
                                                                         GameObject prefab,
-                                                                        bool alternateCurrency = true)
+                                                                        bool alternateCurrency = true,
+                                                                        PurchaseMode purchaseMode = default)
         {
             if (prefab == null) return null;
             if (!enabled) return null;
@@ -325,7 +328,8 @@ namespace MoreShipUpgrades.Managers
                 maxUpgrade: prices.Length,
                 originalName: upgradeName,
                 sharedUpgrade: shareStatus,
-                alternateCurrency: alternateCurrency);
+                alternateCurrency: alternateCurrency,
+                purchaseMode: purchaseMode);
         }
         public CustomTerminalNode SetupMultiplePurchaseableTerminalNode(string upgradeName, ITierUpgradeConfiguration configuration)
         {
@@ -346,7 +350,8 @@ namespace MoreShipUpgrades.Managers
                 prices: incrementalPrices,
                 overrideName: PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? configuration.OverrideName : "",
                 prefab: prefab,
-                alternateCurrency: PluginConfiguration.ALTERNATIVE_CURRENCY_ENABLED && configuration.AlternateCurrency);
+                alternateCurrency: PluginConfiguration.ALTERNATIVE_CURRENCY_ENABLED,
+                purchaseMode: configuration.PurchaseMode);
         }
         public CustomTerminalNode SetupOneTimeTerminalNode(string upgradeName, IOneTimeUpgradeConfiguration configuration)
         {
@@ -363,36 +368,9 @@ namespace MoreShipUpgrades.Managers
                 price: configuration.Price,
                 overrideName: PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? configuration.OverrideName : "",
                 prefab: prefab,
-                alternateCurrency: PluginConfiguration.ALTERNATIVE_CURRENCY_ENABLED && configuration.AlternateCurrency);
-        }
-        /// <summary>
-        /// Generic function where it adds a terminal node for an upgrade that can only be bought once
-        /// </summary>
-        /// <param name="upgradeName"> Name of the upgrade</param>
-        /// <param name="shareStatus"> Wether the upgrade is shared through all players or only for the player who purchased it</param>
-        /// <param name="enabled"> Wether the upgrade is enabled for gameplay or not</param>
-        /// <param name="price"></param>
-        internal CustomTerminalNode SetupOneTimeTerminalNode(string upgradeName,
-                                              bool shareStatus,
-                                              bool enabled,
-                                              int price,
-                                              string overrideName = ""
-                                              )
-        {
-            GameObject oneTimeUpgrade = AssetBundleHandler.GetPerkGameObject(upgradeName);
-            if (!oneTimeUpgrade) return null;
-            if (!enabled) return null;
-            string info = SetupUpgradeInfo(upgrade: oneTimeUpgrade.GetComponent<BaseUpgrade>(), price: price);
-            string moreInfo = info;
-            if (UpgradeBus.Instance.PluginConfiguration.SHOW_WORLD_BUILDING_TEXT && oneTimeUpgrade.GetComponent<BaseUpgrade>() is IUpgradeWorldBuilding component) moreInfo += "\n\n" + component.GetWorldBuildingText(shareStatus) + "\n";
-
-            return new OneTimeTerminalNode(
-                name: overrideName != "" ? overrideName : upgradeName,
-                unlockPrice: price,
-                description: moreInfo,
-                prefab: oneTimeUpgrade,
-                originalName: upgradeName,
-                sharedUpgrade: shareStatus);
+                alternateCurrency: PluginConfiguration.ALTERNATIVE_CURRENCY_ENABLED,
+                purchaseMode: configuration.PurchaseMode
+                );
         }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can only be bought once
@@ -407,7 +385,8 @@ namespace MoreShipUpgrades.Managers
                                               int price,
                                               string overrideName,
                                               GameObject prefab,
-                                              bool alternateCurrency = true
+                                              bool alternateCurrency = true,
+                                              PurchaseMode purchaseMode = default
                                               )
         {
             if (!enabled) return null;
@@ -422,7 +401,8 @@ namespace MoreShipUpgrades.Managers
                 prefab: prefab,
                 originalName: upgradeName,
                 sharedUpgrade: shareStatus,
-                alternateCurrency: alternateCurrency);
+                alternateCurrency: alternateCurrency,
+                purchaseMode: purchaseMode);
         }
 
         public string SetupUpgradeInfo(BaseUpgrade upgrade = null, int price = -1, int[] incrementalPrices = null)

@@ -129,8 +129,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
             IEnumerable<string> categoryLevelKeys = categoryLevels.Where(category => category.Value == level).Select(category => category.Key.ToString());
             string itemList = string.Join(", ", levelKeys.Concat(categoryLevelKeys));
 
-            return string.Format("LVL {0} - ${1} - Allows safekeeping the following items when teleporting: {2}\n",
-                level + 1, price, itemList);
+            return string.Format("LVL {0} - {1} - Allows safekeeping the following items when teleporting: {2}\n",
+                level + 1, GetUpgradePrice(price, GetConfiguration().FusionMatterConfiguration.PurchaseMode), itemList);
         }
 
         public override bool CanInitializeOnStart

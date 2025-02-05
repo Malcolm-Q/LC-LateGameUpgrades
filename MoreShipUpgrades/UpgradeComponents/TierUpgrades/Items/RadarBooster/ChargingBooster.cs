@@ -76,11 +76,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.RadarBooster
                 (SyncedEntry<float>, SyncedEntry<float>) cooldownPair = config.GetEffectPair(0);
                 return cooldownPair.Item1.Value - (level * config.GetEffectPair(0).Item2.Value);
             }
-            const string infoFormat = "LVL {0} - ${1} - Radar boosters will have a recharge cooldown of {2} seconds.\n";
+            const string infoFormat = "LVL {0} - {1} - Radar boosters will have a recharge cooldown of {2} seconds.\n";
 
             ITierMultipleEffectUpgradeConfiguration<float, int> config = GetConfiguration().ChargingBoosterConfiguration;
             (SyncedEntry<float>, SyncedEntry<float>) cooldownPair = config.GetEffectPair(0);
-            return $"LVL 1 - ${initialPrice} -  Provides charging stations to the radar boosters. After used, goes on cooldown for {cooldownPair.Item1.Value} seconds\n" + Tools.GenerateInfoForUpgrade(infoFormat, 0, incrementalPrices, infoFunction, skipFirst: true);
+            return $"LVL 1 - {GetUpgradePrice(initialPrice, config.PurchaseMode)} -  Provides charging stations to the radar boosters. After used, goes on cooldown for {cooldownPair.Item1.Value} seconds\n" + Tools.GenerateInfoForUpgrade(infoFormat, 0, incrementalPrices, infoFunction, skipFirst: true, config.PurchaseMode);
         }
         public override bool CanInitializeOnStart
         {

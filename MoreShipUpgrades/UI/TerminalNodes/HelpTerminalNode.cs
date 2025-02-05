@@ -1,4 +1,5 @@
 ﻿using MoreShipUpgrades.Managers;
+using System;
 
 namespace MoreShipUpgrades.UI.TerminalNodes
 {
@@ -8,6 +9,8 @@ namespace MoreShipUpgrades.UI.TerminalNodes
     internal static class HelpTerminalNode
     {
         static bool addedHelp = false;
+        const string TRADING_HELP_COMMAND = ">LGU TRADE / TRADE PLAYER CREDITS / TRADE\n Allows trading Player Credits between players.\n\n";
+        const string CONVERT_HELP_COMMAND = ">CONVERT / PC\nAllows converting Company Credits to Player Credits and vice versa.\n\n";
         const string INTERNS_HELP_COMMAND = ">INTERNS / INTERN\nRevives the selected player in radar with a new employee. Consumes {0} credits for each revive.\n\n";
 
         const string CONTRACT_HELP_COMMAND = ">CONTRACT [moon]\nGives you a random contract for a scrap item with considerable value and lasts til you leave from assigned planet.\nConsumes {0} credits for each contract and will be unable to get another contract til current has expired.\nIf a moon is specified, it will generate a contract for that moon for the cost of {1} Company credits instead.\n\n";
@@ -58,6 +61,15 @@ namespace MoreShipUpgrades.UI.TerminalNodes
             if (UpgradeBus.Instance.PluginConfiguration.INTERN_ENABLED.Value)
             {
                 return string.Format(INTERNS_HELP_COMMAND, UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value);
+            }
+            return "";
+        }
+
+        internal static string HandleAlternateCurrency()
+        {
+            if (UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_CURRENCY_ENABLED.Value)
+            {
+                return CONVERT_HELP_COMMAND + TRADING_HELP_COMMAND;
             }
             return "";
         }

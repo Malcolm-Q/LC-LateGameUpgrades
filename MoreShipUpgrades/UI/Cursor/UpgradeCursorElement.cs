@@ -50,21 +50,24 @@ namespace MoreShipUpgrades.UI.Cursor
         void AppendPriceText(ref StringBuilder sb)
         {
             int price = Node.GetCurrentPrice();
-            int currentCredits = UpgradeBus.Instance.GetTerminal().groupCredits;
-            if (price <= currentCredits)
+            if (!Node.AlternateCurrency || Node.PurchaseMode != PurchaseMode.AlternateCurrency)
             {
-                sb.Append(price);
-                sb.Append("$");
+                int currentCredits = UpgradeBus.Instance.GetTerminal().groupCredits;
+                if (price <= currentCredits)
+                {
+                    sb.Append(price);
+                    sb.Append("$");
+                }
+                else
+                {
+                    sb.Append(string.Format(LguConstants.COLOR_INITIAL_FORMAT, LguConstants.HEXADECIMAL_DARK_RED));
+                    sb.Append(price);
+                    sb.Append("$");
+                    sb.Append(LguConstants.COLOR_FINAL_FORMAT);
+                }
             }
-            else
-            {
-                sb.Append(string.Format(LguConstants.COLOR_INITIAL_FORMAT, LguConstants.HEXADECIMAL_DARK_RED));
-                sb.Append(price);
-                sb.Append("$");
-                sb.Append(LguConstants.COLOR_FINAL_FORMAT);
-            }
-            if (!Node.AlternateCurrency) return;
-            sb.Append("/");
+            if (!Node.AlternateCurrency || Node.PurchaseMode == PurchaseMode.CompanyCredits) return;
+            if (Node.PurchaseMode != PurchaseMode.AlternateCurrency) sb.Append("/");
             int currencyPrice = CurrencyManager.Instance.GetCurrencyAmountFromCredits(price);
             int currentPlayerCredits = CurrencyManager.Instance.CurrencyAmount;
             if (currencyPrice <= currentPlayerCredits)
