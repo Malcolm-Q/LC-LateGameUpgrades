@@ -2,6 +2,7 @@
 <summary> 3.11.5 - 2025-02-01 </summary>
 
 - Fixed Discombobulator configuration using cooldown as stun timer.
+- Fixed Hiking Boots using Effective Bandaid configuration instead of its own for calculations.
 - Fixed issue with host not seeing items being teleported with clients through Fusion Matter.
 - Added configuration for Discombobulator to apply the stun time as absolute due to enemies' stun resistance.
 - Made Contracts' Enabled Configuration influence the registration of related applications
