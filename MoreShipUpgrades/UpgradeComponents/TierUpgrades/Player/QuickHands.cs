@@ -44,8 +44,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
                 ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().QuickHandsConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
-            const string infoFormat = "LVL {0} - ${1} - Increases interaction speed of the player by {2}%\n";
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            const string infoFormat = "LVL {0} - {1} - Increases interaction speed of the player by {2}%\n";
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().QuickHandsConfiguration.PurchaseMode);
         }
 
         public override bool CanInitializeOnStart

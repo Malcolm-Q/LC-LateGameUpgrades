@@ -16,6 +16,7 @@ using InteractiveTerminalAPI.UI;
 using static BepInEx.BepInDependency;
 using MoreShipUpgrades.UI.Application;
 using MoreShipUpgrades.Configuration;
+using ExtendDeadline.Misc.UI.Application;
 
 namespace MoreShipUpgrades
 {
@@ -86,6 +87,11 @@ namespace MoreShipUpgrades
             InputUtilsCompat.Init();
             PatchManager.PatchMainVersion();
 
+            if (config.ALTERNATIVE_CURRENCY_ENABLED)
+            {
+                InteractiveTerminalManager.RegisterApplication<TradePlayerCreditsApplication>(["trade", "trade player credits", "lgu trade"], caseSensitive: false);
+                InteractiveTerminalManager.RegisterApplication<ConvertPlayerCreditApplication>(["convert", "PC"], caseSensitive: false);
+            }
             InteractiveTerminalManager.RegisterApplication<UpgradeStoreApplication>(["lgu", "lategame store"], caseSensitive: false);
             if (config.CONTRACTS_ENABLED)
             {
@@ -101,6 +107,7 @@ namespace MoreShipUpgrades
         {
             GameObject modStore = AssetBundleHandler.TryLoadGameObjectAsset(ref bundle, "Assets/ShipUpgrades/LguStore.prefab");
             modStore.AddComponent<ContractManager>();
+            modStore.AddComponent<CurrencyManager>();
             modStore.AddComponent<LguStore>();
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(modStore);
             UpgradeBus.Instance.modStorePrefab = modStore;

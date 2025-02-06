@@ -5,7 +5,6 @@ using Unity.Netcode;
 using GameNetcodeStuff;
 using MoreShipUpgrades.UI.TerminalNodes;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
-using MoreShipUpgrades.Configuration;
 
 namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies
 {
@@ -74,7 +73,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies
         }
         public override string GetDisplayInfo(int price = -1)
         {
-            return $"${price} - Butlers will not feel the urge of stabbing you due to your sophisticated taste in clothes.";
+            return $"{GetUpgradePrice(price, GetConfiguration().FedoraSuitConfiguration.PurchaseMode)} - Butlers will not feel the urge of stabbing you due to your sophisticated taste in clothes.";
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {

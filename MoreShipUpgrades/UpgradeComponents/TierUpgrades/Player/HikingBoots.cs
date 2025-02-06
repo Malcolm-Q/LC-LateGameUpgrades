@@ -27,7 +27,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         static float ComputeUphillSlopeDebuffMultiplier()
         {
-            ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().EffectiveBandaidsConfiguration;
+            ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().HikingBootsConfiguration;
             return 1f - ((upgradeConfig.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfig.IncrementalEffect))/100f);
         }
         public static float ReduceUphillSlopeDebuff(float defaultValue)
@@ -41,11 +41,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             static float infoFunction(int level)
             {
-                ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().EffectiveBandaidsConfiguration;
+                ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().HikingBootsConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
-            const string infoFormat = "LVL {0} - ${1} - Reduces the movement speed change when going through slopes by {2}%\n";
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            const string infoFormat = "LVL {0} - {1} - Reduces the movement speed change when going through slopes by {2}%\n";
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().HikingBootsConfiguration.PurchaseMode);
         }
 
         public override bool CanInitializeOnStart

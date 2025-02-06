@@ -40,8 +40,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Store
                 ITierEffectUpgradeConfiguration<int> config = GetConfiguration().MarketInfluenceConfiguration;
                 return config.InitialEffect.Value + (level * config.IncrementalEffect.Value);
             }
-            const string infoFormat = "LVL {0} - ${1} - Guarantees the item sales' percentage to be at least {2}%\n";
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            const string infoFormat = "LVL {0} - {1} - Guarantees the item sales' percentage to be at least {2}%\n";
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().MarketInfluenceConfiguration.PurchaseMode);
         }
         public override bool CanInitializeOnStart
         {

@@ -121,12 +121,12 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
                     }
                 case UpgradeMode.ReduceCarryInfluence:
                     {
-                        infoFormat = "LVL {0} - ${1} - Reduces the weight's influence on player's running speed by {2}%\n";
+                        infoFormat = "LVL {0} - {1} - Reduces the weight's influence on player's running speed by {2}%\n";
                         break;
                     }
                 case UpgradeMode.ReduceCarryStrain:
                     {
-                        infoFormat = "LVL {0} - ${1} - Reduces the weight's influence on player's stamina consumption while running by {2}%\n";
+                        infoFormat = "LVL {0} - {1} - Reduces the weight's influence on player's stamina consumption while running by {2}%\n";
                         break;
                     }
                 default:
@@ -135,7 +135,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
                         break;
                     }
             }
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().BackMusclesConfiguration.PurchaseMode);
         }
         public override bool CanInitializeOnStart
         {

@@ -1713,6 +1713,12 @@ namespace MoreShipUpgrades.Misc.Util
 
         #endregion
 
+        #region Alternative Currency
+
+        internal const string ALTERNATIVE_CURRENCY_ALIAS = "PC";
+
+        #endregion
+
         #region LGU Store Interactive UI
 
         internal const string COLOR_INITIAL_FORMAT = "<color={0}>";
@@ -1736,6 +1742,7 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string REACHED_MAX_LEVEL = "You have reached the maximum level of this upgrade.";
         internal const string LOCKED_UPGRADE = "This upgrade has been assigned to another crew member.";
         internal const string PURCHASE_UPGRADE_FORMAT = "Do you wish to purchase this upgrade for {0} credits?";
+        internal const string PURCHASE_UPGRADE_ALTERNATE_FORMAT = "Do you wish to purchase this upgrade for {0} player credits?";
 
         #endregion
 

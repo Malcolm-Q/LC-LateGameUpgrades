@@ -48,8 +48,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 LandingThrusterUpgradeConfiguration config = GetConfiguration().LandingThrustersConfiguration;
                 return config.InitialEffect.Value + (level * config.IncrementalEffect.Value);
             }
-            const string infoFormat = "LVL {0} - ${1} - Increases the ship's landing speed by {2}%\n";
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            const string infoFormat = "LVL {0} - {1} - Increases the ship's landing speed by {2}%\n";
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().LandingThrustersConfiguration.PurchaseMode);
         }
 
         public override bool CanInitializeOnStart

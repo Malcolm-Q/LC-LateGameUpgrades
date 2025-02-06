@@ -42,8 +42,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
                 ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().LifeInsuranceConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
-            const string infoFormat = "LVL {0} - ${1} - Reduces the credit loss when leaving a body behind when exiting a moon by {2}%\n";
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            const string infoFormat = "LVL {0} - {1} - Reduces the credit loss when leaving a body behind when exiting a moon by {2}%\n";
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().LifeInsuranceConfiguration.PurchaseMode);
         }
 
         public override bool CanInitializeOnStart

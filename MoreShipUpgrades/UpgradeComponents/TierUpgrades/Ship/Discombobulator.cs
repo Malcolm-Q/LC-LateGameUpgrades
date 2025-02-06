@@ -48,7 +48,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         {
             Terminal terminal = UpgradeBus.Instance.GetTerminal();
             PlayAudio(ref terminal);
-            flashCooldown = GetConfiguration().DiscombobulatorUpgradeConfiguration.InitialEffect.Value;
+            flashCooldown = GetConfiguration().DiscombobulatorUpgradeConfiguration.Cooldown.Value;
             StunNearbyEnemies(ref terminal);
         }
 
@@ -127,7 +127,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
                 return config.InitialEffect.Value + (level * config.IncrementalDamage.Value);
             }
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().DiscombobulatorUpgradeConfiguration.PurchaseMode);
         }
         public override bool CanInitializeOnStart
         {

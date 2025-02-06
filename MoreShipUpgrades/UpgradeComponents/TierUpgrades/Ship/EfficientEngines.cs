@@ -31,8 +31,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 ITierEffectUpgradeConfiguration<int> config = GetConfiguration().EfficientEnginesConfiguration;
                 return config.InitialEffect.Value + (level * config.IncrementalEffect.Value);
             }
-            const string infoFormat = "LVL {0} - ${1} - Moon routing will be {2}% cheaper\n";
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            const string infoFormat = "LVL {0} - {1} - Moon routing will be {2}% cheaper\n";
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().EfficientEnginesConfiguration.PurchaseMode);
         }
 
         public static int GetDiscountedMoonPrice(int defaultPrice)

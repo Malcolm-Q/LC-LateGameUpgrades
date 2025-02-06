@@ -40,8 +40,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun
                 ITierEffectUpgradeConfiguration<int> config = GetConfiguration().LongBarrelConfiguration;
                 return config.InitialEffect.Value + (level * config.IncrementalEffect.Value);
             }
-            const string infoFormat = "LVL {0} - ${1} - Shotgun's range and its effective damage ranges are increased by {2}%\n";
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            const string infoFormat = "LVL {0} - {1} - Shotgun's range and its effective damage ranges are increased by {2}%\n";
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().LongBarrelConfiguration.PurchaseMode);
         }
         public static float ComputeLongBarrelRangeBoost()
         {

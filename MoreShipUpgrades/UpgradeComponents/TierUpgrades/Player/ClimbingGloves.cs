@@ -32,8 +32,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 ITierEffectUpgradeConfiguration<float> config = GetConfiguration().ClimblingGlovesConfiguration;
                 return config.InitialEffect.Value + (level * config.IncrementalEffect.Value);
             }
-            const string infoFormat = "LVL {0} - ${1} - Increases the speed of climbing ladders by {2} units.\n";
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            const string infoFormat = "LVL {0} - {1} - Increases the speed of climbing ladders by {2} units.\n";
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().ClimblingGlovesConfiguration.PurchaseMode);
         }
         public override bool CanInitializeOnStart
         {

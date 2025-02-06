@@ -23,7 +23,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies
         }
         public override string GetDisplayInfo(int price = -1)
         {
-            return $"${price} - The pellets in the shotgun are replaced with silver, allowing you to cleanse some paranormal activity if necessary.";
+            return $"{GetUpgradePrice(price, GetConfiguration().SilverBulletsConfiguration.PurchaseMode)} - The pellets in the shotgun are replaced with silver, allowing you to cleanse some paranormal activity if necessary.";
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {

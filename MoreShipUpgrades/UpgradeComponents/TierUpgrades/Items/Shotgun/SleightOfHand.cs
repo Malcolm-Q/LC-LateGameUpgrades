@@ -41,8 +41,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun
                 ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().SleightOfHandConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
-            const string infoFormat = "LVL {0} - ${1} - The reload speed of weaponry is increased by {2}%\n";
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            const string infoFormat = "LVL {0} - {1} - The reload speed of weaponry is increased by {2}%\n";
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().SleightOfHandConfiguration.PurchaseMode);
         }
         public static float ComputeSleightOfHandSpeedBoost()
         {

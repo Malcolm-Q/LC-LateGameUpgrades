@@ -217,7 +217,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             string regenTime = "infinite";
             if (regenAdjustment != 0) regenTime = (batteryLife / regenAdjustment).ToString("F2");
 
-            return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), level, price, drainTime, regenTime);
+            return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), level, GetUpgradePrice(price, config.PurchaseMode), drainTime, regenTime);
         }
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)

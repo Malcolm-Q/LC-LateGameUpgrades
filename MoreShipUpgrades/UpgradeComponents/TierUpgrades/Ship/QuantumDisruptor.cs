@@ -152,8 +152,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
             StringBuilder sb = new();
             switch (level)
             {
-                case 1: sb.Append($"LVL {level} - ${price}: Unlocks \'quantum\' command which reverts curret moon's time by {infoFunctionHours(level - 1)} hours and can only be used {infoFunctionUsages(level - 1)} times per {resetString}\n"); break;
-                default: sb.Append($"LVL {level} - ${price}: Reverts curret moon's time by {infoFunctionHours(level - 1)} hours and can only be used {infoFunctionUsages(level - 1)} times per {resetString}\n"); break;
+                case 1: sb.Append($"LVL {level} - {GetUpgradePrice(price, GetConfiguration().QuantumDisruptorConfiguration.PurchaseMode)}: Unlocks \'quantum\' command which reverts curret moon's time by {infoFunctionHours(level - 1)} hours and can only be used {infoFunctionUsages(level - 1)} times per {resetString}\n"); break;
+                default: sb.Append($"LVL {level} - {GetUpgradePrice(price, GetConfiguration().QuantumDisruptorConfiguration.PurchaseMode)}: Reverts curret moon's time by {infoFunctionHours(level - 1)} hours and can only be used {infoFunctionUsages(level - 1)} times per {resetString}\n"); break;
             }
             return sb.ToString();
         }
@@ -168,8 +168,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
                             (SyncedEntry<int>, SyncedEntry<int>) slowMultiplierPair = GetConfiguration().QuantumDisruptorConfiguration.GetEffectPair(0);
                             return (slowMultiplierPair.Item1.Value + (level * slowMultiplierPair.Item2.Value));
                         }
-                        const string infoFormat = "LVL {0} - ${1} - Decreases the landed moon's rotation force (time passing) by {2}%\n";
-                        return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+                        const string infoFormat = "LVL {0} - {1} - Decreases the landed moon's rotation force (time passing) by {2}%\n";
+                        return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().QuantumDisruptorConfiguration.PurchaseMode);
                     }
                 case UpgradeModes.RevertTime:
                     {

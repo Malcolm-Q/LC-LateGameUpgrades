@@ -10,6 +10,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
     [HarmonyPatch(typeof(TimeOfDay))]
     internal static class TimeOfDayPatcher
     {
+
         [HarmonyPostfix]
         [HarmonyPatch(nameof(TimeOfDay.SyncNewProfitQuotaClientRpc))]
         static void SyncNewProfitQuotaClientRpcPostfix(TimeOfDay __instance)
@@ -51,6 +52,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         {
             if (!__instance.IsHost) return;
 
+            CurrencyManager.Instance.AddCurrencyAmountFromQuotaClientRpc(__instance.quotaFulfilled);
             ItemProgressionManager.CheckNewQuota(__instance.quotaFulfilled);
         }
     }

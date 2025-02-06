@@ -3,6 +3,7 @@ using CSync.Extensions;
 using CSync.Lib;
 using MoreShipUpgrades.Configuration.Interfaces;
 using MoreShipUpgrades.Misc.Util;
+using MoreShipUpgrades.UI.TerminalNodes;
 
 namespace MoreShipUpgrades.Configuration.Abstractions
 {
@@ -13,5 +14,6 @@ namespace MoreShipUpgrades.Configuration.Abstractions
         [field: SyncedEntryField] public SyncedEntry<int> MaximumSalePercentage { get; set; } = cfg.BindSyncedEntry(topSection, "Maximum Sale Percentage", 90, "Maximum percentage achieved when the upgrade goes on sale");
         [field: SyncedEntryField] public SyncedEntry<string> OverrideName { get; set; } = cfg.BindSyncedEntry(topSection, string.Format(LguConstants.OVERRIDE_NAME_KEY_FORMAT, topSection), topSection);
         [field: SyncedEntryField] public SyncedEntry<string> ItemProgressionItems { get; set; } = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_PROGRESSION_ITEMS_KEY, LguConstants.ITEM_PROGRESSION_ITEMS_DEFAULT, LguConstants.ITEM_PROGRESSION_ITEMS_DESCRIPTION);
+        [field: SyncedEntryField] public SyncedEntry<PurchaseMode> PurchaseMode { get; set; } = cfg.BindSyncedEntry(topSection, "Purchase Mode", UI.TerminalNodes.PurchaseMode.Both, "Method of purchase allowed for the upgrade");
     }
 }

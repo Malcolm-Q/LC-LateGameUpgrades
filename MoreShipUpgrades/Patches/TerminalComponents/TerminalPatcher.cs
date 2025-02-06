@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.Patches.Items;
@@ -87,6 +88,18 @@ namespace MoreShipUpgrades.Patches.TerminalComponents
             Tools.FindField(ref index, ref codes, itemCost, skip: true, errorMessage: "Couldn't find the item cost applied to a specific item with index 7");
             Tools.FindField(ref index, ref codes, itemCost, skip: true, errorMessage: "Couldn't find the item cost used when buying vehicles");
             Tools.FindField(ref index, ref codes, itemCost, addCode: applyMoonDiscount, errorMessage: "Couldn't find the item cost applied to moon routing");
+            return codes;
+        }
+
+        [HarmonyTranspiler]
+        [HarmonyPatch(nameof(Terminal.Update))]
+        static IEnumerable<CodeInstruction> UpdateTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo GetNewCreditFormat = typeof(CurrencyManager).GetMethod(nameof(CurrencyManager.GetNewCreditFormat));
+
+            List<CodeInstruction> codes = new(instructions);
+            int index = 0;
+            Tools.FindString(ref index, ref codes, findValue: "${0}", addCode:  GetNewCreditFormat, errorMessage: "Couldn't find the string format for showing credits in the terminal");
             return codes;
         }
     }

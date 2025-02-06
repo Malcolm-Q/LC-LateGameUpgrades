@@ -84,7 +84,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 return forcePair.Item1.Value + (forcePair.Item2.Value * level);
             }
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().ProteinPowderConfiguration.PurchaseMode);
         }
         public override bool CanInitializeOnStart
         {

@@ -51,8 +51,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies
                 ITierEffectUpgradeConfiguration<float> upgradeConfig = GetConfiguration().ClayGlassesConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
-            const string infoFormat = "LVL {0} - ${1} - The maximum distance to spot a \"Clay Surgeon\" entity is increased by {2} additional units.\n";
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            const string infoFormat = "LVL {0} - {1} - The maximum distance to spot a \"Clay Surgeon\" entity is increased by {2} additional units.\n";
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().ClayGlassesConfiguration.PurchaseMode.Value);
         }
 
         public new static (string, string[]) RegisterScrapToUpgrade()

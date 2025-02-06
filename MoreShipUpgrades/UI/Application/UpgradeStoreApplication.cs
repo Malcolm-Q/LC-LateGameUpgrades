@@ -220,13 +220,52 @@ namespace MoreShipUpgrades.UI.Application
 
             int groupCredits = UpgradeBus.Instance.GetTerminal().groupCredits;
             int price = node.GetCurrentPrice();
-            return groupCredits >= price;
+            bool canBeBoughtWithGroupCredits = groupCredits >= price;
+
+            if (!node.AlternateCurrency) return canBeBoughtWithGroupCredits;
+
+            int playerCredits = CurrencyManager.Instance.CurrencyAmount;
+            int playerPrice = CurrencyManager.Instance.GetCurrencyAmountFromCredits(price);
+            bool canBeBoughtWithPlayerCredits = playerCredits >= playerPrice;
+            switch (node.PurchaseMode)
+            {
+                case PurchaseMode.Both: return canBeBoughtWithGroupCredits || canBeBoughtWithPlayerCredits;
+                case PurchaseMode.CompanyCredits: return canBeBoughtWithGroupCredits;
+                case PurchaseMode.AlternateCurrency: return canBeBoughtWithPlayerCredits;
+                default: return false;
+            }
+        }
+
+        static bool CanBuyUpgradeWithGroupCredits(CustomTerminalNode node)
+        {
+            if (UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_ITEM_PROGRESSION && UpgradeBus.Instance.PluginConfiguration.ITEM_PROGRESSION_NO_PURCHASE_UPGRADES) return true;
+            bool maxLevel = node.CurrentUpgrade >= node.MaxUpgrade;
+            if (maxLevel && node.Unlocked)
+                return false;
+
+            int groupCredits = UpgradeBus.Instance.GetTerminal().groupCredits;
+            int price = node.GetCurrentPrice();
+            bool canBeBoughtWithGroupCredits = groupCredits >= price;
+            return canBeBoughtWithGroupCredits;
+        }
+
+        static bool CanBuyUpgradeWithPlayerCredits(CustomTerminalNode node)
+        {
+            if (UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_ITEM_PROGRESSION && UpgradeBus.Instance.PluginConfiguration.ITEM_PROGRESSION_NO_PURCHASE_UPGRADES) return true;
+            bool maxLevel = node.CurrentUpgrade >= node.MaxUpgrade;
+            if (maxLevel && node.Unlocked)
+                return false;
+
+            int price = node.GetCurrentPrice();
+
+            int playerCredits = CurrencyManager.Instance.CurrencyAmount;
+            int playerPrice = CurrencyManager.Instance.GetCurrencyAmountFromCredits(price);
+            bool canBeBoughtWithPlayerCredits = playerCredits >= playerPrice;
+            return canBeBoughtWithPlayerCredits;
         }
         public void BuyUpgrade(CustomTerminalNode node, Action backAction)
         {
             int groupCredits = UpgradeBus.Instance.GetTerminal().groupCredits;
-            bool maxLevel = node.CurrentUpgrade >= node.MaxUpgrade;
-
             StringBuilder discoveredItems = new();
             List<string> items = ItemProgressionManager.GetDiscoveredItems(node);
             if (items.Count > 0)
@@ -235,16 +274,60 @@ namespace MoreShipUpgrades.UI.Application
                 discoveredItems.Append(string.Join(",", items));
             }
             string finalText = node.Description + discoveredItems;
+            bool maxLevel = node.CurrentUpgrade >= node.MaxUpgrade;
             if (maxLevel && node.Unlocked)
             {
                 ErrorMessage(node.Name, finalText, backAction, LguConstants.REACHED_MAX_LEVEL);
                 return;
             }
             int price = node.GetCurrentPrice();
-            if (groupCredits < price)
+            switch(node.PurchaseMode)
             {
-                ErrorMessage(node.Name, finalText, backAction, LguConstants.NOT_ENOUGH_CREDITS);
-                return;
+                case PurchaseMode.CompanyCredits:
+                    {
+                        if (groupCredits < price)
+                        {
+                            ErrorMessage(node.Name, finalText, backAction, LguConstants.NOT_ENOUGH_CREDITS);
+                            return;
+                        }
+                        break;
+                    }
+                case PurchaseMode.AlternateCurrency:
+                    {
+                        if (!node.AlternateCurrency)
+                        {
+                            ErrorMessage(node.Name, finalText, backAction, LguConstants.NOT_ENOUGH_CREDITS);
+                            return;
+                        }
+
+                        int currencyPrice = CurrencyManager.Instance.GetCurrencyAmountFromCredits(price);
+                        int playerCredits = CurrencyManager.Instance.CurrencyAmount;
+                        if (playerCredits < currencyPrice)
+                        {
+                            ErrorMessage(node.Name, finalText, backAction, LguConstants.NOT_ENOUGH_CREDITS);
+                            return;
+                        }
+                        break;
+                    }
+                case PurchaseMode.Both:
+                    {
+                        if (groupCredits >= price) break;
+
+                        if (!node.AlternateCurrency)
+                        {
+                            ErrorMessage(node.Name, finalText, backAction, LguConstants.NOT_ENOUGH_CREDITS);
+                            return;
+                        }
+
+                        int currencyPrice = CurrencyManager.Instance.GetCurrencyAmountFromCredits(price);
+                        int playerCredits = CurrencyManager.Instance.CurrencyAmount;
+                        if (playerCredits < currencyPrice)
+                        {
+                            ErrorMessage(node.Name, finalText, backAction, LguConstants.NOT_ENOUGH_CREDITS);
+                            return;
+                        }
+                        break;
+                    }
             }
             if (UpgradeBus.Instance.PluginConfiguration.BuyableUpgradeOnce && UpgradeBus.Instance.lockedUpgrades.Keys.Contains(node))
             {
@@ -256,11 +339,80 @@ namespace MoreShipUpgrades.UI.Application
                 ErrorMessage(node.Name, finalText, backAction, " ");
                 return;
             }
-            Confirm(node.Name, finalText, () => PurchaseUpgrade(node, price, backAction), backAction, string.Format(LguConstants.PURCHASE_UPGRADE_FORMAT, price));
+            CursorElement[] elements;
+            if (node.AlternateCurrency)
+            {
+                switch(node.PurchaseMode)
+                {
+                    case PurchaseMode.Both:
+                        {
+                            elements = [
+                                CursorElement.Create("Purchase with Company Credits", "", () => ConfirmPurchaseUpgrade(node, price, backAction), active: (_) => CanBuyUpgradeWithGroupCredits(node), selectInactive: false),
+                                CursorElement.Create("Purchase with Player Credits", "", () => ConfirmPurchaseUpgradeAlternateCurrency(node, CurrencyManager.Instance.GetCurrencyAmountFromCredits(price), backAction), active: (_) => CanBuyUpgradeWithPlayerCredits(node), selectInactive: false),
+                                CursorElement.Create("Cancel", "", backAction)
+                                ];
+                            break;
+                        }
+                    case PurchaseMode.AlternateCurrency:
+                        {
+                            elements = [
+                                CursorElement.Create("Purchase with Player Credits", "", () => ConfirmPurchaseUpgradeAlternateCurrency(node, CurrencyManager.Instance.GetCurrencyAmountFromCredits(price), backAction), active: (_) => CanBuyUpgradeWithPlayerCredits(node), selectInactive: false),
+                                CursorElement.Create("Cancel", "", backAction)
+                                ];
+                            break;
+                        }
+                    case PurchaseMode.CompanyCredits:
+                    default:
+                        {
+                            elements = [
+                                CursorElement.Create("Purchase with Company Credits", "", () => ConfirmPurchaseUpgrade(node, price, backAction), active: (_) => CanBuyUpgradeWithGroupCredits(node), selectInactive: false),
+                                CursorElement.Create("Cancel", "", backAction)
+                                ];
+                            break;
+                        }
+                }
+            }
+            else
+            {
+                elements = [
+                    CursorElement.Create("Purchase with Company Credits", "", () => ConfirmPurchaseUpgrade(node, price, backAction), active: (_) => CanBuyUpgradeWithGroupCredits(node), selectInactive: false),
+                    CursorElement.Create("Cancel", "", backAction)
+                    ];
+            }
+            CursorMenu cursorMenu = CursorMenu.Create(elements.Length-1, '>', elements);
+            ITextElement[] elements2 =
+            {
+            TextElement.Create(finalText),
+            TextElement.Create(" "),
+            cursorMenu
+            };
+            IScreen screen = BoxedScreen.Create(node.Name, elements2);
+            SwitchScreen(screen, cursorMenu, previous: false);
+        }
+        void ConfirmPurchaseUpgrade(CustomTerminalNode node, int price, Action backAction)
+        {
+            Confirm(node.Name, string.Format(LguConstants.PURCHASE_UPGRADE_FORMAT, price), () => PurchaseUpgrade(node, price, backAction), backAction);
+        }
+        void ConfirmPurchaseUpgradeAlternateCurrency(CustomTerminalNode node, int currencyPrice, Action backAction)
+        {
+            Confirm(node.Name, string.Format(LguConstants.PURCHASE_UPGRADE_ALTERNATE_FORMAT, currencyPrice), () => PurchaseUpgradeAlternateCurrency(node, currencyPrice, backAction), backAction);
+        }
+        void PurchaseUpgradeAlternateCurrency(CustomTerminalNode node, int currencyPrice, Action backAction)
+        {
+            CurrencyManager.Instance.RemoveCurrencyAmount(currencyPrice);
+            if (!node.Unlocked)
+            {
+                LguStore.Instance.HandleUpgrade(node);
+            }
+            else if (node.Unlocked && node.MaxUpgrade > node.CurrentUpgrade)
+            {
+                LguStore.Instance.HandleUpgrade(node, true);
+            }
+            backAction();
         }
         void PurchaseUpgrade(CustomTerminalNode node, int price, Action backAction)
         {
-            terminal.BuyItemsServerRpc([], terminal.groupCredits - price, terminal.numberOfItemsInDropship); // The only vanilla rpc that syncs credits without ownership check
+            LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits - price);
             LguStore.Instance.AddUpgradeSpentCreditsServerRpc(price);
             UpgradeApi.TriggerUpgradeRankup(node);
             backAction();

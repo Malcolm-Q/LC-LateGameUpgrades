@@ -41,8 +41,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack
                 ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().JetFuelConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
-            const string infoFormat = "LVL {0} - ${1} - The acceleration of the jetpack during flight is increased by {2}%\n";
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            const string infoFormat = "LVL {0} - {1} - The acceleration of the jetpack during flight is increased by {2}%\n";
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().JetFuelConfiguration.PurchaseMode);
         }
         public static float GetIncreasedAcceleration()
         {

@@ -49,8 +49,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
                 ITierEffectUpgradeConfiguration<int> config = GetConfiguration().RubberBootsConfiguration;
                 return config.InitialEffect.Value + (level * config.IncrementalEffect.Value);
             }
-            const string infoFormat = "LVL {0} - ${1} - Reduces the movement debuff when walking on water surfaces by {2}%\n";
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            const string infoFormat = "LVL {0} - {1} - Reduces the movement debuff when walking on water surfaces by {2}%\n";
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().RubberBootsConfiguration.PurchaseMode);
         }
 
         public override bool CanInitializeOnStart

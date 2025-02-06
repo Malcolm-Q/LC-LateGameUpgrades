@@ -27,8 +27,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
                 ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().MedicalNanobotsConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
-            const string infoFormat = "LVL {0} - ${1} - Increases the player's health regeneration cap by {2}%\n";
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            const string infoFormat = "LVL {0} - {1} - Increases the player's health regeneration cap by {2}%\n";
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().MedicalNanobotsConfiguration.PurchaseMode);
         }
         public static int GetIncreasedHealthRegeneration(int defaultValue)
         {

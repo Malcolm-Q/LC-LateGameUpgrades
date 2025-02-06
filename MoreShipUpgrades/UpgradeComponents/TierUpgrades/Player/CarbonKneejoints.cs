@@ -40,8 +40,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
                 ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().CarbonKneejointsConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
-            const string infoFormat = "LVL {0} - ${1} - Reduces the movement speed loss while crouching by {2}%\n";
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            const string infoFormat = "LVL {0} - {1} - Reduces the movement speed loss while crouching by {2}%\n";
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().CarbonKneejointsConfiguration.PurchaseMode);
         }
 
         public override bool CanInitializeOnStart

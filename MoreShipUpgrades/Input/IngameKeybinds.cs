@@ -24,5 +24,8 @@ namespace MoreShipUpgrades.Input
         [InputAction(LguConstants.TOGGLE_NIGHT_VISION_DEFAULT_KEYBIND, Name = LguConstants.TOGGLE_NIGHT_VISION_KEYBIND_NAME)]
         public InputAction NvgKey { get; set; }
 
+        [InputAction("<Keyboard>/leftShift", Name = "Show Alternative Currency Counter")]
+        public InputAction ShowAlternativeCounterKey {  get; set; }
+
     }
 }

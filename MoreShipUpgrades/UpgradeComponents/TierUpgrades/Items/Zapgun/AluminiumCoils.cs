@@ -87,7 +87,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Zapgun
                 return cooldownPair.Item1.Value + (level * cooldownPair.Item2.Value);
             }
             StringBuilder sb = new();
-            sb.Append($"LVL {level} - ${price}: Upgrades to zap gun:\n");
+            sb.Append($"LVL {level} - {GetUpgradePrice(price, GetConfiguration().AluminiumCoilConfiguration.PurchaseMode)}: Upgrades to zap gun:\n");
             sb.Append($"- Increases zap gun's range by {rangeInfo(level - 1) / 13f * 100f:F0}%\n");
             sb.Append($"- Stun time increased by {stunTimerInfo(level - 1)} seconds\n");
             sb.Append($"- Decreases the minigame's difficulty by {difficultyInfo(level - 1):F0}%\n");

@@ -108,7 +108,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items
         public override string GetDisplayInfo(int price = -1)
         {
             SickBeatsUpgradeConfiguration config = GetConfiguration().SickBeatsUpgradeConfiguration;
-            string txt = $"Sick Beats - ${price}\nPlayers within a {config.Radius.Value} unit radius from an active boombox will have the following effects:\n\n";
+            string txt = $"Sick Beats - {GetUpgradePrice(price, config.PurchaseMode)}\nPlayers within a {config.Radius.Value} unit radius from an active boombox will have the following effects:\n\n";
             if (config.EnableSpeed.Value) txt += $"Movement speed increased by {config.SpeedBoost.Value}\n";
             if (config.EnableDamage.Value) txt += $"Damage inflicted increased by {config.DamageBoost.Value}\n";
             if (config.EnableDefense.Value) txt += $"Incoming Damage multiplied by {config.DefenseBoost.Value}\n";
