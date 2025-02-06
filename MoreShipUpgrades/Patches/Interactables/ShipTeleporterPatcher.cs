@@ -35,7 +35,6 @@ namespace MoreShipUpgrades.Patches.Interactables
 
         [HarmonyPatch(nameof(ShipTeleporter.beamOutPlayer), MethodType.Enumerator)]
         [HarmonyTranspiler]
-        [HarmonyDebug]
         static IEnumerable<CodeInstruction> beamOutPlayerTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo DecreaseTeleportTime = typeof(ParticleInfuser).GetMethod(nameof(ParticleInfuser.DecreaseTeleportTime));
