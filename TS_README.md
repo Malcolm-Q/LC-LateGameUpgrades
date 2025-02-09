@@ -300,6 +300,16 @@ This mod offers a "Randomize Upgrade" mode where a set amount of upgrades are pi
 * You can configure this mode to allow showing already purchased upgrades.
 * You can configure when should the randomization of the upgrades be executed (per moon landing, per moon routing or per quota).
 
+## Alternate Currency Mode
+
+This offers an "Alternative Currency" mode where players start obtaining a currency for them only labelled ``Player Credits``. 
+- The player can see their current amount of Player Credits through the terminal in the same spot as Company Credits while holding left shift key (the keybind can be changed if required)
+- This currency can be used to buy upgrades which allow buying with the alternate currency.
+- This currency can be converted to Company Credits and vice versa through ``convert, PC`` commands, using the configurated ratio for this purpose
+- This currency can be traded through other players when required through ``trade, lgu trade, trade player credits`` commands.
+- This currency can be earned from quota, using the configurated ratio for this purpose.
+- The price of alternate currency of each upgrade can be changed through the configurated ratio for this purpose.
+
 ## Contracts
 * __Defusal Contract__
     * Look around the facility for a ticking bomb. Defuse it before the timer runs out or anyone near it might meet a gruesome fate.

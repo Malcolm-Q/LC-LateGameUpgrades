@@ -384,7 +384,7 @@ namespace MoreShipUpgrades.Configuration
             };
 
             topSection = CarbonKneejoints.UPGRADE_NAME;
-            CarbonKneejointsConfiguration = new TierPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.CARBON_KNEEJOINTS_ENABLED_DESCRIPTION, CarbonKneejoints.DEFAULT_PRICES)
+            CarbonKneejointsConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.CARBON_KNEEJOINTS_ENABLED_DESCRIPTION, CarbonKneejoints.DEFAULT_PRICES)
             {
                 InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.CARBON_KNEEJOINTS_INITIAL_CROUCH_DEBUFF_DECREASE_KEY, LguConstants.CARBON_KNEEJOINTS_INITIAL_CROUCH_DEBUFF_DECREASE_DEFAULT, LguConstants.CARBON_KNEEJOINTS_INITIAL_CROUCH_DEBUFF_DECREASE_DESCRIPTION),
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.CARBON_KNEEJOINTS_INCREMENTAL_CROUCH_DEBUFF_DECREASE_KEY, LguConstants.CARBON_KNEEJOINTS_INCREMENTAL_CROUCH_DEBUFF_DECREASE_DEFAULT, LguConstants.CARBON_KNEEJOINTS_INCREMENTAL_CROUCH_DEBUFF_DECREASE_DESCRIPTION),
@@ -456,7 +456,7 @@ namespace MoreShipUpgrades.Configuration
             };
 
             topSection = ScavengerInstincts.UPGRADE_NAME;
-            ScavengerInstictsConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.SCAVENGER_INSTINCTS_ENABLED_DESCRIPTION, ScavengerInstincts.DEFAULT_PRICES)
+            ScavengerInstictsConfiguration = new TierPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.SCAVENGER_INSTINCTS_ENABLED_DESCRIPTION, ScavengerInstincts.DEFAULT_PRICES)
             {
                 InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE_KEY, LguConstants.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE_DEFAULT, LguConstants.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE_DESCRIPTION),
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUNT_SCRAP_INCREASE_KEY, LguConstants.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUNT_SCRAP_INCREASE_DEFAULT, LguConstants.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUNT_SCRAP_INCREASE_DESCRIPTION),

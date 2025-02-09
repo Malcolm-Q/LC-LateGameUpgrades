@@ -6,7 +6,7 @@ using MoreShipUpgrades.Misc.Util;
 
 namespace MoreShipUpgrades.Configuration.Custom
 {
-    public class DiscombobulatorUpgradeConfiguration : TierIndividualPrimitiveUpgradeConfiguration<float>
+    public class DiscombobulatorUpgradeConfiguration : TierPrimitiveUpgradeConfiguration<float>
     {
         [field: SyncedEntryField] public SyncedEntry<int> DamageLevel {  get; set; }
         [field :SyncedEntryField] public SyncedEntry<int> InitialDamage {  get; set; }
