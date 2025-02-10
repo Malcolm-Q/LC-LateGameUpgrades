@@ -1,5 +1,4 @@
-﻿using MoreShipUpgrades.Configuration;
-using MoreShipUpgrades.Managers;
+﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UI.TerminalNodes;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
@@ -81,7 +80,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items
 
         public override string GetDisplayInfo(int price = -1)
         {
-            return $"${price} - Displays your location and time when holding a walkie talkie.\nEspecially useful for fog.";
+            return $"{GetUpgradePrice(price, GetConfiguration().WalkieGpsConfiguration.PurchaseMode)} - Displays your location and time when holding a walkie talkie.\nEspecially useful for fog.";
         }
         public override bool CanInitializeOnStart => GetConfiguration().WalkieGpsConfiguration.Price.Value <= 0;
         public new static (string, string[]) RegisterScrapToUpgrade()

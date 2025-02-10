@@ -1,4 +1,6 @@
 ﻿using HarmonyLib;
+using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.UI.TerminalNodes;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -241,16 +243,16 @@ namespace MoreShipUpgrades.Misc.Util
             return false;
         }
 
-        internal static string GenerateInfoForUpgrade(string infoFormat, int initialPrice, int[] incrementalPrices, Func<int, float> infoFunction, bool skipFirst = false)
+        internal static string GenerateInfoForUpgrade(string infoFormat, int initialPrice, int[] incrementalPrices, Func<int, float> infoFunction, bool skipFirst = false, PurchaseMode purchaseMode = default)
         {
-            string info = skipFirst ? "" : string.Format(infoFormat, 1, initialPrice, infoFunction(0));
+            string info = skipFirst ? "" : string.Format(infoFormat, 1, BaseUpgrade.GetUpgradePrice(initialPrice, purchaseMode), infoFunction(0));
             for (int i = 0; i < incrementalPrices.Length; i++)
             {
                 float infoResult = infoFunction(i + 1);
                 if (infoResult % 1 == 0) // It's an Integer
-                    info += string.Format(infoFormat, i + 2, incrementalPrices[i], Mathf.RoundToInt(infoResult));
+                    info += string.Format(infoFormat, i + 2, BaseUpgrade.GetUpgradePrice(incrementalPrices[i], purchaseMode), Mathf.RoundToInt(infoResult));
                 else
-                    info += string.Format(infoFormat, i + 2, incrementalPrices[i], infoResult);
+                    info += string.Format(infoFormat, i + 2, BaseUpgrade.GetUpgradePrice(incrementalPrices[i], purchaseMode), infoResult);
             }
             return info;
         }

@@ -3,7 +3,6 @@ using System;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.Commands;
-using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using CSync.Lib;
 using System.Runtime.Serialization;
@@ -195,10 +194,29 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<RandomizeUpgradeManager.RandomizeUpgradeEvents> RANDOMIZE_UPGRADES_CHANGE_UPGRADES_EVENT { get; set; }
         #endregion
 
+        #region Alternative Currency
+
+        [field: SyncedEntryField] public SyncedEntry<bool> ALTERNATIVE_CURRENCY_ENABLED { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> ALTERNATIVE_CURRENCY_CREDITS_TO_CURRENCY_RATIO { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> ALTERNATIVE_CURRENCY_QUOTA_TO_CURRENCY_RATIO { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> ALTERNATIVE_CURRENCY_CONVERSION_CREDITS_TO_CURRENCY_RATIO { get; set; }
+
+        #endregion
+
         #region Configuration Bindings
         public LategameConfiguration(ConfigFile cfg) : base(Metadata.GUID)
         {
             string topSection;
+
+            #region Alternative Currency
+
+            topSection = "_Alternative Currency_";
+            ALTERNATIVE_CURRENCY_ENABLED = cfg.BindSyncedEntry(topSection, "Enable Alternative Currency System", false, "Allows purchasing Lategame Upgrades with another currency other than Company Credits");
+            ALTERNATIVE_CURRENCY_CREDITS_TO_CURRENCY_RATIO = cfg.BindSyncedEntry(topSection, "Credits to Alternative Currency Ratio", 100, "How much a single unit of Alternative Currency is worth in Company Credits when purchasing upgrades.");
+            ALTERNATIVE_CURRENCY_QUOTA_TO_CURRENCY_RATIO = cfg.BindSyncedEntry(topSection, "Quota to Alternative Currency Ratio", 100, "How much a single unit of Alternative Currency is worth in Quota Fullfilled");
+            ALTERNATIVE_CURRENCY_CONVERSION_CREDITS_TO_CURRENCY_RATIO = cfg.BindSyncedEntry(topSection, "Credits to Alternative Currency Conversion Ratio", 100, "How much a single unit of Alternative Currency is worth in Company Credits during currency conversions");
+
+            #endregion
 
             #region Randomize Upgrades
 
@@ -366,7 +384,7 @@ namespace MoreShipUpgrades.Configuration
             };
 
             topSection = CarbonKneejoints.UPGRADE_NAME;
-            CarbonKneejointsConfiguration = new TierPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.CARBON_KNEEJOINTS_ENABLED_DESCRIPTION, CarbonKneejoints.DEFAULT_PRICES)
+            CarbonKneejointsConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.CARBON_KNEEJOINTS_ENABLED_DESCRIPTION, CarbonKneejoints.DEFAULT_PRICES)
             {
                 InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.CARBON_KNEEJOINTS_INITIAL_CROUCH_DEBUFF_DECREASE_KEY, LguConstants.CARBON_KNEEJOINTS_INITIAL_CROUCH_DEBUFF_DECREASE_DEFAULT, LguConstants.CARBON_KNEEJOINTS_INITIAL_CROUCH_DEBUFF_DECREASE_DESCRIPTION),
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.CARBON_KNEEJOINTS_INCREMENTAL_CROUCH_DEBUFF_DECREASE_KEY, LguConstants.CARBON_KNEEJOINTS_INCREMENTAL_CROUCH_DEBUFF_DECREASE_DEFAULT, LguConstants.CARBON_KNEEJOINTS_INCREMENTAL_CROUCH_DEBUFF_DECREASE_DESCRIPTION),
@@ -438,7 +456,7 @@ namespace MoreShipUpgrades.Configuration
             };
 
             topSection = ScavengerInstincts.UPGRADE_NAME;
-            ScavengerInstictsConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.SCAVENGER_INSTINCTS_ENABLED_DESCRIPTION, ScavengerInstincts.DEFAULT_PRICES)
+            ScavengerInstictsConfiguration = new TierPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.SCAVENGER_INSTINCTS_ENABLED_DESCRIPTION, ScavengerInstincts.DEFAULT_PRICES)
             {
                 InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE_KEY, LguConstants.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE_DEFAULT, LguConstants.SCAVENGER_INSTINCTS_INITIAL_AMOUNT_SCRAP_INCREASE_DESCRIPTION),
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUNT_SCRAP_INCREASE_KEY, LguConstants.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUNT_SCRAP_INCREASE_DEFAULT, LguConstants.SCAVENGER_INSTINCTS_INCREMENTAL_AMOUNT_SCRAP_INCREASE_DESCRIPTION),
@@ -572,7 +590,7 @@ namespace MoreShipUpgrades.Configuration
             topSection = Discombobulator.UPGRADE_NAME;
             DiscombobulatorUpgradeConfiguration = new DiscombobulatorUpgradeConfiguration(cfg, topSection, LguConstants.DISCOMBOBULATOR_ENABLED_DESCRIPTION, Discombobulator.PRICES_DEFAULT)
             {
-                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.DISCOMBOBULATOR_COOLDOWN_KEY, LguConstants.DISCOMBOBULATOR_COOLDOWN_DEFAULT),
+                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.DISCOMBOBULATOR_STUN_DURATION_KEY, LguConstants.DISCOMBOBULATOR_STUN_DURATION_DEFAULT),
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.DISCOMBOBULATOR_INCREMENTAL_STUN_TIME_KEY, LguConstants.DISCOMBOBULATOR_INCREMENTAL_STUN_TIME_DEFAULT, LguConstants.DISCOMBOBULATOR_INCREMENTAL_STUN_TIME_DESCRIPTION),
             };
 

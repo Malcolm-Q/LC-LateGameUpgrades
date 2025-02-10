@@ -16,6 +16,7 @@ using InteractiveTerminalAPI.UI;
 using static BepInEx.BepInDependency;
 using MoreShipUpgrades.UI.Application;
 using MoreShipUpgrades.Configuration;
+using ExtendDeadline.Misc.UI.Application;
 
 namespace MoreShipUpgrades
 {
@@ -55,6 +56,7 @@ namespace MoreShipUpgrades
             {
                 foreach (var method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static))
                 {
+                    if (method.Name == nameof(ToilheadCompat.FollowTerminalAccessibleObjectBehaviourPatcher.DestroyObject)) continue;
                     var attributes = method.GetCustomAttributes(typeof(RuntimeInitializeOnLoadMethodAttribute), false);
                     if (attributes.Length > 0)
                     {
@@ -77,7 +79,6 @@ namespace MoreShipUpgrades
             UpgradeBus.Instance.UpgradeAssets = UpgradeAssets;
             UpgradeBus.Instance.SetConfiguration(config);
             SetupModStore(ref UpgradeAssets);
-
             SetupItems(ref types);
             SetupCommands(ref types);
             SetupPerks(ref types);
@@ -86,10 +87,18 @@ namespace MoreShipUpgrades
             InputUtilsCompat.Init();
             PatchManager.PatchMainVersion();
 
+            if (config.ALTERNATIVE_CURRENCY_ENABLED)
+            {
+                InteractiveTerminalManager.RegisterApplication<TradePlayerCreditsApplication>(["trade", "trade player credits", "lgu trade"], caseSensitive: false);
+                InteractiveTerminalManager.RegisterApplication<ConvertPlayerCreditApplication>(["convert", "PC"], caseSensitive: false);
+            }
             InteractiveTerminalManager.RegisterApplication<UpgradeStoreApplication>(["lgu", "lategame store"], caseSensitive: false);
-            InteractiveTerminalManager.RegisterApplication<ContractApplication>("contracts", caseSensitive: false);
-            if (!config.CONTRACT_PROVIDE_RANDOM_ONLY)
-                InteractiveTerminalManager.RegisterApplication<ContractApplication>("contract", caseSensitive: false);
+            if (config.CONTRACTS_ENABLED)
+            {
+                InteractiveTerminalManager.RegisterApplication<ContractApplication>("contracts", caseSensitive: false);
+                if (!config.CONTRACT_PROVIDE_RANDOM_ONLY)
+                    InteractiveTerminalManager.RegisterApplication<ContractApplication>("contract", caseSensitive: false);
+            }
 
             mls.LogInfo($"{Metadata.NAME} {Metadata.VERSION} has been loaded successfully.");
         }
@@ -98,6 +107,7 @@ namespace MoreShipUpgrades
         {
             GameObject modStore = AssetBundleHandler.TryLoadGameObjectAsset(ref bundle, "Assets/ShipUpgrades/LguStore.prefab");
             modStore.AddComponent<ContractManager>();
+            modStore.AddComponent<CurrencyManager>();
             modStore.AddComponent<LguStore>();
             LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(modStore);
             UpgradeBus.Instance.modStorePrefab = modStore;

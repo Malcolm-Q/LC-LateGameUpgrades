@@ -147,12 +147,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             batteryExhaustion = false;
         }
 
-        public override void Increment()
-        {
-            base.Increment();
-            LguStore.Instance.UpdateLGUSaveServerRpc(GameNetworkManager.Instance.localPlayerController.playerSteamId, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(new SaveInfo())));
-        }
-
         public override void Load()
         {
             base.Load();
@@ -192,20 +186,21 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             if (client == null) { client = GameNetworkManager.Instance.localPlayerController; }
             transform.GetChild(0).gameObject.SetActive(true);
             UpgradeBus.Instance.activeUpgrades["Night Vision"] = true;
-            LguStore.Instance.UpdateLGUSaveServerRpc(client.playerSteamId, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(new SaveInfo())));
             HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Press {Keybinds.NvgAction.GetBindingDisplayString()} to toggle Night Vision!!!</color>";
         }
 
         public void DisableOnClient()
         {
             nightVisionActive = false;
-            client.nightVision.color = nightVisColor;
-            client.nightVision.range = nightVisRange;
-            client.nightVision.intensity = nightVisIntensity;
+            if (client != null && client.nightVision != null)
+            {
+                client.nightVision.color = nightVisColor;
+                client.nightVision.range = nightVisRange;
+                client.nightVision.intensity = nightVisIntensity;
+            }
 
             transform.GetChild(0).gameObject.SetActive(false);
             UpgradeBus.Instance.activeUpgrades["Night Vision"] = false;
-            LguStore.Instance.UpdateLGUSaveServerRpc(client.playerSteamId, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(new SaveInfo())));
             client = null;
         }
 
@@ -222,7 +217,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             string regenTime = "infinite";
             if (regenAdjustment != 0) regenTime = (batteryLife / regenAdjustment).ToString("F2");
 
-            return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), level, price, drainTime, regenTime);
+            return string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), level, GetUpgradePrice(price, config.PurchaseMode), drainTime, regenTime);
         }
 
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)

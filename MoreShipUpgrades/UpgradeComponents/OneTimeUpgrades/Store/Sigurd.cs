@@ -60,7 +60,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
 
         public override string GetDisplayInfo(int price = -1)
         {
-            return $"${price} - There's a chance that the company will pay more.";
+            return $"{GetUpgradePrice(price, GetConfiguration().SigurdAccessConfiguration.PurchaseMode)} - There's a chance that the company will pay more.";
         }
 
         public string GetWorldBuildingText(bool shareStatus = false)

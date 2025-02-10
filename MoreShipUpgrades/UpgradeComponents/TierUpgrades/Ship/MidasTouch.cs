@@ -62,8 +62,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
                 ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().MidasTouchConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
-            const string infoFormat = "LVL {0} - ${1} - Increases the value of the scrap found in the moons by {2}%.\n";
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            const string infoFormat = "LVL {0} - {1} - Increases the value of the scrap found in the moons by {2}%.\n";
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().MidasTouchConfiguration.PurchaseMode);
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {

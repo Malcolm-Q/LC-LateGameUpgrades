@@ -53,8 +53,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.WeedKiller
                 ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().WeedGeneticManipulationConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
-            const string infoFormat = "LVL {0} - ${1} - Effectiveness of the Weed Killer item in eradicating plants is increased by {2}%\n";
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            const string infoFormat = "LVL {0} - {1} - Effectiveness of the Weed Killer item in eradicating plants is increased by {2}%\n";
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().WeedGeneticManipulationConfiguration.PurchaseMode);
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {

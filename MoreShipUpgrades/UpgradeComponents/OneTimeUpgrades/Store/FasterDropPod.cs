@@ -55,7 +55,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store
         }
         public override string GetDisplayInfo(int price = -1)
         {
-            return $"${price} - Make the Drop Pod, the ship that deliver items bought on the terminal, land faster.";
+            return $"${GetUpgradePrice(price, GetConfiguration().DropPodThrustersConfiguration.PurchaseMode)} - Make the Drop Pod, the ship that deliver items bought on the terminal, land faster.";
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {

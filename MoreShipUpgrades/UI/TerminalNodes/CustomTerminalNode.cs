@@ -1,13 +1,20 @@
-﻿using MoreShipUpgrades.Managers;
+﻿using DigitalRuby.ThunderAndLightning;
+using MoreShipUpgrades.Managers;
 using System;
 using UnityEngine;
-using static Unity.Audio.Handle;
 
 namespace MoreShipUpgrades.UI.TerminalNodes
 {
     /// <summary>
     /// Terminal node used to display the lgu upgrade store
     /// </summary>
+    /// 
+    public enum PurchaseMode
+    {
+        AlternateCurrency,
+        CompanyCredits,
+        Both
+    }
     public abstract class CustomTerminalNode : IComparable
     {
         /// <summary>
@@ -58,7 +65,9 @@ namespace MoreShipUpgrades.UI.TerminalNodes
         /// Wether it should be shown in the Lategame Upgrades store or not
         /// </summary>
         public bool Visible { get; set; }
-        protected CustomTerminalNode(string name, int unlockPrice, string description, GameObject prefab, int[] prices = null, int maxUpgrade = 0, string originalName = "", bool sharedUpgrade = false)
+        public bool AlternateCurrency { get; set; }
+        public PurchaseMode PurchaseMode { get; set; }
+        protected CustomTerminalNode(string name, int unlockPrice, string description, GameObject prefab, int[] prices = null, int maxUpgrade = 0, string originalName = "", bool sharedUpgrade = false, bool alternateCurrency = true, PurchaseMode purchaseMode = default)
         {
             if (prices == null) { prices = []; }
             Name = name;
@@ -70,6 +79,8 @@ namespace MoreShipUpgrades.UI.TerminalNodes
             OriginalName = originalName;
             SharedUpgrade = sharedUpgrade;
             Visible = true;
+            AlternateCurrency = alternateCurrency;
+            PurchaseMode = purchaseMode;
         }
 
         public int CompareTo(object obj)

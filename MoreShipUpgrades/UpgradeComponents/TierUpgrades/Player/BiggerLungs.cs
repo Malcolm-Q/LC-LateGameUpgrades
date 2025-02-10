@@ -77,7 +77,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 return staminaRegenPair.Item1.Value + (level * staminaRegenPair.Item2.Value) - 1f;
             }
             StringBuilder sb = new();
-            sb.AppendFormat(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), level, price, infoFunction(level - 1));
+            sb.AppendFormat(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), level, GetUpgradePrice(price, GetConfiguration().BiggerLungsConfiguration.PurchaseMode), infoFunction(level - 1));
             BiggerLungsUpgradeConfiguration config = GetConfiguration().BiggerLungsConfiguration;
             if (level >= config.StaminaRegenerationLevel) sb.Append($"Stamina regeneration is increased by {Mathf.FloorToInt(staminaRegenerationInfo(level) * 100f)}%\n");
             if (level >= config.JumpReductionLevel.Value) sb.Append($"Stamina used when jumping is reduced by {Mathf.FloorToInt(costReductionInfo(level) * 100f)}%\n");

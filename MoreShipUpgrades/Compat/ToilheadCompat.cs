@@ -1,4 +1,5 @@
-﻿using com.github.zehsteam.ToilHead.MonoBehaviours;
+﻿using com.github.zehsteam.ToilHead;
+using com.github.zehsteam.ToilHead.MonoBehaviours;
 using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
@@ -8,20 +9,21 @@ using UnityEngine;
 
 namespace MoreShipUpgrades.Compat
 {
-    public static class ToilheadCompat
+    internal static class ToilheadCompat
     {
         public static bool Enabled =>
-            BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey(com.github.zehsteam.ToilHead.MyPluginInfo.PLUGIN_GUID);
+            BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey(MyPluginInfo.PLUGIN_GUID);
 
         [HarmonyPatch(typeof(FollowTerminalAccessibleObjectBehaviour))]
         internal static class FollowTerminalAccessibleObjectBehaviourPatcher
         {
             [HarmonyPrefix]
             [HarmonyPatch(nameof(FollowTerminalAccessibleObjectBehaviour.CallFunctionFromTerminal))]
-            static bool DestroyObject(ref FollowTerminalAccessibleObjectBehaviour __instance)
+            internal static bool DestroyObject(ref FollowTerminalAccessibleObjectBehaviour __instance)
             {
                 if (!BaseUpgrade.GetActiveUpgrade(MalwareBroadcaster.UPGRADE_NAME)) { return true; }
-                if (!IsMapHazard(ref __instance)) return true;
+                if (__instance.gameObject.layer != LayerMask.NameToLayer("MapHazards") &&
+                    (__instance.transform.parent == null || __instance.transform.parent.gameObject.layer != LayerMask.NameToLayer("MapHazards"))) return true;
                 if (UpgradeBus.Instance.PluginConfiguration.MalwareBroadcasterUpgradeConfiguration.DestroyTraps.Value)
                 {
                     MalwareBroadcaster.instance.ReqDestroyObjectServerRpc(new NetworkObjectReference(__instance.gameObject.GetComponentInParent<NetworkObject>()));
@@ -33,16 +35,6 @@ namespace MoreShipUpgrades.Compat
                 }
                 return true;
             }
-        }
-        internal static bool IsMapHazard(ref FollowTerminalAccessibleObjectBehaviour possibleHazard)
-        {
-            bool hasMapHazardLayer = possibleHazard.gameObject.layer == LayerMask.NameToLayer("MapHazards");
-            if (hasMapHazardLayer) return true;
-
-            bool parentHasMapHazardLayer = possibleHazard.transform.parent != null && possibleHazard.transform.parent.gameObject.layer == LayerMask.NameToLayer("MapHazards");
-            if (parentHasMapHazardLayer) return true;
-
-            return false;
         }
     }
 }

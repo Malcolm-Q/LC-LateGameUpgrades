@@ -1,4 +1,31 @@
 <details>
+<summary> 3.12.0 - 2025-02-01 </summary>
+
+- Introduced Alternative Currency system:
+  - All players will have their own wallet of the currency labelled "Player Credits". Each can check their current amount through the terminal (default key being left shift) where the counter appears in the place of Company Credits.
+  - You earn Player Credits based on the configured ratio from quota (default being 100 Company Credits equals to 1 Player Credit)
+  - You can also convert Company Credits to Player Credits and vice versa when required (through ``convert, PC`` commands)
+  - You can trade Player Credits with other players in the lobby when required (through ``trade, trade player credits, lgu trade`` commands)
+  - Each upgrade can be bought with either Company or Player Credits or only one of them.
+  - You can change the ratios of Company Credits to Player Credits for both purchase and conversion aswell (default being 100 Company Credits equals to 1 Player Credit).
+
+- Removed ``Individual`` config from Discombobulator and Scavenger Instincts and added to Carbon Kneejoints.
+- Fixed Discombobulator configuration using cooldown as stun timer.
+- Fixed Hiking Boots using Effective Bandaid configuration instead of its own for calculations.
+- Fixed issue with host not seeing items being teleported with clients through Fusion Matter.
+- Added configuration for Discombobulator to apply the stun time as absolute due to enemies' stun resistance.
+- Made Contracts' Enabled Configuration influence the registration of related applications
+- Walkie GPS' UI stays on until you no longer have a walkie in your inventory.
+- Changed Walkie GPS' UI  to not collide with vanilla's item UI.
+
+<details>
+<summary> 3.11.4 - 2025-01-29 </summary>
+
+- Hotfixed LGU breaking due to compatibilities compilation issues.
+
+</details>
+
+<details>
 <summary> 3.11.3 - 2025-01-29 </summary>
 
 - Fixed Night Vision not working as expected due to mistake between initial and incremental values.

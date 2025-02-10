@@ -540,6 +540,7 @@ namespace MoreShipUpgrades.Misc
             displayText += HelpTerminalNode.HandleHelpInterns();
             displayText += HelpTerminalNode.HandleHelpContract();
             displayText += HelpTerminalNode.HandleHelpDiscombobulator();
+            displayText += HelpTerminalNode.HandleAlternateCurrency();
             displayText += "\n\n";
             return DisplayTerminalMessage(displayText);
         }

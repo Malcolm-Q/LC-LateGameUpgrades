@@ -108,7 +108,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
                 return config.InitialEffect.Value + (level * config.IncrementalEffect.Value);
             }
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().StimpackConfiguration.PurchaseMode);
         }
 
         [ServerRpc(RequireOwnership = false)]

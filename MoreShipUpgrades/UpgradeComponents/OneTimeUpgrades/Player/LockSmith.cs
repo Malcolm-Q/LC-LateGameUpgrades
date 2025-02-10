@@ -145,7 +145,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player
 
         public override string GetDisplayInfo(int price = -1)
         {
-            return $"${price} - Allows you to pick door locks by completing a minigame.";
+            return $"{GetUpgradePrice(price, GetConfiguration().LocksmithConfiguration.PurchaseMode)} - Allows you to pick door locks by completing a minigame.";
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {

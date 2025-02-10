@@ -146,10 +146,10 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades
         {
             return CurrentUpgradeMode switch
             {
-                UpgradeMode.EffectiveRange => string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), price, GetConfiguration().LightningRodConfiguration.Effect.Value),
-                UpgradeMode.AlwaysRerouteItem => $"${price} - Reroutes all lightning bolts directed to metallic objects to the ship's lightning rod.",
-                UpgradeMode.AlwaysRerouteRandom => $"${price} - Reroutes all non-targetting lightning bolts to the ship's lightning rod.",
-                UpgradeMode.AlwaysRerouteAll => $"${price} - Reroutes all kind of lightning bolts to the ship's lightning rod",
+                UpgradeMode.EffectiveRange => string.Format(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), GetUpgradePrice(price, GetConfiguration().LightningRodConfiguration.PurchaseMode), GetConfiguration().LightningRodConfiguration.Effect.Value),
+                UpgradeMode.AlwaysRerouteItem => $"${GetUpgradePrice(price, GetConfiguration().LightningRodConfiguration.PurchaseMode)} - Reroutes all lightning bolts directed to metallic objects to the ship's lightning rod.",
+                UpgradeMode.AlwaysRerouteRandom => $"${GetUpgradePrice(price, GetConfiguration().LightningRodConfiguration.PurchaseMode)} - Reroutes all non-targetting lightning bolts to the ship's lightning rod.",
+                UpgradeMode.AlwaysRerouteAll => $"${GetUpgradePrice(price, GetConfiguration().LightningRodConfiguration.PurchaseMode)} - Reroutes all kind of lightning bolts to the ship's lightning rod",
                 _ => string.Empty,
             };
         }

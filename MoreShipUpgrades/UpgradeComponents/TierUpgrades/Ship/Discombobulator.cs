@@ -48,7 +48,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         {
             Terminal terminal = UpgradeBus.Instance.GetTerminal();
             PlayAudio(ref terminal);
-            flashCooldown = GetConfiguration().DiscombobulatorUpgradeConfiguration.InitialEffect.Value;
+            flashCooldown = GetConfiguration().DiscombobulatorUpgradeConfiguration.Cooldown.Value;
             StunNearbyEnemies(ref terminal);
         }
 
@@ -68,7 +68,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
                     int forceValue = config.InitialDamage.Value + (config.IncrementalDamage.Value * (GetUpgradeLevel(UPGRADE_NAME) - config.DamageLevel.Value));
                     enemy.HitEnemy(forceValue);
                 }
-                if (!enemy.isEnemyDead) enemy.SetEnemyStunned(true, config.InitialEffect.Value + (config.IncrementalEffect.Value * GetUpgradeLevel(UPGRADE_NAME)), null);
+                float actualDuration = config.InitialEffect.Value + (config.IncrementalEffect.Value * GetUpgradeLevel(UPGRADE_NAME));
+                if (config.Absolute) actualDuration /= enemy.enemyType.stunTimeMultiplier;
+
+                if (!enemy.isEnemyDead) enemy.SetEnemyStunned(true, actualDuration, null);
             }
         }
 
@@ -124,7 +127,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
                 return config.InitialEffect.Value + (level * config.IncrementalDamage.Value);
             }
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().DiscombobulatorUpgradeConfiguration.PurchaseMode);
         }
         public override bool CanInitializeOnStart
         {

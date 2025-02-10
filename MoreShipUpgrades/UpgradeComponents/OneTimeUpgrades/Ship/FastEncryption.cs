@@ -38,7 +38,7 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship
         }
         public override string GetDisplayInfo(int price = -1)
         {
-            return $"${price} - The transmitter will write the letters faster and the restriction of characters will be lifted.";
+            return $"{GetUpgradePrice(price, GetConfiguration().FastEncryptionConfiguration.PurchaseMode)} - The transmitter will write the letters faster and the restriction of characters will be lifted.";
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
         {

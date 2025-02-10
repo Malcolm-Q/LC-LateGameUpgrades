@@ -58,8 +58,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
                 ITierEffectUpgradeConfiguration<int> upgradeConfiguration = GetConfiguration().ParticleInfuserConfiguration;
                 return upgradeConfiguration.InitialEffect.Value + (level * upgradeConfiguration.IncrementalEffect.Value);
             }
-            const string infoFormat = "LVL {0} - ${1} - Increases the teleporter's speed by {2}%\n";
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            const string infoFormat = "LVL {0} - {1} - Increases the teleporter's speed by {2}%\n";
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().ParticleInfuserConfiguration.PurchaseMode);
         }
 
         public override bool CanInitializeOnStart

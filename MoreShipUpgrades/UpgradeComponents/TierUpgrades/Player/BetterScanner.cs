@@ -60,11 +60,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             BetterScannerUpgradeConfiguration config = GetConfiguration().BetterScannerUpgradeConfiguration;
             switch (level)
             {
-                case 1: return string.Format(AssetBundleHandler.GetInfoFromJSON("Better Scanner1"), level, price, config.NodeRangeIncrease.Value, config.OutsideNodesRangeIncrease.Value);
-                case 2: return string.Format(AssetBundleHandler.GetInfoFromJSON("Better Scanner2"), level, price);
+                case 1: return string.Format(AssetBundleHandler.GetInfoFromJSON("Better Scanner1"), level, GetUpgradePrice(price, config.PurchaseMode), config.NodeRangeIncrease.Value, config.OutsideNodesRangeIncrease.Value);
+                case 2: return string.Format(AssetBundleHandler.GetInfoFromJSON("Better Scanner2"), level, GetUpgradePrice(price, config.PurchaseMode));
                 case 3:
                     {
-                        string result = string.Format(AssetBundleHandler.GetInfoFromJSON("Better Scanner3"), level, price, config.SeeEnemiesThroughWalls.Value ? " and enemies" : "");
+                        string result = string.Format(AssetBundleHandler.GetInfoFromJSON("Better Scanner3"), level, GetUpgradePrice(price, config.PurchaseMode), config.SeeEnemiesThroughWalls.Value ? " and enemies" : "");
                         result += "hives and scrap command display the location of the most valuable hives and scrap on the map.\n";
                         return result;
                     }
@@ -106,7 +106,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
                                                 configuration.Enabled.Value,
                                                 configuration.Price.Value,
                                                 [configuration.SecondPrice.Value, configuration.ThirdPrice.Value],
-                                                GetConfiguration().OVERRIDE_UPGRADE_NAMES ? configuration.OverrideName : ""
+                                                GetConfiguration().OVERRIDE_UPGRADE_NAMES ? configuration.OverrideName : "",
+                                                alternateCurrency: GetConfiguration().ALTERNATIVE_CURRENCY_ENABLED,
+                                                purchaseMode: configuration.PurchaseMode
                                                 );
         }
     }

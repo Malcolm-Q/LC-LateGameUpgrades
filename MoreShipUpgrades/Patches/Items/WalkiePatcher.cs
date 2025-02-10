@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using GameNetcodeStuff;
+using HarmonyLib;
+using MoreShipUpgrades.Extensions;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
 
@@ -8,11 +10,12 @@ namespace MoreShipUpgrades.Patches.Items
     internal static class WalkiePatcher
     {
         [HarmonyPrefix]
-        [HarmonyPatch(nameof(WalkieTalkie.PocketItem))]
         [HarmonyPatch(nameof(WalkieTalkie.DiscardItem))]
         static void DisableHUD(WalkieTalkie __instance)
         {
             if (!BaseUpgrade.GetActiveUpgrade(WalkieGPS.UPGRADE_NAME) || !__instance.playerHeldBy.IsOwner) { return; }
+            PlayerControllerB holdingPlayer = __instance.playerHeldBy;
+            if (holdingPlayer.ContainsItemOfType(__instance)) return;
             WalkieGPS.instance.WalkieDeactivate();
         }
 

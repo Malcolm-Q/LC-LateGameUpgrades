@@ -44,7 +44,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
                 return movementSpeedPair.Item1.Value + (level * movementSpeedPair.Item2.Value);
             }
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().RunningShoesConfiguration.PurchaseMode);
         }
 
         public static float GetAdditionalMovementSpeed(float defaultValue)

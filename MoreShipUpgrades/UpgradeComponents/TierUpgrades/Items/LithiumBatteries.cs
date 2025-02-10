@@ -42,8 +42,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items
                 ITierEffectUpgradeConfiguration<int> config = GetConfiguration().LithiumBatteriesConfiguration;
                 return config.InitialEffect.Value + (level * config.IncrementalEffect.Value);
             }
-            const string infoFormat = "LVL {0} - ${1} - Decreases the rate of battery used on the items by {2}%\n";
-            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction);
+            const string infoFormat = "LVL {0} - {1} - Decreases the rate of battery used on the items by {2}%\n";
+            return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().LithiumBatteriesConfiguration.PurchaseMode);
         }
 
         public override bool CanInitializeOnStart
