@@ -1,5 +1,5 @@
 <details>
-<summary> 3.12.1 - 2025-02-09 </summary>
+<summary> 3.12.1 - 2025-02-10 </summary>
 
 - Fixed compatibility issue with Oxygen mod.
 - Fixed issue with Player Credits earnings ignoring configuration.
