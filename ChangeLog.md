@@ -1,5 +1,11 @@
 <details>
-<summary> 3.12.0 - 2025-02-01 </summary>
+<summary> 3.12.1 - 2025-02-09 </summary>
+
+- Fixed compatibility issue with Oxygen mod.
+- Fixed issue with Player Credits earnings ignoring configuration.
+
+<details>
+<summary> 3.12.0 - 2025-02-09 </summary>
 
 - Introduced Alternative Currency system:
   - All players will have their own wallet of the currency labelled "Player Credits". Each can check their current amount through the terminal (default key being left shift) where the counter appears in the place of Company Credits.

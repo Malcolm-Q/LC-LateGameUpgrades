@@ -52,7 +52,9 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         {
             if (!__instance.IsHost) return;
 
-            CurrencyManager.Instance.AddCurrencyAmountFromQuotaClientRpc(__instance.quotaFulfilled);
+            if (CurrencyManager.Enabled)
+                CurrencyManager.Instance.AddCurrencyAmountFromQuotaClientRpc(__instance.quotaFulfilled);
+
             ItemProgressionManager.CheckNewQuota(__instance.quotaFulfilled);
         }
     }

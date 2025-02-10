@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
-using Oxygen.GameObjects;
+using Oxygen.General;
 using System.Collections.Generic;
 using System.Reflection;
 
