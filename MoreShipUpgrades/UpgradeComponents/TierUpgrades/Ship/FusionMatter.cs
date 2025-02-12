@@ -79,6 +79,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         public static bool CanHoldItem(GrabbableObject grabbableObject, PlayerControllerB player)
         {
             if (grabbableObject == null || !player.IsTeleporting() || player.isPlayerDead) return false;
+            if (!GetActiveUpgrade(UPGRADE_NAME)) return false;
+
             bool result = false;
             foreach (KeyValuePair<ItemCategories,int> category in categoryLevels)
             {
