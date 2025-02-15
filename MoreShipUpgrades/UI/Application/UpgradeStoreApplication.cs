@@ -391,10 +391,22 @@ namespace MoreShipUpgrades.UI.Application
         }
         void ConfirmPurchaseUpgrade(CustomTerminalNode node, int price, Action backAction)
         {
+            int groupCredits = UpgradeBus.Instance.GetTerminal().groupCredits;
+            if (groupCredits < price)
+            {
+                ErrorMessage(node.Name, backAction, LguConstants.NOT_ENOUGH_CREDITS);
+                return;
+            }
             Confirm(node.Name, string.Format(LguConstants.PURCHASE_UPGRADE_FORMAT, price), () => PurchaseUpgrade(node, price, backAction), backAction);
         }
         void ConfirmPurchaseUpgradeAlternateCurrency(CustomTerminalNode node, int currencyPrice, Action backAction)
         {
+            int playerCredits = CurrencyManager.Instance.CurrencyAmount;
+            if (playerCredits < currencyPrice)
+            {
+                ErrorMessage(node.Name, backAction, LguConstants.NOT_ENOUGH_CREDITS);
+                return;
+            }
             Confirm(node.Name, string.Format(LguConstants.PURCHASE_UPGRADE_ALTERNATE_FORMAT, currencyPrice), () => PurchaseUpgradeAlternateCurrency(node, currencyPrice, backAction), backAction);
         }
         void PurchaseUpgradeAlternateCurrency(CustomTerminalNode node, int currencyPrice, Action backAction)
