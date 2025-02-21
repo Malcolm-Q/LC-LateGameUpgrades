@@ -16,7 +16,6 @@ using InteractiveTerminalAPI.UI;
 using static BepInEx.BepInDependency;
 using MoreShipUpgrades.UI.Application;
 using MoreShipUpgrades.Configuration;
-using ExtendDeadline.Misc.UI.Application;
 
 namespace MoreShipUpgrades
 {

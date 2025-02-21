@@ -4,6 +4,7 @@
 - Fixed Fusion Matter's first tier ignoring wether the upgrade was active or not
 - Fixed Contract selection picking Liquidation as possible choice (would have hoped it was done by now)
 - Fixed rare case where cursor ends up on inactive element during Alternative Currency mode, allowing negative credits.
+- Fixed issue with Walkie GPS' UI remaining when disconnecting.
 
 <details>
 <summary> 3.12.1 - 2025-02-10 </summary>
