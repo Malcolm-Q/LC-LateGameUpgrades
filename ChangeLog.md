@@ -6,11 +6,15 @@
 - Fixed rare case where cursor ends up on inactive element during Alternative Currency mode, allowing negative credits.
 - Fixed issue with Walkie GPS' UI remaining when disconnecting.
 
+</details>
+
 <details>
 <summary> 3.12.1 - 2025-02-10 </summary>
 
 - Fixed compatibility issue with Oxygen mod.
 - Fixed issue with Player Credits earnings ignoring configuration.
+
+</details>
 
 <details>
 <summary> 3.12.0 - 2025-02-09 </summary>
@@ -31,6 +35,8 @@
 - Made Contracts' Enabled Configuration influence the registration of related applications
 - Walkie GPS' UI stays on until you no longer have a walkie in your inventory.
 - Changed Walkie GPS' UI  to not collide with vanilla's item UI.
+
+</details>
 
 <details>
 <summary> 3.11.4 - 2025-01-29 </summary>
