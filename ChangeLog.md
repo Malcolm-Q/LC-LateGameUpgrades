@@ -1,5 +1,23 @@
 <details>
-<summary> 3.12.0 - 2025-02-01 </summary>
+<summary> 3.12.2 - 2025-02-24 </summary>
+
+- Fixed Fusion Matter's first tier ignoring wether the upgrade was active or not
+- Fixed Contract selection picking Liquidation as possible choice (would have hoped it was done by now)
+- Fixed rare case where cursor ends up on inactive element during Alternative Currency mode, allowing negative credits.
+- Fixed issue with Walkie GPS' UI remaining when disconnecting.
+
+</details>
+
+<details>
+<summary> 3.12.1 - 2025-02-10 </summary>
+
+- Fixed compatibility issue with Oxygen mod.
+- Fixed issue with Player Credits earnings ignoring configuration.
+
+</details>
+
+<details>
+<summary> 3.12.0 - 2025-02-09 </summary>
 
 - Introduced Alternative Currency system:
   - All players will have their own wallet of the currency labelled "Player Credits". Each can check their current amount through the terminal (default key being left shift) where the counter appears in the place of Company Credits.
@@ -17,6 +35,8 @@
 - Made Contracts' Enabled Configuration influence the registration of related applications
 - Walkie GPS' UI stays on until you no longer have a walkie in your inventory.
 - Changed Walkie GPS' UI  to not collide with vanilla's item UI.
+
+</details>
 
 <details>
 <summary> 3.11.4 - 2025-01-29 </summary>

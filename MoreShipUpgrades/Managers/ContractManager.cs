@@ -136,7 +136,7 @@ namespace MoreShipUpgrades.Managers
                 usedLevels[levelIndex] = true;
                 SelectableLevel level = availableLevels[levelIndex];
                 lastLevel = level.PlanetName;
-                if (level.PlanetName.Contains("Gordion")) continue;
+                if (level.PlanetName.Contains("Gordion") || level.PlanetName.Contains("Liquidation")) continue;
                 if (LethalLevelLoaderCompat.Enabled && LethalLevelLoaderCompat.IsLocked(ref level)) continue;
 
                 logger.LogDebug($"Picked {level.PlanetName} as possible moon for contract...");

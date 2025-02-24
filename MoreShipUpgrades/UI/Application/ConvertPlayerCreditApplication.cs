@@ -3,10 +3,9 @@ using InteractiveTerminalAPI.UI.Application;
 using InteractiveTerminalAPI.UI.Cursor;
 using InteractiveTerminalAPI.UI.Screen;
 using MoreShipUpgrades.Managers;
-using MoreShipUpgrades;
 using System;
 
-namespace ExtendDeadline.Misc.UI.Application
+namespace MoreShipUpgrades.UI.Application
 {
     internal class ConvertPlayerCreditApplication : InteractiveCounterApplication<CursorCounterMenu, CursorCounterElement>
     {
