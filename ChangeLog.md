@@ -1,5 +1,5 @@
 <details>
-<summary> 3.12.2 - 2025-02-12 </summary>
+<summary> 3.12.2 - 2025-02-24 </summary>
 
 - Fixed Fusion Matter's first tier ignoring wether the upgrade was active or not
 - Fixed Contract selection picking Liquidation as possible choice (would have hoped it was done by now)
