@@ -78,9 +78,9 @@
       <HintPath>$(LC_PLUGIN_PATH)\DaXcess-LethalCompanyVR\LCVR\LCVR.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <Reference Include="ShipInventory">
+    <Reference Include="ShipInventoryUpdated">
       <Publicize>true</Publicize>
-      <HintPath>$(LC_PLUGIN_PATH)\WarperSan-ShipInventory\ShipInventory.dll</HintPath>
+      <HintPath>$(LC_PLUGIN_PATH)\LethalCompanyModding-ShipInventoryUpdated\ShipInventoryUpdated.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="BrutalCompanyMinus" Publicize="true">

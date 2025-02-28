@@ -1,4 +1,12 @@
 <details>
+<summary> 3.12.3 - 2025-??-?? </summary>
+
+- Updated compatibility with ShipInventory.
+    - More specifically the [ShipInventoryUpdated](https://thunderstore.io/c/lethal-company/p/LethalCompanyModding/ShipInventoryUpdated/)
+
+</details>
+
+<details>
 <summary> 3.12.2 - 2025-02-24 </summary>
 
 - Fixed Fusion Matter's first tier ignoring wether the upgrade was active or not
