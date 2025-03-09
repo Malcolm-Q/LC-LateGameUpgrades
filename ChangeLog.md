@@ -3,6 +3,7 @@
 
 - Updated compatibility with ShipInventory.
     - More specifically the [ShipInventoryUpdated](https://thunderstore.io/c/lethal-company/p/LethalCompanyModding/ShipInventoryUpdated/)
+- Fixed issue with Scrap Keeper using Effective Bandaid's configuration.
 
 </details>
 
