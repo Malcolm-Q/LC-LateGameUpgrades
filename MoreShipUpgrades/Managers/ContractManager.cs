@@ -146,12 +146,7 @@ namespace MoreShipUpgrades.Managers
                     TerminalNode routeMoon = routeKeyword.compatibleNouns[i].result;
 
                     CompatibleNoun[] additionalNodes = routeMoon.terminalOptions;
-                    for (int j = 0; j < additionalNodes.Length && lvl == Instance.contractLevel; j++)
-                    {
-                        TerminalNode confirmNode = additionalNodes[j].result;
-                        if (confirmNode == null) continue;
-                        if (confirmNode.buyRerouteToMoon == levelIndex) break;
-                    }
+                    if (!IsSelectedLevel(additionalNodes, lvl, levelIndex)) continue;
 
                     int itemCost = routeMoon.itemCost;
                     if (UpgradeBus.Instance.PluginConfiguration.CONTRACT_FREE_MOONS_ONLY.Value && itemCost != 0)
@@ -179,6 +174,17 @@ namespace MoreShipUpgrades.Managers
             Instance.contractLevel = lvl;
             return lvl;
         }
+        internal static bool IsSelectedLevel(CompatibleNoun[] additionalNodes, string lvl, int levelIndex)
+        {
+			for (int j = 0; j < additionalNodes.Length && lvl == Instance.contractLevel; j++)
+			{
+				TerminalNode confirmNode = additionalNodes[j].result;
+				if (confirmNode == null) continue;
+				if (confirmNode.buyRerouteToMoon == levelIndex) return true;
+			}
+            return false;
+		}
+
         /// <summary>
         /// Resets the manager's current state to default
         /// </summary>

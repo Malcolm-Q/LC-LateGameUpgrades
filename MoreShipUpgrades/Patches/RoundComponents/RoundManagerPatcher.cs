@@ -42,7 +42,8 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             if (!UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.Enabled) return;
             if (!UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.AffectLanding) return;
 
-            StartOfRound.Instance.shipAnimator.speed *= LandingThrusters.GetLandingSpeedMultiplier();
+			Plugin.mls.LogInfo("Adding spped in FinishGeneratingLevel callback");
+			StartOfRound.Instance.shipAnimator.speed *= LandingThrusters.GetLandingSpeedMultiplier();
         }
 
         [HarmonyPatch(nameof(RoundManager.DespawnPropsAtEndOfRound))]
