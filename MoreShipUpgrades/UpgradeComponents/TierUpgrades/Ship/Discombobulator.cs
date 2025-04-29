@@ -65,7 +65,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
                 if (IsEnemyBlacklisted(enemy)) continue;
                 if (CanDealDamage())
                 {
-                    int forceValue = config.InitialDamage.Value + (config.IncrementalDamage.Value * (GetUpgradeLevel(UPGRADE_NAME) - config.DamageLevel.Value));
+                    int forceValue = config.InitialDamage.Value + (config.IncrementalDamage.Value * (Mathf.Max(GetUpgradeLevel(UPGRADE_NAME) - config.DamageLevel.Value, 0)));
                     enemy.HitEnemy(forceValue);
                 }
                 float actualDuration = config.InitialEffect.Value + (config.IncrementalEffect.Value * GetUpgradeLevel(UPGRADE_NAME));
@@ -124,7 +124,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
             static float infoFunction(int level)
             {
                 DiscombobulatorUpgradeConfiguration config = GetConfiguration().DiscombobulatorUpgradeConfiguration;
-                return config.InitialEffect.Value + (level * config.IncrementalDamage.Value);
+                return config.InitialEffect.Value + (level * config.IncrementalEffect.Value);
             }
             string infoFormat = AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME);
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().DiscombobulatorUpgradeConfiguration.PurchaseMode);

@@ -5,6 +5,8 @@
     - More specifically the [ShipInventoryUpdated](https://thunderstore.io/c/lethal-company/p/LethalCompanyModding/ShipInventoryUpdated/)
 - Fixed issue with Scrap Keeper using Effective Bandaid's configuration.
 - Fixed issue with Contracts' free moons only configuration being ignored due to mislogic.
+- Fixed issue with destroying game objects instead of despawning them causing issues.
+- Fixed configuration mismatch between alternate currency ratios.
 
 </details>
 
