@@ -1,4 +1,12 @@
 <details>
+<summary> 3.12.4 - 2025-??-?? </summary>
+
+- Changed some contract object's weight (mainly the pentagram and the laptop) to default zero-value to avoid warnings from LethalLib due to invalid weight values.
+    - This shouldn't have any effect gameplay wise as these items were never meant to be picked up by the players.
+
+</details>
+
+<details>
 <summary> 3.12.3 - 2025-05-22 </summary>
 
 - Updated compatibility with ShipInventory.
