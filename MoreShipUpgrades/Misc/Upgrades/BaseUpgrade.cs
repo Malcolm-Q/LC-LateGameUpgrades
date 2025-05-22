@@ -118,8 +118,8 @@ namespace MoreShipUpgrades.Misc.Upgrades
 
             switch (mode)
             {
-                case PurchaseMode.Both: return $"${price}/{CurrencyManager.Instance.GetCurrencyAmountFromCreditsConversion(price)} PC";
-                case PurchaseMode.AlternateCurrency: return $"{CurrencyManager.Instance.GetCurrencyAmountFromCreditsConversion(price)} PC";
+                case PurchaseMode.Both: return $"${price}/{CurrencyManager.Instance.GetCurrencyAmountFromCredits(price)} PC";
+                case PurchaseMode.AlternateCurrency: return $"{CurrencyManager.Instance.GetCurrencyAmountFromCredits(price)} PC";
                 case PurchaseMode.CompanyCredits: return $"${price}";
                 default: return string.Empty;
             }

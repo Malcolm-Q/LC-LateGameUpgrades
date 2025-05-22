@@ -96,12 +96,14 @@ namespace MoreShipUpgrades.UI.Application
         private void TryConvertCreditsToPCs(CursorOutputElement<string> cursorOutputElement, Action backAction)
         {
             int count = cursorOutputElement.Counter;
-            if (terminal.groupCredits < CurrencyManager.Instance.GetCreditsFromCurrencyAmountConversion(count))
+            int requiredCredits = CurrencyManager.Instance.GetRequiredCreditsFromCurrencyConversion(count);
+
+			if (terminal.groupCredits < requiredCredits)
             {
                 ErrorMessage(title: TITLE, description: "", backAction, error: "Not enough Company Credits to perform conversion.");
                 return;
             }
-            LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits - CurrencyManager.Instance.GetCreditsFromCurrencyAmountConversion(count));
+            LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits - requiredCredits);
             CurrencyManager.Instance.AddCurrencyAmount(count);
             backAction();
         }
@@ -109,7 +111,7 @@ namespace MoreShipUpgrades.UI.Application
         const int MINIMUM_PC = 1;
         private bool HasEnoughCreditsToConvert(int amount = MINIMUM_PC)
         {
-            return terminal.groupCredits >= CurrencyManager.Instance.GetCreditsFromCurrencyAmountConversion(amount);
+            return terminal.groupCredits >= CurrencyManager.Instance.GetRequiredCreditsFromCurrencyConversion(amount);
         }
 
         private bool HasEnoughPCsToConvert(int amount = 0)
@@ -121,7 +123,7 @@ namespace MoreShipUpgrades.UI.Application
         {
             CursorOutputElement<string>[] cursorCounterElements = new CursorOutputElement<string>[2];
             Func<int, string>[] array = new Func<int, string>[1];
-            array[0] = (int x) => $"${CurrencyManager.Instance.GetCreditsFromCurrencyAmountConversion(cursorCounterElements[0].Counter)}";
+            array[0] = (int x) => $"${CurrencyManager.Instance.GetRequiredCreditsFromCurrencyConversion(cursorCounterElements[0].Counter)}";
             CursorCounterMenu cursorCounterMenu = CursorCounterMenu.Create(cursorCounterElements.Length - 1, '>', cursorCounterElements);
             IScreen screen = BoxedOutputScreen<string, string>.Create(TITLE, [cursorCounterMenu], input: () => $"{cursorCounterElements[0].Counter} PC", output: (string x) => x);
             cursorCounterElements[0] = new CursorOutputElement<string>()

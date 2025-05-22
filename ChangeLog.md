@@ -1,11 +1,14 @@
 <details>
-<summary> 3.12.3 - 2025-??-?? </summary>
+<summary> 3.12.3 - 2025-05-22 </summary>
 
 - Updated compatibility with ShipInventory.
     - More specifically the [ShipInventoryUpdated](https://thunderstore.io/c/lethal-company/p/LethalCompanyModding/ShipInventoryUpdated/)
+- Added configuration for "Alternative Currency to Credit" conversion ratio, where you specify how many credits you obtain when providing a singular unit of Alternative Currency.
+    - The other conversion ratio is used to know how many credits you require to purchase a singular unit of Alternative Currency.
 - Fixed issue with Scrap Keeper using Effective Bandaid's configuration.
 - Fixed issue with Contracts' free moons only configuration being ignored due to mislogic.
 - Fixed issue with destroying game objects instead of despawning them causing issues.
+- Fixed broken visuals related to Alternative Currency's price displays 
 - Fixed configuration mismatch between alternate currency ratios.
 
 </details>

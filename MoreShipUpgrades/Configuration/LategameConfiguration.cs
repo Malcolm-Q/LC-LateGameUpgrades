@@ -200,6 +200,7 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<int> ALTERNATIVE_CURRENCY_CREDITS_TO_CURRENCY_RATIO { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> ALTERNATIVE_CURRENCY_QUOTA_TO_CURRENCY_RATIO { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> ALTERNATIVE_CURRENCY_CONVERSION_CREDITS_TO_CURRENCY_RATIO { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> ALTERNATIVE_CURRENCY_CONVERSION_CURRENCY_TO_CREDITS_RATIO { get; set; }
 
         #endregion
 
@@ -214,13 +215,14 @@ namespace MoreShipUpgrades.Configuration
             ALTERNATIVE_CURRENCY_ENABLED = cfg.BindSyncedEntry(topSection, "Enable Alternative Currency System", false, "Allows purchasing Lategame Upgrades with another currency other than Company Credits");
             ALTERNATIVE_CURRENCY_CREDITS_TO_CURRENCY_RATIO = cfg.BindSyncedEntry(topSection, "Credits to Alternative Currency Ratio", 100, "How much a single unit of Alternative Currency is worth in Company Credits when purchasing upgrades.");
             ALTERNATIVE_CURRENCY_QUOTA_TO_CURRENCY_RATIO = cfg.BindSyncedEntry(topSection, "Quota to Alternative Currency Ratio", 100, "How much a single unit of Alternative Currency is worth in Quota Fullfilled");
-            ALTERNATIVE_CURRENCY_CONVERSION_CREDITS_TO_CURRENCY_RATIO = cfg.BindSyncedEntry(topSection, "Credits to Alternative Currency Conversion Ratio", 100, "How much a single unit of Alternative Currency is worth in Company Credits during currency conversions");
+            ALTERNATIVE_CURRENCY_CONVERSION_CREDITS_TO_CURRENCY_RATIO = cfg.BindSyncedEntry(topSection, "Credits to Alternative Currency Conversion Ratio", 100, "How many Company Credits you require to purchase a single unit of Alternative Currency.");
+            ALTERNATIVE_CURRENCY_CONVERSION_CURRENCY_TO_CREDITS_RATIO = cfg.BindSyncedEntry(topSection, "Alternative Currency to Credits Conversion Ratio", 100, "How many Company Credits you obtain when converting a single unit of Alternative Currency.");
 
-            #endregion
+			#endregion
 
-            #region Randomize Upgrades
+			#region Randomize Upgrades
 
-            topSection = LguConstants.RANDOMIZE_UPGRADES_SECTION;
+			topSection = LguConstants.RANDOMIZE_UPGRADES_SECTION;
             RANDOMIZE_UPGRADES_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.RANDOMIZE_UPGRADES_ENABLED_KEY, LguConstants.RANDOMIZE_UPGRADES_ENABLED_DEFAULT, LguConstants.RANDOMIZE_UPGRADES_ENABLED_DESCRIPTION);
             RANDOMIZE_UPGRADES_AMOUNT = cfg.BindSyncedEntry(topSection, LguConstants.RANDOMIZE_UPGRADES_AMOUNT_KEY, LguConstants.RANDOMIZE_UPGRADES_AMOUNT_DEFAULT, LguConstants.RANDOMIZE_UPGRADES_AMOUNT_DESCRIPTION);
             RANDOMIZE_UPGRADES_ALWAYS_SHOW_PURCHASED = cfg.BindSyncedEntry(topSection, LguConstants.RANDOMIZE_UPGRADES_ALWAYS_SHOW_PURCHASED_KEY, LguConstants.RANDOMIZE_UPGRADES_ALWAYS_SHOW_PURCHASED_DEFAULT, LguConstants.RANDOMIZE_UPGRADES_ALWAYS_SHOW_PURCHASED_DESCRIPTION);

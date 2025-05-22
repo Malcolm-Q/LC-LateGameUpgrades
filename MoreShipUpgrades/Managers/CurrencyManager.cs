@@ -66,9 +66,14 @@ namespace MoreShipUpgrades.Managers
             return 1f / UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_CURRENCY_QUOTA_TO_CURRENCY_RATIO;
         }
 
-        public float GetCreditConversionRatio()
+        public float GetCreditToCurrencyConversionRatio()
         {
             return 1f / UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_CURRENCY_CONVERSION_CREDITS_TO_CURRENCY_RATIO;
+        }
+
+        public float GetCurrencyToCreditConversionRatio()
+        {
+            return 1f / UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_CURRENCY_CONVERSION_CURRENCY_TO_CREDITS_RATIO;
         }
 
         public int GetCurrencyAmountFromQuota(int quotaFullfilled)
@@ -79,16 +84,20 @@ namespace MoreShipUpgrades.Managers
         public int GetCurrencyAmountFromCredits(int credits)
         {
             return Mathf.CeilToInt(GetCreditRatio() * credits);
-        }
+		}
+		public int GetRequiredCreditsFromCurrencyConversion(int currencyAmount)
+		{
+			return Mathf.CeilToInt(currencyAmount / GetCreditToCurrencyConversionRatio());
+		}
 
-        public int GetCurrencyAmountFromCreditsConversion(int convertedCredits)
+		public int GetCurrencyAmountFromCreditsConversion(int convertedCredits)
         {
-            return Mathf.CeilToInt(GetCreditConversionRatio() * convertedCredits);
+            return Mathf.CeilToInt(GetCreditToCurrencyConversionRatio() * convertedCredits);
         }
 
         public int GetCreditsFromCurrencyAmountConversion(int convertedCurrencyAmount)
         {
-            return Mathf.CeilToInt(convertedCurrencyAmount / GetCreditConversionRatio());
+            return Mathf.CeilToInt(convertedCurrencyAmount / GetCurrencyToCreditConversionRatio());
         }
 
         [ClientRpc]
