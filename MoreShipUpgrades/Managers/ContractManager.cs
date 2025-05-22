@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using Unity.Netcode;
 using UnityEngine;
+using static LethalLib.Modules.Items;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -146,12 +147,7 @@ namespace MoreShipUpgrades.Managers
                     TerminalNode routeMoon = routeKeyword.compatibleNouns[i].result;
 
                     CompatibleNoun[] additionalNodes = routeMoon.terminalOptions;
-                    for (int j = 0; j < additionalNodes.Length && lvl == Instance.contractLevel; j++)
-                    {
-                        TerminalNode confirmNode = additionalNodes[j].result;
-                        if (confirmNode == null) continue;
-                        if (confirmNode.buyRerouteToMoon == levelIndex) break;
-                    }
+                    if (!IsSelectedLevel(additionalNodes, lvl, levelIndex)) continue;
 
                     int itemCost = routeMoon.itemCost;
                     if (UpgradeBus.Instance.PluginConfiguration.CONTRACT_FREE_MOONS_ONLY.Value && itemCost != 0)
@@ -179,6 +175,17 @@ namespace MoreShipUpgrades.Managers
             Instance.contractLevel = lvl;
             return lvl;
         }
+        internal static bool IsSelectedLevel(CompatibleNoun[] additionalNodes, string lvl, int levelIndex)
+        {
+			for (int j = 0; j < additionalNodes.Length && lvl == Instance.contractLevel; j++)
+			{
+				TerminalNode confirmNode = additionalNodes[j].result;
+				if (confirmNode == null) continue;
+				if (confirmNode.buyRerouteToMoon == levelIndex) return true;
+			}
+            return false;
+		}
+
         /// <summary>
         /// Resets the manager's current state to default
         /// </summary>
@@ -230,7 +237,7 @@ namespace MoreShipUpgrades.Managers
                 exorItem.spawnPrefab.AddComponent<ExorcismContract>();
                 RegisterSpawnableContractObject(exorItem, new AnimationCurve(new Keyframe(0, 3), new Keyframe(1, 3)));
             }
-
+            mainItem.weight = 1f;
             ExorcismContract co = mainItem.spawnPrefab.AddComponent<ExorcismContract>();
             co.SetPosition = true;
 
@@ -238,6 +245,7 @@ namespace MoreShipUpgrades.Managers
             pentScript.loot = contractLoot.spawnPrefab;
             pentScript.chant = AssetBundleHandler.GetAudioClip("Ritual Fail");
             pentScript.portal = AssetBundleHandler.GetAudioClip("Ritual Success");
+
 
             RegisterSpawnableContractObject(mainItem, curve);
         }
@@ -305,7 +313,8 @@ namespace MoreShipUpgrades.Managers
 
             Item pc = AssetBundleHandler.GetItemObject("Laptop");
 
-            DataRetrievalContract coPC = pc.spawnPrefab.AddComponent<DataRetrievalContract>();
+			pc.weight = 1f;
+			DataRetrievalContract coPC = pc.spawnPrefab.AddComponent<DataRetrievalContract>();
             coPC.SetPosition = true;
 
             DataPCScript dataScript = pc.spawnPrefab.AddComponent<DataPCScript>();

@@ -1,4 +1,27 @@
 <details>
+<summary> 3.12.4 - 2025-??-?? </summary>
+
+- Changed some contract object's weight (mainly the pentagram and the laptop) to default zero-value to avoid warnings from LethalLib due to invalid weight values.
+    - This shouldn't have any effect gameplay wise as these items were never meant to be picked up by the players.
+
+</details>
+
+<details>
+<summary> 3.12.3 - 2025-05-22 </summary>
+
+- Updated compatibility with ShipInventory.
+    - More specifically the [ShipInventoryUpdated](https://thunderstore.io/c/lethal-company/p/LethalCompanyModding/ShipInventoryUpdated/)
+- Added configuration for "Alternative Currency to Credit" conversion ratio, where you specify how many credits you obtain when providing a singular unit of Alternative Currency.
+    - The other conversion ratio is used to know how many credits you require to purchase a singular unit of Alternative Currency.
+- Fixed issue with Scrap Keeper using Effective Bandaid's configuration.
+- Fixed issue with Contracts' free moons only configuration being ignored due to mislogic.
+- Fixed issue with destroying game objects instead of despawning them causing issues.
+- Fixed broken visuals related to Alternative Currency's price displays 
+- Fixed configuration mismatch between alternate currency ratios.
+
+</details>
+
+<details>
 <summary> 3.12.2 - 2025-02-24 </summary>
 
 - Fixed Fusion Matter's first tier ignoring wether the upgrade was active or not

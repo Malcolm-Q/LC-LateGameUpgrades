@@ -14,7 +14,7 @@ using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UI.TerminalNodes;
 using MoreShipUpgrades.Configuration;
-using MoreShipUpgrades.Configuration.Custom;
+using MoreShipUpgrades.Configuration.Upgrades.Custom;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {

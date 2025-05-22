@@ -1,5 +1,5 @@
-﻿using MoreShipUpgrades.Configuration.Interfaces;
-using MoreShipUpgrades.Configuration.Interfaces.TierUpgrades;
+﻿using MoreShipUpgrades.Configuration.Upgrades.Interfaces;
+using MoreShipUpgrades.Configuration.Upgrades.Interfaces.TierUpgrades;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
@@ -51,7 +51,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items
         }
         public static bool CanKeepScrapBasedOnChance()
         {
-            IUpgradeConfiguration upgradeConfig = GetConfiguration().EffectiveBandaidsConfiguration;
+            IUpgradeConfiguration upgradeConfig = GetConfiguration().ScrapKeeperConfiguration;
             if (!upgradeConfig.Enabled) return false;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return false;
             float scrapChance = Mathf.Clamp(ComputeScrapKeeperKeepScrapChance(), 0f, 1f);

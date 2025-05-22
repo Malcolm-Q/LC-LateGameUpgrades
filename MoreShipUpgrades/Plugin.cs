@@ -28,8 +28,8 @@ namespace MoreShipUpgrades
     [BepInDependency(LethalLevelLoader.Plugin.ModGUID, DependencyFlags.SoftDependency)]
     [BepInDependency(Oxygen.OxygenBase.modGUID, DependencyFlags.SoftDependency)]
     [BepInDependency(LCVR.Plugin.PLUGIN_GUID, DependencyFlags.SoftDependency)]
-    [BepInDependency(ShipInventory.MyPluginInfo.PLUGIN_GUID, DependencyFlags.SoftDependency)]
-    [BepInDependency(BrutalCompanyMinus.Plugin.GUID, DependencyFlags.SoftDependency)]
+	[BepInDependency("ShipInventoryUpdated", DependencyFlags.SoftDependency)]
+	[BepInDependency(BrutalCompanyMinus.Plugin.GUID, DependencyFlags.SoftDependency)]
     [BepInDependency(com.github.zehsteam.ToilHead.MyPluginInfo.PLUGIN_GUID, DependencyFlags.SoftDependency)]
     [BepInDependency(BrutalCompanyMinusExtraCompat.BCMERebornGUID, DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
@@ -86,7 +86,7 @@ namespace MoreShipUpgrades
             InputUtilsCompat.Init();
             PatchManager.PatchMainVersion();
 
-            if (config.ALTERNATIVE_CURRENCY_ENABLED)
+            if (CurrencyManager.Enabled)
             {
                 InteractiveTerminalManager.RegisterApplication<TradePlayerCreditsApplication>(["trade", "trade player credits", "lgu trade"], caseSensitive: false);
                 InteractiveTerminalManager.RegisterApplication<ConvertPlayerCreditApplication>(["convert", "PC"], caseSensitive: false);

@@ -138,12 +138,16 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         {
             if (!UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.Enabled) return;
             if (UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.AffectLanding && !UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.AffectDeparture)
-            {
-                __instance.shipAnimator.speed /= LandingThrusters.GetLandingSpeedMultiplier();
+			{
+				Plugin.mls.LogDebug("Removing spped in ShipLeave callback");
+				__instance.shipAnimator.speed /= LandingThrusters.GetLandingSpeedMultiplier();
                 return;
             }
             if (!UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.AffectLanding && UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.AffectDeparture)
-                __instance.shipAnimator.speed *= LandingThrusters.GetLandingSpeedMultiplier();
+            {
+				Plugin.mls.LogDebug("Adding spped in ShipLeave callback");
+				__instance.shipAnimator.speed *= LandingThrusters.GetLandingSpeedMultiplier();
+			}
         }
         [HarmonyPatch(nameof(StartOfRound.EndOfGame))]
         [HarmonyPostfix]
@@ -151,7 +155,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         {
             if (!UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.Enabled) return;
             if (!UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.AffectDeparture) return;
-
+            Plugin.mls.LogDebug("Removing spped in EndOfGame callback");
             __instance.shipAnimator.speed /= LandingThrusters.GetLandingSpeedMultiplier();
         }
 

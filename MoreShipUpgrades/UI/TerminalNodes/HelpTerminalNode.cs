@@ -67,7 +67,7 @@ namespace MoreShipUpgrades.UI.TerminalNodes
 
         internal static string HandleAlternateCurrency()
         {
-            if (UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_CURRENCY_ENABLED.Value)
+            if (CurrencyManager.Enabled)
             {
                 return CONVERT_HELP_COMMAND + TRADING_HELP_COMMAND;
             }

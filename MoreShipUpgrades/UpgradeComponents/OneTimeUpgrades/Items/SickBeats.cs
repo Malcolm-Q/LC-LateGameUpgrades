@@ -1,6 +1,6 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Configuration;
-using MoreShipUpgrades.Configuration.Custom;
+using MoreShipUpgrades.Configuration.Upgrades.Custom;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UI.TerminalNodes;

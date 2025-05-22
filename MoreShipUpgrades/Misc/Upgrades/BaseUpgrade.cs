@@ -1,5 +1,4 @@
 ﻿using MoreShipUpgrades.Configuration;
-using MoreShipUpgrades.Configuration.Interfaces;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
@@ -114,12 +113,12 @@ namespace MoreShipUpgrades.Misc.Upgrades
 
         public static string GetUpgradePrice(int price, PurchaseMode mode)
         {
-            if (!GetConfiguration().ALTERNATIVE_CURRENCY_ENABLED) return $"${price}";
+            if (!CurrencyManager.Enabled) return $"${price}";
 
             switch (mode)
             {
-                case PurchaseMode.Both: return $"${price}/{CurrencyManager.Instance.GetCurrencyAmountFromCreditsConversion(price)} PC";
-                case PurchaseMode.AlternateCurrency: return $"{CurrencyManager.Instance.GetCurrencyAmountFromCreditsConversion(price)} PC";
+                case PurchaseMode.Both: return $"${price}/{CurrencyManager.Instance.GetCurrencyAmountFromCredits(price)} PC";
+                case PurchaseMode.AlternateCurrency: return $"{CurrencyManager.Instance.GetCurrencyAmountFromCredits(price)} PC";
                 case PurchaseMode.CompanyCredits: return $"${price}";
                 default: return string.Empty;
             }

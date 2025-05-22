@@ -1,5 +1,4 @@
-﻿using LethalLib.Modules;
-using MoreShipUpgrades.Managers;
+﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.Items;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
@@ -1717,11 +1716,33 @@ namespace MoreShipUpgrades.Misc.Util
 
         internal const string ALTERNATIVE_CURRENCY_ALIAS = "PC";
 
-        #endregion
+        internal const string ALTERNATIVE_CURRENCY_TOPSECTION = "_Alternative Currency_";
 
-        #region LGU Store Interactive UI
+        internal const string ALTERNATIVE_CURRENCY_ENABLED_KEY = "Enable Alternative Currency System";
+        internal const bool ALTERNATIVE_CURRENCY_ENABLED_DEFAULT = false;
+        internal const string ALTERNATIVE_CURRENCY_ENABLED_DESCRIPTION = "Allows purchasing Lategame Upgrades with another currency other than Company Credits";
 
-        internal const string COLOR_INITIAL_FORMAT = "<color={0}>";
+        internal const string ALTERNATIVE_CURRENCY_CREDITS_TO_CURRENCY_RATIO_KEY = "Credits to Alternative Currency Ratio";
+        internal const int ALTERNATIVE_CURRENCY_CREDITS_TO_CURRENCY_RATIO_DEFAULT = 100;
+        internal const string ALTERNATIVE_CURRENCY_CREDITS_TO_CURRENCY_RATIO_DESCRIPTION = "How much a single unit of Alternative Currency is worth in Company Credits when purchasing upgrades.";
+
+        internal const string ALTERNATIVE_CURRENCY_QUOTA_TO_CURRENCY_RATIO_KEY = "Quota to Alternative Currency Ratio";
+        internal const int ALTERNATIVE_CURRENCY_QUOTA_TO_CURRENCY_RATIO_DEFAULT = 100;
+        internal const string ALTERNATIVE_CURRENCY_QUOTA_TO_CURRENCY_RATIO_DESCRIPTION = "How much a single unit of Alternative Currency is worth in Quota Fullfilled";
+
+        internal const string ALTERNATIVE_CURRENCY_CREDITS_TO_CURRENCY_CONVERSION_RATIO_KEY = "Credits to Alternative Currency Conversion Ratio";
+        internal const int ALTERNATIVE_CURRENCY_CREDITS_TO_CURRENCY_CONVERSION_RATIO_DEFAULT = 100;
+        internal const string ALTERNATIVE_CURRENCY_CREDITS_TO_CURRENCY_CONVERSION_RATIO_DESCRIPTION = "How many Company Credits you require to purchase a single unit of Alternative Currency.";
+
+        internal const string ALTERNATIVE_CURRENCY_CURRENCY_TO_CREDITS_CONVERSION_RATIO_KEY = "Alternative Currency to Credits Conversion Ratio";
+        internal const int ALTERNATIVE_CURRENCY_CURRENCY_TO_CREDITS_CONVERSION_RATIO_DEFAULT = 100;
+        internal const string ALTERNATIVE_CURRENCY_CURRENCY_TO_CREDITS_CONVERSION_RATIO_DESCRIPTION = "How many Company Credits you obtain when converting a single unit of Alternative Currency.";
+
+		#endregion
+
+		#region LGU Store Interactive UI
+
+		internal const string COLOR_INITIAL_FORMAT = "<color={0}>";
         internal const string COLOR_FINAL_FORMAT = "</color>";
         internal const string DEFAULT_DEACTIVATED_TEXT_COLOUR = HEXADECIMAL_GREY + "55";
 

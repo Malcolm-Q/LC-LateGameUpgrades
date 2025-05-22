@@ -1,7 +1,5 @@
 ﻿using CSync.Lib;
-using MoreShipUpgrades.Configuration;
-using MoreShipUpgrades.Configuration.Custom;
-using MoreShipUpgrades.Configuration.Interfaces;
+using MoreShipUpgrades.Configuration.Upgrades.Custom;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;

@@ -13,18 +13,13 @@ namespace MoreShipUpgrades.UpgradeComponents.Contracts
         public bool SetPosition = false;
         public virtual void Start()
         {
+            if (!IsServer) return;
             if (ContractManager.Instance.contractType != contractType || StartOfRound.Instance.currentLevel.PlanetName != ContractManager.Instance.contractLevel)
             {
-                GrabbableObject grabbableObject = GetComponent<GrabbableObject>();
-                if (grabbableObject != null && grabbableObject.radarIcon != null)
-                {
-                    Destroy(grabbableObject.radarIcon);
-                }
-                gameObject.SetActive(false);
-                Destroy(gameObject);
+                this.gameObject.GetComponent<NetworkObject>().Despawn();
                 return;
             }
-            if (SetPosition && IsHost)
+            if (SetPosition)
             {
                 List<EntranceTeleport> mainDoors = FindObjectsOfType<EntranceTeleport>().Where(obj => obj.gameObject.transform.position.y <= -170).ToList();
                 EnemyVent[] vents = FindObjectsOfType<EnemyVent>();
