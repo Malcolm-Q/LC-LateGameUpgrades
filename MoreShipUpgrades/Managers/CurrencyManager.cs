@@ -1,4 +1,5 @@
 ﻿using GameNetcodeStuff;
+using MoreShipUpgrades.Configuration;
 using MoreShipUpgrades.Misc.Util;
 using Unity.Netcode;
 using UnityEngine;
@@ -39,15 +40,23 @@ namespace MoreShipUpgrades.Managers
         {
             Instance = this;
             showCurrencyAmount = false;
-        }
+		}
+		public static AlternativeCurrencyConfiguration Config
+		{
+			get
+			{
+				return UpgradeBus.Instance.PluginConfiguration.AlternativeCurrencyConfiguration;
+			}
+		}
 
-        public static bool Enabled
+		public static bool Enabled
         {
             get
             {
-                return UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_CURRENCY_ENABLED;
+                return Config.Enabled;
             }
         }
+
 
         public static string GetNewCreditFormat(string format)
         {
@@ -58,22 +67,22 @@ namespace MoreShipUpgrades.Managers
 
         public float GetCreditRatio()
         {
-            return 1f / UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_CURRENCY_CREDITS_TO_CURRENCY_RATIO;
+            return 1f / Config.CreditsToCurrencyRatio;
         }
 
         public float GetQuotaRatio()
         {
-            return 1f / UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_CURRENCY_QUOTA_TO_CURRENCY_RATIO;
+            return 1f / Config.QuotaToCurrencyRatio;
         }
 
         public float GetCreditToCurrencyConversionRatio()
         {
-            return 1f / UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_CURRENCY_CONVERSION_CREDITS_TO_CURRENCY_RATIO;
+            return 1f / Config.CreditsToCurrencyConversionRatio;
         }
 
         public float GetCurrencyToCreditConversionRatio()
         {
-            return 1f / UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_CURRENCY_CONVERSION_CURRENCY_TO_CREDITS_RATIO;
+            return 1f / Config.CurrencyToCreditsConversionRatio;
         }
 
         public int GetCurrencyAmountFromQuota(int quotaFullfilled)

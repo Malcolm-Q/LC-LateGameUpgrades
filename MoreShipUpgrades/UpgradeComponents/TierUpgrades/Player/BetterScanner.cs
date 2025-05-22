@@ -1,6 +1,6 @@
 ﻿using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.Configuration;
-using MoreShipUpgrades.Configuration.Custom;
+using MoreShipUpgrades.Configuration.Upgrades.Custom;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
@@ -107,7 +107,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
                                                 configuration.Price.Value,
                                                 [configuration.SecondPrice.Value, configuration.ThirdPrice.Value],
                                                 GetConfiguration().OVERRIDE_UPGRADE_NAMES ? configuration.OverrideName : "",
-                                                alternateCurrency: GetConfiguration().ALTERNATIVE_CURRENCY_ENABLED,
+                                                alternateCurrency: CurrencyManager.Enabled,
                                                 purchaseMode: configuration.PurchaseMode
                                                 );
         }

@@ -86,7 +86,7 @@ namespace MoreShipUpgrades
             InputUtilsCompat.Init();
             PatchManager.PatchMainVersion();
 
-            if (config.ALTERNATIVE_CURRENCY_ENABLED)
+            if (CurrencyManager.Enabled)
             {
                 InteractiveTerminalManager.RegisterApplication<TradePlayerCreditsApplication>(["trade", "trade player credits", "lgu trade"], caseSensitive: false);
                 InteractiveTerminalManager.RegisterApplication<ConvertPlayerCreditApplication>(["convert", "PC"], caseSensitive: false);

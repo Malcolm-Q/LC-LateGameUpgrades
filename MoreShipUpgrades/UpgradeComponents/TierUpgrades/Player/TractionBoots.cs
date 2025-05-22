@@ -4,7 +4,7 @@ using UnityEngine;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
-using MoreShipUpgrades.Configuration.Interfaces.TierUpgrades;
+using MoreShipUpgrades.Configuration.Upgrades.Interfaces.TierUpgrades;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {

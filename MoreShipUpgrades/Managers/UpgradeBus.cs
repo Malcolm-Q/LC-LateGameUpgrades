@@ -1,13 +1,10 @@
 ﻿using GameNetcodeStuff;
 using LethalLib.Extras;
 using LethalLib.Modules;
-using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.Configuration;
-using MoreShipUpgrades.Configuration.Abstractions.OneTimeUpgrades;
-using MoreShipUpgrades.Configuration.Abstractions.TIerUpgrades;
-using MoreShipUpgrades.Configuration.Interfaces;
-using MoreShipUpgrades.Configuration.Interfaces.OneTimeUpgrades;
-using MoreShipUpgrades.Configuration.Interfaces.TierUpgrades;
+using MoreShipUpgrades.Configuration.Upgrades.Interfaces;
+using MoreShipUpgrades.Configuration.Upgrades.Interfaces.OneTimeUpgrades;
+using MoreShipUpgrades.Configuration.Upgrades.Interfaces.TierUpgrades;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
@@ -22,7 +19,6 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
@@ -352,7 +348,7 @@ namespace MoreShipUpgrades.Managers
                 prices: incrementalPrices,
                 overrideName: PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? configuration.OverrideName : "",
                 prefab: prefab,
-                alternateCurrency: PluginConfiguration.ALTERNATIVE_CURRENCY_ENABLED,
+                alternateCurrency: CurrencyManager.Enabled,
                 purchaseMode: configuration.PurchaseMode);
         }
         public CustomTerminalNode SetupOneTimeTerminalNode(string upgradeName, IOneTimeUpgradeConfiguration configuration)
@@ -370,7 +366,7 @@ namespace MoreShipUpgrades.Managers
                 price: configuration.Price,
                 overrideName: PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? configuration.OverrideName : "",
                 prefab: prefab,
-                alternateCurrency: PluginConfiguration.ALTERNATIVE_CURRENCY_ENABLED,
+                alternateCurrency: CurrencyManager.Enabled,
                 purchaseMode: configuration.PurchaseMode
                 );
         }
