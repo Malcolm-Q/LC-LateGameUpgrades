@@ -8,7 +8,7 @@
 - Added configuration for limitation of Player Credits, more specfically how many each player can hold/use.
     - Additionally added configuration to block operations which would "delete" credits if the result would be over the limit.
 - Added "Global Purchase Mode" configuration toggle in "Alternative Currency" to pick the purchase mode for all listed upgrades.
-- 
+- Possibly fixed issue with Better Scanner ignoring LOS check, causing previous levels to allow see enemies through walls.
 
 </details>
 
