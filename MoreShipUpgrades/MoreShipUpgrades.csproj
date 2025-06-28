@@ -27,6 +27,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Managers\InfoStrings.json" />
+    <None Remove="Managers\UpgradeBus.cs~RF47f1cff.TMP" />
     <None Remove="Misc\InfoStrings.json" />
   </ItemGroup>
   <ItemGroup>

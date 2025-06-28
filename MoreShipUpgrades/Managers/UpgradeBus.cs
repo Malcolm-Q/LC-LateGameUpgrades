@@ -295,11 +295,13 @@ namespace MoreShipUpgrades.Managers
                                                         int[] prices,
                                                         string overrideName = "",
                                                         bool alternateCurrency = true,
-                                                        PurchaseMode purchaseMode = default
+                                                        PurchaseMode purchaseMode = default,
+                                                        bool refundable = true,
+                                                        float refundPercentage = 1f
                                                         )
         {
-            GameObject multiPerk = AssetBundleHandler.GetPerkGameObject(upgradeName) ;
-            return SetupMultiplePurchasableTerminalNode(upgradeName, shareStatus, enabled, initialPrice, prices, overrideName, multiPerk, alternateCurrency, purchaseMode);
+            GameObject multiPerk = AssetBundleHandler.GetPerkGameObject(upgradeName);
+			return SetupMultiplePurchasableTerminalNode(upgradeName, shareStatus, enabled, initialPrice, prices, overrideName, multiPerk, alternateCurrency, purchaseMode, refundable, refundPercentage);
         }
         internal CustomTerminalNode SetupMultiplePurchasableTerminalNode(string upgradeName,
                                                                         bool shareStatus,
@@ -309,7 +311,9 @@ namespace MoreShipUpgrades.Managers
                                                                         string overrideName,
                                                                         GameObject prefab,
                                                                         bool alternateCurrency = true,
-                                                                        PurchaseMode purchaseMode = default)
+                                                                        PurchaseMode purchaseMode = default,
+                                                                        bool refundable = false,
+                                                                        float refundPercentage = 1f)
         {
             if (prefab == null) return null;
             if (!enabled) return null;
@@ -327,7 +331,9 @@ namespace MoreShipUpgrades.Managers
                 originalName: upgradeName,
                 sharedUpgrade: shareStatus,
                 alternateCurrency: alternateCurrency,
-                purchaseMode: purchaseMode);
+                purchaseMode: purchaseMode,
+                refundable: refundable,
+                refundPercentage: refundPercentage);
         }
         public CustomTerminalNode SetupMultiplePurchaseableTerminalNode(string upgradeName, ITierUpgradeConfiguration configuration)
         {
@@ -340,8 +346,11 @@ namespace MoreShipUpgrades.Managers
             int[] prices = ParseUpgradePrices(configuration.Prices);
             int initialPrice = prices.Length > 0 ? prices[0] : -1;
             int[] incrementalPrices = prices.Length > 1 ? prices[1..] : [];
+            PurchaseMode purchaseMode = PluginConfiguration.AlternativeCurrencyConfiguration.EnableGlobalPurchase ? PluginConfiguration.AlternativeCurrencyConfiguration.GlobalPurchaseMode : configuration.PurchaseMode;
+			bool refundable = PluginConfiguration.REFUND_UPGRADES || configuration.Refundable;
+			float refundPercentage = configuration.RefundPercentage / 100f;
 
-            return SetupMultiplePurchasableTerminalNode(upgradeName,
+			return SetupMultiplePurchasableTerminalNode(upgradeName,
                 shareStatus: shareStatus,
                 enabled: configuration.Enabled,
                 initialPrice: initialPrice,
@@ -349,7 +358,9 @@ namespace MoreShipUpgrades.Managers
                 overrideName: PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? configuration.OverrideName : "",
                 prefab: prefab,
                 alternateCurrency: CurrencyManager.Enabled,
-                purchaseMode: configuration.PurchaseMode);
+                purchaseMode: purchaseMode,
+				refundable: refundable,
+				refundPercentage: refundPercentage);
         }
         public CustomTerminalNode SetupOneTimeTerminalNode(string upgradeName, IOneTimeUpgradeConfiguration configuration)
         {
@@ -359,16 +370,21 @@ namespace MoreShipUpgrades.Managers
         public CustomTerminalNode SetupOneTimeTerminalNode(string upgradeName, IOneTimeUpgradeConfiguration configuration, GameObject prefab)
         {
             bool shareStatus = configuration is not IIndividualUpgradeConfiguration individualConfig || (PluginConfiguration.SHARED_UPGRADES || !individualConfig.Individual);
+			PurchaseMode purchaseMode = PluginConfiguration.AlternativeCurrencyConfiguration.EnableGlobalPurchase ? PluginConfiguration.AlternativeCurrencyConfiguration.GlobalPurchaseMode : configuration.PurchaseMode;
+            bool refundable = PluginConfiguration.REFUND_UPGRADES || configuration.Refundable;
+            float refundPercentage = configuration.RefundPercentage / 100f;
 
-            return SetupOneTimeTerminalNode(upgradeName,
+			return SetupOneTimeTerminalNode(upgradeName,
                 shareStatus: shareStatus,
                 enabled: configuration.Enabled,
                 price: configuration.Price,
                 overrideName: PluginConfiguration.OVERRIDE_UPGRADE_NAMES ? configuration.OverrideName : "",
                 prefab: prefab,
                 alternateCurrency: CurrencyManager.Enabled,
-                purchaseMode: configuration.PurchaseMode
-                );
+                purchaseMode: purchaseMode,
+                refundable: refundable,
+                refundPercentage: refundPercentage
+				);
         }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can only be bought once
@@ -384,7 +400,9 @@ namespace MoreShipUpgrades.Managers
                                               string overrideName,
                                               GameObject prefab,
                                               bool alternateCurrency = true,
-                                              PurchaseMode purchaseMode = default
+                                              PurchaseMode purchaseMode = default,
+                                              bool refundable = false,
+                                              float refundPercentage = 1f
                                               )
         {
             if (!enabled) return null;
@@ -400,7 +418,9 @@ namespace MoreShipUpgrades.Managers
                 originalName: upgradeName,
                 sharedUpgrade: shareStatus,
                 alternateCurrency: alternateCurrency,
-                purchaseMode: purchaseMode);
+                purchaseMode: purchaseMode,
+                refundable: refundable,
+                refundPercentage: refundPercentage);
         }
 
         public string SetupUpgradeInfo(BaseUpgrade upgrade = null, int price = -1, int[] incrementalPrices = null)

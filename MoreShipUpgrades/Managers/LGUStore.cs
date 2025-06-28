@@ -1,27 +1,28 @@
-using MoreShipUpgrades.Misc;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using Unity.Netcode;
-using UnityEngine;
-using Newtonsoft.Json;
-using System.Collections;
-using System.Linq;
 using GameNetcodeStuff;
-using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
-using MoreShipUpgrades.UpgradeComponents.Commands;
-using MoreShipUpgrades.Misc.Upgrades;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using MoreShipUpgrades.Compat;
+using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
-using System.Text;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies;
-using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship;
+using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Commands;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player;
-using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
+using Newtonsoft.Json;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text;
+using Unity.Netcode;
+using UnityEngine;
 
 namespace MoreShipUpgrades.Managers
 {
@@ -268,10 +269,11 @@ namespace MoreShipUpgrades.Managers
         /// <param name="id">Identifier of the client that joined the game session for the first time</param>
         /// <param name="json">Lategame Upgrade's relevant save data associated with the new client</param>
         [ServerRpc(RequireOwnership =false)]
-        private void RegisterNewPlayerServerRpc(ulong id, byte[] json)
+        private void RegisterNewPlayerServerRpc(ulong id, byte[] json, ServerRpcParams parameters = default)
         {
             LguSave.playerSaves.Add(id,JsonConvert.DeserializeObject<SaveInfo>(Encoding.ASCII.GetString(json)));
         }
+
         /// <summary>
         /// Method to get old data from json and store in the new dictionaries
         /// </summary>
@@ -379,6 +381,7 @@ namespace MoreShipUpgrades.Managers
             ContractManager.Instance.contractType = SaveInfo.contractType;
 
             CurrencyManager.Instance.CurrencyAmount = SaveInfo.currencyAmount;
+            CurrencyManager.Instance.SpentCurrencyAmount = SaveInfo.spentCurrencyAmount;
 
             UpgradeBus.Instance.SaleData = SaveInfo.SaleData;
             UpgradeBus.Instance.LoadSales();
@@ -434,8 +437,13 @@ namespace MoreShipUpgrades.Managers
             }
             RandomizeUpgradeManager.RandomizeUpgrades();
         }
-        internal void UpdateUpgrades(CustomTerminalNode node, bool increment = false)
+        internal void UpdateUpgrades(CustomTerminalNode node, bool increment = false, bool downgrade = false)
         {
+            if (downgrade)
+            {
+                ExecuteUpgradeDowngrade(node);
+                return;
+            }
             node.Unlocked = true;
             BaseUpgrade upgrade = UpgradeBus.Instance.UpgradeObjects[node.OriginalName].GetComponent<BaseUpgrade>();
             if (increment)
@@ -469,17 +477,36 @@ namespace MoreShipUpgrades.Managers
             SaveInfo = new SaveInfo();
             UpdateLGUSaveServerRpc(playerID, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(SaveInfo)));
         }
-        public void HandleUpgrade(CustomTerminalNode node, bool increment = false)
+
+		private void ExecuteUpgradeDowngrade(CustomTerminalNode node)
+		{
+			BaseUpgrade upgrade = UpgradeBus.Instance.UpgradeObjects[node.OriginalName].GetComponent<BaseUpgrade>();
+            if (node.CurrentUpgrade > 0)
+            {
+                node.CurrentUpgrade--;
+                if (upgrade is TierUpgrade tierUpgrade)
+                {
+                    tierUpgrade.Decrement();
+                }
+            }
+            else
+            {
+                node.Unlocked = false;
+                upgrade.Unwind();
+            }
+		}
+
+		public void HandleUpgrade(CustomTerminalNode node, bool increment = false, bool downgrade = false)
         {
             if (node.SharedUpgrade)
             {
                 logger.LogInfo($"{node.OriginalName} is registered as a shared upgrade! Calling ServerRpc...");
-                HandleUpgradeServerRpc(node.OriginalName, increment);
+                HandleUpgradeServerRpc(node.OriginalName, increment, downgrade);
                 return;
             }
             logger.LogInfo($"{node.OriginalName} is not registered as a shared upgrade! Unlocking on this client only...");
             LockUpgradeServerRpc(node.OriginalName, UpgradeBus.Instance.GetLocalPlayer().actualClientId);
-            UpdateUpgrades(node, increment);
+            UpdateUpgrades(node, increment, downgrade);
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -498,18 +525,18 @@ namespace MoreShipUpgrades.Managers
         }
 
         [ServerRpc(RequireOwnership = false)]
-        private void HandleUpgradeServerRpc(string name, bool increment)
+        private void HandleUpgradeServerRpc(string name, bool increment, bool downgrade)
         {
             logger.LogInfo($"Received server request to handle shared upgrade for: {name} increment: {increment}");
-            HandleUpgradeClientRpc(name, increment);
+            HandleUpgradeClientRpc(name, increment, downgrade);
         }
 
         [ClientRpc]
-        public void HandleUpgradeClientRpc(string name, bool increment)
+        public void HandleUpgradeClientRpc(string name, bool increment, bool downgrade)
         {
             logger.LogInfo($"Received client request to handle shared upgrade for: {name} increment: {increment}");
             foreach (CustomTerminalNode node in UpgradeBus.GetUpgradeNodes())
-                if (node.OriginalName == name) UpdateUpgrades(node, increment);
+                if (node.OriginalName == name) UpdateUpgrades(node, increment, downgrade);
         }
         [ClientRpc]
         public void HandleUpgradeForNoHostClientRpc(string name, bool increment)
@@ -603,6 +630,7 @@ namespace MoreShipUpgrades.Managers
         public string Version = "V2";
 
         public int currencyAmount;
+        public int spentCurrencyAmount;
 
         public SaveInfo()
         {
@@ -614,6 +642,7 @@ namespace MoreShipUpgrades.Managers
             contractLevel = ContractManager.Instance.contractLevel;
 
             currencyAmount = CurrencyManager.Instance.CurrencyAmount;
+            spentCurrencyAmount = CurrencyManager.Instance.SpentCurrencyAmount;
         }
     }
 

@@ -96,7 +96,12 @@ namespace MoreShipUpgrades.UI.Application
         private void TryConvertCreditsToPCs(CursorOutputElement<string> cursorOutputElement, Action backAction)
         {
             int count = cursorOutputElement.Counter;
-            int requiredCredits = CurrencyManager.Instance.GetRequiredCreditsFromCurrencyConversion(count);
+			if (CurrencyManager.Instance.BlockExceedOperations(count))
+			{
+				ErrorMessage(title: TITLE, description: "", backAction, error: "Solicited amount exceeds the configurated maximum cap of alternative currency units.");
+				return;
+			}
+			int requiredCredits = CurrencyManager.Instance.GetRequiredCreditsFromCurrencyConversion(count);
 
 			if (terminal.groupCredits < requiredCredits)
             {
@@ -111,6 +116,7 @@ namespace MoreShipUpgrades.UI.Application
         const int MINIMUM_PC = 1;
         private bool HasEnoughCreditsToConvert(int amount = MINIMUM_PC)
         {
+            if (CurrencyManager.Instance.BlockExceedOperations(amount)) return false;
             return terminal.groupCredits >= CurrencyManager.Instance.GetRequiredCreditsFromCurrencyConversion(amount);
         }
 

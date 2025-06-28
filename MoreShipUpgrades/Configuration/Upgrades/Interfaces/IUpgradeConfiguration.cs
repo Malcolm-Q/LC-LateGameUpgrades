@@ -11,5 +11,7 @@ namespace MoreShipUpgrades.Configuration.Upgrades.Interfaces
         SyncedEntry<string> OverrideName { get; set; }
         SyncedEntry<PurchaseMode> PurchaseMode {  get; set; }
         SyncedEntry<string> ItemProgressionItems { get; set; }
+        SyncedEntry<bool> Refundable { get; set; }
+        SyncedEntry<int> RefundPercentage { get; set; }
     }
 }

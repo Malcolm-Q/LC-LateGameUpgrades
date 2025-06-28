@@ -30,6 +30,11 @@ namespace MoreShipUpgrades.Misc.Upgrades
         {
             UpgradeBus.Instance.upgradeLevels[upgradeName] = GetUpgradeLevel(upgradeName) + 1;
         }
+
+        public virtual void Decrement()
+        {
+            UpgradeBus.Instance.upgradeLevels[upgradeName] = GetUpgradeLevel(upgradeName) - 1;
+        }
         #endregion
     }
 }
