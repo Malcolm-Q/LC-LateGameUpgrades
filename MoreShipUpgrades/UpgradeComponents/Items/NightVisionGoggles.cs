@@ -1,9 +1,12 @@
-﻿using MoreShipUpgrades.Managers;
+﻿using LethalLib.Modules;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
+using Newtonsoft.Json;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.Items
@@ -55,7 +58,9 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
                 UpgradeBus.Instance.UpgradeObjects[NightVision.UPGRADE_NAME].GetComponent<NightVision>().EnableOnClient();
             }
             playerHeldBy.DespawnHeldObject();
-        }
+			LguStore.Instance.SaveInfo = new SaveInfo();
+			LguStore.Instance.UpdateLGUSaveServerRpc(LguStore.Instance.playerID, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(LguStore.Instance.SaveInfo)), true);
+		}
 
         public static new void LoadItem()
         {
