@@ -118,6 +118,7 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<bool> INTERN_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> SALE_PERC { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SHARED_UPGRADES { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> REFUND_UPGRADES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> MEDKIT_ENABLED { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MEDKIT_PRICE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MEDKIT_HEAL_VALUE { get; set; }
@@ -232,6 +233,7 @@ namespace MoreShipUpgrades.Configuration
 
             topSection = LguConstants.MISCELLANEOUS_SECTION;
             SHARED_UPGRADES = cfg.BindSyncedEntry(topSection, LguConstants.SHARE_ALL_UPGRADES_KEY, LguConstants.SHARE_ALL_UPGRADES_DEFAULT, LguConstants.SHARE_ALL_UPGRADES_DESCRIPTION);
+            REFUND_UPGRADES = cfg.BindSyncedEntry(topSection, "All Upgrades Refundable", false, "If enabled, it overrides all upgrades configuration settings to allow refunding a level");
             SALE_PERC = cfg.BindSyncedEntry(topSection, LguConstants.SALE_PERCENT_KEY, LguConstants.SALE_PERCENT_DEFAULT, LguConstants.SALE_PERCENT_DESCRIPTION);
             KEEP_UPGRADES_AFTER_FIRED_CUTSCENE = cfg.BindSyncedEntry(topSection, LguConstants.KEEP_UPGRADES_AFTER_FIRED_KEY, LguConstants.KEEP_UPGRADES_AFTER_FIRED_DEFAULT, LguConstants.KEEP_UPGRADES_AFTER_FIRED_DESCRIPTION);
             SHOW_UPGRADES_CHAT = cfg.BindSyncedEntry(topSection, LguConstants.SHOW_UPGRADES_CHAT_KEY, LguConstants.SHOW_UPGRADES_CHAT_DEFAULT, LguConstants.SHOW_UPGRADES_CHAT_DESCRIPTION);

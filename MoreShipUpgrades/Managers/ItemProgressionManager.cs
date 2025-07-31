@@ -177,7 +177,7 @@ namespace MoreShipUpgrades.Managers
                     {
                         CustomTerminalNode node = SelectNearestValueUpgrade(fullfilledQuota);
                         if (node == null) return; // No upgrades had a price below the fullfilled quota
-                        LguStore.Instance.HandleUpgradeClientRpc(node.OriginalName, node.Unlocked);
+                        LguStore.Instance.HandleUpgradeClientRpc(node.OriginalName, node.Unlocked, false);
                         break;
                     }
             }

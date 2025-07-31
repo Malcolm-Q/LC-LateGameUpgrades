@@ -114,7 +114,7 @@ namespace MoreShipUpgrades.Misc.Upgrades
         public static string GetUpgradePrice(int price, PurchaseMode mode)
         {
             if (!CurrencyManager.Enabled) return $"${price}";
-
+            mode = GetConfiguration().AlternativeCurrencyConfiguration.EnableGlobalPurchase ? GetConfiguration().AlternativeCurrencyConfiguration.GlobalPurchaseMode : mode;
             switch (mode)
             {
                 case PurchaseMode.Both: return $"${price}/{CurrencyManager.Instance.GetCurrencyAmountFromCredits(price)} PC";

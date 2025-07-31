@@ -19,6 +19,12 @@ namespace MoreShipUpgrades.API
             LguStore.Instance.HandleUpgrade(node, node.Unlocked);
         }
 
+        public static void TriggerUpgradeDowngrade(CustomTerminalNode node)
+        {
+			if (!CheckGeneralNodeConditions(node)) return;
+            LguStore.Instance.HandleUpgrade(node, node.Unlocked, true);
+		}
+
         public static void ContributeTowardsUpgrade(string upgradeName, int scrapValue)
         {
             CustomTerminalNode pickedNode = UpgradeBus.Instance.GetUpgradeNode(upgradeName);

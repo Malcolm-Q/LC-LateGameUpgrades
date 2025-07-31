@@ -67,7 +67,10 @@ namespace MoreShipUpgrades.UI.TerminalNodes
         public bool Visible { get; set; }
         public bool AlternateCurrency { get; set; }
         public PurchaseMode PurchaseMode { get; set; }
-        protected CustomTerminalNode(string name, int unlockPrice, string description, GameObject prefab, int[] prices = null, int maxUpgrade = 0, string originalName = "", bool sharedUpgrade = false, bool alternateCurrency = true, PurchaseMode purchaseMode = default)
+
+        public bool Refundable { get; set; }
+        public float RefundPercentage { get; set; }
+        protected CustomTerminalNode(string name, int unlockPrice, string description, GameObject prefab, int[] prices = null, int maxUpgrade = 0, string originalName = "", bool sharedUpgrade = false, bool alternateCurrency = true, PurchaseMode purchaseMode = default, bool refundable = false, float refundPercentage = 1f)
         {
             if (prices == null) { prices = []; }
             Name = name;
@@ -81,6 +84,8 @@ namespace MoreShipUpgrades.UI.TerminalNodes
             Visible = true;
             AlternateCurrency = alternateCurrency;
             PurchaseMode = purchaseMode;
+            Refundable = refundable;
+            RefundPercentage = refundPercentage;
         }
 
         public int CompareTo(object obj)
@@ -100,6 +105,13 @@ namespace MoreShipUpgrades.UI.TerminalNodes
             if (CurrentUpgrade >= MaxUpgrade) return int.MaxValue;
             return (int)((Prices[CurrentUpgrade] - ItemProgressionManager.GetCurrentContribution(this)) * SalePercentage);
         }
+
+        public int GetPreviousPrice()
+        {
+			if (!Unlocked) return 0;
+			if (CurrentUpgrade > MaxUpgrade) return int.MaxValue;
+			return CurrentUpgrade > 0 ? (int)((Prices[CurrentUpgrade-1] - ItemProgressionManager.GetCurrentContribution(this)) * SalePercentage) : UnlockPrice;
+		}
         /// <summary>
         /// Gets the current level of the associated upgrade
         /// </summary>

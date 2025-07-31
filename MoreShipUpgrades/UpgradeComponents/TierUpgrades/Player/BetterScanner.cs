@@ -100,16 +100,22 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         public new static CustomTerminalNode RegisterTerminalNode()
         {
             BetterScannerUpgradeConfiguration configuration = GetConfiguration().BetterScannerUpgradeConfiguration;
+            PurchaseMode purchaseMode = GetConfiguration().AlternativeCurrencyConfiguration.EnableGlobalPurchase ? GetConfiguration().AlternativeCurrencyConfiguration.GlobalPurchaseMode : configuration.PurchaseMode;
 
-            return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
+			bool refundable = GetConfiguration().REFUND_UPGRADES || configuration.Refundable;
+			float refundPercentage = configuration.RefundPercentage / 100f;
+
+			return UpgradeBus.Instance.SetupMultiplePurchasableTerminalNode(UPGRADE_NAME,
                                                 GetConfiguration().SHARED_UPGRADES.Value || !configuration.Individual.Value,
                                                 configuration.Enabled.Value,
                                                 configuration.Price.Value,
                                                 [configuration.SecondPrice.Value, configuration.ThirdPrice.Value],
                                                 GetConfiguration().OVERRIDE_UPGRADE_NAMES ? configuration.OverrideName : "",
                                                 alternateCurrency: CurrencyManager.Enabled,
-                                                purchaseMode: configuration.PurchaseMode
-                                                );
+                                                purchaseMode: purchaseMode,
+												refundable,
+												refundPercentage
+												);
         }
     }
 }

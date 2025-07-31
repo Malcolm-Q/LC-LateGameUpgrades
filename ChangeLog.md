@@ -1,8 +1,15 @@
 <details>
-<summary> 3.12.4 - 2025-??-?? </summary>
+<summary> 3.12.4 - 2025-07-31 </summary>
 
 - Changed some contract object's weight (mainly the pentagram and the laptop) to default zero-value to avoid warnings from LethalLib due to invalid weight values.
     - This shouldn't have any effect gameplay wise as these items were never meant to be picked up by the players.
+- Added refund mechanic for upgrades with configurable refund rates, individual and global refundable toggle.
+    - You can also ask to refund through either group credits or player credits.
+- Added configuration for limitation of Player Credits, more specfically how many each player can hold/use.
+    - Additionally added configuration to block operations which would "delete" credits if the result would be over the limit.
+- Added "Global Purchase Mode" configuration toggle in "Alternative Currency" to pick the purchase mode for all listed upgrades.
+- Possibly fixed issue with Better Scanner ignoring LOS check, causing previous levels to allow see enemies through walls.
+- Possibly fixed issue with Night Vision not saving correctly.
 
 </details>
 

@@ -47,7 +47,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             Instance = this;
             upgradeName = UPGRADE_NAME;
             overridenUpgradeName = GetConfiguration().NightVisionUpgradeConfiguration.OverrideName;
-            nightVisionPrefab = AssetBundleHandler.GetItemObject("Night Vision").spawnPrefab;
+            nightVisionPrefab = AssetBundleHandler.GetItemObject(SIMPLE_UPGRADE_NAME).spawnPrefab;
         }
         internal override void Start()
         {
@@ -100,7 +100,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 
         public void Toggle()
         {
-            if (!GetActiveUpgrade("Night Vision")) return;
+            if (!GetActiveUpgrade(SIMPLE_UPGRADE_NAME)) return;
             if (UpgradeBus.Instance.GetLocalPlayer().inTerminalMenu) return;
             nightVisionActive = !nightVisionActive;
             if (client == null) { client = GameNetworkManager.Instance.localPlayerController; }
@@ -150,13 +150,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         public override void Load()
         {
             base.Load();
-            if (!GetActiveUpgrade("Night Vision")) return;
+            if (!GetActiveUpgrade(SIMPLE_UPGRADE_NAME)) return;
             EnableOnClient();
         }
         public override void Unwind()
         {
             base.Unwind();
-            if (!GetActiveUpgrade("Night Vision")) return;
+            if (!GetActiveUpgrade(SIMPLE_UPGRADE_NAME)) return;
             DisableOnClient();
         }
 
@@ -185,7 +185,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             if (client == null) { client = GameNetworkManager.Instance.localPlayerController; }
             transform.GetChild(0).gameObject.SetActive(true);
-            UpgradeBus.Instance.activeUpgrades["Night Vision"] = true;
+            UpgradeBus.Instance.activeUpgrades[SIMPLE_UPGRADE_NAME] = true;
             HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Press {Keybinds.NvgAction.GetBindingDisplayString()} to toggle Night Vision!!!</color>";
         }
 
@@ -200,7 +200,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             }
 
             transform.GetChild(0).gameObject.SetActive(false);
-            UpgradeBus.Instance.activeUpgrades["Night Vision"] = false;
+            UpgradeBus.Instance.activeUpgrades[SIMPLE_UPGRADE_NAME] = false;
             client = null;
         }
 

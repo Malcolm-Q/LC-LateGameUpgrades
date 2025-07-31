@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
 
@@ -214,6 +215,7 @@ namespace MoreShipUpgrades.UI.Application
         {
             if (UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_ITEM_PROGRESSION && UpgradeBus.Instance.PluginConfiguration.ITEM_PROGRESSION_NO_PURCHASE_UPGRADES) return false;
             if (UpgradeBus.Instance.PluginConfiguration.BuyableUpgradeOnce && UpgradeBus.Instance.lockedUpgrades.Keys.Contains(node)) return false;
+            if (node.Refundable && node.Unlocked) return true;
             bool maxLevel = node.CurrentUpgrade >= node.MaxUpgrade;
             if (maxLevel && node.Unlocked)
                 return false;
@@ -275,7 +277,7 @@ namespace MoreShipUpgrades.UI.Application
             }
             string finalText = node.Description + discoveredItems;
             bool maxLevel = node.CurrentUpgrade >= node.MaxUpgrade;
-            if (maxLevel && node.Unlocked)
+            if (maxLevel && node.Unlocked && !node.Refundable)
             {
                 ErrorMessage(node.Name, finalText, backAction, LguConstants.REACHED_MAX_LEVEL);
                 return;
@@ -285,7 +287,7 @@ namespace MoreShipUpgrades.UI.Application
             {
                 case PurchaseMode.CompanyCredits:
                     {
-                        if (groupCredits < price)
+                        if (groupCredits < price && !node.Refundable)
                         {
                             ErrorMessage(node.Name, finalText, backAction, LguConstants.NOT_ENOUGH_CREDITS);
                             return;
@@ -294,7 +296,7 @@ namespace MoreShipUpgrades.UI.Application
                     }
                 case PurchaseMode.AlternateCurrency:
                     {
-                        if (!node.AlternateCurrency)
+                        if (!node.AlternateCurrency && !node.Refundable)
                         {
                             ErrorMessage(node.Name, finalText, backAction, LguConstants.NOT_ENOUGH_CREDITS);
                             return;
@@ -302,7 +304,7 @@ namespace MoreShipUpgrades.UI.Application
 
                         int currencyPrice = CurrencyManager.Instance.GetCurrencyAmountFromCredits(price);
                         int playerCredits = CurrencyManager.Instance.CurrencyAmount;
-                        if (playerCredits < currencyPrice)
+                        if (playerCredits < currencyPrice && !node.Refundable)
                         {
                             ErrorMessage(node.Name, finalText, backAction, LguConstants.NOT_ENOUGH_CREDITS);
                             return;
@@ -313,7 +315,7 @@ namespace MoreShipUpgrades.UI.Application
                     {
                         if (groupCredits >= price) break;
 
-                        if (!node.AlternateCurrency)
+                        if (!node.AlternateCurrency && !node.Refundable)
                         {
                             ErrorMessage(node.Name, finalText, backAction, LguConstants.NOT_ENOUGH_CREDITS);
                             return;
@@ -321,7 +323,7 @@ namespace MoreShipUpgrades.UI.Application
 
                         int currencyPrice = CurrencyManager.Instance.GetCurrencyAmountFromCredits(price);
                         int playerCredits = CurrencyManager.Instance.CurrencyAmount;
-                        if (playerCredits < currencyPrice)
+                        if (playerCredits < currencyPrice && !node.Refundable)
                         {
                             ErrorMessage(node.Name, finalText, backAction, LguConstants.NOT_ENOUGH_CREDITS);
                             return;
@@ -349,6 +351,8 @@ namespace MoreShipUpgrades.UI.Application
                             elements = [
                                 CursorElement.Create("Purchase with Company Credits", "", () => ConfirmPurchaseUpgrade(node, price, backAction), active: (_) => CanBuyUpgradeWithGroupCredits(node), selectInactive: false),
                                 CursorElement.Create("Purchase with Player Credits", "", () => ConfirmPurchaseUpgradeAlternateCurrency(node, CurrencyManager.Instance.GetCurrencyAmountFromCredits(price), backAction), active: (_) => CanBuyUpgradeWithPlayerCredits(node), selectInactive: false),
+								CursorElement.Create("Refund Upgrade Level for Company Credits", "", () => ConfirmRefundUpgradeLevel(node,PurchaseMode.CompanyCredits, backAction), (_) => CanRefundUpgradeLevel(node), selectInactive: false),
+								CursorElement.Create("Refund Upgrade Level for Player Credits", "", () => ConfirmRefundUpgradeLevel(node,PurchaseMode.AlternateCurrency, backAction), (_) => CanRefundUpgradeLevel(node), selectInactive: false),
                                 CursorElement.Create("Cancel", "", backAction)
                                 ];
                             break;
@@ -357,7 +361,8 @@ namespace MoreShipUpgrades.UI.Application
                         {
                             elements = [
                                 CursorElement.Create("Purchase with Player Credits", "", () => ConfirmPurchaseUpgradeAlternateCurrency(node, CurrencyManager.Instance.GetCurrencyAmountFromCredits(price), backAction), active: (_) => CanBuyUpgradeWithPlayerCredits(node), selectInactive: false),
-                                CursorElement.Create("Cancel", "", backAction)
+								CursorElement.Create("Refund Upgrade Level", "", () => ConfirmRefundUpgradeLevel(node, node.PurchaseMode, backAction), (_) => CanRefundUpgradeLevel(node), selectInactive: false),
+								CursorElement.Create("Cancel", "", backAction)
                                 ];
                             break;
                         }
@@ -366,7 +371,8 @@ namespace MoreShipUpgrades.UI.Application
                         {
                             elements = [
                                 CursorElement.Create("Purchase with Company Credits", "", () => ConfirmPurchaseUpgrade(node, price, backAction), active: (_) => CanBuyUpgradeWithGroupCredits(node), selectInactive: false),
-                                CursorElement.Create("Cancel", "", backAction)
+								CursorElement.Create("Refund Upgrade Level", "", () => ConfirmRefundUpgradeLevel(node, node.PurchaseMode, backAction), (_) => CanRefundUpgradeLevel(node), selectInactive: false),
+								CursorElement.Create("Cancel", "", backAction)
                                 ];
                             break;
                         }
@@ -376,7 +382,8 @@ namespace MoreShipUpgrades.UI.Application
             {
                 elements = [
                     CursorElement.Create("Purchase with Company Credits", "", () => ConfirmPurchaseUpgrade(node, price, backAction), active: (_) => CanBuyUpgradeWithGroupCredits(node), selectInactive: false),
-                    CursorElement.Create("Cancel", "", backAction)
+								CursorElement.Create("Refund Upgrade Level", "", () => ConfirmRefundUpgradeLevel(node, PurchaseMode.CompanyCredits, backAction), (_) => CanRefundUpgradeLevel(node), selectInactive: false),
+					CursorElement.Create("Cancel", "", backAction)
                     ];
             }
             CursorMenu cursorMenu = CursorMenu.Create(elements.Length-1, '>', elements);
@@ -389,7 +396,55 @@ namespace MoreShipUpgrades.UI.Application
             IScreen screen = BoxedScreen.Create(node.Name, elements2);
             SwitchScreen(screen, cursorMenu, previous: false);
         }
-        void ConfirmPurchaseUpgrade(CustomTerminalNode node, int price, Action backAction)
+
+		private void ConfirmRefundUpgradeLevel(CustomTerminalNode node, PurchaseMode refundMode, Action backAction)
+		{
+            if (!node.Refundable)
+			{
+				ErrorMessage(node.Name, backAction, "Current configuration does not allow refunding this upgrade.");
+				return;
+			}
+            if (!node.Unlocked)
+            {
+				ErrorMessage(node.Name, backAction, "You can only refund upgrades you have purchased.");
+				return;
+			}
+
+			Confirm(node.Name, "Do you wish to refund a level from this upgrade", () => RefundUpgrade(node, refundMode, backAction), backAction);
+		}
+
+		private void RefundUpgrade(CustomTerminalNode node, PurchaseMode refundMode, Action backAction)
+		{
+            int price = node.GetPreviousPrice();
+            Plugin.mls.LogDebug(price);
+            switch(refundMode)
+            {
+                case PurchaseMode.CompanyCredits:
+                {
+					LguStore.Instance.SyncCreditsServerRpc(terminal.groupCredits + Mathf.CeilToInt(price * Mathf.Clamp01(node.RefundPercentage)));
+                    break;
+				}
+                case PurchaseMode.AlternateCurrency:
+                {
+                        int credits = Mathf.CeilToInt(price * Mathf.Clamp01(node.RefundPercentage));
+                        int currency = CurrencyManager.Instance.GetCurrencyAmountFromCredits(credits);
+                        CurrencyManager.Instance.AddCurrencyAmount(currency, trackSpent: true);
+                        break;
+				}
+                default:
+                break;
+            }
+			
+			UpgradeApi.TriggerUpgradeDowngrade(node);
+			backAction();
+		}
+
+		private bool CanRefundUpgradeLevel(CustomTerminalNode node)
+		{
+            return node.Refundable && node.Unlocked;
+		}
+
+		void ConfirmPurchaseUpgrade(CustomTerminalNode node, int price, Action backAction)
         {
             int groupCredits = UpgradeBus.Instance.GetTerminal().groupCredits;
             if (groupCredits < price)
@@ -411,7 +466,7 @@ namespace MoreShipUpgrades.UI.Application
         }
         void PurchaseUpgradeAlternateCurrency(CustomTerminalNode node, int currencyPrice, Action backAction)
         {
-            CurrencyManager.Instance.RemoveCurrencyAmount(currencyPrice);
+            CurrencyManager.Instance.RemoveCurrencyAmount(currencyPrice, trackSpent: true);
             if (!node.Unlocked)
             {
                 LguStore.Instance.HandleUpgrade(node);

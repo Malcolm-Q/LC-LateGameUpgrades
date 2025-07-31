@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using MoreShipUpgrades.Configuration;
 using MoreShipUpgrades.Misc.Util;
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -35,10 +36,22 @@ namespace MoreShipUpgrades.Managers
                 currencyAmount = value;
             }
         }
+        int spentCurrencyAmount;
+        public int SpentCurrencyAmount
+        {
+            get
+            {
+                return spentCurrencyAmount;
+            }
+            set
+            {
+                spentCurrencyAmount = value;
+            }
+        }
 
         void Awake()
         {
-            Instance = this;
+            if (Instance == null) Instance = this;
             showCurrencyAmount = false;
 		}
 		public static AlternativeCurrencyConfiguration Config
@@ -57,12 +70,32 @@ namespace MoreShipUpgrades.Managers
             }
         }
 
+        public static bool BlockGainOperations
+        {
+            get
+            {
+                return Config.BlockGainOperations;
+            }
+        }
+
+        public static int MaximumAmountPerPlayer
+        {
+            get
+            {
+                return Config.MaximumAmountPerPlayer;
+            }
+        }
+
 
         public static string GetNewCreditFormat(string format)
         {
             if (!Enabled) return format;
             if (!Instance.ShowCurrentAmount) return format;
-            return $"{Instance.CurrencyAmount} {LguConstants.ALTERNATIVE_CURRENCY_ALIAS}";
+            if (MaximumAmountPerPlayer > 0)
+			{
+				return $"{Instance.CurrencyAmount} / {Mathf.Clamp(Instance.CurrencyAmount + Instance.SpentCurrencyAmount, 0, MaximumAmountPerPlayer)} {LguConstants.ALTERNATIVE_CURRENCY_ALIAS}";
+			}
+			return $"{Instance.CurrencyAmount} / {(Instance.CurrencyAmount + Instance.SpentCurrencyAmount)} {LguConstants.ALTERNATIVE_CURRENCY_ALIAS}";
         }
 
         public float GetCreditRatio()
@@ -122,14 +155,17 @@ namespace MoreShipUpgrades.Managers
             HUDManager.Instance.DisplayTip("Player Credits", $"You currently have {CurrencyAmount} {LguConstants.ALTERNATIVE_CURRENCY_ALIAS}s to use in the upgrade shop.");
         }
 
-        public void AddCurrencyAmount(int amount)
+        public void AddCurrencyAmount(int amount, bool trackSpent = false)
         {
-            CurrencyAmount += amount;
+            CurrencyAmount = Mathf.Clamp(CurrencyAmount + amount, 0, MaximumAmountPerPlayer > 0 ? MaximumAmountPerPlayer : int.MaxValue);
+            if (trackSpent)
+                SpentCurrencyAmount -= amount;
         }
 
-        public void RemoveCurrencyAmount(int amount)
+        public void RemoveCurrencyAmount(int amount, bool trackSpent = false)
         {
             CurrencyAmount -= amount;
+            if (trackSpent) SpentCurrencyAmount += amount;
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -153,5 +189,11 @@ namespace MoreShipUpgrades.Managers
 
             HUDManager.Instance.DisplayTip("Player Credits", $"You have received {playerCreditAmount} {LguConstants.ALTERNATIVE_CURRENCY_ALIAS}s from {traderPlayer.playerUsername}. You currently have {CurrencyAmount} {LguConstants.ALTERNATIVE_CURRENCY_ALIAS}s to use in the upgrade shop.");
         }
-    }
+
+		internal bool BlockExceedOperations(int amount)
+		{
+            if (MaximumAmountPerPlayer <= 0 || !BlockGainOperations) return false;
+            return (Config.IncludeSpentInMaximum ? SpentCurrencyAmount : 0) + CurrencyAmount + amount > MaximumAmountPerPlayer;
+		}
+	}
 }
