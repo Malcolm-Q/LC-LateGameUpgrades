@@ -1,4 +1,11 @@
 <details>
+<summary> 3.12.5 - 2025-07-31 </summary>
+
+- Fixed issue with Better Scanner not working as expected due to misplacement of logical conditions.
+
+</details>
+
+<details>
 <summary> 3.12.4 - 2025-07-31 </summary>
 
 - Changed some contract object's weight (mainly the pentagram and the laptop) to default zero-value to avoid warnings from LethalLib due to invalid weight values.
