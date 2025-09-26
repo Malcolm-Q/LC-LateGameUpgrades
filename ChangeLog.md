@@ -1,5 +1,5 @@
 <details>
-<summary> 3.12.5 - 2025-07-31 </summary>
+<summary> 3.12.5 - 2025-08-02 </summary>
 
 - Fixed issue with Better Scanner not working as expected due to misplacement of logical conditions.
 

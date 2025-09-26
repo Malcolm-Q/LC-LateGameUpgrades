@@ -47,9 +47,9 @@ namespace MoreShipUpgrades.UI.TerminalNodes
         /// </summary>
         public static string HandleHelpContract()
         {
-            if (UpgradeBus.Instance.PluginConfiguration.CONTRACTS_ENABLED.Value)
+            if (UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.Enabled.Value)
             {
-                return string.Format(CONTRACT_HELP_COMMAND + INFO_CONTRACT_HELP_COMMAND, UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value, UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value);
+                return string.Format(CONTRACT_HELP_COMMAND + INFO_CONTRACT_HELP_COMMAND, UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.RandomPrice.Value, UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.SpecifyPrice.Value);
             }
             return "";
         }

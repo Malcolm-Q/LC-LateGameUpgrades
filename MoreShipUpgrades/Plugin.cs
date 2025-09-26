@@ -91,10 +91,10 @@ namespace MoreShipUpgrades
                 InteractiveTerminalManager.RegisterApplication<ConvertPlayerCreditApplication>(["convert", "PC"], caseSensitive: false);
             }
             InteractiveTerminalManager.RegisterApplication<UpgradeStoreApplication>(["lgu", "lategame store"], caseSensitive: false);
-            if (config.CONTRACTS_ENABLED)
+            if (config.ContractsConfiguration.Enabled)
             {
                 InteractiveTerminalManager.RegisterApplication<ContractApplication>("contracts", caseSensitive: false);
-                if (!config.CONTRACT_PROVIDE_RANDOM_ONLY)
+                if (!config.ContractsConfiguration.RandomOnly)
                     InteractiveTerminalManager.RegisterApplication<ContractApplication>("contract", caseSensitive: false);
             }
 

@@ -134,7 +134,6 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
         * Increase distance of all other pings.
     * Level 2
         * Unlocks 5 new scan commands - scan player, scan enemies, scan scrap, scan hives, scan doors.
-        * Type `info better scanner` for information on each.
     * Level 3
         * Allows you to scan scrap through walls.
         * Change the config if you also want to scan enemies through walls.

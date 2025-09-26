@@ -154,7 +154,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             AudioClip buttonPressed = AssetBundleHandler.GetAudioClip("Button Press");
             Item MedKitItem = AssetBundleHandler.GetItemObject("Medkit");
             if (MedKitItem == null) return;
-            AnimationCurve curve = new(new Keyframe(0f, UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value), new Keyframe(1f, UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value));
+            AnimationCurve curve = new(new Keyframe(0f, UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.ExtractionConfiguration.AmountMedkits.Value), new Keyframe(1f, UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.ExtractionConfiguration.AmountMedkits.Value));
 
             MedKitItem.creditsWorth = UpgradeBus.Instance.PluginConfiguration.MEDKIT_PRICE.Value;
             MedKitItem.itemId = 492016;
@@ -190,7 +190,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             };
             MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (_) => curve);
             UpgradeBus.Instance.spawnableMapObjects["MedkitMapItem"] = mapObjDef;
-            UpgradeBus.Instance.spawnableMapObjectsAmount["MedkitMapItem"] = UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value;
+            UpgradeBus.Instance.spawnableMapObjectsAmount["MedkitMapItem"] = UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.ExtractionConfiguration.AmountMedkits.Value;
 
             UpgradeBus.Instance.ItemsToSync.Add(ITEM_NAME, MedKitItem);
         }

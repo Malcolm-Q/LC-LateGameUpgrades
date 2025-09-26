@@ -149,7 +149,7 @@ namespace MoreShipUpgrades.Managers
                     if (!IsSelectedLevel(additionalNodes, lvl, levelIndex)) continue;
 
                     int itemCost = routeMoon.itemCost;
-                    if (UpgradeBus.Instance.PluginConfiguration.CONTRACT_FREE_MOONS_ONLY.Value && itemCost != 0)
+                    if (UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.FreeMoonsOnly.Value && itemCost != 0)
                     {
                         logger.LogDebug($"Criteria algorithm skipped a choice due to configuration only allowing free moons (Choice: {level.PlanetName}, Attached Price: {itemCost})");
                         break;
@@ -286,7 +286,7 @@ namespace MoreShipUpgrades.Managers
             Item scav = AssetBundleHandler.GetItemObject("Scavenger");
             if (scav == null) return;
 
-            scav.weight = UpgradeBus.Instance.PluginConfiguration.CONTRACT_EXTRACT_WEIGHT.Value;
+            scav.weight = UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.ExtractionConfiguration.ScavengerWeight.Value;
             ExtractionContract co = scav.spawnPrefab.AddComponent<ExtractionContract>();
             co.SetPosition = true;
 

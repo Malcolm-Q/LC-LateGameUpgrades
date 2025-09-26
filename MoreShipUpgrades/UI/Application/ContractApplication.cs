@@ -149,14 +149,14 @@ namespace MoreShipUpgrades.UI.Application
                         name: RANDOM_MOON_CURSOR_ELEMENT,
                         description: string.Empty,
                         action: ConfirmRandomMoonContract,
-                        active: (_) => terminal.groupCredits >= UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE,
+                        active: (_) => terminal.groupCredits >= UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.RandomPrice,
                         selectInactive: true
                         ),
                 CursorElement.Create(
                         name: SPECIFIED_MOON_CURSOR_ELEMENT,
                         description: string.Empty,
                         action: PickSpecifiedMoonContract,
-                        active: (_) => terminal.groupCredits >= UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE,
+                        active: (_) => terminal.groupCredits >= UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.SpecifyPrice,
                         selectInactive: true
                         ),
                 CursorElement.Create(
@@ -181,7 +181,7 @@ namespace MoreShipUpgrades.UI.Application
         {
             IScreen previousScreen = currentScreen;
             CursorMenu previousCursorMenu = currentCursorMenu;
-            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE)
+            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.SpecifyPrice)
             {
                 ErrorMessage(MAIN_MENU_TITLE, () => SwitchScreen(previousScreen, previousCursorMenu, true), "Not enough credits to purchase a specified moon contract.");
                 return;
@@ -228,12 +228,12 @@ namespace MoreShipUpgrades.UI.Application
         {
             IScreen previousScreen = currentScreen;
             CursorMenu previousCursorMenu = currentCursorMenu;
-            Confirm(MAIN_MENU_TITLE, $"Do you wish to purchase a contract on {level.PlanetName} for a price of {UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value} Company credits?", () => PurchaseSpecifiedMoonContract(level, () => SwitchScreen(mainScreen, mainCursorMenu, true)), () => SwitchScreen(previousScreen, previousCursorMenu, true));
+            Confirm(MAIN_MENU_TITLE, $"Do you wish to purchase a contract on {level.PlanetName} for a price of {UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.SpecifyPrice.Value} Company credits?", () => PurchaseSpecifiedMoonContract(level, () => SwitchScreen(mainScreen, mainCursorMenu, true)), () => SwitchScreen(previousScreen, previousCursorMenu, true));
         }
 
         void PurchaseSpecifiedMoonContract(SelectableLevel level, Action backAction)
         {
-            terminal.BuyItemsServerRpc([], terminal.groupCredits - UpgradeBus.Instance.PluginConfiguration.CONTRACT_SPECIFY_PRICE.Value, terminal.numberOfItemsInDropship);
+            terminal.BuyItemsServerRpc([], terminal.groupCredits - UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.SpecifyPrice.Value, terminal.numberOfItemsInDropship);
             int i = UnityEngine.Random.Range(0, CommandParser.contracts.Count);
             if (CommandParser.contracts.Count > 1)
             {
@@ -254,17 +254,17 @@ namespace MoreShipUpgrades.UI.Application
         {
             IScreen previousScreen = currentScreen;
             CursorMenu previousCursorMenu = currentCursorMenu;
-            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE)
+            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.RandomPrice)
             {
                 ErrorMessage(MAIN_MENU_TITLE, () => SwitchScreen(previousScreen, previousCursorMenu, true), "Not enough credits to purchase a randomized moon contract.");
                 return;
             }
-            Confirm(MAIN_MENU_TITLE, $"Do you wish to purchase a randomized moon contract for a price of {UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value} Company credits?", () => PurchaseRandomMoonContract(() => SwitchScreen(mainScreen, mainCursorMenu, true)), () => SwitchScreen(previousScreen, previousCursorMenu, true));
+            Confirm(MAIN_MENU_TITLE, $"Do you wish to purchase a randomized moon contract for a price of {UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.RandomPrice.Value} Company credits?", () => PurchaseRandomMoonContract(() => SwitchScreen(mainScreen, mainCursorMenu, true)), () => SwitchScreen(previousScreen, previousCursorMenu, true));
         }
 
         void PurchaseRandomMoonContract(Action backAction)
         {
-            terminal.BuyItemsServerRpc([], terminal.groupCredits - UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value, terminal.numberOfItemsInDropship);
+            terminal.BuyItemsServerRpc([], terminal.groupCredits - UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.RandomPrice.Value, terminal.numberOfItemsInDropship);
             int i = UnityEngine.Random.Range(0, CommandParser.contracts.Count);
             if (CommandParser.contracts.Count > 1)
             {

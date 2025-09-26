@@ -195,7 +195,7 @@ namespace MoreShipUpgrades.Managers
 
         void SyncAvailableContracts()
         {
-            if (!PluginConfiguration.DATA_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
+            if (!PluginConfiguration.ContractsConfiguration.DataConfiguration.Enabled.Value || !PluginConfiguration.ContractsConfiguration.Enabled.Value)
             {
                 logger.LogInfo("Removing data contract");
                 int idx = CommandParser.contracts.IndexOf(LguConstants.DATA_CONTRACT_NAME);
@@ -205,7 +205,7 @@ namespace MoreShipUpgrades.Managers
                     CommandParser.contracts.RemoveAt(idx);
                 }
             }
-            if (!PluginConfiguration.EXTRACTION_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
+            if (!PluginConfiguration.ContractsConfiguration.ExtractionConfiguration.Enabled.Value || !PluginConfiguration.ContractsConfiguration.Enabled.Value)
             {
                 logger.LogInfo("Removing extraction contract");
                 int idx = CommandParser.contracts.IndexOf(LguConstants.EXTRACTION_CONTRACT_NAME);
@@ -215,7 +215,7 @@ namespace MoreShipUpgrades.Managers
                     CommandParser.contracts.RemoveAt(idx);
                 }
             }
-            if (!PluginConfiguration.EXORCISM_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
+            if (!PluginConfiguration.ContractsConfiguration.ExorcismConfiguration.Enabled.Value || !PluginConfiguration.ContractsConfiguration.Enabled.Value)
             {
                 logger.LogInfo("Removing exorcism contract");
                 int idx = CommandParser.contracts.IndexOf(LguConstants.EXORCISM_CONTRACT_NAME);
@@ -225,7 +225,7 @@ namespace MoreShipUpgrades.Managers
                     CommandParser.contracts.RemoveAt(idx);
                 }
             }
-            if (!PluginConfiguration.DEFUSAL_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
+            if (!PluginConfiguration.ContractsConfiguration.DefusalConfiguration.Enabled.Value || !PluginConfiguration.ContractsConfiguration.Enabled.Value)
             {
                 logger.LogInfo("Removing defusal contract");
                 int idx = CommandParser.contracts.IndexOf(LguConstants.DEFUSAL_CONTRACT_NAME);
@@ -235,9 +235,9 @@ namespace MoreShipUpgrades.Managers
                     CommandParser.contracts.RemoveAt(idx);
                 }
             }
-            if (!PluginConfiguration.EXTERMINATOR_CONTRACT.Value || !PluginConfiguration.CONTRACTS_ENABLED.Value)
+            if (!PluginConfiguration.ContractsConfiguration.ExterminationConfiguration.Enabled.Value || !PluginConfiguration.ContractsConfiguration.Enabled.Value)
             {
-                if(CommandParser.contracts.Count == 1 && PluginConfiguration.CONTRACTS_ENABLED.Value)
+                if(CommandParser.contracts.Count == 1 && PluginConfiguration.ContractsConfiguration.Enabled.Value)
                 {
                     logger.LogInfo("Why must you do the things you do");
                     logger.LogWarning("User tried to remove all contracts! Leaving exterminator present. Did you mean to disable contracts?");

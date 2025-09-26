@@ -24,7 +24,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Contracts
                 List<EntranceTeleport> mainDoors = FindObjectsOfType<EntranceTeleport>().Where(obj => obj.gameObject.transform.position.y <= -170).ToList();
                 EnemyVent[] vents = FindObjectsOfType<EnemyVent>();
                 EnemyVent spawnVent = null;
-                if(UpgradeBus.Instance.PluginConfiguration.MAIN_OBJECT_FURTHEST.Value)
+                if(UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.FurthestSpawnPossible.Value)
                 {
                     spawnVent = vents.OrderByDescending(vent => Vector3.Distance(mainDoors[0].transform.position, vent.floorNode.position)).First();
                 }
@@ -38,7 +38,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Contracts
             }
             if (contractType != LguConstants.EXTERMINATOR_CONTRACT_NAME) return;
 
-            Tools.SpawnMob("Hoarding bug", transform.position, UpgradeBus.Instance.PluginConfiguration.CONTRACT_BUG_SPAWNS.Value);
+            Tools.SpawnMob("Hoarding bug", transform.position, UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.ExterminationConfiguration.AmountSpawns.Value);
         }
     }
 }
