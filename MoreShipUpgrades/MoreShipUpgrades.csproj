@@ -22,8 +22,8 @@
     <PackageReference Include="BepInEx.Core" Version="5.*" PrivateAssets="all" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" PrivateAssets="all" />
     <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.1" PrivateAssets="all" ExcludeAssets="runtime" />
-    <PackageReference Include="UnityEngine.Modules" Version="2022.3.9" PrivateAssets="all" IncludeAssets="compile" ExcludeAssets="runtime" />
-    <PackageReference Include="Evaisa.LethalLib" Version="0.16" PrivateAssets="all" />
+    <PackageReference Include="UnityEngine.Modules" Version="2022.3.62" PrivateAssets="all" IncludeAssets="compile" ExcludeAssets="runtime" />
+	<PackageReference Include="TeamXiaolan.DawnLib" Version="0.2.16" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Managers\InfoStrings.json" />
@@ -52,7 +52,7 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(LC_PATH)\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Netcode.Runtime">
+    <Reference Include="Unity.Netcode.Runtime" Publicize="true">
       <HintPath>$(LC_PATH)\Unity.Netcode.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
@@ -108,13 +108,13 @@
     
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Evaisa.NetcodePatcher.MSBuild" Version="3.*" PrivateAssets="all" />
+    <PackageReference Include="Evaisa.NetcodePatcher.MSBuild" Version="4.*" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
       <NetcodePatch Include="$(TargetPath)" />
   </ItemGroup>
   <Target Name="NetcodePatch" AfterTargets="PostBuildEvent">
-    <Exec Command="netcode-patch &quot;$(TargetPath)&quot; @(ReferencePathWithRefAssemblies->'&quot;%(Identity)&quot;', ' ')" />
+    <Exec Command="netcode-patch -uv 2022.3.62 -nv 1.12.0 -tv 1.0.0 &quot;$(TargetPath)&quot; @(ReferencePathWithRefAssemblies->'&quot;%(Identity)&quot;', ' ')" />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(LC_PLUGIN_DIR)" />
   </Target>
 </Project>

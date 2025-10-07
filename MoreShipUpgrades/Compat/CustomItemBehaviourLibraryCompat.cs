@@ -1,6 +1,5 @@
 ﻿using CustomItemBehaviourLibrary.AbstractItems;
 using GameNetcodeStuff;
-using LethalLib.Modules;
 
 namespace MoreShipUpgrades.Compat
 {

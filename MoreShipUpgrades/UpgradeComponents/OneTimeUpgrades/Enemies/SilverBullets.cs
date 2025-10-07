@@ -31,9 +31,9 @@ namespace MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Enemies
         }
         public new static void RegisterUpgrade()
         {
-            GameObject prefab = LethalLib.Modules.NetworkPrefabs.CreateNetworkPrefab(UPGRADE_NAME);
+            GameObject prefab = ItemManager.CreateNetworkPrefab(UPGRADE_NAME);
             prefab.AddComponent<SilverBullets>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(prefab);
+            ItemManager.RegisterNetworkPrefab(prefab);
             Plugin.networkPrefabs[UPGRADE_NAME] = prefab;
         }
         public new static CustomTerminalNode RegisterTerminalNode()

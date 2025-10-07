@@ -32,6 +32,10 @@ namespace MoreShipUpgrades.Configuration.Contracts
 			RewardQuotaMultiplier = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_QUOTA_MULTIPLIER_KEY, LguConstants.CONTRACT_QUOTA_MULTIPLIER_DEFAULT, LguConstants.CONTRACT_QUOTA_MULTIPLIER_DESCRIPTION);
 
 			ExtractionConfiguration = new ExtractionContractConfiguration(cfg, topSection);
+			DataConfiguration = new DataContractConfiguration(cfg, topSection);
+			DefusalConfiguration = new DefusalContractConfiguration(cfg, topSection);
+			ExorcismConfiguration = new ExorcismContractConfiguration(cfg, topSection);
+			ExterminationConfiguration = new ExterminationContractConfiguration(cfg, topSection);
 		}
 	}
 }

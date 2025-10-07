@@ -2,7 +2,6 @@
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Items;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace MoreShipUpgrades.API
 {
@@ -159,11 +158,8 @@ namespace MoreShipUpgrades.API
             sampleScript.itemProperties = sampleItem;
             sampleItem.spawnPrefab.AddComponent<SampleComponent>();
             sampleItem.spawnPrefab.AddComponent<ScrapValueSyncer>();
-            if (registerNetworkPrefab) LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(sampleItem.spawnPrefab);
-            if (!ItemManager.Instance.samplePrefabs.ContainsKey(monsterName.ToLower())) ItemManager.Instance.samplePrefabs.Add(monsterName.ToLower(), new WeightingGroup<GameObject>());
-            ItemManager.Instance.samplePrefabs[monsterName.ToLower()].Add(sampleItem.spawnPrefab, weight);
-            LethalLib.Modules.Items.RegisterItem(sampleItem);
-            Plugin.mls.LogInfo($"Registed sample for the enemy \"{monsterName}\"...");
+			ItemManager.SetupSampleItem(sampleItem, registerNetworkPrefab, monsterName, weight);
+			Plugin.mls.LogInfo($"Registed sample for the enemy \"{monsterName}\"...");
         }
         internal static void RegisterSampleItem(Item sampleItem, string monsterName, bool registerNetworkPrefab = false, bool grabbableToEnemies = true, double weight = 50)
         {
@@ -174,10 +170,7 @@ namespace MoreShipUpgrades.API
             sampleScript.grabbableToEnemies = grabbableToEnemies;
             sampleScript.itemProperties = sampleItem;
             sampleItem.spawnPrefab.AddComponent<ScrapValueSyncer>();
-            if (registerNetworkPrefab) LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(sampleItem.spawnPrefab);
-            if (!ItemManager.Instance.samplePrefabs.ContainsKey(monsterName.ToLower())) ItemManager.Instance.samplePrefabs.Add(monsterName.ToLower(), new WeightingGroup<GameObject>());
-            ItemManager.Instance.samplePrefabs[monsterName.ToLower()].Add(sampleItem.spawnPrefab, weight);
-            LethalLib.Modules.Items.RegisterItem(sampleItem);
+            ItemManager.SetupSampleItem(sampleItem, registerNetworkPrefab, monsterName, weight);
             Plugin.mls.LogInfo($"Registed sample for the enemy \"{monsterName}\"...");
         }
         static bool CheckConditionsForRegister(EnemyAI monster)

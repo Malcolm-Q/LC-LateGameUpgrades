@@ -7,7 +7,6 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using CSync.Lib;
 using System.Runtime.Serialization;
 using CSync.Extensions;
-using LethalLib.Modules;
 using MoreShipUpgrades.Managers;
 using UnityEngine;
 using MoreShipUpgrades.Misc.Util;
@@ -146,6 +145,7 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<bool> SALE_APPLY_ONCE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> BuyableUpgradeOnce { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> ShowLockedUpgrades { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> UseDawnLib {  get; set; }
 
         #endregion
 
@@ -216,7 +216,7 @@ namespace MoreShipUpgrades.Configuration
             BuyableUpgradeOnce = cfg.BindSyncedEntry(topSection, LguConstants.BUYABLE_UPGRADES_ONCE_KEY, LguConstants.BUYABLE_UPGRADES_ONCE_DEFAULT, LguConstants.BUYABLE_UPGRADES_ONCE_DESCRIPTION);
             ShowLockedUpgrades = cfg.BindSyncedEntry(topSection, LguConstants.SHOW_LOCKED_UPGRADES_KEY, LguConstants.SHOW_LOCKED_UPGRADES_DEFAULT, LguConstants.SHOW_LOCKED_UPGRADES_DESCRIPTION);
             OVERRIDE_UPGRADE_NAMES = cfg.BindSyncedEntry(topSection, LguConstants.OVERRIDE_NAMES_ENABLED_KEY, LguConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LguConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
-
+            UseDawnLib = cfg.BindSyncedEntry(topSection, "Use DawnLib for Initialization", false, "Replaces initialization phase that utilizes LethalLib with DawnLib callbacks instead. Use this if you are experiencing issues with LethalLib and believe DawnLib won't have the same issues.");
             #endregion
 
             topSection = LguConstants.CONTRACTS_SECTION;
@@ -743,17 +743,15 @@ namespace MoreShipUpgrades.Configuration
 
         private void PluginConfig_InitialSyncCompleted(object sender, EventArgs e)
         {
+            if (LguStore.Instance == null) return;
             CheckMedkit();
             UpgradeBus.Instance.Reconstruct();
         }
 
         void CheckMedkit()
         {
-            int amount = UpgradeBus.Instance.spawnableMapObjectsAmount["MedkitMapItem"];
-            if (amount == UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.ExtractionConfiguration.AmountMedkits.Value) return;
-            MapObjects.RemoveMapObject(UpgradeBus.Instance.spawnableMapObjects["MedkitMapItem"], Levels.LevelTypes.All);
             AnimationCurve curve = new(new Keyframe(0f, UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.ExtractionConfiguration.AmountMedkits.Value), new Keyframe(1f, UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.ExtractionConfiguration.AmountMedkits.Value));
-            MapObjects.RegisterMapObject(mapObject: UpgradeBus.Instance.spawnableMapObjects["MedkitMapItem"], levels: Levels.LevelTypes.All, spawnRateFunction: (_) => curve);
+            ItemManager.SetupMapObject(AssetBundleHandler.GetItemObject("MedkitMapItem"), curve);
         }
     }
 }

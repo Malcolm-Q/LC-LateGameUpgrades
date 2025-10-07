@@ -1,6 +1,4 @@
 ﻿using GameNetcodeStuff;
-using LethalLib.Extras;
-using LethalLib.Modules;
 using MoreShipUpgrades.Configuration;
 using MoreShipUpgrades.Configuration.Upgrades.Interfaces;
 using MoreShipUpgrades.Configuration.Upgrades.Interfaces.OneTimeUpgrades;
@@ -42,8 +40,6 @@ namespace MoreShipUpgrades.Managers
         internal AudioClip flashNoise;
         internal GameObject modStorePrefab;
 
-        internal Dictionary<string, SpawnableMapObjectDef> spawnableMapObjects = [];
-        internal Dictionary<string, int> spawnableMapObjectsAmount = [];
         internal readonly List<Type> upgradeTypes = [];
         internal readonly List<Type> commandTypes = [];
         internal readonly List<Type> itemTypes = [];
@@ -176,14 +172,14 @@ namespace MoreShipUpgrades.Managers
             Item storeItem = ItemsToSync[itemName];
             if (!configuredEnable)
             {
-                Items.RemoveShopItem(storeItem);
+                ItemManager.RemoveShopItem(storeItem);
                 logger.LogInfo($"Removing {itemName} from store.");
                 return;
             }
             if (storeItem.creditsWorth != configuredPrice)
             {
                 logger.LogInfo($"Changing {itemName}'s price from {storeItem.creditsWorth} to {configuredPrice}");
-                Items.UpdateShopItemPrice(storeItem, configuredPrice);
+                ItemManager.UpdateShopItemPrice(storeItem, configuredPrice);
             }
         }
 
