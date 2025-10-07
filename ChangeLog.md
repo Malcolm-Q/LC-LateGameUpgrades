@@ -1,4 +1,11 @@
 <details>
+<summary> 3.12.7 - 2025-10-07 </summary>
+
+- Fixed issue with mod not loading on boot due to requiring DawnLib's types before initialization callbacks and mod presence checks.
+
+</details>
+
+<details>
 <summary> 3.12.6 - 2025-10-07 </summary>
 
 - Updated mod's netcode patch according to Lethal Company's v73 version change.
