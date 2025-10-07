@@ -396,7 +396,7 @@ namespace MoreShipUpgrades.Misc
         }
         static void ExecuteContractCommands(ref Terminal terminal, ref TerminalNode outputNode)
         {
-            if (!UpgradeBus.Instance.PluginConfiguration.CONTRACT_PROVIDE_RANDOM_ONLY) return;
+            if (!UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.RandomOnly) return;
             outputNode = TryGetContract(ref terminal);
         }
         static TerminalNode TryGetContract(ref Terminal terminal)
@@ -406,16 +406,16 @@ namespace MoreShipUpgrades.Misc
             if (ContractManager.Instance.contractLevel != "None")
             {
                 txt = $"You currently have a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}!\n\n";
-                txt += string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value);
+                txt += string.Format(AssetBundleHandler.GetInfoFromJSON("Contract"), UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.RandomPrice.Value);
                 logger.LogInfo($"User tried starting a new contract while they still have a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}!");
                 return DisplayTerminalMessage(txt);
             }
-            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value)
+            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.RandomPrice.Value)
             {
-                txt = $"Contracts costs ${UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value} and you have ${terminal.groupCredits}\n\n";
+                txt = $"Contracts costs ${UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.RandomPrice.Value} and you have ${terminal.groupCredits}\n\n";
                 return DisplayTerminalMessage(txt);
             }
-            terminal.BuyItemsServerRpc([], terminal.groupCredits - UpgradeBus.Instance.PluginConfiguration.CONTRACT_PRICE.Value, terminal.numberOfItemsInDropship);
+            terminal.BuyItemsServerRpc([], terminal.groupCredits - UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.RandomPrice.Value, terminal.numberOfItemsInDropship);
             int i = Random.Range(0, contracts.Count);
             if (contracts.Count > 1)
             {

@@ -1,6 +1,4 @@
-﻿using LethalLib.Extras;
-using LethalLib.Modules;
-using MoreShipUpgrades.Managers;
+﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Contracts;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
@@ -154,7 +152,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             AudioClip buttonPressed = AssetBundleHandler.GetAudioClip("Button Press");
             Item MedKitItem = AssetBundleHandler.GetItemObject("Medkit");
             if (MedKitItem == null) return;
-            AnimationCurve curve = new(new Keyframe(0f, UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value), new Keyframe(1f, UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value));
+            AnimationCurve curve = new(new Keyframe(0f, UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.ExtractionConfiguration.AmountMedkits.Value), new Keyframe(1f, UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.ExtractionConfiguration.AmountMedkits.Value));
 
             MedKitItem.creditsWorth = UpgradeBus.Instance.PluginConfiguration.MEDKIT_PRICE.Value;
             MedKitItem.itemId = 492016;
@@ -166,7 +164,6 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             medScript.grabbableToEnemies = true;
             medScript.error = errorUse;
             medScript.use = buttonPressed;
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(MedKitItem.spawnPrefab);
 
             ItemManager.SetupStoreItem(MedKitItem);
 
@@ -181,17 +178,9 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             medMapScript.grabbableToEnemies = true;
             medMapScript.error = errorUse;
             medMapScript.use = buttonPressed;
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(MedKitMapItem.spawnPrefab);
+            ItemManager.RegisterNetworkPrefab(MedKitMapItem.spawnPrefab);
 
-            SpawnableMapObjectDef mapObjDef = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
-            mapObjDef.spawnableMapObject = new SpawnableMapObject
-            {
-                prefabToSpawn = MedKitMapItem.spawnPrefab
-            };
-            MapObjects.RegisterMapObject(mapObjDef, Levels.LevelTypes.All, (_) => curve);
-            UpgradeBus.Instance.spawnableMapObjects["MedkitMapItem"] = mapObjDef;
-            UpgradeBus.Instance.spawnableMapObjectsAmount["MedkitMapItem"] = UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value;
-
+            ItemManager.SetupMapObject(MedKitMapItem, curve);
             UpgradeBus.Instance.ItemsToSync.Add(ITEM_NAME, MedKitItem);
         }
     }

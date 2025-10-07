@@ -1,5 +1,4 @@
-﻿using LethalLib.Modules;
-using MoreShipUpgrades.Managers;
+﻿using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
@@ -75,7 +74,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
             visScript.grabbable = true;
             visScript.useCooldown = 2f;
             visScript.grabbableToEnemies = true;
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(nightVisionItem.spawnPrefab);
+            ItemManager.RegisterNetworkPrefab(nightVisionItem.spawnPrefab);
 
             UpgradeBus.Instance.ItemsToSync.Add(ITEM_NAME, nightVisionItem);
 

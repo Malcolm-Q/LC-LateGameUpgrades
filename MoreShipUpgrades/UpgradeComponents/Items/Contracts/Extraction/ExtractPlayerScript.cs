@@ -23,7 +23,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Extraction
         void Start()
         {
             prop = GetComponent<PhysicsProp>();
-            GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.Instance.PluginConfiguration.CONTRACT_EXTRACT_REWARD.Value + (int)(TimeOfDay.Instance.profitQuota * Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.CONTRACT_REWARD_QUOTA_MULTIPLIER.Value / 100f, 0f, 1f)));
+            GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.ExtractionConfiguration.RewardValue.Value + (int)(TimeOfDay.Instance.profitQuota * Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.RewardQuotaMultiplier.Value / 100f, 0f, 1f)));
 
 
             audio = GetComponent<AudioSource>();
@@ -80,7 +80,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Extraction
         void HealScavenger()
         {
             trig.GetComponent<BoxCollider>().enabled = false;
-            audio.PlayOneShot(clipDict["heal"][0], UpgradeBus.Instance.PluginConfiguration.SCAV_VOLUME.Value);
+            audio.PlayOneShot(clipDict["heal"][0], UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.ExtractionConfiguration.ScavengerVolume.Value);
             anim.SetTrigger("heal");
             hurtState = false;
             StartCoroutine(WaitForHealAnim());
@@ -123,7 +123,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Extraction
 
         void PlayAudioLocal(int index, string soundType)
         {
-            audio.PlayOneShot(clipDict[soundType][index], UpgradeBus.Instance.PluginConfiguration.SCAV_VOLUME.Value);
+            audio.PlayOneShot(clipDict[soundType][index], UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.ExtractionConfiguration.ScavengerVolume.Value);
             RoundManager.Instance.PlayAudibleNoise(transform.position, 30f, 0.9f, 0, prop.isInShipRoom, 5);
         }
 

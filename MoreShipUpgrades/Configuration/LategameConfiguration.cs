@@ -7,7 +7,6 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using CSync.Lib;
 using System.Runtime.Serialization;
 using CSync.Extensions;
-using LethalLib.Modules;
 using MoreShipUpgrades.Managers;
 using UnityEngine;
 using MoreShipUpgrades.Misc.Util;
@@ -33,6 +32,7 @@ using MoreShipUpgrades.Configuration.Upgrades.Interfaces.TierUpgrades;
 using MoreShipUpgrades.Configuration.Upgrades.Custom;
 using MoreShipUpgrades.Configuration.Upgrades.Abstractions.TIerUpgrades;
 using MoreShipUpgrades.Configuration.Upgrades.Abstractions.OneTimeUpgrades;
+using MoreShipUpgrades.Configuration.Contracts;
 
 namespace MoreShipUpgrades.Configuration
 {
@@ -95,22 +95,13 @@ namespace MoreShipUpgrades.Configuration
         public NightVisionUpgradeConfiguration NightVisionUpgradeConfiguration { get; set; }
         public SickBeatsUpgradeConfiguration SickBeatsUpgradeConfiguration {  get; set; }
         public BetterScannerUpgradeConfiguration BetterScannerUpgradeConfiguration {  get; set; }
-        #region Enabled
-        [field: SyncedEntryField] public SyncedEntry<bool> CONTRACTS_ENABLED { get; set; }
-
-        #endregion
-        #region Initial Prices
-        [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_PRICE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_SPECIFY_PRICE { get; set; }
-
-        #endregion
+        public ContractsConfiguration ContractsConfiguration { get; set; }
 
         #region Attributes
         [field: SyncedEntryField] public SyncedEntry<float> INTERNS_DELAY_BEFORE_REVIVE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> INTERNS_USAGES_PER_LANDING { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> INTERNS_INTERVAL_BETWEEN_REVIVES {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<Interns.TeleportRestriction> INTERNS_TELEPORT_RESTRICTION { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> CONTRACT_PROVIDE_RANDOM_ONLY { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SHOW_WORLD_BUILDING_TEXT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> MEDKIT_SCAN_NODE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> OVERRIDE_UPGRADE_NAMES { get; set; }
@@ -124,13 +115,6 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<int> MEDKIT_HEAL_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MEDKIT_USES { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> KEEP_UPGRADES_AFTER_FIRED_CUTSCENE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_BUG_REWARD { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_EXOR_REWARD { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_DEFUSE_REWARD { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_BUG_SPAWNS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_EXTRACT_REWARD { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> CONTRACT_EXTRACT_WEIGHT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_DATA_REWARD { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SNARE_FLEA_SAMPLE_MINIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> SNARE_FLEA_SAMPLE_MAXIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> BUNKER_SPIDER_SAMPLE_MINIMUM_VALUE { get; set; }
@@ -157,21 +141,11 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<int> SPORE_LIZARD_SAMPLE_MAXIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MANEATER_SAMPLE_MINIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MANEATER_SAMPLE_MAXIMUM_VALUE { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_GHOST_SPAWN { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<float> SCAV_VOLUME { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> CONTRACT_FREE_MOONS_ONLY { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> DATA_CONTRACT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> EXTERMINATOR_CONTRACT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> EXORCISM_CONTRACT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> EXTRACTION_CONTRACT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> DEFUSAL_CONTRACT { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<bool> MAIN_OBJECT_FURTHEST { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> EXTRACTION_CONTRACT_AMOUNT_MEDKITS { get; set; }
-        [field: SyncedEntryField] public SyncedEntry<int> CONTRACT_REWARD_QUOTA_MULTIPLIER { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SHOW_UPGRADES_CHAT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SALE_APPLY_ONCE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> BuyableUpgradeOnce { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> ShowLockedUpgrades { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> UseDawnLib {  get; set; }
 
         #endregion
 
@@ -242,38 +216,11 @@ namespace MoreShipUpgrades.Configuration
             BuyableUpgradeOnce = cfg.BindSyncedEntry(topSection, LguConstants.BUYABLE_UPGRADES_ONCE_KEY, LguConstants.BUYABLE_UPGRADES_ONCE_DEFAULT, LguConstants.BUYABLE_UPGRADES_ONCE_DESCRIPTION);
             ShowLockedUpgrades = cfg.BindSyncedEntry(topSection, LguConstants.SHOW_LOCKED_UPGRADES_KEY, LguConstants.SHOW_LOCKED_UPGRADES_DEFAULT, LguConstants.SHOW_LOCKED_UPGRADES_DESCRIPTION);
             OVERRIDE_UPGRADE_NAMES = cfg.BindSyncedEntry(topSection, LguConstants.OVERRIDE_NAMES_ENABLED_KEY, LguConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LguConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
-
+            UseDawnLib = cfg.BindSyncedEntry(topSection, "Use DawnLib for Initialization", false, "Replaces initialization phase that utilizes LethalLib with DawnLib callbacks instead. Use this if you are experiencing issues with LethalLib and believe DawnLib won't have the same issues.");
             #endregion
-
-            #region Contracts
 
             topSection = LguConstants.CONTRACTS_SECTION;
-            CONTRACTS_ENABLED = cfg.BindSyncedEntry(topSection, LguConstants.ENABLE_CONTRACTS_KEY, LguConstants.ENABLE_CONTRACTS_DEFAULT);
-            CONTRACT_PROVIDE_RANDOM_ONLY = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_PROVIDE_RANDOM_ONLY_KEY, LguConstants.CONTRACT_PROVIDE_RANDOM_ONLY_DEFAULT, LguConstants.CONTRACT_PROVIDE_RANDOM_ONLY_DESCRIPTION);
-            CONTRACT_FREE_MOONS_ONLY = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_FREE_MOONS_ONLY_KEY, LguConstants.CONTRACT_FREE_MOONS_ONLY_DEFAULT, LguConstants.CONTRACT_FREE_MOONS_ONLY_DESCRIPTION);
-            CONTRACT_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_PRICE_KEY, LguConstants.CONTRACT_PRICE_DEFAULT);
-            CONTRACT_SPECIFY_PRICE = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_SPECIFY_PRICE_KEY, LguConstants.CONTRACT_SPECIFY_PRICE_DEFAULT);
-            CONTRACT_BUG_REWARD = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_BUG_REWARD_KEY, LguConstants.CONTRACT_BUG_REWARD_DEFAULT);
-            CONTRACT_EXOR_REWARD = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_EXORCISM_REWARD_KEY, LguConstants.CONTRACT_EXORCISM_REWARD_DEFAULT);
-            CONTRACT_DEFUSE_REWARD = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_DEFUSAL_REWARD_KEY, LguConstants.CONTRACT_DEFUSAL_REWARD_DEFAULT);
-            CONTRACT_EXTRACT_REWARD = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_EXTRACTION_REWARD_KEY, LguConstants.CONTRACT_EXTRACTION_REWARD_DEFAULT);
-            CONTRACT_DATA_REWARD = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_DATA_REWARD_KEY, LguConstants.CONTRACT_DATA_REWARD_DEFAULT);
-            CONTRACT_BUG_SPAWNS = cfg.BindSyncedEntry(topSection, LguConstants.EXTERMINATION_BUG_SPAWNS_KEY, LguConstants.EXTERMINATION_BUG_SPAWNS_DEFAULT, LguConstants.EXTERMINATION_BUG_SPAWNS_DESCRIPTION);
-            CONTRACT_GHOST_SPAWN = cfg.BindSyncedEntry(topSection, LguConstants.EXORCISM_GHOST_SPAWN_KEY, LguConstants.EXORCISM_GHOST_SPAWN_DEFAULT, LguConstants.EXORCISM_GHOST_SPAWN_DESCRIPTION);
-            CONTRACT_EXTRACT_WEIGHT = cfg.BindSyncedEntry(topSection, LguConstants.EXTRACTION_SCAVENGER_WEIGHT_KEY, LguConstants.EXTRACTION_SCAVENGER_WEIGHT_DEFAULT, LguConstants.EXTRACTION_SCAVENGER_WEIGHT_DESCRIPTION);
-            SCAV_VOLUME = cfg.BindSyncedEntry(topSection, LguConstants.EXTRACTION_SCAVENGER_SOUND_VOLUME_KEY, LguConstants.EXTRACTION_SCAVENGER_SOUND_VOLUME_DEFAULT, LguConstants.EXTRACTION_SCAVENGER_SOUND_VOLUME_DESCRIPTION);
-            MAIN_OBJECT_FURTHEST = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_FAR_FROM_MAIN_KEY, LguConstants.CONTRACT_FAR_FROM_MAIN_DEFAULT, LguConstants.CONTRACT_FAR_FROM_MAIN_DESCRIPTION);
-            EXTRACTION_CONTRACT_AMOUNT_MEDKITS = cfg.BindSyncedEntry(topSection, LguConstants.EXTRACTION_MEDKIT_AMOUNT_KEY, LguConstants.EXTRACTION_MEDKIT_AMOUNT_DEFAULT);
-
-            // this is kind of dumb and I'd like to just use a comma seperated cfg.BindSyncedEntry<string> but this is much more foolproof
-            DATA_CONTRACT = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_DATA_ENABLED_KEY, LguConstants.CONTRACT_DATA_ENABLED_DEFAULT, LguConstants.CONTRACT_DATA_ENABLED_DESCRIPTION);
-            EXTRACTION_CONTRACT = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_EXTRACTION_ENABLED_KEY, LguConstants.CONTRACT_EXTRACTION_ENABLED_DEFAULT, LguConstants.CONTRACT_EXTRACTION_ENABLED_DESCRIPTION);
-            EXORCISM_CONTRACT = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_EXORCISM_ENABLED_KEY, LguConstants.CONTRACT_EXORCISM_ENABLED_DEFAULT, LguConstants.CONTRACT_EXORCISM_ENABLED_DESCRIPTION);
-            DEFUSAL_CONTRACT = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_DEFUSAL_ENABLED_KEY, LguConstants.CONTRACT_DEFUSAL_ENABLED_DEFAULT, LguConstants.CONTRACT_DEFUSAL_ENABLED_DESCRIPTION);
-            EXTERMINATOR_CONTRACT = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_EXTERMINATION_ENABLED_KEY, LguConstants.CONTRACT_EXTERMINATION_ENABLED_DEFAULT, LguConstants.CONTRACT_EXTERMINATION_ENABLED_DESCRIPTION);
-            CONTRACT_REWARD_QUOTA_MULTIPLIER = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_QUOTA_MULTIPLIER_KEY, LguConstants.CONTRACT_QUOTA_MULTIPLIER_DEFAULT, LguConstants.CONTRACT_QUOTA_MULTIPLIER_DESCRIPTION);
-
-            #endregion
+            ContractsConfiguration = new ContractsConfiguration(cfg, topSection);
 
             #region Items
 
@@ -796,17 +743,15 @@ namespace MoreShipUpgrades.Configuration
 
         private void PluginConfig_InitialSyncCompleted(object sender, EventArgs e)
         {
+            if (LguStore.Instance == null) return;
             CheckMedkit();
             UpgradeBus.Instance.Reconstruct();
         }
 
         void CheckMedkit()
         {
-            int amount = UpgradeBus.Instance.spawnableMapObjectsAmount["MedkitMapItem"];
-            if (amount == UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value) return;
-            MapObjects.RemoveMapObject(UpgradeBus.Instance.spawnableMapObjects["MedkitMapItem"], Levels.LevelTypes.All);
-            AnimationCurve curve = new(new Keyframe(0f, UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value), new Keyframe(1f, UpgradeBus.Instance.PluginConfiguration.EXTRACTION_CONTRACT_AMOUNT_MEDKITS.Value));
-            MapObjects.RegisterMapObject(mapObject: UpgradeBus.Instance.spawnableMapObjects["MedkitMapItem"], levels: Levels.LevelTypes.All, spawnRateFunction: (_) => curve);
+            AnimationCurve curve = new(new Keyframe(0f, UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.ExtractionConfiguration.AmountMedkits.Value), new Keyframe(1f, UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.ExtractionConfiguration.AmountMedkits.Value));
+            ItemManager.SetupMapObject(AssetBundleHandler.GetItemObject("MedkitMapItem"), curve);
         }
     }
 }

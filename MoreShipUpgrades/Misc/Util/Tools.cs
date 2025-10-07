@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UI.TerminalNodes;
 using System;
@@ -275,7 +276,7 @@ namespace MoreShipUpgrades.Misc.Util
 
             gameObject.AddComponent<T>();
             gameObject.hideFlags = HideFlags.HideAndDontSave;
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(gameObject);
+            ItemManager.RegisterNetworkPrefab(gameObject);
         }
     }
 }

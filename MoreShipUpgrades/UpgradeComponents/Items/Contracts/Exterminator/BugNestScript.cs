@@ -38,7 +38,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exterminator
         void SpawnLoot(Vector3 position)
         {
             GameObject go = Instantiate(loot, position + Vector3.up, Quaternion.identity);
-            go.GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.Instance.PluginConfiguration.CONTRACT_BUG_REWARD.Value + (int)(TimeOfDay.Instance.profitQuota * Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.CONTRACT_REWARD_QUOTA_MULTIPLIER.Value / 100f, 0f, 1f)));
+            go.GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.ExterminationConfiguration.RewardValue.Value + (int)(TimeOfDay.Instance.profitQuota * Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.RewardQuotaMultiplier.Value / 100f, 0f, 1f)));
             go.GetComponent<NetworkObject>().Spawn();
             DisableNestClientRpc(NetworkObject);
         }

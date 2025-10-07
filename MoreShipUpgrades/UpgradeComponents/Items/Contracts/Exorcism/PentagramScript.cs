@@ -197,12 +197,12 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exorcism
             yield return new WaitForSeconds(0.5f);
             if (IsHost)
             {
-                if (!Tools.SpawnMob("Girl", transform.position + new Vector3(0, 0.15f, 0),UpgradeBus.Instance.PluginConfiguration.CONTRACT_GHOST_SPAWN.Value))
+                if (!Tools.SpawnMob("Girl", transform.position + new Vector3(0, 0.15f, 0),UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.ExorcismConfiguration.AmountSpawnsOnFail.Value))
                 {   
-                    Tools.SpawnMob("Crawler", transform.position + new Vector3(0, 0.15f, 0),UpgradeBus.Instance.PluginConfiguration.CONTRACT_GHOST_SPAWN.Value);
+                    Tools.SpawnMob("Crawler", transform.position + new Vector3(0, 0.15f, 0),UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.ExorcismConfiguration.AmountSpawnsOnFail.Value);
                 }
             }
-            if(UpgradeBus.Instance.PluginConfiguration.CONTRACT_GHOST_SPAWN.Value > 0) HUDManager.Instance.DisplayTip("RUN", "YOU HAVE ANGERED THE SPIRIT WORLD!");
+            if(UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.ExorcismConfiguration.AmountSpawnsOnFail.Value > 0) HUDManager.Instance.DisplayTip("RUN", "YOU HAVE ANGERED THE SPIRIT WORLD!");
         }
         /// <summary>
         /// Stops the particles from playing after a while (used for sucessful ritual) and then spawns the loot item in the center of the pentagram
@@ -216,7 +216,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.Exorcism
             if (IsHost || IsServer)
             {
                 GameObject go = Instantiate(loot, transform.position + new Vector3(0, 0.1f, 0), Quaternion.identity);
-                go.GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.Instance.PluginConfiguration.CONTRACT_EXOR_REWARD.Value + (int)(TimeOfDay.Instance.profitQuota * Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.CONTRACT_REWARD_QUOTA_MULTIPLIER.Value / 100f, 0f, 1f)));
+                go.GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.ExorcismConfiguration.RewardValue.Value + (int)(TimeOfDay.Instance.profitQuota * Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.RewardQuotaMultiplier.Value / 100f, 0f, 1f)));
                 go.GetComponent<NetworkObject>().Spawn();
             }
         }

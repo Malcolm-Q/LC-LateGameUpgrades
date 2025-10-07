@@ -46,7 +46,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal
         void Start()
         {
             InitializeFields();
-            GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.Instance.PluginConfiguration.CONTRACT_DEFUSE_REWARD.Value + (int)(TimeOfDay.Instance.profitQuota * Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.CONTRACT_REWARD_QUOTA_MULTIPLIER.Value / 100f, 0f, 1f)));
+            GetComponent<ScrapValueSyncer>().SetScrapValue(UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.DefusalConfiguration.RewardValue.Value + (int)(TimeOfDay.Instance.profitQuota * Mathf.Clamp(UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.RewardQuotaMultiplier.Value / 100f, 0f, 1f)));
 
             audio.clip = tick;
             audio.Play();

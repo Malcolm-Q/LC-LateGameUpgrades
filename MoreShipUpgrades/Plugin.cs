@@ -16,6 +16,7 @@ using InteractiveTerminalAPI.UI;
 using static BepInEx.BepInDependency;
 using MoreShipUpgrades.UI.Application;
 using MoreShipUpgrades.Configuration;
+using Dawn;
 
 namespace MoreShipUpgrades
 {
@@ -31,6 +32,7 @@ namespace MoreShipUpgrades
 	[BepInDependency("ShipInventoryUpdated", DependencyFlags.SoftDependency)]
     [BepInDependency(com.github.zehsteam.ToilHead.MyPluginInfo.PLUGIN_GUID, DependencyFlags.SoftDependency)]
     [BepInDependency(BrutalCompanyMinusExtraCompat.BCMERebornGUID, DependencyFlags.SoftDependency)]
+    [BepInDependency(DawnLib.PLUGIN_GUID, DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
         internal static ManualLogSource mls;
@@ -49,18 +51,6 @@ namespace MoreShipUpgrades
             catch (ReflectionTypeLoadException e)
             {
                 types = e.Types.Where(t => t != null);
-            }
-            foreach (var type in types)
-            {
-                foreach (var method in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static))
-                {
-                    if (method.Name == nameof(ToilheadCompat.FollowTerminalAccessibleObjectBehaviourPatcher.DestroyObject)) continue;
-                    var attributes = method.GetCustomAttributes(typeof(RuntimeInitializeOnLoadMethodAttribute), false);
-                    if (attributes.Length > 0)
-                    {
-                        method.Invoke(null, null);
-                    }
-                }
             }
 
             string assetDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "shipupgrades");
@@ -91,10 +81,10 @@ namespace MoreShipUpgrades
                 InteractiveTerminalManager.RegisterApplication<ConvertPlayerCreditApplication>(["convert", "PC"], caseSensitive: false);
             }
             InteractiveTerminalManager.RegisterApplication<UpgradeStoreApplication>(["lgu", "lategame store"], caseSensitive: false);
-            if (config.CONTRACTS_ENABLED)
+            if (config.ContractsConfiguration.Enabled)
             {
                 InteractiveTerminalManager.RegisterApplication<ContractApplication>("contracts", caseSensitive: false);
-                if (!config.CONTRACT_PROVIDE_RANDOM_ONLY)
+                if (!config.ContractsConfiguration.RandomOnly)
                     InteractiveTerminalManager.RegisterApplication<ContractApplication>("contract", caseSensitive: false);
             }
 
@@ -107,7 +97,7 @@ namespace MoreShipUpgrades
             modStore.AddComponent<ContractManager>();
             modStore.AddComponent<CurrencyManager>();
             modStore.AddComponent<LguStore>();
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(modStore);
+            ItemManager.RegisterNetworkPrefab(modStore);
             UpgradeBus.Instance.modStorePrefab = modStore;
         }
         private void SetupItems(ref IEnumerable<Type> types)
@@ -117,7 +107,6 @@ namespace MoreShipUpgrades
                 if (!type.IsSubclassOf(typeof(LategameItem))) continue;
                 if (type == typeof(LategameItem)) continue;
                 UpgradeBus.Instance.itemTypes.Add(type);
-
                 MethodInfo method = type.GetMethod(nameof(LategameItem.LoadItem), BindingFlags.Static | BindingFlags.Public);
                 if (method == null) continue;
                 method.Invoke(null, null);

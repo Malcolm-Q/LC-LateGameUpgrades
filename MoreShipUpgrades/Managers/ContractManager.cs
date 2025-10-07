@@ -1,7 +1,4 @@
-﻿using LethalLevelLoader;
-using LethalLib.Extras;
-using LethalLib.Modules;
-using MoreShipUpgrades.Compat;
+﻿using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Contracts;
 using MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal;
@@ -149,7 +146,7 @@ namespace MoreShipUpgrades.Managers
                     if (!IsSelectedLevel(additionalNodes, lvl, levelIndex)) continue;
 
                     int itemCost = routeMoon.itemCost;
-                    if (UpgradeBus.Instance.PluginConfiguration.CONTRACT_FREE_MOONS_ONLY.Value && itemCost != 0)
+                    if (UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.FreeMoonsOnly.Value && itemCost != 0)
                     {
                         logger.LogDebug($"Criteria algorithm skipped a choice due to configuration only allowing free moons (Choice: {level.PlanetName}, Attached Price: {itemCost})");
                         break;
@@ -224,9 +221,9 @@ namespace MoreShipUpgrades.Managers
         {
             Item contractLoot = AssetBundleHandler.GetItemObject("Demon Tome");
             contractLoot.spawnPrefab.AddComponent<ScrapValueSyncer>();
-            Items.RegisterItem(contractLoot);
-            Utilities.FixMixerGroups(contractLoot.spawnPrefab);
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(contractLoot.spawnPrefab);
+            ItemManager.SetupItem(contractLoot);
+            ItemManager.FixMixerGroups(contractLoot.spawnPrefab);
+            ItemManager.RegisterNetworkPrefab(contractLoot.spawnPrefab);
 
             Item mainItem = AssetBundleHandler.GetItemObject("Pentagram");
 
@@ -251,24 +248,19 @@ namespace MoreShipUpgrades.Managers
 
         static void RegisterSpawnableContractObject(Item item, AnimationCurve curve)
         {
-            Utilities.FixMixerGroups(item.spawnPrefab);
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(item.spawnPrefab);
-            Items.RegisterItem(item);
+            ItemManager.FixMixerGroups(item.spawnPrefab);
+            ItemManager.RegisterNetworkPrefab(item.spawnPrefab);
+            ItemManager.SetupItem(item);
 
-            SpawnableMapObjectDef mapObjDefBug = ScriptableObject.CreateInstance<SpawnableMapObjectDef>();
-            mapObjDefBug.spawnableMapObject = new SpawnableMapObject
-            {
-                prefabToSpawn = item.spawnPrefab
-            };
-            MapObjects.RegisterMapObject(mapObjDefBug, Levels.LevelTypes.All, (_) => curve);
+            ItemManager.SetupMapObject(item, curve);
         }
         static void SetupExterminatorContract(AnimationCurve curve)
         {
             Item bugLoot = AssetBundleHandler.GetItemObject("HoardingBugEggsLoot");
             bugLoot.spawnPrefab.AddComponent<ScrapValueSyncer>();
-            Items.RegisterItem(bugLoot);
-            Utilities.FixMixerGroups(bugLoot.spawnPrefab);
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(bugLoot.spawnPrefab);
+            ItemManager.SetupItem(bugLoot);
+			ItemManager.FixMixerGroups(bugLoot.spawnPrefab);
+            ItemManager.RegisterNetworkPrefab(bugLoot.spawnPrefab);
 
             Item nest = AssetBundleHandler.GetItemObject("HoardingBugEggs");
 
@@ -286,7 +278,7 @@ namespace MoreShipUpgrades.Managers
             Item scav = AssetBundleHandler.GetItemObject("Scavenger");
             if (scav == null) return;
 
-            scav.weight = UpgradeBus.Instance.PluginConfiguration.CONTRACT_EXTRACT_WEIGHT.Value;
+            scav.weight = UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.ExtractionConfiguration.ScavengerWeight.Value;
             ExtractionContract co = scav.spawnPrefab.AddComponent<ExtractionContract>();
             co.SetPosition = true;
 
@@ -306,9 +298,9 @@ namespace MoreShipUpgrades.Managers
         {
             Item dataLoot = AssetBundleHandler.GetItemObject("Floppy Disk");
             dataLoot.spawnPrefab.AddComponent<ScrapValueSyncer>();
-            Items.RegisterItem(dataLoot);
-            Utilities.FixMixerGroups(dataLoot.spawnPrefab);
-            LethalLib.Modules.NetworkPrefabs.RegisterNetworkPrefab(dataLoot.spawnPrefab);
+			ItemManager.SetupItem(dataLoot);
+			ItemManager.FixMixerGroups(dataLoot.spawnPrefab);
+            ItemManager.RegisterNetworkPrefab(dataLoot.spawnPrefab);
 
             Item pc = AssetBundleHandler.GetItemObject("Laptop");
 

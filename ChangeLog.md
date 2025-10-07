@@ -1,4 +1,21 @@
 <details>
+<summary> 3.12.6 - 2025-10-07 </summary>
+
+- Updated mod's netcode patch according to Lethal Company's v73 version change.
+- Added configuration setting which changes the initialization phase that utilizes LethalLib callbacks with [DawnLib](https://thunderstore.io/c/lethal-company/p/TeamXiaolan/DawnLib/)'s.
+    - Use this setting if you are experiencing issues with LethalLib and believe DawnLib does not have the same issues.
+- Internally changed contracts and alternative currency configuration setup to be easier to manage.
+    - No significant changes should appear for the user. 
+
+</details>
+<details>
+<summary> 3.12.5 - 2025-08-02 </summary>
+
+- Fixed issue with Better Scanner not working as expected due to misplacement of logical conditions.
+
+</details>
+
+<details>
 <summary> 3.12.4 - 2025-07-31 </summary>
 
 - Changed some contract object's weight (mainly the pentagram and the laptop) to default zero-value to avoid warnings from LethalLib due to invalid weight values.
