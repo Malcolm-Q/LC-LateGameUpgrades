@@ -1,6 +1,7 @@
 ﻿
 
 using MissileTurret;
+using System.Runtime.CompilerServices;
 
 namespace MoreShipUpgrades.Compat
 {
@@ -9,7 +10,8 @@ namespace MoreShipUpgrades.Compat
         public static bool Enabled =>
             BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("Finnerex.MissileTurret");
 
-        internal static bool IsMissileTurret(ref TerminalAccessibleObject possibleHazard)
+		[MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
+		internal static bool IsMissileTurret(ref TerminalAccessibleObject possibleHazard)
         {
             return possibleHazard.GetComponent<MissileTurretAI>() != null;
         }

@@ -1,4 +1,11 @@
 <details>
+<summary> 3.12.8 - 2025-10-07 </summary>
+
+- Changed soft dependency implementations according to new Unity version used.
+
+</details>
+
+<details>
 <summary> 3.12.7 - 2025-10-07 </summary>
 
 - Fixed issue with mod not loading on boot due to requiring DawnLib's types before initialization callbacks and mod presence checks.

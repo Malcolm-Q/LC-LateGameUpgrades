@@ -14,7 +14,6 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         internal const string DEFAULT_PRICES = "100,50,100,150";
         internal const string WORLD_BUILDING_TEXT = "\n\nSpecial kneebrace & lower body harness system that supports your joints. Makes you feel prepared to sneak around. Also makes your butt look amazing.\n\n";
 
-        
         void Awake()
         {
             upgradeName = UPGRADE_NAME;
