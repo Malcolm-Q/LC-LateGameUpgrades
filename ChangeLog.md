@@ -1,5 +1,5 @@
 <details>
-<summary> 3.12.8 - 2025-10-07 </summary>
+<summary> 3.12.8 - 2025-10-14 </summary>
 
 - Changed soft dependency implementations according to new Unity version used.
 
