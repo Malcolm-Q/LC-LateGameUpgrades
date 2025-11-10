@@ -14,6 +14,7 @@ namespace MoreShipUpgrades.Configuration.Contracts
 		[field: SyncedEntryField] public SyncedEntry<bool> FreeMoonsOnly {  get; set; }
 		[field: SyncedEntryField] public SyncedEntry<bool> FurthestSpawnPossible { get; set; }
 		[field: SyncedEntryField] public SyncedEntry<int> RewardQuotaMultiplier { get; set; }
+		[field: SyncedEntryField] public SyncedEntry<string> BlacklistedMoons { get; set; }
 		
 		public DataContractConfiguration DataConfiguration { get; set; }
 		public DefusalContractConfiguration DefusalConfiguration { get; set; }
@@ -30,6 +31,7 @@ namespace MoreShipUpgrades.Configuration.Contracts
 			SpecifyPrice = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_SPECIFY_PRICE_KEY, LguConstants.CONTRACT_SPECIFY_PRICE_DEFAULT);
 			FurthestSpawnPossible = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_FAR_FROM_MAIN_KEY, LguConstants.CONTRACT_FAR_FROM_MAIN_DEFAULT, LguConstants.CONTRACT_FAR_FROM_MAIN_DESCRIPTION);
 			RewardQuotaMultiplier = cfg.BindSyncedEntry(topSection, LguConstants.CONTRACT_QUOTA_MULTIPLIER_KEY, LguConstants.CONTRACT_QUOTA_MULTIPLIER_DEFAULT, LguConstants.CONTRACT_QUOTA_MULTIPLIER_DESCRIPTION);
+			BlacklistedMoons = cfg.BindSyncedEntry(topSection, "Blacklisted Moons", "", "Collection of moons' names separated by a comma (,) where you do not wish to obtain a contract on.\n This should be used when using custom moons where you do not wish to obtain a contract on.\n");
 
 			ExtractionConfiguration = new ExtractionContractConfiguration(cfg, topSection);
 			DataConfiguration = new DataContractConfiguration(cfg, topSection);

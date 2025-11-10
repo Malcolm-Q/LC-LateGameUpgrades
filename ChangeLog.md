@@ -1,4 +1,12 @@
 <details>
+<summary> 3.12.9 - 2025-11-10 </summary>
+
+- Added configuration entry to enter moon names where the players do not wish to obtain contracts on.
+    - This entry should only be used when there are no benefits of obtaining a contract in that moon as it is impossible to complete it.
+
+</details>
+
+<details>
 <summary> 3.12.8 - 2025-10-14 </summary>
 
 - Changed soft dependency implementations according to new Unity version used.
