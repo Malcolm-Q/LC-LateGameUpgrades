@@ -139,13 +139,13 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             if (!UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.Enabled) return;
             if (UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.AffectLanding && !UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.AffectDeparture)
 			{
-				Plugin.mls.LogDebug("Removing spped in ShipLeave callback");
+				Plugin.mls.LogDebug("Removing speed in ShipLeave callback");
 				__instance.shipAnimator.speed /= LandingThrusters.GetLandingSpeedMultiplier();
                 return;
             }
             if (!UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.AffectLanding && UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.AffectDeparture)
             {
-				Plugin.mls.LogDebug("Adding spped in ShipLeave callback");
+				Plugin.mls.LogDebug("Adding speed in ShipLeave callback");
 				__instance.shipAnimator.speed *= LandingThrusters.GetLandingSpeedMultiplier();
 			}
         }
@@ -155,7 +155,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
         {
             if (!UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.Enabled) return;
             if (!UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.AffectDeparture) return;
-            Plugin.mls.LogDebug("Removing spped in EndOfGame callback");
+            Plugin.mls.LogDebug("Removing speed in EndOfGame callback");
             __instance.shipAnimator.speed /= LandingThrusters.GetLandingSpeedMultiplier();
         }
 
