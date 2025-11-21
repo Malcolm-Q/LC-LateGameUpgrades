@@ -1,5 +1,4 @@
 ﻿using MoreShipUpgrades.Compat;
-using MoreShipUpgrades.Configuration;
 using MoreShipUpgrades.Configuration.Contracts;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Contracts;
@@ -27,7 +26,7 @@ namespace MoreShipUpgrades.Managers
         /// </summary>
         private static TerminalKeyword routeKeyword;
 
-        static readonly ContractsConfiguration config = config;
+        static readonly ContractsConfiguration config = UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration;
         #endregion
         #region Variables
         #region Selected Contract

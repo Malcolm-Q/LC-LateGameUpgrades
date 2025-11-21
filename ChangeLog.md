@@ -3,6 +3,7 @@
 
 - Added configuration entry to enter moon names where the players do not wish to obtain contracts on.
     - This entry should only be used when there are no benefits of obtaining a contract in that moon as it is impossible to complete it.
+- Fixed hunter samples not staying after lobby reboot due to missing register callback.
 
 </details>
 

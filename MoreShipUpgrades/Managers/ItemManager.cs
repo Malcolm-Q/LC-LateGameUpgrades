@@ -42,6 +42,7 @@ namespace MoreShipUpgrades.Managers
 			if (registerNetworkPrefab) RegisterNetworkPrefab(sampleItem.spawnPrefab);
 			if (!Instance.samplePrefabs.ContainsKey(monsterName.ToLower())) Instance.samplePrefabs.Add(monsterName.ToLower(), new WeightingGroup<GameObject>());
 			Instance.samplePrefabs[monsterName.ToLower()].Add(sampleItem.spawnPrefab, weight);
+			SetupItem(sampleItem);
 		}
 		internal static void SetupStoreItem(Item storeItem)
 		{
