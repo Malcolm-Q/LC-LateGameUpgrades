@@ -308,7 +308,6 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
             List<CodeInstruction> codes = new(instructions);
             int index = 0;
-
             Tools.FindField(ref index, ref codes, findField: jumpForce, addCode: additionalJumpForce, errorMessage: "Couldn't find first occurence of jump force field");
             Tools.FindField(ref index, ref codes, findField: jumpForce, addCode: additionalJumpForce, errorMessage: "Couldn't find second occurence of jump force field");
             return codes;

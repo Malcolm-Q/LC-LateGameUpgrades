@@ -16,7 +16,6 @@ using InteractiveTerminalAPI.UI;
 using static BepInEx.BepInDependency;
 using MoreShipUpgrades.UI.Application;
 using MoreShipUpgrades.Configuration;
-using Dawn;
 
 namespace MoreShipUpgrades
 {
@@ -32,7 +31,7 @@ namespace MoreShipUpgrades
 	[BepInDependency("ShipInventoryUpdated", DependencyFlags.SoftDependency)]
     [BepInDependency(com.github.zehsteam.ToilHead.MyPluginInfo.PLUGIN_GUID, DependencyFlags.SoftDependency)]
     [BepInDependency(BrutalCompanyMinusExtraCompat.BCMERebornGUID, DependencyFlags.SoftDependency)]
-    [BepInDependency(DawnLib.PLUGIN_GUID, DependencyFlags.SoftDependency)]
+    [BepInDependency(Dawn.DawnLib.PLUGIN_GUID, DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
         internal static ManualLogSource mls;

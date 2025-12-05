@@ -416,7 +416,6 @@ namespace MoreShipUpgrades.UI.Application
 		private void RefundUpgrade(CustomTerminalNode node, PurchaseMode refundMode, Action backAction)
 		{
             int price = node.GetPreviousPrice();
-            Plugin.mls.LogDebug(price);
             switch(refundMode)
             {
                 case PurchaseMode.CompanyCredits:

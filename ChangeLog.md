@@ -1,4 +1,28 @@
 <details>
+<summary> 3.12.9 - 2025-12-05 </summary>
+
+- Added configuration entry to enter moon names where the players do not wish to obtain contracts on.
+    - This entry should only be used when there are no benefits of obtaining a contract in that moon as it is impossible to complete it.
+    - The values inserted on this entry CAN be parts of a moon name (e.g "Mar" or "mar" for "March"), however this is not advised as it can include other moons with the same string of characters.
+- Fixed hunter samples not staying after lobby reboot due to missing register callback.
+
+</details>
+
+<details>
+<summary> 3.12.8 - 2025-10-14 </summary>
+
+- Changed soft dependency implementations according to new Unity version used.
+
+</details>
+
+<details>
+<summary> 3.12.7 - 2025-10-07 </summary>
+
+- Fixed issue with mod not loading on boot due to requiring DawnLib's types before initialization callbacks and mod presence checks.
+
+</details>
+
+<details>
 <summary> 3.12.6 - 2025-10-07 </summary>
 
 - Updated mod's netcode patch according to Lethal Company's v73 version change.

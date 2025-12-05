@@ -1,9 +1,7 @@
-﻿using Dawn;
-using LethalLib.Extras;
+﻿using LethalLib.Extras;
 using LethalLib.Modules;
 using MoreShipUpgrades.API;
 using MoreShipUpgrades.Compat;
-using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -44,6 +42,7 @@ namespace MoreShipUpgrades.Managers
 			if (registerNetworkPrefab) RegisterNetworkPrefab(sampleItem.spawnPrefab);
 			if (!Instance.samplePrefabs.ContainsKey(monsterName.ToLower())) Instance.samplePrefabs.Add(monsterName.ToLower(), new WeightingGroup<GameObject>());
 			Instance.samplePrefabs[monsterName.ToLower()].Add(sampleItem.spawnPrefab, weight);
+			SetupItem(sampleItem);
 		}
 		internal static void SetupStoreItem(Item storeItem)
 		{
@@ -56,11 +55,7 @@ namespace MoreShipUpgrades.Managers
 			}
 			else
 			{
-				NamespacedKey<DawnItemInfo> shopItem = NamespacedKey<DawnItemInfo>.From(Metadata.DAWN_ID, storeItem.itemName);
-				DawnLib.DefineItem(shopItem, storeItem, builder => builder
-				.DefineShop(shopBuilder => shopBuilder
-					.OverrideCost(storeItem.creditsWorth)
-					.OverrideInfoNode(infoNode)));
+				DawnLibCompat.SetupStoreItem(storeItem, infoNode);
 			}
 		}
 
@@ -77,11 +72,7 @@ namespace MoreShipUpgrades.Managers
 			}
 			else
 			{
-				NamespacedKey<DawnMapObjectInfo> dawnItem = NamespacedKey<DawnMapObjectInfo>.From(Metadata.DAWN_ID, item.itemName);
-				DawnLib.DefineMapObject(dawnItem, item.spawnPrefab, builder => builder
-				.DefineInside(insideBuilder => insideBuilder
-					.SetWeights(curveBuilder => curveBuilder
-					.SetGlobalCurve(curve))));
+				DawnLibCompat.SetupMapObject(item, curve);
 			}
 		}
 
@@ -93,7 +84,7 @@ namespace MoreShipUpgrades.Managers
 			}
 			else
 			{
-				DawnLib.RegisterNetworkPrefab(prefab);
+				DawnLibCompat.RegisterNetworkPrefab(prefab);
 			}
 		}
 
@@ -105,8 +96,7 @@ namespace MoreShipUpgrades.Managers
 			}
 			else
 			{
-				NamespacedKey<DawnItemInfo> dawnItem = NamespacedKey<DawnItemInfo>.From(Metadata.DAWN_ID, item.itemName);
-				DawnLib.DefineItem(dawnItem, item, _ => { });
+				DawnLibCompat.SetupItem(item);
 			}
 		}
 
@@ -118,7 +108,7 @@ namespace MoreShipUpgrades.Managers
 			}
 			else
 			{
-				DawnLib.FixMixerGroups(prefab);
+				DawnLibCompat.FixMixerGroups(prefab);
 			}
 		}
 
@@ -130,10 +120,7 @@ namespace MoreShipUpgrades.Managers
 			}
 			else
 			{
-				NamespacedKey<DawnItemInfo> shopItem = NamespacedKey<DawnItemInfo>.From(Metadata.DAWN_ID, storeItem.itemName);
-				DawnLib.DefineItem(shopItem, storeItem, builder => builder
-				.DefineShop(shopBuilder => shopBuilder
-					.SetPurchasePredicate(ITerminalPurchasePredicate.AlwaysHide())));
+				DawnLibCompat.RemoveShopItem(storeItem);
 			}
 		}
 
@@ -145,12 +132,7 @@ namespace MoreShipUpgrades.Managers
 			}
 			else
 			{
-				TerminalNode infoNode = SetupInfoNode(storeItem);
-				NamespacedKey<DawnItemInfo> shopItem = NamespacedKey<DawnItemInfo>.From(Metadata.DAWN_ID, storeItem.itemName);
-				DawnLib.DefineItem(shopItem, storeItem, builder => builder
-				.DefineShop(shopBuilder => shopBuilder
-					.OverrideCost(configuredPrice)
-					.OverrideInfoNode(infoNode)));
+				DawnLibCompat.UpdateShopItemPrice(storeItem, configuredPrice);
 			}
 		}
 

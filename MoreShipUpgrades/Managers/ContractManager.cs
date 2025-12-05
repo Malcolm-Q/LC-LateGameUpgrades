@@ -1,4 +1,5 @@
 ﻿using MoreShipUpgrades.Compat;
+using MoreShipUpgrades.Configuration.Contracts;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.UpgradeComponents.Contracts;
 using MoreShipUpgrades.UpgradeComponents.Items.Contracts.BombDefusal;
@@ -24,6 +25,8 @@ namespace MoreShipUpgrades.Managers
         /// Terminal node for "route" commands used to select the available moons for contract placements
         /// </summary>
         private static TerminalKeyword routeKeyword;
+
+        static readonly ContractsConfiguration config = UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration;
         #endregion
         #region Variables
         #region Selected Contract
@@ -133,7 +136,7 @@ namespace MoreShipUpgrades.Managers
                 usedLevels[levelIndex] = true;
                 SelectableLevel level = availableLevels[levelIndex];
                 lastLevel = level.PlanetName;
-                if (level.PlanetName.Contains("Gordion") || level.PlanetName.Contains("Liquidation")) continue;
+                if (level.PlanetName.Contains("Gordion") || level.PlanetName.Contains("Liquidation") || IsBlacklistedMoon(level.PlanetName)) continue;
                 if (LethalLevelLoaderCompat.Enabled && LethalLevelLoaderCompat.IsLocked(ref level)) continue;
 
                 logger.LogDebug($"Picked {level.PlanetName} as possible moon for contract...");
@@ -146,7 +149,7 @@ namespace MoreShipUpgrades.Managers
                     if (!IsSelectedLevel(additionalNodes, lvl, levelIndex)) continue;
 
                     int itemCost = routeMoon.itemCost;
-                    if (UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.FreeMoonsOnly.Value && itemCost != 0)
+                    if (config.FreeMoonsOnly.Value && itemCost != 0)
                     {
                         logger.LogDebug($"Criteria algorithm skipped a choice due to configuration only allowing free moons (Choice: {level.PlanetName}, Attached Price: {itemCost})");
                         break;
@@ -170,6 +173,17 @@ namespace MoreShipUpgrades.Managers
             logger.LogDebug($"{lvl} will be the moon for the random contract...");
             Instance.contractLevel = lvl;
             return lvl;
+        }
+
+        internal static bool IsBlacklistedMoon(string moonName)
+        {
+            foreach (string blacklistedMoonName in config.BlacklistedMoons.Value.Split(','))
+            {
+                if (!moonName.Contains(blacklistedMoonName, System.StringComparison.OrdinalIgnoreCase)) continue;
+
+                return true;
+            }
+            return false;
         }
         internal static bool IsSelectedLevel(CompatibleNoun[] additionalNodes, string lvl, int levelIndex)
         {
@@ -278,7 +292,7 @@ namespace MoreShipUpgrades.Managers
             Item scav = AssetBundleHandler.GetItemObject("Scavenger");
             if (scav == null) return;
 
-            scav.weight = UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.ExtractionConfiguration.ScavengerWeight.Value;
+            scav.weight = config.ExtractionConfiguration.ScavengerWeight.Value;
             ExtractionContract co = scav.spawnPrefab.AddComponent<ExtractionContract>();
             co.SetPosition = true;
 
