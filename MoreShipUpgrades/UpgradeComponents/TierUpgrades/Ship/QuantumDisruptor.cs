@@ -234,9 +234,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship
         {
             float timeOffset = TimeOfDay.Instance.lengthOfHours * hoursToReduce;
             TimeOfDay.Instance.globalTime -= timeOffset;
-            Plugin.mls.LogDebug($"Before reverting time on quota: {TimeOfDay.Instance.timeUntilDeadline}");
             TimeOfDay.Instance.timeUntilDeadline += timeOffset;
-            Plugin.mls.LogDebug($"After reverting time on quota: {TimeOfDay.Instance.timeUntilDeadline}");
             currentUsages++;
         }
         [ClientRpc]

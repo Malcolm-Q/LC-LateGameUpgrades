@@ -76,7 +76,6 @@ namespace MoreShipUpgrades.Misc.Upgrades
         void AddInitialValue()
         {
             PlayerControllerB localPlayer = GetLocalPlayer();
-            logger.LogDebug($"Adding {initialValue} to {changingAttribute}...");
             switch (changingAttribute)
             {
                 case GameAttribute.PLAYER_HEALTH: localPlayer.health += (int)initialValue; break;
@@ -90,7 +89,6 @@ namespace MoreShipUpgrades.Misc.Upgrades
         void AddIncrementalValue()
         {
             PlayerControllerB localPlayer = GetLocalPlayer();
-            logger.LogDebug($"Adding {incrementalValue} to {changingAttribute}...");
             switch (changingAttribute)
             {
                 case GameAttribute.PLAYER_HEALTH: localPlayer.health += (int)incrementalValue; break;
@@ -107,7 +105,6 @@ namespace MoreShipUpgrades.Misc.Upgrades
             for (int i = 1; i < upgradeLevel + 1; i++)
             {
                 if (i <= currentUpgradeLevel) continue;
-                logger.LogDebug($"Adding {incrementalValue} to {changingAttribute}...");
                 amountToIncrement += incrementalValue;
             }
 
@@ -137,7 +134,6 @@ namespace MoreShipUpgrades.Misc.Upgrades
         void RemoveInitialValue()
         {
             PlayerControllerB localPlayer = GetLocalPlayer();
-            logger.LogDebug($"Removing {initialValue} from {changingAttribute}...");
             switch (changingAttribute)
             {
                 case GameAttribute.PLAYER_HEALTH: localPlayer.health -= (int)initialValue; break;
@@ -154,7 +150,6 @@ namespace MoreShipUpgrades.Misc.Upgrades
             float amountToIncrement = 0;
             for (int i = 0; i < upgradeLevel; i++)
             {
-                logger.LogDebug($"Removing {incrementalValue} from {changingAttribute}...");
                 amountToIncrement += incrementalValue;
             }
             if (amountToIncrement <= 0) return;
