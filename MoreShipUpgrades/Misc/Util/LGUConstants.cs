@@ -1738,6 +1738,8 @@ namespace MoreShipUpgrades.Misc.Util
         internal const int ALTERNATIVE_CURRENCY_CURRENCY_TO_CREDITS_CONVERSION_RATIO_DEFAULT = 100;
         internal const string ALTERNATIVE_CURRENCY_CURRENCY_TO_CREDITS_CONVERSION_RATIO_DESCRIPTION = "How many Company Credits you obtain when converting a single unit of Alternative Currency.";
 
+        internal static string[] TRADE_PLAYER_CREDITS_COMMAND_PROMPT = ["trade", "trade player credits", "lgu trade"];
+        internal static string[] CONVERT_PLAYER_CREDITS_COMMAND_PROMPT = ["convert", "PC"];
 		#endregion
 
 		#region LGU Store Interactive UI
@@ -1746,9 +1748,11 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string COLOR_FINAL_FORMAT = "</color>";
         internal const string DEFAULT_DEACTIVATED_TEXT_COLOUR = HEXADECIMAL_GREY + "55";
 
-        #region Main Screen
+        internal static string[] LGU_COMMAND_PROMPTS = ["lgu", "lategame store"];
 
-        internal const string MAIN_SCREEN_TITLE = "Lategame Upgrades";
+		#region Main Screen
+
+		internal const string MAIN_SCREEN_TITLE = "Lategame Upgrades";
         internal const string MAIN_SCREEN_TOP_TEXT = "Select an upgrade to purchase:";
         internal const string MAIN_SCREEN_TOP_TEXT_NO_ENTRIES = "There are no upgrades for purchase.";
 
@@ -1881,6 +1885,8 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string DATA_CONTRACT_NAME = "Data";
         internal const string EXTERMINATOR_CONTRACT_NAME = "Exterminator";
         internal const string EXORCISM_CONTRACT_NAME = "Exorcism";
+
+        internal static string[] CONTRACT_COMMAND_PROMPT = ["contracts", "contract"];
 
         #endregion
     }
