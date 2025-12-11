@@ -28,7 +28,6 @@ namespace MoreShipUpgrades
     [BepInDependency(LethalLevelLoader.Plugin.ModGUID, DependencyFlags.SoftDependency)]
     [BepInDependency(Oxygen.OxygenBase.modGUID, DependencyFlags.SoftDependency)]
     [BepInDependency(LCVR.Plugin.PLUGIN_GUID, DependencyFlags.SoftDependency)]
-	[BepInDependency("ShipInventoryUpdated", DependencyFlags.SoftDependency)]
     [BepInDependency(com.github.zehsteam.ToilHead.MyPluginInfo.PLUGIN_GUID, DependencyFlags.SoftDependency)]
     [BepInDependency(BrutalCompanyMinusExtraCompat.BCMERebornGUID, DependencyFlags.SoftDependency)]
     [BepInDependency(Dawn.DawnLib.PLUGIN_GUID, DependencyFlags.SoftDependency)]

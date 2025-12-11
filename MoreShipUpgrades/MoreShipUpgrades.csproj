@@ -84,13 +84,8 @@
       <HintPath>$(LC_PLUGIN_PATH)\DaXcess-LethalCompanyVR\LCVR\LCVR.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <Reference Include="ShipInventoryUpdated">
-      <Publicize>true</Publicize>
-      <HintPath>$(LC_PLUGIN_PATH)\LethalCompanyModding-ShipInventoryUpdated\ShipInventoryUpdated.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
     <Reference Include="BrutalCompanyMinus" Publicize="true">
-      <HintPath>$(LC_PLUGIN_PATH)\UnloadedHangar-Brutal_Company_Minus_Extra\BrutalCompanyMinus.dll</HintPath>
+      <HintPath>$(LC_PLUGIN_PATH)\SoftDiamond-BrutalCompanyMinusExtraReborn\BrutalCompanyMinus.dll</HintPath>
     </Reference>
     <Reference Include="LethalConstellations">
       <Publicize>true</Publicize>
@@ -103,15 +98,9 @@
     </Reference>
     <Reference Include="MissileTurret">
       <Publicize>true</Publicize>
-      <HintPath>$(LC_PLUGIN_PATH)\Garf-MissileTurrets\MissileTurret.dll</HintPath>
+      <HintPath>$(LC_PLUGIN_PATH)\HQ_Team-MissileTurretsFork\MissileTurret.dll</HintPath>
     </Reference>
     
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Evaisa.NetcodePatcher.MSBuild" Version="4.*" PrivateAssets="all" />
-  </ItemGroup>
-  <ItemGroup>
-      <NetcodePatch Include="$(TargetPath)" />
   </ItemGroup>
   <Target Name="NetcodePatch" AfterTargets="PostBuildEvent">
     <Exec Command="netcode-patch -uv 2022.3.62 -nv 1.12.0 -tv 1.0.0 &quot;$(TargetPath)&quot; @(ReferencePathWithRefAssemblies->'&quot;%(Identity)&quot;', ' ')" />
