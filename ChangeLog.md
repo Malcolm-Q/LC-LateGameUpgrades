@@ -1,4 +1,13 @@
 <details>
+<summary> 3.12.10 - 2025-12-05 </summary>
+
+- Fixed info text display of NV Headset Upgrade where the values displayed did not match with the configuration.
+    - Drain text was using regen values and vice versa.
+    - The actual mechanic was always using the correct values.
+
+</details>
+
+<details>
 <summary> 3.12.9 - 2025-12-05 </summary>
 
 - Added configuration entry to enter moon names where the players do not wish to obtain contracts on.

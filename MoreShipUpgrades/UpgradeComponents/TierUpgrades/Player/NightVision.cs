@@ -68,7 +68,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 
             if (nightVisionActive)
             {
-                nightBattery -= Time.deltaTime * (config.InitialEffects[1].Value - ((GetUpgradeLevel(UPGRADE_NAME) + 1) * config.IncrementalEffects[1].Value));
+                nightBattery -= Time.deltaTime * (config.InitialEffects[2].Value - ((GetUpgradeLevel(UPGRADE_NAME) + 1) * config.IncrementalEffects[2].Value));
                 nightBattery = Mathf.Clamp(nightBattery, 0f, maxBattery);
                 transform.GetChild(0).gameObject.SetActive(true);
 
@@ -79,7 +79,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             }
             else if (!batteryExhaustion)
             {
-                nightBattery += Time.deltaTime * (config.InitialEffects[2].Value + ((GetUpgradeLevel(UPGRADE_NAME) + 1) * config.IncrementalEffects[2].Value));
+                nightBattery += Time.deltaTime * (config.InitialEffects[1].Value + ((GetUpgradeLevel(UPGRADE_NAME) + 1) * config.IncrementalEffects[1].Value));
                 nightBattery = Mathf.Clamp(nightBattery, 0f, maxBattery);
 
                 if (nightBattery >= maxBattery)
@@ -207,8 +207,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         public static string GetNightVisionInfo(int level, int price)
         {
             NightVisionUpgradeConfiguration config = GetConfiguration().NightVisionUpgradeConfiguration;
-            float regenAdjustment = Mathf.Clamp(config.InitialEffects[1].Value + (config.IncrementalEffects[1].Value * level), 0, 1000);
-            float drainAdjustment = Mathf.Clamp(config.InitialEffects[2].Value - (config.IncrementalEffects[2].Value * level), 0, 1000);
+            float regenAdjustment = Mathf.Clamp(config.InitialEffects[1].Value + (config.IncrementalEffects[1].Value * level), 0f, 1000f);
+            float drainAdjustment = Mathf.Clamp(config.InitialEffects[2].Value - (config.IncrementalEffects[2].Value * level), 0f, 1000f);
             float batteryLife = config.InitialEffects[0].Value + (config.IncrementalEffects[0].Value * level);
 
             string drainTime = "infinite";
