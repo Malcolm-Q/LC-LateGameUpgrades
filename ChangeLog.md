@@ -7,6 +7,7 @@
 - Fixed info text display of NV Headset Upgrade where the values displayed did not match with the configuration.
     - Drain text was using regen values and vice versa.
     - The actual mechanic was always using the correct values.
+- Fixed Player Credits not resetting whenever the players were ejected from the ship.
 
 </details>
 
