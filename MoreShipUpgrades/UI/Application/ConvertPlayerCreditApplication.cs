@@ -7,13 +7,13 @@ using System;
 
 namespace MoreShipUpgrades.UI.Application
 {
-    internal class ConvertPlayerCreditApplication : InteractiveCounterApplication<CursorCounterMenu, CursorCounterElement>
+    internal class ConvertPlayerCreditApplication : InteractiveCounterApplication<CursorCounterElement>
     {
         const string TITLE = "Player Credits Conversion";
         public override void Initialization()
         {
             CursorCounterElement[] cursorCounterElements = new CursorCounterElement[3];
-            CursorCounterMenu cursorCounterMenu = CursorCounterMenu.Create(cursorCounterElements.Length - 1, '>', cursorCounterElements);
+			CursorMenu<CursorCounterElement> cursorCounterMenu = CursorMenu<CursorCounterElement>.Create(cursorCounterElements.Length - 1, '>', cursorCounterElements);
             ITextElement[] textElements =
                 [
                     new TextElement()
@@ -58,7 +58,7 @@ namespace MoreShipUpgrades.UI.Application
             CursorOutputElement<string>[] cursorCounterElements = new CursorOutputElement<string>[2];
             Func<int, string>[] array = new Func<int, string>[1];
             array[0] = (int x) => $"{x} PCs";
-            CursorCounterMenu cursorCounterMenu = CursorCounterMenu.Create(cursorCounterElements.Length - 1, '>', cursorCounterElements);
+			CursorMenu<CursorCounterElement> cursorCounterMenu = CursorMenu<CursorCounterElement>.Create(cursorCounterElements.Length - 1, '>', cursorCounterElements);
             IScreen screen = BoxedOutputScreen<string, string>.Create(TITLE, [cursorCounterMenu], input: () => $"${CurrencyManager.Instance.GetCreditsFromCurrencyAmountConversion(cursorCounterElements[0].Counter)}", output: (string x) => x);
             cursorCounterElements[0] = new CursorOutputElement<string>()
             {
@@ -130,7 +130,7 @@ namespace MoreShipUpgrades.UI.Application
             CursorOutputElement<string>[] cursorCounterElements = new CursorOutputElement<string>[2];
             Func<int, string>[] array = new Func<int, string>[1];
             array[0] = (int x) => $"${CurrencyManager.Instance.GetRequiredCreditsFromCurrencyConversion(cursorCounterElements[0].Counter)}";
-            CursorCounterMenu cursorCounterMenu = CursorCounterMenu.Create(cursorCounterElements.Length - 1, '>', cursorCounterElements);
+            CursorMenu<CursorCounterElement> cursorCounterMenu = CursorMenu<CursorCounterElement>.Create(cursorCounterElements.Length - 1, '>', cursorCounterElements);
             IScreen screen = BoxedOutputScreen<string, string>.Create(TITLE, [cursorCounterMenu], input: () => $"{cursorCounterElements[0].Counter} PC", output: (string x) => x);
             cursorCounterElements[0] = new CursorOutputElement<string>()
             {
@@ -159,7 +159,7 @@ namespace MoreShipUpgrades.UI.Application
             CursorCounterElement.Create("Confirm", "", confirmAction, showCounter: false),
             CursorCounterElement.Create("Abort", "", declineAction, showCounter: false)
             ];
-            CursorCounterMenu cursorMenu = CursorCounterMenu.Create(0, '>', elements);
+			CursorMenu<CursorCounterElement> cursorMenu = CursorMenu<CursorCounterElement>.Create(0, '>', elements);
             ITextElement[] elements2 =
             [
             TextElement.Create(description),
@@ -173,7 +173,7 @@ namespace MoreShipUpgrades.UI.Application
         protected void ErrorMessage(string title, string description, Action backAction, string error)
         {
             CursorCounterElement[] elements = [CursorCounterElement.Create("Back", "", backAction, showCounter: false)];
-            CursorCounterMenu cursorMenu = CursorCounterMenu.Create(0, '>', elements);
+			CursorMenu<CursorCounterElement> cursorMenu = CursorMenu<CursorCounterElement>.Create(0, '>', elements);
             ITextElement[] elements2 =
             [
             TextElement.Create(description),

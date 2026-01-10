@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace MoreShipUpgrades.UI.Application
 {
-    internal class ContractApplication : InteractiveTerminalApplication
+    internal class ContractApplication : InteractiveTerminalApplication<CursorElement>
     {
         const string MAIN_MENU_TITLE = "Contracts";
         const string CONTRACT_INFO_CURSOR_ELEMENT = "Contract Info";
@@ -23,12 +23,12 @@ namespace MoreShipUpgrades.UI.Application
         static readonly string[] MAIN_MENU_CURSOR_ELEMENTS = [CONTRACT_INFO_CURSOR_ELEMENT, PICK_CONTRACT_CURSOR_ELEMENT, CURRENT_CONTRACT_CURSOR_ELEMENT];
 
         IScreen mainScreen;
-        CursorMenu mainCursorMenu;
+        CursorMenu<CursorElement> mainCursorMenu;
         public override void Initialization()
         {
             IScreen screen;
             ITextElement[] textElements;
-            CursorMenu menu;
+            CursorMenu<CursorElement> menu;
             CursorElement[] cursorElements = new CursorElement[MAIN_MENU_CURSOR_ELEMENTS.Length];
             cursorElements[0] = CursorElement.Create(
                     name: MAIN_MENU_CURSOR_ELEMENTS[0],
@@ -51,7 +51,7 @@ namespace MoreShipUpgrades.UI.Application
                     active: (_) => ContractManager.Instance.contractType != "None",
                     selectInactive: true
                 );
-            menu = CursorMenu.Create(startingCursorIndex: 0, elements: cursorElements);
+            menu = CursorMenu<CursorElement>.Create(startingCursorIndex: 0, elements: cursorElements);
             textElements =
                 [
                     TextElement.Create("Select a prompt to execute contract related actions."),
@@ -68,10 +68,10 @@ namespace MoreShipUpgrades.UI.Application
         void ShowContractInformation()
         {
             IScreen previousScreen = currentScreen;
-            CursorMenu previousCursorMenu = currentCursorMenu;
+            BaseCursorMenu<CursorElement> previousCursorMenu = currentCursorMenu;
             IScreen screen;
             ITextElement[] textElements;
-            CursorMenu menu;
+            CursorMenu<CursorElement> menu;
             CursorElement[] cursorElements = new CursorElement[CommandParser.contractInfos.Count + 1];
             for (int i = 0; i < CommandParser.contracts.Count; i++)
             {
@@ -91,7 +91,7 @@ namespace MoreShipUpgrades.UI.Application
                     active: (_) => true,
                     selectInactive: true
                     );
-            menu = CursorMenu.Create(startingCursorIndex: 0, elements: cursorElements);
+            menu = CursorMenu<CursorElement>.Create(startingCursorIndex: 0, elements: cursorElements);
             textElements =
                 [
                     TextElement.Create("Select a prompt to know the information of the contract from."),
@@ -105,10 +105,10 @@ namespace MoreShipUpgrades.UI.Application
         void ShowContractInformation(string contractType, string information)
         {
             IScreen previousScreen = currentScreen;
-            CursorMenu previousCursorMenu = currentCursorMenu;
+            BaseCursorMenu<CursorElement> previousCursorMenu = currentCursorMenu;
             IScreen screen;
             ITextElement[] textElements;
-            CursorMenu menu;
+            CursorMenu<CursorElement> menu;
             CursorElement[] cursorElements =
             [
                 CursorElement.Create(
@@ -119,7 +119,7 @@ namespace MoreShipUpgrades.UI.Application
                         selectInactive: true
                         ),
             ];
-            menu = CursorMenu.Create(startingCursorIndex: 0, elements: cursorElements);
+            menu = CursorMenu<CursorElement>.Create(startingCursorIndex: 0, elements: cursorElements);
             textElements =
                 [
                     TextElement.Create(information),
@@ -134,7 +134,7 @@ namespace MoreShipUpgrades.UI.Application
         void PickContract()
         {
             IScreen previousScreen = currentScreen;
-            CursorMenu previousCursorMenu = currentCursorMenu;
+            BaseCursorMenu<CursorElement> previousCursorMenu = currentCursorMenu;
             if (ContractManager.Instance.contractType != "None")
             {
                 ErrorMessage(MAIN_MENU_TITLE, () => SwitchScreen(previousScreen, previousCursorMenu, true), "You still have an ongoing contract to finish.");
@@ -142,7 +142,7 @@ namespace MoreShipUpgrades.UI.Application
             }
             IScreen screen;
             ITextElement[] textElements;
-            CursorMenu menu;
+            CursorMenu<CursorElement> menu;
             CursorElement[] cursorElements =
             [
                 CursorElement.Create(
@@ -167,7 +167,7 @@ namespace MoreShipUpgrades.UI.Application
                         selectInactive: true
                         ),
             ];
-            menu = CursorMenu.Create(startingCursorIndex: 0, elements: cursorElements);
+            menu = CursorMenu<CursorElement>.Create(startingCursorIndex: 0, elements: cursorElements);
             textElements =
                 [
                     TextElement.Create("Select a prompt to specify where you want to get the contract on."),
@@ -180,7 +180,7 @@ namespace MoreShipUpgrades.UI.Application
         void PickSpecifiedMoonContract()
         {
             IScreen previousScreen = currentScreen;
-            CursorMenu previousCursorMenu = currentCursorMenu;
+            BaseCursorMenu<CursorElement> previousCursorMenu = currentCursorMenu;
             if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.SpecifyPrice)
             {
                 ErrorMessage(MAIN_MENU_TITLE, () => SwitchScreen(previousScreen, previousCursorMenu, true), "Not enough credits to purchase a specified moon contract.");
@@ -193,7 +193,7 @@ namespace MoreShipUpgrades.UI.Application
             }
             IScreen screen;
             ITextElement[] textElements;
-            CursorMenu menu;
+            CursorMenu<CursorElement> menu;
             CursorElement[] cursorElements = new CursorElement[levels.Length + 1];
             for (int i = 0; i < levels.Length; i++)
             {
@@ -213,7 +213,7 @@ namespace MoreShipUpgrades.UI.Application
                     active: (_) => true,
                     selectInactive: true
                     );
-            menu = CursorMenu.Create(startingCursorIndex: 0, elements: cursorElements);
+            menu = CursorMenu<CursorElement>.Create(startingCursorIndex: 0, elements: cursorElements);
             textElements =
                 [
                     TextElement.Create("Select the moon you wish to get a contract on."),
@@ -227,7 +227,7 @@ namespace MoreShipUpgrades.UI.Application
         void ConfirmSpecifiedMoonContract(SelectableLevel level)
         {
             IScreen previousScreen = currentScreen;
-            CursorMenu previousCursorMenu = currentCursorMenu;
+            BaseCursorMenu<CursorElement> previousCursorMenu = currentCursorMenu;
             Confirm(MAIN_MENU_TITLE, $"Do you wish to purchase a contract on {level.PlanetName} for a price of {UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.SpecifyPrice.Value} Company credits?", () => PurchaseSpecifiedMoonContract(level, () => SwitchScreen(mainScreen, mainCursorMenu, true)), () => SwitchScreen(previousScreen, previousCursorMenu, true));
         }
 
@@ -253,7 +253,7 @@ namespace MoreShipUpgrades.UI.Application
         void ConfirmRandomMoonContract()
         {
             IScreen previousScreen = currentScreen;
-            CursorMenu previousCursorMenu = currentCursorMenu;
+            BaseCursorMenu<CursorElement> previousCursorMenu = currentCursorMenu;
             if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.RandomPrice)
             {
                 ErrorMessage(MAIN_MENU_TITLE, () => SwitchScreen(previousScreen, previousCursorMenu, true), "Not enough credits to purchase a randomized moon contract.");
@@ -283,7 +283,7 @@ namespace MoreShipUpgrades.UI.Application
         void ShowCurrentContract()
         {
             IScreen previousScreen = currentScreen;
-            CursorMenu previousCursorMenu = currentCursorMenu;
+            BaseCursorMenu<CursorElement> previousCursorMenu = currentCursorMenu;
             if (ContractManager.Instance.contractType == "None")
             {
                 ErrorMessage(MAIN_MENU_TITLE, () => SwitchScreen(previousScreen, previousCursorMenu, true), "You currently do not have an assigned contract.");
@@ -291,7 +291,7 @@ namespace MoreShipUpgrades.UI.Application
             }
             IScreen screen;
             ITextElement[] textElements;
-            CursorMenu menu;
+            CursorMenu<CursorElement> menu;
             CursorElement[] cursorElements =
             [
                 CursorElement.Create(
@@ -309,7 +309,7 @@ namespace MoreShipUpgrades.UI.Application
                         selectInactive: true
                         ),
             ];
-            menu = CursorMenu.Create(startingCursorIndex: 0, elements: cursorElements);
+            menu = CursorMenu<CursorElement>.Create(startingCursorIndex: 0, elements: cursorElements);
             textElements =
                 [
                     TextElement.Create(CommandParser.contractInfos[CommandParser.contracts.IndexOf(ContractManager.Instance.contractType)]),
@@ -323,7 +323,7 @@ namespace MoreShipUpgrades.UI.Application
         void ConfirmCancelContract()
         {
             IScreen previousScreen = currentScreen;
-            CursorMenu previousCursorMenu = currentCursorMenu;
+            BaseCursorMenu<CursorElement> previousCursorMenu = currentCursorMenu;
             Confirm(MAIN_MENU_TITLE, "Do you wish to cancel the current contract?", () => CancelContract(() => SwitchScreen(mainScreen, mainCursorMenu, true)), () => SwitchScreen(previousScreen, previousCursorMenu, true));
         }
 

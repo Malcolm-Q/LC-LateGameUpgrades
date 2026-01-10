@@ -19,7 +19,7 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace MoreShipUpgrades.UI.Application
 {
-    internal class UpgradeStoreApplication : PageApplication
+    internal class UpgradeStoreApplication : PageApplication<CursorElement>
     {
         const int UPGRADES_PER_PAGE = 12;
         protected override int GetEntriesPerPage<T>(T[] entries)
@@ -36,7 +36,7 @@ namespace MoreShipUpgrades.UI.Application
                 [
                     CursorElement.Create(name: "Leave", action: () => UnityEngine.Object.Destroy(InteractiveTerminalManager.Instance)),
                 ];
-                CursorMenu cursorMenu = CursorMenu.Create(startingCursorIndex: 0, elements: elements);
+                CursorMenu<CursorElement> cursorMenu = CursorMenu<CursorElement>.Create(startingCursorIndex: 0, elements: elements);
                 IScreen screen = new BoxedScreen()
                 {
                     Title = LguConstants.MAIN_SCREEN_TITLE,
@@ -53,20 +53,20 @@ namespace MoreShipUpgrades.UI.Application
                         cursorMenu
                     ]
                 };
-                currentPage = PageCursorElement.Create(startingPageIndex: 0, elements: [screen], cursorMenus: [cursorMenu]);
+                currentPage = PageCursorElement<CursorElement>.Create(startingPageIndex: 0, elements: [screen], cursorMenus: [cursorMenu]);
                 currentCursorMenu = cursorMenu;
                 currentScreen = screen;
                 return;
             }
 
             List<CursorElement> cursorElements = [];
-            PageCursorElement sharedPage = GetFilteredUpgradeNodes(ref filteredNodes, ref cursorElements, (x) => x.SharedUpgrade, LguConstants.MAIN_SCREEN_TITLE, LguConstants.MAIN_SCREEN_SHARED_UPGRADES_TEXT);
-            PageCursorElement individualPage = GetFilteredUpgradeNodes(ref filteredNodes, ref cursorElements, (x) => !x.SharedUpgrade && (UpgradeBus.Instance.PluginConfiguration.ShowLockedUpgrades || !UpgradeBus.Instance.lockedUpgrades.Keys.Contains(x)), LguConstants.MAIN_SCREEN_TITLE, LguConstants.MAIN_SCREEN_INDIVIDUAL_UPGRADES_TEXT);
+            PageCursorElement<CursorElement> sharedPage = GetFilteredUpgradeNodes(ref filteredNodes, ref cursorElements, (x) => x.SharedUpgrade, LguConstants.MAIN_SCREEN_TITLE, LguConstants.MAIN_SCREEN_SHARED_UPGRADES_TEXT);
+            PageCursorElement<CursorElement> individualPage = GetFilteredUpgradeNodes(ref filteredNodes, ref cursorElements, (x) => !x.SharedUpgrade && (UpgradeBus.Instance.PluginConfiguration.ShowLockedUpgrades || !UpgradeBus.Instance.lockedUpgrades.Keys.Contains(x)), LguConstants.MAIN_SCREEN_TITLE, LguConstants.MAIN_SCREEN_INDIVIDUAL_UPGRADES_TEXT);
 
             if (cursorElements.Count > 1)
             {
                 CursorElement[] upgradeElements = [.. cursorElements];
-                CursorMenu upgradeCursorMenu = CursorMenu.Create(startingCursorIndex: 0, elements: upgradeElements);
+                CursorMenu<CursorElement> upgradeCursorMenu = CursorMenu<CursorElement>.Create(startingCursorIndex: 0, elements: upgradeElements);
                 IScreen upgradeScreen = new BoxedScreen()
                 {
                     Title = LguConstants.MAIN_SCREEN_TITLE,
@@ -75,7 +75,7 @@ namespace MoreShipUpgrades.UI.Application
                         upgradeCursorMenu
                     ]
                 };
-                initialPage = PageCursorElement.Create(startingPageIndex: 0, elements: [upgradeScreen], cursorMenus: [upgradeCursorMenu]);
+                initialPage = PageCursorElement<CursorElement>.Create(startingPageIndex: 0, elements: [upgradeScreen], cursorMenus: [upgradeCursorMenu]);
             }
             else
             {
@@ -92,9 +92,9 @@ namespace MoreShipUpgrades.UI.Application
             currentCursorMenu = currentPage.GetCurrentCursorMenu();
             currentScreen = currentPage.GetCurrentScreen();
         }
-        PageCursorElement GetFilteredUpgradeNodes(ref CustomTerminalNode[] nodes, ref List<CursorElement> list, Func<CustomTerminalNode, bool> predicate, string pageTitle, string cursorName)
+        PageCursorElement<CursorElement> GetFilteredUpgradeNodes(ref CustomTerminalNode[] nodes, ref List<CursorElement> list, Func<CustomTerminalNode, bool> predicate, string pageTitle, string cursorName)
         {
-            PageCursorElement page = null;
+            PageCursorElement<CursorElement> page = null;
             CustomTerminalNode[] filteredNodes = nodes.Where(predicate).ToArray();
             if (filteredNodes.Length > 0)
             {
@@ -103,7 +103,7 @@ namespace MoreShipUpgrades.UI.Application
             }
             return page;
         }
-        void SwitchToUpgradeScreen(PageCursorElement page, bool previous)
+        void SwitchToUpgradeScreen(PageCursorElement<CursorElement> page, bool previous)
         {
             InteractiveTerminalAPI.Compat.InputUtils_Compat.CursorExitKey.performed -= OnScreenExit;
             InteractiveTerminalAPI.Compat.InputUtils_Compat.CursorExitKey.performed += OnUpgradeStoreExit;
@@ -116,26 +116,26 @@ namespace MoreShipUpgrades.UI.Application
             InteractiveTerminalAPI.Compat.InputUtils_Compat.CursorExitKey.performed += OnScreenExit;
             InteractiveTerminalAPI.Compat.InputUtils_Compat.CursorExitKey.performed -= OnUpgradeStoreExit;
         }
-        PageCursorElement BuildUpgradePage(CustomTerminalNode[] nodes, string title)
+        PageCursorElement<CursorElement> BuildUpgradePage(CustomTerminalNode[] nodes, string title)
         {
-            (CustomTerminalNode[][], CursorMenu[], IScreen[]) entries = GetPageEntries(nodes);
+            (CustomTerminalNode[][], BaseCursorMenu<CursorElement>[], IScreen[]) entries = GetPageEntries(nodes);
 
             CustomTerminalNode[][] pagesUpgrades = entries.Item1;
-            CursorMenu[] cursorMenus = entries.Item2;
+            BaseCursorMenu<CursorElement>[] cursorMenus = entries.Item2;
             IScreen[] screens = entries.Item3;
-            PageCursorElement page = null;
+            PageCursorElement<CursorElement> page = null;
             for (int i = 0; i < pagesUpgrades.Length; i++)
             {
                 CustomTerminalNode[] upgrades = pagesUpgrades[i];
                 CursorElement[] elements = new CursorElement[upgrades.Length];
-                cursorMenus[i] = CursorMenu.Create(startingCursorIndex: 0, elements: elements,
+                cursorMenus[i] = CursorMenu<CursorElement>.Create(startingCursorIndex: 0, elements: elements,
                     sorting: [
                         CompareName,
                         CompareCurrentPrice,
                         CompareCurrentPriceReversed
                         ]
                 );
-                CursorMenu cursorMenu = cursorMenus[i];
+                BaseCursorMenu<CursorElement> cursorMenu = cursorMenus[i];
                 screens[i] = new BoxedOutputScreen<string, string>()
                 {
                     Title = title,
@@ -166,7 +166,7 @@ namespace MoreShipUpgrades.UI.Application
                     };
                 }
             }
-            page = PageCursorElement.Create(0, screens, cursorMenus);
+            page = PageCursorElement<CursorElement>.Create(0, screens, cursorMenus);
             return page;
         }
 
@@ -386,7 +386,7 @@ namespace MoreShipUpgrades.UI.Application
 					CursorElement.Create("Cancel", "", backAction)
                     ];
             }
-            CursorMenu cursorMenu = CursorMenu.Create(elements.Length-1, '>', elements);
+            CursorMenu<CursorElement> cursorMenu = CursorMenu<CursorElement>.Create(elements.Length-1, '>', elements);
             ITextElement[] elements2 =
             {
             TextElement.Create(finalText),

@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace MoreShipUpgrades.UI.Application
 {
-    internal class TradePlayerCreditsApplication : PageApplication
+    internal class TradePlayerCreditsApplication : PageApplication<CursorElement>
     {
         const string MAIN_SCREEN_TITLE = "Player Credits Trading";
         const string NO_PLAYERS_TO_TRADE_TEXT = "There are no players you can trade your player credits with.";
@@ -28,7 +28,7 @@ namespace MoreShipUpgrades.UI.Application
                 [
                     CursorElement.Create(name: "Leave", action: () => UnityEngine.Object.Destroy(InteractiveTerminalManager.Instance)),
                 ];
-                CursorMenu cursorMenu = CursorMenu.Create(startingCursorIndex: 0, elements: elements);
+                CursorMenu<CursorElement> cursorMenu = CursorMenu<CursorElement>.Create(startingCursorIndex: 0, elements: elements);
                 IScreen screen = new BoxedScreen()
                 {
                     Title = MAIN_SCREEN_TITLE,
@@ -45,7 +45,7 @@ namespace MoreShipUpgrades.UI.Application
                         cursorMenu
                     ]
                 };
-                currentPage = PageCursorElement.Create(startingPageIndex: 0, elements: [screen], cursorMenus: [cursorMenu]);
+                currentPage = PageCursorElement<CursorElement>.Create(startingPageIndex: 0, elements: [screen], cursorMenus: [cursorMenu]);
                 currentCursorMenu = cursorMenu;
                 currentScreen = screen;
                 return;
@@ -56,7 +56,7 @@ namespace MoreShipUpgrades.UI.Application
                 [
                     CursorElement.Create(name: "Leave", action: () => UnityEngine.Object.Destroy(InteractiveTerminalManager.Instance)),
                 ];
-                CursorMenu cursorMenu = CursorMenu.Create(startingCursorIndex: 0, elements: elements);
+                CursorMenu<CursorElement> cursorMenu = CursorMenu<CursorElement>.Create(startingCursorIndex: 0, elements: elements);
                 IScreen screen = new BoxedScreen()
                 {
                     Title = MAIN_SCREEN_TITLE,
@@ -73,23 +73,23 @@ namespace MoreShipUpgrades.UI.Application
                         cursorMenu
                     ]
                 };
-                currentPage = PageCursorElement.Create(startingPageIndex: 0, elements: [screen], cursorMenus: [cursorMenu]);
+                currentPage = PageCursorElement<CursorElement>.Create(startingPageIndex: 0, elements: [screen], cursorMenus: [cursorMenu]);
                 currentCursorMenu = cursorMenu;
                 currentScreen = screen;
                 return;
             }
-            (PlayerControllerB[][], CursorMenu[], IScreen[]) entries = GetPageEntries(activePlayers);
+            (PlayerControllerB[][], BaseCursorMenu<CursorElement>[], IScreen[]) entries = GetPageEntries(activePlayers);
 
             PlayerControllerB[][] pagesPlayers = entries.Item1;
-            CursorMenu[] cursorMenus = entries.Item2;
+            BaseCursorMenu<CursorElement>[] cursorMenus = entries.Item2;
             IScreen[] screens = entries.Item3;
-            PageCursorElement page = null;
+            PageCursorElement<CursorElement> page = null;
             for (int i = 0; i < pagesPlayers.Length; i++)
             {
                 PlayerControllerB[] players = pagesPlayers[i];
                 CursorElement[] cursorElements = new CursorElement[players.Length];
-                cursorMenus[i] = CursorMenu.Create(startingCursorIndex: 0, elements: cursorElements);
-                CursorMenu cursorMenu = cursorMenus[i];
+                cursorMenus[i] = CursorMenu<CursorElement>.Create(startingCursorIndex: 0, elements: cursorElements);
+                BaseCursorMenu<CursorElement> cursorMenu = cursorMenus[i];
                 screens[i] = new BoxedScreen()
                 {
                     Title = MAIN_SCREEN_TITLE,
@@ -118,7 +118,7 @@ namespace MoreShipUpgrades.UI.Application
                     };
                 }
             }
-            page = PageCursorElement.Create(0, screens, cursorMenus);
+            page = PageCursorElement<CursorElement>.Create(0, screens, cursorMenus);
             initialPage = page;
             currentPage = initialPage;
             currentCursorMenu = currentPage.GetCurrentCursorMenu();
@@ -136,7 +136,7 @@ namespace MoreShipUpgrades.UI.Application
                 CursorElement.Create("Give All Player Credits", "", () => ConfirmTradePlayerCredits(tradingPlayer, playerCredits, backAction), selectInactive: false),
                 CursorElement.Create("Cancel", "", backAction)
                 };
-            CursorMenu cursorMenu = CursorMenu.Create(0, '>', elements);
+            CursorMenu<CursorElement> cursorMenu = CursorMenu<CursorElement>.Create(0, '>', elements);
             ITextElement[] elements2 =
             {
                 TextElement.Create(TRADE_PLAYER_TEXT),
