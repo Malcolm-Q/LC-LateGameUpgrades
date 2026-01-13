@@ -1,5 +1,5 @@
 <details>
-<summary> 3.12.10 - 2025-12-05 </summary>
+<summary> 3.12.10 - 2026-01-13 </summary>
 
 - Removed soft compatibility with [ShipInventory](https://thunderstore.io/c/lethal-company/p/WarperSan/ShipInventory/) (which is now [ShipInventoryUpdated](https://thunderstore.io/c/lethal-company/p/LethalCompanyModding/ShipInventoryUpdated/)) related to Scrap Keeper affecting the items stored in the chute.
     - Logic was changed as in the keep rate configuration was removed so the change wasn't as simple as adding a value to another anymore.
