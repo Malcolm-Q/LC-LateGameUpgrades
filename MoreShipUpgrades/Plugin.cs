@@ -16,6 +16,7 @@ using InteractiveTerminalAPI.UI;
 using static BepInEx.BepInDependency;
 using MoreShipUpgrades.UI.Application;
 using MoreShipUpgrades.Configuration;
+using MoreShipUpgrades.Misc.Util;
 
 namespace MoreShipUpgrades
 {
@@ -28,7 +29,6 @@ namespace MoreShipUpgrades
     [BepInDependency(LethalLevelLoader.Plugin.ModGUID, DependencyFlags.SoftDependency)]
     [BepInDependency(Oxygen.OxygenBase.modGUID, DependencyFlags.SoftDependency)]
     [BepInDependency(LCVR.Plugin.PLUGIN_GUID, DependencyFlags.SoftDependency)]
-	[BepInDependency("ShipInventoryUpdated", DependencyFlags.SoftDependency)]
     [BepInDependency(com.github.zehsteam.ToilHead.MyPluginInfo.PLUGIN_GUID, DependencyFlags.SoftDependency)]
     [BepInDependency(BrutalCompanyMinusExtraCompat.BCMERebornGUID, DependencyFlags.SoftDependency)]
     [BepInDependency(Dawn.DawnLib.PLUGIN_GUID, DependencyFlags.SoftDependency)]
@@ -76,15 +76,15 @@ namespace MoreShipUpgrades
 
             if (CurrencyManager.Enabled)
             {
-                InteractiveTerminalManager.RegisterApplication<TradePlayerCreditsApplication>(["trade", "trade player credits", "lgu trade"], caseSensitive: false);
-                InteractiveTerminalManager.RegisterApplication<ConvertPlayerCreditApplication>(["convert", "PC"], caseSensitive: false);
+                InteractiveTerminalManager.RegisterApplication<TradePlayerCreditsApplication>(LguConstants.TRADE_PLAYER_CREDITS_COMMAND_PROMPT, caseSensitive: false);
+                InteractiveTerminalManager.RegisterApplication<ConvertPlayerCreditApplication>(LguConstants.CONVERT_PLAYER_CREDITS_COMMAND_PROMPT, caseSensitive: false);
             }
-            InteractiveTerminalManager.RegisterApplication<UpgradeStoreApplication>(["lgu", "lategame store"], caseSensitive: false);
+            InteractiveTerminalManager.RegisterApplication<UpgradeStoreApplication>(LguConstants.LGU_COMMAND_PROMPTS, caseSensitive: false);
             if (config.ContractsConfiguration.Enabled)
             {
-                InteractiveTerminalManager.RegisterApplication<ContractApplication>("contracts", caseSensitive: false);
-                if (!config.ContractsConfiguration.RandomOnly)
-                    InteractiveTerminalManager.RegisterApplication<ContractApplication>("contract", caseSensitive: false);
+                List<string> commandPrompts = new(LguConstants.CONTRACT_COMMAND_PROMPT);
+                if (config.ContractsConfiguration.RandomOnly) commandPrompts.Remove("contract");
+                InteractiveTerminalManager.RegisterApplication<ContractApplication>([.. commandPrompts], caseSensitive: false);
             }
 
             mls.LogInfo($"{Metadata.NAME} {Metadata.VERSION} has been loaded successfully.");

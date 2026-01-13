@@ -1,4 +1,19 @@
 <details>
+<summary> 3.12.10 - 2026-01-13 </summary>
+
+- Removed soft compatibility with [ShipInventory](https://thunderstore.io/c/lethal-company/p/WarperSan/ShipInventory/) (which is now [ShipInventoryUpdated](https://thunderstore.io/c/lethal-company/p/LethalCompanyModding/ShipInventoryUpdated/)) related to Scrap Keeper affecting the items stored in the chute.
+    - Logic was changed as in the keep rate configuration was removed so the change wasn't as simple as adding a value to another anymore.
+    - To maintain this compatibility, I would have to STOP the other from doing its stuff which I do not wish to do.
+    - Their [feature backlog](https://github.com/LethalCompanyModding/ShipInventoryCommunity/issues/12) also indicate they wish to bring it back at some point and add compatibility to this mod so I will leave this to their discretion.
+- Fixed info text display of NV Headset Upgrade where the values displayed did not match with the configuration.
+    - Drain text was using regen values and vice versa.
+    - The actual mechanic was always using the correct values.
+- Fixed Player Credits not resetting whenever the players were ejected from the ship.
+- Updated according to newest changes in ITAPI.
+
+</details>
+
+<details>
 <summary> 3.12.9 - 2025-12-05 </summary>
 
 - Added configuration entry to enter moon names where the players do not wish to obtain contracts on.

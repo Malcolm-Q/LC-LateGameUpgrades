@@ -82,6 +82,7 @@ namespace MoreShipUpgrades.Managers
             if (PluginConfiguration.NightVisionUpgradeConfiguration.Enabled.Value) NightVision.Instance.nightVisionActive = false;
             if (PluginConfiguration.FedoraSuitConfiguration.Enabled) FedoraSuit.instance.wearingFedora.Clear();
             ContractManager.Instance.ResetAllValues();
+            CurrencyManager.Instance.ResetAllValues();
 
             if (PluginConfiguration.WalkieGpsConfiguration.Enabled)
                 WalkieGPS.instance.WalkieDeactivate();

@@ -134,7 +134,7 @@ namespace MoreShipUpgrades.Managers
                 scrapName = node.headerText.ToLower().Trim();
                 if (!collection.ContainsKey(scrapName))
                 {
-                    Plugin.mls.LogInfo($"{scrapName} from Scan Node was not found in the dictionary.");
+                    Plugin.mls.LogInfo($"{scrapName} from Scan Node was not found in the dictionary."); 
                     return false;
                 }
             }

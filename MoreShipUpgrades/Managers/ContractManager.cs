@@ -177,6 +177,7 @@ namespace MoreShipUpgrades.Managers
 
         internal static bool IsBlacklistedMoon(string moonName)
         {
+            if (config.BlacklistedMoons.Value.Length == 0) return false;
             foreach (string blacklistedMoonName in config.BlacklistedMoons.Value.Split(','))
             {
                 if (!moonName.Contains(blacklistedMoonName, System.StringComparison.OrdinalIgnoreCase)) continue;

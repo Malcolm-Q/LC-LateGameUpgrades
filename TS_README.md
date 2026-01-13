@@ -160,11 +160,6 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
     * Each level increase further increases the amount of time.
     * Alternative mode where you can revert back time spent on a moon through 'quantum' command
 
-* __Helmet - $750__
-    * Blocks incoming damage through amount of hits.
-    * Once reached the limit of hits, it will be destroyed, having to purchase a new one if needed.
-    * Alternative mode where the helmet gives partial damage reduction and only breaks when the next hit would kill the player.
-
 * __Drop Pod Thrusters - $300__
     * Speeds up the shop's drop pod to deliver items faster.
     * The drop pod leaves after picking up the items when the upgrade's active.

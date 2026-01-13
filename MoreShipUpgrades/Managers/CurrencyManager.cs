@@ -195,5 +195,11 @@ namespace MoreShipUpgrades.Managers
             if (MaximumAmountPerPlayer <= 0 || !BlockGainOperations) return false;
             return (Config.IncludeSpentInMaximum ? SpentCurrencyAmount : 0) + CurrencyAmount + amount > MaximumAmountPerPlayer;
 		}
+
+		internal void ResetAllValues()
+		{
+            currencyAmount = 0;
+            spentCurrencyAmount = 0;
+		}
 	}
 }
