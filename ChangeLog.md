@@ -8,6 +8,7 @@
     - Drain text was using regen values and vice versa.
     - The actual mechanic was always using the correct values.
 - Fixed Player Credits not resetting whenever the players were ejected from the ship.
+- Updated according to newest changes in ITAPI.
 
 </details>
 
