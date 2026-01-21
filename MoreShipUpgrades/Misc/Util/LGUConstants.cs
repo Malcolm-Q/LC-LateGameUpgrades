@@ -1706,15 +1706,31 @@ namespace MoreShipUpgrades.Misc.Util
         internal const int WALKIE_GPS_PRICE_DEFAULT = 450;
         internal const string WALKIE_GPS_PRICE_DESCRIPTION = $"Default price for {WalkieGPS.UPGRADE_NAME} upgrade.";
 
-        #endregion
+		#endregion
 
-        #endregion
+		#region Baby Pacifier
 
-        #endregion
+		internal const string BABY_PACIFIER_ENABLED_KEY = $"Enable the {BabyPacifier.UPGRADE_NAME} upgrade.";
+		internal const bool BABY_PACIFIER_ENABLED_DEFAULT = true;
+		internal const string BABY_PACIFIER_ENABLED_DESCRIPTION = "Decreases the growth rate of baby maneater when they are crying";
 
-        #region Alternative Currency
+        internal const string BABY_PACIFIER_INITIAL_PERCENTAGE_KEY = "Initial percentage of Growth Decrease";
+        internal const int BABY_PACIFIER_INITIAL_PERCENTAGE_DEFAULT = 15;
+        internal const string BABY_PACIFIER_INITIAL_PERCENTAGE_DESCRIPTION = "Initial percentage (%) removed from Maneaters Growth Increment when crying";
 
-        internal const string ALTERNATIVE_CURRENCY_ALIAS = "PC";
+        internal const string BABY_PACIFIER_INCREMENTAL_PERCENTAGE_KEY = "Incremental percentage of Growth Decrease";
+        internal const int BABY_PACIFIER_INCREMENTAL_PERCENTAGE_DEFAULT = 15;
+        internal const string BABY_PACIFIER_INCREMENTAL_PERCENTAGE_DESCRIPTION = "Incremental percentage (%) removed from Maneaters Growth Increment when crying";
+
+		#endregion
+
+		#endregion
+
+		#endregion
+
+		#region Alternative Currency
+
+		internal const string ALTERNATIVE_CURRENCY_ALIAS = "PC";
 
         internal const string ALTERNATIVE_CURRENCY_TOPSECTION = "_Alternative Currency_";
 

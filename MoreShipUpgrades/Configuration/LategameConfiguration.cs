@@ -95,6 +95,7 @@ namespace MoreShipUpgrades.Configuration
         public NightVisionUpgradeConfiguration NightVisionUpgradeConfiguration { get; set; }
         public SickBeatsUpgradeConfiguration SickBeatsUpgradeConfiguration {  get; set; }
         public BetterScannerUpgradeConfiguration BetterScannerUpgradeConfiguration {  get; set; }
+        public ITierEffectUpgradeConfiguration<int> BabyPacifierUpgradeConfiguration { get; set; }
         public ContractsConfiguration ContractsConfiguration { get; set; }
 
         #region Attributes
@@ -716,6 +717,13 @@ namespace MoreShipUpgrades.Configuration
 
             topSection = WalkieGPS.UPGRADE_NAME;
             WalkieGpsConfiguration = new OneTimeIndividualUpgradeConfiguration(cfg, topSection, LguConstants.WALKIE_GPS_ENABLED_DESCRIPTION, LguConstants.WALKIE_GPS_PRICE_DEFAULT);
+
+            topSection = BabyPacifier.UPGRADE_NAME;
+            BabyPacifierUpgradeConfiguration = new TierPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.BABY_PACIFIER_ENABLED_DESCRIPTION, BabyPacifier.PRICES_DEFAULT)
+            {
+                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.BABY_PACIFIER_INITIAL_PERCENTAGE_KEY, LguConstants.BABY_PACIFIER_INITIAL_PERCENTAGE_DEFAULT, LguConstants.BABY_PACIFIER_INITIAL_PERCENTAGE_DESCRIPTION),
+                IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.BABY_PACIFIER_INCREMENTAL_PERCENTAGE_KEY, LguConstants.BABY_PACIFIER_INCREMENTAL_PERCENTAGE_DEFAULT, LguConstants.BABY_PACIFIER_INCREMENTAL_PERCENTAGE_DESCRIPTION)
+            };
 
             #endregion
 
