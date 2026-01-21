@@ -1722,6 +1722,20 @@ namespace MoreShipUpgrades.Misc.Util
         internal const int BABY_PACIFIER_INCREMENTAL_PERCENTAGE_DEFAULT = 15;
         internal const string BABY_PACIFIER_INCREMENTAL_PERCENTAGE_DESCRIPTION = "Incremental percentage (%) removed from Maneaters Growth Increment when crying";
 
+        #endregion
+
+        #region Item Duplicator
+
+        internal const string ITEM_DUPLICATOR_ENABLED_DESCRIPTION = "Possibly duplicates the items purchased from the Company Store without occupying space in the drop pod.";
+
+        internal const string ITEM_DUPLICATOR_INITIAL_PERCENTAGE_KEY = "Initial percentage of duplication chance";
+        internal const int ITEM_DUPLICATOR_INITIAL_PERCENTAGE_DEFAULT = 30;
+        internal const string ITEM_DUPLICATOR_INITIAL_PERCENTAGE_DESCRIPTION = "Initial percentage (%) of chance that the purchased item will be duplicated from the drop pod.";
+
+        internal const string ITEM_DUPLICATOR_INCREMENTAL_PERCENTAGE_KEY = "Incremental percentage of duplication chance";
+        internal const int ITEM_DUPLICATOR_INCREMENTAL_PERCENTAGE_DEFAULT = 15;
+        internal const string ITEM_DUPLICATOR_INCREMENTAL_PERCENTAGE_DESCRIPTION = "Incremental percentage (%) of chance that the purchased item will be duplicated from the drop pod.";
+
 		#endregion
 
 		#endregion

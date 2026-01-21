@@ -3,7 +3,7 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies
@@ -16,7 +16,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies
 		internal override void Start()
 		{
 			upgradeName = UPGRADE_NAME;
-
+			overridenUpgradeName = GetConfiguration().BabyPacifierUpgradeConfiguration.OverrideName;
 			base.Start();
 		}
 		public override bool CanInitializeOnStart

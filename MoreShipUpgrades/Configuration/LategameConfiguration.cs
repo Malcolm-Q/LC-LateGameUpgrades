@@ -96,6 +96,7 @@ namespace MoreShipUpgrades.Configuration
         public SickBeatsUpgradeConfiguration SickBeatsUpgradeConfiguration {  get; set; }
         public BetterScannerUpgradeConfiguration BetterScannerUpgradeConfiguration {  get; set; }
         public ITierEffectUpgradeConfiguration<int> BabyPacifierUpgradeConfiguration { get; set; }
+        public ITierEffectUpgradeConfiguration<int> ItemDuplicatorUpgradeConfiguration { get; set; }
         public ContractsConfiguration ContractsConfiguration { get; set; }
 
         #region Attributes
@@ -723,6 +724,13 @@ namespace MoreShipUpgrades.Configuration
             {
                 InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.BABY_PACIFIER_INITIAL_PERCENTAGE_KEY, LguConstants.BABY_PACIFIER_INITIAL_PERCENTAGE_DEFAULT, LguConstants.BABY_PACIFIER_INITIAL_PERCENTAGE_DESCRIPTION),
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.BABY_PACIFIER_INCREMENTAL_PERCENTAGE_KEY, LguConstants.BABY_PACIFIER_INCREMENTAL_PERCENTAGE_DEFAULT, LguConstants.BABY_PACIFIER_INCREMENTAL_PERCENTAGE_DESCRIPTION)
+            };
+
+            topSection = ItemDuplicator.UPGRADE_NAME;
+            ItemDuplicatorUpgradeConfiguration = new TierPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.ITEM_DUPLICATOR_ENABLED_DESCRIPTION, ItemDuplicator.PRICES_DEFAULT)
+            {
+                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_DUPLICATOR_INITIAL_PERCENTAGE_KEY, LguConstants.ITEM_DUPLICATOR_INITIAL_PERCENTAGE_DEFAULT, LguConstants.ITEM_DUPLICATOR_INITIAL_PERCENTAGE_DESCRIPTION),
+                IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.ITEM_DUPLICATOR_INCREMENTAL_PERCENTAGE_KEY, LguConstants.ITEM_DUPLICATOR_INCREMENTAL_PERCENTAGE_DEFAULT, LguConstants.ITEM_DUPLICATOR_INCREMENTAL_PERCENTAGE_DESCRIPTION)
             };
 
             #endregion

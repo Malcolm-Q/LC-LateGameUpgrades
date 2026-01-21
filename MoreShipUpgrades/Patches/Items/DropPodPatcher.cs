@@ -2,6 +2,7 @@
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Store;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -89,6 +90,13 @@ namespace MoreShipUpgrades.Patches.Items
                 __instance.itemsToDeliver.Add(orderedItems[0]);
                 orderedItems.RemoveAt(0);
             }
+        }
+
+        [HarmonyPatch(nameof(ItemDropship.LandShipOnServer))]
+        [HarmonyPostfix]
+        static void LandShipOnServerPostfix(ref List<int> ___itemsToDeliver)
+        {
+            ItemDuplicator.AttemptDuplication(ref ___itemsToDeliver);
         }
     }
 }
