@@ -41,7 +41,7 @@ namespace MoreShipUpgrades.Configuration
     {
         public ITierEffectUpgradeConfiguration<int> EffectiveBandaidsConfiguration { get; set; }
         public ITierEffectUpgradeConfiguration<int> MedicalNanobotsConfiguration { get; set; }
-        public ITierEffectUpgradeConfiguration<int> ScrapKeeperConfiguration { get; set; }
+        public ScrapKeeperUpgradeConfiguration ScrapKeeperConfiguration { get; set; }
         public ITierEffectUpgradeConfiguration<int> ParticleInfuserConfiguration { get; set; }
         public IOneTimeUpgradeConfiguration SilverBulletsConfiguration { get; set; }
         public ITierCollectionUpgradeConfiguration FusionMatterConfiguration { get; set; }
@@ -256,7 +256,7 @@ namespace MoreShipUpgrades.Configuration
             };
 
             topSection = ScrapKeeper.UPGRADE_NAME;
-            ScrapKeeperConfiguration = new TierPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.SCRAP_KEEPER_ENABLED_DESCRIPTION, ScrapKeeper.PRICES_DEFAULT)
+            ScrapKeeperConfiguration = new ScrapKeeperUpgradeConfiguration(cfg, topSection, LguConstants.SCRAP_KEEPER_ENABLED_DESCRIPTION, ScrapKeeper.PRICES_DEFAULT)
             {
                 InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_KEEPER_INITIAL_KEEP_SCRAP_CHANCE_INCREASE_KEY, LguConstants.SCRAP_KEEPER_INITIAL_KEEP_SCRAP_CHANCE_INCREASE_DEFAULT, LguConstants.SCRAP_KEEPER_INITIAL_KEEP_SCRAP_CHANCE_INCREASE_DESCRIPTION),
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.SCRAP_KEEPER_INCREMENTAL_KEEP_SCRAP_CHANCE_INCREASE_KEY, LguConstants.SCRAP_KEEPER_INCREMENTAL_KEEP_SCRAP_CHANCE_INCREASE_DEFAULT, LguConstants.SCRAP_KEEPER_INCREMENTAL_KEEP_SCRAP_CHANCE_INCREASE_DESCRIPTION)

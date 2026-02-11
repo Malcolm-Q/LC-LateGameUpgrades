@@ -6,6 +6,7 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items;
+using System.Reflection.Emit;
 
 namespace MoreShipUpgrades.Patches.RoundComponents
 {
@@ -57,7 +58,10 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             List<CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindField(ref index, ref codes, findField: IsScrap, addCode: CanKeepScrapBasedOnChance, andInstruction: true, notInstruction: true);
-            return codes;
+			codes.Insert(index, new CodeInstruction(opcode: OpCodes.Ldelem_Ref));
+			codes.Insert(index, new CodeInstruction(opcode: OpCodes.Ldloc, operand: 9));
+			codes.Insert(index, new CodeInstruction(opcode: OpCodes.Ldloc_0));
+			return codes;
         }
     }
 }

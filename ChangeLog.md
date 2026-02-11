@@ -1,3 +1,11 @@
+
+<details>
+<summary> 3.12.11 - 2026-??-?? </summary>
+
+- Added Scrap Keeper configuration to only apply its effect on items that were previously stored in the ship and ignore items stored in the same day.
+
+</details>
+
 <details>
 <summary> 3.12.10 - 2026-01-13 </summary>
 

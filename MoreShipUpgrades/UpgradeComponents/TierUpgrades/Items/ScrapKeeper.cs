@@ -1,4 +1,5 @@
-﻿using MoreShipUpgrades.Configuration.Upgrades.Interfaces;
+﻿using MoreShipUpgrades.Configuration.Upgrades.Custom;
+using MoreShipUpgrades.Configuration.Upgrades.Interfaces;
 using MoreShipUpgrades.Configuration.Upgrades.Interfaces.TierUpgrades;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
@@ -49,11 +50,12 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items
             int percentage = upgradeConfig.InitialEffect + (GetUpgradeLevel(UPGRADE_NAME) * upgradeConfig.IncrementalEffect);
             return percentage / 100f;
         }
-        public static bool CanKeepScrapBasedOnChance()
+        public static bool CanKeepScrapBasedOnChance(GrabbableObject item)
         {
-            IUpgradeConfiguration upgradeConfig = GetConfiguration().ScrapKeeperConfiguration;
-            if (!upgradeConfig.Enabled) return false;
-            if (!GetActiveUpgrade(UPGRADE_NAME)) return false;
+            ScrapKeeperUpgradeConfiguration upgradeConfig = GetConfiguration().ScrapKeeperConfiguration;
+			if (!upgradeConfig.Enabled) return false;
+			if (!GetActiveUpgrade(UPGRADE_NAME)) return false;
+			if (upgradeConfig.OnlyKeepItemsInShip && !item.scrapPersistedThroughRounds) return false;
             float scrapChance = Mathf.Clamp(ComputeScrapKeeperKeepScrapChance(), 0f, 1f);
             return Random.Range(0f, 1f) <= scrapChance;
         }
