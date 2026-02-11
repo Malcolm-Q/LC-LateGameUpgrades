@@ -3,6 +3,8 @@
 <summary> 3.12.11 - 2026-??-?? </summary>
 
 - Added Scrap Keeper configuration to only apply its effect on items that were previously stored in the ship and ignore items stored in the same day.
+- Implemented "Item Duplicator" which adds a chance of duplicating purchased items from the Company Store when dropped from the item drop pod.
+- Implemented "Baby Pacifier" which reduces the growth rate of maneater when they are crying.
 
 </details>
 
