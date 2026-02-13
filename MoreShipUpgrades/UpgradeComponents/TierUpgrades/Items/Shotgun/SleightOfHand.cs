@@ -54,7 +54,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun
         {
             if (!GetConfiguration().SleightOfHandConfiguration.Enabled) return defaultValue;
             if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
-            float multiplier = ComputeSleightOfHandSpeedBoost();
+            float multiplier = ComputeSleightOfHandSpeedBoost()/2f;
             return Mathf.Clamp(defaultValue * (1f - multiplier), 0, defaultValue);
         }
         public new static (string, string[]) RegisterScrapToUpgrade()
