@@ -39,6 +39,7 @@ namespace MoreShipUpgrades.Configuration
     [DataContract]
     public class LategameConfiguration : SyncedConfig2<LategameConfiguration>
     {
+        public ITierEffectUpgradeConfiguration<int> SmarterLockpickUpgradeConfiguration { get; set; }
         public ITierEffectUpgradeConfiguration<int> EffectiveBandaidsConfiguration { get; set; }
         public ITierEffectUpgradeConfiguration<int> MedicalNanobotsConfiguration { get; set; }
         public ScrapKeeperUpgradeConfiguration ScrapKeeperConfiguration { get; set; }
@@ -240,6 +241,13 @@ namespace MoreShipUpgrades.Configuration
             #endregion
 
             #region Upgrades
+
+            topSection = SmarterLockpick.UPGRADE_NAME;
+            SmarterLockpickUpgradeConfiguration = new TierPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.SMARTER_LOCKPICK_ENABLED_DESCRIPTION, SmarterLockpick.PRICES_DEFAULT)
+            {
+                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.SMARTER_LOCKPICK_INITIAL_INCREASE_KEY, LguConstants.SMARTER_LOCKPICK_INITIAL_INCREASE_DEFAULT, LguConstants.SMARTER_LOCKPICK_INITIAL_INCREASE_DESCRIPTION),
+                IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.SMARTER_LOCKPICK_INCREMENTAL_INCREASE_KEY, LguConstants.SMARTER_LOCKPICK_INCREMENTAL_INCREASE_DEFAULT, LguConstants.SMARTER_LOCKPICK_INCREMENTAL_INCREASE_DESCRIPTION),
+            };
 
             topSection = EffectiveBandaids.UPGRADE_NAME;
             EffectiveBandaidsConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.EFFECTIVE_BANDAIDS_ENABLED_DESCRIPTION, EffectiveBandaids.DEFAULT_PRICES)

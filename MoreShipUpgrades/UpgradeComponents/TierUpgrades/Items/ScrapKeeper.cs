@@ -1,5 +1,4 @@
 ﻿using MoreShipUpgrades.Configuration.Upgrades.Custom;
-using MoreShipUpgrades.Configuration.Upgrades.Interfaces;
 using MoreShipUpgrades.Configuration.Upgrades.Interfaces.TierUpgrades;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;

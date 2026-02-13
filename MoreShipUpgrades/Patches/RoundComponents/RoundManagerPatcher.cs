@@ -36,9 +36,7 @@ namespace MoreShipUpgrades.Patches.RoundComponents
             return codes;
         }
 
-        [HarmonyPatch(nameof(RoundManager.FinishGeneratingLevel))]
-        [HarmonyPrefix]
-        static void FinishGeneratingLevelPrefix()
+        public static void FinishGeneratingLevelPrefix()
         {
             if (!UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.Enabled) return;
             if (!UpgradeBus.Instance.PluginConfiguration.LandingThrustersConfiguration.AffectLanding) return;
@@ -47,7 +45,20 @@ namespace MoreShipUpgrades.Patches.RoundComponents
 			StartOfRound.Instance.shipAnimator.speed *= LandingThrusters.GetLandingSpeedMultiplier();
         }
 
-        [HarmonyPatch(nameof(RoundManager.DespawnPropsAtEndOfRound))]
+        [HarmonyPatch(nameof(RoundManager.GenerateNewLevelClientRpc))]
+        [HarmonyTranspiler]
+        static IEnumerable<CodeInstruction> GenerateNewLevelClientRpcTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            List<CodeInstruction> codes = new(instructions);
+            int index = 0;
+
+            FieldInfo spawnScrapAndEnemies = typeof(SelectableLevel).GetField(nameof(SelectableLevel.spawnEnemiesAndScrap));
+            Tools.FindField(ref index, ref codes, spawnScrapAndEnemies, skip: true);
+            codes.Insert(index - 2, new CodeInstruction(OpCodes.Call, typeof(RoundManagerPatcher).GetMethod(nameof(RoundManagerPatcher.FinishGeneratingLevelPrefix))));
+            return codes;
+        }
+
+		[HarmonyPatch(nameof(RoundManager.DespawnPropsAtEndOfRound))]
         [HarmonyTranspiler]
         static IEnumerable<CodeInstruction> DespawnPropsAtEndOfRoundTranspiler(IEnumerable<CodeInstruction> instructions)
         {

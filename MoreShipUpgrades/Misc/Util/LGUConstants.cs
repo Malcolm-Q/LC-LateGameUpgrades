@@ -397,9 +397,21 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string ENABLED_FORMAT = "Enable {0} Upgrade";
         internal const string PRICE_FORMAT = "Price of {0} Upgrade";
 
-        #region Effective Bandaids
+        #region Smarter Lockpick
+        internal const string SMARTER_LOCKPICK_ENABLED_DESCRIPTION = "Tier upgrade that increases the efficiency of the lockpicker item, making it faster at opening doors.";
 
-        internal const string EFFECTIVE_BANDAIDS_ENABLED_KEY = $"Enable {EffectiveBandaids.UPGRADE_NAME} Upgrade";
+        internal const string SMARTER_LOCKPICK_INITIAL_INCREASE_KEY = "Initial Efficiency Increase";
+        internal const int SMARTER_LOCKPICK_INITIAL_INCREASE_DEFAULT = 100;
+        internal const string SMARTER_LOCKPICK_INITIAL_INCREASE_DESCRIPTION = "Initial increase (%) of efficiency of the lockpicker item in opening doors, decreasing the required time to be lockpicked";
+
+        internal const string SMARTER_LOCKPICK_INCREMENTAL_INCREASE_KEY = "Incremental Efficiency Increase";
+        internal const int SMARTER_LOCKPICK_INCREMENTAL_INCREASE_DEFAULT = 100;
+        internal const string SMARTER_LOCKPICK_INCREMENTAL_INCREASE_DESCRIPTION = "Incremental increase (%) of efficiency of the lockpicker item in opening doors, decreasing the required time to be lockpicked";
+		#endregion
+
+		#region Effective Bandaids
+
+		internal const string EFFECTIVE_BANDAIDS_ENABLED_KEY = $"Enable {EffectiveBandaids.UPGRADE_NAME} Upgrade";
         internal const bool EFFECTIVE_BANDAIDS_ENABLED_DEFAULT = true;
         internal const string EFFECTIVE_BANDAIDS_ENABLED_DESCRIPTION = "Tier upgrade which increases the amount of health you regain when regenerating.";
 
