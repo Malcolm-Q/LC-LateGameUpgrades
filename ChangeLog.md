@@ -1,4 +1,29 @@
 <details>
+<summary> 3.12.13 - 2026-??-?? </summary>
+
+- Fixed Smarter Lockpicker upgrade description being incorrect.
+
+</details>
+
+<details>
+<summary> 3.12.12 - 2026-02-13 </summary>
+
+- Hotfixed accidental linking with CustomItemBehaviourLibrary, causing crashes/errors on people without that mod.
+
+</details>
+
+<details>
+<summary> 3.12.11 - 2026-02-13 </summary>
+
+- Added Scrap Keeper configuration to only apply its effect on items that were previously stored in the ship and ignore items stored in the same day.
+- Implemented "Item Duplicator" which adds a chance of duplicating purchased items from the Company Store when dropped from the item drop pod.
+- Implemented "Baby Pacifier" which reduces the growth rate of maneater when they are crying.
+- Implemented "Smarter Lockpick" which increases the efficiency of the lockpicker item, decreasing the amount of time required to open the locked door.
+- Possibly fixed Landing Thrusters causing slow landings after landing on the Company moon.
+
+</details>
+
+<details>
 <summary> 3.12.10 - 2026-01-13 </summary>
 
 - Removed soft compatibility with [ShipInventory](https://thunderstore.io/c/lethal-company/p/WarperSan/ShipInventory/) (which is now [ShipInventoryUpdated](https://thunderstore.io/c/lethal-company/p/LethalCompanyModding/ShipInventoryUpdated/)) related to Scrap Keeper affecting the items stored in the chute.

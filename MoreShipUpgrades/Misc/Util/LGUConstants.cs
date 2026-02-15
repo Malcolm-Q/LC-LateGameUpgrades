@@ -397,9 +397,21 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string ENABLED_FORMAT = "Enable {0} Upgrade";
         internal const string PRICE_FORMAT = "Price of {0} Upgrade";
 
-        #region Effective Bandaids
+        #region Smarter Lockpick
+        internal const string SMARTER_LOCKPICK_ENABLED_DESCRIPTION = "Tier upgrade that increases the efficiency of the lockpicker item, making it faster at opening doors.";
 
-        internal const string EFFECTIVE_BANDAIDS_ENABLED_KEY = $"Enable {EffectiveBandaids.UPGRADE_NAME} Upgrade";
+        internal const string SMARTER_LOCKPICK_INITIAL_INCREASE_KEY = "Initial Efficiency Increase";
+        internal const int SMARTER_LOCKPICK_INITIAL_INCREASE_DEFAULT = 100;
+        internal const string SMARTER_LOCKPICK_INITIAL_INCREASE_DESCRIPTION = "Initial increase (%) of efficiency of the lockpicker item in opening doors, decreasing the required time to be lockpicked";
+
+        internal const string SMARTER_LOCKPICK_INCREMENTAL_INCREASE_KEY = "Incremental Efficiency Increase";
+        internal const int SMARTER_LOCKPICK_INCREMENTAL_INCREASE_DEFAULT = 100;
+        internal const string SMARTER_LOCKPICK_INCREMENTAL_INCREASE_DESCRIPTION = "Incremental increase (%) of efficiency of the lockpicker item in opening doors, decreasing the required time to be lockpicked";
+		#endregion
+
+		#region Effective Bandaids
+
+		internal const string EFFECTIVE_BANDAIDS_ENABLED_KEY = $"Enable {EffectiveBandaids.UPGRADE_NAME} Upgrade";
         internal const bool EFFECTIVE_BANDAIDS_ENABLED_DEFAULT = true;
         internal const string EFFECTIVE_BANDAIDS_ENABLED_DESCRIPTION = "Tier upgrade which increases the amount of health you regain when regenerating.";
 
@@ -1706,15 +1718,45 @@ namespace MoreShipUpgrades.Misc.Util
         internal const int WALKIE_GPS_PRICE_DEFAULT = 450;
         internal const string WALKIE_GPS_PRICE_DESCRIPTION = $"Default price for {WalkieGPS.UPGRADE_NAME} upgrade.";
 
-        #endregion
+		#endregion
+
+		#region Baby Pacifier
+
+		internal const string BABY_PACIFIER_ENABLED_KEY = $"Enable the {BabyPacifier.UPGRADE_NAME} upgrade.";
+		internal const bool BABY_PACIFIER_ENABLED_DEFAULT = true;
+		internal const string BABY_PACIFIER_ENABLED_DESCRIPTION = "Decreases the growth rate of baby maneater when they are crying";
+
+        internal const string BABY_PACIFIER_INITIAL_PERCENTAGE_KEY = "Initial percentage of Growth Decrease";
+        internal const int BABY_PACIFIER_INITIAL_PERCENTAGE_DEFAULT = 15;
+        internal const string BABY_PACIFIER_INITIAL_PERCENTAGE_DESCRIPTION = "Initial percentage (%) removed from Maneaters Growth Increment when crying";
+
+        internal const string BABY_PACIFIER_INCREMENTAL_PERCENTAGE_KEY = "Incremental percentage of Growth Decrease";
+        internal const int BABY_PACIFIER_INCREMENTAL_PERCENTAGE_DEFAULT = 15;
+        internal const string BABY_PACIFIER_INCREMENTAL_PERCENTAGE_DESCRIPTION = "Incremental percentage (%) removed from Maneaters Growth Increment when crying";
 
         #endregion
 
-        #endregion
+        #region Item Duplicator
 
-        #region Alternative Currency
+        internal const string ITEM_DUPLICATOR_ENABLED_DESCRIPTION = "Possibly duplicates the items purchased from the Company Store without occupying space in the drop pod.";
 
-        internal const string ALTERNATIVE_CURRENCY_ALIAS = "PC";
+        internal const string ITEM_DUPLICATOR_INITIAL_PERCENTAGE_KEY = "Initial percentage of duplication chance";
+        internal const int ITEM_DUPLICATOR_INITIAL_PERCENTAGE_DEFAULT = 30;
+        internal const string ITEM_DUPLICATOR_INITIAL_PERCENTAGE_DESCRIPTION = "Initial percentage (%) of chance that the purchased item will be duplicated from the drop pod.";
+
+        internal const string ITEM_DUPLICATOR_INCREMENTAL_PERCENTAGE_KEY = "Incremental percentage of duplication chance";
+        internal const int ITEM_DUPLICATOR_INCREMENTAL_PERCENTAGE_DEFAULT = 15;
+        internal const string ITEM_DUPLICATOR_INCREMENTAL_PERCENTAGE_DESCRIPTION = "Incremental percentage (%) of chance that the purchased item will be duplicated from the drop pod.";
+
+		#endregion
+
+		#endregion
+
+		#endregion
+
+		#region Alternative Currency
+
+		internal const string ALTERNATIVE_CURRENCY_ALIAS = "PC";
 
         internal const string ALTERNATIVE_CURRENCY_TOPSECTION = "_Alternative Currency_";
 

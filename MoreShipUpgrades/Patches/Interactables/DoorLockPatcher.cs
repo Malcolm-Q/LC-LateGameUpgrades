@@ -1,7 +1,12 @@
 ﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items;
+using System.Collections.Generic;
+using System.Reflection;
+using UnityEngine;
 
 namespace MoreShipUpgrades.Patches.Interactables
 {
@@ -24,6 +29,21 @@ namespace MoreShipUpgrades.Patches.Interactables
                 __instance.doorTrigger.hoverTip = "Use door : [LMB]";
             }
         }
+        [HarmonyPatch(nameof(DoorLock.Update))]
+        [HarmonyTranspiler]
+        static IEnumerable<CodeInstruction> UpdateTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            List<CodeInstruction> codes = new(instructions);
+            int index = 0;
+
+            MethodInfo IncreaseLockpickEfficiency = typeof(SmarterLockpick).GetMethod(nameof(SmarterLockpick.IncreaseLockpickEfficiency));
+            MethodInfo deltaTime = typeof(Time).GetProperty(nameof(Time.deltaTime)).GetGetMethod();
+
+			Tools.FindMethod(ref index, ref codes, findMethod: deltaTime, skip: true, errorMessage: "DeltaTime not found in DoorLock script");
+			Tools.FindMethod(ref index, ref codes, findMethod: deltaTime, addCode: IncreaseLockpickEfficiency, errorMessage: "DeltaTime not found in DoorLock script");
+
+            return codes;
+		}
 
         [HarmonyPatch(nameof(DoorLock.OnHoldInteract))]
         [HarmonyPrefix]

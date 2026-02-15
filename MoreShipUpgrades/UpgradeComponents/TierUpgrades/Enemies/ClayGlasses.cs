@@ -4,7 +4,6 @@ using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
 using MoreShipUpgrades.UI.TerminalNodes;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
-using MoreShipUpgrades.Configuration;
 using MoreShipUpgrades.Configuration.Upgrades.Interfaces.TierUpgrades;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies

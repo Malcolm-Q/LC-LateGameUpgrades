@@ -261,6 +261,14 @@ You can check the key binds used for More Ship Upgrades to understand how to nav
 * __Effective Bandaids - $250__
     * Increases the amount of health regenerated from the vanilla health regeneration mechanic. 
     
+* __Item Duplicator - $250__
+    * Adds chance to duplicate the items dropped from the item drop pod.
+
+* __Baby Pacifier - $100__
+    * Decreases the growth rate of the maneater child while crying.
+
+* __Smarter Lockpicker - $200__
+    * Increases the efficiency of the lockpicker item, decreasing the amount of time required to open locked doors. 
 ## Item Progression Mode
 
 This mod offers an alternative mode for obtaining upgrades through selling items to The Company. The following modes are available for playthroughs:
