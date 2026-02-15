@@ -1,10 +1,9 @@
-﻿using CustomItemBehaviourLibrary.Misc;
-using HarmonyLib;
+﻿using HarmonyLib;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
+using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;

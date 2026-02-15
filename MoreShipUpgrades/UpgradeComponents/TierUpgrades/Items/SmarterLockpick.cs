@@ -34,7 +34,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items
 				ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().SmarterLockpickUpgradeConfiguration;
 				return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
 			}
-			const string infoFormat = "LVL {0} - {1} - In case of a full team wipe, each scrap present in the ship has a {2}% chance of not being discarded.\n";
+			const string infoFormat = "LVL {0} - {1} - The lockpicker item is {2}% more efficient (faster) at opening up locked doors.\n";
 			return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().SmarterLockpickUpgradeConfiguration.PurchaseMode);
 		}
 

@@ -1,3 +1,9 @@
+<details>
+<summary> 3.12.12 - 2026-02-13 </summary>
+
+- Hotfixed accidental linking with CustomItemBehaviourLibrary, causing crashes/errors on people without that mod.
+
+</details>
 
 <details>
 <summary> 3.12.11 - 2026-02-13 </summary>

@@ -1,5 +1,5 @@
-﻿using CustomItemBehaviourLibrary.Misc;
-using HarmonyLib;
+﻿using HarmonyLib;
+using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies;
 using System.Collections.Generic;
 using System.Reflection;
