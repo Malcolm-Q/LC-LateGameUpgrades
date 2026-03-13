@@ -1,8 +1,13 @@
 <details>
 <summary> 3.12.13 - 2026-??-?? </summary>
 
+- Implemented maximum individual upgrades configuration where the player's individual upgrades count are limited to the value in this configuration entry.
+    - Additional levels do not count towards this maximum (Level 1 and Level 5 upgrade both count as one individual upgrade).
+    - An error screen is shown when attempting to surpass this maximum by purchasing another individual upgrade.
+    - This configuration is disabled if the introduced value is lesser or equal to zero.
 - Fixed Smarter Lockpicker upgrade description being incorrect.
 - Fixed Better Scanner displaying items through items at the first level instead of last.
+- Fixed Random Contract on Keyword configuration ignoring Enabled configuration, causing players to acquire contracts even if they are disabled.
 - Recompiled against newest release of DawnLib due to changes with CurveTableBuilder.
 
 </details>

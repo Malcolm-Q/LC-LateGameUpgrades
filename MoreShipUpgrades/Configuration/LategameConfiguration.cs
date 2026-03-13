@@ -101,6 +101,7 @@ namespace MoreShipUpgrades.Configuration
         public ContractsConfiguration ContractsConfiguration { get; set; }
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<int> MaximumIndividualUpgrades { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> INTERNS_DELAY_BEFORE_REVIVE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> INTERNS_USAGES_PER_LANDING { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> INTERNS_INTERVAL_BETWEEN_REVIVES {  get; set; }
@@ -220,9 +221,10 @@ namespace MoreShipUpgrades.Configuration
             ShowLockedUpgrades = cfg.BindSyncedEntry(topSection, LguConstants.SHOW_LOCKED_UPGRADES_KEY, LguConstants.SHOW_LOCKED_UPGRADES_DEFAULT, LguConstants.SHOW_LOCKED_UPGRADES_DESCRIPTION);
             OVERRIDE_UPGRADE_NAMES = cfg.BindSyncedEntry(topSection, LguConstants.OVERRIDE_NAMES_ENABLED_KEY, LguConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LguConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
             UseDawnLib = cfg.BindSyncedEntry(topSection, "Use DawnLib for Initialization", false, "Replaces initialization phase that utilizes LethalLib with DawnLib callbacks instead. Use this if you are experiencing issues with LethalLib and believe DawnLib won't have the same issues.");
-            #endregion
+            MaximumIndividualUpgrades = cfg.BindSyncedEntry(topSection, "Maximum purchaseable individual upgrades", 0, "If greater than zero, limits each player's amount of purchased individual upgrades to the configurated value.");
+			#endregion
 
-            topSection = LguConstants.CONTRACTS_SECTION;
+			topSection = LguConstants.CONTRACTS_SECTION;
             ContractsConfiguration = new ContractsConfiguration(cfg, topSection);
 
             #region Items

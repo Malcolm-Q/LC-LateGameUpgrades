@@ -396,6 +396,7 @@ namespace MoreShipUpgrades.Misc
         }
         static void ExecuteContractCommands(ref Terminal terminal, ref TerminalNode outputNode)
         {
+            if (!UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.Enabled) return;
             if (!UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.RandomOnly) return;
             outputNode = TryGetContract(ref terminal);
         }

@@ -4,7 +4,6 @@ using InteractiveTerminalAPI.UI.Cursor;
 using InteractiveTerminalAPI.UI.Page;
 using InteractiveTerminalAPI.UI.Screen;
 using MoreShipUpgrades.API;
-using MoreShipUpgrades.Input;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.Cursor;
@@ -215,7 +214,9 @@ namespace MoreShipUpgrades.UI.Application
         {
             if (UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_ITEM_PROGRESSION && UpgradeBus.Instance.PluginConfiguration.ITEM_PROGRESSION_NO_PURCHASE_UPGRADES) return false;
             if (UpgradeBus.Instance.PluginConfiguration.BuyableUpgradeOnce && UpgradeBus.Instance.lockedUpgrades.Keys.Contains(node)) return false;
-            if (node.Refundable && node.Unlocked) return true;
+            if (UpgradeBus.Instance.PluginConfiguration.MaximumIndividualUpgrades > 0 && UpgradeApi.GetUpgradeNodes().Where(x => !x.SharedUpgrade && x.Unlocked).Count() >= UpgradeBus.Instance.PluginConfiguration.MaximumIndividualUpgrades) return false;
+
+			if (node.Refundable && node.Unlocked) return true;
             bool maxLevel = node.CurrentUpgrade >= node.MaxUpgrade;
             if (maxLevel && node.Unlocked)
                 return false;
@@ -340,8 +341,13 @@ namespace MoreShipUpgrades.UI.Application
             {
                 ErrorMessage(node.Name, finalText, backAction, " ");
                 return;
-            }
-            CursorElement[] elements;
+			}
+			if (UpgradeBus.Instance.PluginConfiguration.MaximumIndividualUpgrades > 0 && UpgradeApi.GetUpgradeNodes().Where(x => !x.SharedUpgrade && x.Unlocked).Count() >= UpgradeBus.Instance.PluginConfiguration.MaximumIndividualUpgrades && !node.Unlocked)
+			{
+				ErrorMessage(node.Name, finalText, backAction, $"You have surpassed the maximum amount of allowed individual upgrades purchased. ({UpgradeBus.Instance.PluginConfiguration.MaximumIndividualUpgrades.Value})");
+				return;
+			}
+			CursorElement[] elements;
             if (node.AlternateCurrency)
             {
                 switch(node.PurchaseMode)
