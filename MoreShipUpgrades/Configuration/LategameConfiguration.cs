@@ -145,6 +145,8 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<int> SPORE_LIZARD_SAMPLE_MAXIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MANEATER_SAMPLE_MINIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MANEATER_SAMPLE_MAXIMUM_VALUE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> GIANT_SAPSUCKER_SAMPLE_MINIMUM_VALUE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> GIANT_SAPSUCKER_SAMPLE_MAXIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SHOW_UPGRADES_CHAT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SALE_APPLY_ONCE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> BuyableUpgradeOnce { get; set; }
@@ -586,10 +588,12 @@ namespace MoreShipUpgrades.Configuration
             SPORE_LIZARD_SAMPLE_MAXIMUM_VALUE = cfg.BindSyncedEntry(topSection, LguConstants.SPORE_LIZARD_SAMPLE_MAXIMUM_VALUE_KEY, LguConstants.SPORE_LIZARD_SAMPLE_MAXIMUM_VALUE_DEFAULT);
             MANEATER_SAMPLE_MINIMUM_VALUE = cfg.BindSyncedEntry(topSection, LguConstants.MANEATER_SAMPLE_MINIMUM_VALUE_KEY, LguConstants.MANEATER_SAMPLE_MINIMUM_VALUE_DEFAULT);
             MANEATER_SAMPLE_MAXIMUM_VALUE = cfg.BindSyncedEntry(topSection, LguConstants.MANEATER_SAMPLE_MAXIMUM_VALUE_KEY, LguConstants.MANEATER_SAMPLE_MAXIMUM_VALUE_DEFAULT);
+			GIANT_SAPSUCKER_SAMPLE_MINIMUM_VALUE = cfg.BindSyncedEntry(topSection, LguConstants.GIANT_SAPSUCKER_SAMPLE_MINIMUM_VALUE_KEY, LguConstants.GIANT_SAPSUCKER_SAMPLE_MINIMUM_VALUE_DEFAULT);
+			GIANT_SAPSUCKER_SAMPLE_MAXIMUM_VALUE = cfg.BindSyncedEntry(topSection, LguConstants.GIANT_SAPSUCKER_SAMPLE_MAXIMUM_VALUE_KEY, LguConstants.GIANT_SAPSUCKER_SAMPLE_MAXIMUM_VALUE_DEFAULT);
 
-            #endregion
+			#endregion
 
-            topSection = LethalDeals.UPGRADE_NAME;
+			topSection = LethalDeals.UPGRADE_NAME;
             LethalDealsConfiguration = new OneTimeUpgradeConfiguration(cfg, topSection, LguConstants.LETHAL_DEALS_ENABLED_DESCRIPTION, LguConstants.LETHAL_DEALS_PRICE_DEFAULT);
 
             topSection = LightningRod.UPGRADE_NAME;

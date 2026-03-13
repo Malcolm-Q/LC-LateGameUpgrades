@@ -73,6 +73,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies
             { "cavedweller", "Maneater" },
             { "baby", "Maneater" },
             { "babyeater", "Maneater" },
+            { "giant sapsucker", "Giant Kiwi" },
+            { "giant kiwi", "Giant Kiwi" },
+            { "woodpecker", "Giant Kiwi" },
+            { "giantkiwi", "Giant Kiwi" },
             };
 
         /**

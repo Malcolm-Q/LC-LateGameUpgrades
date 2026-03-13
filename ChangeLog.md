@@ -5,6 +5,10 @@
     - Additional levels do not count towards this maximum (Level 1 and Level 5 upgrade both count as one individual upgrade).
     - An error screen is shown when attempting to surpass this maximum by purchasing another individual upgrade.
     - This configuration is disabled if the introduced value is lesser or equal to zero.
+- Implemented Hunter sample for Giant Sapsucker enemy.
+    - Its default tier is the second one.
+    - Update will not add this listing to your installed configurations, you have to change it yourself.
+    - As usual, minimum and maximum scrap value are configurable.
 - Fixed Smarter Lockpicker upgrade description being incorrect.
 - Fixed Better Scanner displaying items through items at the first level instead of last.
 - Fixed Random Contract on Keyword configuration ignoring Enabled configuration, causing players to acquire contracts even if they are disabled.

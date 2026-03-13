@@ -214,7 +214,7 @@ namespace MoreShipUpgrades.UI.Application
         {
             if (UpgradeBus.Instance.PluginConfiguration.ALTERNATIVE_ITEM_PROGRESSION && UpgradeBus.Instance.PluginConfiguration.ITEM_PROGRESSION_NO_PURCHASE_UPGRADES) return false;
             if (UpgradeBus.Instance.PluginConfiguration.BuyableUpgradeOnce && UpgradeBus.Instance.lockedUpgrades.Keys.Contains(node)) return false;
-            if (UpgradeBus.Instance.PluginConfiguration.MaximumIndividualUpgrades > 0 && UpgradeApi.GetUpgradeNodes().Where(x => !x.SharedUpgrade && x.Unlocked).Count() >= UpgradeBus.Instance.PluginConfiguration.MaximumIndividualUpgrades) return false;
+            if (MaximumIndividualUpgradeCheck(node)) return false;
 
 			if (node.Refundable && node.Unlocked) return true;
             bool maxLevel = node.CurrentUpgrade >= node.MaxUpgrade;
@@ -251,6 +251,12 @@ namespace MoreShipUpgrades.UI.Application
             bool canBeBoughtWithGroupCredits = groupCredits >= price;
             return canBeBoughtWithGroupCredits;
         }
+
+        static bool MaximumIndividualUpgradeCheck(CustomTerminalNode node)
+        {
+            return !node.SharedUpgrade && (!node.Unlocked && UpgradeBus.Instance.PluginConfiguration.MaximumIndividualUpgrades > 0 && UpgradeApi.GetUpgradeNodes().Where(x => !x.SharedUpgrade && x.Unlocked).Count() >= UpgradeBus.Instance.PluginConfiguration.MaximumIndividualUpgrades);
+
+		}
 
         static bool CanBuyUpgradeWithPlayerCredits(CustomTerminalNode node)
         {
@@ -342,7 +348,7 @@ namespace MoreShipUpgrades.UI.Application
                 ErrorMessage(node.Name, finalText, backAction, " ");
                 return;
 			}
-			if (UpgradeBus.Instance.PluginConfiguration.MaximumIndividualUpgrades > 0 && UpgradeApi.GetUpgradeNodes().Where(x => !x.SharedUpgrade && x.Unlocked).Count() >= UpgradeBus.Instance.PluginConfiguration.MaximumIndividualUpgrades && !node.Unlocked)
+			if (MaximumIndividualUpgradeCheck(node))
 			{
 				ErrorMessage(node.Name, finalText, backAction, $"You have surpassed the maximum amount of allowed individual upgrades purchased. ({UpgradeBus.Instance.PluginConfiguration.MaximumIndividualUpgrades.Value})");
 				return;
