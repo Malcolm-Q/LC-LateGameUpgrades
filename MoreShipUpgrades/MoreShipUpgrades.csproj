@@ -24,7 +24,7 @@
     <PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.1" PrivateAssets="all" ExcludeAssets="runtime" />
     <PackageReference Include="Evaisa.LethalLib" Version="1.1.1" />
     <PackageReference Include="UnityEngine.Modules" Version="2022.3.62" PrivateAssets="all" IncludeAssets="compile" ExcludeAssets="runtime" />
-	<PackageReference Include="TeamXiaolan.DawnLib" Version="*" />
+	<PackageReference Include="TeamXiaolan.DawnLib" Version="0.8.5" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Managers\InfoStrings.json" />

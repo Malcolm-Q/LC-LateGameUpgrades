@@ -824,10 +824,10 @@ namespace MoreShipUpgrades.Misc.Util
         internal const int HUNTER_PRICE_DEFAULT = 700;
 
         internal const string HUNTER_SAMPLE_TIERS_KEY = "Samples dropping at each tier";
-        internal const string HUNTER_SAMPLE_TIERS_DEFAULT = "Hoarding Bug, Centipede, Spore Lizard-Bunker Spider, Baboon hawk, Tulip Snake, Kidnapper Fox-Flowerman, MouthDog, Crawler, Manticoil, Maneater-Forest Giant";
+        internal const string HUNTER_SAMPLE_TIERS_DEFAULT = "Hoarding Bug, Centipede, Spore Lizard-Bunker Spider, Baboon hawk, Tulip Snake, Kidnapper Fox, Giant Kiwi-Flowerman, MouthDog, Crawler, Manticoil, Maneater-Forest Giant";
         internal const string HUNTER_SAMPLE_TIERS_DESCRIPTION = "Specifies at which tier of Hunter do each sample start dropping from. Each tier is separated with a dash ('-') and each list of monsters will be separated with a comma (',')\n" +
                                                                 "Supported Enemies: Hoarding Bug, Centipede (Snare Flea),Bunker Spider, Baboon Hawk, Crawler (Half/Thumper), " +
-                                                                "Flowerman (Bracken), MouthDog (Eyeless Dog), Forest Giant, Tulip Snake, Manticoil, Kidnapper Fox and Spore Lizard.";
+                                                                "Flowerman (Bracken), MouthDog (Eyeless Dog), Forest Giant, Tulip Snake, Manticoil, Kidnapper Fox, Spore Lizard and Giant Kiwi (Giant Sapsucker/Woodpecker).";
 
         internal const string MINIMUM_SAMPLE_VALUE_FORMAT = "Minimum scrap value of a {0} sample";
         internal const string MAXIMUM_SAMPLE_VALUE_FORMAT = "Maximum scrap value of a {0} sample";
@@ -960,13 +960,23 @@ namespace MoreShipUpgrades.Misc.Util
         internal static readonly string MANEATER_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Maneater");
         internal const int MANEATER_SAMPLE_MAXIMUM_VALUE_DEFAULT = 120;
 
-        #endregion
+		#endregion
 
-        #endregion
+		#region Giant Sapsucker
 
-        #region Night Vision
+		internal static readonly string GIANT_SAPSUCKER_SAMPLE_MINIMUM_VALUE_KEY = string.Format(MINIMUM_SAMPLE_VALUE_FORMAT, "Giant Sapsucker");
+		internal const int GIANT_SAPSUCKER_SAMPLE_MINIMUM_VALUE_DEFAULT = 110;
 
-        internal const string NIGHT_VISION_ENABLED_KEY = $"Enable {NightVision.SIMPLE_UPGRADE_NAME} Upgrade";
+		internal static readonly string GIANT_SAPSUCKER_SAMPLE_MAXIMUM_VALUE_KEY = string.Format(MAXIMUM_SAMPLE_VALUE_FORMAT, "Giant Sapsucker");
+		internal const int GIANT_SAPSUCKER_SAMPLE_MAXIMUM_VALUE_DEFAULT = 160;
+
+		#endregion
+
+		#endregion
+
+		#region Night Vision
+
+		internal const string NIGHT_VISION_ENABLED_KEY = $"Enable {NightVision.SIMPLE_UPGRADE_NAME} Upgrade";
         internal const bool NIGHT_VISION_ENABLED_DEFAULT = true;
         internal const string NIGHT_VISION_ENABLED_DESCRIPTION = "Toggleable night vision.";
 
