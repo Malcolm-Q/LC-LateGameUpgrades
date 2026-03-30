@@ -101,6 +101,7 @@ namespace MoreShipUpgrades.Configuration
         public ContractsConfiguration ContractsConfiguration { get; set; }
 
         #region Attributes
+        [field: SyncedEntryField] public SyncedEntry<int> MaximumIndividualUpgrades { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> INTERNS_DELAY_BEFORE_REVIVE {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> INTERNS_USAGES_PER_LANDING { get; set; }
         [field: SyncedEntryField] public SyncedEntry<float> INTERNS_INTERVAL_BETWEEN_REVIVES {  get; set; }
@@ -144,6 +145,8 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<int> SPORE_LIZARD_SAMPLE_MAXIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MANEATER_SAMPLE_MINIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<int> MANEATER_SAMPLE_MAXIMUM_VALUE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> GIANT_SAPSUCKER_SAMPLE_MINIMUM_VALUE { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<int> GIANT_SAPSUCKER_SAMPLE_MAXIMUM_VALUE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SHOW_UPGRADES_CHAT { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> SALE_APPLY_ONCE { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> BuyableUpgradeOnce { get; set; }
@@ -220,9 +223,10 @@ namespace MoreShipUpgrades.Configuration
             ShowLockedUpgrades = cfg.BindSyncedEntry(topSection, LguConstants.SHOW_LOCKED_UPGRADES_KEY, LguConstants.SHOW_LOCKED_UPGRADES_DEFAULT, LguConstants.SHOW_LOCKED_UPGRADES_DESCRIPTION);
             OVERRIDE_UPGRADE_NAMES = cfg.BindSyncedEntry(topSection, LguConstants.OVERRIDE_NAMES_ENABLED_KEY, LguConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LguConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
             UseDawnLib = cfg.BindSyncedEntry(topSection, "Use DawnLib for Initialization", false, "Replaces initialization phase that utilizes LethalLib with DawnLib callbacks instead. Use this if you are experiencing issues with LethalLib and believe DawnLib won't have the same issues.");
-            #endregion
+            MaximumIndividualUpgrades = cfg.BindSyncedEntry(topSection, "Maximum purchaseable individual upgrades", 0, "If greater than zero, limits each player's amount of purchased individual upgrades to the configurated value.");
+			#endregion
 
-            topSection = LguConstants.CONTRACTS_SECTION;
+			topSection = LguConstants.CONTRACTS_SECTION;
             ContractsConfiguration = new ContractsConfiguration(cfg, topSection);
 
             #region Items
@@ -584,10 +588,12 @@ namespace MoreShipUpgrades.Configuration
             SPORE_LIZARD_SAMPLE_MAXIMUM_VALUE = cfg.BindSyncedEntry(topSection, LguConstants.SPORE_LIZARD_SAMPLE_MAXIMUM_VALUE_KEY, LguConstants.SPORE_LIZARD_SAMPLE_MAXIMUM_VALUE_DEFAULT);
             MANEATER_SAMPLE_MINIMUM_VALUE = cfg.BindSyncedEntry(topSection, LguConstants.MANEATER_SAMPLE_MINIMUM_VALUE_KEY, LguConstants.MANEATER_SAMPLE_MINIMUM_VALUE_DEFAULT);
             MANEATER_SAMPLE_MAXIMUM_VALUE = cfg.BindSyncedEntry(topSection, LguConstants.MANEATER_SAMPLE_MAXIMUM_VALUE_KEY, LguConstants.MANEATER_SAMPLE_MAXIMUM_VALUE_DEFAULT);
+			GIANT_SAPSUCKER_SAMPLE_MINIMUM_VALUE = cfg.BindSyncedEntry(topSection, LguConstants.GIANT_SAPSUCKER_SAMPLE_MINIMUM_VALUE_KEY, LguConstants.GIANT_SAPSUCKER_SAMPLE_MINIMUM_VALUE_DEFAULT);
+			GIANT_SAPSUCKER_SAMPLE_MAXIMUM_VALUE = cfg.BindSyncedEntry(topSection, LguConstants.GIANT_SAPSUCKER_SAMPLE_MAXIMUM_VALUE_KEY, LguConstants.GIANT_SAPSUCKER_SAMPLE_MAXIMUM_VALUE_DEFAULT);
 
-            #endregion
+			#endregion
 
-            topSection = LethalDeals.UPGRADE_NAME;
+			topSection = LethalDeals.UPGRADE_NAME;
             LethalDealsConfiguration = new OneTimeUpgradeConfiguration(cfg, topSection, LguConstants.LETHAL_DEALS_ENABLED_DESCRIPTION, LguConstants.LETHAL_DEALS_PRICE_DEFAULT);
 
             topSection = LightningRod.UPGRADE_NAME;

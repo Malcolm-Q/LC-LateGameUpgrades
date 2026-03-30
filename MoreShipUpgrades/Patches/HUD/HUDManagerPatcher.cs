@@ -25,11 +25,11 @@ namespace MoreShipUpgrades.Patches.HUD
             if (!BaseUpgrade.GetActiveUpgrade(BetterScanner.UPGRADE_NAME)) { return; }
             if (node == null) { __result = false; return; }
             float rangeIncrease = node.headerText == "Main entrance" || node.headerText == "Ship" ? UpgradeBus.Instance.PluginConfiguration.BetterScannerUpgradeConfiguration.OutsideNodesRangeIncrease.Value : UpgradeBus.Instance.PluginConfiguration.BetterScannerUpgradeConfiguration.NodeRangeIncrease.Value;
-            float num = Vector3.Distance(playerScript.transform.position, node.transform.position);
-            __result = num <= node.maxRange + rangeIncrease && num >= node.minRange;
+			bool throughWall = Physics.Linecast(playerScript.gameplayCamera.transform.position, node.transform.position, 134217984, QueryTriggerInteraction.Ignore);
+			float num = Vector3.Distance(playerScript.transform.position, node.transform.position);
+            __result = num <= node.maxRange + rangeIncrease && (node.minRange == -1 || num >= node.minRange) && (!node.requiresLineOfSight || !throughWall);
 			bool hasRequiredLevel = BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) == 2;
             if (!hasRequiredLevel) return;
-			bool throughWall = Physics.Linecast(playerScript.gameplayCamera.transform.position, node.transform.position, 134217984, QueryTriggerInteraction.Ignore);
 			bool cannotSeeEnemiesThroughWalls = node.nodeType == 1 && !UpgradeBus.Instance.PluginConfiguration.BetterScannerUpgradeConfiguration.SeeEnemiesThroughWalls.Value;
 			if (node.requiresLineOfSight && throughWall && cannotSeeEnemiesThroughWalls)
 			{

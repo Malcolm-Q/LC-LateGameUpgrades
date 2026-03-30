@@ -94,7 +94,7 @@ namespace MoreShipUpgrades.Managers
         internal static void ContributeTowardsUpgrade(string upgradeName, int scrapValue)
         {
             CustomTerminalNode assignedUpgrade = UpgradeBus.Instance.GetUpgradeNode(upgradeName);
-            if (!assignedUpgrade.Visible) return;
+            if (assignedUpgrade == null || !assignedUpgrade.Visible) return;
             ContributeTowardsUpgrade(assignedUpgrade, scrapValue);
         }
 

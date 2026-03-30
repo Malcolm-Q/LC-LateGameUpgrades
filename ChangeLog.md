@@ -1,17 +1,32 @@
 <details>
-<summary> 3.13.0 - 2026-??-?? </summary>
+<summary> 3.12.13.1 - 2026-03-30 </summary>
 
-- Recompiled against v80 release of Lethal Company.
-    - Weed Killer changes related to Weed Genetic Manipulation upgrade (more specifically when using the weed killer to kill stuff)
-    - Changes in the dungeon generation causing soft compatibilities (such as Lethal Level Loader) to fail.
-        - For now, any interaction with LLL related to selecting the moons is disabled.
-
-</details>
+- Initial release of LGU beta against v80 release of Lethal Company
+    - Changed Weed Killer Genetic Manipulation to influence the speed of the weed killer item to kill stuff.
+    - Temporarily removed code related to LethalLevelLoader's ExtendedLevels such as contract picking a random moon algorithm.
 
 <details>
-<summary> 3.12.13 - 2026-??-?? </summary>
+<summary> 3.12.13 - 2026-03-30 </summary>
 
+- Implemented maximum individual upgrades configuration where the player's individual upgrades count are limited to the value in this configuration entry.
+    - Additional levels do not count towards this maximum (Level 1 and Level 5 upgrade both count as one individual upgrade).
+    - An error screen is shown when attempting to surpass this maximum by purchasing another individual upgrade.
+    - This configuration is disabled if the introduced value is lesser or equal to zero.
+- Implemented Hunter sample for Giant Sapsucker enemy.
+    - Its default tier is the second one.
+    - Update will not add this listing to your installed configurations, you have to change it yourself.
+    - As usual, minimum and maximum scrap value are configurable.
+- Implemented scan node in entrances (both main and fire exits) after purchasing the first level of Better Scanner.
+    - Maximum range is influenced by the outside range increase configuration.
 - Fixed Smarter Lockpicker upgrade description being incorrect.
+- Fixed Better Scanner displaying items through items at the first level instead of last.
+- Fixed Random Contract on Keyword configuration ignoring Enabled configuration, causing players to acquire contracts even if they are disabled.
+- Fixed Item Progression Unique and Custom Scrap modes breaking when selling to the Company due to invalid item & upgrade pairings.
+- Recompiled against newest release of DawnLib due to changes with CurveTableBuilder.
+
+P.S Some changes in the v80 release of Lethal Company causes issues to this release. 
+As a result, I will upload at a later time (under the alias of 'WhiteSpike') a version of LGU which is compiled against v80 release. 
+The initial release will only include fixes to immediate crashes/errors when launching through v80 so issues like an upgrade not working correctly will have to be reported through github to be fixed properly.
 
 </details>
 
