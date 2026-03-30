@@ -22,6 +22,7 @@ If using v45 - downgrade to v2.8.6
 If using v50 - downgrade to v3.8.1  
 If using v64 - downgrade to v3.10.4 
 If using v72 - downgrade to v3.12.5
+If using v73 - downgrade to v3.12.13
 
 ## Community
 
