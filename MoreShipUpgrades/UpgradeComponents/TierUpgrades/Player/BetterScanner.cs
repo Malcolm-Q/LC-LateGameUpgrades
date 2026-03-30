@@ -1,5 +1,4 @@
 ﻿using MoreShipUpgrades.Compat;
-using MoreShipUpgrades.Configuration;
 using MoreShipUpgrades.Configuration.Upgrades.Custom;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
@@ -7,6 +6,7 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UI.TerminalNodes;
 using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Text;
+using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {
@@ -50,6 +50,12 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             if (!GetActiveUpgrade(UPGRADE_NAME)) return;
             LguScanNodeProperties.AddGeneralScanNode(objectToAddScanNode: steamValveHazard.gameObject, header: "Bursted Steam Valve", subText: "Fix it to get rid of the steam", minRange: 3);
         }
+
+        public static void AddScannerNodeToEntrance(ref EntranceTeleport entrance)
+        {
+			if (!GetActiveUpgrade(UPGRADE_NAME)) return;
+			LguScanNodeProperties.AddGeneralScanNode(objectToAddScanNode: entrance.gameObject, header: "Entrance Point", subText: "", minRange: -1, maxRange: Mathf.CeilToInt(UpgradeBus.Instance.PluginConfiguration.BetterScannerUpgradeConfiguration.OutsideNodesRangeIncrease.Value), requiresLineOfSight: false);
+		}
 
         public static void RemoveScannerNodeFromValve(ref SteamValveHazard steamValveHazard)
         {

@@ -1,5 +1,5 @@
 <details>
-<summary> 3.12.13 - 2026-??-?? </summary>
+<summary> 3.13.0 - 2026-03-30 </summary>
 
 - Implemented maximum individual upgrades configuration where the player's individual upgrades count are limited to the value in this configuration entry.
     - Additional levels do not count towards this maximum (Level 1 and Level 5 upgrade both count as one individual upgrade).
@@ -9,6 +9,8 @@
     - Its default tier is the second one.
     - Update will not add this listing to your installed configurations, you have to change it yourself.
     - As usual, minimum and maximum scrap value are configurable.
+- Implemented scan node in entrances (both main and fire exits) after purchasing the first level of Better Scanner.
+    - Maximum range is influenced by the outside range increase configuration.
 - Fixed Smarter Lockpicker upgrade description being incorrect.
 - Fixed Better Scanner displaying items through items at the first level instead of last.
 - Fixed Random Contract on Keyword configuration ignoring Enabled configuration, causing players to acquire contracts even if they are disabled.

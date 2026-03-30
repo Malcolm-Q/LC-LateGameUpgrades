@@ -3,6 +3,7 @@ using HarmonyLib;
 using MoreShipUpgrades.Configuration;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.UpgradeComponents.Commands;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 
 namespace MoreShipUpgrades.Patches.Interactables
 {
@@ -17,6 +18,13 @@ namespace MoreShipUpgrades.Patches.Interactables
             if (!config.INTERN_ENABLED || config.INTERNS_TELEPORT_RESTRICTION != Interns.TeleportRestriction.ExitBuilding) return;
             PlayerControllerB player = StartOfRound.Instance.allPlayerScripts[playerObj];
             Interns.instance.RemoveRecentlyInterned(player);
+        }
+
+        [HarmonyPatch(nameof(EntranceTeleport.Awake))]
+        [HarmonyPostfix]
+        static void AwakePostfix(EntranceTeleport __instance)
+        {
+            BetterScanner.AddScannerNodeToEntrance(ref __instance);
         }
     }
 }
