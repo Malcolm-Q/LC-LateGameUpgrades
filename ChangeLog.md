@@ -12,6 +12,7 @@
 - Fixed Smarter Lockpicker upgrade description being incorrect.
 - Fixed Better Scanner displaying items through items at the first level instead of last.
 - Fixed Random Contract on Keyword configuration ignoring Enabled configuration, causing players to acquire contracts even if they are disabled.
+- Fixed Item Progression Unique and Custom Scrap modes breaking when selling to the Company due to invalid item & upgrade pairings.
 - Recompiled against newest release of DawnLib due to changes with CurveTableBuilder.
 
 </details>

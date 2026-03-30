@@ -126,7 +126,7 @@ namespace MoreShipUpgrades.Managers
         {
             foreach (CustomTerminalNode node in terminalNodes)
             {
-                if (node.OriginalName == upgradeName || node.Name == upgradeName) return node;
+                if (node.OriginalName.Equals(upgradeName, StringComparison.OrdinalIgnoreCase) || node.Name.Equals(upgradeName, StringComparison.OrdinalIgnoreCase)) return node;
             }
             return null;
         }
