@@ -13,15 +13,15 @@ namespace MoreShipUpgrades.Compat
 		[MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
 		internal static void GrabAllAvailableLevels(ref SelectableLevel[] levels)
         {
-            levels = levels.Where(x => PatchedContent.TryGetExtendedContent(x, out ExtendedLevel extendedLevel) && !extendedLevel.IsRouteLocked).ToArray();
+            //levels = levels.Where(x => PatchedContent.TryGetExtendedContent(x, out ExtendedLevel extendedLevel) && !extendedLevel.IsRouteLocked).ToArray();
         }
 
 		[MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
 		internal static bool IsLocked(ref SelectableLevel level)
         {
             ExtendedLevel extendedLevel;
-            PatchedContent.TryGetExtendedContent(level, out extendedLevel);
-            if (extendedLevel == null || extendedLevel.IsRouteLocked) return true;
+            //PatchedContent.TryGetExtendedContent(level, out extendedLevel);
+            //if (extendedLevel == null || extendedLevel.IsRouteLocked) return true;
             return false;
         }
     }

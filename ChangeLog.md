@@ -1,4 +1,14 @@
 <details>
+<summary> 3.13.0 - 2026-??-?? </summary>
+
+- Recompiled against v80 release of Lethal Company.
+    - Weed Killer changes related to Weed Genetic Manipulation upgrade (more specifically when using the weed killer to kill stuff)
+    - Changes in the dungeon generation causing soft compatibilities (such as Lethal Level Loader) to fail.
+        - For now, any interaction with LLL related to selecting the moons is disabled.
+
+</details>
+
+<details>
 <summary> 3.12.13 - 2026-??-?? </summary>
 
 - Fixed Smarter Lockpicker upgrade description being incorrect.

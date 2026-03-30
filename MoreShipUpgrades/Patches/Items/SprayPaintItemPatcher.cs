@@ -13,15 +13,16 @@ namespace MoreShipUpgrades.Patches.Items
         [HarmonyPatch(nameof(SprayPaintItem.LateUpdate))]
         static IEnumerable<CodeInstruction> LateUpdateTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            FieldInfo killWeedSpeed = typeof(SprayPaintItem).GetField(nameof(SprayPaintItem.killWeedSpeed), BindingFlags.NonPublic | BindingFlags.Instance);
+            //FieldInfo killWeedSpeed = typeof(SprayPaintItem).GetField(nameof(SprayPaintItem.killWeedSpeed), BindingFlags.NonPublic | BindingFlags.Instance);
             MethodInfo getAdditionalEffectiveness = typeof(WeedGeneticManipulation).GetMethod(nameof(WeedGeneticManipulation.GetWeedKillerEffectiveness));
 
             List<CodeInstruction> codes = new(instructions);
             int index = 0;
 
-            Tools.FindField(ref index, ref codes, findField: killWeedSpeed, addCode: getAdditionalEffectiveness, errorMessage: "Couldn't find the usage of killWeedSpeed attribute");
+            Tools.FindFloat(ref index, ref codes, findValue: 2.2f, addCode: getAdditionalEffectiveness, errorMessage: "Couldn't find the usage of killWeedSpeed attribute");
+			Tools.FindFloat(ref index, ref codes, findValue: 1.7f, addCode: getAdditionalEffectiveness, errorMessage: "Couldn't find the usage of killWeedSpeed attribute");
 
-            return codes;
+			return codes;
         }
     }
 }
