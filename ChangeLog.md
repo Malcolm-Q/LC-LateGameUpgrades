@@ -5,6 +5,8 @@
     - Changed Weed Killer Genetic Manipulation to influence the speed of the weed killer item to kill stuff.
     - Temporarily removed code related to LethalLevelLoader's ExtendedLevels such as contract picking a random moon algorithm.
 
+</details>
+
 <details>
 <summary> 3.12.13 - 2026-03-30 </summary>
 
