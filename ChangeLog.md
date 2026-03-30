@@ -1,5 +1,5 @@
 <details>
-<summary> 3.13.0 - 2026-03-30 </summary>
+<summary> 3.12.13 - 2026-03-30 </summary>
 
 - Implemented maximum individual upgrades configuration where the player's individual upgrades count are limited to the value in this configuration entry.
     - Additional levels do not count towards this maximum (Level 1 and Level 5 upgrade both count as one individual upgrade).
@@ -16,6 +16,10 @@
 - Fixed Random Contract on Keyword configuration ignoring Enabled configuration, causing players to acquire contracts even if they are disabled.
 - Fixed Item Progression Unique and Custom Scrap modes breaking when selling to the Company due to invalid item & upgrade pairings.
 - Recompiled against newest release of DawnLib due to changes with CurveTableBuilder.
+
+P.S Some changes in the v80 release of Lethal Company causes issues to this release. 
+As a result, I will upload at a later time (under the alias of 'WhiteSpike') a version of LGU which is compiled against v80 release. 
+The initial release will only include fixes to immediate crashes/errors when launching through v80 so issues like an upgrade not working correctly will have to be reported through github to be fixed properly.
 
 </details>
 
