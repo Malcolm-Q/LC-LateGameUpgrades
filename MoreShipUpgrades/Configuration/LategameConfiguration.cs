@@ -52,6 +52,8 @@ namespace MoreShipUpgrades.Configuration
         public ITierEffectUpgradeConfiguration<int> JetFuelConfiguration { get; set; }
         public ITierEffectUpgradeConfiguration<int> QuickHandsConfiguration { get; set; }
         public ITierEffectUpgradeConfiguration<int> MidasTouchConfiguration { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> AffectSamples {  get; set; }
+        [field : SyncedEntryField] public SyncedEntry<bool> AffectApparatus { get; set; }
         public ITierEffectUpgradeConfiguration<int> CarbonKneejointsConfiguration { get; set; }
         public ITierEffectUpgradeConfiguration<int> LifeInsuranceConfiguration { get; set; }
         public ITierEffectUpgradeConfiguration<int> RubberBootsConfiguration { get; set; }
@@ -330,8 +332,10 @@ namespace MoreShipUpgrades.Configuration
                 InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.MIDAS_TOUCH_INITIAL_SCRAP_VALUE_INCREASE_KEY, LguConstants.MIDAS_TOUCH_INITIAL_SCRAP_VALUE_INCREASE_DEFAULT, LguConstants.MIDAS_TOUCH_INITIAL_SCRAP_VALUE_INCREASE_DESCRIPTION),
                 IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.MIDAS_TOUCH_INCREMENTAL_SCRAP_VALUE_INCREASE_KEY, LguConstants.MIDAS_TOUCH_INCREMENTAL_SCRAP_VALUE_INCREASE_DEFAULT, LguConstants.MIDAS_TOUCH_INCREMENTAL_SCRAP_VALUE_INCREASE_DESCRIPTION),
             };
+            AffectSamples = cfg.BindSyncedEntry(topSection, "Affect Samples", true, "When enabled, Midas Touch will increase the value of the dropped samples from killing creatures.");
+            AffectApparatus = cfg.BindSyncedEntry(topSection, "Affect Apparatus", true, "When enabled, Midas Touch will increase the value of the apparatus that spawns from special rooms");
 
-            topSection = CarbonKneejoints.UPGRADE_NAME;
+			topSection = CarbonKneejoints.UPGRADE_NAME;
             CarbonKneejointsConfiguration = new TierIndividualPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.CARBON_KNEEJOINTS_ENABLED_DESCRIPTION, CarbonKneejoints.DEFAULT_PRICES)
             {
                 InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.CARBON_KNEEJOINTS_INITIAL_CROUCH_DEBUFF_DECREASE_KEY, LguConstants.CARBON_KNEEJOINTS_INITIAL_CROUCH_DEBUFF_DECREASE_DEFAULT, LguConstants.CARBON_KNEEJOINTS_INITIAL_CROUCH_DEBUFF_DECREASE_DESCRIPTION),

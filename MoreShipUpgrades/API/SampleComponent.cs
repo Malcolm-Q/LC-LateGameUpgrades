@@ -1,4 +1,6 @@
-﻿using MoreShipUpgrades.Misc;
+﻿using MoreShipUpgrades.Managers;
+using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
 using UnityEngine;
 
 namespace MoreShipUpgrades.API
@@ -15,7 +17,14 @@ namespace MoreShipUpgrades.API
                 random = new System.Random(usedMapSeed + 105);
             }
             Item itemProperties = GetComponent<GrabbableObject>().itemProperties;
-            GetComponent<ScrapValueSyncer>().SetScrapValue(random.Next(minValue: itemProperties.minValue, maxValue: itemProperties.maxValue));
+            int value = random.Next(minValue: itemProperties.minValue, maxValue: itemProperties.maxValue);
+            if (UpgradeBus.Instance.PluginConfiguration.AffectSamples)
+			{
+                Plugin.mls.LogDebug($"Midas Touch affecting samples is enabled, increasing the original scrap value ({value})...");
+				value = MidasTouch.IncreaseScrapValueInteger(value);
+                Plugin.mls.LogDebug($"Set the sample scrap value to {value}...");
+            }
+            GetComponent<ScrapValueSyncer>().SetScrapValue(value);
         }
     }
 }
