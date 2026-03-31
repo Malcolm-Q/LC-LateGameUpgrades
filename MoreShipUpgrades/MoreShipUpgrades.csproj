@@ -101,6 +101,10 @@
       <Publicize>true</Publicize>
       <HintPath>$(LC_PLUGIN_PATH)\HQ_Team-MissileTurretsFork\MissileTurret.dll</HintPath>
     </Reference>
+	  <Reference Include="DunGen">
+		  <Publicize>true</Publicize>
+		  <HintPath>$(LC_PATH)\DunGen.dll</HintPath>
+	  </Reference>
     
   </ItemGroup>
   <Target Name="NetcodePatch" AfterTargets="PostBuildEvent">

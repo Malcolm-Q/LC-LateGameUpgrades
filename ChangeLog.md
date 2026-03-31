@@ -1,4 +1,11 @@
 <details>
+<summary> 3.12.13.2 - 2026-??-?? </summary>
+
+- Added code related to LethalLevelLoader's ExtendedLevels as DunGen is no longer included in ``AssemblyCSharp.dll`` but rather its own assembly (``DunGen.dll``).
+
+</details>
+
+<details>
 <summary> 3.12.13.1 - 2026-03-30 </summary>
 
 - Initial release of LGU beta against v80 release of Lethal Company
