@@ -53,8 +53,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 
         public static void AddScannerNodeToEntrance(ref EntranceTeleport entrance)
         {
-			if (!GetActiveUpgrade(UPGRADE_NAME)) return;
-			LguScanNodeProperties.AddGeneralScanNode(objectToAddScanNode: entrance.gameObject, header: "Entrance Point", subText: "", minRange: -1, maxRange: Mathf.CeilToInt(UpgradeBus.Instance.PluginConfiguration.BetterScannerUpgradeConfiguration.OutsideNodesRangeIncrease.Value), requiresLineOfSight: false);
+			if (!GetActiveUpgrade(UPGRADE_NAME) || !entrance.isEntranceToBuilding) return;
+			LguScanNodeProperties.AddGeneralScanNode(objectToAddScanNode: entrance.gameObject, header: "Entrance Point", subText: "", minRange: 0, maxRange: Mathf.CeilToInt(UpgradeBus.Instance.PluginConfiguration.BetterScannerUpgradeConfiguration.OutsideNodesRangeIncrease.Value), requiresLineOfSight: false);
 		}
 
         public static void RemoveScannerNodeFromValve(ref SteamValveHazard steamValveHazard)
