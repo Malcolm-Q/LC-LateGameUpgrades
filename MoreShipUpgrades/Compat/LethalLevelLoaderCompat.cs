@@ -19,8 +19,7 @@ namespace MoreShipUpgrades.Compat
 		[MethodImpl(MethodImplOptions.NoOptimization | MethodImplOptions.NoInlining)]
 		internal static bool IsLocked(ref SelectableLevel level)
         {
-            ExtendedLevel extendedLevel;
-            PatchedContent.TryGetExtendedContent(level, out extendedLevel);
+            PatchedContent.TryGetExtendedContent(level, out ExtendedLevel extendedLevel);
             if (extendedLevel == null || extendedLevel.IsRouteLocked) return true;
             return false;
         }

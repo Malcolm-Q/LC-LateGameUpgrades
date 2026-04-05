@@ -1,4 +1,22 @@
 <details>
+<summary> 3.13.0 - 2026-04-05 </summary>
+
+- Added code related to LethalLevelLoader's ExtendedLevels as DunGen is no longer included in ``AssemblyCSharp.dll`` but rather its own assembly (``DunGen.dll``).
+- Made Midas Touch influence both samples dropped by creatures through Hunter upgrade and the apparatices that spawn in the interior's special rooms (both toggleable through configuration)
+- Fixed Better Scanner spawning "Entrance Point" nodes in the interior of the facility while it was only intended for outside entrance points.
+
+</details>
+
+<details>
+<summary> 3.12.13.1 - 2026-03-30 </summary>
+
+- Initial release of LGU beta against v80 release of Lethal Company
+    - Changed Weed Killer Genetic Manipulation to influence the speed of the weed killer item to kill stuff.
+    - Temporarily removed code related to LethalLevelLoader's ExtendedLevels such as contract picking a random moon algorithm.
+
+</details>
+
+<details>
 <summary> 3.12.13 - 2026-03-30 </summary>
 
 - Implemented maximum individual upgrades configuration where the player's individual upgrades count are limited to the value in this configuration entry.
