@@ -21,8 +21,9 @@ using MoreShipUpgrades.Misc.Util;
 namespace MoreShipUpgrades
 {
     [BepInPlugin(Metadata.GUID, Metadata.NAME, Metadata.VERSION)]
-    [BepInDependency(LethalLib.Plugin.ModGUID, "0.13.0")]
-    [BepInDependency("com.sigurd.csync")]
+    [BepInDependency(LethalLib.Plugin.ModGUID, DependencyFlags.HardDependency)]
+	[BepInDependency(Dawn.DawnLib.PLUGIN_GUID, DependencyFlags.SoftDependency)]
+	[BepInDependency("com.sigurd.csync")]
     [BepInDependency(LethalCompanyInputUtils.MyPluginInfo.PLUGIN_GUID)]
     [BepInDependency("WhiteSpike.InteractiveTerminalAPI")]
     [BepInDependency(CustomItemBehaviourLibrary.Misc.Metadata.GUID, DependencyFlags.SoftDependency)]
@@ -31,7 +32,6 @@ namespace MoreShipUpgrades
     [BepInDependency(LCVR.Plugin.PLUGIN_GUID, DependencyFlags.SoftDependency)]
     [BepInDependency(com.github.zehsteam.ToilHead.MyPluginInfo.PLUGIN_GUID, DependencyFlags.SoftDependency)]
     [BepInDependency(BrutalCompanyMinusExtraCompat.BCMERebornGUID, DependencyFlags.SoftDependency)]
-    [BepInDependency(Dawn.DawnLib.PLUGIN_GUID, DependencyFlags.SoftDependency)]
     public class Plugin : BaseUnityPlugin
     {
         internal static ManualLogSource mls;
