@@ -1,10 +1,10 @@
 <details>
-<summary> 3.12.13.2 - 2026-??-?? </summary>
+<summary> 3.13.0 - 2026-04-05 </summary>
 
 - Added code related to LethalLevelLoader's ExtendedLevels as DunGen is no longer included in ``AssemblyCSharp.dll`` but rather its own assembly (``DunGen.dll``).
 - Made Midas Touch influence both samples dropped by creatures through Hunter upgrade and the apparatices that spawn in the interior's special rooms (both toggleable through configuration)
 - Fixed Better Scanner spawning "Entrance Point" nodes in the interior of the facility while it was only intended for outside entrance points.
-- 
+
 </details>
 
 <details>
