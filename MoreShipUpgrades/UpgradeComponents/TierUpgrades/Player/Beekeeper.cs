@@ -20,7 +20,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
         internal const string WORLD_BUILDING_TEXT = "\n\nOn-the-job training package that instructs {0} how to more safely and efficiently handle Circuit Bee Nests." +
             " Departments with a LVL {1} Certification in Circuit Bee Nest Handling earn an extra commission for every Nest they sell.\n\n";
 
-        protected bool CanIncreaseHivePrice => GetUpgradeLevel(UPGRADE_NAME) == GetConfiguration().BeekeeperConfiguration.Prices.Value.Split(',').Length;
+        protected bool CanIncreaseHivePrice => GetActiveUpgrade(UPGRADE_NAME) && (GetUpgradeLevel(UPGRADE_NAME) + 1 == GetConfiguration().BeekeeperConfiguration.Prices.Value.Split(',').Length);
 
         void Awake()
         {
