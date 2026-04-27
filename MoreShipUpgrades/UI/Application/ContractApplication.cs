@@ -149,14 +149,14 @@ namespace MoreShipUpgrades.UI.Application
                         name: RANDOM_MOON_CURSOR_ELEMENT,
                         description: string.Empty,
                         action: ConfirmRandomMoonContract,
-                        active: (_) => terminal.groupCredits >= UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.RandomPrice,
+                        active: (_) => terminal.groupCredits >= UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.RandomPrice || UpgradeBus.Instance.AllowOverspending,
                         selectInactive: true
                         ),
                 CursorElement.Create(
                         name: SPECIFIED_MOON_CURSOR_ELEMENT,
                         description: string.Empty,
                         action: PickSpecifiedMoonContract,
-                        active: (_) => terminal.groupCredits >= UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.SpecifyPrice,
+                        active: (_) => terminal.groupCredits >= UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.SpecifyPrice || UpgradeBus.Instance.AllowOverspending,
                         selectInactive: true
                         ),
                 CursorElement.Create(
@@ -181,7 +181,7 @@ namespace MoreShipUpgrades.UI.Application
         {
             IScreen previousScreen = currentScreen;
             BaseCursorMenu<CursorElement> previousCursorMenu = currentCursorMenu;
-            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.SpecifyPrice)
+            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.SpecifyPrice && !UpgradeBus.Instance.AllowOverspending)
             {
                 ErrorMessage(MAIN_MENU_TITLE, () => SwitchScreen(previousScreen, previousCursorMenu, true), "Not enough credits to purchase a specified moon contract.");
                 return;
@@ -254,7 +254,7 @@ namespace MoreShipUpgrades.UI.Application
         {
             IScreen previousScreen = currentScreen;
             BaseCursorMenu<CursorElement> previousCursorMenu = currentCursorMenu;
-            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.RandomPrice)
+            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.RandomPrice && !UpgradeBus.Instance.AllowOverspending)
             {
                 ErrorMessage(MAIN_MENU_TITLE, () => SwitchScreen(previousScreen, previousCursorMenu, true), "Not enough credits to purchase a randomized moon contract.");
                 return;

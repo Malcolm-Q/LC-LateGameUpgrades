@@ -16,6 +16,7 @@ using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -25,6 +26,7 @@ namespace MoreShipUpgrades.Managers
 {
     public class UpgradeBus : MonoBehaviour
     {
+        public bool AllowOverspending = false;
         internal static UpgradeBus Instance { get; set; }
         internal LategameConfiguration PluginConfiguration { get; set; }
         static readonly LguLogger logger = new(nameof(UpgradeBus));
@@ -58,6 +60,18 @@ namespace MoreShipUpgrades.Managers
             DontDestroyOnLoad(gameObject);
         }
 
+        public void ToggleOverspending(bool toggle)
+		{
+			this.AllowOverspending = toggle;
+			if (toggle)
+            {
+                Plugin.mls.LogInfo("Overspending on upgrades and other related purchases has been enabled from third-party mod, players can now go negative credits whenever purchasing from this mod.");
+            }
+            else
+            {
+                Plugin.mls.LogInfo("Overspending on upgrades and other related purchases has been disabled from third-party mod, players can't from this point go negative credits whenever purchasing from this mod.");
+            }
+        }
         public Terminal GetTerminal()
         {
             if (terminal == null) terminal = GameObject.Find("TerminalScript").GetComponent<Terminal>();

@@ -8,6 +8,25 @@ namespace MoreShipUpgrades.API
 {
     public static class UpgradeApi
     {
+        public static void TurnOnOverspending()
+        {
+            if (UpgradeBus.Instance.AllowOverspending)
+            {
+                Plugin.mls.LogInfo("Overspending on upgrades is already enabled, ignoring request...");
+                return;
+            }
+            UpgradeBus.Instance.ToggleOverspending(true);
+        }
+
+        public static void TurnOffOverspending()
+		{
+			if (!UpgradeBus.Instance.AllowOverspending)
+			{
+				Plugin.mls.LogInfo("Overspending on upgrades is already disabled, ignoring request...");
+				return;
+			}
+			UpgradeBus.Instance.ToggleOverspending(false);
+		}
         public static void TriggerUpgradeRankup(string upgradeName)
         {
             CustomTerminalNode pickedNode = UpgradeBus.Instance.GetUpgradeNode(upgradeName);

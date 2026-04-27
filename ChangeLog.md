@@ -1,5 +1,11 @@
 <details>
-<summary> 3.13.1 - 2026-04-05 </summary>
+<summary> 3.13.2 - 2026-??-?? </summary>
+
+- Added ``OverSpending`` attribute in the UpgradeAPI related code where it allows credit purchases to go negative
+</details>
+
+<details>
+<summary> 3.13.1 - 2026-04-15 </summary>
 
 - Fixed Fusion Matter not working as expected due to changes to the logic related to dropping items when teleporting from v80 game release.
 - Reworked patch involving scanner nodes and Better Scanner.
