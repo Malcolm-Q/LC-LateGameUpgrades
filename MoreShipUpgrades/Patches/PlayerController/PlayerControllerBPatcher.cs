@@ -444,7 +444,8 @@ namespace MoreShipUpgrades.Patches.PlayerController
             Tools.FindField(ref index, ref codes, findField: playerBodyAnimator, skip: true);
             Tools.FindInteger(ref index, ref codes, findValue: 0, addCode: RemainActivatingItemIfTeleporting, orInstruction: true, requireInstance: true);
             Tools.FindInteger(ref index, ref codes, findValue: 0, addCode: RemainTwoHandedIfTeleporting, orInstruction: true, requireInstance: true);
-            Tools.FindFloat(ref index, ref codes, findValue: 1f, addCode: RemainCarryWeightIfTeleporting, requireInstance: true, instanceBefore: true);
+			Tools.FindInteger(ref index, ref codes, findValue: 0, addCode: RemainTwoHandedIfTeleporting, orInstruction: true, requireInstance: true);
+			Tools.FindFloat(ref index, ref codes, findValue: 1f, addCode: RemainCarryWeightIfTeleporting, requireInstance: true, instanceBefore: true);
             Tools.FindNull(ref index, ref codes, addCode: RemainCurrentlyHeldObjectServerIfTeleporting, requireInstance: true, instanceBefore: true);
             return codes;
         }

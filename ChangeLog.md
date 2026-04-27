@@ -5,6 +5,7 @@
 - Added configuration for enabling force credits command to be used during the run.
     - This is a consensus configuration, if at least one of the clients does not wish to use the command, the command is unavailable to the host.
     - Once all clients (including host) agree to use the force credits command, the host is allowed to use the command.
+- Fixed issue with Fusion Matter causing items to be discarded incorrectly.
 
 </details>
 
