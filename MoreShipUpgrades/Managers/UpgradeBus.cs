@@ -470,6 +470,12 @@ namespace MoreShipUpgrades.Managers
         internal void SetConfiguration(LategameConfiguration config)
         {
             PluginConfiguration = config;
-        }
-    }
+		}
+		public IEnumerator ChangeTerminalText(TerminalNode node)
+		{
+			yield return new WaitForEndOfFrame();
+			Terminal terminal = UpgradeBus.Instance.GetTerminal();
+			terminal.LoadNewNode(node);
+		}
+	}
 }

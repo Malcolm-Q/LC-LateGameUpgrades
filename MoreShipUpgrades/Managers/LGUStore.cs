@@ -614,8 +614,19 @@ namespace MoreShipUpgrades.Managers
         {
             Terminal terminal = UpgradeBus.Instance.GetTerminal();
             terminal.SyncGroupCreditsClientRpc(newAmount, terminal.numberOfItemsInDropship);
-        }
-    }
+		}
+		[ClientRpc]
+		internal void CheckForceCreditsConsensusClientRpc()
+		{
+			CheckForceCreditsConsensusServerRpc(UpgradeBus.Instance.PluginConfiguration.EnableForceCredits.Value);
+		}
+		[ServerRpc(RequireOwnership = false)]
+		internal void CheckForceCreditsConsensusServerRpc(bool consensus, ServerRpcParams serverRpcParams = default)
+		{
+            Plugin.mls.LogInfo($"Received consensus response from {serverRpcParams.Receive.SenderClientId}...");
+            CommandParser.CheckForceCreditsConsensus(consensus, serverRpcParams.Receive.SenderClientId);
+		}
+	}
 
     [Serializable]
     public class SaveInfo
