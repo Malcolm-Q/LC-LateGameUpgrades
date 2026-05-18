@@ -62,23 +62,23 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades
                 (SyncedEntry<float>, SyncedEntry<float>) additionalStaminaPair = config.GetEffectPair(0);
                 return additionalStaminaPair.Item1.Value + (level * additionalStaminaPair.Item2.Value);
             }
-            static float costReductionInfo(int level)
-            {
-                BiggerLungsUpgradeConfiguration config = GetConfiguration().BiggerLungsConfiguration;
-                (SyncedEntry<float>, SyncedEntry<float>) jumpReductionPair = config.GetEffectPair(2);
-                return 1f - (jumpReductionPair.Item1.Value - (level * jumpReductionPair.Item2.Value));
-            }
             static float staminaRegenerationInfo(int level)
             {
                 BiggerLungsUpgradeConfiguration config = GetConfiguration().BiggerLungsConfiguration;
                 (SyncedEntry<float>, SyncedEntry<float>) staminaRegenPair = config.GetEffectPair(1);
                 return staminaRegenPair.Item1.Value + (level * staminaRegenPair.Item2.Value) - 1f;
             }
+            static float costReductionInfo(int level)
+            {
+                BiggerLungsUpgradeConfiguration config = GetConfiguration().BiggerLungsConfiguration;
+                (SyncedEntry<float>, SyncedEntry<float>) jumpReductionPair = config.GetEffectPair(2);
+                return 1f - (jumpReductionPair.Item1.Value - (level * jumpReductionPair.Item2.Value));
+            }
             StringBuilder sb = new();
             sb.AppendFormat(AssetBundleHandler.GetInfoFromJSON(UPGRADE_NAME), level, GetUpgradePrice(price, GetConfiguration().BiggerLungsConfiguration.PurchaseMode), infoFunction(level - 1));
             BiggerLungsUpgradeConfiguration config = GetConfiguration().BiggerLungsConfiguration;
-            if (level >= config.StaminaRegenerationLevel) sb.Append($"Stamina regeneration is increased by {Mathf.FloorToInt(staminaRegenerationInfo(level) * 100f)}%\n");
-            if (level >= config.JumpReductionLevel.Value) sb.Append($"Stamina used when jumping is reduced by {Mathf.FloorToInt(costReductionInfo(level) * 100f)}%\n");
+            if (level >= config.StaminaRegenerationLevel) sb.Append($"Stamina regeneration is increased by {Mathf.RoundToInt(staminaRegenerationInfo(level-config.StaminaRegenerationLevel) * 100f)}%\n");
+            if (level >= config.JumpReductionLevel.Value) sb.Append($"Stamina used when jumping is reduced by {Mathf.RoundToInt(costReductionInfo(level-config.JumpReductionLevel) * 100f)}%\n");
             return sb.ToString();
         }
 
