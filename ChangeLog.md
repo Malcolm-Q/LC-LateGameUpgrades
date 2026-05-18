@@ -9,6 +9,8 @@
 - Fixed issue with Fusion Matter causing items to be discarded incorrectly.
 - Fixed issue with NV Headset Batteries upgrade applying too early when activating night vision from the goggles item.
 - Fixed issue with NV Headset Batteries refund causing night vision being disabled, having to rebuy the goggles to turn it back on.
+- Removed code related to save sharing when globally sharing upgrades.
+    - This code was never updated and/or looked at and caused more issues than it solved and the current save system already shares the contents of the save file between clients and it still functions when upgrades become individual later.
 
 </details>
 

@@ -249,18 +249,7 @@ namespace MoreShipUpgrades.Managers
                 upgrade.Register();
             }
             LguSave = JsonConvert.DeserializeObject<LguSave>(Encoding.ASCII.GetString(json));
-            List<ulong> saves = [.. LguSave.playerSaves.Keys];
-            if(UpgradeBus.Instance.PluginConfiguration.SHARED_UPGRADES.Value && saves.Count > 0)
-            {
-                ulong steamID = LguSave.playerSaves.Keys.ToList<ulong>()[0];
-                logger.LogInfo($"SHARED SAVE FILE: Loading index 0 save under steam ID: {steamID}");
-                SaveInfo = LguSave.playerSaves[steamID];
-                UpdateUpgradeBus(false);
-            }
-            else
-            {
-                UpdateUpgradeBus();
-            }
+            UpdateUpgradeBus();
         }
 
         /// <summary>
