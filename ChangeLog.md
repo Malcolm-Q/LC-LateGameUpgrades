@@ -7,6 +7,8 @@
     - Once all clients (including host) agree to use the force credits command, the host is allowed to use the command.
 - Fixed Beekeeper's last level not applying correctly when increasing the hive's scrap value.
 - Fixed issue with Fusion Matter causing items to be discarded incorrectly.
+- Fixed issue with NV Headset Batteries upgrade applying too early when activating night vision from the goggles item.
+- Fixed issue with NV Headset Batteries refund causing night vision being disabled, having to rebuy the goggles to turn it back on.
 
 </details>
 
