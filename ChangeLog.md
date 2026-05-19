@@ -5,11 +5,13 @@
 - Added configuration for enabling force credits command to be used during the run.
     - This is a consensus configuration, if at least one of the clients does not wish to use the command, the command is unavailable to the host.
     - Once all clients (including host) agree to use the force credits command, the host is allowed to use the command.
+- Added Bullet Resistance upgrade which reduces incoming damage from bullets by a percentage.
+    - The affected damage sources are the turrets and the shotgun (both when used by the nutcracker and the player).
 - Fixed Beekeeper's last level not applying correctly when increasing the hive's scrap value.
 - Fixed issue with Fusion Matter causing items to be discarded incorrectly.
 - Fixed issue with NV Headset Batteries upgrade applying too early when activating night vision from the goggles item.
 - Fixed issue with NV Headset Batteries refund causing night vision being disabled, having to rebuy the goggles to turn it back on.
-- Fixed Bigger Lungs displaying incorrect values related with stamina regeneration and stamina cost decrease when jumping.
+- Fixed Bigger Lungs upgrade displaying incorrect values related with stamina regeneration and stamina cost decrease when jumping.
 - Removed code related to save sharing when globally sharing upgrades.
     - This code was never updated and/or looked at and caused more issues than it solved and the current save system already shares the contents of the save file between clients and it still functions when upgrades become individual later.
 

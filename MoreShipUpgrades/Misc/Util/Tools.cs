@@ -100,8 +100,9 @@ namespace MoreShipUpgrades.Misc.Util
 			}
 			if (!found) logger.LogError(errorMessage);
 			index++;
-		}
-		public static void FindString(ref int index, ref List<CodeInstruction> codes, string findValue, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
+        }
+
+        public static void FindString(ref int index, ref List<CodeInstruction> codes, string findValue, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
         {
             FindCodeInstruction(ref index, ref codes, findValue: findValue, addCode: addCode, skip: skip, requireInstance: requireInstance, notInstruction: notInstruction, andInstruction: andInstruction, orInstruction: orInstruction, errorMessage: errorMessage);
         }
@@ -170,8 +171,8 @@ namespace MoreShipUpgrades.Misc.Util
 						case 1: return code.opcode == OpCodes.Ldloc_1;
 						case 2: return code.opcode == OpCodes.Ldloc_2;
 						case 3: return code.opcode == OpCodes.Ldloc_3;
-						default: return code.opcode == OpCodes.Ldloc && (int)code.operand == index;
-					}
+                        default: return (code.opcode == OpCodes.Ldloc && (int)code.operand == index) || (code.opcode == OpCodes.Ldloc_S && ((LocalBuilder)(code.operand)).LocalIndex == index);
+                    }
 				}
 				else
 				{
@@ -181,7 +182,7 @@ namespace MoreShipUpgrades.Misc.Util
 						case 1: return code.opcode == OpCodes.Stloc_1;
 						case 2: return code.opcode == OpCodes.Stloc_2;
 						case 3: return code.opcode == OpCodes.Stloc_3;
-						default: return code.opcode == OpCodes.Stloc && (int)code.operand == index;
+						default: return (code.opcode == OpCodes.Stloc || code.opcode == OpCodes.Stloc_S) && (int)code.operand == index;
 					}
 				}
 			}
@@ -195,7 +196,7 @@ namespace MoreShipUpgrades.Misc.Util
 						case 1: return code.opcode == OpCodes.Ldarg_1;
 						case 2: return code.opcode == OpCodes.Ldarg_2;
 						case 3: return code.opcode == OpCodes.Ldarg_3;
-						default: return code.opcode == OpCodes.Ldarg && (int)code.operand == index;
+						default: return (code.opcode == OpCodes.Ldarg && (int)code.operand == index) || (code.opcode == OpCodes.Ldarg_S && (byte)code.operand == index);
 					}
 				}
 				else

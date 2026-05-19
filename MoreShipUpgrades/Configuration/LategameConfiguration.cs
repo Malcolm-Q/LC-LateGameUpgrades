@@ -39,6 +39,7 @@ namespace MoreShipUpgrades.Configuration
     [DataContract]
     public class LategameConfiguration : SyncedConfig2<LategameConfiguration>
     {
+        public ITierEffectUpgradeConfiguration<int> ExplosionReistanceConfiguration { get; set; }
         public ITierEffectUpgradeConfiguration<int> SmarterLockpickUpgradeConfiguration { get; set; }
         public ITierEffectUpgradeConfiguration<int> EffectiveBandaidsConfiguration { get; set; }
         public ITierEffectUpgradeConfiguration<int> MedicalNanobotsConfiguration { get; set; }
@@ -249,6 +250,13 @@ namespace MoreShipUpgrades.Configuration
             #endregion
 
             #region Upgrades
+
+            topSection = ExplosionResistance.UPGRADE_NAME;
+            ExplosionReistanceConfiguration = new TierPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.EXPLOSION_RESISTANCE_ENABLED_DESCRIPTION, ExplosionResistance.DEFAULT_PRICES)
+            {
+                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.EXPLOSION_RESISTANCE_INITIAL_DAMAGE_REDUCTION_KEY, LguConstants.EXPLOSION_RESISTANCE_INITIAL_DAMAGE_REDUCTION_DEFAULT, LguConstants.EXPLOSION_RESISTANCE_INITIAL_DAMAGE_REDUCTION_DESCRIPTION),
+                IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.EXPLOSION_RESISTANCE_INCREMENTAL_DAMAGE_REDUCTION_KEY, LguConstants.EXPLOSION_RESISTANCE_INCREMENTAL_DAMAGE_REDUCTION_DEFAULT, LguConstants.EXPLOSION_RESISTANCE_INCREMENTAL_DAMAGE_REDUCTION_DESCRIPTION),
+            };
 
             topSection = SmarterLockpick.UPGRADE_NAME;
             SmarterLockpickUpgradeConfiguration = new TierPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.SMARTER_LOCKPICK_ENABLED_DESCRIPTION, SmarterLockpick.PRICES_DEFAULT)

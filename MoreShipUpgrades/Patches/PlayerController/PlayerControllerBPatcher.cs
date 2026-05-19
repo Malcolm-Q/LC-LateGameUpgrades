@@ -449,5 +449,28 @@ namespace MoreShipUpgrades.Patches.PlayerController
             Tools.FindNull(ref index, ref codes, addCode: RemainCurrentlyHeldObjectServerIfTeleporting, requireInstance: true, instanceBefore: true);
             return codes;
         }
+
+
+        [HarmonyPrefix]
+        [HarmonyPatch(nameof(PlayerControllerB.KillPlayer))]
+        static bool KillPlayerPrefix(PlayerControllerB __instance, Vector3 bodyVelocity, bool spawnBody, CauseOfDeath causeOfDeath, int deathAnimation, Vector3 positionOffset)
+        {
+            return PreventInstantKill(ref __instance, bodyVelocity, spawnBody, causeOfDeath, deathAnimation, positionOffset);
+        }
+
+        static bool PreventInstantKill(ref PlayerControllerB __instance, Vector3 bodyVelocity, bool spawnBody, CauseOfDeath causeOfDeath, int deathAnimation, Vector3 positionOffset)
+        {
+            switch (causeOfDeath)
+            {
+                case CauseOfDeath.Blast:
+                    {
+                        if (!BaseUpgrade.GetActiveUpgrade(ExplosionResistance.UPGRADE_NAME)) return true;
+                        Plugin.mls.LogInfo($"Kill player fired due to explosion with {ExplosionResistance.UPGRADE_NAME} upgrade on, mitigating 100 damage instead of instant kill...");
+                        __instance.DamagePlayer(ExplosionResistance.GetExplosionDamageResistance(100), hasDamageSFX: true, callRPC: true, causeOfDeath: causeOfDeath, deathAnimation: deathAnimation, fallDamage: false, force: bodyVelocity);
+                        return false;
+                    }
+                default: return true;
+            }
+        }
     }
 }
