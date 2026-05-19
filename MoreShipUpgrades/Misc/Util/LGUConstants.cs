@@ -397,6 +397,20 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string ENABLED_FORMAT = "Enable {0} Upgrade";
         internal const string PRICE_FORMAT = "Price of {0} Upgrade";
 
+        #region Bullet Resistance
+
+        internal const string BULLET_RESISTANCE_ENABLED_DESCRIPTION = "Tier upgrade that increases the bullet resistance of the player, reducing the damage taken from bullets.";
+
+        internal const string BULLET_RESISTANCE_INITIAL_DAMAGE_REDUCTION_KEY = "Initial Damage Reduction";
+        internal const int BULLET_RESISTANCE_INITIAL_DAMAGE_REDUCTION_DEFAULT = 25;
+        internal const string BULLET_RESISTANCE_INITIAL_DAMAGE_REDUCTION_DESCRIPTION = "Initial percentage of damage reduction from bullets when first purchasing the upgrade.";
+
+        internal const string BULLET_RESISTANCE_INCREMENTAL_DAMAGE_REDUCTION_KEY = "Incremental Damage Reduction";
+        internal const int BULLET_RESISTANCE_INCREMENTAL_DAMAGE_REDUCTION_DEFAULT = 25;
+        internal const string BULLET_RESISTANCE_INCREMENTAL_DAMAGE_REDUCTION_DESCRIPTION = "Incremental percentage of damage reduction from bullets when purchasing further levels of the upgrade";
+
+        #endregion
+
         #region Explosion Resistance
 
         internal const string EXPLOSION_RESISTANCE_ENABLED_DESCRIPTION = "Tier upgrade that increases the explosion resistance of the player, reducing the damage taken from explosions.";

@@ -39,6 +39,7 @@ namespace MoreShipUpgrades.Configuration
     [DataContract]
     public class LategameConfiguration : SyncedConfig2<LategameConfiguration>
     {
+        public ITierEffectUpgradeConfiguration<int> BulletResistanceConfiguration {  get; set; }
         public ITierEffectUpgradeConfiguration<int> ExplosionReistanceConfiguration { get; set; }
         public ITierEffectUpgradeConfiguration<int> SmarterLockpickUpgradeConfiguration { get; set; }
         public ITierEffectUpgradeConfiguration<int> EffectiveBandaidsConfiguration { get; set; }
@@ -250,6 +251,13 @@ namespace MoreShipUpgrades.Configuration
             #endregion
 
             #region Upgrades
+
+            topSection = BulletResistance.UPGRADE_NAME;
+            BulletResistanceConfiguration = new TierPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.BULLET_RESISTANCE_ENABLED_DESCRIPTION, BulletResistance.DEFAULT_PRICES)
+            {
+                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.BULLET_RESISTANCE_INITIAL_DAMAGE_REDUCTION_KEY, LguConstants.BULLET_RESISTANCE_INITIAL_DAMAGE_REDUCTION_DEFAULT, LguConstants.BULLET_RESISTANCE_INITIAL_DAMAGE_REDUCTION_DESCRIPTION),
+                IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.BULLET_RESISTANCE_INCREMENTAL_DAMAGE_REDUCTION_KEY, LguConstants.BULLET_RESISTANCE_INCREMENTAL_DAMAGE_REDUCTION_DEFAULT, LguConstants.BULLET_RESISTANCE_INCREMENTAL_DAMAGE_REDUCTION_DESCRIPTION),
+            };
 
             topSection = ExplosionResistance.UPGRADE_NAME;
             ExplosionReistanceConfiguration = new TierPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.EXPLOSION_RESISTANCE_ENABLED_DESCRIPTION, ExplosionResistance.DEFAULT_PRICES)

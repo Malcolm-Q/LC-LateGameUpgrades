@@ -7,6 +7,7 @@
     - Once all clients (including host) agree to use the force credits command, the host is allowed to use the command.
 - Added Bullet Resistance upgrade which reduces incoming damage from bullets by a percentage.
     - The affected damage sources are the turrets and the shotgun (both when used by the nutcracker and the player).
+- Added Explosion Resistance upgrade which reduces incoming damage from explosions by a percentage.
 - Fixed Beekeeper's last level not applying correctly when increasing the hive's scrap value.
 - Fixed issue with Fusion Matter causing items to be discarded incorrectly.
 - Fixed issue with NV Headset Batteries upgrade applying too early when activating night vision from the goggles item.

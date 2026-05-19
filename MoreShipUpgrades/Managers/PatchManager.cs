@@ -96,6 +96,7 @@ namespace MoreShipUpgrades.Managers
             harmony.PatchAll(typeof(ShipTeleporterPatcher));
             harmony.PatchAll(typeof(VehicleControllerPatcher));
             harmony.PatchAll(typeof(LandminePatcher));
+            harmony.PatchAll(typeof(TurretPatcher));
             Plugin.mls.LogInfo("Interactables have been patched");
         }
 
