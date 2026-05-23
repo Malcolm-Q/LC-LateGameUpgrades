@@ -16,6 +16,7 @@ namespace MoreShipUpgrades.Configuration.Upgrades.Custom
         [field: SyncedEntryField] public SyncedEntry<float> ExhaustTime { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> LoseOnDeath {  get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> DropOnDeath { get; set; }
+        [field: SyncedEntryField] public SyncedEntry<bool> IndividualNV { get; set; }
         public NightVisionUpgradeConfiguration(ConfigFile cfg, string topSection, string enabledDescription, string defaultPrices) : base(cfg, topSection, enabledDescription, defaultPrices)
         {
             ItemPrice = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_PRICE_KEY, LguConstants.NIGHT_VISION_PRICE_DEFAULT);
@@ -26,6 +27,7 @@ namespace MoreShipUpgrades.Configuration.Upgrades.Custom
             ExhaustTime = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_EXHAUST_KEY, LguConstants.NIGHT_VISION_EXHAUST_DEFAULT, LguConstants.NIGHT_VISION_EXHAUST_DESCRIPTION);
             LoseOnDeath = cfg.BindSyncedEntry(topSection, LguConstants.LOSE_NIGHT_VISION_ON_DEATH_KEY, LguConstants.LOSE_NIGHT_VISION_ON_DEATH_DEFAULT, LguConstants.LOSE_NIGHT_VISION_ON_DEATH_DESCRIPTION);
             DropOnDeath = cfg.BindSyncedEntry(topSection, LguConstants.NIGHT_VISION_DROP_ON_DEATH_KEY, LguConstants.NIGHT_VISION_DROP_ON_DEATH_DEFAULT, LguConstants.NIGHT_VISION_DROP_ON_DEATH_DESCRIPTION);
+            IndividualNV = cfg.BindSyncedEntry(topSection, LguConstants.INDIVIDUAL_NIGHT_VISION_KEY, LguConstants.INDIVIDUAL_NIGHT_VISION_DEFAULT, LguConstants.INDIVIDUAL_NIGHT_VISION_DESCRIPTION);
         }
     }
 }

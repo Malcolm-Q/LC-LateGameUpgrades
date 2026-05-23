@@ -1078,6 +1078,10 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string NIGHT_VISION_DROP_ON_DEATH_KEY = $"Drop {NightVisionGoggles.ITEM_NAME} on Death";
         internal const bool NIGHT_VISION_DROP_ON_DEATH_DEFAULT = true;
         internal const string NIGHT_VISION_DROP_ON_DEATH_DESCRIPTION = $"If true, when you die and lose {NightVision.SIMPLE_UPGRADE_NAME} upon death, you will drop the {NightVisionGoggles.ITEM_NAME} on your body.";
+
+        internal const string INDIVIDUAL_NIGHT_VISION_KEY = $"Individual {NightVision.SIMPLE_UPGRADE_NAME} Upgrade";
+        internal const bool INDIVIDUAL_NIGHT_VISION_DEFAULT = false;
+        internal const string INDIVIDUAL_NIGHT_VISION_DESCRIPTION = $"If true, equipping the goggles will only activate the night vision mechanic on the person equipping them, not the team.";
         #endregion
 
         #region Mechanical Arms
