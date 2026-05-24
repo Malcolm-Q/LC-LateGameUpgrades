@@ -1,5 +1,5 @@
 <details>
-<summary> 3.13.2 - 2026-??-?? </summary>
+<summary> 3.14.0 - 2026-05-24 </summary>
 
 - Added ``OverSpending`` attribute in the UpgradeAPI related code where it allows credit purchases to go negative
 - Added configuration for enabling force credits command to be used during the run.
