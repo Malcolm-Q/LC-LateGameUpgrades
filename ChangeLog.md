@@ -8,6 +8,10 @@
 - Added Bullet Resistance upgrade which reduces incoming damage from bullets by a percentage.
     - The affected damage sources are the turrets and the shotgun (both when used by the nutcracker and the player).
 - Added Explosion Resistance upgrade which reduces incoming damage from explosions by a percentage.
+- Added TZP Buffer upgrade which increases the effectiveness of its positive buffs (movement speed and stamina effieciency) and reduces the effectiveness of its negative debuffs (visual impairment).
+    - Separate configurable values for both positive and negative effects.
+    - At 100% effectiveness of positive buff, you won't lose any stamina while in the effect of TZP.
+    - At 100% effectiveness loss of negative debuff, the gas visual impairment will be completely removed.
 - Implemented configuration for Night Vision where equipping the goggles activates the night vision mechanic for the whole team or only for the player equipping it.
     - Previously, this was done with just the "Individual Upgrade" setting, however this would also make the NV Headset Battery upgrade to be individual aswell, which is undesireable for some situations.
     - Now, "Individual Upgrade" only affects NV Headset Battery upgrade while this new setting ("Individual Night Vision Upgrade") only affects the goggles item.

@@ -33,12 +33,14 @@ using MoreShipUpgrades.Configuration.Upgrades.Custom;
 using MoreShipUpgrades.Configuration.Upgrades.Abstractions.TIerUpgrades;
 using MoreShipUpgrades.Configuration.Upgrades.Abstractions.OneTimeUpgrades;
 using MoreShipUpgrades.Configuration.Contracts;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.TZP;
 
 namespace MoreShipUpgrades.Configuration
 {
     [DataContract]
     public class LategameConfiguration : SyncedConfig2<LategameConfiguration>
     {
+        public TZPBufferUpgradeConfiguration TZPBufferConfiguration { get; set; }
         public ITierEffectUpgradeConfiguration<int> BulletResistanceConfiguration {  get; set; }
         public ITierEffectUpgradeConfiguration<int> ExplosionReistanceConfiguration { get; set; }
         public ITierEffectUpgradeConfiguration<int> SmarterLockpickUpgradeConfiguration { get; set; }
@@ -251,6 +253,21 @@ namespace MoreShipUpgrades.Configuration
             #endregion
 
             #region Upgrades
+
+            topSection = TZPBuffer.UPGRADE_NAME;
+            TZPBufferConfiguration = new TZPBufferUpgradeConfiguration(cfg, topSection, LguConstants.TZP_BUFFER_ENABLED_DESCRIPTION, TZPBuffer.DEFAULT_PRICES)
+            {
+                InitialEffects =
+                {
+                    cfg.BindSyncedEntry(topSection, LguConstants.TZP_BUFFER_INITIAL_BUFF_DURATION_INCREASE_KEY, LguConstants.TZP_BUFFER_INITIAL_BUFF_DURATION_INCREASE_DEFAULT, LguConstants.TZP_BUFFER_INITIAL_BUFF_DURATION_INCREASE_DESCRIPTION),
+                    cfg.BindSyncedEntry(topSection, LguConstants.TZP_BUFFER_INITIAL_DEBUFF_DURATION_REDUCTION_KEY, LguConstants.TZP_BUFFER_INITIAL_DEBUFF_DURATION_REDUCTION_DEFAULT, LguConstants.TZP_BUFFER_INITIAL_DEBUFF_DURATION_REDUCTION_DESCRIPTION),
+                },
+                IncrementalEffects =
+                {
+                    cfg.BindSyncedEntry(topSection, LguConstants.TZP_BUFFER_INCREMENTAL_BUFF_DURATION_INCREASE_KEY, LguConstants.TZP_BUFFER_INCREMENTAL_BUFF_DURATION_INCREASE_DEFAULT, LguConstants.TZP_BUFFER_INCREMENTAL_BUFF_DURATION_INCREASE_DESCRIPTION),
+                    cfg.BindSyncedEntry(topSection, LguConstants.TZP_BUFFER_INCREMENTAL_DEBUFF_DURATION_REDUCTION_KEY, LguConstants.TZP_BUFFER_INCREMENTAL_DEBUFF_DURATION_REDUCTION_DEFAULT, LguConstants.TZP_BUFFER_INCREMENTAL_DEBUFF_DURATION_REDUCTION_DESCRIPTION),
+                },
+            };
 
             topSection = BulletResistance.UPGRADE_NAME;
             BulletResistanceConfiguration = new TierPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.BULLET_RESISTANCE_ENABLED_DESCRIPTION, BulletResistance.DEFAULT_PRICES)

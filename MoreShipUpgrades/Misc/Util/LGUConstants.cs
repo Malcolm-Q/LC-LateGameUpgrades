@@ -397,6 +397,28 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string ENABLED_FORMAT = "Enable {0} Upgrade";
         internal const string PRICE_FORMAT = "Price of {0} Upgrade";
 
+        #region TZP Buffer
+
+        internal const string TZP_BUFFER_ENABLED_DESCRIPTION = "Tier upgrade that increases the TZP Inhaler's buff effect while also decreasing the debuff's effect";
+
+        internal const string TZP_BUFFER_INITIAL_BUFF_DURATION_INCREASE_KEY = "Initial Buff Effect Increase";
+        internal const int TZP_BUFFER_INITIAL_BUFF_DURATION_INCREASE_DEFAULT = 20;
+        internal const string TZP_BUFFER_INITIAL_BUFF_DURATION_INCREASE_DESCRIPTION = "Initial percentage increase of the buff effect of the TZP Inhaler when first purchasing the upgrade.";
+
+        internal const string TZP_BUFFER_INCREMENTAL_BUFF_DURATION_INCREASE_KEY = "Incremental Buff Effect Increase";
+        internal const int TZP_BUFFER_INCREMENTAL_BUFF_DURATION_INCREASE_DEFAULT = 15;
+        internal const string TZP_BUFFER_INCREMENTAL_BUFF_DURATION_INCREASE_DESCRIPTION = "Incremental percentage increase of the buff effect of the TZP Inhaler when purchasing further levels of the upgrade";
+
+        internal const string TZP_BUFFER_INITIAL_DEBUFF_DURATION_REDUCTION_KEY = "Initial Debuff Effect Reduction";
+        internal const int TZP_BUFFER_INITIAL_DEBUFF_DURATION_REDUCTION_DEFAULT = 20;
+        internal const string TZP_BUFFER_INITIAL_DEBUFF_DURATION_REDUCTION_DESCRIPTION = "Initial percentage reduction of the debuff effect of the TZP Inhaler when first purchasing the upgrade.";
+        
+        internal const string TZP_BUFFER_INCREMENTAL_DEBUFF_DURATION_REDUCTION_KEY = "Incremental Debuff Effect Reduction";
+        internal const int TZP_BUFFER_INCREMENTAL_DEBUFF_DURATION_REDUCTION_DEFAULT = 15;
+        internal const string TZP_BUFFER_INCREMENTAL_DEBUFF_DURATION_REDUCTION_DESCRIPTION = "Incremental percentage reduction of the debuff effect of the TZP Inhaler when purchasing further levels of the upgrade";
+
+        #endregion
+
         #region Bullet Resistance
 
         internal const string BULLET_RESISTANCE_ENABLED_DESCRIPTION = "Tier upgrade that increases the bullet resistance of the player, reducing the damage taken from bullets.";

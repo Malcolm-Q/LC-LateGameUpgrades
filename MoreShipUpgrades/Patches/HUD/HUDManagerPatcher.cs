@@ -5,6 +5,7 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Ship;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.TZP;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
 using System.Collections.Generic;
@@ -22,8 +23,8 @@ namespace MoreShipUpgrades.Patches.HUD
         static IEnumerable<CodeInstruction> MeetsScanNodeRequirementsTranspiler(IEnumerable<CodeInstruction> instructions)
         {
             MethodInfo GetAdditionalRange = typeof(BetterScanner).GetMethod(nameof(BetterScanner.GetAdditionalMaximumScanNodeRange));
-			MethodInfo CanSeeScrapThroughWalls = typeof(BetterScanner).GetMethod(nameof(BetterScanner.CanSeeScrapThroughWall));
-			MethodInfo CanSeeEnemiesThroughWalls = typeof(BetterScanner).GetMethod(nameof(BetterScanner.CanSeeEnemiesThroughWall));
+            MethodInfo CanSeeScrapThroughWalls = typeof(BetterScanner).GetMethod(nameof(BetterScanner.CanSeeScrapThroughWall));
+            MethodInfo CanSeeEnemiesThroughWalls = typeof(BetterScanner).GetMethod(nameof(BetterScanner.CanSeeEnemiesThroughWall));
 
             FieldInfo maxRange = typeof(ScanNodeProperties).GetField(nameof(ScanNodeProperties.maxRange));
             FieldInfo requireLineOfSight = typeof(ScanNodeProperties).GetField(nameof(ScanNodeProperties.requiresLineOfSight));
@@ -34,13 +35,13 @@ namespace MoreShipUpgrades.Patches.HUD
             Tools.FindField(ref index, ref codes, findField: maxRange, addCode: GetAdditionalRange, errorMessage: "Couldn't find maximum range of scan node properties");
             codes.Insert(index, new CodeInstruction(OpCodes.Ldarg_1));
             Tools.FindField(ref index, ref codes, findField: requireLineOfSight, addCode: CanSeeScrapThroughWalls, andInstruction: true, notInstruction: true, errorMessage: "Couldn't find line of sight requirement of scan node properties");
-			codes.Insert(index, new CodeInstruction(OpCodes.Ldarg_1));
-			Tools.FindFieldReverse(ref index, ref codes, findField: requireLineOfSight, addCode: CanSeeEnemiesThroughWalls, andInstruction: true, notInstruction: true, errorMessage: "Couldn't find line of sight requirement of scan node properties");
-			codes.Insert(index+2, new CodeInstruction(OpCodes.Ldarg_1));
+            codes.Insert(index, new CodeInstruction(OpCodes.Ldarg_1));
+            Tools.FindFieldReverse(ref index, ref codes, findField: requireLineOfSight, addCode: CanSeeEnemiesThroughWalls, andInstruction: true, notInstruction: true, errorMessage: "Couldn't find line of sight requirement of scan node properties");
+            codes.Insert(index + 2, new CodeInstruction(OpCodes.Ldarg_1));
             return codes;
 
-		}
-		[HarmonyPatch(nameof(HUDManager.UseSignalTranslatorServerRpc))]
+        }
+        [HarmonyPatch(nameof(HUDManager.UseSignalTranslatorServerRpc))]
         [HarmonyTranspiler]
         static IEnumerable<CodeInstruction> UseSignalTranslatorServerRpcTranspiler(IEnumerable<CodeInstruction> instructions)
         {
@@ -98,6 +99,19 @@ namespace MoreShipUpgrades.Patches.HUD
             List<CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindField(ref index, ref codes, findField: allPlayersDead, addCode: CheckIfKeptScrap, andInstruction: true, notInstruction: true);
+            return codes;
+        }
+
+        [HarmonyTranspiler]
+        [HarmonyPatch(nameof(HUDManager.SetScreenFilters))]
+        static IEnumerable<CodeInstruction> SetScreenFiltersTranspiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo TZPBufferDebuffEffectReduction = typeof(TZPBuffer).GetMethod(nameof(TZPBuffer.GetTZPBufferDebuffDurationReduction));
+
+            FieldInfo drunkness = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.drunkness));
+            List<CodeInstruction> codes = new(instructions);
+            int index = 0;
+            Tools.FindField(ref index, ref codes, findField: drunkness, addCode: TZPBufferDebuffEffectReduction, errorMessage: "Couldn't find the drunkness value which is used as intensity for screen filters related to TZP");
             return codes;
         }
     }

@@ -10,6 +10,7 @@ using MoreShipUpgrades.UpgradeComponents.Commands;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.TZP;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
 using System;
@@ -243,12 +244,16 @@ namespace MoreShipUpgrades.Patches.PlayerController
             MethodInfo backMusclesStaminaWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreaseStrain));
             MethodInfo medicalNanobotsHealthRegenMethod = typeof(MedicalNanobots).GetMethod(nameof(MedicalNanobots.GetIncreasedHealthRegeneration));
             MethodInfo effectiveBandaidsHealthAmountMethod = typeof(EffectiveBandaids).GetMethod(nameof(EffectiveBandaids.GetIncreasedHealthRegenerated));
+            MethodInfo TZPBufferBuffEffectIncrease = typeof(TZPBuffer).GetMethod(nameof(TZPBuffer.GetTZPBufferBuffEffectIncrease));
 
             FieldInfo sprintTime = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.sprintTime));
             FieldInfo carryWeight = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.carryWeight));
 
+            MethodInfo Abs = typeof(Mathf).GetMethod(nameof(Mathf.Abs), [typeof(float)]);
+
             List<CodeInstruction> codes = new(instructions);
             int index = 0;
+            Tools.FindMethod(ref index, ref codes, findMethod: Abs, addCode: TZPBufferBuffEffectIncrease, errorMessage: "Couldn't find the value used to decrement the effect of stamina efficiency while on TZP");
             Tools.FindField(ref index, ref codes, findField: sprintTime, addCode: additionalSprintTime, errorMessage: "Couldn't find the first occurence of sprintTime field");
             Tools.FindDiv(ref index, ref codes, addCode: sickBeatsDrainMethod, errorMessage: "Couldn't find first mul instruction to include our drain method from Sick Beats");
             Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: backMusclesStaminaWeight, errorMessage: "Couldn't find the occurence of carryWeight field");
@@ -326,6 +331,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             MethodInfo uphillSlopeMultiplier = typeof(HikingBoots).GetMethod(nameof(HikingBoots.ReduceUphillSlopeDebuff));
             MethodInfo ReduceCrouchMovementSpeedDebuff = typeof(CarbonKneejoints).GetMethod(nameof(CarbonKneejoints.ReduceCrouchMovementSpeedDebuff));
             MethodInfo ReduceFallDamage = typeof(ReinforcedBoots).GetMethod(nameof(ReinforcedBoots.ReduceFallDamage));
+            MethodInfo TZPBufferBuffEffectIncrease = typeof(TZPBuffer).GetMethod(nameof(TZPBuffer.GetTZPBufferBuffDurationIncrease));
 
             FieldInfo carryWeight = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.carryWeight));
             FieldInfo movementSpeed = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.movementSpeed));
@@ -340,6 +346,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             Tools.FindField(ref index, ref codes, findField: movementSpeed, addCode: additionalMovement, errorMessage: "Couldn't find second occurence of movement speed field");
             Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: reduceCarryLoss, errorMessage: "Couldn't find first carryWeight occurence");
             Tools.FindFloat(ref index, ref codes, findValue: 1.5f, addCode: ReduceCrouchMovementSpeedDebuff, errorMessage: "Couldn't find the movement speed loss value while crouching");
+            Tools.FindFloat(ref index, ref codes, findValue: 1f, addCode: TZPBufferBuffEffectIncrease, errorMessage: "Couldn't find the value used to increment the effect of movement speed while on TZP");
             Tools.FindField(ref index, ref codes, findField: slopeIntensity, skip: true, errorMessage: "Couldn't find skip slope Intensity");
             Tools.FindField(ref index, ref codes, findField: slopeModifier, addCode: uphillSlopeMultiplier, errorMessage: "Couldn't find occurence of slopeModifier");
             Tools.FindFloat(ref index, ref codes, findValue: 5f, addCode: additionalTractionForce, errorMessage: "Couldn't find the numerator used when sprinting");
