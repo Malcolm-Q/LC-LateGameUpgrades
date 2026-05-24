@@ -32,20 +32,11 @@ namespace MoreShipUpgrades.Patches.Enemies
             MethodInfo beeIncreaseHiveValue = typeof(Beekeeper).GetMethod(nameof(Beekeeper.GetHiveScrapValue));
 
             List<CodeInstruction> codes = instructions.ToList();
-            bool found = false;
-            for (int i = 0; i < codes.Count; i++)
-            {
-                if (found) break;
-                if (codes[i].opcode != OpCodes.Ldarg_2) continue;
-                if (!(codes[i + 1].opcode == OpCodes.Stfld && codes[i + 1].operand.ToString() == "System.Int32 scrapValue")) continue;
-
-                codes.Insert(i + 1, new CodeInstruction(OpCodes.Ldarg_2));
-                codes.Insert(i + 1, new CodeInstruction(OpCodes.Starg, 2));
-                codes.Insert(i + 1, new CodeInstruction(OpCodes.Call, beeIncreaseHiveValue));
-                found = true;
-            }
-            if (!found) { logger.LogError("Did not find the hive scrap value..."); }
-            return codes.AsEnumerable();
+            int index = 0;
+			Tools.FindArgumentField(ref index, ref codes, argumentIndex: 2, addCode: beeIncreaseHiveValue, errorMessage: "Could not find the argument with hive's scrap value");
+			Tools.FindArgumentField(ref index, ref codes, argumentIndex: 2, addCode: beeIncreaseHiveValue, errorMessage: "Could not find the argument with hive's scrap value");
+			Tools.FindArgumentField(ref index, ref codes, argumentIndex: 2, addCode: beeIncreaseHiveValue, errorMessage: "Could not find the argument with hive's scrap value");
+			return codes.AsEnumerable();
         }
     }
 }

@@ -13,6 +13,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Misc
@@ -20,6 +21,10 @@ namespace MoreShipUpgrades.Misc
     internal static class CommandParser
     {
         static readonly LguLogger logger = new(nameof(CommandParser));
+
+        static readonly List<ulong> responses = [];
+        static bool allConsensus = false;
+        static int forceCreditAmount = 0;
 
         const string LOAD_LGU_COMMAND = "load lgu";
         public static readonly List<string> contracts = [LguConstants.DATA_CONTRACT_NAME, LguConstants.EXTERMINATOR_CONTRACT_NAME, LguConstants.EXTRACTION_CONTRACT_NAME,LguConstants.EXORCISM_CONTRACT_NAME,LguConstants.DEFUSAL_CONTRACT_NAME];
@@ -94,16 +99,54 @@ namespace MoreShipUpgrades.Misc
                 logger.LogError("LGU SAVE NOT FOUND in ExecuteResetLGUSave()!");
                 return DisplayTerminalMessage(LguConstants.LGU_SAVE_NOT_FOUND);
             }
-        }
-        private static TerminalNode ExecuteForceCredits(string creditAmount, ref Terminal terminal)
+		}
+		internal static void CheckForceCreditsConsensus(bool consensus, ulong senderClientId)
+		{
+            if (responses.Contains(senderClientId))
+            {
+                Plugin.mls.LogInfo($"Already received response from {senderClientId}, ignoring...");
+                return;
+            }
+            if (!StartOfRound.Instance.ClientPlayerList.ContainsKey(senderClientId))
+            {
+                Plugin.mls.LogInfo($"Received response from unknown client identifier, ignoring...");
+                return;
+            }
+            if (!allConsensus)
+            {
+                Plugin.mls.LogInfo("Somebody already said no to using forcecredits command, ignoring...");
+                return;
+            }
+            responses.Add(senderClientId);
+			allConsensus &= consensus;
+            if (!allConsensus)
+            {
+                Plugin.mls.LogInfo("Somebody rejected using forcecredits command.");
+                Terminal terminal = UpgradeBus.Instance.GetTerminal();
+				UpgradeBus.Instance.StartCoroutine(UpgradeBus.Instance.ChangeTerminalText(DisplayTerminalMessage("Rejecting command due to not all players agree to use the command.\n\n")));
+			}
+            else if (responses.Count == StartOfRound.Instance.ClientPlayerList.Count)
+            {
+				Plugin.mls.LogInfo("Everyone agreed to use forcecredits command.");
+				Terminal terminal = UpgradeBus.Instance.GetTerminal();
+				terminal.SyncGroupCreditsClientRpc(forceCreditAmount, terminal.numberOfItemsInDropship);
+                forceCreditAmount = 0;
+                UpgradeBus.Instance.StartCoroutine(UpgradeBus.Instance.ChangeTerminalText(DisplayTerminalMessage("Consensus has been achieved, forcing credit amount...\n\n")));
+			}
+		}
+		private static TerminalNode ExecuteForceCredits(string creditAmount, ref Terminal terminal)
         {
             if (int.TryParse(creditAmount, out int value))
             {
                 if (terminal.IsHost || terminal.IsServer)
                 {
-                    terminal.SyncGroupCreditsClientRpc(value, terminal.numberOfItemsInDropship);
-                    return DisplayTerminalMessage(string.Format(LguConstants.FORCE_CREDITS_SUCCESS_FORMAT, value));
-                }
+                    responses.Clear();
+					allConsensus = true;
+                    forceCreditAmount = value;
+                    LguStore.Instance.CheckForceCreditsConsensusClientRpc();
+					//terminal.SyncGroupCreditsClientRpc(value, terminal.numberOfItemsInDropship);
+					return DisplayTerminalMessage("Processing consensus for usage of forcecredits command...\n\n");
+				}
                 else
                 {
                     return DisplayTerminalMessage(LguConstants.FORCE_CREDITS_HOST_ONLY);
@@ -117,7 +160,7 @@ namespace MoreShipUpgrades.Misc
         {
             if (!UpgradeBus.Instance.PluginConfiguration.INTERN_ENABLED) return outputNode;
 
-            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value)
+            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value && !UpgradeBus.Instance.AllowOverspending)
                 return DisplayTerminalMessage(string.Format(LguConstants.INTERNS_NOT_ENOUGH_CREDITS_FORMAT, UpgradeBus.Instance.PluginConfiguration.INTERN_PRICE.Value, terminal.groupCredits));
 
             if (Interns.instance.revivalTimer > 0f)
@@ -411,7 +454,7 @@ namespace MoreShipUpgrades.Misc
                 logger.LogInfo($"User tried starting a new contract while they still have a {ContractManager.Instance.contractType} contract on {ContractManager.Instance.contractLevel}!");
                 return DisplayTerminalMessage(txt);
             }
-            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.RandomPrice.Value)
+            if (terminal.groupCredits < UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.RandomPrice.Value && !UpgradeBus.Instance.AllowOverspending)
             {
                 txt = $"Contracts costs ${UpgradeBus.Instance.PluginConfiguration.ContractsConfiguration.RandomPrice.Value} and you have ${terminal.groupCredits}\n\n";
                 return DisplayTerminalMessage(txt);
@@ -545,5 +588,6 @@ namespace MoreShipUpgrades.Misc
             displayText += "\n\n";
             return DisplayTerminalMessage(displayText);
         }
-    }
+
+	}
 }

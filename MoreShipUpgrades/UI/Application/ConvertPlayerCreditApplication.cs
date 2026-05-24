@@ -103,7 +103,7 @@ namespace MoreShipUpgrades.UI.Application
 			}
 			int requiredCredits = CurrencyManager.Instance.GetRequiredCreditsFromCurrencyConversion(count);
 
-			if (terminal.groupCredits < requiredCredits)
+			if (terminal.groupCredits < requiredCredits && !UpgradeBus.Instance.AllowOverspending)
             {
                 ErrorMessage(title: TITLE, description: "", backAction, error: "Not enough Company Credits to perform conversion.");
                 return;
@@ -117,7 +117,7 @@ namespace MoreShipUpgrades.UI.Application
         private bool HasEnoughCreditsToConvert(int amount = MINIMUM_PC)
         {
             if (CurrencyManager.Instance.BlockExceedOperations(amount)) return false;
-            return terminal.groupCredits >= CurrencyManager.Instance.GetRequiredCreditsFromCurrencyConversion(amount);
+            return terminal.groupCredits >= CurrencyManager.Instance.GetRequiredCreditsFromCurrencyConversion(amount) || UpgradeBus.Instance.AllowOverspending;
         }
 
         private bool HasEnoughPCsToConvert(int amount = 0)

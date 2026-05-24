@@ -53,7 +53,7 @@ namespace MoreShipUpgrades.UI.Cursor
             if (!Node.AlternateCurrency || Node.PurchaseMode != PurchaseMode.AlternateCurrency)
             {
                 int currentCredits = UpgradeBus.Instance.GetTerminal().groupCredits;
-                if (price <= currentCredits)
+                if (price <= currentCredits || UpgradeBus.Instance.AllowOverspending)
                 {
                     sb.Append(price);
                     sb.Append("$");

@@ -1,22 +1,24 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
+using MoreShipUpgrades.Compat;
+using MoreShipUpgrades.Configuration;
+using MoreShipUpgrades.Extensions;
 using MoreShipUpgrades.Managers;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Linq;
-using UnityEngine;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
-using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
-using MoreShipUpgrades.Compat;
 using MoreShipUpgrades.UpgradeComponents.Commands;
+using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Items;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.TZP;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
-using MoreShipUpgrades.Extensions;
-using MoreShipUpgrades.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Reflection.Emit;
+using UnityEngine;
 
 namespace MoreShipUpgrades.Patches.PlayerController
 {
@@ -242,12 +244,16 @@ namespace MoreShipUpgrades.Patches.PlayerController
             MethodInfo backMusclesStaminaWeight = typeof(BackMuscles).GetMethod(nameof(BackMuscles.DecreaseStrain));
             MethodInfo medicalNanobotsHealthRegenMethod = typeof(MedicalNanobots).GetMethod(nameof(MedicalNanobots.GetIncreasedHealthRegeneration));
             MethodInfo effectiveBandaidsHealthAmountMethod = typeof(EffectiveBandaids).GetMethod(nameof(EffectiveBandaids.GetIncreasedHealthRegenerated));
+            MethodInfo TZPBufferBuffEffectIncrease = typeof(TZPBuffer).GetMethod(nameof(TZPBuffer.GetTZPBufferBuffEffectIncrease));
 
             FieldInfo sprintTime = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.sprintTime));
             FieldInfo carryWeight = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.carryWeight));
 
+            MethodInfo Abs = typeof(Mathf).GetMethod(nameof(Mathf.Abs), [typeof(float)]);
+
             List<CodeInstruction> codes = new(instructions);
             int index = 0;
+            Tools.FindMethod(ref index, ref codes, findMethod: Abs, addCode: TZPBufferBuffEffectIncrease, errorMessage: "Couldn't find the value used to decrement the effect of stamina efficiency while on TZP");
             Tools.FindField(ref index, ref codes, findField: sprintTime, addCode: additionalSprintTime, errorMessage: "Couldn't find the first occurence of sprintTime field");
             Tools.FindDiv(ref index, ref codes, addCode: sickBeatsDrainMethod, errorMessage: "Couldn't find first mul instruction to include our drain method from Sick Beats");
             Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: backMusclesStaminaWeight, errorMessage: "Couldn't find the occurence of carryWeight field");
@@ -325,6 +331,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             MethodInfo uphillSlopeMultiplier = typeof(HikingBoots).GetMethod(nameof(HikingBoots.ReduceUphillSlopeDebuff));
             MethodInfo ReduceCrouchMovementSpeedDebuff = typeof(CarbonKneejoints).GetMethod(nameof(CarbonKneejoints.ReduceCrouchMovementSpeedDebuff));
             MethodInfo ReduceFallDamage = typeof(ReinforcedBoots).GetMethod(nameof(ReinforcedBoots.ReduceFallDamage));
+            MethodInfo TZPBufferBuffEffectIncrease = typeof(TZPBuffer).GetMethod(nameof(TZPBuffer.GetTZPBufferBuffDurationIncrease));
 
             FieldInfo carryWeight = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.carryWeight));
             FieldInfo movementSpeed = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.movementSpeed));
@@ -339,6 +346,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             Tools.FindField(ref index, ref codes, findField: movementSpeed, addCode: additionalMovement, errorMessage: "Couldn't find second occurence of movement speed field");
             Tools.FindField(ref index, ref codes, findField: carryWeight, addCode: reduceCarryLoss, errorMessage: "Couldn't find first carryWeight occurence");
             Tools.FindFloat(ref index, ref codes, findValue: 1.5f, addCode: ReduceCrouchMovementSpeedDebuff, errorMessage: "Couldn't find the movement speed loss value while crouching");
+            Tools.FindFloat(ref index, ref codes, findValue: 1f, addCode: TZPBufferBuffEffectIncrease, errorMessage: "Couldn't find the value used to increment the effect of movement speed while on TZP");
             Tools.FindField(ref index, ref codes, findField: slopeIntensity, skip: true, errorMessage: "Couldn't find skip slope Intensity");
             Tools.FindField(ref index, ref codes, findField: slopeModifier, addCode: uphillSlopeMultiplier, errorMessage: "Couldn't find occurence of slopeModifier");
             Tools.FindFloat(ref index, ref codes, findValue: 5f, addCode: additionalTractionForce, errorMessage: "Couldn't find the numerator used when sprinting");
@@ -392,9 +400,11 @@ namespace MoreShipUpgrades.Patches.PlayerController
         [HarmonyPatch(nameof(PlayerControllerB.DropAllHeldItems))]
         [HarmonyTranspiler]
         static IEnumerable<CodeInstruction> DropAllHeldItemsTranspiler(IEnumerable<CodeInstruction> instructions)
-        {
-            MethodInfo CanHoldItem = typeof(FusionMatter).GetMethod(nameof(FusionMatter.CanHoldItem));
-            MethodInfo RemainIsHoldingObjectIfTeleporting = typeof(PlayerControllerBExtensions).GetMethod(nameof(PlayerControllerBExtensions.RemainIsHoldingObjectIfTeleporting));
+		{
+			MethodInfo CanHoldItem = typeof(FusionMatter).GetMethod(nameof(FusionMatter.CanHoldItem));
+
+			MethodInfo RemainItemSlotIfTeleporting = typeof(PlayerControllerBExtensions).GetMethod(nameof(PlayerControllerBExtensions.RemainItemSlotIfTeleporting));
+			MethodInfo RemainIsHoldingObjectIfTeleporting = typeof(PlayerControllerBExtensions).GetMethod(nameof(PlayerControllerBExtensions.RemainIsHoldingObjectIfTeleporting));
             MethodInfo RemainActivatingItemIfTeleporting = typeof(PlayerControllerBExtensions).GetMethod(nameof(PlayerControllerBExtensions.RemainActivatingItemIfTeleporting));
             MethodInfo RemainTwoHandedIfTeleporting = typeof(PlayerControllerBExtensions).GetMethod(nameof(PlayerControllerBExtensions.RemainTwoHandedIfTeleporting));
             MethodInfo RemainCarryWeightIfTeleporting = typeof(PlayerControllerBExtensions).GetMethod(nameof(PlayerControllerBExtensions.RemainCarryWeightIfTeleporting));
@@ -402,23 +412,72 @@ namespace MoreShipUpgrades.Patches.PlayerController
 
             FieldInfo isHoldingObject = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.isHoldingObject));
             FieldInfo playerBodyAnimator = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.playerBodyAnimator));
+            FieldInfo ItemOnlySlot = typeof(PlayerControllerB).GetField(nameof(PlayerControllerB.ItemOnlySlot));
 
-            List<CodeInstruction> codes = new(instructions);
+
+			List <CodeInstruction> codes = new(instructions);
             int index = 0;
             Tools.FindNull(ref index, ref codes, skip: true);
+			Tools.FindNull(ref index, ref codes, skip: true);
             index++;
-            codes.Insert(index, new CodeInstruction(OpCodes.And));
-            codes.Insert(index, new CodeInstruction(OpCodes.Not));
-            codes.Insert(index, new CodeInstruction(OpCodes.Call, CanHoldItem));
-            codes.Insert(index, new CodeInstruction(OpCodes.Ldarg_0));
+			codes.Insert(index, new CodeInstruction(OpCodes.And));
+			codes.Insert(index, new CodeInstruction(OpCodes.Not));
+			codes.Insert(index, new CodeInstruction(OpCodes.Call, CanHoldItem));
+			codes.Insert(index, new CodeInstruction(OpCodes.Ldarg_0));
+			codes.Insert(index, new CodeInstruction(OpCodes.Ldloc_0));
+
+			Tools.FindArgumentField(ref index, ref codes, argumentIndex: 2, skip: true);
+			Tools.FindArgumentField(ref index, ref codes, argumentIndex: 2, skip: true);
+			codes.Insert(index, new CodeInstruction(OpCodes.Or));
+			codes.Insert(index, new CodeInstruction(OpCodes.Call, CanHoldItem));
+			codes.Insert(index, new CodeInstruction(OpCodes.Ldarg_0));
             codes.Insert(index, new CodeInstruction(OpCodes.Ldloc_0));
-            Tools.FindField(ref index, ref codes, findField: isHoldingObject, addCode: RemainIsHoldingObjectIfTeleporting, andInstruction: true, notInstruction: true, requireInstance: true);
+			Tools.FindNull(ref index, ref codes, addCode: RemainItemSlotIfTeleporting, requireInstance: true);
+            codes.RemoveAt(index - 1);
+            index--;
+			codes.Insert(index+1, new CodeInstruction(OpCodes.Ldloc_1));
+            //Tools.FindNull(ref index, ref codes, skip: true);
+
+			Tools.FindNull(ref index, ref codes, skip: true);
+			index++;
+			codes.Insert(index, new CodeInstruction(OpCodes.And));
+			codes.Insert(index, new CodeInstruction(OpCodes.Not));
+			codes.Insert(index, new CodeInstruction(OpCodes.Call, CanHoldItem));
+			codes.Insert(index, new CodeInstruction(OpCodes.Ldarg_0));
+			codes.Insert(index, new CodeInstruction(OpCodes.Ldfld, ItemOnlySlot));
+			codes.Insert(index, new CodeInstruction(OpCodes.Ldarg_0));
+
+			Tools.FindField(ref index, ref codes, findField: isHoldingObject, addCode: RemainIsHoldingObjectIfTeleporting, andInstruction: true, notInstruction: true, requireInstance: true);
             Tools.FindField(ref index, ref codes, findField: playerBodyAnimator, skip: true);
             Tools.FindInteger(ref index, ref codes, findValue: 0, addCode: RemainActivatingItemIfTeleporting, orInstruction: true, requireInstance: true);
             Tools.FindInteger(ref index, ref codes, findValue: 0, addCode: RemainTwoHandedIfTeleporting, orInstruction: true, requireInstance: true);
-            Tools.FindFloat(ref index, ref codes, findValue: 1f, addCode: RemainCarryWeightIfTeleporting, requireInstance: true, instanceBefore: true);
+			Tools.FindInteger(ref index, ref codes, findValue: 0, addCode: RemainTwoHandedIfTeleporting, orInstruction: true, requireInstance: true);
+			Tools.FindFloat(ref index, ref codes, findValue: 1f, addCode: RemainCarryWeightIfTeleporting, requireInstance: true, instanceBefore: true);
             Tools.FindNull(ref index, ref codes, addCode: RemainCurrentlyHeldObjectServerIfTeleporting, requireInstance: true, instanceBefore: true);
             return codes;
+        }
+
+
+        [HarmonyPrefix]
+        [HarmonyPatch(nameof(PlayerControllerB.KillPlayer))]
+        static bool KillPlayerPrefix(PlayerControllerB __instance, Vector3 bodyVelocity, bool spawnBody, CauseOfDeath causeOfDeath, int deathAnimation, Vector3 positionOffset)
+        {
+            return PreventInstantKill(ref __instance, bodyVelocity, spawnBody, causeOfDeath, deathAnimation, positionOffset);
+        }
+
+        static bool PreventInstantKill(ref PlayerControllerB __instance, Vector3 bodyVelocity, bool spawnBody, CauseOfDeath causeOfDeath, int deathAnimation, Vector3 positionOffset)
+        {
+            switch (causeOfDeath)
+            {
+                case CauseOfDeath.Blast:
+                    {
+                        if (!BaseUpgrade.GetActiveUpgrade(ExplosionResistance.UPGRADE_NAME)) return true;
+                        Plugin.mls.LogInfo($"Kill player fired due to explosion with {ExplosionResistance.UPGRADE_NAME} upgrade on, mitigating 100 damage instead of instant kill...");
+                        __instance.DamagePlayer(ExplosionResistance.GetExplosionDamageResistance(100), hasDamageSFX: true, callRPC: true, causeOfDeath: causeOfDeath, deathAnimation: deathAnimation, fallDamage: false, force: bodyVelocity);
+                        return false;
+                    }
+                default: return true;
+            }
         }
     }
 }

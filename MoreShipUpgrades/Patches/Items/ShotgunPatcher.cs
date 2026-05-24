@@ -2,8 +2,10 @@
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Reflection.Emit;
 
 namespace MoreShipUpgrades.Patches.Items
 {
@@ -47,10 +49,11 @@ namespace MoreShipUpgrades.Patches.Items
             MethodInfo GetHollowPointDamageBoost = typeof(HollowPoint).GetMethod(nameof(HollowPoint.GetHollowPointDamageBoost));
             MethodInfo GetLongBarrelRangeBoost = typeof(LongBarrel).GetMethod(nameof(LongBarrel.GetLongBarrelRangeBoost));
             FieldInfo enemyColliders = typeof(ShotgunItem).GetField(nameof(ShotgunItem.enemyColliders), BindingFlags.Instance | BindingFlags.NonPublic);
+            MethodInfo bulletResistance = typeof(BulletResistance).GetMethod(nameof(BulletResistance.GetBulletDamageResistance));
 
             List<CodeInstruction> codes = new(instructions);
             int index = 0;
-
+            Tools.FindLocalField(ref index, ref codes, localIndex: 4,  addCode: bulletResistance, errorMessage: "Couldn't find the damage number used to damage players");
             Tools.FindField(ref index, ref codes, findField: enemyColliders, skip: true);
             Tools.FindFloat(ref index, ref codes, findValue: 15f, addCode: GetLongBarrelRangeBoost);
             Tools.FindFloat(ref index, ref codes, findValue: 3.7f, addCode: GetLongBarrelRangeBoost);

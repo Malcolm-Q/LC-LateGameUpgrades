@@ -397,6 +397,56 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string ENABLED_FORMAT = "Enable {0} Upgrade";
         internal const string PRICE_FORMAT = "Price of {0} Upgrade";
 
+        #region TZP Buffer
+
+        internal const string TZP_BUFFER_ENABLED_DESCRIPTION = "Tier upgrade that increases the TZP Inhaler's buff effect while also decreasing the debuff's effect";
+
+        internal const string TZP_BUFFER_INITIAL_BUFF_DURATION_INCREASE_KEY = "Initial Buff Effect Increase";
+        internal const int TZP_BUFFER_INITIAL_BUFF_DURATION_INCREASE_DEFAULT = 20;
+        internal const string TZP_BUFFER_INITIAL_BUFF_DURATION_INCREASE_DESCRIPTION = "Initial percentage increase of the buff effect of the TZP Inhaler when first purchasing the upgrade.";
+
+        internal const string TZP_BUFFER_INCREMENTAL_BUFF_DURATION_INCREASE_KEY = "Incremental Buff Effect Increase";
+        internal const int TZP_BUFFER_INCREMENTAL_BUFF_DURATION_INCREASE_DEFAULT = 15;
+        internal const string TZP_BUFFER_INCREMENTAL_BUFF_DURATION_INCREASE_DESCRIPTION = "Incremental percentage increase of the buff effect of the TZP Inhaler when purchasing further levels of the upgrade";
+
+        internal const string TZP_BUFFER_INITIAL_DEBUFF_DURATION_REDUCTION_KEY = "Initial Debuff Effect Reduction";
+        internal const int TZP_BUFFER_INITIAL_DEBUFF_DURATION_REDUCTION_DEFAULT = 20;
+        internal const string TZP_BUFFER_INITIAL_DEBUFF_DURATION_REDUCTION_DESCRIPTION = "Initial percentage reduction of the debuff effect of the TZP Inhaler when first purchasing the upgrade.";
+        
+        internal const string TZP_BUFFER_INCREMENTAL_DEBUFF_DURATION_REDUCTION_KEY = "Incremental Debuff Effect Reduction";
+        internal const int TZP_BUFFER_INCREMENTAL_DEBUFF_DURATION_REDUCTION_DEFAULT = 15;
+        internal const string TZP_BUFFER_INCREMENTAL_DEBUFF_DURATION_REDUCTION_DESCRIPTION = "Incremental percentage reduction of the debuff effect of the TZP Inhaler when purchasing further levels of the upgrade";
+
+        #endregion
+
+        #region Bullet Resistance
+
+        internal const string BULLET_RESISTANCE_ENABLED_DESCRIPTION = "Tier upgrade that increases the bullet resistance of the player, reducing the damage taken from bullets.";
+
+        internal const string BULLET_RESISTANCE_INITIAL_DAMAGE_REDUCTION_KEY = "Initial Damage Reduction";
+        internal const int BULLET_RESISTANCE_INITIAL_DAMAGE_REDUCTION_DEFAULT = 25;
+        internal const string BULLET_RESISTANCE_INITIAL_DAMAGE_REDUCTION_DESCRIPTION = "Initial percentage of damage reduction from bullets when first purchasing the upgrade.";
+
+        internal const string BULLET_RESISTANCE_INCREMENTAL_DAMAGE_REDUCTION_KEY = "Incremental Damage Reduction";
+        internal const int BULLET_RESISTANCE_INCREMENTAL_DAMAGE_REDUCTION_DEFAULT = 25;
+        internal const string BULLET_RESISTANCE_INCREMENTAL_DAMAGE_REDUCTION_DESCRIPTION = "Incremental percentage of damage reduction from bullets when purchasing further levels of the upgrade";
+
+        #endregion
+
+        #region Explosion Resistance
+
+        internal const string EXPLOSION_RESISTANCE_ENABLED_DESCRIPTION = "Tier upgrade that increases the explosion resistance of the player, reducing the damage taken from explosions.";
+
+        internal const string EXPLOSION_RESISTANCE_INITIAL_DAMAGE_REDUCTION_KEY = "Initial Damage Reduction";
+        internal const int EXPLOSION_RESISTANCE_INITIAL_DAMAGE_REDUCTION_DEFAULT = 25;
+        internal const string EXPLOSION_RESISTANCE_INITIAL_DAMAGE_REDUCTION_DESCRIPTION = "Initial percentage of damage reduction from explosions when first purchasing the upgrade.";
+
+        internal const string EXPLOSION_RESISTANCE_INCREMENTAL_DAMAGE_REDUCTION_KEY = "Incremental Damage Reduction";
+        internal const int EXPLOSION_RESISTANCE_INCREMENTAL_DAMAGE_REDUCTION_DEFAULT = 25;
+        internal const string EXPLOSION_RESISTANCE_INCREMENTAL_DAMAGE_REDUCTION_DESCRIPTION = "Incremental percentage of damage reduction from explosions when purchasing further levels of the upgrade";
+
+        #endregion
+
         #region Smarter Lockpick
         internal const string SMARTER_LOCKPICK_ENABLED_DESCRIPTION = "Tier upgrade that increases the efficiency of the lockpicker item, making it faster at opening doors.";
 
@@ -1050,6 +1100,10 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string NIGHT_VISION_DROP_ON_DEATH_KEY = $"Drop {NightVisionGoggles.ITEM_NAME} on Death";
         internal const bool NIGHT_VISION_DROP_ON_DEATH_DEFAULT = true;
         internal const string NIGHT_VISION_DROP_ON_DEATH_DESCRIPTION = $"If true, when you die and lose {NightVision.SIMPLE_UPGRADE_NAME} upon death, you will drop the {NightVisionGoggles.ITEM_NAME} on your body.";
+
+        internal const string INDIVIDUAL_NIGHT_VISION_KEY = $"Individual {NightVision.SIMPLE_UPGRADE_NAME} Upgrade";
+        internal const bool INDIVIDUAL_NIGHT_VISION_DEFAULT = false;
+        internal const string INDIVIDUAL_NIGHT_VISION_DESCRIPTION = $"If true, equipping the goggles will only activate the night vision mechanic on the person equipping them, not the team.";
         #endregion
 
         #region Mechanical Arms

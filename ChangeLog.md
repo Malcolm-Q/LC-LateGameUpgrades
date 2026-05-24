@@ -1,4 +1,41 @@
 <details>
+<summary> 3.14.0 - 2026-05-24 </summary>
+
+- Added ``OverSpending`` attribute in the UpgradeAPI related code where it allows credit purchases to go negative
+- Added configuration for enabling force credits command to be used during the run.
+    - This is a consensus configuration, if at least one of the clients does not wish to use the command, the command is unavailable to the host.
+    - Once all clients (including host) agree to use the force credits command, the host is allowed to use the command.
+- Added Bullet Resistance upgrade which reduces incoming damage from bullets by a percentage.
+    - The affected damage sources are the turrets and the shotgun (both when used by the nutcracker and the player).
+- Added Explosion Resistance upgrade which reduces incoming damage from explosions by a percentage.
+- Added TZP Buffer upgrade which increases the effectiveness of its positive buffs (movement speed and stamina effieciency) and reduces the effectiveness of its negative debuffs (visual impairment).
+    - Separate configurable values for both positive and negative effects.
+    - At 100% effectiveness of positive buff, you won't lose any stamina while in the effect of TZP.
+    - At 100% effectiveness loss of negative debuff, the gas visual impairment will be completely removed.
+- Implemented configuration for Night Vision where equipping the goggles activates the night vision mechanic for the whole team or only for the player equipping it.
+    - Previously, this was done with just the "Individual Upgrade" setting, however this would also make the NV Headset Battery upgrade to be individual aswell, which is undesireable for some situations.
+    - Now, "Individual Upgrade" only affects NV Headset Battery upgrade while this new setting ("Individual Night Vision Upgrade") only affects the goggles item.
+- Fixed Beekeeper's last level not applying correctly when increasing the hive's scrap value.
+- Fixed issue with Fusion Matter causing items to be discarded incorrectly.
+- Fixed issue with NV Headset Batteries upgrade applying too early when activating night vision from the goggles item.
+- Fixed issue with NV Headset Batteries refund causing night vision being disabled, having to rebuy the goggles to turn it back on.
+- Fixed Bigger Lungs upgrade displaying incorrect values related with stamina regeneration and stamina cost decrease when jumping.
+- Removed code related to save sharing when globally sharing upgrades.
+    - This code was never updated and/or looked at and caused more issues than it solved and the current save system already shares the contents of the save file between clients and it still functions when upgrades become individual later.
+
+</details>
+
+<details>
+<summary> 3.13.1 - 2026-04-15 </summary>
+
+- Fixed Fusion Matter not working as expected due to changes to the logic related to dropping items when teleporting from v80 game release.
+- Reworked patch involving scanner nodes and Better Scanner.
+    - Essentialy turned the postfix patch (which would always override whatever vanilla was doing and anything before) into a transpiler patch (modifying the vanilla code to include additional checks from using Better Scanner)
+- Fixed Market Influence not always working as expected due to a second randomization which picks a value between zero and the value influenced by Market Influence, allowing sale percentages lower than the intended minimum.
+- Fixed Item Progression modes not working as expected due to code alterations in the selling desk from The Company (mainly, the additional check for an item that isn't considered scrap but has some scrap value)
+</details>
+
+<details>
 <summary> 3.13.0 - 2026-04-05 </summary>
 
 - Added code related to LethalLevelLoader's ExtendedLevels as DunGen is no longer included in ``AssemblyCSharp.dll`` but rather its own assembly (``DunGen.dll``).

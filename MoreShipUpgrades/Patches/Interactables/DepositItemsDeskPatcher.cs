@@ -27,7 +27,13 @@ namespace MoreShipUpgrades.Patches.Interactables
             codes.Insert(index, new CodeInstruction(OpCodes.Ldloc_2));
             codes.Insert(index, new CodeInstruction(OpCodes.Ldfld, itemsOnCounter));
             codes.Insert(index, new CodeInstruction(OpCodes.Ldarg_0));
-            return codes;
+			Tools.FindField(ref index, ref codes, findField: scrapValue, skip: true);
+			codes.Insert(index, new CodeInstruction(OpCodes.Call, checkCollectionScrap));
+			codes.Insert(index, new CodeInstruction(OpCodes.Callvirt, codes[index - 2].operand));
+			codes.Insert(index, new CodeInstruction(OpCodes.Ldloc_2));
+			codes.Insert(index, new CodeInstruction(OpCodes.Ldfld, itemsOnCounter));
+			codes.Insert(index, new CodeInstruction(OpCodes.Ldarg_0));
+			return codes;
         }
     }
 }

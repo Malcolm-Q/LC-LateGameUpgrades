@@ -249,18 +249,7 @@ namespace MoreShipUpgrades.Managers
                 upgrade.Register();
             }
             LguSave = JsonConvert.DeserializeObject<LguSave>(Encoding.ASCII.GetString(json));
-            List<ulong> saves = [.. LguSave.playerSaves.Keys];
-            if(UpgradeBus.Instance.PluginConfiguration.SHARED_UPGRADES.Value && saves.Count > 0)
-            {
-                ulong steamID = LguSave.playerSaves.Keys.ToList<ulong>()[0];
-                logger.LogInfo($"SHARED SAVE FILE: Loading index 0 save under steam ID: {steamID}");
-                SaveInfo = LguSave.playerSaves[steamID];
-                UpdateUpgradeBus(false);
-            }
-            else
-            {
-                UpdateUpgradeBus();
-            }
+            UpdateUpgradeBus();
         }
 
         /// <summary>
@@ -614,8 +603,19 @@ namespace MoreShipUpgrades.Managers
         {
             Terminal terminal = UpgradeBus.Instance.GetTerminal();
             terminal.SyncGroupCreditsClientRpc(newAmount, terminal.numberOfItemsInDropship);
-        }
-    }
+		}
+		[ClientRpc]
+		internal void CheckForceCreditsConsensusClientRpc()
+		{
+			CheckForceCreditsConsensusServerRpc(UpgradeBus.Instance.PluginConfiguration.EnableForceCredits.Value);
+		}
+		[ServerRpc(RequireOwnership = false)]
+		internal void CheckForceCreditsConsensusServerRpc(bool consensus, ServerRpcParams serverRpcParams = default)
+		{
+            Plugin.mls.LogInfo($"Received consensus response from {serverRpcParams.Receive.SenderClientId}...");
+            CommandParser.CheckForceCreditsConsensus(consensus, serverRpcParams.Receive.SenderClientId);
+		}
+	}
 
     [Serializable]
     public class SaveInfo

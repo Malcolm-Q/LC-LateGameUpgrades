@@ -64,11 +64,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             if (client == null) { return; }
 
             NightVisionUpgradeConfiguration config = GetConfiguration().NightVisionUpgradeConfiguration;
-            float maxBattery = config.InitialEffects[0].Value + ((GetUpgradeLevel(UPGRADE_NAME) + 1) * config.IncrementalEffects[0].Value);
+            float maxBattery = config.InitialEffects[0].Value + (GetActiveUpgrade(UPGRADE_NAME) ? ((GetUpgradeLevel(UPGRADE_NAME)+1) * config.IncrementalEffects[0].Value) : 0);
 
             if (nightVisionActive)
             {
-                nightBattery -= Time.deltaTime * (config.InitialEffects[2].Value - ((GetUpgradeLevel(UPGRADE_NAME) + 1) * config.IncrementalEffects[2].Value));
+                nightBattery -= Time.deltaTime * (config.InitialEffects[2].Value - (GetActiveUpgrade(UPGRADE_NAME) ? ((GetUpgradeLevel(UPGRADE_NAME)+1) * config.IncrementalEffects[2].Value) : 0));
                 nightBattery = Mathf.Clamp(nightBattery, 0f, maxBattery);
                 transform.GetChild(0).gameObject.SetActive(true);
 
@@ -79,7 +79,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             }
             else if (!batteryExhaustion)
             {
-                nightBattery += Time.deltaTime * (config.InitialEffects[1].Value + ((GetUpgradeLevel(UPGRADE_NAME) + 1) * config.IncrementalEffects[1].Value));
+                nightBattery += Time.deltaTime * (config.InitialEffects[1].Value + (GetActiveUpgrade(UPGRADE_NAME) ? ((GetUpgradeLevel(UPGRADE_NAME)+1) * config.IncrementalEffects[1].Value) : 0));
                 nightBattery = Mathf.Clamp(nightBattery, 0f, maxBattery);
 
                 if (nightBattery >= maxBattery)
@@ -156,8 +156,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         public override void Unwind()
         {
             base.Unwind();
-            if (!GetActiveUpgrade(SIMPLE_UPGRADE_NAME)) return;
-            DisableOnClient();
+            //if (!GetActiveUpgrade(SIMPLE_UPGRADE_NAME)) return;
+            //DisableOnClient();
         }
 
         [ServerRpc(RequireOwnership = false)]

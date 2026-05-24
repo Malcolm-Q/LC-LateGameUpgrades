@@ -3,6 +3,7 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Ship;
 using UnityEngine;
 
 namespace MoreShipUpgrades.Extensions
@@ -66,7 +67,7 @@ namespace MoreShipUpgrades.Extensions
         }
         public static bool RemainIsHoldingObjectIfTeleporting(this PlayerControllerB player)
         {
-            return player.IsTeleporting() && player.CheckIfCurrentlyHeldObjectIsInInventory();
+            return player.currentlyHeldObjectServer != null && FusionMatter.CanHoldItem(player.currentlyHeldObjectServer, player) && player.CheckIfCurrentlyHeldObjectIsInInventory();
         }
 
         public static bool RemainActivatingItemIfTeleporting(this PlayerControllerB player)
@@ -89,6 +90,12 @@ namespace MoreShipUpgrades.Extensions
         {
             if (player.IsTeleporting()) return Mathf.Clamp(defaultValue + player.GetCurrentWeightFromInventory(),1f,10f);
             return defaultValue;
+        }
+
+        public static GrabbableObject RemainItemSlotIfTeleporting(this PlayerControllerB player, int itemSlotIndex)
+        {
+            if (FusionMatter.CanHoldItem(player.ItemSlots[itemSlotIndex], player)) return player.ItemSlots[itemSlotIndex];
+            return null;
         }
     }
 }

@@ -33,12 +33,16 @@ using MoreShipUpgrades.Configuration.Upgrades.Custom;
 using MoreShipUpgrades.Configuration.Upgrades.Abstractions.TIerUpgrades;
 using MoreShipUpgrades.Configuration.Upgrades.Abstractions.OneTimeUpgrades;
 using MoreShipUpgrades.Configuration.Contracts;
+using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.TZP;
 
 namespace MoreShipUpgrades.Configuration
 {
     [DataContract]
     public class LategameConfiguration : SyncedConfig2<LategameConfiguration>
     {
+        public TZPBufferUpgradeConfiguration TZPBufferConfiguration { get; set; }
+        public ITierEffectUpgradeConfiguration<int> BulletResistanceConfiguration {  get; set; }
+        public ITierEffectUpgradeConfiguration<int> ExplosionReistanceConfiguration { get; set; }
         public ITierEffectUpgradeConfiguration<int> SmarterLockpickUpgradeConfiguration { get; set; }
         public ITierEffectUpgradeConfiguration<int> EffectiveBandaidsConfiguration { get; set; }
         public ITierEffectUpgradeConfiguration<int> MedicalNanobotsConfiguration { get; set; }
@@ -154,6 +158,7 @@ namespace MoreShipUpgrades.Configuration
         [field: SyncedEntryField] public SyncedEntry<bool> BuyableUpgradeOnce { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> ShowLockedUpgrades { get; set; }
         [field: SyncedEntryField] public SyncedEntry<bool> UseDawnLib {  get; set; }
+        public ConfigEntry<bool> EnableForceCredits { get; set; }
 
         #endregion
 
@@ -226,6 +231,7 @@ namespace MoreShipUpgrades.Configuration
             OVERRIDE_UPGRADE_NAMES = cfg.BindSyncedEntry(topSection, LguConstants.OVERRIDE_NAMES_ENABLED_KEY, LguConstants.OVERRIDE_NAMES_ENABLED_DEFAULT, LguConstants.OVERRIDE_NAMES_ENABLED_DESCRIPTION);
             UseDawnLib = cfg.BindSyncedEntry(topSection, "Use DawnLib for Initialization", false, "Replaces initialization phase that utilizes LethalLib with DawnLib callbacks instead. Use this if you are experiencing issues with LethalLib and believe DawnLib won't have the same issues.");
             MaximumIndividualUpgrades = cfg.BindSyncedEntry(topSection, "Maximum purchaseable individual upgrades", 0, "If greater than zero, limits each player's amount of purchased individual upgrades to the configurated value.");
+            EnableForceCredits = cfg.Bind(topSection, "Enable force credits command", false, "If enabled, you can use the forcecredits command to change the current amount of credits. Should only be used incase an error has happened during gameplay");
 			#endregion
 
 			topSection = LguConstants.CONTRACTS_SECTION;
@@ -247,6 +253,35 @@ namespace MoreShipUpgrades.Configuration
             #endregion
 
             #region Upgrades
+
+            topSection = TZPBuffer.UPGRADE_NAME;
+            TZPBufferConfiguration = new TZPBufferUpgradeConfiguration(cfg, topSection, LguConstants.TZP_BUFFER_ENABLED_DESCRIPTION, TZPBuffer.DEFAULT_PRICES)
+            {
+                InitialEffects =
+                {
+                    cfg.BindSyncedEntry(topSection, LguConstants.TZP_BUFFER_INITIAL_BUFF_DURATION_INCREASE_KEY, LguConstants.TZP_BUFFER_INITIAL_BUFF_DURATION_INCREASE_DEFAULT, LguConstants.TZP_BUFFER_INITIAL_BUFF_DURATION_INCREASE_DESCRIPTION),
+                    cfg.BindSyncedEntry(topSection, LguConstants.TZP_BUFFER_INITIAL_DEBUFF_DURATION_REDUCTION_KEY, LguConstants.TZP_BUFFER_INITIAL_DEBUFF_DURATION_REDUCTION_DEFAULT, LguConstants.TZP_BUFFER_INITIAL_DEBUFF_DURATION_REDUCTION_DESCRIPTION),
+                },
+                IncrementalEffects =
+                {
+                    cfg.BindSyncedEntry(topSection, LguConstants.TZP_BUFFER_INCREMENTAL_BUFF_DURATION_INCREASE_KEY, LguConstants.TZP_BUFFER_INCREMENTAL_BUFF_DURATION_INCREASE_DEFAULT, LguConstants.TZP_BUFFER_INCREMENTAL_BUFF_DURATION_INCREASE_DESCRIPTION),
+                    cfg.BindSyncedEntry(topSection, LguConstants.TZP_BUFFER_INCREMENTAL_DEBUFF_DURATION_REDUCTION_KEY, LguConstants.TZP_BUFFER_INCREMENTAL_DEBUFF_DURATION_REDUCTION_DEFAULT, LguConstants.TZP_BUFFER_INCREMENTAL_DEBUFF_DURATION_REDUCTION_DESCRIPTION),
+                },
+            };
+
+            topSection = BulletResistance.UPGRADE_NAME;
+            BulletResistanceConfiguration = new TierPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.BULLET_RESISTANCE_ENABLED_DESCRIPTION, BulletResistance.DEFAULT_PRICES)
+            {
+                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.BULLET_RESISTANCE_INITIAL_DAMAGE_REDUCTION_KEY, LguConstants.BULLET_RESISTANCE_INITIAL_DAMAGE_REDUCTION_DEFAULT, LguConstants.BULLET_RESISTANCE_INITIAL_DAMAGE_REDUCTION_DESCRIPTION),
+                IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.BULLET_RESISTANCE_INCREMENTAL_DAMAGE_REDUCTION_KEY, LguConstants.BULLET_RESISTANCE_INCREMENTAL_DAMAGE_REDUCTION_DEFAULT, LguConstants.BULLET_RESISTANCE_INCREMENTAL_DAMAGE_REDUCTION_DESCRIPTION),
+            };
+
+            topSection = ExplosionResistance.UPGRADE_NAME;
+            ExplosionReistanceConfiguration = new TierPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.EXPLOSION_RESISTANCE_ENABLED_DESCRIPTION, ExplosionResistance.DEFAULT_PRICES)
+            {
+                InitialEffect = cfg.BindSyncedEntry(topSection, LguConstants.EXPLOSION_RESISTANCE_INITIAL_DAMAGE_REDUCTION_KEY, LguConstants.EXPLOSION_RESISTANCE_INITIAL_DAMAGE_REDUCTION_DEFAULT, LguConstants.EXPLOSION_RESISTANCE_INITIAL_DAMAGE_REDUCTION_DESCRIPTION),
+                IncrementalEffect = cfg.BindSyncedEntry(topSection, LguConstants.EXPLOSION_RESISTANCE_INCREMENTAL_DAMAGE_REDUCTION_KEY, LguConstants.EXPLOSION_RESISTANCE_INCREMENTAL_DAMAGE_REDUCTION_DEFAULT, LguConstants.EXPLOSION_RESISTANCE_INCREMENTAL_DAMAGE_REDUCTION_DESCRIPTION),
+            };
 
             topSection = SmarterLockpick.UPGRADE_NAME;
             SmarterLockpickUpgradeConfiguration = new TierPrimitiveUpgradeConfiguration<int>(cfg, topSection, LguConstants.SMARTER_LOCKPICK_ENABLED_DESCRIPTION, SmarterLockpick.PRICES_DEFAULT)

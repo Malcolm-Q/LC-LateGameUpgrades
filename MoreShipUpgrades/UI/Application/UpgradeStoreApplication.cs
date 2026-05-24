@@ -223,7 +223,7 @@ namespace MoreShipUpgrades.UI.Application
 
             int groupCredits = UpgradeBus.Instance.GetTerminal().groupCredits;
             int price = node.GetCurrentPrice();
-            bool canBeBoughtWithGroupCredits = groupCredits >= price;
+            bool canBeBoughtWithGroupCredits = groupCredits >= price || UpgradeBus.Instance.AllowOverspending;
 
             if (!node.AlternateCurrency) return canBeBoughtWithGroupCredits;
 
@@ -248,7 +248,7 @@ namespace MoreShipUpgrades.UI.Application
 
             int groupCredits = UpgradeBus.Instance.GetTerminal().groupCredits;
             int price = node.GetCurrentPrice();
-            bool canBeBoughtWithGroupCredits = groupCredits >= price;
+            bool canBeBoughtWithGroupCredits = groupCredits >= price || UpgradeBus.Instance.AllowOverspending;
             return canBeBoughtWithGroupCredits;
         }
 
@@ -294,7 +294,7 @@ namespace MoreShipUpgrades.UI.Application
             {
                 case PurchaseMode.CompanyCredits:
                     {
-                        if (groupCredits < price && !node.Refundable)
+                        if (groupCredits < price && !node.Refundable && !UpgradeBus.Instance.AllowOverspending)
                         {
                             ErrorMessage(node.Name, finalText, backAction, LguConstants.NOT_ENOUGH_CREDITS);
                             return;
@@ -320,7 +320,7 @@ namespace MoreShipUpgrades.UI.Application
                     }
                 case PurchaseMode.Both:
                     {
-                        if (groupCredits >= price) break;
+                        if (groupCredits >= price || UpgradeBus.Instance.AllowOverspending) break;
 
                         if (!node.AlternateCurrency && !node.Refundable)
                         {
@@ -458,7 +458,7 @@ namespace MoreShipUpgrades.UI.Application
 		void ConfirmPurchaseUpgrade(CustomTerminalNode node, int price, Action backAction)
         {
             int groupCredits = UpgradeBus.Instance.GetTerminal().groupCredits;
-            if (groupCredits < price)
+            if (groupCredits < price && !UpgradeBus.Instance.AllowOverspending)
             {
                 ErrorMessage(node.Name, backAction, LguConstants.NOT_ENOUGH_CREDITS);
                 return;

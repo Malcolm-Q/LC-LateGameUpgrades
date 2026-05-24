@@ -85,7 +85,23 @@ namespace MoreShipUpgrades.Misc.Util
             }
             if (!found) logger.LogError(errorMessage);
             index++;
+		}
+		public static void FindArgumentField(ref int index, ref List<CodeInstruction> codes, int argumentIndex, object addCode = null, bool skip = false, bool store = false, bool requireInstance = false, string errorMessage = "Not found")
+		{
+			bool found = false;
+			for (; index < codes.Count; index++)
+			{
+				if (!CheckCodeInstruction(codes[index], argumentIndex, store, argument: true)) continue;
+				found = true;
+				if (skip) break;
+				codes.Insert(index + 1, new CodeInstruction(OpCodes.Call, addCode));
+				if (requireInstance) codes.Insert(index + 1, new CodeInstruction(OpCodes.Ldarg_0));
+				break;
+			}
+			if (!found) logger.LogError(errorMessage);
+			index++;
         }
+
         public static void FindString(ref int index, ref List<CodeInstruction> codes, string findValue, MethodInfo addCode = null, bool skip = false, bool notInstruction = false, bool andInstruction = false, bool orInstruction = false, bool requireInstance = false, string errorMessage = "Not found")
         {
             FindCodeInstruction(ref index, ref codes, findValue: findValue, addCode: addCode, skip: skip, requireInstance: requireInstance, notInstruction: notInstruction, andInstruction: andInstruction, orInstruction: orInstruction, errorMessage: errorMessage);
@@ -143,30 +159,54 @@ namespace MoreShipUpgrades.Misc.Util
         {
             FindCodeInstruction(ref index, ref codes, findValue: null, addCode: addCode, skip: skip, notInstruction: notInstruction, andInstruction: andInstruction, orInstruction: orInstruction, requireInstance: requireInstance, instanceBefore: instanceBefore, errorMessage: errorMessage);
         }
-        private static bool CheckCodeInstruction(CodeInstruction code, int localIndex, bool store = false)
+        private static bool CheckCodeInstruction(CodeInstruction code, int index, bool store = false, bool argument = false)
         {
-            if (!store)
+            if (!argument)
             {
-                switch (localIndex)
-                {
-                    case 0: return code.opcode == OpCodes.Ldloc_0;
-                    case 1: return code.opcode == OpCodes.Ldloc_1;
-                    case 2: return code.opcode == OpCodes.Ldloc_2;
-                    case 3: return code.opcode == OpCodes.Ldloc_3;
-                    default: return code.opcode == OpCodes.Ldloc && (int)code.operand == localIndex;
-                }
-            }
+				if (!store)
+				{
+					switch (index)
+					{
+						case 0: return code.opcode == OpCodes.Ldloc_0;
+						case 1: return code.opcode == OpCodes.Ldloc_1;
+						case 2: return code.opcode == OpCodes.Ldloc_2;
+						case 3: return code.opcode == OpCodes.Ldloc_3;
+                        default: return (code.opcode == OpCodes.Ldloc && (int)code.operand == index) || (code.opcode == OpCodes.Ldloc_S && ((LocalBuilder)(code.operand)).LocalIndex == index);
+                    }
+				}
+				else
+				{
+					switch (index)
+					{
+						case 0: return code.opcode == OpCodes.Stloc_0;
+						case 1: return code.opcode == OpCodes.Stloc_1;
+						case 2: return code.opcode == OpCodes.Stloc_2;
+						case 3: return code.opcode == OpCodes.Stloc_3;
+						default: return (code.opcode == OpCodes.Stloc || code.opcode == OpCodes.Stloc_S) && (int)code.operand == index;
+					}
+				}
+			}
             else
             {
-                switch (localIndex)
-                {
-                    case 0: return code.opcode == OpCodes.Stloc_0;
-                    case 1: return code.opcode == OpCodes.Stloc_1;
-                    case 2: return code.opcode == OpCodes.Stloc_2;
-                    case 3: return code.opcode == OpCodes.Stloc_3;
-                    default: return code.opcode == OpCodes.Stloc && (int)code.operand == localIndex;
-                }
-            }
+				if (!store)
+				{
+					switch (index)
+					{
+						case 0: return code.opcode == OpCodes.Ldarg_0;
+						case 1: return code.opcode == OpCodes.Ldarg_1;
+						case 2: return code.opcode == OpCodes.Ldarg_2;
+						case 3: return code.opcode == OpCodes.Ldarg_3;
+						default: return (code.opcode == OpCodes.Ldarg && (int)code.operand == index) || (code.opcode == OpCodes.Ldarg_S && (byte)code.operand == index);
+					}
+				}
+				else
+				{
+					switch (index)
+					{
+						default: return code.opcode == OpCodes.Starg && (int)code.operand == index;
+					}
+				}
+			}
         }
         private static bool CheckCodeInstruction(CodeInstruction code, object findValue)
         {

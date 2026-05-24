@@ -61,6 +61,43 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             LguScanNodeProperties.RemoveScanNode(steamValveHazard.gameObject);
         }
+
+        public static int GetAdditionalMaximumScanNodeRange(int defaultValue, ScanNodeProperties scanNode)
+        {
+            if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
+            float rangeIncrease;
+            switch(scanNode.headerText.ToLower().Trim())
+            {
+                case "main entrance":
+                case "ship":
+                {
+                    rangeIncrease = GetConfiguration().BetterScannerUpgradeConfiguration.OutsideNodesRangeIncrease;
+                    break;
+                }
+                default:
+                {
+                    rangeIncrease = GetConfiguration().BetterScannerUpgradeConfiguration.NodeRangeIncrease;
+                    break;
+                }
+
+			}
+			return Mathf.CeilToInt(defaultValue + rangeIncrease);
+		}
+
+        public static bool CanSeeScrapThroughWall(ScanNodeProperties scanNode)
+        {
+            return GetActiveUpgrade(UPGRADE_NAME) &&
+            GetUpgradeLevel(UPGRADE_NAME) == 2 &&
+            scanNode.nodeType == (int)LguScanNodeProperties.NodeType.SCRAP;
+        }
+
+        public static bool CanSeeEnemiesThroughWall(ScanNodeProperties scanNode)
+        {
+            return GetActiveUpgrade(UPGRADE_NAME) &&
+            GetUpgradeLevel(UPGRADE_NAME) == 2 &&
+            scanNode.nodeType == (int)LguScanNodeProperties.NodeType.DANGER &&
+            GetConfiguration().BetterScannerUpgradeConfiguration.SeeEnemiesThroughWalls;
+        }
         public static string GetBetterScannerInfo(int level, int price)
         {
             BetterScannerUpgradeConfiguration config = GetConfiguration().BetterScannerUpgradeConfiguration;
