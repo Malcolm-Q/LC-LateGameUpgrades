@@ -1,6 +1,6 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
-using MoreShipUpgrades.Misc;
+using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.UpgradeComponents.OneTimeUpgrades.Player;
 using UnityEngine;
@@ -14,7 +14,7 @@ namespace MoreShipUpgrades.Patches.Interactables
         [HarmonyPatch(nameof(InteractTrigger.OnTriggerEnter))]
         private static bool OnTriggerEnterPrefix(InteractTrigger __instance, Collider other)
         {
-            if (!BaseUpgrade.GetActiveUpgrade(LockSmith.UPGRADE_NAME)) { return true; }
+            if (!BaseUpgrade.GetActiveUpgrade(LockSmith.UPGRADE_NAME) || UpgradeBus.Instance.PluginConfiguration.LocksmithConfiguration.DisableDoorCollision) { return true; }
             PlayerControllerB player = other.gameObject.GetComponent<PlayerControllerB>();
             if (player == null) { return true; }
             if (!player.IsOwner) { return true; }

@@ -25,7 +25,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
                 ITierEffectUpgradeConfiguration<int> upgradeConfig = GetConfiguration().BulletResistanceConfiguration;
                 return upgradeConfig.InitialEffect.Value + (level * upgradeConfig.IncrementalEffect.Value);
             }
-            const string infoFormat = "LVL {0} - {1} - Increases the damage resistance to bullets by {2}\n";
+            const string infoFormat = "LVL {0} - {1} - Increases the damage resistance to bullets by {2}%\n";
             return Tools.GenerateInfoForUpgrade(infoFormat, initialPrice, incrementalPrices, infoFunction, purchaseMode: GetConfiguration().BulletResistanceConfiguration.PurchaseMode);
         }
         public static int GetBulletDamageResistance(int defaultValue)

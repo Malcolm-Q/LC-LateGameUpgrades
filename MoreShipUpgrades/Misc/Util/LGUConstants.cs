@@ -1948,8 +1948,12 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string INTERNS_PLAYER_ALREADY_ALIVE_FORMAT = "{0} is still alive, they can't be replaced with an intern.\n\n";
 
         internal const string LOAD_LGU_NO_NAME = "Enter the name of the user whos upgrades/save you want to copy. Ex: `load lgu steve`\n";
+        internal const string LOAD_LGU_ALL_NO_NAME = "Enter the name of the user whos upgrades/saves you want to copy to all present members in the lobby. Ex: 'load lgu all steve'\n";
+        internal const string LOAD_LGU_ALL_HOST_ONLY = "Only the host is allowed to sync all player's upgrades at the same time.\n";
         internal const string LOAD_LGU_SUCCESS_FORMAT = "Attempting to overwrite local save data with {0}'s save data\nYou should see a popup in 5 seconds...\n.\n";
         internal const string LOAD_LGU_FAILURE_FORMAT = "The name {0} was not found. The following names were found:\n{1}\n";
+
+        internal const string LOAD_LGU_ALL_SUCCESS_FORMAT = "Attempting to overwrite all client's save data with {0}'s save data\nYou should see a popup in 5 seconds...\n.\n";
 
         internal const string UNLOAD_LGU_SUCCESS_FORMAT = "Unwinding {0}\n\n";
 

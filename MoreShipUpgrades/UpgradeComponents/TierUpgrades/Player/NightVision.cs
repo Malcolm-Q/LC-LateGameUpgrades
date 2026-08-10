@@ -1,20 +1,18 @@
 ﻿using GameNetcodeStuff;
+using MoreShipUpgrades.Configuration.Upgrades.Custom;
+using MoreShipUpgrades.Input;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc;
 using MoreShipUpgrades.Misc.Upgrades;
-using Newtonsoft.Json;
+using MoreShipUpgrades.Misc.Util;
+using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Collections;
 using System.Text;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using MoreShipUpgrades.Input;
 using UnityEngine.UI;
-using MoreShipUpgrades.Misc.Util;
-using MoreShipUpgrades.UpgradeComponents.Interfaces;
-using MoreShipUpgrades.UI.TerminalNodes;
-using MoreShipUpgrades.Configuration;
-using MoreShipUpgrades.Configuration.Upgrades.Custom;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {
@@ -187,6 +185,9 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
             transform.GetChild(0).gameObject.SetActive(true);
             UpgradeBus.Instance.activeUpgrades[SIMPLE_UPGRADE_NAME] = true;
             HUDManager.Instance.chatText.text += $"\n<color=#FF0000>Press {Keybinds.NvgAction.GetBindingDisplayString()} to toggle Night Vision!!!</color>";
+            NightVisionUpgradeConfiguration config = GetConfiguration().NightVisionUpgradeConfiguration;
+            float maxBattery = config.InitialEffects[0].Value + (GetActiveUpgrade(UPGRADE_NAME) ? ((GetUpgradeLevel(UPGRADE_NAME) + 1) * config.IncrementalEffects[0].Value) : 0);
+            nightBattery = Mathf.Clamp(config.InitialCharge.Value, 0f, maxBattery);
         }
 
         public void DisableOnClient()

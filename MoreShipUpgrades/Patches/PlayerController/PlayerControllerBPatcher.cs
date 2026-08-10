@@ -457,7 +457,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             return codes;
         }
 
-
+        static bool alreadyMitigated = false;
         [HarmonyPrefix]
         [HarmonyPatch(nameof(PlayerControllerB.KillPlayer))]
         static bool KillPlayerPrefix(PlayerControllerB __instance, Vector3 bodyVelocity, bool spawnBody, CauseOfDeath causeOfDeath, int deathAnimation, Vector3 positionOffset)
@@ -471,9 +471,14 @@ namespace MoreShipUpgrades.Patches.PlayerController
             {
                 case CauseOfDeath.Blast:
                     {
-                        if (!BaseUpgrade.GetActiveUpgrade(ExplosionResistance.UPGRADE_NAME)) return true;
+                        if (!BaseUpgrade.GetActiveUpgrade(ExplosionResistance.UPGRADE_NAME) || alreadyMitigated)
+                        {
+                            alreadyMitigated = false;
+                            return true;
+                        }
                         Plugin.mls.LogInfo($"Kill player fired due to explosion with {ExplosionResistance.UPGRADE_NAME} upgrade on, mitigating 100 damage instead of instant kill...");
                         __instance.DamagePlayer(ExplosionResistance.GetExplosionDamageResistance(100), hasDamageSFX: true, callRPC: true, causeOfDeath: causeOfDeath, deathAnimation: deathAnimation, fallDamage: false, force: bodyVelocity);
+                        alreadyMitigated = true;
                         return false;
                     }
                 default: return true;

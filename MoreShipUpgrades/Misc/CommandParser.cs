@@ -27,6 +27,7 @@ namespace MoreShipUpgrades.Misc
         static int forceCreditAmount = 0;
 
         const string LOAD_LGU_COMMAND = "load lgu";
+        const string LOAD_LGU_ALL_COMMAND = "load lgu all";
         public static readonly List<string> contracts = [LguConstants.DATA_CONTRACT_NAME, LguConstants.EXTERMINATOR_CONTRACT_NAME, LguConstants.EXTRACTION_CONTRACT_NAME,LguConstants.EXORCISM_CONTRACT_NAME,LguConstants.DEFUSAL_CONTRACT_NAME];
         public static readonly List<string> contractInfos = [
             "\n\nOur systems have detected an active PC somewhere in the facility.\nFind it, use the bruteforce command on the ship terminal with the devices IP to get login credentials, then use the cd, ls, and mv commands to find the .db file (enter `mv survey.db` in the containing folder).\n\n",
@@ -209,6 +210,34 @@ namespace MoreShipUpgrades.Misc
             return DisplayTerminalMessage(string.Format(LguConstants.LOAD_LGU_FAILURE_FORMAT, playerNameToSearch, csvNames));
         }
 
+        private static TerminalNode ExecuteLoadLGUAllCommand(string text, ref Terminal terminal)
+        {
+            if (text.ToLower() == LOAD_LGU_ALL_COMMAND) return DisplayTerminalMessage(LguConstants.LOAD_LGU_ALL_NO_NAME);
+            if (!terminal.IsServer) return DisplayTerminalMessage(LguConstants.LOAD_LGU_ALL_HOST_ONLY);
+
+            PlayerControllerB[] players = StartOfRound.Instance.allPlayerScripts;
+            List<string> playerNames = [];
+            string playerNameToSearch = text[(text.IndexOf(LOAD_LGU_ALL_COMMAND) + LOAD_LGU_ALL_COMMAND.Length)..].Trim();
+
+            foreach (PlayerControllerB player in players)
+            {
+                if (player == null) continue;
+                string playerName = player.playerUsername;
+                ulong playerSteamID = player.playerSteamId;
+                if (playerName == null) continue;
+                playerNames.Add(playerName);
+                if (!playerName.Contains(playerNameToSearch, System.StringComparison.OrdinalIgnoreCase)) continue;
+
+                LguStore.Instance.ShareSaveServer();
+                LguStore.Instance.ShareSaveAllClientRpc(playerSteamID);
+                logger.LogInfo($"Attempting to overwrite every client's save data with {playerName}'s.");
+                return DisplayTerminalMessage(string.Format(LguConstants.LOAD_LGU_ALL_SUCCESS_FORMAT, playerName));
+            }
+            string csvNames = string.Join(", ", playerNames);
+            logger.LogInfo($"{playerNameToSearch} was not found among: {csvNames}");
+            return DisplayTerminalMessage(string.Format(LguConstants.LOAD_LGU_FAILURE_FORMAT, playerNameToSearch, csvNames));
+        }
+
         private static TerminalNode ExecuteScanHivesCommand()
         {
             if (BaseUpgrade.GetUpgradeLevel(BetterScanner.UPGRADE_NAME) < 1) return DisplayTerminalMessage(LguConstants.SCANNER_LEVEL_REQUIRED);
@@ -381,12 +410,20 @@ namespace MoreShipUpgrades.Misc
                 _ => outputNode,
             };
         }
-        private static TerminalNode ExecuteLoadCommands(string secondWord, string fullText, ref Terminal terminal, ref TerminalNode outputNode)
+        private static TerminalNode ExecuteLoadCommands(string secondWord, string thirdWord, string fullText, ref Terminal terminal, ref TerminalNode outputNode)
         {
             return secondWord switch
             {
-                "lgu" => ExecuteLoadLGUCommand(fullText, ref terminal),
+                "lgu" => ExecuteLoadLGUCommands(thirdWord, fullText, ref terminal),
                 _ => outputNode,
+            };
+        }
+        private static TerminalNode ExecuteLoadLGUCommands(string thirdWord, string fullText, ref Terminal terminal)
+        {
+            return thirdWord switch
+            {
+                "all" => ExecuteLoadLGUAllCommand(fullText, ref terminal),
+                _ => ExecuteLoadLGUCommand(fullText, ref terminal),
             };
         }
         private static TerminalNode ExecuteScanCommands(string secondWord, ref TerminalNode outputNode)
@@ -430,7 +467,7 @@ namespace MoreShipUpgrades.Misc
                 case "forcecredits": outputNode = ExecuteForceCredits(secondWord, ref terminal); return;
                 case "intern":
                 case "interns": outputNode = ExecuteInternsCommand(ref terminal, outputNode); return;
-                case "load": outputNode = ExecuteLoadCommands(secondWord, fullText, ref terminal, ref outputNode); return;
+                case "load": outputNode = ExecuteLoadCommands(secondWord, thirdWord, fullText, ref terminal, ref outputNode); return;
                 case "scan": outputNode = ExecuteScanCommands(secondWord, ref outputNode); return;
                 case "quantum": ExecuteQuantumCommands(ref terminal, ref outputNode); return;
                 case "contract": ExecuteContractCommands(ref terminal, ref outputNode); return;
@@ -556,7 +593,7 @@ namespace MoreShipUpgrades.Misc
             return DisplayTerminalMessage(txt);
         }
 
-        private static IEnumerator WaitForSync(ulong id)
+        internal static IEnumerator WaitForSync(ulong id)
         {
             yield return new WaitForSeconds(3f);
             HUDManager.Instance.DisplayTip("LOADING SAVE DATA", $"Overwiting local save data with the save under player id: {id}");

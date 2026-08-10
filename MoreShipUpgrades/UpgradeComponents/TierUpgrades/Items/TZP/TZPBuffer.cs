@@ -47,8 +47,8 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.TZP
             }
             StringBuilder sb = new();
             sb.Append($"LVL {level} - {GetUpgradePrice(price, GetConfiguration().TZPBufferConfiguration.PurchaseMode)}: Upgrades to TZP Inhaler:\n");
-            sb.Append($"- Increases the buff effect (movement speed and stamina usage reduction) by {buffEffectInfo(level)}%\n");
-            sb.Append($"- Decreases the debuff effect (visual impairment) by {debuffEffectInfo(level)}%\n");
+            sb.Append($"- Increases the buff effect (movement speed and stamina usage reduction) by {buffEffectInfo(level-1)}%\n");
+            sb.Append($"- Decreases the debuff effect (visual impairment) by {debuffEffectInfo(level-1)}%\n");
             sb.Append('\n');
             return sb.ToString();
         }

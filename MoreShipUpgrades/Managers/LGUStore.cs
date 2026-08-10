@@ -56,7 +56,7 @@ namespace MoreShipUpgrades.Managers
         /// <summary>
         /// Wether this client already received the save from host client or not
         /// </summary>
-        private bool receivedSave;
+        private bool receivedSave = false;
         internal bool alreadyReceivedScrapToUpgrade = false;
 
         private void Awake()
@@ -202,6 +202,13 @@ namespace MoreShipUpgrades.Managers
         [ServerRpc(RequireOwnership = false)]
         public void ShareSaveServerRpc()
         {
+            ShareSaveServer();
+        }
+        /// <summary>
+        /// Shares the save file stored in host to all other clients, including itself.
+        /// </summary>
+        public void ShareSaveServer()
+        {
             string json = JsonConvert.SerializeObject(LguSave);
             ShareSaveClientRpc(Encoding.ASCII.GetBytes(json));
             List<StringContainer> scraps = [];
@@ -215,6 +222,11 @@ namespace MoreShipUpgrades.Managers
                 }
             }
             SetScrapToUpgradeDictionaryClientRpc([.. scraps], [.. upgrades]);
+        }
+        [ClientRpc]
+        internal void ShareSaveAllClientRpc(ulong playerSteamID)
+        {
+            Instance.StartCoroutine(CommandParser.WaitForSync(playerSteamID));
         }
 
         [ClientRpc]
@@ -615,7 +627,7 @@ namespace MoreShipUpgrades.Managers
             Plugin.mls.LogInfo($"Received consensus response from {serverRpcParams.Receive.SenderClientId}...");
             CommandParser.CheckForceCreditsConsensus(consensus, serverRpcParams.Receive.SenderClientId);
 		}
-	}
+    }
 
     [Serializable]
     public class SaveInfo

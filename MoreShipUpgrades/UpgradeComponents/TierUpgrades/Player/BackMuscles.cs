@@ -109,7 +109,14 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             static float infoFunction(int level)
             {
                 ITierAlternativeEffectUpgradeConfiguration<float, UpgradeMode> config = GetConfiguration().BackMusclesConfiguration;
-                return (config.InitialEffect.Value - (level * config.IncrementalEffect.Value)) * 100;
+                switch (CurrentUpgradeMode)
+                {
+                    case UpgradeMode.ReduceCarryInfluence:
+                    case UpgradeMode.ReduceCarryStrain:
+                        return (1f -(config.InitialEffect.Value - (level * config.IncrementalEffect.Value))) * 100;
+                    default:
+                        return (config.InitialEffect.Value - (level * config.IncrementalEffect.Value)) * 100;
+                }
             }
             string infoFormat;
             switch (CurrentUpgradeMode)

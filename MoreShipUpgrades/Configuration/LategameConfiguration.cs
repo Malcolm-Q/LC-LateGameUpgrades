@@ -92,7 +92,7 @@ namespace MoreShipUpgrades.Configuration
         public ITierEffectUpgradeConfiguration<int> EfficientEnginesConfiguration {  get; set; }
         public ITierEffectUpgradeConfiguration<float> ClimblingGlovesConfiguration { get; set; }
         public ITierEffectUpgradeConfiguration<int> LithiumBatteriesConfiguration { get; set; }
-        public IOneTimeUpgradeConfiguration LocksmithConfiguration { get; set; }
+        public LocksmithUpgradeConfiguration LocksmithConfiguration { get; set; }
         public IOneTimeUpgradeConfiguration FastEncryptionConfiguration {  get; set; }
         public DropPodThrustersUpgradeConfiguration DropPodThrustersConfiguration { get; set; }
         public SigurdAccessUpgradeConfiguration SigurdAccessConfiguration { get; set; }
@@ -650,7 +650,7 @@ namespace MoreShipUpgrades.Configuration
             };
 
             topSection = LockSmith.UPGRADE_NAME;
-            LocksmithConfiguration = new OneTimeIndividualUpgradeConfiguration(cfg, topSection, LguConstants.LOCKSMITH_ENABLED_DESCRIPTION, LguConstants.LOCKSMITH_PRICE_DEFAULT);
+            LocksmithConfiguration = new LocksmithUpgradeConfiguration(cfg, topSection, LguConstants.LOCKSMITH_ENABLED_DESCRIPTION, LguConstants.LOCKSMITH_PRICE_DEFAULT);
 
             topSection = MalwareBroadcaster.UPGRADE_NAME;
             MalwareBroadcasterUpgradeConfiguration = new(cfg, topSection, LguConstants.MALWARE_BROADCASTER_ENABLED_DESCRIPTION, LguConstants.MALWARE_BROADCASTER_PRICE_DEFAULT);

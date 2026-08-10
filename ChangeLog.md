@@ -1,4 +1,19 @@
 <details>
+<summary> 3.14.1 - 2026-06-05 </summary>
+
+- Added terminal command ``load lgu all <playername>``, where the host uses this command to force all clients (including themselves) to load the same save file as the player specified in the command.
+    - This is a version of ``load lgu <playername>`` where only one person has to type the command instead of all players take turns to type the command.
+    - Both these commands should only be used when you experience problems with the saves not being properly synced between players. If the desync is in fact caused by this mod, it should be reported so that I can manage to look into it.
+- Added configuration setting to set the initial charge when acquiring night vision.
+- Added configuration setting to disable Locksmith minigame trigger when colliding with locked doors, giving the only option of interacting with them to start it.
+- Fixed info display for TZP Buffer showing incorrect stats on the first level.
+- Fixed info display for Bullet Resistance for missing a percentage sign.
+- Fixed Back Muscles upgrade descriptions for alternative modes as it was showing an incorrect value.
+- Fixed issue with Explosion Resistance causing crashes due to infinite loop between kill player and damage player callbacks.
+
+</details>
+
+<details>
 <summary> 3.14.0 - 2026-05-24 </summary>
 
 - Added ``OverSpending`` attribute in the UpgradeAPI related code where it allows credit purchases to go negative
