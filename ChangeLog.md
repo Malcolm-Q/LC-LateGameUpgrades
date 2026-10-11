@@ -1,5 +1,5 @@
 <details>
-<summary> 3.14.2 - 2026-??-?? </summary>
+<summary> 3.14.2 - 2026-10-11 </summary>
 
 - Fixed Rubber Boots not working as expected due to miscalculation of the hindrance multiplier.
 - Fixed Carbon Kneejoins not working as expected due to unexpected negative values, causing it to be slower rather than faster.
@@ -9,8 +9,9 @@
     - Default setting is ``false`` to maintain the behaviour from prior versions.
 - Implemented configuration for Interns for time allowed to teleport the player back to the ship after being revived through Interns.
   - This is for cases where the player can be revived inside a section of the facility which is closed off to the outside.
-- Added more world-building text to some upgrades. (Thank you Draglorr (discordID:draglorr))
+- Added more world-building text to some upgrades. (Thank you Draglorr (discordID:draglorr, [Ao3](https://archiveofourown.org/users/Draglorr/works)))
     - Due to already existing text on some upgrades from previous contributions, the lore will be randomized between texts on game session.
+    - Added the credits to the individual in the mod's thunderstore page.
 
 </details>
 
