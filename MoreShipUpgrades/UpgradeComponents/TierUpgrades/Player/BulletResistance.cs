@@ -3,14 +3,17 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {
-    internal class BulletResistance : TierUpgrade
+    internal class BulletResistance : TierUpgrade , IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Bullet Resistance";
         internal const string DEFAULT_PRICES = "200, 250, 350";
+        internal const string WORLD_BUILDING_TEXT = "Advertised as a high-quality advanced bullet-stopping technology but is really just a thick," +
+            " bulky metal plate with several attached straps that has to be secured underneath your suit. It’s heavy and kind of uncomfortable, but that's the price of safety.";
 
         internal override void Start()
         {
@@ -60,6 +63,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         public new static CustomTerminalNode RegisterTerminalNode()
         {
             return UpgradeBus.Instance.SetupMultiplePurchaseableTerminalNode(UPGRADE_NAME, GetConfiguration().BulletResistanceConfiguration, Plugin.networkPrefabs[UPGRADE_NAME]);
+        }
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
         }
     }
 }

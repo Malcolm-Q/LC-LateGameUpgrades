@@ -29,7 +29,7 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         {
             float decreaseMultiplier = CalculateDecreaseMultiplier();
             float multipliedValue = 1f - defaultValue; // Being less than 1 means it makes the player faster while crouching
-            return defaultValue - (Mathf.Clamp(1f - decreaseMultiplier, 0f, 1f) * multipliedValue);
+            return defaultValue - Mathf.Abs(Mathf.Clamp(decreaseMultiplier, 0f, 1f) * multipliedValue);
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {

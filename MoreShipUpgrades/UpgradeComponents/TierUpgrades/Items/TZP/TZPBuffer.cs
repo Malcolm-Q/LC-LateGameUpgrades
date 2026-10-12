@@ -3,18 +3,19 @@ using MoreShipUpgrades.Configuration.Upgrades.Custom;
 using MoreShipUpgrades.Configuration.Upgrades.Interfaces.TierUpgrades;
 using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
-using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
-using MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Shotgun;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Text;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.TZP
 {
-    internal class TZPBuffer : TierUpgrade
+    internal class TZPBuffer : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "TZP Buffer";
         internal const string DEFAULT_PRICES = "100,200,300";
+        internal const string WORLD_BUILDING_TEXT = "An after-market additive to TZP meant to increase its highs and reduce dizziness." +
+            " Commonly traded around in dark alleyways, its side-effects aren’t entirely known.";
 
         internal override void Start()
         {
@@ -107,6 +108,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.TZP
         public new static CustomTerminalNode RegisterTerminalNode()
         {
             return UpgradeBus.Instance.SetupMultiplePurchaseableTerminalNode(UPGRADE_NAME, GetConfiguration().TZPBufferConfiguration, Plugin.networkPrefabs[UPGRADE_NAME]);
+        }
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
         }
     }
 }

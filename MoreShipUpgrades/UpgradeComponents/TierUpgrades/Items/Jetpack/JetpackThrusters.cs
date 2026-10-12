@@ -13,10 +13,18 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack
         internal const string UPGRADE_NAME = "Jetpack Thrusters";
         internal const string DEFAULT_PRICES = "300,150,300,400";
         internal const string WORLD_BUILDING_TEXT = "\n\nOptimization procedure for your jetpack's thrust nozzles that results in a higher terminal velocity at maximum thrust.\n\n";
+        internal const string WORLD_BUILDING_TEXT_2 = "Higher tolerance jetpack thruster replacements that can withstand more pressure and thus, can retain a higher top speed.";
 
         public string GetWorldBuildingText(bool shareStatus = false)
         {
-            return WORLD_BUILDING_TEXT;
+            if (UnityEngine.Random.value < 0.5f)
+            {
+                return WORLD_BUILDING_TEXT;
+            }
+            else
+            {
+                return WORLD_BUILDING_TEXT_2;
+            }
         }
         internal override void Start()
         {

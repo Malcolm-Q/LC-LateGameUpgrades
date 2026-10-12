@@ -308,7 +308,9 @@ namespace MoreShipUpgrades.Managers
                                                         bool alternateCurrency = true,
                                                         PurchaseMode purchaseMode = default,
                                                         bool refundable = true,
-                                                        float refundPercentage = 1f
+                                                        float refundPercentage = 1f,
+                                                        float minimumSalePercentage = 1f,
+                                                        float maximumSalePercentage = 1f
                                                         )
         {
             GameObject multiPerk = AssetBundleHandler.GetPerkGameObject(upgradeName);
@@ -324,7 +326,9 @@ namespace MoreShipUpgrades.Managers
                                                                         bool alternateCurrency = true,
                                                                         PurchaseMode purchaseMode = default,
                                                                         bool refundable = false,
-                                                                        float refundPercentage = 1f)
+                                                                        float refundPercentage = 1f,
+                                                                        float minimumSalePercentage = 1f,
+                                                                        float maximumSalePercentage = 1f)
         {
             if (prefab == null) return null;
             if (!enabled) return null;
@@ -344,7 +348,9 @@ namespace MoreShipUpgrades.Managers
                 alternateCurrency: alternateCurrency,
                 purchaseMode: purchaseMode,
                 refundable: refundable,
-                refundPercentage: refundPercentage);
+                refundPercentage: refundPercentage,
+                minimumSalePercentage: minimumSalePercentage,
+                maximumSalePercentage: maximumSalePercentage);
         }
         public CustomTerminalNode SetupMultiplePurchaseableTerminalNode(string upgradeName, ITierUpgradeConfiguration configuration)
         {
@@ -360,8 +366,10 @@ namespace MoreShipUpgrades.Managers
             PurchaseMode purchaseMode = PluginConfiguration.AlternativeCurrencyConfiguration.EnableGlobalPurchase ? PluginConfiguration.AlternativeCurrencyConfiguration.GlobalPurchaseMode : configuration.PurchaseMode;
 			bool refundable = PluginConfiguration.REFUND_UPGRADES || configuration.Refundable;
 			float refundPercentage = configuration.RefundPercentage / 100f;
+            float minimumSalePercentage = configuration.MinimumSalePercentage / 100f;
+            float maximumSalePercentage = configuration.MaximumSalePercentage / 100f;
 
-			return SetupMultiplePurchasableTerminalNode(upgradeName,
+            return SetupMultiplePurchasableTerminalNode(upgradeName,
                 shareStatus: shareStatus,
                 enabled: configuration.Enabled,
                 initialPrice: initialPrice,
@@ -371,7 +379,9 @@ namespace MoreShipUpgrades.Managers
                 alternateCurrency: CurrencyManager.Enabled,
                 purchaseMode: purchaseMode,
 				refundable: refundable,
-				refundPercentage: refundPercentage);
+				refundPercentage: refundPercentage,
+                minimumSalePercentage: minimumSalePercentage,
+                maximumSalePercentage: maximumSalePercentage);
         }
         public CustomTerminalNode SetupOneTimeTerminalNode(string upgradeName, IOneTimeUpgradeConfiguration configuration)
         {
@@ -384,8 +394,10 @@ namespace MoreShipUpgrades.Managers
 			PurchaseMode purchaseMode = PluginConfiguration.AlternativeCurrencyConfiguration.EnableGlobalPurchase ? PluginConfiguration.AlternativeCurrencyConfiguration.GlobalPurchaseMode : configuration.PurchaseMode;
             bool refundable = PluginConfiguration.REFUND_UPGRADES || configuration.Refundable;
             float refundPercentage = configuration.RefundPercentage / 100f;
+            float minimumSalePercentage = configuration.MinimumSalePercentage / 100f;
+            float maximumSalePercentage = configuration.MaximumSalePercentage / 100f;
 
-			return SetupOneTimeTerminalNode(upgradeName,
+            return SetupOneTimeTerminalNode(upgradeName,
                 shareStatus: shareStatus,
                 enabled: configuration.Enabled,
                 price: configuration.Price,
@@ -394,8 +406,11 @@ namespace MoreShipUpgrades.Managers
                 alternateCurrency: CurrencyManager.Enabled,
                 purchaseMode: purchaseMode,
                 refundable: refundable,
-                refundPercentage: refundPercentage
-				);
+                refundPercentage: refundPercentage,
+                minimumSalePercentage: minimumSalePercentage,
+                maximumSalePercentage: maximumSalePercentage
+
+                );
         }
         /// <summary>
         /// Generic function where it adds a terminal node for an upgrade that can only be bought once
@@ -413,7 +428,9 @@ namespace MoreShipUpgrades.Managers
                                               bool alternateCurrency = true,
                                               PurchaseMode purchaseMode = default,
                                               bool refundable = false,
-                                              float refundPercentage = 1f
+                                              float refundPercentage = 1f,
+                                              float minimumSalePercentage = 1f,
+                                              float maximumSalePercentage = 1f
                                               )
         {
             if (!enabled) return null;
@@ -431,7 +448,9 @@ namespace MoreShipUpgrades.Managers
                 alternateCurrency: alternateCurrency,
                 purchaseMode: purchaseMode,
                 refundable: refundable,
-                refundPercentage: refundPercentage);
+                refundPercentage: refundPercentage,
+                minimumSalePercentage: minimumSalePercentage,
+                maximumSalePercentage: maximumSalePercentage);
         }
 
         public string SetupUpgradeInfo(BaseUpgrade upgrade = null, int price = -1, int[] incrementalPrices = null)

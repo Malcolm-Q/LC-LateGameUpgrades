@@ -3,14 +3,17 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {
-    internal class ExplosionResistance : TierUpgrade
+    internal class ExplosionResistance : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Explosion Resistance";
         internal const string DEFAULT_PRICES = "150, 200, 250";
+        internal const string WORLD_BUILDING_TEXT = "A set of proprietary spine reinforcement braces for your suit along with some specialized padded kevlar work boots." +
+            " You may only have a slightly higher chance of surviving an explosion with these, but you will look awesome doing it!";
 
         internal override void Start()
         {
@@ -60,6 +63,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         public new static CustomTerminalNode RegisterTerminalNode()
         {
             return UpgradeBus.Instance.SetupMultiplePurchaseableTerminalNode(UPGRADE_NAME, GetConfiguration().ExplosionReistanceConfiguration, Plugin.networkPrefabs[UPGRADE_NAME]);
+        }
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
         }
     }
 }

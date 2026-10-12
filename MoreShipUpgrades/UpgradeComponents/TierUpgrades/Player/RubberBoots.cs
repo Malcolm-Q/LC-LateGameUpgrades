@@ -38,8 +38,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         }
         public static float ReduceMovementHinderance(float defaultValue)
         {
+            ITierEffectUpgradeConfiguration<int> config = GetConfiguration().RubberBootsConfiguration;
+            if (!config.Enabled || !GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
             float decreaseMultiplier = CalculateDecreaseMultiplier();
-            return Mathf.Clamp(Mathf.Clamp(1f - decreaseMultiplier, 0f, 1f) * defaultValue, 1f, 100f);
+            float slowdownFactor = 0.5f - defaultValue;
+            return Mathf.Max(defaultValue - Mathf.Abs(slowdownFactor * decreaseMultiplier), 0.5f);
         }
         public override string GetDisplayInfo(int initialPrice = -1, int maxLevels = -1, int[] incrementalPrices = null)
         {

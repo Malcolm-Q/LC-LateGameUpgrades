@@ -471,7 +471,7 @@ namespace MoreShipUpgrades.Patches.PlayerController
             {
                 case CauseOfDeath.Blast:
                     {
-                        if (!BaseUpgrade.GetActiveUpgrade(ExplosionResistance.UPGRADE_NAME) || alreadyMitigated)
+                        if (!BaseUpgrade.GetActiveUpgrade(ExplosionResistance.UPGRADE_NAME) || alreadyMitigated || __instance.health - ExplosionResistance.GetExplosionDamageResistance(100) <= 0)
                         {
                             alreadyMitigated = false;
                             return true;

@@ -3,15 +3,18 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {
-    internal class EffectiveBandaids : TierUpgrade
+    internal class EffectiveBandaids : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Effective Bandaids";
         internal const string DEFAULT_PRICES = "250,300,400,550";
+        internal const string WORLD_BUILDING_TEXT = "An old faded advertisement in the bottom of page 27 of the Company Catalogue advertises" +
+            " adhesive bandages that have been coated in anesthetic and an unknown mixture of chemicals to help you keep going even after injury. They seem kind of sketchy.";
 
         internal override void Start()
         {
@@ -61,6 +64,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         public new static CustomTerminalNode RegisterTerminalNode()
         {
             return UpgradeBus.Instance.SetupMultiplePurchaseableTerminalNode(UPGRADE_NAME, GetConfiguration().EffectiveBandaidsConfiguration, Plugin.networkPrefabs[UPGRADE_NAME]);
+        }
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
         }
     }
 }

@@ -3,20 +3,32 @@ using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using UnityEngine;
 using MoreShipUpgrades.UI.TerminalNodes;
-using MoreShipUpgrades.Configuration;
 using MoreShipUpgrades.Configuration.Upgrades.Interfaces.TierUpgrades;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.WeedKiller
 {
-    internal class WeedGeneticManipulation : TierUpgrade
+    internal class WeedGeneticManipulation : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Weed Genetic Manipulation";
         internal const string PRICES_DEFAULT = "100,100,150,200";
-        internal const string WORLD_BUILDING_TEXT = "\n\nYou figured out that pissing into the Weed Killer makes it more effective. The cost of this upgrade comes from extra portable water requisitions your department needs to order to make the project happen.\n\n";
+        internal const string WORLD_BUILDING_TEXT = "You figured out that pissing into the Weed Killer makes it more effective." +
+            " The cost of this upgrade comes from extra portable water requisitions your department needs to order to make the project happen.";
+
+        internal const string WORLD_BUILDING_TEXT_2 = "Engineered to be extra deadly to Vain Shrouds and Cadaver Growths infesting different moons," +
+            " and yet they keep coming back all the same. It's been rumoured the Company is engineering both the problem and the solution," +
+            " and no it does not tame the split-faced dogs! They are not your friend!";
 
         public string GetWorldBuildingText(bool shareStatus = false)
         {
-            return WORLD_BUILDING_TEXT;
+            if (UnityEngine.Random.value < 0.5f)
+            {
+                return WORLD_BUILDING_TEXT;
+            }
+            else
+            {
+                return WORLD_BUILDING_TEXT_2;
+            }
         }
         internal override void Start()
         {

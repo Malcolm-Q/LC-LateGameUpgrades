@@ -564,7 +564,7 @@ namespace MoreShipUpgrades.Managers
             {
                 if (UnityEngine.Random.value > UpgradeBus.Instance.PluginConfiguration.SALE_PERC.Value)
                 {
-                    node.SalePercentage = UnityEngine.Random.Range(0.60f, 0.90f);
+                    node.SalePercentage = 1f - UnityEngine.Random.Range(node.MinimumSalePercentage, node.MaximumSalePercentage);
                     logger.LogInfo($"Set sale percentage to: {node.SalePercentage} for {node.Name}.");
                 }
                 else

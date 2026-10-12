@@ -3,16 +3,19 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items
 {
-	internal class SmarterLockpick : TierUpgrade
+    internal class SmarterLockpick : TierUpgrade, IUpgradeWorldBuilding
 	{
 
 		internal const string UPGRADE_NAME = "Smarter Lockpick";
 		internal const string PRICES_DEFAULT = "200,300,350,450";
-		internal override void Start()
+		internal const string WORLD_BUILDING_TEXT = "An upgrade code to the lockpicking device’s outdated proprietary firmware to more effectively open the locks found within facilities." +
+			" The upgrade itself seems to be more than a century old though…";
+        internal override void Start()
 		{
 			upgradeName = UPGRADE_NAME;
 			overridenUpgradeName = GetConfiguration().SmarterLockpickUpgradeConfiguration.OverrideName;
@@ -63,5 +66,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items
 			efficiencyMultiplier = Mathf.Clamp(efficiencyMultiplier, 1f, float.MaxValue);
 			return defaultAmount + (defaultAmount *  efficiencyMultiplier);
 		}
-	}
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+			return WORLD_BUILDING_TEXT;
+        }
+    }
 }

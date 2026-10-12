@@ -41,6 +41,7 @@ Anyone who contributes in any way is greatly appreciated.
     - Sad Amazon
     - Bobilka
     - Pixelated Engie - [twitter](https://twitter.com/PixelatedEngie)
+    - Draglorr - [Ao3](https://archiveofourown.org/users/Draglorr/works), discordID:draglorr
 - Beta Testers
     - Lann
     - Kapt

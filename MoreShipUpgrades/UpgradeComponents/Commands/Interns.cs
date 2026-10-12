@@ -19,6 +19,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
         internal int currentUsages;
         internal float revivalTimer;
         internal float delayReviveTimer;
+        internal float allowTeleportTimer;
         internal PlayerControllerB delayedRevivePlayer;
         public enum TeleportRestriction
         {
@@ -35,6 +36,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
             internInterests = AssetBundleHandler.GetInfoFromJSON("InternInterests").Split(",");
             currentUsages = 0;
             revivalTimer = 0f;
+            allowTeleportTimer = 0f;
             delayReviveTimer = 0f;
             delayedRevivePlayer = null;
         }
@@ -43,6 +45,9 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
         {
             if (revivalTimer > 0f)
                 revivalTimer -= Time.deltaTime;
+
+            if (allowTeleportTimer > 0f)
+                allowTeleportTimer -= Time.deltaTime;
 
             if (delayReviveTimer > 0f)
             {
@@ -126,6 +131,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
         {
             currentUsages++;
             revivalTimer = UpgradeBus.Instance.PluginConfiguration.INTERNS_INTERVAL_BETWEEN_REVIVES;
+            allowTeleportTimer = UpgradeBus.Instance.PluginConfiguration.INTERNS_TELEPORT_TIMER;
             int health = 100;
             if (UpgradeBus.Instance.PluginConfiguration.StimpackConfiguration.Enabled)
             {
@@ -257,7 +263,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Commands
 
         internal bool ContainsRecentlyInterned(PlayerControllerB player)
         {
-            return recentlyInterned.Contains(player);
+            return recentlyInterned.Contains(player) && allowTeleportTimer <= 0f;
         }
         internal void AddRecentlyInterned(PlayerControllerB player)
         {

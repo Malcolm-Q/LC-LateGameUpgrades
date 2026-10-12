@@ -65,6 +65,7 @@ namespace MoreShipUpgrades.UpgradeComponents.Items
         {
             base.ItemActivate(used, buttonDown);
             AttemptToHealPlayer();
+            if (itemUsedUp && UpgradeBus.Instance.PluginConfiguration.DESTROY_USED_MEDKITS) DestroyObjectInHand(playerHeldBy);
         }
         /// <summary>
         /// Attempts to provide healing to the player that activated the medkit item

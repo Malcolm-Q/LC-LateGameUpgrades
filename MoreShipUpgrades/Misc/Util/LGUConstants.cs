@@ -387,6 +387,10 @@ namespace MoreShipUpgrades.Misc.Util
         internal const int MEDKIT_USES_DEFAULT = 3;
         internal const string MEDKIT_USES_DESCRIPTION = $"The amount of times the {Medkit.ITEM_NAME} can heal you.";
 
+        internal const string DESTROY_USED_MEDKITS_KEY = "Destroy used up medkits";
+        internal const bool DESTROY_USED_MEDKITS_DEFAULT = false;
+        internal const string DESTROY_USED_MEDKITS_DESCRIPTION = $"If enabled, destroys the medkit item when it reaches zero charges.";
+
         internal static readonly string MEDKIT_SCAN_NODE_KEY = string.Format(ITEM_SCAN_NODE_KEY_FORMAT, Medkit.ITEM_NAME);
         #endregion
 

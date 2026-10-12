@@ -65,12 +65,15 @@ namespace MoreShipUpgrades.UI.TerminalNodes
         /// Wether it should be shown in the Lategame Upgrades store or not
         /// </summary>
         public bool Visible { get; set; }
+
+        public float MinimumSalePercentage { get; set; }
+        public float MaximumSalePercentage { get; set; }
         public bool AlternateCurrency { get; set; }
         public PurchaseMode PurchaseMode { get; set; }
 
         public bool Refundable { get; set; }
         public float RefundPercentage { get; set; }
-        protected CustomTerminalNode(string name, int unlockPrice, string description, GameObject prefab, int[] prices = null, int maxUpgrade = 0, string originalName = "", bool sharedUpgrade = false, bool alternateCurrency = true, PurchaseMode purchaseMode = default, bool refundable = false, float refundPercentage = 1f)
+        protected CustomTerminalNode(string name, int unlockPrice, string description, GameObject prefab, int[] prices = null, int maxUpgrade = 0, string originalName = "", bool sharedUpgrade = false, bool alternateCurrency = true, PurchaseMode purchaseMode = default, bool refundable = false, float refundPercentage = 1f, float minimumSalePercentage = 0, float maximumSalePercentage = 0)
         {
             if (prices == null) { prices = []; }
             Name = name;
@@ -86,6 +89,8 @@ namespace MoreShipUpgrades.UI.TerminalNodes
             PurchaseMode = purchaseMode;
             Refundable = refundable;
             RefundPercentage = refundPercentage;
+            MinimumSalePercentage = minimumSalePercentage;
+            MaximumSalePercentage = maximumSalePercentage;
         }
 
         public int CompareTo(object obj)

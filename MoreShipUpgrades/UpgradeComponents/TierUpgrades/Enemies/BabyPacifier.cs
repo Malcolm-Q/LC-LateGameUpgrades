@@ -3,17 +3,21 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies
 {
-	public class BabyPacifier : TierUpgrade
+    public class BabyPacifier : TierUpgrade, IUpgradeWorldBuilding
 	{
 		public const string UPGRADE_NAME = "Baby Pacifier";
 		internal const string PRICES_DEFAULT = "100,100,200,200,400";
+		internal const string WORLD_BUILDING_TEXT = "Ships a box of Company-issue plastic baby pacifiers to you that have been proven to help calm down Periplaneta clamorus" +
+			" (colloquially called the ‘Maneater’) and prevent stress-induced growth spurts that have become the demise of numerous different teams.";
 
-		internal override void Start()
+
+        internal override void Start()
 		{
 			upgradeName = UPGRADE_NAME;
 			overridenUpgradeName = GetConfiguration().BabyPacifierUpgradeConfiguration.OverrideName;
@@ -62,5 +66,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Enemies
 		{
 			return UpgradeBus.Instance.SetupMultiplePurchaseableTerminalNode(UPGRADE_NAME, GetConfiguration().BabyPacifierUpgradeConfiguration, Plugin.networkPrefabs[UPGRADE_NAME]);
 		}
-	}
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
+        }
+    }
 }

@@ -3,15 +3,19 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
 {
-    internal class MedicalNanobots : TierUpgrade
+    internal class MedicalNanobots : TierUpgrade, IUpgradeWorldBuilding
     {
         internal const string UPGRADE_NAME = "Medical Nanobots";
         internal const string DEFAULT_PRICES = "300,400,500,750";
+        internal const string WORLD_BUILDING_TEXT = "A weekly subscription service offered by the Company for disposable medical nanobots that are stored in a vial in your suit." +
+            " When a serious injury is detected the vial is opened and they begin working to seal the wound…somewhat." +
+            " They have been known to not be particularly effective and to break quickly but can save you in a pinch.";
 
         internal override void Start()
         {
@@ -61,6 +65,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Player
         public new static CustomTerminalNode RegisterTerminalNode()
         {
             return UpgradeBus.Instance.SetupMultiplePurchaseableTerminalNode(UPGRADE_NAME, GetConfiguration().MedicalNanobotsConfiguration, Plugin.networkPrefabs[UPGRADE_NAME]);
+        }
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+            return WORLD_BUILDING_TEXT;
         }
     }
 }

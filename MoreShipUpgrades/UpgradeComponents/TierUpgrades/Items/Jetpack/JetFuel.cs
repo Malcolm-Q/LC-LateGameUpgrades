@@ -13,10 +13,18 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.Jetpack
         internal const string UPGRADE_NAME = "Jet Fuel";
         internal const string DEFAULT_PRICES = "400,200,400,500";
         internal const string WORLD_BUILDING_TEXT = "\n\nOptimization procedure for your jetpack's fuel injector that results in a cleaner and more efficient detonation of the propellant.\n\n";
+        internal const string WORLD_BUILDING_TEXT_2 = "Jetpack fuel formula that burns considerably hotter for those who GOTTA GO FAST and throw safety by the wayside.";
 
         public string GetWorldBuildingText(bool shareStatus = false)
         {
-            return WORLD_BUILDING_TEXT;
+            if (UnityEngine.Random.value < 0.5f)
+            {
+                return WORLD_BUILDING_TEXT;
+            }
+            else
+            {
+                return WORLD_BUILDING_TEXT_2;
+            }
         }
         internal override void Start()
         {

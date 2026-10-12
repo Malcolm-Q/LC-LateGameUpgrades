@@ -3,17 +3,21 @@ using MoreShipUpgrades.Managers;
 using MoreShipUpgrades.Misc.Upgrades;
 using MoreShipUpgrades.Misc.Util;
 using MoreShipUpgrades.UI.TerminalNodes;
+using MoreShipUpgrades.UpgradeComponents.Interfaces;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items
 {
-	internal class ItemDuplicator : TierUpgrade
+    internal class ItemDuplicator : TierUpgrade, IUpgradeWorldBuilding
 	{
 		public const string UPGRADE_NAME = "Item Duplicator";
 		internal const string PRICES_DEFAULT = "250,350,500,750";
+		internal const string WORLD_BUILDING_TEXT = "A strange, clearly hand-made module for the terminal that preys on a deficiency in the ordering code and sometimes causes " +
+			"you to get additional items from the Company without having to pay for them, that you traded for with a previous crew." +
+			" The problem is that it requires an adapter you don’t have, and the Company sells for a high price. You should probably keep this to yourself as it is wildly against regulation.";
 
-		internal override void Start()
+        internal override void Start()
 		{
 			upgradeName = UPGRADE_NAME;
 			overridenUpgradeName = GetConfiguration().ItemDuplicatorUpgradeConfiguration.OverrideName;
@@ -71,5 +75,10 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items
 		{
 			return UpgradeBus.Instance.SetupMultiplePurchaseableTerminalNode(UPGRADE_NAME, GetConfiguration().ItemDuplicatorUpgradeConfiguration, Plugin.networkPrefabs[UPGRADE_NAME]);
 		}
-	}
+
+        public string GetWorldBuildingText(bool shareStatus = false)
+        {
+			return WORLD_BUILDING_TEXT;
+        }
+    }
 }
