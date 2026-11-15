@@ -401,6 +401,12 @@ namespace MoreShipUpgrades.Misc.Util
         internal const string ENABLED_FORMAT = "Enable {0} Upgrade";
         internal const string PRICE_FORMAT = "Price of {0} Upgrade";
 
+        #region Stronger Beacon
+
+        internal const string STRONGER_BEACON_ENABLED_DESCRIPTION = "One-time upgrade that increases the strength of the beacon signal while in caves, not causing loss of signal from the terminal radar.";
+
+        #endregion
+
         #region TZP Buffer
 
         internal const string TZP_BUFFER_ENABLED_DESCRIPTION = "Tier upgrade that increases the TZP Inhaler's buff effect while also decreasing the debuff's effect";

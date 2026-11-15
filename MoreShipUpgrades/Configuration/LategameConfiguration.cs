@@ -40,6 +40,7 @@ namespace MoreShipUpgrades.Configuration
     [DataContract]
     public class LategameConfiguration : SyncedConfig2<LategameConfiguration>
     {
+        public IOneTimeUpgradeConfiguration StrongerBeaconConfiguration { get; set; }
         public TZPBufferUpgradeConfiguration TZPBufferConfiguration { get; set; }
         public ITierEffectUpgradeConfiguration<int> BulletResistanceConfiguration {  get; set; }
         public ITierEffectUpgradeConfiguration<int> ExplosionReistanceConfiguration { get; set; }
@@ -256,6 +257,9 @@ namespace MoreShipUpgrades.Configuration
             #endregion
 
             #region Upgrades
+
+            topSection = StrongerBeacon.UPGRADE_NAME;
+            StrongerBeaconConfiguration = new OneTimeUpgradeConfiguration(cfg, topSection, LguConstants.STRONGER_BEACON_ENABLED_DESCRIPTION, StrongerBeacon.PRICE_DEFAULT);
 
             topSection = TZPBuffer.UPGRADE_NAME;
             TZPBufferConfiguration = new TZPBufferUpgradeConfiguration(cfg, topSection, LguConstants.TZP_BUFFER_ENABLED_DESCRIPTION, TZPBuffer.DEFAULT_PRICES)

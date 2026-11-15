@@ -61,6 +61,11 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.AttributeUpgrades
             base.Increment();
             UpdatePlayerHealthLevel();
         }
+        public override void Decrement()
+        {
+            base.Decrement();
+            UpdatePlayerHealthLevel();
+        }
         void UpdatePlayerHealthLevel()
         {
             PlayerControllerB player = UpgradeBus.Instance.GetLocalPlayer();

@@ -81,6 +81,7 @@ namespace MoreShipUpgrades.Managers
         static void PatchHUD()
         {
             harmony.PatchAll(typeof(HudManagerPatcher));
+            harmony.PatchAll(typeof(ManualCameraRendererPatcher));
             Plugin.mls.LogInfo("HUD has been patched");
         }
 

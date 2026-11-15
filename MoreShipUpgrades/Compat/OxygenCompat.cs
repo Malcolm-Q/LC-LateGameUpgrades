@@ -24,7 +24,7 @@ namespace MoreShipUpgrades.Compat
             MethodInfo ReduceOxygenConsumption = typeof(OxygenCanisters).GetMethod(nameof(OxygenCanisters.ReduceOxygenConsumption));
             List<CodeInstruction> codes = new(instructions);
             int index = codes.Count-1;
-            Tools.FindLocalFieldReverse(ref index, ref codes, localIndex: 2, addCode: ReduceOxygenConsumption, errorMessage: "Couldn't find the property used to deplete oxygen while underwater");
+            Tools.FindLocalFieldReverse(ref index, ref codes, localIndex: 3, addCode: ReduceOxygenConsumption, errorMessage: "Couldn't find the property used to deplete oxygen while underwater");
             return codes;
         }
     }
