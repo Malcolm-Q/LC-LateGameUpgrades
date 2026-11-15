@@ -49,6 +49,13 @@ namespace MoreShipUpgrades.UpgradeComponents.TierUpgrades.Items.WeedKiller
             float multiplier = ComputeWeedKillerEffectiveness();
             return Mathf.Clamp(defaultValue * multiplier, defaultValue, float.MaxValue);
         }
+        public static int GetWeedKillerIntegerEffectiveness(int defaultValue)
+        {
+            if (!GetConfiguration().WeedGeneticManipulationConfiguration.Enabled) return defaultValue;
+            if (!GetActiveUpgrade(UPGRADE_NAME)) return defaultValue;
+            float multiplier = 1f - ComputeWeedKillerEffectiveness();
+            return Mathf.CeilToInt(Mathf.Clamp(defaultValue * multiplier, 0, defaultValue));
+        }
         public override bool CanInitializeOnStart
         {
             get

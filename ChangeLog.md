@@ -1,11 +1,13 @@
 <details>
-<summary> 3.14.3 - 2026-??-?? </summary>
+<summary> 3.14.3 - 2026-11-15 </summary>
 
 - Implemented Stronger Beacon one-time purchase upgrade which focuses on providing radar signal in the terminal from players who are located in caves.
     - Implementation focuses on the checks performed by ``ManualMapRenderer`` on wether the player is in a cave node or not so this upgrade might also work with interior nodes who set up their own "cave nodes".
         - However, vanilla only allows this check to run if it's in mineshaft interior. Another mod that removes this restriction would allow the use of cave nodes as expected.
     - Configuration is the same as other one-time purchase upgrades.
+- Weed Killer Genetic Manipulation now affects the damage and desinfection rate of Corpse-Bloom infected crew members when using weed killer on them.
 - Fixed compatibility patching issue with [Oxygen](https://thunderstore.io/c/lethal-company/p/consequential/Oxygen/)
+- Fixed issue with Stimpack where host isn't notified of new max health update when refunding.
 
 </details>
 
